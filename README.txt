@@ -28,4 +28,4 @@ Open the browser (chrome or firefox) at the main folder url. The ecommerce syste
 *****************
 Find us at github.com and sourceforge.net for more information.
 
-Tip: There is also available for purchase a tool named dbmanager. This tool is very useful to edit the database records. Get more information at: http://youronlineshop.sourceforge.net/dbmanager
+Tip: There is also available for purchasing a tool named dbmanager. This tool is very useful to edit the database records. Get more information at: http://youronlineshop.sourceforge.net/dbmanager
