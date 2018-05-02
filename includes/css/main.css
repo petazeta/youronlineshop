@@ -71,7 +71,7 @@ body {
 }
 
 table.backgroundspace {
-  margin:auto;
+  width:100%;
 }
 table.backgroundspace td.topmargin {
     height: 0.6em;
