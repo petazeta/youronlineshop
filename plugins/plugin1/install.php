@@ -1,0 +1,3 @@
+<?php
+//PLUG IN INSTALLER SCRIPT
+?>

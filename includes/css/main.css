@@ -1,0 +1,621 @@
+/*
+Note: We somethimes have to set height and width to 100% for avoiding the efect of block contraction when loading some content in a block element
+*/
+
+/* Fonts */
+html, select, button{
+  font-family: sans-serif;
+  font-size: medium;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Table for formating. Transparent. */
+table{border-collapse:collapse;} /* It is needed for the table border to be 0 width */
+td,th{padding:0;vertical-align:top;} /* Padding 0 because this tables are used as boxes to locate the content. vertical-align:top because the content in the table should be as appear in the dom that is positioning from top to down */
+
+/* Table for forms */
+
+/* Boxes */
+
+table.box {
+    min-width: 10em;
+}
+table.box th, table.box th a {
+  color:white;
+}
+table.box .boxhead {
+    background-color: #47B913;
+    background-image: linear-gradient(-180deg, #47B913 0%, #44D205 90%);
+    padding: 5px 0px;
+    width: 100%;
+    /* border: 1px solid rgba(27,31,35,0.2); */
+    border-radius: 6px 6px 0px 0px;
+  box-shadow: 0px 3px 6px rgb(136, 136, 136);
+}
+table.box table.boxInside {
+  width:100%;
+}
+table.box table.boxInside {
+  background-color: #f8f7f5;
+}
+table.box table.boxInside td.rowborder{
+  height:7px;
+}
+table.box table.boxInside td.row{
+  min-height:1em;
+  padding: 3px 8px 3px 8px;
+}
+table.box table.boxInside td.border-bottom{
+  border-bottom:1px solid rgb(238, 237, 233);
+}
+table.box table.boxInside a{
+  color:#d2853c;
+}
+table.box table.boxInside a:hover{
+  color: #3cc400;
+}
+table.box table.boxInside tr.selected a, table.box table.boxInside a.selected{
+  color: #4bab20;
+}
+table.box table.boxInside {
+  box-shadow: 0px 3px 6px rgb(136, 136, 136);
+    border-radius: 0px 0px 8px 8px;
+}
+
+/* Margins, Dimensions && background */
+body {
+  background-color:#fbfaf6;
+}
+
+table.backgroundspace {
+  width: 100%;
+}
+table.backgroundspace td.topmargin {
+    height: 0.6em;
+}
+table.mainblock {
+    min-width: 990px;
+    width: 98%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+table.mainblock td.headermiddletransition {
+    height: 2em;
+    background-color: rgb(244, 240, 231);
+}
+table.mainblock td.middlebottomtransition {
+    height: 2em;
+}
+table.backgroundspace td.bottommargin {
+    height: 0.6em;
+}
+
+/* Header */
+.topimage{
+  border-radius: 10px 10px 0px 0px;
+  background: url('images/bg/header.jpg') top left repeat;
+}
+header h1, h2 {
+  color: rgb(210, 133, 60);
+  margin: 0px;
+}
+
+header h1 {
+  font-size: 5em;
+  margin: 0.2em 0px 0px;
+}
+
+header h2 {
+  font-size: 2em;
+  margin: 0.1em 0 0.3em;
+}
+
+/* nav */
+
+.navbk {
+  border-top: 2px solid rgb(161, 161, 161);
+  border-bottom: 2px solid rgb(161, 161, 161);
+  background: rgb(244, 240, 183);
+}
+
+nav a {
+  font-weight: normal;
+  font-size: 1.5em;
+  color: rgb(80,80,80);
+}
+
+nav a:hover, nav .selected a{
+  color: rgb(20,20,20);
+}
+
+nav selected a {
+  color: rgb(20,20,20);
+}
+
+nav span{
+  margin: 0.8em 1.2em;
+}
+/* left bar */
+table.leftcolumn {
+    height: 100%;
+    min-width: 202px;
+}
+table.leftcolumn td.maincontent {
+    box-shadow: 0px 8px 6px -6px rgb(136, 136, 136);
+}
+
+table.leftcolumn td.maincontent {
+    padding: 0 0 20px 18px;
+}
+
+table.leftcolumn td.maincontent {
+    background-color: rgb(244, 240, 231);
+}
+div.space {
+    width: 100%;
+    height: 2em;
+}
+/* right bar */
+table.rightcolumn {
+    height: 100%;
+    min-width: 201px;
+}
+table.rightcolumn td.maincontent {
+    padding: 0 0 20px 18px;
+}
+table.rightcolumn td.maincontent {
+    box-shadow: 0px 8px 6px -6px rgb(136, 136, 136);
+}
+table.rightcolumn td.maincontent {
+    background-color: rgb(244, 240, 231);
+}
+/* center */
+
+.centercolumn {
+    width: 100%; /* Important to cover all central space */
+    height: 100%;
+}
+div.centercolumn {
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 0px 5px rgb(136, 136, 136);
+    position: relative;
+    background: linear-gradient(to right, rgb(242, 242, 242), white 20%, white 80%, rgba(242,242,242,1));
+}
+
+div.centercolumn div.centercontent {
+    padding: 1em 2em 2em 2em;
+    min-height: 21em;
+}
+
+/* Documents */
+.paragraph {
+  padding: 0.5em 0 1em 0;
+}
+#centralcontent:first-child .paragraph{
+  padding: 1em 0;
+}
+
+/* alert highligting */
+div.alert {
+  position: fixed !important;
+    top: 20%;
+    left: 30%;
+  width: 300px;
+  border: 2px solid #F1C486;
+  background: #F8EED3;
+  padding: 0.5rem;
+  text-align: center;
+  z-index:100;
+}
+div.alert {
+    border-radius: 12px;
+    box-shadow: 0px 0px 12px rgb(136, 136, 136);
+}
+div.note{
+  background-color:#F8F8F8;
+  border: 1px solid #d6d6d6;
+  border-left-color: #e4e4e4;
+  border-top-color: #e4e4e4;
+}
+.msgbox {
+    background-color:#F8F8F8;
+    border: 1px solid #AAA;
+    padding: 1rem;
+    text-align: center;
+    margin: 1rem;
+    border-radius: 3px;
+}
+/* footer */
+
+td.footer a{
+  color:#fff !important;
+}
+td.footer a:hover{
+  color: #92e9ff !important;
+}
+
+/* buttons */
+
+.btn{
+  color: #666666 !important;
+  background-color: #eff3f6;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid rgba(27,31,35,0.2);
+  border-radius: 0.25em;
+}
+.btnplane{
+   background-color: #316cbe;
+     border-radius: 0.25em;
+     padding: 5px 10px;
+     color: white;
+}
+/* adminedit*/
+.contenteditableactive {
+  background-color: white;
+  color: rgb(27,31,35) !important;
+  padding: 2px 4px;
+  border: 1px solid rgba(27,31,35,0.8);
+}
+.rmbox {
+  position:relative;
+  display: table;
+  margin: auto;
+}
+.btrighttop {
+    position: absolute;
+    top: -16px;
+    right: -16px;
+}
+.bttopadmn {
+    position: absolute;
+    top: -38px;
+    left: 0px;
+}
+.bttopedit {
+  position: absolute;
+  top:-16px;
+  right:-34px;
+}
+.btinside {
+  position: absolute;
+  left: 2px;
+  top:-12px;
+}
+.btrightedit {
+    position: absolute;
+    top: calc(50% - 16px);
+    right: -27px;
+}
+.btrightnarrow {
+    position: absolute;
+    top: 0px;
+    right: -24px;
+}
+.btrightadmn {
+    position: absolute;
+    top: calc(50% - 16px);
+    left: 40px;
+}
+
+.btleftedit {
+    position: absolute;
+    top: calc(50% - 16px);
+    left: -34px;
+}
+/*
+  .adminedit is the inner and adminlauncher is the outer so when mouse is over launcher => edit is visible.
+  the single part is for the edit button¿?
+ */
+.singleadminedit {
+  background-color: rgba(0, 0, 0, 0);
+  opacity:0;
+}
+.adminedit {
+  position:relative;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0);
+  opacity:0;
+}
+.adminlauncher {
+  position: relative;
+  display: inline-block;
+}
+.adminlauncher:hover
+.adminedit {
+    opacity: 1;
+    transition: opacity 0.2s ease 0.2s;
+}
+.adminsinglelauncher {
+  position: relative;
+  display: inline-block;
+}
+.adminsinglelauncher:hover
+.singleadminedit {
+    opacity: 1;
+    transition: opacity 0.2s ease 0.2s;
+}
+a.butedit, a.butdel, a.butadd, a.butsucs, table.arrows{
+  background-color: #eff3f6;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid rgba(27,31,35,0.2);
+  border-radius: 0.25em;
+}
+
+a.butopen {
+  padding: 5px;
+}
+
+/* admin buttons default location */
+
+/* normal text */
+
+/* table with heading */
+
+/* form text fields */
+
+/* table color */
+table.mytable {
+  margin: auto;
+}
+table.mytable td {
+  padding: 0.5em;
+}
+
+table.list {
+  margin:auto;
+  border: 1px #666 solid;
+}
+table.list > tbody > tr > td {
+  border: 1px #666 solid;
+  padding:0.5em;
+  vertical-align: middle;
+}
+table.list > thead > tr > th {
+  background-color: #F0F0F0;
+  padding:0.5em;
+}
+
+.form-group {
+    display: block;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-label {
+    display: block;
+    margin-bottom: .375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+.form-control {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-radius: 3px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-btn {
+  line-height: 1.84615385;
+  padding: 0.375rem 0.75rem;
+  color: #666666
+  border-radius: 3px;
+}
+
+.formtable {
+    background-color: #F8EED3;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+  /* box-shadow: 0px 3px 6px rgb(136, 136, 136); */
+}
+.formtable {
+  margin: 0 auto 2rem auto;
+  border-collapse: separate;
+}
+.formtable a {
+  color: #3D3E3D !important;
+    font-weight: normal !important;
+}
+.formtable a:hover {
+  color: #D2853C !important;
+}
+.formtable th {
+    background-color: #f1daa4;
+    border-bottom: 1px solid #AAA;
+}
+.formtable th {
+    padding: 4px;
+}
+.formtable td {
+    padding: 0.2rem 0.5rem;
+}
+.formtable td.label{
+  text-align: right;
+}
+.formtable td.hr {
+    height: 5px;
+}
+.formtable td.centertext {
+  text-align: center;
+}
+table.order .product {
+  width: 65%;
+}
+table.order .quantity {
+  width: 11%;
+}
+table.order .price {
+  width: 14%;
+}
+table.order .total {
+  width: 10%;
+}
+table.order tr.total {
+  font-weight: bold;
+  text-align: right;
+}
+div.cart tr.product a, div.cart tr.product span{
+  font-size: 9pt !important;
+}
+div.cart tr.product a{
+  margin: 0px 0.1em 0px 0px;
+}
+div.cart tr.product td:hover{
+  background: rgb(241, 228, 204);
+}
+div.cart tr.product span{
+  color:#d2853c !important;
+}
+div.cart span.remove {
+  vertical-align: 2px;
+  font-size: 0.6em;
+  border: 1px solid #D2853C;
+  padding: 1px;
+}
+
+/* subcategories flaps */
+
+div.flapscontainer table.flap td a{
+    color: white;
+}
+div.flapscontainer table.selected td a{
+    color: #18730C;
+}
+div.flapscontainer table.flap {
+  float:left;
+  margin-right:4px;
+}
+div.flapscontainer table.flap td a{
+    white-space: nowrap !important;
+}
+div.flapscontainer table.flap td{
+  vertical-align: top;
+  text-align: center;
+}
+div.flapscontainer table.flap td.tl{
+    background: url('images/bg/topleft.gif') no-repeat right bottom;
+    width: 11px;
+  height: 11px;
+}
+div.flapscontainer table.selected td.tl{
+    background: url('images/bg/topleftl.gif') no-repeat right bottom !important;
+}
+div.flapscontainer table.flap td.tr{
+    background: url('images/bg/topright.gif') no-repeat left bottom;
+    width: 11px;
+}
+div.flapscontainer table.selected td.tr{
+    background: url('images/bg/toprightl.gif') no-repeat left bottom !important;
+}
+div.flapscontainer table.flap td.t{
+    background: url('images/bg/topmid.gif') repeat-x left bottom;
+}
+div.flapscontainer table.selected td.t{
+    background: url('images/bg/topmidl.gif') repeat-x left bottom !important;
+}
+div.flapscontainer table.flap td.mr {
+    background: url('images/bg/midright.gif') repeat-y left top;
+    width: 11px;
+}
+div.flapscontainer table.selected td.mr {
+    background: url('images/bg/midrightl.gif') repeat-y left top !important;
+}
+div.flapscontainer table.flap td.ml{
+    background: url('images/bg/midleft.gif') repeat-y right top;
+    width: 11px;
+  height: 22px;
+}
+div.flapscontainer table.selected td.ml{
+    background: url('images/bg/midleftl.gif') repeat-y right top !important;
+}
+div.flapscontainer table.flap td.m{
+    background-color: #32a525;
+}
+div.flapscontainer table.selected td.m{
+    background-color: #2cec22 !important;
+}
+
+/* items */
+.productlist tr {
+  border-bottom:1px solid #AAA;
+}
+.productlist td{
+  padding-right:1.5em;
+  padding-top:0.5em;
+}
+.productlist tr:last-child{
+  border-bottom:none;
+}
+table.catalog  table.product p{
+  color:#30270c;
+}
+table.catalog table.product p{
+  margin: 0px 0px 0.5rem;
+  padding: 0px;
+}
+table.catalog  table.product a{
+  color: rgb(210, 133, 60);
+}
+table.catalog  table.product a:hover{
+  color: #3cc400;
+}
+table.catalog  table.product a.selected{
+  color: #4bab20;
+}
+table.catalog table.product h3{
+  margin: 0px 0px 0.5rem;
+  padding: 0px;
+}
+table.catalog table.product h3{
+    color: #37AF27;
+}
+table.catalog table.product{
+    border: 1px solid #A5EB93;
+}
+table.catalog table.product{
+  width: 100%;
+}
+table.catalog table.product td.product{
+    border-bottom: 1px solid #A5EB93;
+}
+table.catalog table.product td.product{
+  width: 100%;
+    padding: 10px;
+}
+table.catalog table td.product td.productimg img.productimg{
+   margin: 2px 15px 0px 0px;
+}
+table.catalog table td.product table.textproduct{
+  height: 100%;   /* this way add to cart button will be at the bottom allways */
+  width: 100%;
+  vertical-align: middle;
+}
+table.catalog table td.product table.addtocart td{
+  vertical-align: middle;
+}
+table.catalog table td.product table.addtocart td{
+  vertical-align: middle;
+}
+table.addtocart {
+  border-collapse:separate;
+  border: 1px solid #AAA;
+  border-radius: 6px;
+  margin-right:auto; /* left alignment */
+}
+table.addtocart td {
+  padding: 0.5em;
+}
+table.addtocart span {
+ color:#666;
+}
