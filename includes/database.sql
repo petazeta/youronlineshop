@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 04-05-2018 a las 16:16:04
+-- Tiempo de generación: 05-05-2018 a las 16:15:59
 -- Versión del servidor: 5.5.58-0+deb8u1
 -- Versión de PHP: 5.6.30-0+deb8u1
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `documents` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `creationdate` datetime NOT NULL,
   `modificationdate` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `documents`
@@ -92,8 +92,8 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (23, 'status', 'Connected'),
 (25, 'crtbxtt', 'Shopping cart'),
 (27, 'ckouttt', 'Check out'),
-(32, 'license', 'License'),
-(33, 'designed', 'Powered by YOS'),
+(32, 'license', '<a href="LICENSE.txt">License</a>'),
+(33, 'designed', 'Powered by <a href="https://sourceforge.net/projects/youronlineshop/">YourOnlineShop</a>'),
 (36, 'addcarttt', '+1 to the cart'),
 (38, 'lgintt', 'Insert you account details or create a new account.'),
 (41, 'headtitle', 'Shop Title'),
@@ -105,7 +105,7 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (48, '', 'Continue at <b>How to</b>'),
 (49, '', 'To start: log in with one of the users or sign in with a new one.'),
 (50, '', 'More information at: <a href="https://github.com/petazeta/youronlineshop/wiki">Project Docs</a>&nbsp;and <a href="https://sourceforge.net/p/youronlineshop/discussion/">Project Forums</a>'),
-(56, '', 'DbManager is a tool for editing database records. Get more information at: <a href="http://youronlineshop.sourceforge.net/dbmanager/">Dbmanager Home</a>'),
+(56, '', 'DbManager is a tool for editing ORM database records.<div><br></div><div>Get more information at: <a href="http://youronlineshop.sourceforge.net/dbmanager/">Dbmanager Home</a></div>'),
 (57, '', 'When edit content click outside of the editable area to save changes. Use Intro for new line.');
 
 -- --------------------------------------------------------
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   `child_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '1',
   `relationships_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=847 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=846 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `links`
@@ -508,7 +508,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 -- AUTO_INCREMENT de la tabla `documents`
 --
 ALTER TABLE `documents`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT de la tabla `domelements`
 --
@@ -528,7 +528,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 -- AUTO_INCREMENT de la tabla `links`
 --
 ALTER TABLE `links`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=847;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=846;
 --
 -- AUTO_INCREMENT de la tabla `orderitems`
 --

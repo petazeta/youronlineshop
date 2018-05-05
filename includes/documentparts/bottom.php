@@ -6,60 +6,14 @@
     <template>
       <div class="adminsinglelauncher">
 	<span></span>
-	<script>thisElement.textContent=thisNode.properties.innerHTML</script>
-	<div class="btrightedit"> </div>
-	<script>
-	  var addadminbutts=function(){
-	    var launcher=new NodeMale();
-	    launcher.editpropertyname="innerHTML";
-	    launcher.editelement=thisElement.parentElement.firstElementChild;
-	    launcher.myNode=thisNode;
-	    launcher.myContainer=thisElement;
-	    launcher.myTp=document.getElementById("butedittp").content;
-	    launcher.refreshView();  
-	  }
-	  if (webuser.isWebAdmin()) {
-	    addadminbutts();
-	  }
-	  webuser.addEventListener("log", function() {
-	    if (!this.isWebAdmin()) {
-	      thisElement.innerHTML='';
-	    }
-	    else {
-	      addadminbutts();
-	    }
-	  });
-	</script>
+	<script>thisElement.innerHTML=thisNode.properties.innerHTML</script>
       </div>
     </template>
     <td style="padding:10px;text-align:right;"></td>
     <template>
       <div class="adminsinglelauncher">
 	<span></span>
-	<script>thisElement.textContent=thisNode.properties.innerHTML</script>
-	<div class="btleftedit"> </div>
-	<script>
-	  var addadminbutts=function(){
-	    var launcher=new NodeMale();
-	    launcher.editpropertyname="innerHTML";
-	    launcher.editelement=thisElement.parentElement.firstElementChild;
-	    launcher.myNode=thisNode;
-	    launcher.myContainer=thisElement;
-	    launcher.myTp=document.getElementById("butedittp").content;
-	    launcher.refreshView();  
-	  }
-	  if (webuser.isWebAdmin()) {
-	    addadminbutts();
-	  }
-	  webuser.addEventListener("log", function() {
-	    if (!this.isWebAdmin()) {
-	      thisElement.innerHTML='';
-	    }
-	    else {
-	      addadminbutts();
-	    }
-	  });
-	</script>
+	<script>thisElement.innerHTML=thisNode.properties.innerHTML</script>
       </div>
     </template>
   </tr>

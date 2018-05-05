@@ -231,10 +231,10 @@ div.note{
 }
 /* footer */
 
-td.footer a{
+#footer a{
   color:#fff !important;
 }
-td.footer a:hover{
+#footer a:hover{
   color: #92e9ff !important;
 }
 
