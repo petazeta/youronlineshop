@@ -19,6 +19,12 @@ Some elements are loaded through out `refreshChildreview` or `refreshView` metho
 
 Index.php is the beginning file. Files at documentparts and templates folder are just ".php" but actually most of then doesn't have any php command.
 
-Some page content fillings are in nested way: so sometimes the references must be well researched before giving a straight resolution. Sometimes we are filling a template with another template that is inside or comes with some other template and so on.
+Some teplates are filled in in nested way. That could produce confusion about what we are actually filling with if the references aren't well researched. So before giving a definitive resolution we must resolve the templates inside fillings. That is, before filling the last one container we can fill a template with another template. The reason for that is that the templates that comes inside contents (or behaviour) are independent from the ones at the main template.
 
-You would find `thisNode` and `thisElement` vars several times at the templates scripts. thisNode is a javascript object that usually contains the information to fill in with (or it is a parent of it) and is related to a database record (row). And thisElement is (refers) a Dom element. When the script comes inside the "data-js" element attribute: then thisElement is this one, and when it comes in a "script" element: then it is the element above.
+Scripts at templates are exected at loading time, that would mean that they are executed secuently and that the elements they car refer must be above them, so bellow elements are still not loaded at the document. 
+
+You would find `thisNode` and `thisElement` vars several times at the templates scripts. thisNode is a javascript object that usually contains the information to fill in with (or it is a parent of it) and it is related to a database record (row). And thisElement is (refers) a Dom element. When the script comes inside the "data-js" element attribute: then thisElement is this one, and when it comes in a "script" element: then it is the element above.
+
+Next: [Developers Manual (Advanced)](./Developers-Manual-(Advanced))
+
+Previous: [Frequently Asked Questions](./Frequently-Asked-Questions.md)

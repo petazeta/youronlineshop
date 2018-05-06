@@ -5,3 +5,7 @@ There is three olready created users: "user1", "user2" and "user3". These are th
 User "user2" is order administrator and can watch and edit all the orders. Once you log in with this user click at "Show orders" button.
 
 User "user3" is web administrator user and can edit the web page content and the catalog (categories and items).
+
+Next: [Frequently Asked Questions](./Frequently-Asked-Questions)
+
+Previous: [Installation insctructions](./Installation-insctructions)

@@ -5,3 +5,5 @@
 5. Edit database settings at:
   includes/config.php
 6. Give write permisions to the folder catalog/images/small. (To allow upload product images)
+
+Next: [Getting Started](./Getting-Started)

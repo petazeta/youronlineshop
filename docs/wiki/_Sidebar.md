@@ -2,5 +2,7 @@
 * [Getting Started](./Getting-Started)
 * [Frequently Asked Questions](./Frequently-Asked-Questions)
 * [Quick Start Guide (Developers)](./Quick-Start-Guide-(Developers))
-* [Developers manual (Advanced)](./Developers-manual-(Advanced))
+* [Developers Manual (Advanced)](./Developers-Manual-(Advanced))
 * [Online Demo](http://youronlineshop.sourceforge.net/yos/)
+* [YouTube Demo](./Web-Administration-Demo-Video)
+* [Help Forums](https://sourceforge.net/p/youronlineshop/discussion/)

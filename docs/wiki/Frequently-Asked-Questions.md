@@ -12,17 +12,21 @@ There isn't any other themes available. You can modify yourself some of the page
 
 - **How can I give text formatting to the pages at the menus?**
 
-There isn't a tool for that purpose but you can format text with some word editor and copy-paste it. The web browser holds the text format and introduce it in HTML form. That also works for coping content from web pages.
+There isn't a tool for that purpose but you can format text with some word editor and copy-paste it. The web browser holds the text formatting and introduce it in HTML form. That also works for coping content from web pages.
 
-For mastering the HTML content you must edit it directly at the database (table documents).
+For mastering the HTML content you must edit it directly at the database (table domelements).
 
 - **How can I add or change fields to the address?**
 
 You just change the address fields (add, remove or name modification) at the database table addresses. Some of the address fields comes from usersdata table.
 
+- **How can I change the site language?**
+
+You must do it yourself by changing text content through out the web administrator login, some database records at domelements tabla y the rest would be text in the files.
+
 - **How can I change users names, passwords and privileges?**
 
-There isn't a straight forward way for doing it (but [Dbmanager](http://youronlineshop.sourceforge.net/dbmanager/) would help). But you can make that changes directly at the database: table "users".
+There isn't a straight forward way for doing it (except if you got [Dbmanager](http://youronlineshop.sourceforge.net/dbmanager/)). But you can make that changes directly at the database: table "users".
 
 For the privileges: those comes with a relationship between table users and table users_userstypes. So you would have to establish that relationship through the "links" table: 
 
@@ -39,3 +43,7 @@ There isn't a way to get an URL that would directly bring to a page content. Als
 - **How can I contact for more information?**
 
 **USE** [SOURCEFORGE FORUMS](https://sourceforge.net/p/youronlineshop/discussion/?source=navbar).
+
+Next: [Quick Start Guide (Developers)](./Quick-Start-Guide-(Developers))
+
+Previous: [Getting Started](./Getting-Started)
