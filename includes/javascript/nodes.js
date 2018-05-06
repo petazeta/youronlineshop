@@ -165,6 +165,51 @@ Node.prototype.refreshPropertiesView = function (container, tp) {
   }
 }
 
+// Set children results from the given arguments and refresh the view. It uses this.childTp and this.childContainer
+Node.prototype.setChildrenView=function (tp) {
+  if (!tp) tp=this.childTp;
+  var myreturn=[];
+  var children="children";
+  if (this.constructor.name=="NodeMale") children="relationships";
+  this[children]=this[children].sort(function(a,b){return a.sort_order-b.sort_order});
+  for (var i=0; i<this[children].length; i++) {
+    myreturn.push(this[children][i].setView(tp.cloneNode(true)));
+  }
+  return myreturn;
+};
+
+Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
+  if (container) this.childContainer=container;
+  var refresh=function(){
+    while (this.childContainer.firstChild) this.childContainer.removeChild(this.childContainer.firstChild);
+    var results=this.setChildrenView();
+    for (var i=0; i<results.length; i++) {
+      this.childContainer.appendChild(results[i]); //It will improve performance by not clonning but we prefer by now to have a template for each children
+    }
+    if (reqlistener) reqlistener.call(this);
+    if (this.events && this.events.refreshChildrenView) {
+      var i=this.events.refreshChildrenView.length;
+      while(i--) {
+        this.events.refreshChildrenView[i].call(this);
+      }
+    }
+  };
+  if (typeof tp=="string") {
+    var loadedtp=function() {
+      this.childTp=this.xmlTp;
+      refresh.call(this);
+    };
+    this.getTp(tp, loadedtp);
+  }
+  else {
+    if (tp) {
+      if (tp.tagName && tp.tagName=="TEMPLATE") tp=tp.content;
+      this.childTp=tp;
+    }
+    refresh.call(this);
+  }
+};
+
 //It loads a node tree from a php script that privides it in json format
 Node.prototype.loadfromhttp=function (request, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
@@ -281,49 +326,6 @@ NodeFemale.prototype.loadasc=function(source, level) {
   this.partnerNode=new NodeMale();
   this.partnerNode.loadasc(source.partnerNode, level);
 }
-
-// Set children results from the given arguments and refresh the view. It uses this.childTp and this.childContainer
-NodeFemale.prototype.setChildrenView=function (tp) {
-  if (!tp) tp=this.childTp;
-  var myreturn=[];
-  this.children=this.children.sort(function(a,b){return a.sort_order-b.sort_order});
-  for (var i=0; i<this.children.length; i++) {
-    myreturn.push(this.children[i].setView(tp.cloneNode(true)));
-  }
-  return myreturn;
-};
-
-NodeFemale.prototype.refreshChildrenView=function (container, tp, reqlistener) {
-  if (container) this.childContainer=container;
-  var refresh=function(){
-    while (this.childContainer.firstChild) this.childContainer.removeChild(this.childContainer.firstChild);
-    var results=this.setChildrenView();
-    for (var i=0; i<results.length; i++) {
-      this.childContainer.appendChild(results[i]); //It will improve performance by not clonning but we prefer by now to have a template for each children
-    }
-    if (reqlistener) reqlistener.call(this);
-    if (this.events && this.events.refreshChildrenView) {
-      var i=this.events.refreshChildrenView.length;
-      while(i--) {
-        this.events.refreshChildrenView[i].call(this);
-      }
-    }
-  };
-  if (typeof tp=="string") {
-    var loadedtp=function() {
-      this.childTp=this.xmlTp;
-      refresh.call(this);
-    };
-    this.getTp(tp, loadedtp);
-  }
-  else {
-    if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") tp=tp.content;
-      this.childTp=tp;
-    }
-    refresh.call(this);
-  }
-};
 
 NodeFemale.prototype.avoidrecursion=function () {
   this.partnerNode=null;

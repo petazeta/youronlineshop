@@ -34,4 +34,4 @@ User "user3" is web administrator user and can edit the web page content and the
 
 Find us at github.com and sourceforge.net for more information.
 
->**Tip**: There is also available for purchasing a tool named dbmanager. This tool is very useful to edit the database records. Get more information at: [DbManager](http://youronlineshop.sourceforge.net/dbmanager)
+>**Tip**: There is also available for purchasing a tool named dbmanager. This tool is very useful to edit ORM database records. Get more information at: [DbManager](http://youronlineshop.sourceforge.net/dbmanager)
