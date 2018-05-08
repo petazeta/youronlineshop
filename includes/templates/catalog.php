@@ -30,7 +30,7 @@
 	      }
 	    });
 	    //showing flaps (after the listeners to refreshChildrenView are added) after refreshing first time we choose the first tab
-	    thisNode.refreshChildrenView(thisElement, thisElement.parentElement.querySelector("template").content, function(){
+	    thisNode.refreshChildrenView(thisElement, thisElement.parentElement.querySelector("template"), function(){
 	      if (this.children.length>0) this.children[0].getMyDomNodes()[0].querySelector("a").click();
 	    });
 	  </script>
@@ -47,7 +47,7 @@
 		  <div class="adminlauncher adminsinglelauncher">
 		    <a href=""></a>
 		    <script>
-		      thisElement.textContent=thisNode.properties.cname || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+		      thisElement.textContent=thisNode.properties.cname || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 		      thisElement.onclick=function() {
 			thisNode.setActive();
 			var myform=document.getElementById("formgeneric").cloneNode(true);
@@ -62,15 +62,19 @@
 			      element.myContainer=this.childContainer;
 			      element.refreshView();
 			    }
+			    while (myTable.rows.length > 1) myTable.deleteRow(1); // for start after intoColumns
+			    var columns=Math.round((screen.availWidth-524)/500);
+			    if (columns < 1) columns=1;
+			    intoColumns.call(myTable.rows[0], columns);
 			  });
 			  //lets search for the table that will contain the products
 			  var mypointer=thisElement;
 			  while (!(mypointer.tagName=="DIV" && mypointer.className=="flapscontainer")) {
 			    mypointer=mypointer.parentElement;
 			  }
-			  var myContainer=mypointer.nextElementSibling;
-			  items.childContainer=myContainer;
-			  items.childTp=myContainer.nextElementSibling.content;
+			  var myTable=mypointer.nextElementSibling;
+			  items.childContainer=myTable.rows[0];
+			  items.childTp=myTable.nextElementSibling.content;
 			  items.refreshChildrenView();
 			});
 			return false;
@@ -103,9 +107,10 @@
 	</div>
 	
 	<table class="product">
+	  <tr></tr>
 	</table>
 	<template>
-	  <tr>
+
 	    <td class="product" style="position:relative">
 	      <div class="adminlauncher" style="width:100%;">
 		<div style="
@@ -155,7 +160,7 @@
 			<td>
 			  <div class="adminsinglelauncher">
 			    <h3 data-js='
-			      thisElement.textContent=thisNode.properties.name || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+			      thisElement.textContent=thisNode.properties.name || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 			    '></h3>
 			    <div class="btrightedit">
 			    </div>
@@ -174,7 +179,7 @@
 			  <div>
 			    <div class="adminsinglelauncher">
 			      <div style="margin-bottom:1em;" data-js='
-				thisElement.innerHTML=thisNode.properties.descriptionshort || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+				thisElement.innerHTML=thisNode.properties.descriptionshort || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 			      '></div>
 			      <div class="btrightedit">
 			      </div>
@@ -201,7 +206,7 @@
 				<div class="adminsinglelauncher">
 				  <div style="padding-right:1em;">
 				    <span data-js='
-					thisElement.textContent=thisNode.properties.price || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+					thisElement.textContent=thisNode.properties.price || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 				      '>
 				    </span>
 				    <span> &euro;</span>
@@ -226,8 +231,7 @@
 				  <img src="includes/css/images/cart.png"/>
 				</a>
 				<script>
-				  var additemnode=websectionsroot.getRelationship({"name":"websections"}).getChild({"name":"middle"}).getRelationship({"name":"websections_domelements"}).getChild({"name":"addcarttt"});
-				  thisElement.title=additemnode.properties.innerHTML;
+				  thisElement.title=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"addcarttt"}).properties.innerHTML;
 				  thisElement.onclick=function(){
 				    mycart.additem(thisNode);
 				    return false;
@@ -244,7 +248,6 @@
 	      </table>
 	      </div>
 	    </td>
-	  </tr>
 	</template>
       </td>
     </tr>

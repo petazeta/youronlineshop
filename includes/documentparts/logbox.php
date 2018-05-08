@@ -10,7 +10,7 @@
 	    if (webuser.properties.id) {
 	      logbox=thisNode.getChild({"name":"logboxin"});
 	    }
-	    thisElement.textContent=logbox.getRelationship({"name":"websections_domelements"}).getChild({"name":"status"}).properties.innerHTML;
+	    thisElement.textContent=logbox.getNextChild({"name":"status"}).properties.innerHTML;
 	  }
 	  setlogstatus();
 	  webuser.addEventListener("log", function() {
@@ -48,7 +48,7 @@
 			if (webuser.properties.id) {
 			  logbox=thisNode.getChild({"name":"logboxin"});
 			}
-			thisElement.textContent=webuser.properties.username || logbox.getRelationship({"name":"websections_domelements"}).getChild({"name":"username"}).properties.innerHTML;
+			thisElement.textContent=webuser.properties.username || logbox.getNextChild({"name":"username"}).properties.innerHTML;
 		      }
 		      setlogname();
 		      webuser.addEventListener("log", function() {
@@ -80,7 +80,7 @@
 			if (webuser.properties.id) {
 			  logbox=thisNode.getChild({"name":"logboxin"});
 			}
-			thisElement.textContent=logbox.getRelationship({"name":"websections_domelements"}).getChild({"name":"title"}).properties.innerHTML;
+			thisElement.textContent=logbox.getNextChild({"name":"title"}).properties.innerHTML;
 		      }
 		      setlogtitle();
 		      webuser.addEventListener("log", function() {
@@ -114,7 +114,7 @@
 <script>
 var mycart=new cart();
 webuser.addEventListener("loadses", function(){
-  var logboxparent=websectionsroot.getRelationship({"name":"websections"}).getChild({"name":"middle"}).getRelationship({"name":"websections"}).getChild({"name":"logbox"}).getRelationship({"name":"websections"});
+  var logboxparent=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"logbox"}).getRelationship({"name":"domelements"});
   logboxparent.refreshView(document.querySelector("#logboxcontainer > div"), document.querySelector("#logboxcontainer > template").content);
 });
 webuser.addEventListener("log", function(){

@@ -79,7 +79,7 @@ table.backgroundspace td.topmargin {
 table.mainblock {
     min-width: 990px;
     width: 98%;
-    max-width: 1400px;
+    /*max-width: 1400px;*/
     margin: 0 auto;
 }
 
@@ -581,16 +581,15 @@ table.catalog table.product h3{
     color: #37AF27;
 }
 table.catalog table.product{
-    border: 1px solid #A5EB93;
+    box-shadow: 0px 3px 6px #A5EB93;
 }
 table.catalog table.product{
   width: 100%;
 }
 table.catalog table.product td.product{
-    border-bottom: 1px solid #A5EB93;
+    border: 1px solid #A5EB93;
 }
 table.catalog table.product td.product{
-  width: 100%;
     padding: 10px;
 }
 table.catalog table td.product td.productimg img.productimg{

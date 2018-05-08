@@ -6,7 +6,7 @@
       <template>
 	<span></span>
 	<script>
-	  thisElement.textContent=thisNode.properties.innerHTML || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+	  thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 	</script>
 	<div class="btrightedit"></div>
 	<script>
@@ -16,7 +16,7 @@
 	    launcher.editelement=thisElement.parentElement.firstElementChild;
 	    launcher.myNode=thisNode;
 	    launcher.myContainer=thisElement;
-	    launcher.myTp=document.getElementById("butedittp");
+	    launcher.myTp=document.getElementById("butedittp").content;
 	    launcher.refreshView();
 	  }
 	  if (webuser.isWebAdmin()) {
@@ -85,7 +85,7 @@
 		  <div class="adminlauncher adminsinglelauncher">
 		    <a href=""></a>
 		    <script>
-		      thisElement.innerHTML=thisNode.properties.cname || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+		      thisElement.innerHTML=thisNode.properties.cname || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 		      if (thisNode.selected) setSelected.call(closesttagname.call(thisElement, "TR"));
 		      thisElement.onclick=function(){
 			thisNode.setActive();
@@ -147,8 +147,8 @@
 
 <script>
 webuser.addEventListener("loadses", function(){
-  var cartbox=websectionsroot.getRelationship({"name":"websections"}).getChild({"name":"middle"}).getRelationship({"name":"websections_domelements"}).getChild({"name":"ctgbxtt"});
-  cartbox.refreshView(document.querySelector("#catgbox div"), document.querySelector("#catgbox th template").content);
+  var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"});
+  cartbox.refreshView(document.querySelector("#catgbox div"), document.querySelector("#catgbox th template"));
 
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="<?php echo TABLE_CATEGORIES; ?>";
@@ -159,11 +159,9 @@ webuser.addEventListener("loadses", function(){
   categoriesrootmother.loadfromhttp(myform, function(){
     var myform=document.getElementById("formgeneric").cloneNode(true);
     var categoriesroot=this.children[0];
-    categoriesroot.relationships[0]=new NodeFemale();
-    categoriesroot.relationships[0].partnerNode=categoriesroot;
-    categoriesroot.relationships[0].properties.cloneFromArray(this.properties);
+    var myrel=categoriesroot.cloneRelationship();
     
-    categoriesroot.relationships[0].refreshView(document.querySelector("#categoriescontainer").rows[1].cells[0],  document.querySelector("#categoriescontainer template").content);
+    myrel.refreshView(document.querySelector("#categoriescontainer").rows[1].cells[0],  document.querySelector("#categoriescontainer template").content);
 
   });
 });

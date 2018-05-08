@@ -2,8 +2,7 @@
   <div style="padding-bottom: 1rem">
     <div class="msgbox"></div>
     <script>
-      var midddoms=websectionsroot.getRelationship({"name":"websections"}).getChild({"name":"middle"}).getRelationship({"name":"websections_domelements"});
-      thisElement.textContent=midddoms.getChild({"name":"lgintt"}).properties.innerHTML;
+      thisElement.textContent=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"lgintt"}).properties.innerHTML;
     </script>
   </div>
   <div>

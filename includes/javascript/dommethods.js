@@ -17,7 +17,7 @@ function activeedition(thisNode, field){
     this.className=this.className.replace(/ contenteditableactive/g,'');
     //empty values are not allowed
     if (this[myproperty]=="") {
-       this[myproperty]=field.value || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+       this[myproperty]=field.value || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
       return false;
     }
     else if (field.value != this[myproperty]) { //just when content change and not void
@@ -45,19 +45,27 @@ function setUnselected() {
 function closesttagname(tagname){
   //if !myreturn.parentElement.tagName => document fragment
   var myreturn=this;
-  while(myreturn && myreturn.parentElement.tagName && myreturn.parentElement.tagName!=tagname) {
+  while(myreturn && myreturn.parentElement && myreturn.parentElement.tagName && myreturn.parentElement.tagName!=tagname) {
     myreturn=myreturn.parentElement;
   }
   return myreturn.parentElement;
 };
 function intoColumns(cellsNumber) {
   // columns distribution applied to a row
+  //if (this.cells.length < cellsNumber) return false;
   while (this.cells.length>0) {
     var newRow=closesttagname.call(this, "TABLE").insertRow();
     var i=cellsNumber;
     while(i--) {
-      if (this.cells.length>0) newRow.appendChild(this.cells[0]);
-      else newRow.insertCell();
+      var cellsWidth=Math.round(100/cellsNumber) + "%";
+      if (this.cells.length>0) {
+	this.cells[0].style.width=cellsWidth;
+	newRow.appendChild(this.cells[0]);
+      }
+      else {
+	var newCell=newRow.insertCell();
+	newCell.style.width=cellsWidth;
+      }
     }
   }
 }

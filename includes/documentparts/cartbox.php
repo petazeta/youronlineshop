@@ -6,7 +6,7 @@
         <div class="adminsinglelauncher">
           <a href=""></a>
           <script>
-            thisElement.textContent=thisNode.getRelationship({name: "websections_domelements"}).getChild({name: "crtbxtt"}).properties.innerHTML || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+            thisElement.textContent=thisNode.getNextChild({name: "crtbxtt"}).properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
             thisElement.onclick=function(){  
 	      mycart.tocheckout();
               return false;
@@ -18,7 +18,7 @@
 	      var launcher=new NodeMale();
 	      launcher.editpropertyname="innerHTML";
 	      launcher.editelement=thisElement.parentElement.firstElementChild;
-	      launcher.myNode=thisNode.getRelationship({name: "websections_domelements"}).getChild({name: "crtbxtt"});
+	      launcher.myNode=thisNode.getNextChild({name: "crtbxtt"});
 	      launcher.myContainer=thisElement;
 	      launcher.myTp=document.getElementById("butedittp").content;
 	      launcher.refreshView();   
@@ -91,8 +91,7 @@
 		<div class="adminsinglelauncher" style="text-align:center;">
 		<a href="" class="btn"></a>
 		<script>
-		  var checkoutnode=thisNode.getRelationship({name: "websections_domelements"}).getChild({"name":"ckouttt"});
-		  thisElement.textContent=checkoutnode.properties.innerHTML || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+		  thisElement.textContent=thisNode.getNextChild({"name":"ckouttt"}).properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 		  thisElement.onclick=function(){  
 		    mycart.tocheckout();
 		    return false;
@@ -104,7 +103,7 @@
 		    var launcher=new NodeMale();
 		    launcher.editpropertyname="innerHTML";
 		    launcher.editelement=thisElement.parentElement.firstElementChild;
-		    launcher.myNode=thisNode.getRelationship({name: "websections_domelements"}).getChild({name: "ckouttt"});
+		    launcher.myNode=thisNode.getNextChild({name: "ckouttt"});
 		    launcher.myContainer=thisElement;
 		    launcher.myTp=document.getElementById("butedittp").content;
 		    launcher.refreshView();	    
@@ -136,7 +135,7 @@
 <script>
 var mycart=new cart();
 webuser.addEventListener("loadses", function(){
-  var cartbox=websectionsroot.getRelationship({"name":"websections"}).getChild({"name":"middle"}).getRelationship({"name":"websections"}).getChild({"name":"cartbox"});
-  cartbox.refreshView(document.querySelector("#cartcontainer > div"), document.querySelector("#cartcontainer > template").content);
+  var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"});
+  cartbox.refreshView(document.querySelector("#cartcontainer > div"), document.querySelector("#cartcontainer > template"));
 });
 </script>

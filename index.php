@@ -22,22 +22,36 @@ require('includes/database_tables.php');
 document.body.appendChild(document.getElementById("formgenerictp").content.querySelector("form").cloneNode(true));
 document.body.appendChild(document.getElementById("formgenerictreetp").content.querySelector("form").cloneNode(true));
 //We load the dom elements text that will be included in some parts of the document
+var labelsRoot=null;
 var websectionsroot= new NodeMale();
 websectionsrootmother=new NodeFemale();
-websectionsrootmother.properties.childtablename="<?php echo TABLE_WEBSECTIONS; ?>";
-websectionsrootmother.properties.parenttablename="<?php echo TABLE_WEBSECTIONS; ?>";
+websectionsrootmother.properties.childtablename="<?php echo TABLE_DOMELEMENTS; ?>";
+websectionsrootmother.properties.parenttablename="<?php echo TABLE_DOMELEMENTS; ?>";
 var myForm=document.getElementById("formgeneric").cloneNode(true);
 myForm.elements.parameters.value=JSON.stringify({action:"load root"});
 websectionsrootmother.setView(myForm);
 websectionsrootmother.loadfromhttp(myForm, function(){
   var myForm=document.getElementById("formgeneric").cloneNode(true);
-  var jsonparameters={action: "load my tree"};
+  var jsonparameters={action: "load my relationships"};
   myForm.elements.parameters.value=JSON.stringify(jsonparameters);
   websectionsroot.load(websectionsrootmother.children[0]);
   websectionsroot.loadasc(websectionsrootmother.children[0]);
   websectionsroot.setView(myForm);
   websectionsroot.loadfromhttp(myForm, function(){
-    this.dispatchEvent("loadtree");
+    var myForm=document.getElementById("formgeneric").cloneNode(true);
+    var jsonparameters={action: "load my children"};
+    myForm.elements.parameters.value=JSON.stringify(jsonparameters);
+    this.relationships[0].setView(myForm);
+    this.relationships[0].loadfromhttp(myForm, function(){
+      var myForm=document.getElementById("formgeneric").cloneNode(true);
+      var jsonparameters={action: "load my tree"};
+      myForm.elements.parameters.value=JSON.stringify(jsonparameters);
+      this.getChild({name: "labels"}).setView(myForm);
+      this.getChild({name: "labels"}).loadfromhttp(myForm, function(){
+	labelsRoot=this;
+	websectionsroot.dispatchEvent("loadtree");
+      });
+    });
   });
 });
 var myalert=new Alert();

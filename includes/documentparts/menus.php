@@ -3,7 +3,7 @@
   <span class="adminlauncher adminsinglelauncher">
     <a href=""></a>
     <script>
-      thisElement.textContent=thisNode.properties.name || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+      thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
       if (thisNode.selected) setSelected.call(thisElement.parentElement);
       thisElement.onclick=function(){
 	thisNode.setActive();
@@ -12,15 +12,15 @@
 	myForm.elements.parameters.value=JSON.stringify(jsonparameters);
 	thisNode.setView(myForm);
 	thisNode.loadfromhttp(myForm, function() {
-	  var elements=thisNode.getRelationship({"name":"documents_domelements"});
-	    elements.addEventListener("refreshChildrenView", function() {
-	      if (this.children==0){
-		var element=this.addChild(new NodeMale());
-		element.myTp=document.getElementById("nochildrentp").content;
-		element.myContainer=this.childContainer;
-		element.refreshView();
-	      }
-	    });
+	  var elements=thisNode.getRelationship({"name":"domelements"});
+	  elements.addEventListener("refreshChildrenView", function() {
+	    if (this.children==0){
+	      var element=this.addChild(new NodeMale());
+	      element.myTp=document.getElementById("nochildrentp").content;
+	      element.myContainer=this.childContainer;
+	      element.refreshView();
+	    }
+	  });
 	  elements.refreshChildrenView(document.getElementById("centralcontent"), document.querySelector("#menucontainer #domelementtp").content);
 	});
 	return false;
@@ -62,7 +62,7 @@
 <template id="domelementtp">
   <div class="paragraph">
     <div class="adminlauncher adminsinglelauncher">
-      <div data-js='thisElement.innerHTML=thisNode.properties.innerHTML || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;'>
+      <div data-js='thisElement.innerHTML=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;'>
       </div>
       <div class="btinside"></div>
       <script>
@@ -87,23 +87,18 @@
 
 <script type="text/javascript">
 webuser.addEventListener("loadses", function(){
-  //lets load root document (root menu)
-  var documentrootmother=new NodeFemale();
-  documentrootmother.properties.childtablename="<?php echo TABLE_DOCUMENTS; ?>";
-  documentrootmother.properties.parenttablename="<?php echo TABLE_DOCUMENTS; ?>";
+  var documentroot=websectionsroot.getNextChild({name: "texts"});
   var myForm=document.getElementById("formgeneric").cloneNode(true);
-  myForm.elements.parameters.value=JSON.stringify({action:"load root"});
-  documentrootmother.setView(myForm);
-  documentrootmother.loadfromhttp(myForm, function(){
+  myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
+  var myrel=documentroot.cloneRelationship();
+  myrel.setView(myForm);
+  myrel.loadfromhttp(myForm, function(){
+    documentroot=this.getChild({name: "nav"});
     var myForm=document.getElementById("formgeneric").cloneNode(true);
-    var documentroot=this.children[0];
-    documentroot.relationships[0]=new NodeFemale();
-    documentroot.relationships[0].partnerNode=documentroot;
-    documentroot.relationships[0].properties.cloneFromArray(this.properties);
-    documentroot.relationships[0].setView(myForm);
     myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
-    //lests load the menus
-    documentroot.relationships[0].loadfromhttp(myForm, function(){
+    var myrel=documentroot.cloneRelationship();
+    myrel.setView(myForm);
+    myrel.loadfromhttp(myForm, function(){
       this.addEventListener("refreshChildrenView", function() {
 	if (this.children==0){
 	  var element=this.addChild(new NodeMale());

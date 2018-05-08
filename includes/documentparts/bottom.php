@@ -20,11 +20,10 @@
 </table>
 <script type="text/javascript">
 webuser.addEventListener("loadses", function(){
-  var bottomsection=websectionsroot.getRelationship({"name":"websections"}).getChild({"name":"bottom"});
-  var license=bottomsection.getRelationship({"name":"websections_domelements"}).getChild({"name":"license"});
+  var license=labelsRoot.getNextChild({"name":"bottom"}).getNextChild({"name":"license"});
   var licensecontainer=document.getElementById("footer").rows[0].cells[0];
   license.refreshView(licensecontainer, licensecontainer.nextElementSibling.content);
-  var designed=bottomsection.getRelationship({"name":"websections_domelements"}).getChild({"name":"designed"});
+  var designed=labelsRoot.getNextChild({"name":"bottom"}).getNextChild({"name":"designed"});
   var designedcontainer=document.getElementById("footer").rows[0].cells[1];
   designed.refreshView(designedcontainer, designedcontainer.nextElementSibling.content);
 });

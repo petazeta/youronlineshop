@@ -3,7 +3,7 @@
   <div class="adminsinglelauncher">
     <h1></h1>
     <script>
-      thisElement.textContent=thisNode.properties.innerHTML || websectionsroot.getRelationship({name: "websections_domelements"}).getChild({name: "emptyvallabel"}).properties.innerHTML;
+      thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
       if (thisNode.properties.innerHTML) document.title=thisNode.properties.innerHTML;
     </script>
     <div class="btrightedit"></div>
@@ -33,8 +33,6 @@
 </template>
 <script>
 webuser.addEventListener("loadses", function(){
-  var topsection=websectionsroot.getRelationship({"name":"websections"}).getChild({"name":"top"});
-  var headtt=topsection.getRelationship({"name":"websections_domelements"}).getChild({"name":"headtitle"});
-  headtt.refreshView(document.querySelector("#topheadtitle div"), document.querySelector("#topheadtitle template"));
+  labelsRoot.getNextChild({"name":"top"}).getNextChild({"name":"headtitle"}).refreshView(document.querySelector("#topheadtitle div"), document.querySelector("#topheadtitle template"));
 });
 </script>

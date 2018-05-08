@@ -36,7 +36,12 @@ Node.prototype.loadasc=function(source) {
     this.properties.cloneFromArray(source.properties);
   if (source.extra) this.extra=source.extra;
 }
-
+Node.prototype.cloneNode=function(level) {
+  if (level!==true) level=false;
+  var myClon=new this.constructor();
+  myClon.load(this, level);
+  return myClon;
+}
 Node.prototype.getTp=function (tpHref, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
   var thisNode=this;
@@ -296,7 +301,7 @@ function NodeFemale() {
 NodeFemale.prototype=Object.create(Node.prototype);
 NodeFemale.prototype.constructor=NodeFemale;
 
-NodeFemale.prototype.load=function(source) {
+NodeFemale.prototype.load=function(source, level) {
   Node.prototype.load.call(this, source);
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
@@ -304,12 +309,14 @@ NodeFemale.prototype.load=function(source) {
       this.childtablekeys[i].cloneFromArray(source.childtablekeys[i]);
     }
   }
-  this.children=[];
-  if (source.children) {
-    for (var i=0;i<source.children.length;i++) {
-      this.children[i]=new NodeMale;
-      this.children[i].parentNode=this;
-      this.children[i].load(source.children[i]);
+  if (level!==false) {
+    this.children=[];
+    if (source.children) {
+      for (var i=0;i<source.children.length;i++) {
+	this.children[i]=new NodeMale;
+	this.children[i].parentNode=this;
+	this.children[i].load(source.children[i]);
+      }
     }
   }
 }
@@ -415,17 +422,23 @@ NodeMale.prototype=Object.create(Node.prototype);
 NodeMale.prototype.constructor=NodeMale;
 
   //It loads data from a json string or an object
-NodeMale.prototype.load=function(source) {
+NodeMale.prototype.load=function(source, level) {
   Node.prototype.load.call(this, source);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
-  this.relationships=[]
-  if (source.relationships) {
-    for (var i=0;i<source.relationships.length; i++) {
-        this.relationships[i]=new NodeFemale();
-        this.relationships[i].partnerNode=this;
-        this.relationships[i].load(source.relationships[i]);
+  if (level!==false) {
+    this.relationships=[]
+    if (source.relationships) {
+      for (var i=0;i<source.relationships.length; i++) {
+	  this.relationships[i]=new NodeFemale();
+	  this.relationships[i].partnerNode=this;
+	  this.relationships[i].load(source.relationships[i]);
+      }
     }
   }
+}
+
+NodeMale.prototype.getNextChild=function(obj) {
+  return this.relationships[0].getChild(obj);
 }
 
 NodeMale.prototype.loadasc=function(source, level) {
@@ -443,6 +456,13 @@ NodeMale.prototype.avoidrecursion=function () {
   for (var i=0;i<this.relationships.length;i++) {
     this.relationships[i].avoidrecursion();
   }
+};
+
+NodeMale.prototype.cloneRelationship=function() {
+  var relClon=this.parentNode.cloneNode();
+  this.relationships[0]=relClon;
+  this.relationships[0].partnerNode=this;
+  return this.relationships[0];
 };
 
 NodeMale.prototype.getrootnode=function() {

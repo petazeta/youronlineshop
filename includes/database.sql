@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 05-05-2018 a las 16:15:59
+-- Tiempo de generación: 07-05-2018 a las 23:46:40
 -- Versión del servidor: 5.5.58-0+deb8u1
 -- Versión de PHP: 5.6.30-0+deb8u1
 
@@ -46,30 +46,6 @@ INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `documents`
---
-
-CREATE TABLE IF NOT EXISTS `documents` (
-`id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `creationdate` datetime NOT NULL,
-  `modificationdate` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `documents`
---
-
-INSERT INTO `documents` (`id`, `name`, `creationdate`, `modificationdate`) VALUES
-(1, 'root', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(23, 'How to', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(30, 'About', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(31, 'More', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(32, 'Additional Apps', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `domelements`
 --
 
@@ -77,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `domelements` (
 `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `innerHTML` text COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `domelements`
@@ -106,7 +82,23 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (49, '', 'To start: log in with one of the users or sign in with a new one.'),
 (50, '', 'More information at: <a href="https://github.com/petazeta/youronlineshop/wiki">Project Docs</a>&nbsp;and <a href="https://sourceforge.net/p/youronlineshop/discussion/">Project Forums</a>'),
 (56, '', 'DbManager is a tool for editing ORM database records.<div><br></div><div>Get more information at: <a href="http://youronlineshop.sourceforge.net/dbmanager/">Dbmanager Home</a></div>'),
-(57, '', 'When edit content click outside of the editable area to save changes. Use Intro for new line.');
+(57, '', 'When edit content click outside of the editable area to save changes. Use Intro for new line.'),
+(58, 'root', ''),
+(59, 'top', ''),
+(60, 'middle', ''),
+(61, 'bottom', ''),
+(62, 'logbox', ''),
+(63, 'logboxin', ''),
+(64, 'logboxout', ''),
+(65, 'cartbox', ''),
+(66, 'nav', ''),
+(67, 'menu', 'About'),
+(68, 'menu', 'How to'),
+(69, 'menu', 'More'),
+(70, 'menu', 'Additional Apps'),
+(71, 'labels', ''),
+(72, 'texts', ''),
+(73, 'not located', '');
 
 -- --------------------------------------------------------
 
@@ -174,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   `child_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '1',
   `relationships_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=846 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=890 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `links`
@@ -193,8 +185,6 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (86, 1, 3, 2, 13),
 (128, 1, 2, 2, 18),
 (129, 1, 3, 3, 18),
-(130, 3, 32, 2, 16),
-(131, 3, 33, 1, 16),
 (133, 33, 34, 2, 17),
 (134, 33, 35, 1, 17),
 (153, 6, 3, 2, 14),
@@ -204,31 +194,14 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (163, 10, 15, 2, 14),
 (165, 7, 17, 1, 14),
 (168, 6, 20, 1, 14),
-(200, 2, 36, 1, 16),
-(204, 2, 38, 2, 16),
 (272, 1, 6, 1, 18),
-(274, 6, 41, 1, 16),
-(275, 6, 42, 2, 16),
-(276, 6, 43, 3, 16),
-(277, 43, 44, 1, 17),
 (482, 1, 23, 2, 26),
 (583, 2, 7, 1, 18),
 (591, 7, 8, 1, 18),
 (592, 7, 9, 2, 18),
-(593, 8, 14, 2, 16),
-(594, 8, 23, 1, 16),
-(595, 9, 15, 3, 16),
-(596, 9, 19, 2, 16),
-(597, 9, 20, 1, 16),
-(599, 8, 43, 3, 16),
 (600, 2, 10, 2, 18),
-(602, 10, 25, 2, 16),
-(603, 10, 27, 1, 16),
-(604, 2, 9, 3, 16),
-(610, 1, 44, 1, 16),
 (698, 33, 8, 1, 15),
 (699, 32, 9, 1, 15),
-(719, 23, 46, 1, 30),
 (740, 14, 21, 1, 14),
 (787, 1, 30, 1, 26),
 (812, 13, 30, 1, 10),
@@ -239,16 +212,48 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (817, 15, 22, 1, 29),
 (818, 14, 3, 1, 4),
 (819, 15, 7, 1, 4),
-(820, 30, 47, 1, 30),
-(821, 30, 48, 2, 30),
-(822, 23, 49, 3, 30),
 (823, 1, 31, 3, 26),
-(824, 31, 50, 1, 30),
 (838, 13, 52, 1, 20),
 (839, 52, 83, 1, 21),
 (840, 1, 32, 4, 26),
-(844, 32, 56, 1, 30),
-(845, 23, 57, 2, 30);
+(849, 59, 41, 2, 17),
+(850, 59, 42, 1, 17),
+(851, 60, 36, 5, 17),
+(852, 60, 38, 4, 17),
+(853, 60, 9, 3, 17),
+(854, 60, 62, 1, 17),
+(855, 62, 63, 1, 17),
+(856, 62, 64, 2, 17),
+(857, 63, 23, 3, 17),
+(858, 63, 14, 2, 17),
+(859, 63, 43, 1, 17),
+(860, 64, 20, 3, 17),
+(861, 64, 19, 2, 17),
+(862, 64, 15, 1, 17),
+(863, 60, 65, 2, 17),
+(864, 65, 27, 2, 17),
+(865, 65, 25, 1, 17),
+(866, 61, 33, 2, 17),
+(867, 61, 32, 1, 17),
+(869, 66, 67, 1, 17),
+(870, 66, 68, 2, 17),
+(871, 66, 69, 3, 17),
+(872, 66, 70, 4, 17),
+(874, 67, 48, 2, 17),
+(875, 68, 46, 1, 17),
+(876, 68, 57, 2, 17),
+(877, 68, 49, 3, 17),
+(878, 69, 50, 1, 17),
+(879, 70, 56, 1, 17),
+(880, 58, 71, 1, 17),
+(881, 58, 72, 2, 17),
+(883, 71, 59, 3, 17),
+(884, 71, 60, 2, 17),
+(885, 71, 61, 1, 17),
+(886, 72, 66, 1, 17),
+(887, 71, 73, 4, 17),
+(888, 73, 44, 1, 17),
+(889, 67, 47, 1, 17);
 
 -- --------------------------------------------------------
 
@@ -315,15 +320,13 @@ INSERT INTO `relationships` (`id`, `name`, `parenttablename`, `parentunique`, `c
 (10, 'user_userdata', 'users', 1, 'usersdata', 1, 0),
 (13, 'itemcategories', 'itemcategories', 1, 'itemcategories', 0, 0),
 (14, 'itemcategories_items', 'itemcategories', 1, 'items', 0, 0),
-(16, 'websections_domelements', 'websections', 1, 'domelements', 0, 0),
 (17, 'domelements', 'domelements', 1, 'domelements', 0, 0),
 (18, 'websections', 'websections', 1, 'websections', 0, 0),
 (20, 'orders', 'users', 1, 'orders', 0, 0),
 (21, 'orderitems', 'orders', 1, 'orderitems', 0, 0),
 (22, 'items', 'orderitems', 1, 'items', 1, 1),
 (26, 'documents', 'documents', 1, 'documents', 0, 0),
-(29, 'users_addresses', 'users', 1, 'addresses', 0, 0),
-(30, 'documents_domelements', 'documents', 1, 'domelements', 0, 0);
+(29, 'users_addresses', 'users', 1, 'addresses', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -388,31 +391,6 @@ INSERT INTO `userstypes` (`id`, `type`) VALUES
 (3, 'orders administrator'),
 (7, 'web administrator');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `websections`
---
-
-CREATE TABLE IF NOT EXISTS `websections` (
-`id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `websections`
---
-
-INSERT INTO `websections` (`id`, `name`) VALUES
-(1, 'root'),
-(2, 'middle'),
-(3, 'bottom'),
-(6, 'top'),
-(7, 'logbox'),
-(8, 'logboxin'),
-(9, 'logboxout'),
-(10, 'cartbox');
-
 --
 -- Índices para tablas volcadas
 --
@@ -421,12 +399,6 @@ INSERT INTO `websections` (`id`, `name`) VALUES
 -- Indices de la tabla `addresses`
 --
 ALTER TABLE `addresses`
- ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `documents`
---
-ALTER TABLE `documents`
  ADD PRIMARY KEY (`id`);
 
 --
@@ -490,12 +462,6 @@ ALTER TABLE `userstypes`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `websections`
---
-ALTER TABLE `websections`
- ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -505,15 +471,10 @@ ALTER TABLE `websections`
 ALTER TABLE `addresses`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
--- AUTO_INCREMENT de la tabla `documents`
---
-ALTER TABLE `documents`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
---
 -- AUTO_INCREMENT de la tabla `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=58;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=74;
 --
 -- AUTO_INCREMENT de la tabla `itemcategories`
 --
@@ -528,7 +489,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 -- AUTO_INCREMENT de la tabla `links`
 --
 ALTER TABLE `links`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=846;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=890;
 --
 -- AUTO_INCREMENT de la tabla `orderitems`
 --
@@ -559,11 +520,6 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 --
 ALTER TABLE `userstypes`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT de la tabla `websections`
---
-ALTER TABLE `websections`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
