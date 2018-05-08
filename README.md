@@ -32,6 +32,6 @@ User "user3" is web administrator user and can edit the web page content and the
 
 ## More
 
-Find us at github.com and sourceforge.net for more information.
+Find us at [github.com](https://github.com/petazeta/youronlineshop/) and [sourceforge.net](https://sourceforge.net/projects/youronlineshop/) for more information.
 
 >**Tip**: There is also available for purchasing a tool named dbmanager. This tool is very useful to edit ORM database records. Get more information at: [DbManager](http://youronlineshop.sourceforge.net/dbmanager)
