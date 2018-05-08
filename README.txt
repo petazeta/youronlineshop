@@ -26,5 +26,3 @@ Open the browser (chrome or firefox) at the main folder url. The ecommerce syste
 *More*
 *****************
 Find us at https://github.com/petazeta/youronlineshop/ and https://sourceforge.net/projects/youronlineshop/ for more information.
-
-Tip: There is also available for purchasing a tool named dbmanager. This tool is very useful to edit ORM database records. Get more information at: http://youronlineshop.sourceforge.net/dbmanager
