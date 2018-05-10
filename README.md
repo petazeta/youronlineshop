@@ -30,6 +30,18 @@ User "user2" is order administrator and can watch and edit all the orders. Once 
 User "user3" is web administrator user and can edit the web page content and the catalog (categories and items).
 
 
-## More
+## More Info
 
 Find us at [github.com](https://github.com/petazeta/youronlineshop/) and [sourceforge.net](https://sourceforge.net/projects/youronlineshop/) for more information.
+
+## Samples
+
+<img itemprop="screenshot" src="//a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1" width="245" height="183" srcset="//a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1.5 1.5x, //a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/2 2x" alt="desktop admin">
+
+<a title="You Tube Video" rel="section" href="//www.youtube.com/embed/V6koxAigX5E?rel=0">
+  <img src="//img.youtube.com/vi/V6koxAigX5E/hqdefault.jpg" width="245" height="183">
+</a>
+
+## Liven Demo
+
+[Your Online Shop Demo](http://youronlineshop.sourceforge.net/code/)

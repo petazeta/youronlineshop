@@ -46,10 +46,10 @@
 	  <template>
 	    <table style="width:100%"></table>
 	    <script>
-	      var myform=document.getElementById("formgeneric").cloneNode(true);
-	      thisNode.setView(myform);
-	      myform.elements.parameters.value=JSON.stringify({action:"load my children"});
-	      thisNode.loadfromhttp(myform, function() {
+	      var myForm=document.getElementById("formgeneric").cloneNode(true);
+	      thisNode.setView(myForm);
+	      myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
+	      thisNode.loadfromhttp(myForm, function() {
 		this.addEventListener("refreshChildrenView", function() {
 		  if (this.children==0){
 		    //Add the nochildren node that will be the container of the addnode button in case user is web admin
@@ -89,14 +89,12 @@
 		      if (thisNode.selected) setSelected.call(closesttagname.call(thisElement, "TR"));
 		      thisElement.onclick=function(){
 			thisNode.setActive();
-			var myform=document.getElementById("formgeneric").cloneNode(true);
-			thisNode.relationships[0]=new NodeFemale();
-			thisNode.relationships[0].partnerNode=thisNode;
-			thisNode.relationships[0].properties.cloneFromArray(thisNode.parentNode.properties);
-			thisNode.relationships[0].setView(myform);
-			myform.elements.parameters.value=JSON.stringify({action:"load my children"});
-			thisNode.relationships[0].loadfromhttp(myform, function(){
-			  thisNode.relationships[0].refreshView(document.getElementById("centralcontent"),document.querySelector("#catgbox template"));
+			var myForm=document.getElementById("formgeneric").cloneNode(true);
+			var myrel=thisNode.cloneRelationship();
+			myrel.setView(myForm);
+			myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
+			myrel.loadfromhttp(myForm, function(){
+			  this.refreshView(document.getElementById("centralcontent"),document.querySelector("#catgbox template"));
 			});
 			return false;
 		      };
@@ -153,11 +151,11 @@ webuser.addEventListener("loadses", function(){
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="<?php echo TABLE_CATEGORIES; ?>";
   categoriesrootmother.properties.parenttablename="<?php echo TABLE_CATEGORIES; ?>";
-  var myform=document.getElementById("formgeneric").cloneNode(true);
-  myform.elements.parameters.value=JSON.stringify({action:"load root"});
-  categoriesrootmother.setView(myform);
-  categoriesrootmother.loadfromhttp(myform, function(){
-    var myform=document.getElementById("formgeneric").cloneNode(true);
+  var myForm=document.getElementById("formgeneric").cloneNode(true);
+  myForm.elements.parameters.value=JSON.stringify({action:"load root"});
+  categoriesrootmother.setView(myForm);
+  categoriesrootmother.loadfromhttp(myForm, function(){
+    var myForm=document.getElementById("formgeneric").cloneNode(true);
     var categoriesroot=this.children[0];
     var myrel=categoriesroot.cloneRelationship();
     
