@@ -44,6 +44,6 @@ Find us at [github.com](https://github.com/petazeta/youronlineshop/) and [source
   <img src="https://img.youtube.com/vi/V6koxAigX5E/hqdefault.jpg" width="245" height="183">
 </a>
 
-## Liven Demo
+## Live Demo
 
 [Your Online Shop Demo](http://youronlineshop.sourceforge.net/code/)
