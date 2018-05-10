@@ -1,8 +1,9 @@
 # Your Online Shop System
 
 ## Samples
-
-<img itemprop="screenshot" src="https://a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1" width="245" height="183" srcset="//a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1.5 1.5x, //a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/2 2x" alt="desktop admin">
+<a href="https://a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/max/max/1">
+	<img itemprop="screenshot" src="https://a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1" width="245" height="183" srcset="//a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1.5 1.5x, //a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/2 2x" alt="desktop admin">
+</a>
 
 ## YouTube
 
