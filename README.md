@@ -3,10 +3,14 @@
 <table>
   <tr>
     <td>
-hola
+<a href="https://a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/max/max/1">
+	<img itemprop="screenshot" src="https://a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1" width="245" height="183" srcset="//a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1.5 1.5x, //a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/2 2x" alt="desktop admin">
+</a>
     </td>
     <td>
-adios
+<a title="You Tube Video" rel="section" href="https://www.youtube.com/embed/V6koxAigX5E?rel=0">
+  <img src="https://img.youtube.com/vi/V6koxAigX5E/hqdefault.jpg" width="245" height="183">
+</a>
     </td>
   </tr>
 </table>
