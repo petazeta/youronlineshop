@@ -1,5 +1,5 @@
 <template>
-  <table class="formtable" style="width:100%">
+  <table class="formtable">
     <tr>
       <td style="pading-bottom:0.5em; border-bottom:1px solid #666;">
 	<table style="width:100%" class="productlist" data-js='
