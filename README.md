@@ -1,5 +1,19 @@
 # Your Online Shop System
 
+## Samples
+
+<img itemprop="screenshot" src="https://a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1" width="245" height="183" srcset="//a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1.5 1.5x, //a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/2 2x" alt="desktop admin">
+
+## YouTube
+
+<a title="You Tube Video" rel="section" href="https://www.youtube.com/embed/V6koxAigX5E?rel=0">
+  <img src="https://img.youtube.com/vi/V6koxAigX5E/hqdefault.jpg" width="245" height="183">
+</a>
+
+## Live Demo
+
+[Your Online Shop Demo](http://youronlineshop.sourceforge.net/code/)
+
 ## Autor Note
 
 This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to those people that have developed software in which I got inspiration. This version of the software is free to use and modify.
@@ -33,17 +47,3 @@ User "user3" is web administrator user and can edit the web page content and the
 ## More Info
 
 Find us at [github.com](https://github.com/petazeta/youronlineshop/) and [sourceforge.net](https://sourceforge.net/projects/youronlineshop/) for more information.
-
-## Samples
-
-<img itemprop="screenshot" src="https://a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1" width="245" height="183" srcset="//a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/1.5 1.5x, //a.fsdn.com/con/app/proj/youronlineshop/screenshots/widescreen.png/245/183/2 2x" alt="desktop admin">
-
-## YouTube
-
-<a title="You Tube Video" rel="section" href="https://www.youtube.com/embed/V6koxAigX5E?rel=0">
-  <img src="https://img.youtube.com/vi/V6koxAigX5E/hqdefault.jpg" width="245" height="183">
-</a>
-
-## Live Demo
-
-[Your Online Shop Demo](http://youronlineshop.sourceforge.net/code/)
