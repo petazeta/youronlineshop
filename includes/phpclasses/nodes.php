@@ -37,7 +37,7 @@ class Node {
     if (isset($source->extra)) $this->extra=$source->extra;
   }
   function db_search($tablename=null, $proparray=null) {
-    if (!$tablename) $tablename=$this->parentNode->properties->childtablename;
+    if (!$tablename) $tablename=constant($this->parentNode->properties->childtablename);
     if (!$proparray) {
       $proparray=$this->properties;
     }
@@ -107,7 +107,7 @@ class NodeFemale extends Node{
     $child->parentNode=$this;
   }
   function db_loadchildtablekeys() {
-    $sql="show columns from " . $this->properties->childtablename;
+    $sql="show columns from " . constant($this->properties->childtablename);
     if (($result = $this->getdblink()->query($sql))===false) return false;
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
@@ -121,7 +121,7 @@ class NodeFemale extends Node{
   function db_loadmychildren() {  
     $sql = "SELECT t.*, l.sort_order FROM "
     . TABLE_LINKS . " l"
-    . " inner join " . $this->properties->childtablename . " t on t.id=l.child_id"
+    . " inner join " . constant($this->properties->childtablename) . " t on t.id=l.child_id"
     .  " WHERE"
     .  " l.relationships_id=" . $this->properties->id
     .  " and l.parent_id=" . $this->partnerNode->properties->id
@@ -157,10 +157,10 @@ class NodeFemale extends Node{
     $this->properties->cloneFromArray($row);
     $this->db_loadchildtablekeys();
     $sql = "SELECT t.* FROM "
-      .  $this->properties->childtablename . " t" 
+      .  constant($this->properties->childtablename) . " t" 
       . " where t.id not in ("
       .  "SELECT t.id FROM "
-        . $this->properties->childtablename . " t "
+        . constant($this->properties->childtablename) . " t "
         . " inner join " . TABLE_LINKS . " l on l.relationships_id=" . $this->properties->id . " and t.id=l.child_id"
         . " WHERE 1"
       . ")";
@@ -244,7 +244,7 @@ class NodeMale extends Node{
   function db_loadmyself(){
     $sql = "SELECT t.*";
     if (isset($this->parentNode->partnerNode) && isset($this->parentNode->partnerNode->id)) $sql .= ", l.sort_order";
-    $sql .= " FROM " . $this->parentNode->childtablename . " t";
+    $sql .= " FROM " . constant($this->parentNode->childtablename) . " t";
     if (isset($this->parentNode->partnerNode) && isset($this->parentNode->partnerNode->id) && isset($this->parentNode->id))
       $sql .= " left join " . TABLE_LINKS . " l on t.id=l.child_id" . " and " . "l.relationships_id='" . $this->parentNode->id . "'" . " and " . "l.parent_id='" . $this->parentNode->partnerNode->id . "'";
     $sql .=" where " . "t.id =" . $this->properties->id;
@@ -264,7 +264,7 @@ class NodeMale extends Node{
       $myproperties[$key]='"' . $value . '"';
     }
     $sql = "INSERT INTO "
-      . $this->parentNode->properties->childtablename
+      . constant($this->parentNode->properties->childtablename)
       . " ("
         . implode(", ", array_keys($myproperties))
       . " ) VALUES ("
@@ -324,7 +324,7 @@ class NodeMale extends Node{
     if (!isset($this->properties->id) || $this->properties->id==null) return false;
     if (isset($this->parentNode->properties->childtablelocked) && $this->parentNode->properties->childtablelocked==1) return false;
       $sql="DELETE FROM "
-      . $this->parentNode->properties->childtablename
+      . constant($this->parentNode->properties->childtablename)
       . " where id=" . $this->properties->id . " LIMIT 1";
       if (($result = $this->getdblink()->query($sql))===false) return false;
     
@@ -389,7 +389,7 @@ class NodeMale extends Node{
         array_push($setSentences, $key . "=" . '"' . mysql_escape_string($value) . '"');
       }
       $sql = "update ".
-        $this->parentNode->properties->childtablename  .
+        constant($this->parentNode->properties->childtablename)  .
         " set ";
       $sql .= implode(", ", $setSentences);
       $sql .=" where id=" . $this->properties->id;

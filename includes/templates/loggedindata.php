@@ -8,7 +8,7 @@
         <table>
 	  <tr></tr>
 	  <script>
-	    var userdata=thisNode.getRelationship({"name":"user_userdata"}).children[0];
+	    var userdata=thisNode.getRelationship({"name":"usersdata"}).children[0];
 	    userdata.getTp("includes/templates/singlefield.php", function(){
 	      var coltp=userdata.xmlTp.cloneNode(true);
 	      userdata.refreshPropertiesView(thisElement,coltp);

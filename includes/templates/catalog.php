@@ -54,7 +54,7 @@
 			thisNode.setView(myform);
 			myform.elements.parameters.value=JSON.stringify({action:"load my tree"});
 			thisNode.loadfromhttp(myform, function(){
-			  var items=thisNode.getRelationship({name:"itemcategories_items"});
+			  var items=thisNode.getRelationship({name:"items"});
 			  items.addEventListener("refreshChildrenView", function() {
 			    if (this.children==0){
 			      var element=this.addChild(new NodeMale());

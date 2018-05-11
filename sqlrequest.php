@@ -1,8 +1,8 @@
 <?php
 session_start();
 require('includes/config.php');
-require('includes/database_tables.php');
 require('includes/phpclasses/nodes.php');
+require('includes/database_tables.php');
 require('includes/phpclasses/user.php');
 
 $myreturn=new NodeFemale();

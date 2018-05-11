@@ -149,8 +149,8 @@ webuser.addEventListener("loadses", function(){
   cartbox.refreshView(document.querySelector("#catgbox div"), document.querySelector("#catgbox th template"));
 
   var categoriesrootmother=new NodeFemale();
-  categoriesrootmother.properties.childtablename="<?php echo TABLE_CATEGORIES; ?>";
-  categoriesrootmother.properties.parenttablename="<?php echo TABLE_CATEGORIES; ?>";
+  categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
+  categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
   var myForm=document.getElementById("formgeneric").cloneNode(true);
   myForm.elements.parameters.value=JSON.stringify({action:"load root"});
   categoriesrootmother.setView(myForm);

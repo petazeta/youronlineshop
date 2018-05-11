@@ -1,8 +1,8 @@
 <?php
 session_start();
 require('includes/config.php');
-require('includes/database_tables.php');
 require('includes/phpclasses/nodes.php');
+require('includes/database_tables.php');
 require('includes/phpclasses/user.php');
 
 header("Content-type: application/json");
@@ -38,10 +38,10 @@ if ($loginresult->extra->usernameok==true && $loginresult->extra->passwordok ==t
   $user->properties->id=$loginresult->properties->id;
   $user->db_loadmyrelationships();
   foreach ($user->relationships as $key => $value) {
-    if ($user->relationships[$key]->properties->name=="users_userstypes") {
+    if ($user->relationships[$key]->properties->name=="userstypes") {
       $user->relationships[$key]->db_loadmychildren();
     }
-    if ($user->relationships[$key]->properties->name=="user_userdata") {
+    if ($user->relationships[$key]->properties->name=="usersdata") {
       $user->relationships[$key]->db_loadmychildren();
     }
   }

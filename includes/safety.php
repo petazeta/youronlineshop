@@ -16,14 +16,14 @@ function is_actionpermited($parameters, $myelement){
   $myuserid=null;
   if (isset($_SESSION["user"])) {
     $user=unserialize($_SESSION["user"]);
-    $usertyperel=$user->getRelationship(array("name" => "users_userstypes"));
+    $usertyperel=$user->getRelationship(array("name" => "userstypes"));
     if (isset($usertyperel->children[0])) $usertype=$usertyperel->children[0]->properties->type;
   }
-  $systemtables=[TABLE_RELATIONSHIPS, TABLE_LINKS];
+  $systemtables=["TABLE_RELATIONSHIPS", "TABLE_LINKS"];
   if (array_search($tablename, $systemtables)) {
     return false;
   }
-  $privatetables=[TABLE_USERS, TABLE_USERSDATA, TABLE_ADDRESSES, TABLE_ORDERS, TABLE_ORDERITEMS];
+  $privatetables=["TABLE_USERS", "TABLE_USERSDATA", "TABLE_ADDRESSES", "TABLE_ORDERS", "TABLE_ORDERITEMS"];
   if (!array_search($tablename,$privatetables)) {
     if ($action=="write") {
       if ($usertype=="web administrator") return true;
@@ -32,11 +32,11 @@ function is_actionpermited($parameters, $myelement){
     return false;
   }
   else {
-    if ($tablename==TABLE_USERS) {
+    if ($tablename=="TABLE_USERS") {
       if ($usertype=="web administrator")  return true;
       else return false;
     }
-    if ($tablename==TABLE_ADDRESSES || $tablename==TABLE_USERSDATA || $tablename==TABLE_ORDERS || $tablename==TABLE_ORDERITEMS) {
+    if ($tablename=="TABLE_ADDRESSES" || $tablename=="TABLE_USERSDATA" || $tablename=="TABLE_ORDERS" || $tablename=="TABLE_ORDERITEMS") {
       if ($usertype=="orders administrator") return true;
       //we must check the user owner of the table
       if (isset($parameters->user_id)) {

@@ -24,7 +24,7 @@
 	thisUser.loadfromhttp(myform, function() {
 	  var myform=document.getElementById("formgeneric").cloneNode(true);
 	  myform.elements.parameters.value=JSON.stringify({action: "load my children"});
-	  var datarel=this.getRelationship({name:"user_userdata"});
+	  var datarel=this.getRelationship({name:"usersdata"});
 	  datarel.setView(myform);
 	  datarel.loadfromhttp(myform, function() {
 	    thisElement.textContent=this.children[0].properties.name + " " + this.children[0].properties.surname;
@@ -32,7 +32,7 @@
 	});
       }
       else {
-	thisElement.textContent=webuser.getRelationship({name:"user_userdata"}).children[0].properties.name + " " + webuser.getRelationship({name:"user_userdata"}).children[0].properties.surname;
+	thisElement.textContent=webuser.getRelationship({name:"usersdata"}).children[0].properties.name + " " + webuser.getRelationship({name:"usersdata"}).children[0].properties.surname;
       }
       //Show the address
       var launcher=new NodeMale();

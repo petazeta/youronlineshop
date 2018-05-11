@@ -11,8 +11,8 @@
   <a href="" class="btn">Finish Order</a>
   <script>
     thisElement.onclick=function(){
-      var addressdata=webuser.getRelationship({"name":"users_addresses"}).children[0];
-      var userdata=webuser.getRelationship({"name":"user_userdata"}).children[0];
+      var addressdata=webuser.getRelationship({"name":"addresses"}).children[0];
+      var userdata=webuser.getRelationship({"name":"usersdata"}).children[0];
       var result=new NodeMale();
       result.extra={};
       myalert.properties.timeout=2000;

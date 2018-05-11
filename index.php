@@ -1,7 +1,3 @@
-<?php
-//Includes
-require('includes/database_tables.php');
-?>
 <!DOCTYPE html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
@@ -25,8 +21,8 @@ document.body.appendChild(document.getElementById("formgenerictreetp").content.q
 var labelsRoot=null;
 var websectionsroot= new NodeMale();
 websectionsrootmother=new NodeFemale();
-websectionsrootmother.properties.childtablename="<?php echo TABLE_DOMELEMENTS; ?>";
-websectionsrootmother.properties.parenttablename="<?php echo TABLE_DOMELEMENTS; ?>";
+websectionsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
+websectionsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
 var myForm=document.getElementById("formgeneric").cloneNode(true);
 myForm.elements.parameters.value=JSON.stringify({action:"load root"});
 websectionsrootmother.setView(myForm);

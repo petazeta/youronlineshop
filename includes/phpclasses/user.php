@@ -3,7 +3,7 @@ class user extends NodeMale {
   public function __construct() {
     parent::__construct();
     $this->parentNode=new NodeFemale();
-    $this->parentNode->properties->childtablename=TABLE_USERS;
+    $this->parentNode->properties->childtablename="TABLE_USERS";
     $this->parentNode->db_loadchildtablekeys();
   }
   function checklogindata($uname, $upass) {
@@ -55,7 +55,7 @@ class user extends NodeMale {
         $result->properties->id=$user->properties->id;
         $user->db_loadmyrelationships();
         /* lets not set any usertype. There was also an error that the insertion was duplicated
-        $usertyperel=$user->getRelationship(array("name"=>"users_userstypes"));
+        $usertyperel=$user->getRelationship(array("name"=>"userstypes"));
         $defaultusertype=new NodeMale();
         $defaultusertype->properties->id=2;
         $usertyperel->children[0]=$defaultusertype;
@@ -64,14 +64,14 @@ class user extends NodeMale {
           $result->extra->error=false;
         }
         */
-        $userdatarel=$user->getRelationship(array("name"=>"user_userdata"));
+        $userdatarel=$user->getRelationship(array("name"=>"usersdata"));
         $defaulttype=new NodeMale();
         $userdatarel->children[0]=$defaulttype;
         $defaulttype->parentNode=$userdatarel;
         if ($userdatarel->children[0]->db_insertmyself()!=false) {
           $result->extra->error=false;
         }
-        $addressrel=$user->getRelationship(array("name"=>"users_addresses"));
+        $addressrel=$user->getRelationship(array("name"=>"addresses"));
         $newaddress=new NodeMale();
         $addressrel->children[0]=$newaddress;
         $newaddress->parentNode=$addressrel;

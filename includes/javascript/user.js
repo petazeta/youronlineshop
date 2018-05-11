@@ -65,7 +65,7 @@ user.prototype.isWebAdmin=function(){
 }
 
 user.prototype.getUserType=function(){
-  if (webuser.getRelationship({name:"users_userstypes"}) && webuser.getRelationship({name:"users_userstypes"}).children[0]) return webuser.getRelationship({name:"users_userstypes"}).children[0].properties.type;
+  if (webuser.getRelationship({name:"userstypes"}) && webuser.getRelationship({name:"userstypes"}).children[0]) return webuser.getRelationship({name:"userstypes"}).children[0].properties.type;
 }
 
 user.prototype.checklogindata=function(uname, upass){
