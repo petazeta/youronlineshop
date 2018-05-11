@@ -36,7 +36,7 @@ class user extends NodeMale {
     return $result;
   }
   function create($username, $pwd) {
-    $result=new NodeFemale();
+    $result=new NodeMale();
     if (!isset($result->extra)) $result->extra=new stdClass();
     $result->extra->error=true;
     $result->extra->usernameok=false;
