@@ -69,3 +69,13 @@ function intoColumns(cellsNumber) {
     }
   }
 }
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+function checklength(value, min, max){
+  if (typeof value == "string") {
+    if (value.length >= min && value.length <= max) return true;
+  }
+  return false;
+}

@@ -31,10 +31,6 @@
       checkInput(userdata);
       if (!result.extra.error) checkInput(addressdata);
       if (!result.extra.error) {
-	function validateEmail(email) {
-	  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	  return re.test(String(email).toLowerCase());
-	}
 	if (!validateEmail(userdata.properties.email)) {
 	  result.extra.error=true;
 	  result.extra.errorkey="email";
