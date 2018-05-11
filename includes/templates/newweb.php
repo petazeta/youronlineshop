@@ -7,7 +7,7 @@
     </div>
   </div>
   <div>
-    <form action="http://youronlineshop.sourceforge.net/shop/createshop.php" method="POST">
+    <form action="http://youronlineshop.sourceforge.net/shop/verifyemail.php" method="POST">
       <table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
 	<tr>
 	  <td>
