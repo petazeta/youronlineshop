@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 07-05-2018 a las 23:46:40
+-- Tiempo de generación: 11-05-2018 a las 17:27:57
 -- Versión del servidor: 5.5.58-0+deb8u1
 -- Versión de PHP: 5.6.30-0+deb8u1
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 --
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`) VALUES
-(20, 'my street', 'cityyyyyy', '', ''),
+(20, 'my street', 'cityyyyyy', 'mystate', '19293'),
 (21, '', '', '', ''),
 (22, '', '', '', '');
 
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `descriptionshort` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `items`
@@ -152,7 +152,8 @@ INSERT INTO `items` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `imag
 (15, 'Peeling + morera', '<p>Tratamiento de gran efecto exfoliante e iluminador. Contribuye a difuminar los excesos de pigmentación y corregir las imperfecciones causadas por lesiones cutáneas. Previene la aparición de manchas.</p><p>Contiene ácido glicólico, ácido láctico y extracto de morera. Esta combinación de ingredientes le confiere un profundo efecto exfoliante que favorece la redistribuición de la pigmentación, proporciondo un tono y un tacto uniforme. El ácido glicólico es un compuesto que se extrae de la caña de azúcar.</p><p>Indicado para pieles con lesiones de acné y/o con excesos de pigmentación.</p><print><p>Modo de empleo:<br> Aplicar en el rostro, incidiendo sobre las zonas más necesitadas. No aclarar. <b>Aplicar este producto un día y dejar descansar los dos siguientes. No aplicar más de 3 veces por semana.</b></p></print>', '<p>Tratamiento de gran efecto exfoliante e iluminador. Contribuye a difuminar los excesos de pigmentación y corregir las imperfecciones causadas por lesiones cutáneas. Previene la aparición de manchas.</p>', 'peeling.jpg', 20.00),
 (17, 'Gel crema contorno de ojos de aloe vera 50ml', '<p>Gel crema no graso, que descongestiona las bolsas bajo los ojos y regenera la epidermis del contorno ocular, atenuando las arrugas de expresión, el decaimiento de los párpados y evitando la deshidratación.</p><p>Tonifica el contorno de ojos y previene la aparición de arrugas.</p><p>Modo de empleo:<br> Aplicar en el contorno de ojos.</p>', '<p>Gel crema no graso, que descongestiona las bolsas bajo los ojos y regenera la epidermis del contorno ocular, atenuando las arrugas de expresión, el decaimiento de los párpados y evitando la deshidratación.</p>', 'contornodeojos.jpg', 3.00),
 (20, 'Jabon del apicultor hexagonal de miel 100gr', '<p>Tiene una deliciosa y potente fragancia a miel muy relajante. Contiene miel de abejas por lo que suaviza la piel y la deja mas hidratada.</p><p>Especialmente recomendado para las manos. Tiene forma hexagonal como los paneles de abejas de las que se obtiene la deliciosa miel.</p><p>Utilizar para el ba&ntilde;o o ducha diario.</p>', '<p>Tiene una deliciosa y potente fragancia a miel muy relajante. Contiene miel de abejas por lo que suaviza la piel y la deja mas hidratada.</p>', 'jabonmiel.jpg', 53.00),
-(21, '', '', '', '', 0.00);
+(21, '', '', '', '', 0.00),
+(22, '', '', '', '', 0.00);
 
 -- --------------------------------------------------------
 
@@ -166,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   `child_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '1',
   `relationships_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=890 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=902 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `links`
@@ -190,8 +191,8 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (153, 6, 3, 2, 14),
 (155, 9, 1, 1, 14),
 (160, 8, 8, 1, 14),
-(161, 10, 9, 1, 14),
-(163, 10, 15, 2, 14),
+(161, 10, 9, 2, 14),
+(163, 10, 15, 1, 14),
 (165, 7, 17, 1, 14),
 (168, 6, 20, 1, 14),
 (272, 1, 6, 1, 18),
@@ -213,7 +214,7 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (818, 14, 3, 1, 4),
 (819, 15, 7, 1, 4),
 (823, 1, 31, 3, 26),
-(838, 13, 52, 1, 20),
+(838, 13, 52, 6, 20),
 (839, 52, 83, 1, 21),
 (840, 1, 32, 4, 26),
 (849, 59, 41, 2, 17),
@@ -253,7 +254,19 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (886, 72, 66, 1, 17),
 (887, 71, 73, 4, 17),
 (888, 73, 44, 1, 17),
-(889, 67, 47, 1, 17);
+(889, 67, 47, 1, 17),
+(890, 13, 53, 5, 20),
+(891, 53, 84, 1, 21),
+(892, 13, 54, 4, 20),
+(893, 54, 85, 1, 21),
+(894, 13, 55, 3, 20),
+(895, 55, 86, 1, 21),
+(896, 13, 56, 2, 20),
+(897, 56, 87, 1, 21),
+(898, 6, 22, 3, 14),
+(899, 13, 57, 1, 20),
+(900, 57, 88, 2, 21),
+(901, 57, 89, 1, 21);
 
 -- --------------------------------------------------------
 
@@ -266,14 +279,20 @@ CREATE TABLE IF NOT EXISTS `orderitems` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `quantity` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `orderitems`
 --
 
 INSERT INTO `orderitems` (`id`, `name`, `price`, `quantity`) VALUES
-(83, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 2);
+(83, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 2),
+(84, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 2),
+(85, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
+(86, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
+(87, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
+(88, 'Peeling + morera', 20.00, 1),
+(89, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1);
 
 -- --------------------------------------------------------
 
@@ -286,14 +305,19 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `orders`
 --
 
 INSERT INTO `orders` (`id`, `creationdate`, `modificationdate`, `status`) VALUES
-(52, '2018-04-27 20:56:25', '0000-00-00 00:00:00', 0);
+(52, '2018-04-27 20:56:25', '0000-00-00 00:00:00', 0),
+(53, '2018-05-08 19:58:21', '0000-00-00 00:00:00', 0),
+(54, '2018-05-08 20:28:46', '0000-00-00 00:00:00', 0),
+(55, '2018-05-08 20:29:23', '0000-00-00 00:00:00', 0),
+(56, '2018-05-08 20:32:08', '0000-00-00 00:00:00', 0),
+(57, '2018-05-11 14:16:19', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -309,24 +333,22 @@ CREATE TABLE IF NOT EXISTS `relationships` (
   `childtablename` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `childunique` tinyint(1) NOT NULL DEFAULT '0',
   `childtablelocked` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `relationships`
 --
 
 INSERT INTO `relationships` (`id`, `name`, `parenttablename`, `parentunique`, `childtablename`, `childunique`, `childtablelocked`) VALUES
-(4, 'users_userstypes', 'users', 0, 'userstypes', 1, 1),
-(10, 'user_userdata', 'users', 1, 'usersdata', 1, 0),
-(13, 'itemcategories', 'itemcategories', 1, 'itemcategories', 0, 0),
-(14, 'itemcategories_items', 'itemcategories', 1, 'items', 0, 0),
-(17, 'domelements', 'domelements', 1, 'domelements', 0, 0),
-(18, 'websections', 'websections', 1, 'websections', 0, 0),
-(20, 'orders', 'users', 1, 'orders', 0, 0),
-(21, 'orderitems', 'orders', 1, 'orderitems', 0, 0),
-(22, 'items', 'orderitems', 1, 'items', 1, 1),
-(26, 'documents', 'documents', 1, 'documents', 0, 0),
-(29, 'users_addresses', 'users', 1, 'addresses', 0, 0);
+(4, 'userstypes', 'TABLE_USERS', 0, 'TABLE_USERSTYPES', 1, 1),
+(10, 'usersdata', 'TABLE_USERS', 1, 'TABLE_USERSDATA', 1, 0),
+(13, 'itemcategories', 'TABLE_ITEMCATEGORIES', 1, 'TABLE_ITEMCATEGORIES', 0, 0),
+(14, 'items', 'TABLE_ITEMCATEGORIES', 1, 'TABLE_ITEMS', 0, 0),
+(17, 'domelements', 'TABLE_DOMELEMENTS', 1, 'TABLE_DOMELEMENTS', 0, 0),
+(20, 'orders', 'TABLE_USERS', 1, 'TABLE_ORDERS', 0, 0),
+(21, 'orderitems', 'TABLE_ORDERS', 1, 'TABLE_ORDERITEMS', 0, 0),
+(22, 'items', 'TABLE_ORDERITEMS', 1, 'TABLE_ITEMS', 1, 1),
+(29, 'addresses', 'TABLE_USERS', 1, 'TABLE_ADDRESSES', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -368,7 +390,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
 --
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`) VALUES
-(30, 'uname', 'surname', 'emaillllll', 1111),
+(30, 'uname', 'mmmmmmme', 'mmm@kkkl.com', 1111),
 (31, '', '', '', 0),
 (32, '', '', '', 0);
 
@@ -484,27 +506,27 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 -- AUTO_INCREMENT de la tabla `items`
 --
 ALTER TABLE `items`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT de la tabla `links`
 --
 ALTER TABLE `links`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=890;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=902;
 --
 -- AUTO_INCREMENT de la tabla `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=84;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=90;
 --
 -- AUTO_INCREMENT de la tabla `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT de la tabla `relationships`
 --
 ALTER TABLE `relationships`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
