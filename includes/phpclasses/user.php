@@ -65,9 +65,9 @@ class user extends NodeMale {
         }
         */
         $userdatarel=$user->getRelationship(array("name"=>"usersdata"));
-        $defaulttype=new NodeMale();
-        $userdatarel->children[0]=$defaulttype;
-        $defaulttype->parentNode=$userdatarel;
+        $defaultdata=new NodeMale();
+        $userdatarel->children[0]=$defaultdata;
+        $defaultdata->parentNode=$userdatarel;
         if ($userdatarel->children[0]->db_insertmyself()!=false) {
           $result->extra->error=false;
         }
