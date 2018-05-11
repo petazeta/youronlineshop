@@ -62,8 +62,12 @@
 <template id="domelementtp">
   <div class="paragraph">
     <div class="adminlauncher adminsinglelauncher">
-      <div data-js='thisElement.innerHTML=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;'>
-      </div>
+      <div></div>
+      <script>
+	thisElement.innerHTML=thisNode.properties.innerHTML ||
+	labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+	thisNode.setView(thisElement);
+      </script>
       <div class="btinside"></div>
       <script>
 	if (webuser.isWebAdmin()) {
