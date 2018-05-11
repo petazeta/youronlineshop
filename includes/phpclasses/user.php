@@ -94,4 +94,10 @@ class user extends NodeMale {
 
   }
 }
+function checklength($value, $min, $max){
+  if ($value) {
+    if (count($value) >= $min && count($value) <= $max) return true;
+  }
+  return false;
+}
 ?>
