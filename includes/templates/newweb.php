@@ -7,7 +7,7 @@
     </div>
   </div>
   <div>
-    <form action="http://youronlineshop.sourceforge.net/shop/createshop.php">
+    <form action="http://youronlineshop.sourceforge.net/shop/createshop.php" method="POST">
       <table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
 	<tr>
 	  <td>
@@ -45,11 +45,11 @@
     </form>
     <script>
       thisElement.onsubmit=function() {
-	if (checklength(thisElement.elements.user_name.value, 4, 8)) {
+	if (!checklength(thisElement.elements.user_name.value, 4, 8)) {
 	  alert("User name between 4 and 8 characters!");
 	  return false;
 	}
-	if (checklength(thisElement.elements.user_password.value, 6, 10)) {
+	if (!checklength(thisElement.elements.user_password.value, 6, 10)) {
 	  alert("Password between 6 and 10 characters!");
 	  return false;
 	}
