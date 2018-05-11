@@ -35,8 +35,12 @@
     </form>
     <script>
       thisElement.onsubmit=function() {
-	if (!webuser.checklogindata(thisElement.elements.user_name.value, thisElement.elements.user_password.value)) {
-	  alert("User name and password between 4 and 8 characters!");
+	if (!checklength(thisElement.elements.user_name.value, 4, 8)) {
+	  alert("User name between 4 and 8 characters!");
+	  return false;
+	}
+	if (!checklength(thisElement.elements.user_password.value, 6, 10)) {
+	  alert("Password between 6 and 10 characters!");
 	  return false;
 	}
 	webuser.loginbutton="create";

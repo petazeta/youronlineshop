@@ -17,69 +17,99 @@ class user extends NodeMale {
     $result->extra=new stdClass();
     $user=new user();
     $user->properties->username=$username;
-    $result->extra->usernameok=false;
-    $result->extra->passwordok=false;
-    $result->extra->error=true;
     $candidates=$user->db_search();
     if (!(count($candidates) == 1)) {
+      $result->extra->error=true;
+      $result->extra->errormsg="username already present";
       return $result;
     }
-    $result->extra->usernameok=true;
+    
     $user->properties->pwd=$pwd;
     $candidates=$user->db_search();
     if (!(count($candidates) == 1)) {
-      return $result;
+      $result->extra->error=true;
+      $result->extra->errormsg="password error";
     }
-    $result->extra->passwordok=true;
-    $result->extra->error=false;
     $result->properties->id = $candidates[0]["id"];
     return $result;
   }
-  function create($username, $pwd) {
+  function create($username, $pwd, $email=null) {
     $result=new NodeMale();
     if (!isset($result->extra)) $result->extra=new stdClass();
-    $result->extra->error=true;
-    $result->extra->usernameok=false;
+    
+    if (!$this->checklength($username, 4, 10)) {
+      $result->extra->error=true;
+      $result->extra->errormsg="username characters error";
+      return $result;
+    }
+    if (!$this->checklength($pwd, 6, 12)) {
+      $result->extra->error=true;
+      $result->extra->errormsg="password characters error";
+      return $result;
+    }
+    if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $result->extra->error=true;
+      $result->extra->errormsg="email error";
+      return $result;
+    }
+
     $user=new user();
     //expiredata=get from license
     //expiredata->limit;
     //if ($user->db_num()->expiredata->limit) $this->expire();
     $user->properties->username=$username;
     $candidates=$user->db_search();
-    if (count($candidates) == 0) {
-      $result->extra->usernameok=true;
-      $user->properties->pwd=$pwd;
-      $result->extra->passwordok=true;
-      
-      if ($user->db_insertmyself()==true) {
-        $result->properties->id=$user->properties->id;
-        $user->db_loadmyrelationships();
-        /* lets not set any usertype. There was also an error that the insertion was duplicated
-        $usertyperel=$user->getRelationship(array("name"=>"userstypes"));
-        $defaultusertype=new NodeMale();
-        $defaultusertype->properties->id=2;
-        $usertyperel->children[0]=$defaultusertype;
-        $defaultusertype->parentNode=$usertyperel;
-        if ($usertyperel->children[0]->db_setmylink()!=false) {
-          $result->extra->error=false;
-        }
-        */
-        $userdatarel=$user->getRelationship(array("name"=>"usersdata"));
-        $defaultdata=new NodeMale();
-        $userdatarel->children[0]=$defaultdata;
-        $defaultdata->parentNode=$userdatarel;
-        if ($userdatarel->children[0]->db_insertmyself()!=false) {
-          $result->extra->error=false;
-        }
-        $addressrel=$user->getRelationship(array("name"=>"addresses"));
-        $newaddress=new NodeMale();
-        $addressrel->children[0]=$newaddress;
-        $newaddress->parentNode=$addressrel;
-        if ($addressrel->children[0]->db_insertmyself()!=false) {
-          $result->extra->error=false;
-        }
+    if (count($candidates) != 0) {
+      $result->extra->error=true;
+      $result->extra->usernameok=false;
+      return $result;
+    }
+    $user->properties->pwd=$pwd;
+    
+    if ($user->db_insertmyself()==true) {
+      $result->properties->id=$user->properties->id;
+      $user->db_loadmyrelationships();
+      /* lets not set any usertype. There was also an error that the insertion was duplicated
+      $usertyperel=$user->getRelationship(array("name"=>"userstypes"));
+      $defaultusertype=new NodeMale();
+      $defaultusertype->properties->id=2;
+      $usertyperel->children[0]=$defaultusertype;
+      $defaultusertype->parentNode=$usertyperel;
+      if ($usertyperel->children[0]->db_setmylink()!=false) {
+	$result->extra->error=false;
+      }
+      */
+      $userdatarel=$user->getRelationship(array("name"=>"usersdata"));
+      $defaultdata=new NodeMale();
+      $userdatarel->children[0]=$defaultdata;
+      $defaultdata->parentNode=$userdatarel;
+      if ($email) $userdatarel->children[0]->properties->name=uniqid();
+      if ($userdatarel->children[0]->db_insertmyself()==false) {
+	$result->extra->error=false;
+	return $result;
+      }
+      $addressrel=$user->getRelationship(array("name"=>"addresses"));
+      $newaddress=new NodeMale();
+      $addressrel->children[0]=$newaddress;
+      $newaddress->parentNode=$addressrel;
+      if ($addressrel->children[0]->db_insertmyself()==false) {
+	$result->extra->error=true;
+	return $result;
       }
     }
+    if ($email) {
+      $to      = $email;
+      $subject = 'Your Online Shop Email Verification';
+      $message = 'Dear user,' . "\r\n" .
+      "Please get to this address for email verification:" . "\r\n" .
+      'http://youronlineshop.sourceforge.net/shop/verifyemail.php?key=' . $userdatarel->children[0]->properties->name;
+      $headers = 'From: noreplay@youronlineshop.com' . "\r\n" .
+	  'Reply-To: noreplay@youronlineshop.com' . "\r\n" .
+	  'X-Mailer: PHP/' . phpversion();
+
+      mail($to, $subject, $message, $headers);
+    }
+    $result->extra->key=$userdatarel->children[0]->properties->name;
     return $result;
   }
   function expire(){
@@ -93,11 +123,9 @@ class user extends NodeMale {
   //If not return true
 
   }
-}
-function checklength($value, $min, $max){
-  if ($value) {
-    if (count($value) >= $min && count($value) <= $max) return true;
+  function checklength($value, $min, $max){
+    if (strlen($value) >= $min && strlen($value) <= $max) return true;
+    return false;
   }
-  return false;
 }
 ?>

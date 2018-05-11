@@ -7,7 +7,7 @@
     </div>
   </div>
   <div>
-    <form action="http://youronlineshop.sourceforge.net/shop/verifyemail.php" method="POST">
+    <form action="dblogin.php" method="POST">
       <table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
 	<tr>
 	  <td>
@@ -36,7 +36,7 @@
 	<tr>
 	  <td style="text-align:center">
 	    <div style="padding-bottom: 1rem">
-	      <input type="hidden" name="parameters" value='{"action":"login"}'>
+	      <input type="hidden" name="parameters" value='{"action":"create"}'>
 	      <input type="submit" class="form-btn" value="Send">
 	    </div>
 	  </td>
@@ -57,6 +57,19 @@
 	  alert("Email is not correct");
 	  return false;
 	}
+	webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value, thisElement.elements.user_email.value, function(){
+	  var myalertmsg="";
+	  if (this.extra.error===true) {
+	    if (this.extra.usernameok!=true) myalertmsg="username error";
+	    else myalertmsg="password error";
+	  }
+	  else {
+	    myalertmsg="User created. Loggin ok. Check your emai for Verification.";
+	  }
+	  myalert.load({properties:{alertmsg: myalertmsg, timeout:2000}});
+	  myalert.showalert();
+	});
+	return false;
       }
     </script>
   </div>

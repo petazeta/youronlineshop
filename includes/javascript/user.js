@@ -19,7 +19,7 @@ user.prototype.logoff=function(){
     else this.dispatchEvent("log");
   });
 };
-user.prototype.loginproto=function(action, name, password, reqlistener){
+user.prototype.loginproto=function(action, name, password, email, reqlistener){
   var myform=document.getElementById("formgeneric").cloneNode(true);
   myform.action="dblogin.php";
   myform.elements.parameters.value=JSON.stringify({action: action});
@@ -27,11 +27,18 @@ user.prototype.loginproto=function(action, name, password, reqlistener){
   var nameInput=document.createElement("INPUT");
   nameInput.name="user_name";
   nameInput.value=name;
+  myform.appendChild(nameInput);
   var passwordInput=document.createElement("INPUT");
   passwordInput.name="user_password";
   passwordInput.value=password;
-  myform.appendChild(nameInput);
   myform.appendChild(passwordInput);
+  if (email) {
+    var emailInput=document.createElement("INPUT");
+    emailInput.name="user_email";
+    emailInput.value=email;
+    myform.appendChild(emailInput);
+  }
+  
   this.loadfromhttp(myform, function(){
     if (this.extra.login==true) {
       this.loadfromhttp("sesload.php?sesname=user", function() {
@@ -50,11 +57,11 @@ user.prototype.loginproto=function(action, name, password, reqlistener){
   
   
 user.prototype.login=function(name, password, reqlistener){
-  this.loginproto("login", name, password, reqlistener);
+  this.loginproto("login", name, password, null, reqlistener);
 }
 
-user.prototype.create=function(name, password, reqlistener){
-  this.loginproto("create", name, password, reqlistener);
+user.prototype.create=function(name, password, email, reqlistener){
+  this.loginproto("create", name, password, email, reqlistener);
 }
 
 user.prototype.isWebAdmin=function(){
@@ -66,11 +73,4 @@ user.prototype.isWebAdmin=function(){
 
 user.prototype.getUserType=function(){
   if (webuser.getRelationship({name:"userstypes"}) && webuser.getRelationship({name:"userstypes"}).children[0]) return webuser.getRelationship({name:"userstypes"}).children[0].properties.type;
-}
-
-user.prototype.checklogindata=function(uname, upass){
-  if (typeof uname == "string" & typeof upass == "string") {
-    if (uname.length >= 4 && uname.length <= 8 && upass.length >= 4 && upass.length <= 8) return true;
-  }
-  return false;
 }

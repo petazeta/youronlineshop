@@ -25,16 +25,19 @@ if (!isset($_POST["user_name"]) || !isset($_POST["user_password"])) {
 $user=new user();
 $uname=$_POST["user_name"];
 $upwd=$_POST["user_password"];
+$email=null;
+if (isset($_POST["user_email"])) $email=$_POST["user_email"];
 $user->properties->username=$uname;
 $user->properties->password=$upwd;
-if (!$user->checklogindata($uname, $upwd)) exit("error");
+
+
 if ($parameters->action=="create") {
-  $loginresult=$user->create($uname, $upwd);
+  $loginresult=$user->create($uname, $upwd, $email);
 }
 else {
   $loginresult=$user->usercheck($uname, $upwd);
 }
-if ($loginresult->extra->usernameok==true && $loginresult->extra->passwordok ==true) {
+if (!isset($loginresult->extra->error)) {
   $user->properties->id=$loginresult->properties->id;
   $user->db_loadmyrelationships();
   foreach ($user->relationships as $key => $value) {
