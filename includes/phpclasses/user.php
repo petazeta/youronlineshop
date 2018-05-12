@@ -107,9 +107,10 @@ class user extends NodeMale {
 	  'Reply-To: noreplay@youronlineshop.com' . "\r\n" .
 	  'X-Mailer: PHP/' . phpversion();
 
-      mail($to, $subject, $message, $headers);
+      $returnemail=mail($to, $subject, $message, $headers);
     }
-    $result->extra->key=$userdatarel->children[0]->properties->name;
+    $result->extra->email=$email;
+    $result->extra->returnemail=$returnemail;
     return $result;
   }
   function expire(){
