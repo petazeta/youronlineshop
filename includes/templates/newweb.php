@@ -64,10 +64,12 @@
 	    else myalertmsg="password error";
 	  }
 	  else {
-	    myalertmsg="User created. Loggin ok. Check your emai for Verification.";
+	    myalertmsg="User created. Login ok.";
 	  }
-	  myalert.load({properties:{alertmsg: myalertmsg, timeout:2000}});
+	  myalert.load({properties:{alertmsg: myalertmsg, timeout:3000}});
 	  myalert.showalert();
+	  //We must copy database structure maybe copy tables //maybe first allow change password adminweb adminorders
+	  // CREATE TABLE table2 LIKE table1;INSERT INTO table2 SELECT * FROM table1
 	});
 	return false;
       }

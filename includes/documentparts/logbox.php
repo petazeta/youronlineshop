@@ -125,8 +125,10 @@ webuser.addEventListener("log", function(){
       this.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
   }
   else {
-    if (this.loginbutton=="checkout")
+    if (this.loginbutton=="checkout") {
       this.refreshView(document.getElementById("centralcontent"), document.getElementById("checkout1tp").content);
+      this.loginbutton=null;
+    }
     else
       this.refreshView(document.getElementById("centralcontent"),  "includes/templates/loggedindata.php");
   }

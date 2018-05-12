@@ -83,7 +83,7 @@ class user extends NodeMale {
       $defaultdata=new NodeMale();
       $userdatarel->children[0]=$defaultdata;
       $defaultdata->parentNode=$userdatarel;
-      if ($email) $userdatarel->children[0]->properties->name=uniqid();
+      if ($email) $userdatarel->children[0]->properties->email=$email;
       if ($userdatarel->children[0]->db_insertmyself()==false) {
 	$result->extra->error=false;
 	return $result;
@@ -97,20 +97,6 @@ class user extends NodeMale {
 	return $result;
       }
     }
-    if ($email) {
-      $to      = $email;
-      $subject = 'Your Online Shop Email Verification';
-      $message = 'Dear user,' . "\r\n" .
-      "Please get to this address for email verification:" . "\r\n" .
-      'http://youronlineshop.sourceforge.net/shop/verifyemail.php?key=' . $userdatarel->children[0]->properties->name;
-      $headers = 'From: noreplay@youronlineshop.com' . "\r\n" .
-	  'Reply-To: noreplay@youronlineshop.com' . "\r\n" .
-	  'X-Mailer: PHP/' . phpversion();
-
-      $returnemail=mail($to, $subject, $message, $headers);
-    }
-    $result->extra->email=$email;
-    $result->extra->returnemail=$returnemail;
     return $result;
   }
   function expire(){
