@@ -108,7 +108,6 @@ class user extends NodeMale {
   function checkexpired(){
   //Check table relationships
   //If not return true
-
   }
   function checklength($value, $min, $max){
     if (strlen($value) >= $min && strlen($value) <= $max) return true;
