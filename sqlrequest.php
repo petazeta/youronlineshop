@@ -6,12 +6,12 @@ require('includes/database_tables.php');
 require('includes/phpclasses/user.php');
 
 $myreturn=new NodeFemale();
+$myreturn->extra=new stdClass();
 
 //we will get the $sql from the include file
 include('includes/sqlrequests.php');
 
 if (($result = $myreturn->getdblink()->query($sql))===false) {
-  $myreturn->extra=new stdClass();
   $myreturn->extra->error=true;
   $myreturn->extra->errorinfo=new stdClass();
   $myreturn->extra->errorinfo->type="database error";
