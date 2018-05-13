@@ -35,7 +35,7 @@
 	admnlauncher.buttons=[
 	  { 
 	    template: document.getElementById("butedittp"),
-	    args:{editpropertyname:"name", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	    args:{editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
 	  },
 	  {template: document.getElementById("buthchpostp")},
 	  {template: document.getElementById("butaddnodetp")},
