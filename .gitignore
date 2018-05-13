@@ -1,0 +1,3 @@
+# Ignoring the actual config.php and .gitignore
+includes/config.php
+.gitignore
