@@ -2,10 +2,10 @@
 -- version 4.2.12deb2+deb8u2
 -- http://www.phpmyadmin.net
 --
--- Servidor: localhost
--- Tiempo de generación: 11-05-2018 a las 17:27:57
--- Versión del servidor: 5.5.58-0+deb8u1
--- Versión de PHP: 5.6.30-0+deb8u1
+-- Host: localhost
+-- Generation Time: May 13, 2018 at 07:57 PM
+-- Server version: 5.5.58-0+deb8u1
+-- PHP Version: 5.6.30-0+deb8u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `ecommerce`
+-- Database: `ecommerce`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `addresses`
+-- Table structure for table `addresses`
 --
 
 CREATE TABLE IF NOT EXISTS `addresses` (
@@ -32,31 +32,30 @@ CREATE TABLE IF NOT EXISTS `addresses` (
   `city` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `state` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pc` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `addresses`
+-- Dumping data for table `addresses`
 --
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`) VALUES
-(20, 'my street', 'cityyyyyy', 'mystate', '19293'),
-(21, '', '', '', ''),
-(22, '', '', '', '');
+(23, '', '', '', ''),
+(24, '', '', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `domelements`
+-- Table structure for table `domelements`
 --
 
 CREATE TABLE IF NOT EXISTS `domelements` (
 `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `innerHTML` text COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `domelements`
+-- Dumping data for table `domelements`
 --
 
 INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
@@ -76,13 +75,13 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (42, 'headsubtitle', 'This is my first shop'),
 (43, 'username', 'the user name'),
 (44, 'emptyvallabel', 'Not any value'),
-(46, '', '<div>There are three olready created users: "user1", "user2" and "user3".&nbsp;</div><div><br></div><div>These are the users names, and users passwords are the same as users names.</div><div><br></div><div>User "user2" is order administrator and can watch and edit all the orders. Once you log in with this user click at "Show orders" button.</div><div><br></div><div>User "user3" is web administrator and can edit the web page content and the catalog (categories and items).<br></div>'),
+(46, '', '<div>There are two already created users: "webadmin" and "ordersadmin".&nbsp;</div><div><br></div><div>These are the users names, and users passwords are the same as users names.</div><div><br></div><div>User "ordersadmin" is order administrator and can watch and edit all the orders. Once you log in with this user click at "Show orders" button.</div><div><br></div><div>User "webadmin" is web administrator and can edit the web page content and the catalog (categories and items).<br></div>'),
 (47, '', 'This software implements a smart customizable WYSIWYG (What You See Is What You Get) online ordering system (also known as ecommerce, e-commerce CMS, online store or shopping cart).<br>'),
-(48, '', 'Continue at <b>How to</b>'),
-(49, '', 'To start: log in with one of the users or sign in with a new one.'),
+(48, '', 'Continue at [&nbsp;<a href="">How to</a>&nbsp;]\r\n<script>\r\n  thisElement.onclick=function(){\r\n    document.querySelector("nav").querySelectorAll("a")[1].click();\r\n    return false;\r\n  }\r\n</script>'),
+(49, '', 'To start: log in with one of the users or create a new one.'),
 (50, '', 'More information at: <a href="https://github.com/petazeta/youronlineshop/wiki">Project Docs</a>&nbsp;and <a href="https://sourceforge.net/p/youronlineshop/discussion/">Project Forums</a>'),
 (56, '', 'DbManager is a tool for editing ORM database records.<div><br></div><div>Get more information at: <a href="http://youronlineshop.sourceforge.net/dbmanager/">Dbmanager Home</a></div>'),
-(57, '', 'When edit content click outside of the editable area to save changes. Use Intro for new line.'),
+(57, '', 'Once finish editing content click outside of the editable area to save changes. Use Intro for new line.'),
 (58, 'root', ''),
 (59, 'top', ''),
 (60, 'middle', ''),
@@ -94,25 +93,27 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (66, 'nav', ''),
 (67, 'menu', 'About'),
 (68, 'menu', 'How to'),
-(69, 'menu', 'More'),
+(69, 'More Info', 'More Info'),
 (70, 'menu', 'Additional Apps'),
 (71, 'labels', ''),
 (72, 'texts', ''),
-(73, 'not located', '');
+(73, 'not located', ''),
+(76, '', 'Free Web'),
+(77, '', 'Get your free web trial service at:<br><br>\r\n<a href="http://youronlineshop.sourceforge.net/shop/" title="free web">\r\nYour Online Shop Web Service Page\r\n</a>');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `itemcategories`
+-- Table structure for table `itemcategories`
 --
 
 CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
   `cname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `itemcategories`
+-- Dumping data for table `itemcategories`
 --
 
 INSERT INTO `itemcategories` (`id`, `cname`) VALUES
@@ -128,7 +129,7 @@ INSERT INTO `itemcategories` (`id`, `cname`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `items`
+-- Table structure for table `items`
 --
 
 CREATE TABLE IF NOT EXISTS `items` (
@@ -141,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `items` (
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `items`
+-- Dumping data for table `items`
 --
 
 INSERT INTO `items` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`) VALUES
@@ -158,7 +159,7 @@ INSERT INTO `items` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `imag
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `links`
+-- Table structure for table `links`
 --
 
 CREATE TABLE IF NOT EXISTS `links` (
@@ -167,10 +168,10 @@ CREATE TABLE IF NOT EXISTS `links` (
   `child_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '1',
   `relationships_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=902 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=919 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `links`
+-- Dumping data for table `links`
 --
 
 INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships_id`) VALUES
@@ -205,16 +206,9 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (699, 32, 9, 1, 15),
 (740, 14, 21, 1, 14),
 (787, 1, 30, 1, 26),
-(812, 13, 30, 1, 10),
-(813, 13, 20, 1, 29),
-(814, 14, 31, 1, 10),
-(815, 14, 21, 1, 29),
-(816, 15, 32, 1, 10),
-(817, 15, 22, 1, 29),
 (818, 14, 3, 1, 4),
 (819, 15, 7, 1, 4),
 (823, 1, 31, 3, 26),
-(838, 13, 52, 6, 20),
 (839, 52, 83, 1, 21),
 (840, 1, 32, 4, 26),
 (849, 59, 41, 2, 17),
@@ -239,7 +233,7 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (869, 66, 67, 1, 17),
 (870, 66, 68, 2, 17),
 (871, 66, 69, 3, 17),
-(872, 66, 70, 4, 17),
+(872, 66, 70, 5, 17),
 (874, 67, 48, 2, 17),
 (875, 68, 46, 1, 17),
 (876, 68, 57, 2, 17),
@@ -255,23 +249,29 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (887, 71, 73, 4, 17),
 (888, 73, 44, 1, 17),
 (889, 67, 47, 1, 17),
-(890, 13, 53, 5, 20),
 (891, 53, 84, 1, 21),
-(892, 13, 54, 4, 20),
 (893, 54, 85, 1, 21),
-(894, 13, 55, 3, 20),
 (895, 55, 86, 1, 21),
-(896, 13, 56, 2, 20),
 (897, 56, 87, 1, 21),
 (898, 6, 22, 3, 14),
-(899, 13, 57, 1, 20),
 (900, 57, 88, 2, 21),
-(901, 57, 89, 1, 21);
+(901, 57, 89, 1, 21),
+(905, 58, 90, 3, 21),
+(906, 58, 91, 2, 21),
+(907, 58, 92, 1, 21),
+(910, 16, 33, 1, 10),
+(911, 16, 23, 1, 29),
+(912, 17, 34, 1, 10),
+(913, 17, 24, 1, 29),
+(914, 16, 7, 1, 4),
+(915, 17, 3, 1, 4),
+(916, 66, 76, 4, 17),
+(917, 76, 77, 1, 17);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `orderitems`
+-- Table structure for table `orderitems`
 --
 
 CREATE TABLE IF NOT EXISTS `orderitems` (
@@ -279,10 +279,10 @@ CREATE TABLE IF NOT EXISTS `orderitems` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `quantity` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `orderitems`
+-- Dumping data for table `orderitems`
 --
 
 INSERT INTO `orderitems` (`id`, `name`, `price`, `quantity`) VALUES
@@ -292,12 +292,15 @@ INSERT INTO `orderitems` (`id`, `name`, `price`, `quantity`) VALUES
 (86, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
 (87, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
 (88, 'Peeling + morera', 20.00, 1),
-(89, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1);
+(89, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
+(90, 'Regenerador Cutáneo 200ml', 714.00, 1),
+(91, 'Peeling + morera', 20.00, 2),
+(92, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 2);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `orders`
+-- Table structure for table `orders`
 --
 
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -305,24 +308,12 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `orders`
---
-
-INSERT INTO `orders` (`id`, `creationdate`, `modificationdate`, `status`) VALUES
-(52, '2018-04-27 20:56:25', '0000-00-00 00:00:00', 0),
-(53, '2018-05-08 19:58:21', '0000-00-00 00:00:00', 0),
-(54, '2018-05-08 20:28:46', '0000-00-00 00:00:00', 0),
-(55, '2018-05-08 20:29:23', '0000-00-00 00:00:00', 0),
-(56, '2018-05-08 20:32:08', '0000-00-00 00:00:00', 0),
-(57, '2018-05-11 14:16:19', '0000-00-00 00:00:00', 0);
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `relationships`
+-- Table structure for table `relationships`
 --
 
 CREATE TABLE IF NOT EXISTS `relationships` (
@@ -336,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `relationships` (
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `relationships`
+-- Dumping data for table `relationships`
 --
 
 INSERT INTO `relationships` (`id`, `name`, `parenttablename`, `parentunique`, `childtablename`, `childunique`, `childtablelocked`) VALUES
@@ -353,28 +344,27 @@ INSERT INTO `relationships` (`id`, `name`, `parenttablename`, `parentunique`, `c
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
 `id` int(11) NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pwd` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`) VALUES
-(13, 'user1', 'user1'),
-(14, 'user2', 'user2'),
-(15, 'user3', 'user3');
+(16, 'webadmin', 'webadmin'),
+(17, 'ordersadmin', 'ordersadmin');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usersdata`
+-- Table structure for table `usersdata`
 --
 
 CREATE TABLE IF NOT EXISTS `usersdata` (
@@ -383,21 +373,20 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
   `surname` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phonenumber` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `usersdata`
+-- Dumping data for table `usersdata`
 --
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`) VALUES
-(30, 'uname', 'mmmmmmme', 'mmm@kkkl.com', 1111),
-(31, '', '', '', 0),
-(32, '', '', '', 0);
+(33, '', '', '', 0),
+(34, '', '', '', 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `userstypes`
+-- Table structure for table `userstypes`
 --
 
 CREATE TABLE IF NOT EXISTS `userstypes` (
@@ -406,7 +395,7 @@ CREATE TABLE IF NOT EXISTS `userstypes` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `userstypes`
+-- Dumping data for table `userstypes`
 --
 
 INSERT INTO `userstypes` (`id`, `type`) VALUES
@@ -414,131 +403,131 @@ INSERT INTO `userstypes` (`id`, `type`) VALUES
 (7, 'web administrator');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `addresses`
+-- Indexes for table `addresses`
 --
 ALTER TABLE `addresses`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `domelements`
+-- Indexes for table `domelements`
 --
 ALTER TABLE `domelements`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `itemcategories`
+-- Indexes for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `items`
+-- Indexes for table `items`
 --
 ALTER TABLE `items`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `links`
+-- Indexes for table `links`
 --
 ALTER TABLE `links`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `orderitems`
+-- Indexes for table `orderitems`
 --
 ALTER TABLE `orderitems`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `orders`
+-- Indexes for table `orders`
 --
 ALTER TABLE `orders`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `relationships`
+-- Indexes for table `relationships`
 --
 ALTER TABLE `relationships`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `usersdata`
+-- Indexes for table `usersdata`
 --
 ALTER TABLE `usersdata`
  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `userstypes`
+-- Indexes for table `userstypes`
 --
 ALTER TABLE `userstypes`
  ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `addresses`
+-- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
--- AUTO_INCREMENT de la tabla `domelements`
+-- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=74;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=79;
 --
--- AUTO_INCREMENT de la tabla `itemcategories`
+-- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
--- AUTO_INCREMENT de la tabla `items`
+-- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
--- AUTO_INCREMENT de la tabla `links`
+-- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=902;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=919;
 --
--- AUTO_INCREMENT de la tabla `orderitems`
+-- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=90;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
 --
--- AUTO_INCREMENT de la tabla `orders`
+-- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=58;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=59;
 --
--- AUTO_INCREMENT de la tabla `relationships`
+-- AUTO_INCREMENT for table `relationships`
 --
 ALTER TABLE `relationships`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
 --
--- AUTO_INCREMENT de la tabla `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
--- AUTO_INCREMENT de la tabla `usersdata`
+-- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
 --
--- AUTO_INCREMENT de la tabla `userstypes`
+-- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
