@@ -6,12 +6,6 @@ class user extends NodeMale {
     $this->parentNode->properties->childtablename="TABLE_USERS";
     $this->parentNode->db_loadchildtablekeys();
   }
-  function checklogindata($uname, $upass) {
-    $ucharts=strlen(utf8_decode($uname));
-    $pcharts=strlen(utf8_decode($upass));
-    if ($ucharts >= 4 && $ucharts <= 8 && $pcharts >= 4 && $pcharts <= 8) return true;
-    return false;
-  }
   function usercheck($username, $pwd) {
     $result=new NodeMale();
     $result->extra=new stdClass();
