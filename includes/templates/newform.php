@@ -44,7 +44,7 @@
 	  return false;
 	}
 	webuser.loginbutton="create";
-	webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value, function(){
+	webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value, null, function(){
 	  var myalertmsg="";
 	  if (this.extra.error===true) {
 	    if (this.extra.usernameok!=true) myalertmsg="username error";
