@@ -35,12 +35,13 @@
     </form>
     <script>
       thisElement.onsubmit=function() {
-	if (!checklength(thisElement.elements.user_name.value, 4, 8)) {
-	  alert("User name between 4 and 8 characters!");
+	var min=4, max=12;
+	if (!checklength(thisElement.elements.user_name.value, min, max)) {
+	  alert("User name between " + min + " and " + max + " characters!");
 	  return false;
 	}
-	if (!checklength(thisElement.elements.user_password.value, 6, 10)) {
-	  alert("Password between 6 and 10 characters!");
+	if (!checklength(thisElement.elements.user_password.value, min, max)) {
+	  alert("Password between " + min + " and " + max + " characters!");
 	  return false;
 	}
 	webuser.loginbutton="create";
