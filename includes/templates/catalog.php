@@ -8,7 +8,7 @@
 	    thisNode.addEventListener("refreshChildrenView", function() {
 	      if (this.children==0){
 		var element=this.addChild(new NodeMale());
-		element.myTp=document.getElementById("nochildrentp");
+		element.myTp=document.getElementById("nochildrentp").content;
 		element.myContainer=this.childContainer;
 		element.refreshView();
 	      }
