@@ -31,12 +31,12 @@ class user extends NodeMale {
     $result=new NodeMale();
     if (!isset($result->extra)) $result->extra=new stdClass();
     
-    if (!$this->checklength($username, 4, 12)) {
+    if (!$this->checklength($username, 4, 20)) {
       $result->extra->error=true;
       $result->extra->errormsg="username characters error";
       return $result;
     }
-    if (!$this->checklength($pwd, 4, 12)) {
+    if (!$this->checklength($pwd, 4, 20)) {
       $result->extra->error=true;
       $result->extra->errormsg="password characters error";
       return $result;

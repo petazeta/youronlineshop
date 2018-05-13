@@ -36,7 +36,7 @@
     </form>
     <script>
       thisElement.onsubmit=function() {
-	var min=4, max=12;
+	var min=4, max=15;
 	if (!checklength(thisElement.elements.user_name.value, min, max)) {
 	  alert("User name between " + min + " and " + max + " characters!");
 	  return false;
