@@ -48,13 +48,12 @@
 	webuser.login(thisElement.elements.user_name.value, thisElement.elements.user_password.value, function(){
 	  var myalertmsg="";
 	  if (this.extra.error===true) {
-	    if (this.extra.usernameok!=true) myalertmsg="username error";
-	    else myalertmsg="password error";
+	    myalertmsg=this.extra.errormsg;
 	  }
 	  else {
 	    myalertmsg="log in ok";
 	  }
-	  myalert.load({properties:{alertmsg: myalertmsg, timeout:2000}});
+	  myalert.load({properties:{alertmsg: myalertmsg, timeout:3000}});
 	  myalert.showalert();
 	});
 	return false;

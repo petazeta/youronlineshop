@@ -74,6 +74,7 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 function checklength(value, min, max){
+  if (typeof value=="number") value=value.toString();
   if (typeof value == "string") {
     if (value.length >= min && value.length <= max) return true;
   }

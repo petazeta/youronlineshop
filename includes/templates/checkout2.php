@@ -15,15 +15,22 @@
       var userdata=webuser.getRelationship({"name":"usersdata"}).children[0];
       var result=new NodeMale();
       result.extra={};
-      myalert.properties.timeout=2000;
-      var minchar=5;
+      myalert.properties.timeout=5000;
+      var minchar=3;
+      var maxchar=120;
       function checkInput(data) {
 	for (var key in data.properties) {
-	  if (!data.properties[key] ||
-	  (typeof data.properties[key]=="string" && data.properties[key].length < minchar)) {
+	  var value=data.properties[key];
+	  if(!data.properties.hasOwnProperty(key)) continue;
+	  if (key=="id") continue;
+	  if (!value ||
+	  (!checklength(value, minchar, maxchar))) {
+	    result.extra.charsNum=0;
 	    result.extra.error=true;
 	    result.extra.errorkey=key;
-	    result.extra.errormsg="Error: Not enought characters at " + result.extra.errorkey;
+	    result.extra.errorvalue=value;
+	    result.extra.errormsg="Error: Not enought characters at " + result.extra.errorkey + ".";
+	    result.extra.errormsg += " Enter at least " + minchar + " characters.";
 	    break;
 	  }
 	}

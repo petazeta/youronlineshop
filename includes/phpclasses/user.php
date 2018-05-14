@@ -24,7 +24,7 @@ class user extends NodeMale {
       $result->extra->error=true;
       $result->extra->errormsg="password error";
     }
-    $result->properties->id = $candidates[0]["id"];
+    else $result->properties->id = $candidates[0]["id"];
     return $result;
   }
   function create($username, $pwd, $email=null) {
