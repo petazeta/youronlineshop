@@ -140,19 +140,10 @@ nav span{
   margin: 0.8em 1.2em;
 }
 /* left bar */
-table.leftcolumn {
-    height: 100%;
-    min-width: 202px;
-}
-table.leftcolumn td.maincontent {
+section.leftcolumn {
+    /* height: 100%; */
+    padding: 0 2em 1em 1em;
     box-shadow: 0px 8px 6px -6px rgb(136, 136, 136);
-}
-
-table.leftcolumn td.maincontent {
-    padding: 0 0 20px 18px;
-}
-
-table.leftcolumn td.maincontent {
     background-color: rgb(244, 240, 231);
 }
 div.space {
@@ -160,22 +151,16 @@ div.space {
     height: 2em;
 }
 /* right bar */
-table.rightcolumn {
-    height: 100%;
-    min-width: 201px;
-}
-table.rightcolumn td.maincontent {
-    padding: 0 0 20px 18px;
-}
-table.rightcolumn td.maincontent {
+section.rightcolumn {
+    /* height: 100%; */
+    padding: 0 1em 1em 1.6em;
     box-shadow: 0px 8px 6px -6px rgb(136, 136, 136);
-}
-table.rightcolumn td.maincontent {
     background-color: rgb(244, 240, 231);
 }
+
 /* center */
 
-.centercolumn {
+.maxwidth {
     width: 100%; /* Important to cover all central space */
     height: 100%;
 }
@@ -186,7 +171,7 @@ div.centercolumn {
     background: linear-gradient(to right, rgb(242, 242, 242), white 20%, white 80%, rgba(242,242,242,1));
 }
 
-div.centercolumn div.centercontent {
+#centralcontent {
     padding: 1em 2em 2em 2em;
     min-height: 21em;
 }
@@ -231,11 +216,18 @@ div.note{
 }
 /* footer */
 
-#footer a{
+footer a{
   color:#fff !important;
 }
-#footer a:hover{
+footer a:hover{
   color: #92e9ff !important;
+}
+footer > table {
+  background-color:#7d6c41;
+  color:#fff;
+}
+footer > table td{
+  padding:0.6em;
 }
 
 /* buttons */
@@ -465,19 +457,19 @@ table.order tr.total {
   font-weight: bold;
   text-align: right;
 }
-div.cart tr.product a, div.cart tr.product span{
+#cartbox tr.product a, #cartbox tr.product span{
   font-size: 9pt !important;
 }
-div.cart tr.product a{
+#cartbox tr.product a{
   margin: 0px 0.1em 0px 0px;
 }
-div.cart tr.product td:hover{
+#cartbox tr.product td:hover{
   background: rgb(241, 228, 204);
 }
-div.cart tr.product span{
+#cartbox tr.product span{
   color:#d2853c !important;
 }
-div.cart span.remove {
+#cartbox span.remove {
   vertical-align: 2px;
   font-size: 0.6em;
   border: 1px solid #D2853C;

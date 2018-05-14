@@ -1,9 +1,8 @@
-<table class="box" id="catgbox">
-  <?php include("includes/templates/catalog.php"); ?>
+<table class="box">
   <tr>
     <th class="boxhead">
       <div class="adminsinglelauncher"></div>
-      <template>
+      <template id="catgboxheadtp">
 	<span></span>
 	<script>
 	  thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
@@ -43,7 +42,7 @@
 	</tr>
 	<tr>
 	  <td></td>
-	  <template>
+	  <template id="categoriestp">
 	    <table style="width:100%"></table>
 	    <script>
 	      var myForm=document.getElementById("formgeneric").cloneNode(true);
@@ -76,7 +75,7 @@
 		  }
 		});
 		//showing categories
-		this.refreshChildrenView(thisElement,  document.querySelector("#categoriescontainer template").content);
+		this.refreshChildrenView(thisElement,  document.querySelector("#categorytp"));
 		//to refresh the nochildren element when log
 		webuser.addEventListener("log", function(){
 		  if (thisNode.children.length==1 && !thisNode.children[0].properties.id) {
@@ -86,7 +85,7 @@
 		});
 	      });
 	    </script>
-	    <template>
+	    <template id="categorytp">
 	      <tr>
 		<td class="row border-bottom">
 		  <div class="adminlauncher adminsinglelauncher">
@@ -101,7 +100,7 @@
 			myrel.setView(myForm);
 			myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
 			myrel.loadfromhttp(myForm, function(){
-			  this.refreshView(document.getElementById("centralcontent"),document.querySelector("#catgbox template"));
+			  this.refreshView(document.getElementById("centralcontent"),document.querySelector("#catalogtp"));
 			});
 			return false;
 		      };
@@ -149,11 +148,11 @@
     </td>
   </tr>                                  
 </table>
-
+<?php include("includes/templates/catalog.php"); ?>
 <script>
 webuser.addEventListener("loadses", function(){
   var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"});
-  cartbox.refreshView(document.querySelector("#catgbox div"), document.querySelector("#catgbox th template"));
+  cartbox.refreshView(document.querySelector("#catgboxheadtp").previousElementSibling, document.querySelector("#catgboxheadtp"));
 
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
@@ -166,7 +165,7 @@ webuser.addEventListener("loadses", function(){
     var categoriesroot=this.children[0];
     var myrel=categoriesroot.cloneRelationship();
     
-    myrel.refreshView(document.querySelector("#categoriescontainer").rows[1].cells[0],  document.querySelector("#categoriescontainer template").content);
+    myrel.refreshView(document.querySelector("#categoriestp").previousElementSibling,  document.querySelector("#categoriestp"));
 
   });
 });

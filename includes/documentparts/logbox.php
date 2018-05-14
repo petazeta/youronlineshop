@@ -1,6 +1,6 @@
 <div></div>
-<template>
-  <table class="box" id=logbox>
+<template id="logboxtp">
+  <table class="box">
     <tr>
       <th class="boxhead">
       <a href=""></a>
@@ -115,7 +115,7 @@
 var mycart=new cart();
 webuser.addEventListener("loadses", function(){
   var logboxparent=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"logbox"}).getRelationship({"name":"domelements"});
-  logboxparent.refreshView(document.querySelector("#logboxcontainer > div"), document.querySelector("#logboxcontainer > template").content);
+  logboxparent.refreshView(document.querySelector("#logboxtp").previousElementSibling, document.querySelector("#logboxtp"));
 });
 webuser.addEventListener("log", function(){
   if (!this.properties.id) {
