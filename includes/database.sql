@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 13, 2018 at 07:57 PM
+-- Generation Time: May 14, 2018 at 02:45 AM
 -- Server version: 5.5.58-0+deb8u1
 -- PHP Version: 5.6.30-0+deb8u1
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `domelements` (
 `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `innerHTML` text COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
@@ -97,9 +97,7 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (70, 'menu', 'Additional Apps'),
 (71, 'labels', ''),
 (72, 'texts', ''),
-(73, 'not located', ''),
-(76, '', 'Free Web'),
-(77, '', 'Get your free web trial service at:<br><br>\r\n<a href="http://youronlineshop.sourceforge.net/shop/" title="free web">\r\nYour Online Shop Web Service Page\r\n</a>');
+(73, 'not located', '');
 
 -- --------------------------------------------------------
 
@@ -110,21 +108,14 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
   `cname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
 --
 
 INSERT INTO `itemcategories` (`id`, `cname`) VALUES
-(1, 'root'),
-(3, 'Línea Facial'),
-(5, 'Línea Tratamientos'),
-(6, 'Limpieza'),
-(7, 'Nutritivas'),
-(8, 'Hidratantes'),
-(9, 'Acné'),
-(10, 'Manchas y marcas');
+(1, 'root');
 
 -- --------------------------------------------------------
 
@@ -146,15 +137,7 @@ CREATE TABLE IF NOT EXISTS `items` (
 --
 
 INSERT INTO `items` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`) VALUES
-(1, 'Lote Tratamiento Acné. 40 días. 15% Dto.', '<p>Las más de mil personas que han realizado con éxito este tratamiento son el mejor aliciente para comenzar a beneficiarse de las mejorías que se obtienen no sólo con respecto al acné sino también en el estado de salud de la piel.</p><p>Este tratamiento tiene un uso interno que actúa directamente en el origen del problema debido a sus propiedades depurativas y como regulador hormonal, y un uso externo que actúa eliminando el acné debido a sus propiedades astringetes, bactericidas, antibióticas y regeneradoras. Además es un tratamiento totalmente natural y sin efectos secundarios, beneficioso para la salud, fortalecedor de las defensas del organismo y aporta gran parte de las vitaminas y minerales necesarios para tener una piel sana.</p><p>De forma externa su acción es sobre los granos ya que literalmente cura la infección, elimina la obstrucción de los poros y nutre las capas epiteliales hasta conseguir regenerar la piel dañada.</p><p>Productos que componen el tratamiento:</p><ul><li>2 - Aloe Vera bebible 1L</li> <li>1 - Gel limpiador pieles grasas</li> <li>1 - Aloe Vera en Gel 200ml</li> <li>1 - Pulpa fresca de Aloe Vera 200ml</li></ul><printOut><p>Modo de aplicación:</p><ul> <li> Jugo de aloe vera 1l.: debes tomarte 4 tapones diarios preferiblemente en ayunas. (Doblar la dosis durante la primera semana)</li> <li> Lávate con el gel limpiador antes de las otras aplicaciones.</li> <li> Gel de aloe vera: Crema hidratante que debes aplicarte por las mañanas dejando que actúe durante todo el día. Puedes repetir la aplicación las veces que sea necesario a lo largo del día.</li> <li> Pulpa de Aloe: dátela cuando estés en casa, dos o tres veces, sin necesidad de aclarar. Te la puedes dar también antes de acostarte y, una vez se seque, dormir con ella puesta.</li></ul></printOut><p>Duración aprox. del lote: 40</p>', '<p>Las más de mil personas que han realizado con éxito este tratamiento son el mejor aliciente para comenzar a beneficiarse de las mejorías que se obtienen no sólo con respecto al acné sino también en el estado de salud de la piel. tambien tenemos mas cosas bien hechas.<br></p>', 'trat_acne.jpg', 969.00),
-(3, 'Gel limpiador facial pieles grasa 200ml.', '<p>Nuestro sistema específico de limpieza facial que no contiene jabón y no irrita, es, sin duda, uno de los productos con más éxito. Ideal para pieles grasas y/o sensibles.</p><p>Al estar formulado con Hamamelis y Aloe Vera, cuida la piel a la vez que limpia en profundidad, eliminando grasa e impurezas de la piel y, por tanto, dejándola con un tono mate y más homogéneo.</p><p>Es muy beneo en casos de acné y de piel grasa, ya que elimina impuzas sin dañar la piel.</p><p>Modo de empleo:</p><p>Aplicar sobre el rostro realizando ligeros masajes circulares. Retirar con agua. No produce espuma...</p>', 'Nuestro sistema específico de limpieza facial que no contiene jabón y no irrita, es, sin duda, uno de los productos con más éxito. Ideal para pieles grasas y/o sensibles', 'limp_gel.jpg', 71.00),
-(8, 'Protector Labial', '<p>Suaviza, hidrata y repara los labios protegiendolos de las inclemencias del tiempo asi como el frio y el viento.</p><p>Con Prop&oacute;leo:. Recomendado para los labios cortados y agrietados. Previene la aparicion de estos casos a la vez que hidrata y protege los labios<br>Con protector solar factor 20: Protege de las radiaciones solares y el frio, revitalizando y recomponiendo el tejido labial. Hidrata y no engrasa<br>Con aloe vera: regenera y hidrata los labios d&aacute;ndoles un aspecto m&aacute;s atratactivo.</p><p>Aplicar las veces al d&iacute;a que sea necesario.</p>', '<p>Suaviza, hidrata y repara los labios protegiendolos de las inclemencias del tiempo asi como el frio y el viento.</p>', 'plabial.jpg', 7.00),
-(9, 'Regenerador Cutáneo 200ml', '<p>Por sus propiedades regeneradoras es un producto excelente para eliminar las marcas y manchas producidas por el acné.</p><p> De aroma refrescante y profunda penetración. Homogeiniza el tono y suaviza las imperfecciones.</p> <p> Indicado para acelerar la regeneración de cicatrices y eliminar marcas y manchas.</p> <p> Modo de empleo:<BR> Extender sobre la cara o zonas a tratar, permitiendo que la piel lo absorba. Es recomendable aplicárselo antes de acostarse para que actúe durante la noche.</p>', 'Por sus propiedades regeneradoras es un producto excelente para eliminar las marcas y manchas producidas por el acné.', 'regenerador.jpg', 714.00),
-(15, 'Peeling + morera', '<p>Tratamiento de gran efecto exfoliante e iluminador. Contribuye a difuminar los excesos de pigmentación y corregir las imperfecciones causadas por lesiones cutáneas. Previene la aparición de manchas.</p><p>Contiene ácido glicólico, ácido láctico y extracto de morera. Esta combinación de ingredientes le confiere un profundo efecto exfoliante que favorece la redistribuición de la pigmentación, proporciondo un tono y un tacto uniforme. El ácido glicólico es un compuesto que se extrae de la caña de azúcar.</p><p>Indicado para pieles con lesiones de acné y/o con excesos de pigmentación.</p><print><p>Modo de empleo:<br> Aplicar en el rostro, incidiendo sobre las zonas más necesitadas. No aclarar. <b>Aplicar este producto un día y dejar descansar los dos siguientes. No aplicar más de 3 veces por semana.</b></p></print>', '<p>Tratamiento de gran efecto exfoliante e iluminador. Contribuye a difuminar los excesos de pigmentación y corregir las imperfecciones causadas por lesiones cutáneas. Previene la aparición de manchas.</p>', 'peeling.jpg', 20.00),
-(17, 'Gel crema contorno de ojos de aloe vera 50ml', '<p>Gel crema no graso, que descongestiona las bolsas bajo los ojos y regenera la epidermis del contorno ocular, atenuando las arrugas de expresión, el decaimiento de los párpados y evitando la deshidratación.</p><p>Tonifica el contorno de ojos y previene la aparición de arrugas.</p><p>Modo de empleo:<br> Aplicar en el contorno de ojos.</p>', '<p>Gel crema no graso, que descongestiona las bolsas bajo los ojos y regenera la epidermis del contorno ocular, atenuando las arrugas de expresión, el decaimiento de los párpados y evitando la deshidratación.</p>', 'contornodeojos.jpg', 3.00),
-(20, 'Jabon del apicultor hexagonal de miel 100gr', '<p>Tiene una deliciosa y potente fragancia a miel muy relajante. Contiene miel de abejas por lo que suaviza la piel y la deja mas hidratada.</p><p>Especialmente recomendado para las manos. Tiene forma hexagonal como los paneles de abejas de las que se obtiene la deliciosa miel.</p><p>Utilizar para el ba&ntilde;o o ducha diario.</p>', '<p>Tiene una deliciosa y potente fragancia a miel muy relajante. Contiene miel de abejas por lo que suaviza la piel y la deja mas hidratada.</p>', 'jabonmiel.jpg', 53.00),
-(21, '', '', '', '', 0.00),
-(22, '', '', '', '', 0.00);
+(21, '', '', '', '', 0.00);
 
 -- --------------------------------------------------------
 
@@ -168,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   `child_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '1',
   `relationships_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=919 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=918 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `links`
@@ -178,24 +161,10 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (71, 4, 5, 1, 17),
 (72, 4, 6, 2, 17),
 (73, 4, 7, 3, 17),
-(79, 5, 9, 1, 13),
-(80, 5, 10, 2, 13),
-(81, 3, 6, 1, 13),
-(82, 3, 8, 2, 13),
-(83, 3, 7, 3, 13),
-(85, 1, 5, 1, 13),
-(86, 1, 3, 2, 13),
 (128, 1, 2, 2, 18),
 (129, 1, 3, 3, 18),
 (133, 33, 34, 2, 17),
 (134, 33, 35, 1, 17),
-(153, 6, 3, 2, 14),
-(155, 9, 1, 1, 14),
-(160, 8, 8, 1, 14),
-(161, 10, 9, 2, 14),
-(163, 10, 15, 1, 14),
-(165, 7, 17, 1, 14),
-(168, 6, 20, 1, 14),
 (272, 1, 6, 1, 18),
 (482, 1, 23, 2, 26),
 (583, 2, 7, 1, 18),
@@ -233,7 +202,7 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (869, 66, 67, 1, 17),
 (870, 66, 68, 2, 17),
 (871, 66, 69, 3, 17),
-(872, 66, 70, 5, 17),
+(872, 66, 70, 4, 17),
 (874, 67, 48, 2, 17),
 (875, 68, 46, 1, 17),
 (876, 68, 57, 2, 17),
@@ -253,7 +222,6 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (893, 54, 85, 1, 21),
 (895, 55, 86, 1, 21),
 (897, 56, 87, 1, 21),
-(898, 6, 22, 3, 14),
 (900, 57, 88, 2, 21),
 (901, 57, 89, 1, 21),
 (905, 58, 90, 3, 21),
@@ -264,9 +232,7 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (912, 17, 34, 1, 10),
 (913, 17, 24, 1, 29),
 (914, 16, 7, 1, 4),
-(915, 17, 3, 1, 4),
-(916, 66, 76, 4, 17),
-(917, 76, 77, 1, 17);
+(915, 17, 3, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -308,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -485,12 +451,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=79;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=78;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `items`
 --
@@ -500,7 +466,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=919;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=918;
 --
 -- AUTO_INCREMENT for table `orderitems`
 --
@@ -510,7 +476,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=59;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `relationships`
 --
