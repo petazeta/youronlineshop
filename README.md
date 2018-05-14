@@ -19,7 +19,9 @@
 
 ## Live Demo
 
-[Your Online Shop Demo](http://youronlineshop.sourceforge.net/code/)
+[Your Online Shop Demo Shop](http://youronlineshop.sourceforge.net/sample/) -> Shop only
+
+[Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/code/) -> user/pass webadmin/webadmin
 
 ## Make it Online
 
