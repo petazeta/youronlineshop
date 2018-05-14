@@ -19,9 +19,9 @@
 
 ## Live Demo
 
-[Your Online Shop Demo Shop](http://youronlineshop.sourceforge.net/sample/) -> Shop only
+Shop only -> [Your Online Shop Demo Shop](http://youronlineshop.sourceforge.net/sample/)
 
-[Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/code/) -> user/pass webadmin/webadmin
+Admin (user/pass webadmin/webadmin ordersadmin/ordersadmin) -> [Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/code/)
 
 ## Make it Online
 
@@ -41,7 +41,7 @@ It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As w
 
 1. Upload the files to your web server.
 2. Unpack it to the destination folder.
-3. Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.
+3. Create a database and import file includes/database_sample.sql. You can use PhpMyAdmin for this purpose.
 4. Edit database settings at: includes/config.sample.php and rename it to config.php.
 5. Give write permisions to the folder catalog/images/small. (To allow upload product images)
 
