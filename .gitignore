@@ -1,4 +1,5 @@
 /temp/*
 catalog/images/small/*
 catalog/images/small/!noimg.png
+!catalog/images/small/noimg.png
 .gitignore
