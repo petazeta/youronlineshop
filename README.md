@@ -21,7 +21,7 @@
 
 Shop only -> [Your Online Shop Demo Shop](http://youronlineshop.sourceforge.net/sample/)
 
-Admin -> [Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/code/)
+Shop Administration -> [Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/test/)
 
 user/pass -> webadmin/webadmin & ordersadmin/ordersadmin
 
