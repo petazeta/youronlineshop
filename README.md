@@ -23,7 +23,7 @@ Shop only -> [Your Online Shop Demo Shop](http://youronlineshop.sourceforge.net/
 
 Admin -> [Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/code/)
 
-(user/pass -> webadmin/webadmin & ordersadmin/ordersadmin)
+user/pass -> webadmin/webadmin & ordersadmin/ordersadmin
 
 ## Make it Online
 
