@@ -77,6 +77,13 @@
 		});
 		//showing categories
 		this.refreshChildrenView(thisElement,  document.querySelector("#categoriescontainer template").content);
+		//to refresh the nochildren element when log
+		webuser.addEventListener("log", function(){
+		  if (thisNode.children.length==1 && !thisNode.children[0].properties.id) {
+		    thisNode.children=[];
+		    thisNode.refreshChildrenView();
+		  }
+		});
 	      });
 	    </script>
 	    <template>
