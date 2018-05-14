@@ -2,3 +2,4 @@
 includes/config.php
 catalog/images/small/*
 catalog/images/small/!noimg.png
+.gitignore
