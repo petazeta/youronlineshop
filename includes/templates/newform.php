@@ -35,6 +35,7 @@
     </form>
     <script>
       thisElement.onsubmit=function() {
+	myalert.properties.timeout=5000;
 	var min=4, max=15;
 	if (!checklength(thisElement.elements.user_name.value, min, max)) {
 	  alert("User name between " + min + " and " + max + " characters!");
@@ -46,15 +47,12 @@
 	}
 	webuser.loginbutton="create";
 	webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value, null, function(){
-	  var myalertmsg="";
-	  if (this.extra.error===true) {
-	    if (this.extra.usernameok!=true) myalertmsg="username error";
-	    else myalertmsg="password error";
+	  if (this.extra.error) {
+	    myalert.properties.alertmsg=this.extra.errormsg;
+	    myalert.showalert();
+	    return false;
 	  }
-	  else {
-	    myalertmsg="User created. Loggin ok";
-	  }
-	  myalert.load({properties:{alertmsg: myalertmsg, timeout:2000}});
+	  myalert.load({properties:{alertmsg: "User created. Login ok", timeout:3000}});
 	  myalert.showalert();
 	});
 	return false;

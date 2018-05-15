@@ -55,7 +55,7 @@ class user extends NodeMale {
     $candidates=$user->db_search();
     if (count($candidates) != 0) {
       $result->extra->error=true;
-      $result->extra->usernameok=false;
+      $result->extra->errormsg="username already present";
       return $result;
     }
     $user->properties->pwd=$pwd;
