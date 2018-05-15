@@ -1,6 +1,6 @@
 <div></div>
-<template>
-  <table class="box" id="cartbox">
+<template id="cartboxtp">
+  <table class="box">
     <tr>
       <th class="boxhead">
         <div class="adminsinglelauncher">
@@ -136,6 +136,6 @@
 var mycart=new cart();
 webuser.addEventListener("loadses", function(){
   var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"});
-  cartbox.refreshView(document.querySelector("#cartcontainer > div"), document.querySelector("#cartcontainer > template"));
+  cartbox.refreshView(document.querySelector("#cartboxtp").previousElementSibling, document.querySelector("#cartboxtp"));
 });
 </script>

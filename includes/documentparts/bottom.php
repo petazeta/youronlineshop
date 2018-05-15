@@ -1,30 +1,26 @@
-<table id="footer" style="width:100%;">
-  <tr style="
-  	background-color:#7d6c41;
-	color:#fff;height:35px;">
-    <td style="padding:10px;"></td>
-    <template>
-      <div class="adminsinglelauncher">
+<footer>
+  <table style="width:100%;">
+    <tr>
+      <td></td>
+      <template>
 	<span></span>
 	<script>thisElement.innerHTML=thisNode.properties.innerHTML</script>
-      </div>
-    </template>
-    <td style="padding:10px;text-align:right;"></td>
-    <template>
-      <div class="adminsinglelauncher">
+      </template>
+      <td style="text-align:right;"></td>
+      <template>
 	<span></span>
 	<script>thisElement.innerHTML=thisNode.properties.innerHTML</script>
-      </div>
-    </template>
-  </tr>
-</table>
+      </template>
+    </tr>
+  </table>
+</footer>
 <script type="text/javascript">
 webuser.addEventListener("loadses", function(){
   var license=labelsRoot.getNextChild({"name":"bottom"}).getNextChild({"name":"license"});
-  var licensecontainer=document.getElementById("footer").rows[0].cells[0];
+  var licensecontainer=document.querySelector("footer > table").rows[0].cells[0];
   license.refreshView(licensecontainer, licensecontainer.nextElementSibling.content);
   var designed=labelsRoot.getNextChild({"name":"bottom"}).getNextChild({"name":"designed"});
-  var designedcontainer=document.getElementById("footer").rows[0].cells[1];
+  var designedcontainer=document.querySelector("footer > table").rows[0].cells[1];
   designed.refreshView(designedcontainer, designedcontainer.nextElementSibling.content);
 });
 </script>
