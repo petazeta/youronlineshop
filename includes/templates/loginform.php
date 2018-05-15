@@ -46,14 +46,12 @@
 	  return false;
 	}
 	webuser.login(thisElement.elements.user_name.value, thisElement.elements.user_password.value, function(){
-	  var myalertmsg="";
-	  if (this.extra.error===true) {
-	    myalertmsg=this.extra.errormsg;
+	  if (this.extra.error) {
+	    myalert.properties.alertmsg=this.extra.errormsg;
+	    myalert.showalert();
+	    return false;
 	  }
-	  else {
-	    myalertmsg="log in ok";
-	  }
-	  myalert.load({properties:{alertmsg: myalertmsg, timeout:3000}});
+	  myalert.load({properties:{alertmsg: "Login ok", timeout:3000}});
 	  myalert.showalert();
 	});
 	return false;
