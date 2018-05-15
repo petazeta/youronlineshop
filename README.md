@@ -25,9 +25,9 @@ Shop Administration -> [Your Online Shop Demo Admin](http://youronlineshop.sourc
 
 user/pass -> webadmin/webadmin & ordersadmin/ordersadmin
 
-## Make it Online
+## Free Online Web
 
-[Your Online Shop Online](http://youronlineshop.sourceforge.net/shop/)
+[Get your Free Online Shop](http://youronlineshop.sourceforge.net/shop/)
 
 ## Autor Note
 
