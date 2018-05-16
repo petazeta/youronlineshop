@@ -24,4 +24,4 @@ Open the browser (chrome or firefox) at the main folder url you will see a page 
 *****************
 *More*
 *****************
-Find us at https://github.com/petazeta/freshhh/ and https://sourceforge.net/projects/dclps/ for more information.
+Find us at https://github.com/petazeta/freshhh/ and https://sourceforge.net/p/hierarnodesys/ for more information.
