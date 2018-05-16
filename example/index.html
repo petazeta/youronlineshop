@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <script type="text/javascript" src="../core/includes/javascript/nodes.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="icon" href="favicon.ico">
+  </head>
+  <body>
+    <table style="width:100%;">
+    <tr>
+      <td>
+        <div id="mycontainer">
+        </div>
+      </td>
+    </tr>
+    </table>
+  <script>
+  var hotel=null;
+  var myhotelmother=new NodeFemale();
+  myhotelmother.properties.childtablename="TABLE_HOTEL";
+  myhotelmother.properties.parenttablename="TABLE_HOTEL";
+  var request=myhotelmother.toRequestFormData("with asc", {action: "load root"});
+  request.action="../core/dbrequest.php";
+  myhotelmother.loadfromhttp(request, function(){
+    hotel=this.children[0];
+    var request=hotel.toRequestFormData("with asc", {action: "load my relationships"});
+    request.action="../core/dbrequest.php";
+    hotel.loadfromhttp(request, function(){
+      var request=this.getRelationship("bookings").toRequestFormData("with asc", {action: "load my tree"});
+      request.action="../core/dbrequest.php";
+      this.getRelationship("bookings").loadfromhttp(request, function(){
+	this.refreshChildrenView(document.getElementById("mycontainer"), "templates/booking.html");
+      });
+    });
+  });
+  </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<template>
+  <table class="mytable">
+    <tbody>
+      <tr>
+	<th data-js='thisElement.textContent="Booking number: " + thisNode.properties.id'>
+	</th>
+      </tr>
+      <tr>
+	<td>
+	  Customer:
+	</td>
+      </tr>
+      <tr>
+	<td style="padding:5px;">
+	  <div></div>
+	  <script>
+	    var request=thisNode.toRequestFormData("all", {action:"load my tree up"});
+	    request.action="../core/dbrequest.php";
+	    thisNode.loadfromhttp(request, function() {
+	      var i=this.parentNode.length;
+	      while (i--) {
+		if (this.parentNode[i].properties.parenttablename=="TABLE_CUSTOMERS") {
+		  break;
+		}
+	      }
+	      this.parentNode[i].partnerNode.refreshView(thisElement, "templates/customerview.html")
+	    });
+	  </script>
+	</td>
+      </tr>
+      <tr>
+      <tr>
+	<td>
+	  Rooms:
+	</td>
+      </tr>
+      <tr>
+	<td style="padding:5px;">
+	  <div></div>
+	  <script>
+	    thisNode.getRelationship("rooms").refreshChildrenView(thisElement, "templates/roomlist.html");
+	  </script>
+	</td>
+      </tr>
+    </tbody>
+  </table>
+</template>
