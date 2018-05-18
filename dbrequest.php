@@ -27,21 +27,77 @@ unset($fields["parameters"]);
 $myelement->properties->cloneFromArray($fields);  //For the case when some data comes from a form
 require('includes/safety.php');
 switch ($parameters->action) {
-  case "load myself": $myexecfunction="db_loadmyself"; break;
-  case "load my children": $myexecfunction="db_loadmychildren"; break;
-  case "load my relationships": $myexecfunction="db_loadmyrelationships"; break;  
-  case "load my childtablekeys": $myexecfunction="db_loadchildtablekeys"; break;
-  case "load my tree": $myexecfunction="db_loadmytree"; if (isset($myelement->extra->level)) $argument=$myelement->extra->level; break;
-  case "load root": $myexecfunction="db_loadroot"; break;
-  case "add myself": $myexecfunction="db_insertmyself"; break;
-  case "add my tree": $myexecfunction="db_insertmytree"; break;
-  case "add my link": $myexecfunction="db_insertmylink"; break;
-  case "delete myself": $myexecfunction="db_deletemyself"; break;
-  case "delete my tree": $myexecfunction="db_deletemytree"; break;
-  case "delete my link": $myexecfunction="db_deletemylink"; break;
-  case "edit my sort_order": $myexecfunction="db_updatemysort_order"; $argument=$myelement->properties->oldsort_order; unset($myelement->properties->oldsort_order); break;
-  case "edit my properties": $myexecfunction="db_updatemyproperties"; break;
-  case "replace myself": $myexecfunction="db_replacemyself"; $argument=$myelement->properties->newid; unset($myelement->properties->newid); break;
+  case "load myself":
+    $myexecfunction="db_loadmyself";
+    $callback="cutUp";
+    break;
+  case "load my children":
+    $myexecfunction="db_loadmychildren";
+    if (isset($parameters->filter)) $argument=$parameters->filter;
+    $callback="cutUp";
+    break;
+  case "load my relationships":
+    $myexecfunction="db_loadmyrelationships";
+    $callback="cutUp";
+    break;
+  case "load my tree":
+    $myexecfunction="db_loadmytree";
+    if (isset($myelement->extra->level)) $argument=$myelement->extra->level;
+    $callback="cutUp";
+    break;
+  case "load my partner":
+    $myexecfunction="db_loadmypartner";
+    $callback="cutDown";
+    break;
+    
+  case "load my childtablekeys":
+    $myexecfunction="db_loadchildtablekeys";
+    break;
+  case "load root":
+    $myexecfunction="db_loadroot";
+    break;
+    
+  case "load my parent":
+    $myexecfunction="db_loadmyparent";
+    $callback="cutDown";
+    break;
+  case "load my tree up":
+    $myexecfunction="db_loadmytreeup";
+    if (isset($myelement->extra->level)) $argument=$myelement->extra->level;
+    $callback="cutDown";
+    break;
+
+  case "add myself":
+    $myexecfunction="db_insertmyself";
+    break;
+  case "add my tree":
+    $myexecfunction="db_insertmytree";
+    break;
+  case "add my link":
+    $myexecfunction="db_insertmylink";
+    break;
+  case "delete myself":
+    $myexecfunction="db_deletemyself";
+    break;
+  case "delete my tree":
+    $myexecfunction="db_deletemytree";
+    break;
+  case "delete my link":
+    $myexecfunction="db_deletemylink";
+    break;
+  case "edit my sort_order":
+    $myexecfunction="db_updatemysort_order";
+    $argument=$myelement->properties->oldsort_order;
+    unset($myelement->properties->oldsort_order);
+    break;
+  case "edit my properties":
+    $myexecfunction="db_updatemyproperties";
+    break;
+  case "replace myself":
+    $myexecfunction="db_replacemyself";
+    $argument=$myelement->properties->newid;
+    unset($myelement->properties->newid);
+    break;
   default: $myexecfunction=null;
 }
 if (isset($argument)) $executed=$myelement->$myexecfunction($argument);
@@ -53,7 +109,7 @@ if ($executed===false) {
   $myelement->extra->errorinfo->type="database";
 }
 $myelement->avoidrecursion(); //needed when insert
-
+if (isset($callback)) $myelement->$callback();
 header("Content-type: application/json");
 echo json_encode($myelement);
 ?>

@@ -23,8 +23,19 @@ cartboxitem.prototype.loadcartitem=function(cartitem) {
 
 function cart() {
 	NodeMale.call(this);
-	this.load({relationships:[{properties: {name:"cartitem"}}, {properties:{name:"cartbox"}, children: [{relationships:[{properties: {name:"cartboxitem"}}]}]}]});
-	var cartitemrel=this.getRelationship({name:"cartitem"});
+	//this.load({relationships:[{properties: {name:"cartitem"}}, {properties:{name:"cartbox"}, children: [{relationships:[{properties: {name:"cartboxitem"}}]}]}]});
+	var cartitemrel=new NodeFemale();
+	cartitemrel.properties.name="cartitem";
+	this.addRelationship(cartitemrel);
+	var cartboxrel=new NodeFemale();
+	cartboxrel.properties.name="cartbox";
+	this.addRelationship(cartboxrel);
+	var cartboxchild=new NodeMale();
+	cartboxrel.addChild(cartboxchild);
+	var cartboxchildrel=new NodeFemale();
+	cartboxchildrel.properties.name="cartboxitem";
+	cartboxchild.addRelationship(cartboxchildrel);
+	
 	this.properties.subTotal=0;
 
 	this.checkout=function(){

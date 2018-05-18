@@ -91,16 +91,16 @@
 
 <script type="text/javascript">
 webuser.addEventListener("loadses", function(){
-  var documentroot=websectionsroot.getNextChild({name: "texts"});
+  var menusroot=domelementsroot.getNextChild({name: "texts"});
   var myForm=document.getElementById("formgeneric").cloneNode(true);
   myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
-  var myrel=documentroot.cloneRelationship();
+  var myrel=menusroot.cloneRelationship();
   myrel.setView(myForm);
   myrel.loadfromhttp(myForm, function(){
-    documentroot=this.getChild({name: "nav"});
+    menusroot=this.getChild({name: "nav"});
     var myForm=document.getElementById("formgeneric").cloneNode(true);
     myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
-    var myrel=documentroot.cloneRelationship();
+    var myrel=menusroot.cloneRelationship();
     myrel.setView(myForm);
     myrel.loadfromhttp(myForm, function(){
       this.addEventListener("refreshChildrenView", function() {

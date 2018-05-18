@@ -89,10 +89,26 @@ class NodeFemale extends Node{
       }
     }
     if (!isset($source->partnerNode) || !$source->partnerNode) return false;
-    $this->partnerNode= new NodeMale();
-    $this->partnerNode->loadasc($source->partnerNode);
+    if (gettype($source->partnerNode)=="array") {
+      $this->partnerNode=[];
+      foreach($source->partnerNode as $sourcePartnerNode) {
+	$partnerNode=new NodeMale();
+	$partnerNode->loadasc($sourcePartnerNode);
+	$this->partnerNode[]=$partnerNode;
+      }
+    }
+    else {
+      $this->partnerNode= new NodeMale();
+      $this->partnerNode->loadasc($source->partnerNode);
+    }
+    return true;
   }
-  
+  function cutUp(){
+    $this->partnerNode=null;
+  }
+  function cutDown(){
+    $this->children=null;
+  }
   function getChild($obj) {
     $keyname=array_keys($obj)[0];
     $i=count($this->children);
@@ -118,14 +134,17 @@ class NodeFemale extends Node{
     return true;
   }
 
-  function db_loadmychildren() {  
+  function db_loadmychildren($filter=null) {
     $sql = "SELECT t.*, l.sort_order FROM "
     . TABLE_LINKS . " l"
     . " inner join " . constant($this->properties->childtablename) . " t on t.id=l.child_id"
     .  " WHERE"
     .  " l.relationships_id=" . $this->properties->id
-    .  " and l.parent_id=" . $this->partnerNode->properties->id
-    . " order by l.sort_order";
+    .  " and l.parent_id=" . $this->partnerNode->properties->id;
+    if ($filter) {
+      $sql .= " and " . $filter;
+    }
+    $sql .= " order by l.sort_order";
     if (($result = $this->getdblink()->query($sql))===false) return false;
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
@@ -138,6 +157,33 @@ class NodeFemale extends Node{
     return true;
   }
   
+  function db_loadmypartner() {
+    if (!isset($this->properties->id)) return false; //Virtual mother case
+    $sql = "SELECT t.* FROM "
+    . TABLE_LINKS . " l"
+    . " inner join " . constant($this->properties->parenttablename) . " t on t.id=l.parent_id"
+    .  " WHERE"
+    .  " l.relationships_id=" . $this->properties->id
+    .  " and l.child_id=" . $this->children[0]->properties->id;
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if ($result->num_rows > 1) {
+      $this->partnerNode=[];
+      for ($i=0; $i<$result->num_rows; $i++) {
+	$row=$result->fetch_array(MYSQLI_ASSOC);
+	$this->partnerNode[$i] = new NodeMale();
+	$this->partnerNode[$i]->properties->cloneFromArray($row);
+	$this->partnerNode[$i]->relationships[0]=$this;
+      }
+    }
+    else if ($result->num_rows==1) {
+      $row=$result->fetch_array(MYSQLI_ASSOC);
+      $this->partnerNode = new NodeMale();
+      $this->partnerNode->properties->cloneFromArray($row);
+      $this->partnerNode->relationships[0]=$this;
+    }
+    return true;
+  }
+  
   function db_loadmytree($level=null) {
     if ($level===0) return true;
     if ($level) $level--;
@@ -145,6 +191,18 @@ class NodeFemale extends Node{
     for ($i=0; $i<count($this->children); $i++)  {
       if ($this->children[$i]->db_loadmytree($level)===false) return false;
     }
+  }
+  
+  function db_loadmytreeup($level=null) {
+    if ($level===0) return true;
+    if ($level) $level--;
+    if ($this->db_loadmypartner()===false) return false;
+    if (gettype($this->partnerNode)=="array") {
+      for ($i=0; $i<count($this->partnerNode); $i++)  {
+	if ($this->partnerNode[$i]->db_loadmytreeup($level)===false) return false;
+      }
+    }
+    else if ($this->partnerNode && $this->partnerNode->db_loadmytreeup($level)===false) return false;
   }
 
   function db_loadroot() {
@@ -170,11 +228,33 @@ class NodeFemale extends Node{
       $this->children[0]->properties->cloneFromArray($row);
       $this->children[0]->parentNode=$this;
   }
-
   function avoidrecursion(){
+    if ($this->partnerNode) {
+      if (gettype($this->partnerNode)=="array") {
+	foreach ($this->partnerNode as $i => $value) {
+	  $this->partnerNode[$i]->avoidrecursionup();
+	}
+      }
+    }
+    for ($i=0; $i<count($this->children); $i++)  {
+      $this->children[$i]->avoidrecursiondown();
+    }
+  }
+  function avoidrecursiondown(){
     $this->partnerNode=null;
     for ($i=0; $i<count($this->children); $i++)  {
-      $this->children[$i]->avoidrecursion();
+      $this->children[$i]->avoidrecursiondown();
+    }
+  }
+  function avoidrecursionup(){
+    $this->children=[];
+    if ($this->partnerNode) {
+      if (gettype($this->partnerNode)=="array") {
+	foreach ($this->partnerNode as $i => $value) {
+	  $this->partnerNode[$i]->avoidrecursionup();
+	}
+      }
+      else $this->partnerNode->avoidrecursionup();
     }
   }
 }
@@ -202,12 +282,30 @@ class NodeMale extends Node{
   function loadasc($source) {
     parent::loadasc($source);
     if (!isset($source->parentNode) || !$source->parentNode) return false;
-    $this->parentNode=new NodeFemale();
-    $this->parentNode->loadasc($source->parentNode);
+    if (gettype($source->parentNode)=="array") {
+      $this->parentNode=[];
+      foreach($source->parentNode as $sourceparentNode) {
+	$parentNode=new NodeFemale();
+	$parentNode->loadasc($sourceparentNode);
+	$this->parentNode[]=$parentNode;
+      }
+    }
+    else {
+      $this->parentNode=new NodeFemale();
+      $this->parentNode->loadasc($source->parentNode);
+    }
     return true;
   }
-
+  function cutUp(){
+    $this->parentNode=null;
+  }
+  function cutDown(){
+    $this->relationships=null;
+  }
   function getRelationship($obj) {
+    if (gettype($obj)=="string") {
+      $obj=['name' => $obj];
+    }
     $keyname=array_keys($obj)[0];
     $i=count($this->relationships);
     while($i--) {
@@ -232,6 +330,40 @@ class NodeMale extends Node{
     return true;
   }
   
+  //It load relationships of a determined node from its parentNode->childtablename
+  function db_loadmyparent() {
+    if ($this->parentNode) {
+      $mytablename=$this->parentNode->properties->childtablename;
+    }
+    else if (count($this->relationships) > 0) $mytablename=$this->relationships[0]->properties->parenttablename;
+    else return false;
+    $sql = "SELECT r.* FROM "
+      . TABLE_RELATIONSHIPS . " r"
+      . " INNER JOIN " . TABLE_LINKS . " l"
+      . " ON l.relationships_id=r.id"
+      . " WHERE" . " r.childtablename='" . $mytablename . "'"
+      . " AND l.child_id=" . $this->properties->id;
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if ($result->num_rows > 1) {
+      $this->parentNode=[];
+      for ($i=0; $i<$result->num_rows; $i++) {
+	$row=$result->fetch_array(MYSQLI_ASSOC);
+	$this->parentNode[$i] = new NodeFemale();
+	$this->parentNode[$i]->properties->cloneFromArray($row);
+	$this->parentNode[$i]->db_loadchildtablekeys();
+	$this->parentNode[$i]->children[0]=$this;
+      }
+    }
+    else if ($result->num_rows==1) {
+      $row=$result->fetch_array(MYSQLI_ASSOC);
+      $this->parentNode = new NodeFemale();
+      $this->parentNode->properties->cloneFromArray($row);
+      $this->parentNode->db_loadchildtablekeys();
+      $this->parentNode->children[0]=$this;
+    }
+    return true;
+  }
+  
   function db_loadmytree($level=null) {
     if ($level===0) return true;
     if ($level) $level--;
@@ -239,6 +371,18 @@ class NodeMale extends Node{
     for ($i=0; $i<count($this->relationships); $i++)  {
       if ($this->relationships[$i]->db_loadmytree($level)===false) return false;
     }
+  }
+  
+  function db_loadmytreeup($level=null) {
+    if ($level===0) return true;
+    if ($level) $level--;
+    if ($this->db_loadmyparent()===false) return false;
+    if (gettype($this->parentNode)=="array") {
+      for ($i=0; $i<count($this->parentNode); $i++)  {
+	if ($this->parentNode[$i]->db_loadmytreeup($level)===false) return false;
+      }
+    }
+    else if ($this->parentNode && $this->parentNode->db_loadmytreeup($level)===false) return false;
   }
   
   function db_loadmyself(){
@@ -429,11 +573,34 @@ class NodeMale extends Node{
       if (($result = $this->getdblink()->query($sql))===false) return false;
       return true;
   }
-
-  function avoidrecursion(){
+  function avoidrecursion() {
+    if ($this->parentNode) {
+      if (gettype($this->parentNode)=="array") {
+	foreach ($this->parentNode as $i => $value) {
+	  $this->parentNode[$i]->avoidrecursionup();
+	}
+      }
+      else $this->parentNode->avoidrecursionup();
+    }
+    for ($i=0; $i<count($this->relationships); $i++)  {
+      $this->relationships[$i]->avoidrecursiondown();
+    }
+  }
+  function avoidrecursionup(){
+    $this->relationships=[];
+    if ($this->parentNode) {
+      if (gettype($this->parentNode)=="array") {
+	foreach ($this->parentNode as $i => $value) {
+	  $this->parentNode[$i]->avoidrecursionup();
+	}
+      }
+      else $this->parentNode->avoidrecursionup();
+    }
+  }
+  function avoidrecursiondown(){
     $this->parentNode=null;
     for ($i=0; $i<count($this->relationships); $i++)  {
-      $this->relationships[$i]->avoidrecursion();
+      $this->relationships[$i]->avoidrecursiondown();
     }
   }
 }

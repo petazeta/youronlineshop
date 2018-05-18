@@ -66,6 +66,59 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
   xmlhttp.open("GET",tpHref,true);
   xmlhttp.send();
 };
+Node.prototype.toRequestFormData=function(parameters) {
+  switch (parameters.action) {
+    case "load myself":
+    case "load my children":
+    case "load my relationships":
+    case "load my tree":
+    case "load my partner":
+      var node=new this.constructor;
+      node.loadasc(this,2);
+      break;
+    case "load my childtablekeys":
+    case "load root":
+      var node=new this.constructor;
+      node.load(this, 0);
+      break;
+    case "load my parent":
+    case "load my tree up":
+      var node=new this.constructor;
+      node.load(this,1);
+      node.avoidrecursion();
+      node.loadasc(this,2);
+      break;
+      
+    case "myself":
+      var node=new this.constructor;
+      node.load(this, 0);
+      break;
+    case "with asc":
+      var node=new this.constructor;
+      node.loadasc(this,2);
+      break;
+    case "just asc":
+      var node=new this.constructor;
+      node.loadasc(this,2);
+      node.properties.forEach(function(property){
+	delete(property);
+      });
+      break;
+    case "all":
+      var node=new this.constructor;
+      node.load(this);
+      node.avoidrecursion();
+      node.loadasc(this,3);
+      break;
+    default:
+  }
+  var FD  = new FormData();
+  // Push our data into our FormData object
+  FD.append("json", JSON.stringify(node));
+  FD.append("parameters", JSON.stringify(parameters));
+  return FD;
+}
+
 
 //This function serves to set html template and to reset it if it is already a dom element:
 //node.setView(form), node.setView(scriptelement)
@@ -219,7 +272,7 @@ Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
 Node.prototype.loadfromhttp=function (request, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
   var thisNode=this;
-  xmlhttp.onload=function() {
+  xmlhttp.addEventListener('load', function() {
     console.log(this.responseText);
     var responseobj=JSON.parse(this.responseText);
     if (typeof responseobj=="object") {
@@ -233,16 +286,28 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
 	thisNode.events.loadFromHTTP[i].call(thisNode);
       }
     }
-  };
+  });
+  xmlhttp.addEventListener('error', function(event) {
+    alert('Oops! Something went wrong with the XMLHttpRequest.');
+  });
   xmlhttp.overrideMimeType("application/json");
   if (typeof request=="string") {
     xmlhttp.open("GET",request,true);
     xmlhttp.send();
   }
   else if (typeof request=="object") {
+    if (request.constructor === Object) {
+      var myAction= request.requesterFile || "dbrequest.php";
+      var request=this.toRequestFormData(request);
+      request.action=myAction;
+    }
     xmlhttp.open("POST",request.action, true);
-    if (request.tagName=="FORM") xmlhttp.send(new FormData(request));
-    else xmlhttp.send(request); //sending just formData (archives)
+    if (request.tagName=="FORM") {
+      xmlhttp.send(new FormData(request));
+    }
+    else {
+      xmlhttp.send(request); //sending just formData (archives)
+    }
   }
 };
 Node.prototype.addEventListener=function (eventName, listenerFunction, id) {
@@ -309,15 +374,13 @@ NodeFemale.prototype.load=function(source, level) {
       this.childtablekeys[i].cloneFromArray(source.childtablekeys[i]);
     }
   }
-  if (level!==false) {
-    this.children=[];
-    if (source.children) {
-      for (var i=0;i<source.children.length;i++) {
-	this.children[i]=new NodeMale;
-	this.children[i].parentNode=this;
-	this.children[i].load(source.children[i]);
-      }
-    }
+  if (level==0) return false;
+  if (level) level--;
+  if (!source.children) return false;
+  for (var i=0;i<source.children.length;i++) {
+    this.children[i]=new NodeMale;
+    this.children[i].parentNode=this;
+    this.children[i].load(source.children[i], level);
   }
 }
 
@@ -330,8 +393,17 @@ NodeFemale.prototype.loadasc=function(source, level) {
   if (!source.partnerNode) return false;
   if (level==0) return false;
   if (level) level--;
-  this.partnerNode=new NodeMale();
-  this.partnerNode.loadasc(source.partnerNode, level);
+  if (Array.isArray(source.partnerNode)) {
+    this.partnerNode=[];
+    for (var i=0; i < source.partnerNode.length; i++) {
+      this.partnerNode[i]=new NodeMale();
+      this.partnerNode[i].loadasc(source.partnerNode[i], level);
+    }
+  }
+  else {
+    this.partnerNode=new NodeMale();
+    this.partnerNode.loadasc(source.partnerNode, level);
+  }
 }
 
 NodeFemale.prototype.avoidrecursion=function () {
@@ -425,15 +497,13 @@ NodeMale.prototype.constructor=NodeMale;
 NodeMale.prototype.load=function(source, level) {
   Node.prototype.load.call(this, source);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
-  if (level!==false) {
-    this.relationships=[]
-    if (source.relationships) {
-      for (var i=0;i<source.relationships.length; i++) {
-	  this.relationships[i]=new NodeFemale();
-	  this.relationships[i].partnerNode=this;
-	  this.relationships[i].load(source.relationships[i]);
-      }
-    }
+  if (level==0) return false;
+  if (level) level--;
+  if (!source.relationships) return false;
+  for (var i=0;i<source.relationships.length; i++) {
+    this.relationships[i]=new NodeFemale();
+    this.relationships[i].partnerNode=this;
+    this.relationships[i].load(source.relationships[i], level);
   }
 }
 
@@ -447,8 +517,17 @@ NodeMale.prototype.loadasc=function(source, level) {
   if (!source.parentNode) return false;
   if (level==0) return false;
   if (level) level--;
-  this.parentNode=new NodeFemale();
-  this.parentNode.loadasc(source.parentNode, level);
+  if (Array.isArray(source.parentNode)) {
+    this.parentNode=[];
+    for (var i=0; i < source.parentNode.length; i++) {
+      this.parentNode[i]=new NodeFemale();
+      this.parentNode[i].loadasc(source.parentNode[i], level);
+    }
+  }
+  else {
+    this.parentNode=new NodeFemale();
+    this.parentNode.loadasc(source.parentNode, level);
+  }
 }
 
 NodeMale.prototype.avoidrecursion=function () {
@@ -465,12 +544,18 @@ NodeMale.prototype.cloneRelationship=function() {
   return this.relationships[0];
 };
 
+NodeMale.prototype.addRelationship=function(rel) {
+  this.relationships.push(rel);
+  rel.partnerNode=this;
+}
+
 NodeMale.prototype.getrootnode=function() {
   if (!this.parentNode) return this;
   else return this.parentNode.getrootnode();
 }
 
 NodeMale.prototype.getRelationship=function(obj) {
+  if (typeof obj == "string") obj={name: obj};
   var keyname=Object.keys(obj)[0];
   var i= this.relationships.length;
   while(i--) {

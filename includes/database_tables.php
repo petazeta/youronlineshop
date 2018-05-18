@@ -1,21 +1,8 @@
 <?php
 /*
-  Table Names in case there would be prefix
+  Table Names to constants.
+  In case there would be prefix (__***) it is removed from the contastant name
 */
-
-$standardTables=[
-"addresses",
-"domelements",
-"itemcategories",
-"items",
-"links",
-"orderitems",
-"orders",
-"relationships",
-"users",
-"usersdata",
-"userstypes"
-];
 
 $sql="SHOW TABLES";
 
@@ -32,20 +19,10 @@ for ($i=0; $i<$result->num_rows; $i++) {
 $databaseTableNames=[];
 foreach($tablesRequester->children as $myTable) {
   $key=array_keys((array)$myTable->properties)[0];
-  array_push($databaseTableNames, $myTable->properties->$key);
+  $databaseTableNames[] = $myTable->properties->$key;
 }
-foreach ($standardTables as $stdTable) {
-  $key=array_search($stdTable, $databaseTableNames);
-  if ($key!==false) {
-    define('TABLE_' . strtoupper($stdTable), $databaseTableNames[$key]);
-  }
-  else {
-    foreach ($databaseTableNames as $dbTableName) {
-      if (preg_match("/_" . $stdTable . "$/i", $dbTableName)) {
-	define('TABLE_' . strtoupper($stdTable), $dbTableName);
-      }
-    }
-  }
+$standardTables=preg_replace('/__(.+)$/', '$1', $databaseTableNames);
+for ($i=0; $i<count($databaseTableNames); $i++) {
+  define('TABLE_' . strtoupper($standardTables[$i]), $databaseTableNames[$i]);
 }
-
 ?>

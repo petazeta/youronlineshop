@@ -14,38 +14,30 @@
     <?php include("includes/templates.php"); ?>
   </head>
   <body>
-    <script type="text/javascript">
+    <script>
 document.body.appendChild(document.getElementById("formgenerictp").content.querySelector("form").cloneNode(true));
 document.body.appendChild(document.getElementById("formgenerictreetp").content.querySelector("form").cloneNode(true));
 //We load the dom elements text that will be included in some parts of the document
 var labelsRoot=null;
-var websectionsroot= new NodeMale();
-websectionsrootmother=new NodeFemale();
-websectionsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
-websectionsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
-var myForm=document.getElementById("formgeneric").cloneNode(true);
-myForm.elements.parameters.value=JSON.stringify({action:"load root"});
-websectionsrootmother.setView(myForm);
-websectionsrootmother.loadfromhttp(myForm, function(){
-  var myForm=document.getElementById("formgeneric").cloneNode(true);
-  var jsonparameters={action: "load my relationships"};
-  myForm.elements.parameters.value=JSON.stringify(jsonparameters);
-  websectionsroot.load(websectionsrootmother.children[0]);
-  websectionsroot.loadasc(websectionsrootmother.children[0]);
-  websectionsroot.setView(myForm);
-  websectionsroot.loadfromhttp(myForm, function(){
-    var myForm=document.getElementById("formgeneric").cloneNode(true);
-    var jsonparameters={action: "load my children"};
-    myForm.elements.parameters.value=JSON.stringify(jsonparameters);
-    this.relationships[0].setView(myForm);
-    this.relationships[0].loadfromhttp(myForm, function(){
-      var myForm=document.getElementById("formgeneric").cloneNode(true);
-      var jsonparameters={action: "load my tree"};
-      myForm.elements.parameters.value=JSON.stringify(jsonparameters);
-      this.getChild({name: "labels"}).setView(myForm);
-      this.getChild({name: "labels"}).loadfromhttp(myForm, function(){
+var domelementsroot=null;
+domelementsrootmother=new NodeFemale();
+domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
+domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
+domelementsrootmother.loadfromhttp({action:"load root"}, function(){
+  domelementsroot=domelementsrootmother.children[0];
+  domelementsroot.addEventListener("loadtree", function(){
+    webuser.loadfromhttp('sesload.php?sesname=user', function(){
+      this.dispatchEvent("loadses");
+    });
+  });
+  domelementsroot.addEventListener("loadtree", function(){
+    myalert.hidealert();
+  });
+  domelementsroot.loadfromhttp({action:"load my relationships"}, function(){
+    this.relationships[0].loadfromhttp({action:"load my children"}, function(){
+      this.getChild({name: "labels"}).loadfromhttp({action:"load my tree"}, function(){
 	labelsRoot=this;
-	websectionsroot.dispatchEvent("loadtree");
+	domelementsroot.dispatchEvent("loadtree");
       });
     });
   });
@@ -54,17 +46,9 @@ var myalert=new Alert();
 myalert.myTp=document.getElementById("alerttp").content; //For error alerts
 myalert.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
 myalert.showalert();
-websectionsroot.addEventListener("loadtree", function(){
-  myalert.hidealert();
-});
 
 var webuser=new user();
 //More about webuser at logbox.php
-websectionsroot.addEventListener("loadtree", function(){
-  webuser.loadfromhttp('sesload.php?sesname=user', function(){
-    this.dispatchEvent("loadses");
-  });
-});
     </script>
     <table class="backgroundspace">
       <tr>

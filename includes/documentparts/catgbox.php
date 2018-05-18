@@ -95,11 +95,8 @@
 		      if (thisNode.selected) setSelected.call(closesttagname.call(thisElement, "TR"));
 		      thisElement.onclick=function(){
 			thisNode.setActive();
-			var myForm=document.getElementById("formgeneric").cloneNode(true);
 			var myrel=thisNode.cloneRelationship();
-			myrel.setView(myForm);
-			myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
-			myrel.loadfromhttp(myForm, function(){
+			myrel.loadfromhttp({action:"load my children"}, function(){
 			  this.refreshView(document.getElementById("centralcontent"),document.querySelector("#catalogtp"));
 			});
 			return false;
@@ -157,10 +154,7 @@ webuser.addEventListener("loadses", function(){
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
   categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
-  var myForm=document.getElementById("formgeneric").cloneNode(true);
-  myForm.elements.parameters.value=JSON.stringify({action:"load root"});
-  categoriesrootmother.setView(myForm);
-  categoriesrootmother.loadfromhttp(myForm, function(){
+  categoriesrootmother.loadfromhttp({action:"load root"}, function(){
     var myForm=document.getElementById("formgeneric").cloneNode(true);
     var categoriesroot=this.children[0];
     var myrel=categoriesroot.cloneRelationship();
