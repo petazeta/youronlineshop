@@ -111,6 +111,10 @@ Node.prototype.toRequestFormData=function(parameters) {
       node.loadasc(this,3);
       break;
     default:
+      var node=new this.constructor;
+      node.load(this);
+      node.avoidrecursion();
+      node.loadasc(this);
   }
   var FD  = new FormData();
   // Push our data into our FormData object

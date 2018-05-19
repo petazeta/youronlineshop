@@ -25,17 +25,11 @@
 	insertuser.loadasc(webuser);
 	insertuser.load(webuser);
 	//Now we start to load rels so webuser clon: insertuser will be empty of any data
-	var myform=document.getElementById("formgeneric").cloneNode(true);
-	myform.elements.namedItem("parameters").value=JSON.stringify({action: "load my relationships", user_id: webuser.properties.id});
-	insertuser.setView(myform); 
-	insertuser.loadfromhttp(myform, function(){
+	insertuser.loadfromhttp({action: "load my relationships", user_id: webuser.properties.id}, function(){
 	  insertuser.properties.id=webuser.properties.id;
 	  insertuser.getRelationship({name:"orders"}).addChild(new NodeMale());
 	  var myorder=insertuser.getRelationship({name:"orders"}).children[0];
-	  var myform=document.getElementById("formgeneric").cloneNode(true);
-	  myform.elements.namedItem("parameters").value=JSON.stringify({action: "load my relationships", user_id: webuser.properties.id});
-	  myorder.setView(myform);
-	  myorder.loadfromhttp(myform, function(){
+	  myorder.loadfromhttp({action: "load my relationships", user_id: webuser.properties.id}, function(){
 	    var myordercartitems=ordercart.getRelationship({name:"cartbox"}).children[0].getRelationship({name:"cartboxitem"}).children;
 	    for (var i=0; i<myordercartitems.length; i++) {
 	      var myorderitemdata=new NodeMale();
@@ -46,14 +40,16 @@
 	    }
 	    //lets try to insert the order
 	    //This request adds descendents
-	    var myresult=new NodeMale();
-	    var myform=document.getElementById("formgenerictree").cloneNode(true);
-	    myorder.setView(myform);
-	    myform.elements.namedItem("parameters").value=JSON.stringify({action: "add my tree", user_id: webuser.properties.id});
-	    myresult.loadfromhttp(myform, function(){
+	    myorder.loadfromhttp({action: "add my tree", user_id: webuser.properties.id}, function(){
+	      if (this.extra && this.extra.error) {
+		myalert.properties.alertmsg=this.extra.errormsg;
+		myalert.properties.timeout=4000;
+		myalert.showalert();
+		return false;
+	      }
 	      myalert.load({properties:{alertmsg: "Order items saved.", timeout:2000}});
 	      myalert.showalert();
-	      myresult.refreshView(document.getElementById("centralcontent"),"includes/templates/checkout2.php");
+	      this.refreshView(document.getElementById("centralcontent"),"includes/templates/checkout2.php");
 	      //We remove the items from the cart
 	      mycart.getRelationship({name:"cartitem"}).children=[];
 	      mycart.refreshcartbox();
