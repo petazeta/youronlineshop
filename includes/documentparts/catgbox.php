@@ -45,10 +45,7 @@
 	  <template id="categoriestp">
 	    <table style="width:100%"></table>
 	    <script>
-	      var myForm=document.getElementById("formgeneric").cloneNode(true);
-	      thisNode.setView(myForm);
-	      myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
-	      thisNode.loadfromhttp(myForm, function() {
+	      thisNode.loadfromhttp({action:"load my children"}, function() {
 		this.addEventListener("refreshChildrenView", function() {
 		  if (this.children==0){
 		    //Add the nochildren node that will be the container of the addnode button in case user is web admin
@@ -155,10 +152,8 @@ webuser.addEventListener("loadses", function(){
   categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
   categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
   categoriesrootmother.loadfromhttp({action:"load root"}, function(){
-    var myForm=document.getElementById("formgeneric").cloneNode(true);
     var categoriesroot=this.children[0];
     var myrel=categoriesroot.cloneRelationship();
-    
     myrel.refreshView(document.querySelector("#categoriestp").previousElementSibling,  document.querySelector("#categoriestp"));
 
   });
