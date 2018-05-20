@@ -50,10 +50,7 @@
 		      thisElement.textContent=thisNode.properties.cname || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
 		      thisElement.onclick=function() {
 			thisNode.setActive();
-			var myform=document.getElementById("formgeneric").cloneNode(true);
-			thisNode.setView(myform);
-			myform.elements.parameters.value=JSON.stringify({action:"load my tree"});
-			thisNode.loadfromhttp(myform, function(){
+			thisNode.loadfromhttp({action:"load my tree"}, function(){
 			  var items=thisNode.getRelationship({name:"items"});
 			  items.addEventListener("refreshChildrenView", function() {
 			    if (this.children==0){
@@ -82,21 +79,21 @@
 		    </script>
 		    <div class="bttopadmn"></div>
 		    <div class="btrightnarrow"></div>
-		      <script>
-			if (webuser.isWebAdmin()) {
-			  var admnlauncher=new NodeMale();
-			  admnlauncher.myNode=thisNode;
-			  admnlauncher.buttons=[
-			    { 
-			      template: document.getElementById("butedittp"),
-			      args:{editpropertyname:"cname", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-			    },
-			    {template: document.getElementById("buthchpostp")},
-			    {template: document.getElementById("butaddnodetp")},
-			    {template: document.getElementById("butdeletetp")}
-			  ];
-			  admnlauncher.refreshView(thisElement, document.getElementById("butopentp"));
-			}
+		    <script>
+		      if (webuser.isWebAdmin()) {
+			var admnlauncher=new NodeMale();
+			admnlauncher.myNode=thisNode;
+			admnlauncher.buttons=[
+			  { 
+			    template: document.getElementById("butedittp"),
+			    args:{editpropertyname:"cname", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+			  },
+			  {template: document.getElementById("buthchpostp")},
+			  {template: document.getElementById("butaddnodetp")},
+			  {template: document.getElementById("butdeletetp")}
+			];
+			admnlauncher.refreshView(thisElement, document.getElementById("butopentp"));
+		      }
 		    </script>
 		  </div>
 		</td>

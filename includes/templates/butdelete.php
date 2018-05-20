@@ -56,7 +56,7 @@
 		  myresult.loadfromhttp(this, function(){
 		    thisParent.removeChild(thisNode);
 		    //for no children add a eventlistener to refreshChildrenView event
-		    thisParent.refreshChildrenView();
+		    if (thisParent.childContainer) thisParent.refreshChildrenView();
 		    thisParent.dispatchEvent("deleteNode", [thisNode]);
 		    thisNode.dispatchEvent("deleteNode");
 		  });

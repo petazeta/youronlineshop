@@ -7,11 +7,7 @@
       if (thisNode.selected) setSelected.call(thisElement.parentElement);
       thisElement.onclick=function(){
 	thisNode.setActive();
-	var jsonparameters={action: "load my tree"};
-	var myForm=document.getElementById("formgeneric").cloneNode(true);
-	myForm.elements.parameters.value=JSON.stringify(jsonparameters);
-	thisNode.setView(myForm);
-	thisNode.loadfromhttp(myForm, function() {
+	thisNode.loadfromhttp({action: "load my tree"}, function() {
 	  var elements=thisNode.getRelationship({"name":"domelements"});
 	  elements.addEventListener("refreshChildrenView", function() {
 	    if (this.children==0){
@@ -92,17 +88,11 @@
 <script type="text/javascript">
 webuser.addEventListener("loadses", function(){
   var menusroot=domelementsroot.getNextChild({name: "texts"});
-  var myForm=document.getElementById("formgeneric").cloneNode(true);
-  myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
   var myrel=menusroot.cloneRelationship();
-  myrel.setView(myForm);
-  myrel.loadfromhttp(myForm, function(){
+  myrel.loadfromhttp({action:"load my children"}, function(){
     menusroot=this.getChild({name: "nav"});
-    var myForm=document.getElementById("formgeneric").cloneNode(true);
-    myForm.elements.parameters.value=JSON.stringify({action:"load my children"});
     var myrel=menusroot.cloneRelationship();
-    myrel.setView(myForm);
-    myrel.loadfromhttp(myForm, function(){
+    myrel.loadfromhttp({action:"load my children"}, function(){
       this.addEventListener("refreshChildrenView", function() {
 	if (this.children==0){
 	  var element=this.addChild(new NodeMale());

@@ -134,22 +134,36 @@ class NodeFemale extends Node{
     return true;
   }
 
-  function db_loadmychildren($filter=null) {
-    $sql = "SELECT t.*, l.sort_order FROM "
-    . TABLE_LINKS . " l"
-    . " inner join " . constant($this->properties->childtablename) . " t on t.id=l.child_id"
-    .  " WHERE"
-    .  " l.relationships_id=" . $this->properties->id
-    .  " and l.parent_id=" . $this->partnerNode->properties->id;
-    if ($filter) {
-      $sql .= " and " . $filter;
+  function db_loadmychildren($filter=null, $order=null, $limit=null) {
+    if (isset($this->properties->id)) {
+      $sql = "SELECT t.*, l.sort_order FROM "
+      . TABLE_LINKS . " l"
+      . " inner join " . constant($this->properties->childtablename) . " t on t.id=l.child_id"
+      .  " WHERE"
+      .  " l.relationships_id=" . $this->properties->id
+      .  " AND l.parent_id=" . $this->partnerNode->properties->id;
+      if ($filter) {
+	$sql .= " AND " . $filter;
+      }
+      if ($order) $sql .= " ORDER BY " . $order;
+      else $sql .= " ORDER BY l.sort_order";
+      if ($limit) $sql .= " LIMIT " . $limit;
     }
-    $sql .= " order by l.sort_order";
+    else { //load every 
+      $sql = "SELECT t.* FROM "
+      . constant($this->properties->childtablename) . " t"
+      .  " WHERE 1";
+      if ($filter) {
+	$sql .= " AND " . $filter;
+      }
+      if ($order) $sql .= " ORDER BY " . $order;
+      if ($limit) $sql .= " LIMIT " . $limit;
+    }
     if (($result = $this->getdblink()->query($sql))===false) return false;
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
       $this->children[$i] = new NodeMale();
-      if ($row["sort_order"]) $this->children[$i]->sort_order=$row["sort_order"];
+      if (isset($row["sort_order"])) $this->children[$i]->sort_order=$row["sort_order"];
       unset($row["sort_order"]);
       $this->children[$i]->properties->cloneFromArray($row);
       $this->children[$i]->parentNode=$this;
@@ -157,14 +171,14 @@ class NodeFemale extends Node{
     return true;
   }
   
-  function db_loadmypartner() {
+  function db_loadmypartner($child) {
     if (!isset($this->properties->id)) return false; //Virtual mother case
     $sql = "SELECT t.* FROM "
     . TABLE_LINKS . " l"
     . " inner join " . constant($this->properties->parenttablename) . " t on t.id=l.parent_id"
     .  " WHERE"
     .  " l.relationships_id=" . $this->properties->id
-    .  " and l.child_id=" . $this->children[0]->properties->id;
+    .  " and l.child_id=" . $child->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     if ($result->num_rows > 1) {
       $this->partnerNode=[];
@@ -196,7 +210,7 @@ class NodeFemale extends Node{
   function db_loadmytreeup($level=null) {
     if ($level===0) return true;
     if ($level) $level--;
-    if ($this->db_loadmypartner()===false) return false;
+    if ($this->db_loadmypartner($this->children[0])===false) return false;
     if (gettype($this->partnerNode)=="array") {
       for ($i=0; $i<count($this->partnerNode); $i++)  {
 	if ($this->partnerNode[$i]->db_loadmytreeup($level)===false) return false;

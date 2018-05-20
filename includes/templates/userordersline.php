@@ -17,16 +17,10 @@
       var thisUser=webuser; //When it is not orders administrator
       if (webuser.getUserType()=="orders administrator") {
       //Complit user information
-	var myform=document.getElementById("formgeneric").cloneNode(true);
-	myform.elements.parameters.value=JSON.stringify({action: "load my relationships"});
-	thisUser=thisNode.getRelationship({name: "users"}).children[0];
-	thisUser.setView(myform);
-	thisUser.loadfromhttp(myform, function() {
-	  var myform=document.getElementById("formgeneric").cloneNode(true);
-	  myform.elements.parameters.value=JSON.stringify({action: "load my children"});
+	thisUser=thisNode.parentNode.partnerNode;
+	thisUser.loadfromhttp({action: "load my relationships"}, function() {
 	  var datarel=this.getRelationship({name:"usersdata"});
-	  datarel.setView(myform);
-	  datarel.loadfromhttp(myform, function() {
+	  datarel.loadfromhttp({action: "load my children"}, function() {
 	    thisElement.textContent=this.children[0].properties.name + " " + this.children[0].properties.surname;
 	  });
 	});
@@ -69,10 +63,7 @@
       });
       thisElement.onclick=function(){
 	if (launcher.openview) return false;
-	var myform=document.getElementById("formgeneric").cloneNode(true);
-        myform.elements.parameters.value=JSON.stringify({action: "load my tree", user_id: webuser.properties.id});
-        thisNode.setView(myform);
-        thisNode.loadfromhttp(myform, function() {
+        thisNode.loadfromhttp({action: "load my tree", user_id: webuser.properties.id}, function() {
 	  var thisRow=closesttagname.call(thisElement, "TR");
 	  var thisTable=closesttagname.call(thisElement, "TABLE");
 	  myrow=thisTable.insertRow(thisRow.rowIndex+1);
@@ -89,10 +80,18 @@
   <td>
     <div></div>
     <script>
-      var admnlauncher=new NodeMale();
-      admnlauncher.butadminposition="vertical";
-      admnlauncher.myNode=thisNode;
-      admnlauncher.refreshView(thisElement,"includes/templates/admnorderactions.php");
+      if (webuser.getUserType()=="orders administrator") {
+	var admnlauncher=new NodeMale();
+	var myNewStatus=1;
+	if (thisNode.properties.status==1) myNewStatus=0;
+	admnlauncher.myNode=thisNode;
+	admnlauncher.buttons=[
+	  {template: document.getElementById("butsuccessordertp"), args:{newStatus: myNewStatus}},
+	  {template: document.getElementById("butdeletetp")}
+	];
+	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+      }
+      else thisElement.parentElement.style.display="none";
     </script>
   </td>
 </tr>

@@ -13,44 +13,48 @@
       //first we load orders from database
       var myform=document.getElementById("formgeneric").cloneNode(true);
       if (webuser.getUserType()=="orders administrator") {
-	var ordersrel=new NodeFemale();
-	myform.action="sqlrequest.php";
-	myform.elements.parameters.value=JSON.stringify({action: "load orders"});
+	//create virtual ordersmother
+	var ordersRel=new NodeFemale();
+	ordersRel.properties.childtablename="TABLE_ORDERS";
       }
       else {
-	var ordersrel=webuser.getRelationship({"name":"orders"});
-	myform.elements.parameters.value=JSON.stringify({action: "load my children", user_id: webuser.properties.id});
+	var ordersRel=webuser.getRelationship({"name":"orders"});
       }
-      ordersrel.setView(myform);
-      ordersrel.loadfromhttp(myform, function(){
-	//filter orders to new or archived
-	  for(var i=0; i<ordersrel.children.length; i++) {
-	    if (thisNode.filterorders=="archived") ordersrel.children[i].newstatus=0;
-	    else ordersrel.children[i].newstatus=1;
-	    if (thisNode.filterorders=="new" && ordersrel.children[i].properties.status!=0 || thisNode.filterorders=="archived" && ordersrel.children[i].properties.status!=1) {
-	      ordersrel.children.splice(i,1);
-	      i--;
-	    }
-	  }
-	    
+      var myFilter="t.status = 0";
+      if (thisNode.filterorders=="archived") myFilter="t.status = 1"
+      ordersRel.loadfromhttp({action: "load my children", filter: myFilter, user_id: webuser.properties.id}, function(){
+	if (this.children.length == 0) return false;
 	if (webuser.getUserType()=="orders administrator") {
-	  //add structure to the result user_id;
-	  for(var i=0;i<ordersrel.children.length; i++) {
-	    var userrel=new NodeFemale();
-	    userrel.properties.childtablename=webuser.parentNode.properties.childtablename;
-	    userrel.properties.name="users";
-	    var thisUser=new NodeMale();
-	    thisUser.properties.id=ordersrel.children[i].properties.user_id;
-	    userrel.addChild(thisUser);
-	    ordersrel.children[i].relationships[0]=userrel;
-	    userrel.partnerNode=ordersrel.children[i];
-	    //Also we need to add the order to the user for when deleting it to delete also the user link
-	    ordersrel.properties.cloneFromArray(webuser.getRelationship({"name":"orders"}).properties);
-	    thisUser.relationships[0]=ordersrel;
-	    ordersrel.partnerNode=thisUser;
+	  for (var i=0; i<this.children.length; i++) {
+	    this.children[i].addEventListener("deleteNode", function(){
+	      ordersRel.removeChild(this);
+	      ordersRel.refreshChildrenView();
+	    });
+	    this.children[i].addEventListener("change order status", function(){
+	      ordersRel.removeChild(this);
+	      ordersRel.refreshChildrenView();
+	    });
+	  }
+	  this.addEventListener("loadedUser", function(){
+	    var finished=true;
+	    for (var i=0; i<this.children.length; i++) {
+	      if (!this.children[i].parentNode.partnerNode) finished=false;
+	    }
+	    if (finished) {
+	      this.refreshChildrenView(thisElement, "includes/templates/userordersline.php");
+	    }
+	  });
+	  for (var i=0; i<this.children.length; i++) {
+	    this.children[i].parentNode=new NodeFemale();
+	    this.children[i].parentNode.properties.cloneFromArray(ordersRel.properties);
+	    this.children[i].loadfromhttp({action: "load my tree up", user_id: webuser.properties.id}, function(){
+	      this.parentNode.partnerNode.parentNode=new NodeFemale();
+	      this.parentNode.partnerNode.parentNode.properties.childtablename=this.parentNode.properties.parenttablename;
+	      ordersRel.dispatchEvent("loadedUser");
+	    });
 	  }
 	}
-	ordersrel.refreshChildrenView(thisElement, "includes/templates/userordersline.php");
+	else ordersRel.refreshChildrenView(thisElement, "includes/templates/userordersline.php");
       });
     </script>
   </table>

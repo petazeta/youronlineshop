@@ -390,22 +390,24 @@ NodeFemale.prototype.load=function(source, level) {
 
 NodeFemale.prototype.loadasc=function(source, level) {
   Node.prototype.loadasc.call(this, source);
-  for (var i=0;i<source.childtablekeys.length;i++) {
-    this.childtablekeys[i]=new Properties();
-    this.childtablekeys[i].cloneFromArray(source.childtablekeys[i]);
+  if (source.childtablekeys) {
+    for (var i=0;i<source.childtablekeys.length;i++) {
+      this.childtablekeys[i]=new Properties();
+      this.childtablekeys[i].cloneFromArray(source.childtablekeys[i]);
+    }
   }
   if (!source.partnerNode) return false;
   if (level==0) return false;
   if (level) level--;
   if (Array.isArray(source.partnerNode)) {
-    this.partnerNode=[];
+    if (!Array.isArray(this.partnerNode)) this.partnerNode=[this.partnerNode];
     for (var i=0; i < source.partnerNode.length; i++) {
       this.partnerNode[i]=new NodeMale();
       this.partnerNode[i].loadasc(source.partnerNode[i], level);
     }
   }
   else {
-    this.partnerNode=new NodeMale();
+    if (!this.partnerNode) this.partnerNode=new NodeMale();
     this.partnerNode.loadasc(source.partnerNode, level);
   }
 }
@@ -522,14 +524,14 @@ NodeMale.prototype.loadasc=function(source, level) {
   if (level==0) return false;
   if (level) level--;
   if (Array.isArray(source.parentNode)) {
-    this.parentNode=[];
+    if (!Array.isArray(this.parentNode)) this.parentNode=[this.parentNode];
     for (var i=0; i < source.parentNode.length; i++) {
       this.parentNode[i]=new NodeFemale();
       this.parentNode[i].loadasc(source.parentNode[i], level);
     }
   }
   else {
-    this.parentNode=new NodeFemale();
+    if (!this.parentNode) this.parentNode=new NodeFemale();
     this.parentNode.loadasc(source.parentNode, level);
   }
 }

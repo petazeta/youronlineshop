@@ -33,7 +33,11 @@ switch ($parameters->action) {
     break;
   case "load my children":
     $myexecfunction="db_loadmychildren";
-    if (isset($parameters->filter)) $argument=$parameters->filter;
+    $filter=null; $order=null; $limit = null;
+    if (isset($parameters->filter)) $filter=$parameters->filter;
+    if (isset($parameters->order)) $order=$parameters->order;
+    if (isset($parameters->limit)) $limit=$parameters->limit;
+    if ($filter || $order || $limit) $argument=[$filter, $order, $limit];
     $callback="cutUp";
     break;
   case "load my relationships":
@@ -108,7 +112,10 @@ switch ($parameters->action) {
     break;
   default: $myexecfunction=null;
 }
-if (isset($argument)) $executed=$myelement->$myexecfunction($argument);
+if (isset($argument)) {
+  if (gettype($argument)=="array") $executed=call_user_func_array([$myelement, $myexecfunction], $argument);
+  else $executed=$myelement->$myexecfunction($argument);
+}
 else $executed=$myelement->$myexecfunction();
 if ($executed===false) {
   $myelement->extra=new stdClass();
