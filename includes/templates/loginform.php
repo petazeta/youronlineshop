@@ -47,7 +47,7 @@
 	}
 	webuser.login(thisElement.elements.user_name.value, thisElement.elements.user_password.value, function(){
 	  if (this.extra.error) {
-	    myalert.properties.alertmsg=this.extra.errormsg;
+	    myalert.load({properties:{alertmsg: this.extra.errormsg, timeout:3000}});
 	    myalert.showalert();
 	    return false;
 	  }
