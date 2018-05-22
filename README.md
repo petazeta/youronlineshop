@@ -58,7 +58,10 @@ User "ordersadmin" is order administrator and can watch and edit all the orders.
 
 User "webadmin" is web administrator user and can edit the web page content and the catalog (categories and items).
 
+Once editing some content click outside from the editable area to save changes (Don't use Enter key).
 
 ## More Info
 
 Find us at [github.com](https://github.com/petazeta/youronlineshop/) and [sourceforge.net](https://sourceforge.net/projects/youronlineshop/) for more information.
+
+Project documentation: [project wiki](https://github.com/petazeta/youronlineshop/wiki/).

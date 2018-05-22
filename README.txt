@@ -20,9 +20,19 @@ It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As w
 *****************
 *Getting started*
 *****************
-Open the browser (chrome or firefox) at the main folder url. The ecommerce system will appear. There two already created users: "webadmin" and "ordersadmin". These are the users names, and users passwords are the same as users names. User "ordersadmin" is order administrator and can watch and edit all the orders. Once you log in with this user click at *Show orders* button. User "webadmin" is web administrator user and can edit the web page content and the catalog (categories and items).
+Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear.
+
+There are two already created users: "webadmin" and "ordersadmin". These are the users names, and users passwords are the same as users names.
+
+User "ordersadmin" is order administrator and can watch and edit all the orders. Once you log in with this user click at "Show orders" button.
+
+User "webadmin" is web administrator user and can edit the web page content and the catalog (categories and items).
+
+Once editing some content click outside from the editable area to save changes (Don't use Enter key).
 
 *****************
 *More*
 *****************
 Find us at https://github.com/petazeta/youronlineshop/ and https://sourceforge.net/projects/youronlineshop/ for more information.
+
+Project documentation: https://github.com/petazeta/youronlineshop/wiki/
