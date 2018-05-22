@@ -56,7 +56,7 @@ function uploadfile($myfile, $target_dir, $result){
   // if everything is ok, try to upload file
   } else {
       if (move_uploaded_file($myfile["tmp_name"], $target_file)) {
-          $result->msg= "The file ". basename( $myfile["name"]). " has been uploaded. $target_file";
+          $result->msg= "The file ". basename( $myfile["name"]). " has been uploaded.";
       } else {
         $result->extra->error=true;
         $result->extra->errormsg = "Sorry, there was an error uploading your file.";

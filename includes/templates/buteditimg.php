@@ -19,33 +19,33 @@
       <form action="uploadfile.php" enctype="multipart/form-data">
 	<table class="mytable">
 	  <tr>
-	    <td colspan="3">
+	    <td>
 	      The image will be resized to fit the frame
 	      <input type="hidden" name="imagesize" id="imagesize" value="132">
 	    </td>
 	  </tr>
 	  <tr>
-	    <td colspan="3">
+	    <td>
 	      <div class="form-group">
 		<label class="form-label">Archivo de imagen:</label>
-		<input name="Filedata" type="file">
+		<input name="Filedata" type="file" style="width:100%">
 	      </div>
 	    </td>
 	  </tr>
 	  <tr>
-	    <td colspan="3" id="fileDisplayArea">
+	    <td id="fileDisplayArea">
 	    </td>
 	  </tr>
 	  <tr>
-	    <td colspan="3">
-		<table class="mytable">
-		  <tr>
-		    <td>
-		      <input type="button" value="Close" name="exit" class="form-btn">
-		    </td>
-		    <td><input type="submit" value="Send" class="form-btn"></td>
-		  </tr>
-		</table>
+	    <td>
+	      <table class="mytable">
+		<tr>
+		  <td>
+		    <input type="button" value="Close" name="exit" class="form-btn">
+		  </td>
+		  <td><input type="submit" value="Send" class="form-btn"></td>
+		</tr>
+	      </table>
 	    </td>
 	  </tr>
 	</table>
