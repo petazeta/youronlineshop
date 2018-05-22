@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 14, 2018 at 02:45 AM
+-- Generation Time: May 22, 2018 at 04:42 PM
 -- Server version: 5.5.58-0+deb8u1
 -- PHP Version: 5.6.30-0+deb8u1
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
   `city` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `state` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pc` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `addresses`
@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`) VALUES
 (23, '', '', '', ''),
-(24, '', '', '', '');
+(24, '', '', '', ''),
+(26, 'ustreet', 'asfff', 'asdsa', '3445645');
 
 -- --------------------------------------------------------
 
@@ -52,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `domelements` (
 `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `innerHTML` text COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
@@ -80,7 +81,7 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (48, '', 'Continue at [&nbsp;<a href="">How to</a>&nbsp;]\r\n<script>\r\n  thisElement.onclick=function(){\r\n    document.querySelector("nav").querySelectorAll("a")[1].click();\r\n    return false;\r\n  }\r\n</script>'),
 (49, '', 'To start: log in with one of the users or create a new one.'),
 (50, '', 'More information at: <a href="https://github.com/petazeta/youronlineshop/wiki">Project Docs</a>&nbsp;and <a href="https://sourceforge.net/p/youronlineshop/discussion/">Project Forums</a>'),
-(56, '', 'DbManager is a tool for editing ORM database records.<div><br></div><div>Get more information at: <a href="http://youronlineshop.sourceforge.net/dbmanager/">Dbmanager Home</a></div>'),
+(56, '', '<ul>\r\n  <li>\r\nDbManager is a tool for editing ORM database records.<div><br></div><div>Get more information at: <a href="https://sourceforge.net/projects/freshhh-dbmanager/">Dbmanager Home</a></div>\r\n  </li>\r\n</ul>'),
 (57, '', 'Once finish editing content click outside of the editable area to save changes. Use Intro for new line.'),
 (58, 'root', ''),
 (59, 'top', ''),
@@ -94,7 +95,7 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (67, 'menu', 'About'),
 (68, 'menu', 'How to'),
 (69, 'More Info', 'More Info'),
-(70, 'menu', 'Additional Apps'),
+(70, 'menu', 'Add. Apps'),
 (71, 'labels', ''),
 (72, 'texts', ''),
 (73, 'not located', '');
@@ -108,14 +109,16 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
   `cname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
 --
 
 INSERT INTO `itemcategories` (`id`, `cname`) VALUES
-(1, 'root');
+(1, 'root'),
+(2, 'cat_1'),
+(9, 'subcat1');
 
 -- --------------------------------------------------------
 
@@ -130,14 +133,14 @@ CREATE TABLE IF NOT EXISTS `items` (
   `descriptionshort` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `items`
 --
 
 INSERT INTO `items` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`) VALUES
-(21, '', '', '', '', 0.00);
+(26, '', '', '', '', 0.00);
 
 -- --------------------------------------------------------
 
@@ -151,35 +154,13 @@ CREATE TABLE IF NOT EXISTS `links` (
   `child_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '1',
   `relationships_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=918 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=943 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `links`
 --
 
 INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships_id`) VALUES
-(71, 4, 5, 1, 17),
-(72, 4, 6, 2, 17),
-(73, 4, 7, 3, 17),
-(128, 1, 2, 2, 18),
-(129, 1, 3, 3, 18),
-(133, 33, 34, 2, 17),
-(134, 33, 35, 1, 17),
-(272, 1, 6, 1, 18),
-(482, 1, 23, 2, 26),
-(583, 2, 7, 1, 18),
-(591, 7, 8, 1, 18),
-(592, 7, 9, 2, 18),
-(600, 2, 10, 2, 18),
-(698, 33, 8, 1, 15),
-(699, 32, 9, 1, 15),
-(740, 14, 21, 1, 14),
-(787, 1, 30, 1, 26),
-(818, 14, 3, 1, 4),
-(819, 15, 7, 1, 4),
-(823, 1, 31, 3, 26),
-(839, 52, 83, 1, 21),
-(840, 1, 32, 4, 26),
 (849, 59, 41, 2, 17),
 (850, 59, 42, 1, 17),
 (851, 60, 36, 5, 17),
@@ -218,21 +199,19 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (887, 71, 73, 4, 17),
 (888, 73, 44, 1, 17),
 (889, 67, 47, 1, 17),
-(891, 53, 84, 1, 21),
-(893, 54, 85, 1, 21),
-(895, 55, 86, 1, 21),
-(897, 56, 87, 1, 21),
-(900, 57, 88, 2, 21),
-(901, 57, 89, 1, 21),
-(905, 58, 90, 3, 21),
-(906, 58, 91, 2, 21),
-(907, 58, 92, 1, 21),
 (910, 16, 33, 1, 10),
 (911, 16, 23, 1, 29),
 (912, 17, 34, 1, 10),
 (913, 17, 24, 1, 29),
 (914, 16, 7, 1, 4),
-(915, 17, 3, 1, 4);
+(915, 17, 3, 1, 4),
+(918, 1, 2, 1, 13),
+(921, 19, 36, 1, 10),
+(922, 19, 26, 1, 29),
+(931, 19, 5, 3, 20),
+(932, 5, 97, 1, 21),
+(940, 2, 9, 1, 13),
+(942, 9, 26, 1, 14);
 
 -- --------------------------------------------------------
 
@@ -245,23 +224,14 @@ CREATE TABLE IF NOT EXISTS `orderitems` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `quantity` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orderitems`
 --
 
 INSERT INTO `orderitems` (`id`, `name`, `price`, `quantity`) VALUES
-(83, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 2),
-(84, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 2),
-(85, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
-(86, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
-(87, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
-(88, 'Peeling + morera', 20.00, 1),
-(89, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 1),
-(90, 'Regenerador Cutáneo 200ml', 714.00, 1),
-(91, 'Peeling + morera', 20.00, 2),
-(92, 'Lote Tratamiento Acné. 40 días. 15% Dto.', 969.00, 2);
+(97, 'p1', 6.00, 1);
 
 -- --------------------------------------------------------
 
@@ -274,7 +244,14 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `creationdate`, `modificationdate`, `status`) VALUES
+(5, '2018-05-19 21:37:47', '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -317,7 +294,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 `id` int(11) NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pwd` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -325,7 +302,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `username`, `pwd`) VALUES
 (16, 'webadmin', 'webadmin'),
-(17, 'ordersadmin', 'ordersadmin');
+(17, 'ordersadmin', 'ordersadmin'),
+(19, 'user1', 'user1');
 
 -- --------------------------------------------------------
 
@@ -339,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
   `surname` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phonenumber` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `usersdata`
@@ -347,7 +325,8 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`) VALUES
 (33, '', '', '', 0),
-(34, '', '', '', 0);
+(34, 'pepe', '', '', 0),
+(36, 'pepe', 'juan', 'mail@mail.com', 12345);
 
 -- --------------------------------------------------------
 
@@ -446,37 +425,37 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=78;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=74;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=918;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=943;
 --
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=98;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `relationships`
 --
@@ -486,12 +465,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --

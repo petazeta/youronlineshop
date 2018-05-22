@@ -187,6 +187,12 @@ Node.prototype.refreshView=function (container, tp, reqlistener) {
     this.myContainer.appendChild(clone);
     
     if (reqlistener) reqlistener.call(this);
+    if (this.events && this.events.refreshView) {
+      var i=this.events.refreshView.length;
+      while(i--) {
+        this.events.refreshView[i].call(this);
+      }
+    }
   };
   if (typeof tp=="string") {
     var loadedtp=function() {
@@ -205,7 +211,7 @@ Node.prototype.refreshView=function (container, tp, reqlistener) {
 };
 
 //This function write a template record for each property
-Node.prototype.refreshPropertiesView = function (container, tp) {
+Node.prototype.refreshPropertiesView = function (container, tp, reqlistener) {
   if (container) this.propertiesContainer=container;
   if (typeof tp=="string") {
     this.getTp(tp, function() {
@@ -241,6 +247,13 @@ Node.prototype.refreshPropertiesView = function (container, tp) {
       var thiscol=this.propertyTp.cloneNode(true);
       this.setView(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
       container.appendChild(thiscol);
+    }
+    if (reqlistener) reqlistener.call(this);
+    if (this.events && this.events.refreshPropertiesView) {
+      var i=this.events.refreshPropertiesView.length;
+      while(i--) {
+        this.events.refreshPropertiesView[i].call(this);
+      }
     }
   }
 }

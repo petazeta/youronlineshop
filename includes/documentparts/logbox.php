@@ -21,7 +21,6 @@
 	      webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php")
 	    }
 	    else {
-	      webuser.loginbutton="logbox"; //So the program will know what to do after login
 	      webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 	    }
 	    return false;
@@ -59,7 +58,6 @@
 			  webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php")
 			}
 			else {
-			  webuser.loginbutton="logbox"; //So the program will know what to do after login
 			  webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 			}
 			return false;
@@ -91,7 +89,6 @@
 			  webuser.logoff();
 			}
 			else {
-			  webuser.loginbutton="logbox"; //So the program will know what to do after login
 			  webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 			}
 			return false;
@@ -119,18 +116,10 @@ webuser.addEventListener("loadses", function(){
 });
 webuser.addEventListener("log", function(){
   if (!this.properties.id) {
-    if (this.loginbutton=="create")
-      this.refreshView(document.getElementById("centralcontent"), "includes/templates/newform.php");
-    else
-      this.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+    this.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
   }
   else {
-    if (this.loginbutton=="checkout") {
-      this.refreshView(document.getElementById("centralcontent"), document.getElementById("checkout1tp").content);
-      this.loginbutton=null;
-    }
-    else
-      this.refreshView(document.getElementById("centralcontent"),  "includes/templates/loggedindata.php");
+    this.refreshView(document.getElementById("centralcontent"),  "includes/templates/loggedindata.php");
   }
 });
 </script>

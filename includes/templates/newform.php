@@ -45,7 +45,6 @@
 	  alert("Password between " + min + " and " + max + " characters!");
 	  return false;
 	}
-	webuser.loginbutton="create";
 	webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value, null, function(){
 	  if (this.extra && this.extra.error) {
 	    myalert.properties.alertmsg=this.extra.errormsg;
