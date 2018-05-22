@@ -399,12 +399,8 @@ table.list > thead > tr > th {
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .form-btn {
-  line-height: 1.84615385;
-  padding: 0.375rem 0.75rem;
-  color: #666666
-  border-radius: 3px;
+  padding: 0.8em 1em;
 }
-
 .formtable {
     background-color: #F8EED3;
   border: 1px solid #AAA;
@@ -574,6 +570,9 @@ table.catalog table.product h3{
 }
 table.catalog table.product{
     box-shadow: 0px 3px 6px #A5EB93;
+}
+table.catalog{
+  width: 100%;
 }
 table.catalog table.product{
   width: 100%;

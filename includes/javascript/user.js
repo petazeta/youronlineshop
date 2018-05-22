@@ -5,12 +5,15 @@ user.prototype=Object.create(NodeMale.prototype);
 user.prototype.constructor=user;
 
 user.prototype.logoff=function(){
-  var myform=document.getElementById("formgeneric").cloneNode(true);
-  myform.action="dblogin.php";
-  var jsonparameters={action: "logout"};
-  myform.elements.parameters.value=JSON.stringify(jsonparameters);
-  this.loadfromhttp(myform, function() {
+  var FD  = new FormData();
+  FD.append("parameters", JSON.stringify({action: "logout"}));
+  FD.action="dblogin.php";
+  this.loadfromhttp(FD, function() {
     if (this.extra && this.extra.logout) {
+      //clean the properties.
+      for (var key in this.properties) {
+	delete(this.properties[key]);
+      }
       this.loadfromhttp("sesload.php?sesname=user", function() {
 	this.extra.logout=true;
 	this.dispatchEvent("log");
@@ -20,26 +23,15 @@ user.prototype.logoff=function(){
   });
 };
 user.prototype.loginproto=function(action, name, password, email, reqlistener){
-  var myform=document.getElementById("formgeneric").cloneNode(true);
-  myform.action="dblogin.php";
-  myform.elements.parameters.value=JSON.stringify({action: action});
-  //create inputs for name and password
-  var nameInput=document.createElement("INPUT");
-  nameInput.name="user_name";
-  nameInput.value=name;
-  myform.appendChild(nameInput);
-  var passwordInput=document.createElement("INPUT");
-  passwordInput.name="user_password";
-  passwordInput.value=password;
-  myform.appendChild(passwordInput);
+  var FD  = new FormData();
+  FD.append("parameters", JSON.stringify({action: action}));
+  FD.append("user_name", name);
+  FD.append("user_password", password);
   if (email) {
-    var emailInput=document.createElement("INPUT");
-    emailInput.name="user_email";
-    emailInput.value=email;
-    myform.appendChild(emailInput);
+    FD.append("user_email", email);
   }
-  
-  this.loadfromhttp(myform, function(){
+  FD.action="dblogin.php";
+  this.loadfromhttp(FD, function(){
     if (this.extra.login==true) {
       this.loadfromhttp("sesload.php?sesname=user", function() {
 	if (!this.extra) this.extra={};

@@ -554,9 +554,9 @@ class NodeMale extends Node{
       if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   
-  function db_updatemysort_order($old_sort_order){
+  function db_updatemysort_order($new_sort_order){
     $sql="update " . TABLE_LINKS
-    . " set" . " sort_order=" . $this->sort_order
+    . " set" . " sort_order=" . $new_sort_order
     . " where"
     . " relationships_id='" . $this->parentNode->properties->id . "'"
     . " and parent_id=" . $this->parentNode->partnerNode->properties->id
@@ -564,11 +564,11 @@ class NodeMale extends Node{
     if (($result = $this->getdblink()->query($sql))===false) return false;
     
     $sql="update " . TABLE_LINKS
-    . " set" . " sort_order=" . $old_sort_order
+    . " set" . " sort_order=" . $this->sort_order
     . " where"
     . " relationships_id='" . $this->parentNode->properties->id . "'"
     . " and parent_id=" . $this->parentNode->partnerNode->properties->id
-    . " and sort_order=" . $this->sort_order
+    . " and sort_order=" . $new_sort_order
     . " and child_id!=" . $this->properties->id
     . " LIMIT 1";
     if (($result = $this->getdblink()->query($sql))===false) return false;

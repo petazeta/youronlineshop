@@ -8,12 +8,19 @@
         <table>
 	  <tr></tr>
 	  <script>
-	    var userdata=thisNode.getRelationship({"name":"usersdata"}).children[0];
+	  var datarel=thisNode.getRelationship({"name":"usersdata"});
+	  function showdata(){
+	    var userdata=datarel.children[0];
 	    userdata.getTp("includes/templates/singlefield.php", function(){
 	      var coltp=userdata.xmlTp.cloneNode(true);
 	      userdata.refreshPropertiesView(thisElement,coltp);
 	      intoColumns.apply(thisElement, [2]);
 	    });
+	  }
+	  if (datarel.children.length==0) {
+	    datarel.loadfromhttp({action: "load my children", user_id: webuser.properties.id}, showdata)
+	  }
+	  else showdata();
 	  </script>
         </table>
       </td>

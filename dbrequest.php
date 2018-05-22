@@ -96,8 +96,7 @@ switch ($parameters->action) {
     break;
   case "edit my sort_order":
     $myexecfunction="db_updatemysort_order";
-    $argument=$myelement->properties->oldsort_order;
-    unset($myelement->properties->oldsort_order);
+    if (isset($parameters->newsort_order)) $argument=$parameters->newsort_order;
     $callback=["cutDown", "cutUp"];
     break;
   case "edit my properties":

@@ -89,7 +89,7 @@
 			    args:{editpropertyname:"cname", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
 			  },
 			  {template: document.getElementById("buthchpostp")},
-			  {template: document.getElementById("butaddnodetp")},
+			  {template: document.getElementById("butaddnewnodetp"), args:{sort_order: thisNode.sort_order + 1}},
 			  {template: document.getElementById("butdeletetp")}
 			];
 			admnlauncher.refreshView(thisElement, document.getElementById("butopentp"));
@@ -122,7 +122,7 @@
 		    admnlauncher.myNode=thisNode;
 		    admnlauncher.buttons=[
 		      {template: document.getElementById("butvchpostp")},
-		      {template: document.getElementById("butaddnodetp")},
+		      {template: document.getElementById("butaddnewnodetp"), args:{sort_order: thisNode.sort_order + 1}},
 		      {template: document.getElementById("butdeletetp")}
 		    ];
 		    admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));

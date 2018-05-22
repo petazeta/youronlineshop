@@ -26,58 +26,36 @@
 	</tr>
 	<tr>
 	  <td>
-	    <template>
-	      <form action="dbrequest.php">
-		<input type="hidden" name="json"/>
-		<script>
-		  var mydata=new NodeMale();
-		  mydata.properties.id=thisNode.properties.id;
-		  mydata.sort_order=thisNode.sort_order;
-		  mydata.parentNode=new NodeFemale();
-		  mydata.parentNode.loadasc(thisNode.parentNode, 1);
-		  thisElement.value=JSON.stringify(mydata);
-		</script>
-		<input type="hidden" name="parameters" value="" data-js='thisElement.value=JSON.stringify({action:"delete my tree", user_id: webuser.properties.id});'/>
-		<table style="margin:auto;">
-		  <tr>
-		    <td>
-		      <input type="button" class="form-btn" value="Don't remove" name="exit">
-		    </td>
-		    <td><input type="submit" class="form-btn" value="Remove"></td>
-		  </tr>
-		</table>
-	      </form>
-	      <script>
-		//normalize
-		var thisLauncher=thisNode.myLauncher;
-		thisElement.onsubmit=function() {
-		  var myresult=new NodeMale();
-		  var thisParent=thisNode.parentNode;
-		  myresult.loadfromhttp(this, function(){
-		    thisParent.removeChild(thisNode);
-		    //for no children add a eventlistener to refreshChildrenView event
-		    if (thisParent.childContainer) thisParent.refreshChildrenView();
-		    thisParent.dispatchEvent("deleteNode", [thisNode]);
-		    thisNode.dispatchEvent("deleteNode");
-		  });
-		  thisLauncher.hidealert();
-		  return false;
-		}
-		thisElement.elements.exit.onclick=function(){
-		  thisLauncher.hidealert();
-		}
-	      </script>
-	    </template>
+	    <form action="dbrequest.php">
+	      <table style="margin:auto;">
+		<tr>
+		  <td>
+		    <input type="button" class="form-btn" value="Don't remove" name="exit">
+		  </td>
+		  <td><input type="submit" class="form-btn" value="Remove"></td>
+		</tr>
+	      </table>
+	    </form>
+	    <script>
+	      //normalize
+	      var launcher=thisNode;
+	      var thisNode=launcher.myNode;
+	      thisElement.onsubmit=function() {
+		thisNode.loadfromhttp({action:"delete my tree", user_id: webuser.properties.id}, function(){
+		  this.parentNode.removeChild(this);
+		  //for no children add a eventlistener to refreshChildrenView event
+		  if (this.parentNode.childContainer) this.parentNode.refreshChildrenView();
+		  this.parentNode.dispatchEvent("deleteNode", [this]);
+		  this.dispatchEvent("deleteNode");
+		});
+		launcher.hidealert();
+		return false;
+	      }
+	      thisElement.elements.exit.onclick=function(){
+		launcher.hidealert();
+	      }
+	    </script>
 	  </td>
-	  <script>
-	    //normalize
-	    var launcher=thisNode;
-	    var thisNode=launcher.myNode;
-	    thisNode.myLauncher=launcher;
-	    var myFormTp=thisElement.querySelector("template").content.cloneNode(true);
-	    thisNode.setView(myFormTp);
-	    thisElement.insertBefore(myFormTp, thisElement.querySelector("template"));
-	  </script>
 	</tr>
       </table>
     </div>

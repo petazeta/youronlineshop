@@ -44,9 +44,6 @@ if (!isset($loginresult->extra->error)) {
     if ($user->relationships[$key]->properties->name=="userstypes") {
       $user->relationships[$key]->db_loadmychildren();
     }
-    if ($user->relationships[$key]->properties->name=="usersdata") {
-      $user->relationships[$key]->db_loadmychildren();
-    }
   }
   $_SESSION["user"]=serialize($user);
   $loginresult->extra->login=true;

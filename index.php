@@ -15,8 +15,6 @@
   </head>
   <body>
     <script>
-document.body.appendChild(document.getElementById("formgenerictp").content.querySelector("form").cloneNode(true));
-document.body.appendChild(document.getElementById("formgenerictreetp").content.querySelector("form").cloneNode(true));
 //We load the dom elements text that will be included in some parts of the document
 var labelsRoot=null;
 var domelementsroot=null;

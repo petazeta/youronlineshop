@@ -77,22 +77,30 @@
       }
     </script>
   </td>
-  <td>
-    <div></div>
-    <script>
-      if (webuser.getUserType()=="orders administrator") {
-	var admnlauncher=new NodeMale();
-	var myNewStatus=1;
-	if (thisNode.properties.status==1) myNewStatus=0;
-	admnlauncher.myNode=thisNode;
-	admnlauncher.buttons=[
-	  {template: document.getElementById("butsuccessordertp"), args:{newStatus: myNewStatus}},
-	  {template: document.getElementById("butdeletetp")}
-	];
-	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-      }
-      else thisElement.parentElement.style.display="none";
-    </script>
-  </td>
+  <template>
+    <td>
+      <div></div>
+      <script>
+	if (webuser.getUserType()=="orders administrator") {
+	  var admnlauncher=new NodeMale();
+	  var myNewStatus=1;
+	  if (thisNode.properties.status==1) myNewStatus=0;
+	  admnlauncher.myNode=thisNode;
+	  admnlauncher.buttons=[
+	    {template: document.getElementById("butsuccessordertp"), args:{newStatus: myNewStatus}},
+	    {template: document.getElementById("butdeletetp")}
+	  ];
+	  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+	}
+      </script>
+    </td>
+  </template>
 </tr>
+<script>
+  if (webuser.getUserType()=="orders administrator") {
+    var actionsTd=thisElement.querySelector("template").content.querySelector("td").cloneNode(true);
+    thisElement.appendChild(actionsTd);
+    thisNode.setView(actionsTd);
+  }
+</script>
 </template>

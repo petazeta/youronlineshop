@@ -5,13 +5,22 @@
 	<th style="padding:5px;">Date</th>
 	<th style="padding:5px;">Name</th>
 	<th style="padding:5px;">Order</th>
-	<th style="padding:5px;">Actions</th>
+	<template>
+	  <th style="padding:5px;">Actions</th>
+	</template>
       </tr>
+      <script>
+	//first we load orders from database
+	if (webuser.getUserType()=="orders administrator") {
+	  //create virtual ordersmother
+	  var actionsHead=thisElement.querySelector("template").content.cloneNode(true);
+	  thisElement.appendChild(actionsHead);
+	}
+      </script>
     </thead>
     <tbody></tbody>
     <script>
       //first we load orders from database
-      var myform=document.getElementById("formgeneric").cloneNode(true);
       if (webuser.getUserType()=="orders administrator") {
 	//create virtual ordersmother
 	var ordersRel=new NodeFemale();

@@ -4,7 +4,7 @@
     if (webuser.isWebAdmin()) {
       var admnlauncher=new NodeMale();
       admnlauncher.myNode=thisNode;
-      admnlauncher.refreshView(thisElement, document.getElementById("butaddnodetp").content);
+      admnlauncher.refreshView(thisElement, document.getElementById("butaddnewnodetp").content);
     }
   </script>
 </template>

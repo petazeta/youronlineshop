@@ -1,8 +1,8 @@
 function Properties() {
 }
-Properties.prototype.cloneFromArray = function(obj, update) {
-  if (!update) {
-    for(var key in this) {
+Properties.prototype.cloneFromArray = function(obj, clone) {
+  if (clone) {
+    for (var key in this) {
       delete(this[key]);
     }
   }
@@ -73,8 +73,15 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "load my relationships":
     case "load my tree":
     case "load my partner":
+    case "delete my tree":
+    case "add myself":
+    case "edit my sort_order":
       var node=new this.constructor;
       node.loadasc(this,2);
+      break;
+    case "edit my properties":
+      var node=new this.constructor;
+      node.loadasc(this,2); //needs to for safety module
       break;
     case "load my childtablekeys":
     case "load root":
@@ -85,10 +92,8 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "load my tree up":
       var node=new this.constructor;
       node.load(this,1);
-      node.avoidrecursion();
       node.loadasc(this,2);
       break;
-      
     case "myself":
       var node=new this.constructor;
       node.load(this, 0);
@@ -115,6 +120,19 @@ Node.prototype.toRequestFormData=function(parameters) {
       node.load(this);
       node.avoidrecursion();
       node.loadasc(this);
+  }
+  //we make a criv of properties not needed
+  if (parameters.action!="add myself" && parameters.action!="edit my properties") {
+    var myPointer=node;
+    while (myPointer) {
+      if (myPointer.constructor.name=="NodeMale") {
+	var nodeId=myPointer.properties.id;
+	myPointer.properties=new Properties();
+	myPointer.properties.id=nodeId;
+	myPointer=myPointer.parentNode;
+      }
+      else myPointer=myPointer.partnerNode;
+    }
   }
   var FD  = new FormData();
   // Push our data into our FormData object
