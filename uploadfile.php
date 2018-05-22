@@ -7,7 +7,7 @@ header("Content-type: application/json");
 $result=new stdclass();
 $result->extra=new stdClass();
 
-$base_dir = "/var/www/html/yosecommerce/catalog/images/";
+$base_dir = "catalog/images/";
 if (isset($_POST["folder"])) $target_dir=$base_dir . $_POST["folder"] . "/";
 else $target_dir=$base_dir;
 
@@ -56,7 +56,7 @@ function uploadfile($myfile, $target_dir, $result){
   // if everything is ok, try to upload file
   } else {
       if (move_uploaded_file($myfile["tmp_name"], $target_file)) {
-          $result->msg= "The file ". basename( $myfile["name"]). " has been uploaded.";
+          $result->msg= "The file ". basename( $myfile["name"]). " has been uploaded. $target_file";
       } else {
         $result->extra->error=true;
         $result->extra->errormsg = "Sorry, there was an error uploading your file.";
