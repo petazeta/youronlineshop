@@ -12,15 +12,15 @@ class user extends NodeMale {
     $user=new user();
     $user->properties->username=$username;
     $candidates=$user->db_search();
-    if (!(count($candidates) == 1)) {
+    if (!(count($candidates) == 1)) { //candidates=0
       $result->extra->error=true;
-      $result->extra->errormsg="username already present";
+      $result->extra->errormsg="username error";
       return $result;
     }
     
     $user->properties->pwd=$pwd;
     $candidates=$user->db_search();
-    if (!(count($candidates) == 1)) {
+    if (!(count($candidates) == 1)) { //candidates=0
       $result->extra->error=true;
       $result->extra->errormsg="password error";
     }
@@ -53,9 +53,9 @@ class user extends NodeMale {
     //if ($user->db_num()->expiredata->limit) $this->expire();
     $user->properties->username=$username;
     $candidates=$user->db_search();
-    if (count($candidates) != 0) {
+    if (count($candidates) != 0) { //candidates=1
       $result->extra->error=true;
-      $result->extra->errormsg="username error";
+      $result->extra->errormsg="username already taken";
       return $result;
     }
     $user->properties->pwd=$pwd;
