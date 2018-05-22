@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 22, 2018 at 04:42 PM
+-- Generation Time: May 22, 2018 at 05:51 PM
 -- Server version: 5.5.58-0+deb8u1
 -- PHP Version: 5.6.30-0+deb8u1
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
   `city` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `state` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pc` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `addresses`
@@ -76,13 +76,7 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (42, 'headsubtitle', 'This is my first shop'),
 (43, 'username', 'the user name'),
 (44, 'emptyvallabel', 'Not any value'),
-(46, '', '<div>There are two already created users: "webadmin" and "ordersadmin".&nbsp;</div><div><br></div><div>These are the users names, and users passwords are the same as users names.</div><div><br></div><div>User "ordersadmin" is order administrator and can watch and edit all the orders. Once you log in with this user click at "Show orders" button.</div><div><br></div><div>User "webadmin" is web administrator and can edit the web page content and the catalog (categories and items).<br></div>'),
-(47, '', 'This software implements a smart customizable WYSIWYG (What You See Is What You Get) online ordering system (also known as ecommerce, e-commerce CMS, online store or shopping cart).<br>'),
-(48, '', 'Continue at [&nbsp;<a href="">How to</a>&nbsp;]\r\n<script>\r\n  thisElement.onclick=function(){\r\n    document.querySelector("nav").querySelectorAll("a")[1].click();\r\n    return false;\r\n  }\r\n</script>'),
-(49, '', 'To start: log in with one of the users or create a new one.'),
-(50, '', 'More information at: <a href="https://github.com/petazeta/youronlineshop/wiki">Project Docs</a>&nbsp;and <a href="https://sourceforge.net/p/youronlineshop/discussion/">Project Forums</a>'),
-(56, '', '<ul>\r\n  <li>\r\nDbManager is a tool for editing ORM database records.<div><br></div><div>Get more information at: <a href="https://sourceforge.net/projects/freshhh-dbmanager/">Dbmanager Home</a></div>\r\n  </li>\r\n</ul>'),
-(57, '', 'Once finish editing content click outside of the editable area to save changes. Use Intro for new line.'),
+(47, '', 'This is the first Menu content. Edit this content and add more content and menus. Use the webadmin user, password also webadmin. More information at README files.<br>'),
 (58, 'root', ''),
 (59, 'top', ''),
 (60, 'middle', ''),
@@ -92,10 +86,7 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`) VALUES
 (64, 'logboxout', ''),
 (65, 'cartbox', ''),
 (66, 'nav', ''),
-(67, 'menu', 'About'),
-(68, 'menu', 'How to'),
-(69, 'More Info', 'More Info'),
-(70, 'menu', 'Add. Apps'),
+(67, 'menu', 'Hello'),
 (71, 'labels', ''),
 (72, 'texts', ''),
 (73, 'not located', '');
@@ -154,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   `child_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '1',
   `relationships_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=943 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=947 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `links`
@@ -181,15 +172,6 @@ INSERT INTO `links` (`id`, `parent_id`, `child_id`, `sort_order`, `relationships
 (866, 61, 33, 2, 17),
 (867, 61, 32, 1, 17),
 (869, 66, 67, 1, 17),
-(870, 66, 68, 2, 17),
-(871, 66, 69, 3, 17),
-(872, 66, 70, 4, 17),
-(874, 67, 48, 2, 17),
-(875, 68, 46, 1, 17),
-(876, 68, 57, 2, 17),
-(877, 68, 49, 3, 17),
-(878, 69, 50, 1, 17),
-(879, 70, 56, 1, 17),
 (880, 58, 71, 1, 17),
 (881, 58, 72, 2, 17),
 (883, 71, 59, 3, 17),
@@ -224,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `orderitems` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `quantity` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orderitems`
@@ -244,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orders`
@@ -294,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 `id` int(11) NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pwd` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -317,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
   `surname` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phonenumber` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `usersdata`
@@ -425,7 +407,7 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
@@ -445,17 +427,17 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=943;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=947;
 --
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=98;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=99;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `relationships`
 --
@@ -465,12 +447,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --

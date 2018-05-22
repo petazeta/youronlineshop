@@ -122,6 +122,10 @@ header h2 {
   background: rgb(244, 240, 183);
 }
 
+nav {
+  min-height: 2em;
+}
+
 nav a {
   font-weight: normal;
   font-size: 1.5em;

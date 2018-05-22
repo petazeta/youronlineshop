@@ -121,6 +121,13 @@ webuser.addEventListener("loadses", function(){
       this.refreshChildrenView(document.querySelector("#menucontainer nav"), document.querySelector("#menucontainer #menutp").content, function(){
 	if (this.children.length>0 && !webuser.isWebAdmin()) this.children[0].getMyDomNodes()[0].querySelector("a").click();
       });
+      //to refresh the nochildren element when log
+      webuser.addEventListener("log", function(){
+	if (myrel.children.length==1 && !myrel.children[0].properties.id) {
+	  myrel.children=[];
+	  myrel.refreshChildrenView();
+	}
+      });
     });
   });
 });

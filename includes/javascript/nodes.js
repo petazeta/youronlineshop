@@ -181,7 +181,7 @@ Node.prototype.setView = function (tp) {
 Node.prototype.refreshView=function (container, tp, reqlistener) {
   if (container) this.myContainer=container;
   var refresh=function() {
-    while (this.myContainer.hasChildNodes()) this.myContainer.removeChild(this.myContainer.lastChild);
+    this.myContainer.innerHTML="";
     var clone=this.myTp.cloneNode(true);
     this.setView(clone);
     this.myContainer.appendChild(clone);
@@ -275,6 +275,7 @@ Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
   if (container) this.childContainer=container;
   var refresh=function(){
     while (this.childContainer.firstChild) this.childContainer.removeChild(this.childContainer.firstChild);
+    this.childContainer.innerHTML="";
     var results=this.setChildrenView();
     for (var i=0; i<results.length; i++) {
       this.childContainer.appendChild(results[i]); //It will improve performance by not clonning but we prefer by now to have a template for each children

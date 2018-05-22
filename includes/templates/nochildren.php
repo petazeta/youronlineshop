@@ -6,5 +6,8 @@
       admnlauncher.myNode=thisNode;
       admnlauncher.refreshView(thisElement, document.getElementById("butaddnewnodetp").content);
     }
+    else {
+      thisElement.innerHTML='';
+    }
   </script>
 </template>

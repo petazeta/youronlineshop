@@ -14,6 +14,9 @@ user.prototype.logoff=function(){
       for (var key in this.properties) {
 	delete(this.properties[key]);
       }
+      this.relationships.forEach(function(rel){
+	rel.children=[];
+      });
       this.loadfromhttp("sesload.php?sesname=user", function() {
 	this.extra.logout=true;
 	this.dispatchEvent("log");
