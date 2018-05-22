@@ -2,18 +2,23 @@ function Properties() {
 }
 Properties.prototype.cloneFromArray = function(obj, clone) {
   if (clone) {
-    for (var key in this) {
-      delete(this[key]);
-    }
+    Object.keys(this).forEach.call(this, function(key){
+      if (this.isProperty(this, key)) delete(this[key]);
+    });
   }
-  for(var key in obj) {
-    if(obj.hasOwnProperty(key)) {
-      if (typeof obj[key] == 'object') continue; //We copy just values but not objects unless it is an array of objetcts
-      if (typeof obj[key] == 'function') continue; //We copy just values not methods
-      this[key] = obj[key];
-      if (typeof this[key]=="string" &&  this[key].length > 0 && !isNaN(this[key]) ) this[key]=Number(this[key]); //numbers in strings becomes just numbers
-    }
-  }
+  var myThis=this;
+  Object.keys(obj).forEach(function(key){
+    if (!myThis.isProperty(obj, key)) return false;
+    myThis[key] = obj[key];
+    if (typeof myThis[key]=="string" &&  myThis[key].length > 0 && !isNaN(myThis[key])) 
+      myThis[key]=Number(myThis[key]); //numbers in strings becomes just numbers
+  });
+};
+Properties.prototype.isProperty = function(obj, key) {
+  if (!obj.hasOwnProperty(key)) return false;
+  if (typeof obj[key] == 'object') return false; //We copy just values but not objects unless it is an array of objetcts
+  if (typeof obj[key] == 'function') return false; //We copy just values not methods
+  return true;
 };
 
 function Node() {
@@ -105,6 +110,7 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "just asc":
       var node=new this.constructor;
       node.loadasc(this,2);
+      //next line is not good
       node.properties.forEach(function(property){
 	delete(property);
       });
@@ -227,27 +233,25 @@ Node.prototype.refreshPropertiesView = function (container, tp, reqlistener) {
     refresh.call(this);
   }
   function refresh() {
-    var mykeys;
+    var myThis=this;
     if (this.parentNode && this.parentNode.childtablekeys) {
-      mykeys=this.parentNode.childtablekeys;
+      var myKeys=this.parentNode.childtablekeys;
     }
     else {
-      var thiskeys=Object.keys(this);
-      mykyes=[];
-      for(var i=0; i<thiskeys.length; i++) {
-	if (typeof obj[key] == 'object' || typeof obj[key] == 'function') continue;
-	var index=mykeys.push({})-1;
-	mykeys[index].Field=thiskeys[i];
-      }
+      var myKeys=[];
+      Object.keys(this.properties).forEach(function(key){
+	if (!myThis.properties.isProperty(myThis.properties, key)) return false;
+	var index=myKeys.push({})-1;
+	myKeys[index].Field=key;
+      });
     }
-    for(var i=0; i<mykeys.length; i++) {
-      key=mykeys[i].Field;
-      if (key=="id") continue;
-      this.editpropertyname=key; //for the edition facility
-      var thiscol=this.propertyTp.cloneNode(true);
-      this.setView(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
+    myKeys.forEach(function(tableKey){
+      if (tableKey.Field=="id") return false;
+      myThis.editpropertyname=tableKey.Field; //for knowing the key and for the edition facility
+      var thiscol=myThis.propertyTp.cloneNode(true);
+      myThis.setView(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
       container.appendChild(thiscol);
-    }
+    });
     if (reqlistener) reqlistener.call(this);
     if (this.events && this.events.refreshPropertiesView) {
       var i=this.events.refreshPropertiesView.length;
@@ -328,7 +332,7 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
   });
   xmlhttp.overrideMimeType("application/json");
   if (typeof request=="string") {
-    xmlhttp.open("GET",request,true);
+    xmlhttp.open("GET", request, true);
     xmlhttp.send();
   }
   else if (typeof request=="object") {
@@ -475,7 +479,7 @@ NodeFemale.prototype.updateChild=function(obj) {
     }
   }
   if (!myelement) return false;
-  myelement.properties.cloneFromArray(obj.properties, true);
+  myelement.properties.cloneFromArray(obj.properties);
   myelement.extra=obj.extra;
   if (obj.sort_order && obj.sort_order!=myelement.sort_order) {
     var i= this.children.length;

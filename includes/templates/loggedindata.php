@@ -11,7 +11,7 @@
         <table>
 	  <tr></tr>
 	  <script>
-	  var datarel=thisNode.getRelationship({"name":"usersdata"});
+	  var datarel=thisNode.getRelationship("usersdata");
 	  function showdata(){
 	    datarel.children[0].refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){intoColumns.apply(thisElement, [2]);});
 	  }
@@ -46,7 +46,7 @@
   </div>
   <script>
     //if cart it is not empty -> redirect to checkout
-    if (mycart.getRelationship({name:"cartitem"}).children.length>0) {
+    if (mycart.getRelationship("cartitem").children.length>0) {
       webuser.refreshView(document.getElementById("centralcontent"), document.getElementById("checkout1tp").content);
     }
   </script>

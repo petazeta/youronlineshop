@@ -11,14 +11,14 @@ user.prototype.logoff=function(){
   this.loadfromhttp(FD, function() {
     if (this.extra && this.extra.logout) {
       //clean the properties.
-      for (var key in this.properties) {
-	delete(this.properties[key]);
-      }
+      var myThis=this;
+      this.parentNode.childtablekeys.forEach(function(key){
+	myThis.properties[key.Field]=null;
+      });
       this.relationships.forEach(function(rel){
 	rel.children=[];
       });
       this.loadfromhttp("sesload.php?sesname=user", function() {
-	this.extra.logout=true;
 	this.dispatchEvent("log");
       });
     }

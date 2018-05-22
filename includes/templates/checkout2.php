@@ -3,10 +3,10 @@
     Just one last thing.<br>Check if your address is ok, change it or fill it.
     <br>Use street field to write also street number and so on.<br>pc is postal code.
   </div>
-  <div data-js='
+  <div></div>
+  <script>
     webuser.refreshView(thisElement,"includes/templates/useraddress.php");
-  '>
-  </div>
+  </script>
   <div style="width:100%; text-align:center;">
   <a href="" class="btn">Finish Order</a>
   <script>
