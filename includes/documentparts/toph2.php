@@ -1,6 +1,6 @@
 <div></div>
 <template>
-  <div class="admnlauncher adminsinglelauncher">
+  <div class="adminlauncher adminsinglelauncher">
     <h2></h2>
     <script>
       thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
