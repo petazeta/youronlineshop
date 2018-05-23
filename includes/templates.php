@@ -10,5 +10,4 @@ include("includes/templates/butaddnewnode.php");
 include("includes/templates/butvchpos.php");
 include("includes/templates/buthchpos.php");
 include("includes/templates/butsuccessorder.php");
-include("includes/templates/checkout1.php");
 ?>

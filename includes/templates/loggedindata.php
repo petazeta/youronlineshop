@@ -47,7 +47,7 @@
   <script>
     //if cart it is not empty -> redirect to checkout
     if (mycart.getRelationship("cartitem").children.length>0) {
-      webuser.refreshView(document.getElementById("centralcontent"), document.getElementById("checkout1tp").content);
+      webuser.refreshView(document.getElementById("centralcontent"), 'includes/templates/checkout1.php');
     }
   </script>
 </template>
