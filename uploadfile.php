@@ -55,8 +55,9 @@ function uploadfile($myfile, $target_dir, $result){
       $result->extra->errormsg += " Sorry, your file was not uploaded.";
   // if everything is ok, try to upload file
   } else {
+      //chmod($target_dir,0777);
       if (move_uploaded_file($myfile["tmp_name"], $target_file)) {
-          $result->msg= "The file ". basename( $myfile["name"]). " has been uploaded.";
+          $result->extra->filename=basename( $myfile["name"]);
       } else {
         $result->extra->error=true;
         $result->extra->errormsg = "Sorry, there was an error uploading your file.";

@@ -60,31 +60,25 @@
 	  myresult.loadfromhttp(this.myFormData, function(){
 	  var myalertmsg="";
 	  if (this.extra && this.extra.error==true) {
-	    myalertmsg="error uploading file";
+	    myalertmsg="Error uploading file";
 	  }
 	  else {
-	    myalertmsg="upload image product id " + thisNode.properties.id + " ok";
+	    myalertmsg="Image uploaded";
 	  }
 	  myalert.load({properties:{alertmsg: myalertmsg, timeout:2000}});
 	  myalert.showalert();
 	  
 	  //Now we need to update item image column
 	  if (myresult.error!=true) {
-	    var updatedone=function(){
-	      //Falta aqui refrescar la imagen, esto no parece tan sencillo porque desconocemos el container
+	    var myresultEdit=new NodeMale();
+	    myresultEdit.parentNode=new NodeFemale();
+	    myresultEdit.parentNode.loadasc(thisNode.parentNode,0);
+	    myresultEdit.properties.id=thisNode.properties.id;
+	    myresultEdit.properties.image="file_"+thisNode.properties.id+ ".png";
+	    myresultEdit.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id}, function(){
 	      launcher.hidealert();
 	      thisNode.parentNode.partnerNode.getMyDomNodes()[0].querySelector("a").click();
-	    }
-	    var formEdit=thisElement.parentElement.querySelector("template").content.querySelector("form").cloneNode(true);
-	    thisNode.setView(formEdit);
-	    thisElement.insertBefore(formEdit, thisElement.querySelector("template"));
-	    var editfield=document.createElement("input");
-	    editfield.name="image";
-	    editfield.value="file_"+thisNode.properties.id+ ".png";
-	    editfield.type="hidden";
-	    formEdit.appendChild(editfield);
-	    var myresultedit=new NodeMale();
-	    myresultedit.loadfromhttp(formEdit, updatedone);
+	    });
 	  }
 	    //submitted
 	});
@@ -166,20 +160,7 @@ fileInput.addEventListener("change", function() {
     fileDisplayArea.innerHTML = "File not supported!";
   }
 });
-	</script>
-	<template>
-	  <form action="dbrequest.php">
-	    <input type="hidden" name="json"/>
-	    <script>
-	      var mydata=new NodeMale();
-	      mydata.properties.id=thisNode.properties.id;
-	      mydata.parentNode=new NodeFemale();
-	      mydata.parentNode.loadasc(thisNode.parentNode, 1);
-	      thisElement.value=JSON.stringify(mydata);
-	    </script>
-	    <input type="hidden" name="parameters" value="" data-js='thisElement.value=JSON.stringify({action:"edit my properties", user_id: webuser.properties.id});'/>
-	  </form>
-	</template>
+      </script>
     </template>
   </div>
 </template>
