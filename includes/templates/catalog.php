@@ -156,9 +156,11 @@
 		      <tr>
 			<td>
 			  <div class="adminsinglelauncher">
-			    <h3 data-js='
-			      thisElement.textContent=thisNode.properties.name || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
-			    '></h3>
+			    <h3></h3>
+			    <script>
+			      thisElement.textContent=thisNode.properties.name ||
+			      labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+			    </script>
 			    <div class="btrightedit">
 			    </div>
 			    <script>
@@ -175,15 +177,18 @@
 			  </div>
 			  <div>
 			    <div class="adminsinglelauncher">
-			      <div style="margin-bottom:1em;" data-js='
-				thisElement.innerHTML=thisNode.properties.descriptionshort || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
-			      '></div>
+			      <div style="margin-bottom:1em;"></div>
+			      <script>
+				thisElement.innerHTML=thisNode.properties.descriptionshort ||
+				labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+			      </script>
 			      <div class="btrightedit">
 			      </div>
 			      <script>
 				if (webuser.isWebAdmin()) {
 				  var launcher=new NodeMale();
 				  launcher.editpropertyname="descriptionshort";
+				  launcher.allowedHTML=true;
 				  launcher.editelement=thisElement.parentElement.firstElementChild;
 				  launcher.myNode=thisNode;
 				  launcher.myContainer=thisElement;

@@ -1,15 +1,18 @@
 <template  id="butedittp">
   <template>
     <form action="dbrequest.php"  style="display:none">
-      <input type="hidden" name="id" data-js='thisElement.value= thisNode.properties.id;'/>
-      <input type="hidden" name="json"/>
+      <input type="hidden" name="json">
       <script>
 	var mydata=new NodeMale();
+	mydata.properties.id=thisNode.properties.id;
 	mydata.parentNode=new NodeFemale();
 	mydata.parentNode.loadasc(thisNode.parentNode,1);
 	thisElement.value=JSON.stringify(mydata);
       </script>
-      <input type="hidden" name="parameters" value="" data-js='thisElement.value=JSON.stringify({action:"edit my properties", user_id: webuser.properties.id});'/>
+      <input type="hidden" name="parameters">
+      <script>
+	thisElement.value=JSON.stringify({action:"edit my properties", user_id: webuser.properties.id});
+      </script>
     </form>
   </template>
   <a style="" href="" class="singleadminedit butedit">

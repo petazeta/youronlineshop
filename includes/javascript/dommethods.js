@@ -1,18 +1,6 @@
 //Some functions that will be applied to dom elements
 function activeedition(thisNode, field){
-  if (this.allowedHTML) var myproperty="innerHTML";
-  else var myproperty="textContent";
-  //field contains the previous value
-  //removing the initial value for null values
-  if (this[myproperty]!=thisNode.properties[field.name]) {
-    if (thisNode.properties[field.name]) this[myproperty]=thisNode.properties[field.name];
-    else this[myproperty]=null;
-  }
-  field.setAttribute("value",this[myproperty]);
-  this.setAttribute("contenteditable","true");
-  this.className+=" contenteditableactive";
-  this.focus();
-  this.onblur=function() {
+  function submit() {
     this.setAttribute("contenteditable","false");
     this.className=this.className.replace(/ contenteditableactive/g,'');
     //empty values are not allowed
@@ -34,6 +22,29 @@ function activeedition(thisNode, field){
       });
     }
   };
+  if (this.allowedHTML) var myproperty="innerHTML";
+  else {
+    var myproperty="textContent";
+    var myThis=this;
+    this.addEventListener('keydown', function (e) {
+    var key = e.which || e.keyCode;
+    if (key === 13) { 
+      submit.call(myThis);
+    }
+});
+  }
+  //field contains the previous value
+  //removing the initial value for null values
+  if (this[myproperty]!=thisNode.properties[field.name]) {
+    if (thisNode.properties[field.name]) this[myproperty]=thisNode.properties[field.name];
+    else this[myproperty]=null;
+  }
+  field.setAttribute("value",this[myproperty]);
+  this.setAttribute("contenteditable","true");
+  this.className+=" contenteditableactive";
+  this.focus();
+  
+  this.addEventListener("blur", submit);
 }
 
 function setSelected() {
