@@ -33,9 +33,9 @@ function fitincolumn() {
   var rightcolumn=closesttagname.call(document.querySelector("section.rightcolumn"), 'TD');
   document.getElementById("mainblock").style.minWidth="300px";
   document.getElementById("mainblock").style.width="100%";
-  var catalogbox=leftcolumn.querySelector('div[title="phone view"]');
-  var logbox=rightcolumn.querySelector('div[title="phone view"]');
-  var cartbox=rightcolumn.querySelectorAll('div[title="phone view"]')[1];
+  var catalogbox=leftcolumn.querySelector('div[data-phone]');
+  var logbox=rightcolumn.querySelector('div[data-phone]');
+  var cartbox=rightcolumn.querySelectorAll('div[data-phone]')[1];
   logbox.style.display="table";
   centralcontent.style.padding="0px 5px";
   logbox.style.margin="1em auto 0 auto";

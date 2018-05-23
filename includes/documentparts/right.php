@@ -1,9 +1,9 @@
 <section class="rightcolumn">
-  <div title="phone view">
+  <div data-phone="phone view">
     <?php include('includes/documentparts/logbox.php'); ?>
   </div>
   <div class="space"></div>
-  <div title="phone view">
+  <div data-phone="phone view">
     <?php include('includes/documentparts/cartbox.php'); ?>
   </div>
   <div class="space"></div>
