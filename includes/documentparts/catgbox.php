@@ -1,7 +1,7 @@
 <table class="box">
   <tr>
     <th class="boxhead">
-      <div class="adminsinglelauncher"></div>
+      <div class="adminlauncher adminsinglelauncher"></div>
       <template id="catgboxheadtp">
 	<span></span>
 	<script>
@@ -10,13 +10,13 @@
 	<div class="btrightedit"></div>
 	<script>
 	  var addadminbutts=function(){
-	    var launcher=new NodeMale();
-	    launcher.editpropertyname="innerHTML";
-	    launcher.editelement=thisElement.parentElement.firstElementChild;
-	    launcher.myNode=thisNode;
-	    launcher.myContainer=thisElement;
-	    launcher.myTp=document.getElementById("butedittp").content;
-	    launcher.refreshView();
+	    var admnlauncher=new NodeMale();
+	    admnlauncher.myNode=thisNode;
+	    admnlauncher.buttons=[{
+	      template: document.getElementById("butedittp"),
+	      args: {editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	    }];
+	    admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 	  }
 	  if (webuser.isWebAdmin()) {
 	    addadminbutts();

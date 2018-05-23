@@ -278,8 +278,7 @@ Node.prototype.setChildrenView=function (tp) {
 Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
   if (container) this.childContainer=container;
   var refresh=function(){
-    while (this.childContainer.firstChild) this.childContainer.removeChild(this.childContainer.firstChild);
-    this.childContainer.innerHTML="";
+    this.childContainer.innerHTML='';
     var results=this.setChildrenView();
     for (var i=0; i<results.length; i++) {
       this.childContainer.appendChild(results[i]); //It will improve performance by not clonning but we prefer by now to have a template for each children

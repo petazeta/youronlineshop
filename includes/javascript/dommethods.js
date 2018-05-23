@@ -3,6 +3,10 @@ function activeedition(thisNode, field){
   function submit() {
     this.setAttribute("contenteditable","false");
     this.className=this.className.replace(/ contenteditableactive/g,'');
+    var tableAdmin=this.parentElement.querySelector("table.adminedit");
+    if (tableAdmin) {
+      tableAdmin.style.visibility="visible";
+    }
     //empty values are not allowed
     if (this[myproperty]=="") {
        this[myproperty]=field.value || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
@@ -22,16 +26,21 @@ function activeedition(thisNode, field){
       });
     }
   };
+  var tableAdmin=this.parentElement.querySelector("table.adminedit");
+  if (tableAdmin) {
+    tableAdmin.style.visibility="hidden";
+  }
+  
   if (this.allowedHTML) var myproperty="innerHTML";
   else {
     var myproperty="textContent";
     var myThis=this;
     this.addEventListener('keydown', function (e) {
-    var key = e.which || e.keyCode;
-    if (key === 13) { 
-      submit.call(myThis);
-    }
-});
+      var key = e.which || e.keyCode;
+      if (key === 13) { 
+	submit.call(myThis);
+      }
+    });
   }
   //field contains the previous value
   //removing the initial value for null values

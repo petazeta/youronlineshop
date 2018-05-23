@@ -3,7 +3,7 @@
   <table class="box">
     <tr>
       <th class="boxhead">
-        <div class="adminsinglelauncher">
+        <div class="adminlauncher adminsinglelauncher">
           <a href=""></a>
           <script>
             thisElement.textContent=thisNode.getNextChild({name: "crtbxtt"}).properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
@@ -15,13 +15,13 @@
           <div class="btrightedit"></div>
           <script>
 	    var addadminbutts=function(){
-	      var launcher=new NodeMale();
-	      launcher.editpropertyname="innerHTML";
-	      launcher.editelement=thisElement.parentElement.firstElementChild;
-	      launcher.myNode=thisNode.getNextChild({name: "crtbxtt"});
-	      launcher.myContainer=thisElement;
-	      launcher.myTp=document.getElementById("butedittp").content;
-	      launcher.refreshView();   
+	      var admnlauncher=new NodeMale();
+	      admnlauncher.myNode=thisNode.getNextChild({name: "crtbxtt"});
+	      admnlauncher.buttons=[{
+		template: document.getElementById("butedittp"),
+		args: {editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	      }];
+	      admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 	    }
 	    if (webuser.isWebAdmin()) {
 	      addadminbutts();
@@ -88,7 +88,7 @@
           </tr>
           <tr>
              <td style="text-align:center;">
-		<div class="adminsinglelauncher" style="text-align:center;">
+		<div class="adminlauncher adminsinglelauncher" style="text-align:center;">
 		<a href="" class="btn"></a>
 		<script>
 		  thisElement.textContent=thisNode.getNextChild({"name":"ckouttt"}).properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
@@ -100,13 +100,13 @@
 		<div class="btrightedit"></div>
 		<script>
 		  var addadminbutts=function(){
-		    var launcher=new NodeMale();
-		    launcher.editpropertyname="innerHTML";
-		    launcher.editelement=thisElement.parentElement.firstElementChild;
-		    launcher.myNode=thisNode.getNextChild({name: "ckouttt"});
-		    launcher.myContainer=thisElement;
-		    launcher.myTp=document.getElementById("butedittp").content;
-		    launcher.refreshView();	    
+		    var admnlauncher=new NodeMale();
+		    admnlauncher.myNode=thisNode.getNextChild({name: "ckouttt"});
+		    admnlauncher.buttons=[{
+		      template: document.getElementById("butedittp"),
+		      args: {editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+		    }];
+		    admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 		  }
 		  if (webuser.isWebAdmin()) {
 		    addadminbutts();

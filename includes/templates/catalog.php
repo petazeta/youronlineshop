@@ -25,7 +25,7 @@
 	      }
 	      if (this.children.length==1 && !this.children[0].properties.id) {
 		//remove products in case we just remove all subcategories flaps
-		var myContainer=thisElement.parentElement.nextElementSibling;
+		var myContainer=thisElement.parentElement.nextElementSibling.rows[0];
 		myContainer.innerHTML="";
 	      }
 	    });
@@ -52,11 +52,17 @@
 			thisNode.setActive();
 			thisNode.loadfromhttp({action:"load my tree"}, function(){
 			  var items=thisNode.getRelationship({name:"items"});
+			  //lets search for the table that will contain the products
+			  var mypointer=thisElement;
+			  while (!(mypointer.tagName=="DIV" && mypointer.className=="flapscontainer")) {
+			    mypointer=mypointer.parentElement;
+			  }
+			  var myTable=mypointer.nextElementSibling;
 			  items.addEventListener("refreshChildrenView", function() {
 			    if (this.children==0){
 			      var element=this.addChild(new NodeMale());
 			      element.myTp=document.getElementById("nochildrentp").content;
-			      element.myContainer=this.childContainer;
+			      element.myContainer=myTable.rows[0];
 			      element.refreshView();
 			    }
 			    while (myTable.rows.length > 1) myTable.deleteRow(1); // for start after intoColumns
@@ -64,14 +70,8 @@
 			    if (columns < 1) columns=1;
 			    intoColumns.call(myTable.rows[0], columns);
 			  });
-			  //lets search for the table that will contain the products
-			  var mypointer=thisElement;
-			  while (!(mypointer.tagName=="DIV" && mypointer.className=="flapscontainer")) {
-			    mypointer=mypointer.parentElement;
-			  }
-			  var myTable=mypointer.nextElementSibling;
 			  items.childContainer=myTable.rows[0];
-			  items.childTp=myTable.nextElementSibling.content;
+			  items.childTp=document.getElementById("producttp").content;
 			  items.refreshChildrenView();
 			});
 			return false;
@@ -104,34 +104,35 @@
 	</div>
 	
 	<table class="product">
-	  <tr></tr>
+	  <tr>
+	    <td></td>
+	  </tr>
 	</table>
-	<template>
-
-	    <td class="product" style="position:relative">
-	      <div class="adminlauncher" style="width:100%;">
-		<div style="
-		position: absolute;
-		right: 0px;
-		bottom:0px;
-		">
-		</div>
-		<script>
-		  if (webuser.isWebAdmin()) {
-		    var admnlauncher=new NodeMale();
-		    admnlauncher.myNode=thisNode;
-		    admnlauncher.buttons=[
-		      {template: document.getElementById("butvchpostp")},
-		      {template: document.getElementById("butaddnewnodetp"), args:{sort_order: thisNode.sort_order + 1}},
-		      {template: document.getElementById("butdeletetp")}
-		    ];
-		    admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-		  }
-		</script>
+	<template id="producttp">
+	  <td class="product" style="position:relative">
+	    <div class="adminlauncher" style="width:100%;">
+	      <div style="
+	      position: absolute;
+	      right: 0px;
+	      bottom:0px;
+	      ">
+	      </div>
+	      <script>
+		if (webuser.isWebAdmin()) {
+		  var admnlauncher=new NodeMale();
+		  admnlauncher.myNode=thisNode;
+		  admnlauncher.buttons=[
+		    {template: document.getElementById("butvchpostp")},
+		    {template: document.getElementById("butaddnewnodetp"), args:{sort_order: thisNode.sort_order + 1}},
+		    {template: document.getElementById("butdeletetp")}
+		  ];
+		  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+		}
+	      </script>
 	      <table style="width:100%;position:relative;">
 		<tr>
 		  <td class="productimg">
-		    <div class="adminsinglelauncher">
+		    <div class="adminlauncher adminsinglelauncher">
 		      <img class="productimg">
 		      <script>
 		      var img=thisNode.properties.image || "noimg.png";
@@ -155,7 +156,7 @@
 		    <table class="textproduct">
 		      <tr>
 			<td>
-			  <div class="adminsinglelauncher">
+			  <div class="adminlauncher adminsinglelauncher">
 			    <h3></h3>
 			    <script>
 			      thisElement.textContent=thisNode.properties.name ||
@@ -165,18 +166,18 @@
 			    </div>
 			    <script>
 			      if (webuser.isWebAdmin()) {
-				var launcher=new NodeMale();
-				launcher.editpropertyname="name";
-				launcher.editelement=thisElement.parentElement.firstElementChild;
-				launcher.myNode=thisNode;
-				launcher.myContainer=thisElement;
-				launcher.myTp=document.getElementById("butedittp").content;
-				launcher.refreshView();
+				var admnlauncher=new NodeMale();
+				admnlauncher.myNode=thisNode;
+				admnlauncher.buttons=[{
+				  template: document.getElementById("butedittp"),
+				  args: {editpropertyname:"name", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+				}];
+				admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 			      }
 			    </script>
 			  </div>
 			  <div>
-			    <div class="adminsinglelauncher">
+			    <div class="adminlauncher adminsinglelauncher">
 			      <div style="margin-bottom:1em;"></div>
 			      <script>
 				thisElement.innerHTML=thisNode.properties.descriptionshort ||
@@ -186,14 +187,13 @@
 			      </div>
 			      <script>
 				if (webuser.isWebAdmin()) {
-				  var launcher=new NodeMale();
-				  launcher.editpropertyname="descriptionshort";
-				  launcher.allowedHTML=true;
-				  launcher.editelement=thisElement.parentElement.firstElementChild;
-				  launcher.myNode=thisNode;
-				  launcher.myContainer=thisElement;
-				  launcher.myTp=document.getElementById("butedittp").content;
-				  launcher.refreshView();
+				  var admnlauncher=new NodeMale();
+				  admnlauncher.myNode=thisNode;
+				  admnlauncher.buttons=[{
+				    template: document.getElementById("butedittp"),
+				    args: {editpropertyname:"descriptionshort", allowedHTML:true, editelement:thisElement.parentElement.firstElementChild}
+				  }];
+				  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 				}
 			      </script>
 			    </div>
@@ -205,7 +205,7 @@
 			  <table class="addtocart">
 			    <tr>
 			      <td style="position:relative;">
-				<div class="adminsinglelauncher">
+				<div class="adminlauncher adminsinglelauncher">
 				  <div style="padding-right:1em;">
 				    <span data-js='
 					thisElement.textContent=thisNode.properties.price || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
@@ -216,13 +216,13 @@
 				    </div>
 				    <script>
 				      if (webuser.isWebAdmin()) {
-					var launcher=new NodeMale();
-					launcher.editpropertyname="price";
-					launcher.editelement=thisElement.parentElement.firstElementChild;
-					launcher.myNode=thisNode;
-					launcher.myContainer=thisElement;
-					launcher.myTp=document.getElementById("butedittp").content;
-					launcher.refreshView();
+					var admnlauncher=new NodeMale();
+					admnlauncher.myNode=thisNode;
+					admnlauncher.buttons=[{
+					  template: document.getElementById("butedittp"),
+					  args: {editpropertyname:"price", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+					}];
+					admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 				      }
 				    </script>
 				  </div>
@@ -248,8 +248,8 @@
 		  </td>
 		</tr>
 	      </table>
-	      </div>
-	    </td>
+	    </div>
+	  </td>
 	</template>
       </td>
     </tr>

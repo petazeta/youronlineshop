@@ -1,6 +1,6 @@
 <template>
   <td style="padding-right:1em;">
-    <div class="adminsinglelauncher">
+    <div class="adminlauncher adminsinglelauncher">
       <div class="form-group">
 	<label class="form-label"></label>
 	<script>thisElement.innerHTML=thisNode.editpropertyname;</script>
@@ -10,13 +10,13 @@
 	</script>
 	<div class="btrightedit"></div>
 	<script>
-	  var launcher=new NodeMale();
-	  launcher.editpropertyname=thisNode.editpropertyname;
-	  launcher.editelement=thisElement.parentElement.querySelector("span");
-	  launcher.myNode=thisNode;
-	  launcher.myContainer=thisElement;
-	  launcher.myTp=document.getElementById("butedittp").content;
-	  launcher.refreshView();
+	  var admnlauncher=new NodeMale();
+	  admnlauncher.myNode=thisNode;
+	  admnlauncher.buttons=[{
+	    template: document.getElementById("butedittp"),
+	    args: {editpropertyname:thisNode.editpropertyname, allowedHTML:false, editelement:thisElement.parentElement.querySelector("span")}
+	  }];
+	  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 	</script>
       </div>
     </div>

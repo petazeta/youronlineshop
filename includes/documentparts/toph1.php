@@ -1,6 +1,6 @@
 <div></div>
 <template>
-  <div class="adminsinglelauncher">
+  <div class="adminlauncher adminsinglelauncher">
     <h1></h1>
     <script>
       thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
@@ -9,13 +9,13 @@
     <div class="btrightedit"></div>
     <script>
       var addadminbutts=function(){
-	var launcher=new NodeMale();
-	launcher.editpropertyname="innerHTML";
-	launcher.editelement=thisElement.parentElement.firstElementChild;
-	launcher.myNode=thisNode;
-	launcher.myContainer=thisElement;
-	launcher.myTp=document.getElementById("butedittp").content;
-	launcher.refreshView();
+	var admnlauncher=new NodeMale();
+	admnlauncher.myNode=thisNode;
+	admnlauncher.buttons=[{
+	  template: document.getElementById("butedittp"),
+	  args: {editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	}];
+	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
       }
       if (webuser.isWebAdmin()) {
 	addadminbutts();

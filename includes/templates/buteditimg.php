@@ -74,7 +74,7 @@
 	    myresultEdit.parentNode=new NodeFemale();
 	    myresultEdit.parentNode.loadasc(thisNode.parentNode,0);
 	    myresultEdit.properties.id=thisNode.properties.id;
-	    myresultEdit.properties.image="file_"+thisNode.properties.id+ ".png";
+	    myresultEdit.properties.image="file_"+thisNode.properties.id+ ".png?" + new Date().getTime(); //to refresh image
 	    myresultEdit.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id}, function(){
 	      launcher.hidealert();
 	      thisNode.parentNode.partnerNode.getMyDomNodes()[0].querySelector("a").click();
