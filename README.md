@@ -46,7 +46,7 @@ It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As w
 3. Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.
 4. Edit database settings at: includes/config.sample.php and rename it to config.php.
 5. Give write permisions to the folder catalog/images/small (To allow upload product images).
-6. Install the complement [DbManager](https://sourceforge.net/projects/freshhh-dbmanager/) for further database control.
+6. For further database control install the complement [DbManager](https://sourceforge.net/projects/freshhh-dbmanager/).
 
 ## Getting started
 

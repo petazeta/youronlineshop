@@ -81,6 +81,7 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "delete my tree":
     case "add myself":
     case "edit my sort_order":
+    case "delete my link":
       var node=new this.constructor;
       node.loadasc(this,2);
       break;
@@ -140,7 +141,7 @@ Node.prototype.toRequestFormData=function(parameters) {
       else myPointer=myPointer.partnerNode;
     }
   }
-  var FD  = new FormData();
+  var FD = new FormData();
   // Push our data into our FormData object
   FD.append("json", JSON.stringify(node));
   FD.append("parameters", JSON.stringify(parameters));

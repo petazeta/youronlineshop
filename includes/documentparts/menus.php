@@ -22,7 +22,6 @@
 	return false;
       };
     </script>
-    <div class="bttopadmn"></div>
     <div class="btrightnarrow"></div>
     <script>
       if (webuser.isWebAdmin()) {

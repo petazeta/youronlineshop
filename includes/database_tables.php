@@ -21,7 +21,7 @@ foreach($tablesRequester->children as $myTable) {
   $key=array_keys((array)$myTable->properties)[0];
   $databaseTableNames[] = $myTable->properties->$key;
 }
-$standardTables=preg_replace('/__(.+)$/', '$1', $databaseTableNames);
+$standardTables=preg_replace('/.*__(.+)$/', '$1', $databaseTableNames);
 for ($i=0; $i<count($databaseTableNames); $i++) {
   define('TABLE_' . strtoupper($standardTables[$i]), $databaseTableNames[$i]);
 }

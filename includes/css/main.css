@@ -336,6 +336,15 @@ footer > table td{
     opacity: 1;
     transition: opacity 0.2s ease 0.2s;
 }
+.adminlauncherfix {
+  position: relative;
+  display: inline-block;
+}
+.adminlauncherfix
+.adminedit {
+    opacity: 1;
+    transition: opacity 0.2s ease 0.2s;
+}
 a.butedit, a.butdel, a.butadd, a.butsucs, table.arrows{
   background-color: #eff3f6;
   background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
