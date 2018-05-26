@@ -82,6 +82,8 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "add myself":
     case "edit my sort_order":
     case "delete my link":
+    case "load unlinked":
+    case "load my children not":
       var node=new this.constructor;
       node.loadasc(this,2);
       break;
@@ -91,6 +93,8 @@ Node.prototype.toRequestFormData=function(parameters) {
       break;
     case "load my childtablekeys":
     case "load root":
+    case "myself":
+    case "load this relationship":
       var node=new this.constructor;
       node.load(this, 0);
       break;
@@ -100,9 +104,9 @@ Node.prototype.toRequestFormData=function(parameters) {
       node.load(this,1);
       node.loadasc(this,2);
       break;
-    case "myself":
+    case "load all":
       var node=new this.constructor;
-      node.load(this, 0);
+      node.loadasc(this,1);
       break;
     case "with asc":
       var node=new this.constructor;
@@ -337,10 +341,11 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
   }
   else if (typeof request=="object") {
     if (request.constructor === Object) {
-      var myAction= request.requesterFile || "dbrequest.php";
+      var myAction= request.requesterFile;
       var request=this.toRequestFormData(request);
       request.action=myAction;
     }
+    if (!request.action) request.action="dbrequest.php";
     xmlhttp.open("POST",request.action, true);
     if (request.tagName=="FORM") {
       xmlhttp.send(new FormData(request));

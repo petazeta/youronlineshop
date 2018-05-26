@@ -21,17 +21,19 @@
     <tbody></tbody>
     <script>
       //first we load orders from database
+      var myaction="load my children";
       if (webuser.getUserType()=="orders administrator") {
 	//create virtual ordersmother
 	var ordersRel=new NodeFemale();
 	ordersRel.properties.childtablename="TABLE_ORDERS";
+	myaction="load all";
       }
       else {
 	var ordersRel=webuser.getRelationship({"name":"orders"});
       }
       var myFilter="t.status = 0";
       if (thisNode.filterorders=="archived") myFilter="t.status = 1"
-      ordersRel.loadfromhttp({action: "load my children", filter: myFilter, user_id: webuser.properties.id}, function(){
+      ordersRel.loadfromhttp({action: myaction, filter: myFilter, user_id: webuser.properties.id}, function(){
 	if (this.children.length == 0) return false;
 	if (webuser.getUserType()=="orders administrator") {
 	  for (var i=0; i<this.children.length; i++) {

@@ -25,8 +25,8 @@
 	      }
 	      if (this.children.length==1 && !this.children[0].properties.id) {
 		//remove products in case we just remove all subcategories flaps
-		var myContainer=thisElement.parentElement.nextElementSibling.rows[0];
-		myContainer.innerHTML="";
+		var itemContainer=closesttagname.call(thisElement, 'TD').querySelector('table.product').rows[0];
+		itemContainer.innerHTML="";
 	      }
 	    });
 	    //showing flaps (after the listeners to refreshChildrenView are added) after refreshing first time we choose the first tab
@@ -53,25 +53,26 @@
 			thisNode.loadfromhttp({action:"load my tree"}, function(){
 			  var items=thisNode.getRelationship({name:"items"});
 			  //lets search for the table that will contain the products
-			  var mypointer=thisElement;
-			  while (!(mypointer.tagName=="DIV" && mypointer.className=="flapscontainer")) {
-			    mypointer=mypointer.parentElement;
-			  }
-			  var myTable=mypointer.nextElementSibling;
 			  items.addEventListener("refreshChildrenView", function() {
+			    var rowContainer=this.childContainer;
 			    if (this.children==0){
 			      var element=this.addChild(new NodeMale());
-			      element.myTp=document.getElementById("nochildrentp").content;
-			      element.myContainer=myTable.rows[0];
+			      element.myTp=document.createElement('td');
+			      element.myTp.appendChild(document.getElementById("nochildrentp").content.cloneNode(true));
+			      element.myContainer=rowContainer;
 			      element.refreshView();
 			    }
-			    while (myTable.rows.length > 1) myTable.deleteRow(1); // for start after intoColumns
-			    var columns=Math.round((screen.availWidth-524)/500);
+			    var columns=Math.round((window.screen.width-524)/500);
 			    if (columns < 1) columns=1;
-			    intoColumns.call(myTable.rows[0], columns);
+			    var myTable=intoColumns.call(rowContainer, columns);
+			    rowContainer.innerHTML='';
+			    var myCell = rowContainer.insertCell();
+			    myCell.appendChild(myTable);
 			  });
-			  items.childContainer=myTable.rows[0];
-			  items.childTp=document.getElementById("producttp").content;
+			  var flapTable=closesttagname.call(thisElement, 'TABLE');
+			  var catalogTable=closesttagname.call(flapTable, 'TABLE');
+			  items.childContainer=catalogTable.querySelector('table.product').rows[0];
+			  items.childTp=document.getElementById("producttp").content.querySelector('td');
 			  items.refreshChildrenView();
 			});
 			return false;

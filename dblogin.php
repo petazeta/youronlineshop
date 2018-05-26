@@ -40,11 +40,7 @@ else {
 if (!isset($loginresult->extra->error)) {
   $user->properties->id=$loginresult->properties->id;
   $user->db_loadmyrelationships();
-  foreach ($user->relationships as $key => $value) {
-    if ($user->relationships[$key]->properties->name=="userstypes") {
-      $user->relationships[$key]->db_loadmychildren();
-    }
-  }
+  $user->db_loadmytreeup();
   $_SESSION["user"]=serialize($user);
   $loginresult->extra->login=true;
 }

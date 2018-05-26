@@ -22,6 +22,7 @@
 	return false;
       };
     </script>
+    <div class="bttopadmn" data-info'this is for the open close element'></div>
     <div class="btrightnarrow"></div>
     <script>
       if (webuser.isWebAdmin()) {

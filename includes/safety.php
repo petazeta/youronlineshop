@@ -16,8 +16,7 @@ function is_actionpermited($parameters, $myelement){
   $myuserid=null;
   if (isset($_SESSION["user"])) {
     $user=unserialize($_SESSION["user"]);
-    $usertyperel=$user->getRelationship(array("name" => "userstypes"));
-    if (isset($usertyperel->children[0])) $usertype=$usertyperel->children[0]->properties->type;
+    if (isset($user->parentNode) && isset($user->parentNode->partnerNode)) $usertype=$user->parentNode->partnerNode->properties->type;
   }
   $systemtables=["TABLE_RELATIONSHIPS", "TABLE_LINKS"];
   if (array_search($tablename, $systemtables)) {

@@ -73,8 +73,10 @@ function closesttagname(tagname){
 function intoColumns(cellsNumber) {
   // columns distribution applied to a row
   //if (this.cells.length < cellsNumber) return false;
+  var newTable=document.createElement('TABLE');
+  newTable.style.width='100%';
   while (this.cells.length>0) {
-    var newRow=closesttagname.call(this, "TABLE").insertRow();
+    var newRow=newTable.insertRow();
     var i=cellsNumber;
     while(i--) {
       var cellsWidth=Math.round(100/cellsNumber) + "%";
@@ -88,6 +90,7 @@ function intoColumns(cellsNumber) {
       }
     }
   }
+  return newTable;
 }
 function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

@@ -1,5 +1,5 @@
 <template id="nochildrentp">
-  <div style="text-align:center;" class="adminlauncherfix"></div>
+  <div class="adminlauncherfix"></div>
   <script>
     if (webuser.isWebAdmin()) {
       var admnlauncher=new NodeMale();

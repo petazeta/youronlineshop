@@ -53,7 +53,7 @@ function fitincolumn() {
   rightcolumn.style.display="none";
 }
 window.addEventListener("load", function(){
-  if (window.screen.availWidth<500) {
+  if (window.screen.width<500) {
     fitincolumn();
   }
 });

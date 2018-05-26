@@ -27,6 +27,11 @@
     tableRow.appendChild(tableCell);
   });
   thisElement.appendChild(tableRow);
-  if (launcher.colsnum) intoColumns.apply(tableRow, [colsnum]);
+  if (launcher.colsnum) {
+    var myTable=intoColumns.apply(tableRow, [colsnum]);
+    tableRow.innerHTML='';
+    var myCell = thisElement.insertCell();
+    myCell.appendChild(myTable);
+  }
   </script>
 </template>

@@ -13,7 +13,12 @@
 	  <script>
 	  var datarel=thisNode.getRelationship("usersdata");
 	  function showdata(){
-	    datarel.children[0].refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){intoColumns.apply(thisElement, [2]);});
+	    datarel.children[0].refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
+	      var myTable=intoColumns.apply(thisElement, [2]);
+	      thisElement.innerHTML='';
+	      var myCell = thisElement.insertCell();
+	      myCell.appendChild(myTable);
+	    });
 	  }
 	  if (datarel.children.length==0) {
 	    datarel.loadfromhttp({action: "load my children", user_id: webuser.properties.id}, showdata)

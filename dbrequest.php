@@ -109,6 +109,29 @@ switch ($parameters->action) {
     unset($myelement->properties->newid);
     $callback=["cutDown", "cutUp"];
     break;
+  case "load unlinked":
+    $myexecfunction="db_loadunlinked";
+    $callback="cutUp";
+    break;
+  case "load my children not":
+    $myexecfunction="db_loadmychildrennot";
+    $callback="cutUp";
+    break;
+  case "load all":
+    $myexecfunction="db_loadall";
+    $filter=null; $order=null; $limit = null;
+    if (isset($parameters->filter)) $filter=$parameters->filter;
+    if (isset($parameters->order)) $order=$parameters->order;
+    if (isset($parameters->limit)) $limit=$parameters->limit;
+    if ($filter || $order || $limit) $argument=[$filter, $order, $limit];
+    $callback="cutUp";
+    break;
+  case "load this relationship":
+    $myexecfunction="db_loadthisrel";
+    break;
+  case "load tables":
+    $myexecfunction="db_loadtables";
+    break;
   default: $myexecfunction=null;
 }
 if (isset($argument)) {
