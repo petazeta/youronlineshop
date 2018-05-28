@@ -625,11 +625,12 @@ class NodeMale extends Node{
     . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order
     . ' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
-    
+
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $this->sort_order
     . ' WHERE'
-    . ' t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' t.id !=' . $this->properties->id
+    . ' AND t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
     . ' AND t.' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
