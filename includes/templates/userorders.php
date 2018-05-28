@@ -30,11 +30,15 @@
       }
       else {
 	var ordersRel=webuser.getRelationship({"name":"orders"});
+	ordersRel.children=[];
       }
       var myFilter="t.status = 0";
       if (thisNode.filterorders=="archived") myFilter="t.status = 1"
       ordersRel.loadfromhttp({action: myaction, filter: myFilter, user_id: webuser.properties.id}, function(){
-	if (this.children.length == 0) return false;
+	if (this.children.length == 0) {
+	  thisElement.innerHTML="";
+	  return false;
+	}
 	if (webuser.getUserType()=="orders administrator") {
 	  for (var i=0; i<this.children.length; i++) {
 	    this.children[i].addEventListener("deleteNode", function(){
