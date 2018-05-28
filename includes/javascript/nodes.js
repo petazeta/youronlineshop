@@ -193,12 +193,12 @@ Node.prototype.refreshView=function (container, tp, reqlistener) {
   if (container) this.myContainer=container;
   this.myContainer.innerHTML='';
   this.appendThis(container, tp, reqlistener);
-    if (this.events && this.events.refreshView) {
-      var i=this.events.refreshView.length;
-      while(i--) {
-        this.events.refreshView[i].call(this);
-      }
+  if (this.events && this.events.refreshView) {
+    var i=this.events.refreshView.length;
+    while(i--) {
+      this.events.refreshView[i].call(this);
     }
+  }
 };
 
 Node.prototype.appendThis=function (container, tp, reqlistener) {
@@ -235,12 +235,12 @@ Node.prototype.refreshPropertiesView=function (container, tp, reqlistener) {
   if (container) this.propertiesContainer=container;
   this.propertiesContainer.innerHTML='';
   this.appendProperties(container, tp, reqlistener);
-    if (this.events && this.events.refreshPropertiesView) {
-      var i=this.events.refreshPropertiesView.length;
-      while(i--) {
-        this.events.refreshPropertiesView[i].call(this);
-      }
+  if (this.events && this.events.refreshPropertiesView) {
+    var i=this.events.refreshPropertiesView.length;
+    while(i--) {
+      this.events.refreshPropertiesView[i].call(this);
     }
+  }
 };
 //This function write a template record for each property
 Node.prototype.appendProperties = function (container, tp, reqlistener) {
@@ -305,12 +305,12 @@ Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
   if (container) this.childContainer=container;
   this.childContainer.innerHTML='';
   this.appendChildren(container, tp, reqlistener);
-    if (this.events && this.events.refreshChildrenView) {
-      var i=this.events.refreshChildrenView.length;
-      while(i--) {
-        this.events.refreshChildrenView[i].call(this);
-      }
+  if (this.events && this.events.refreshChildrenView) {
+    var i=this.events.refreshChildrenView.length;
+    while(i--) {
+      this.events.refreshChildrenView[i].call(this);
     }
+  }
 };
 
 Node.prototype.appendChildren=function (container, tp, reqlistener) {
