@@ -153,9 +153,9 @@ Node.prototype.toRequestFormData=function(parameters) {
 }
 
 
-//This function serves to set html template and to reset it if it is already a dom element:
-//node.setView(form), node.setView(scriptelement)
-Node.prototype.setView = function (tp) {
+//This function serves to render html template or a dom element:
+//node.render(domelement), node.render(scriptelement)
+Node.prototype.render = function (tp) {
   if (!tp) tp=this.myTp;
   var elementsToBeModified=[];
   var myElements=[];
@@ -164,7 +164,7 @@ Node.prototype.setView = function (tp) {
   for (var i=0; i<myElements.length; i++) {
     if (myElements[i].tagName=="SCRIPT") {
       //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
-      //Also to execute script <script> for an already loaded element when we use setVew
+      //Also to execute script <script> for an already loaded element when we use render
       var myScript=document.createElement("SCRIPT");
       var scriptTop="var thisElement=document.currentScript.previousElementSibling; var thisNode=document.currentScript.thisNode;";
       myScript.textContent="(function(){" + scriptTop + myElements[i].textContent + "})();"; //adding scope (encapsulation) so this variables are local and can't be modified from another scripts.
@@ -191,26 +191,36 @@ Node.prototype.setView = function (tp) {
 
 Node.prototype.refreshView=function (container, tp, reqlistener) {
   if (container) this.myContainer=container;
-  var refresh=function() {
-    this.myContainer.innerHTML="";
-    var clone=this.myTp.cloneNode(true);
-    this.setView(clone);
-    this.myContainer.appendChild(clone);
-    
-    if (reqlistener) reqlistener.call(this);
+  this.myContainer.innerHTML='';
+  this.appendThis(container, tp, reqlistener);
     if (this.events && this.events.refreshView) {
       var i=this.events.refreshView.length;
       while(i--) {
         this.events.refreshView[i].call(this);
       }
     }
+};
+
+Node.prototype.appendThis=function (container, tp, reqlistener) {
+  if (container) this.myContainer=container;
+  var refresh=function() {
+    var clone=this.myTp.cloneNode(true);
+    this.render(clone);
+    this.myContainer.appendChild(clone);
+    
+    if (reqlistener) reqlistener.call(this);
+    if (this.events && this.events.appendThis) {
+      var i=this.events.appendThis.length;
+      while(i--) {
+        this.events.appendThis[i].call(this);
+      }
+    }
   };
   if (typeof tp=="string") {
-    var loadedtp=function() {
+    this.getTp(tp, function() {
       this.myTp=this.xmlTp;
       refresh.call(this);
-    };
-    this.getTp(tp, loadedtp);
+    });
   }
   else {
     if (tp) {
@@ -221,8 +231,19 @@ Node.prototype.refreshView=function (container, tp, reqlistener) {
   }
 };
 
+Node.prototype.refreshPropertiesView=function (container, tp, reqlistener) {
+  if (container) this.propertiesContainer=container;
+  this.propertiesContainer.innerHTML='';
+  this.appendProperties(container, tp, reqlistener);
+    if (this.events && this.events.refreshPropertiesView) {
+      var i=this.events.refreshPropertiesView.length;
+      while(i--) {
+        this.events.refreshPropertiesView[i].call(this);
+      }
+    }
+};
 //This function write a template record for each property
-Node.prototype.refreshPropertiesView = function (container, tp, reqlistener) {
+Node.prototype.appendProperties = function (container, tp, reqlistener) {
   if (container) this.propertiesContainer=container;
   if (typeof tp=="string") {
     this.getTp(tp, function() {
@@ -254,45 +275,53 @@ Node.prototype.refreshPropertiesView = function (container, tp, reqlistener) {
       if (tableKey.Field=="id") return false;
       myThis.editpropertyname=tableKey.Field; //for knowing the key and for the edition facility
       var thiscol=myThis.propertyTp.cloneNode(true);
-      myThis.setView(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
+      myThis.render(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
       container.appendChild(thiscol);
     });
     if (reqlistener) reqlistener.call(this);
-    if (this.events && this.events.refreshPropertiesView) {
-      var i=this.events.refreshPropertiesView.length;
+    if (this.events && this.events.appendProperties) {
+      var i=this.events.appendProperties.length;
       while(i--) {
-        this.events.refreshPropertiesView[i].call(this);
+        this.events.appendProperties[i].call(this);
       }
     }
   }
 }
 
 // Set children results from the given arguments and refresh the view. It uses this.childTp and this.childContainer
-Node.prototype.setChildrenView=function (tp) {
+Node.prototype.renderChildren=function (tp) {
   if (!tp) tp=this.childTp;
-  var myreturn=[];
   var children="children";
   if (this.constructor.name=="NodeMale") children="relationships";
   this[children]=this[children].sort(function(a,b){return a.sort_order-b.sort_order});
+  var myreturn=document.createDocumentFragment();
   for (var i=0; i<this[children].length; i++) {
-    myreturn.push(this[children][i].setView(tp.cloneNode(true)));
+    myreturn.appendChild(this[children][i].render(tp.cloneNode(true)));
   }
   return myreturn;
 };
 
 Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
   if (container) this.childContainer=container;
-  var refresh=function(){
-    this.childContainer.innerHTML='';
-    var results=this.setChildrenView();
-    for (var i=0; i<results.length; i++) {
-      this.childContainer.appendChild(results[i]); //It will improve performance by not clonning but we prefer by now to have a template for each children
-    }
-    if (reqlistener) reqlistener.call(this);
+  this.childContainer.innerHTML='';
+  this.appendChildren(container, tp, reqlistener);
     if (this.events && this.events.refreshChildrenView) {
       var i=this.events.refreshChildrenView.length;
       while(i--) {
         this.events.refreshChildrenView[i].call(this);
+      }
+    }
+};
+
+Node.prototype.appendChildren=function (container, tp, reqlistener) {
+  if (container) this.childContainer=container;
+  var refresh=function(){
+    this.childContainer.appendChild(this.renderChildren());
+    if (reqlistener) reqlistener.call(this);
+    if (this.events && this.events.appendChildren) {
+      var i=this.events.appendChildren.length;
+      while(i--) {
+        this.events.appendChildren[i].call(this);
       }
     }
   };
@@ -556,6 +585,9 @@ NodeMale.prototype.load=function(source, level) {
 
 NodeMale.prototype.getNextChild=function(obj) {
   return this.relationships[0].getChild(obj);
+}
+NodeMale.prototype.appendNextChildren=function(container, tp, reqlistener, append) {
+  return this.relationships[0].appendChildren(container, tp, reqlistener, append);
 }
 
 NodeMale.prototype.loadasc=function(source, level) {

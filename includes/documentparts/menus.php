@@ -45,7 +45,7 @@
 	    thisElement.previousElementSibling.innerHTML="";
 	  }
 	  else {
-	    thisNode.setView(thisElement.nextElementSibling);
+	    thisNode.render(thisElement.nextElementSibling);
 	  }
       }, "category" + thisNode.properties.id);
       thisNode.addEventListener("deleteNode", function() {
@@ -62,7 +62,6 @@
       <script>
 	thisElement.innerHTML=thisNode.properties.innerHTML ||
 	labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
-	thisNode.setView(thisElement);
       </script>
       <div class="btinside"></div>
       <script>

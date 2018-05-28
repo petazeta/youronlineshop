@@ -70,27 +70,32 @@ function closesttagname(tagname){
   }
   return myreturn.parentElement;
 };
-function intoColumns(cellsNumber) {
+function intoColumns(tableElement, elements, cellsNumber) {
   // columns distribution applied to a row
   //if (this.cells.length < cellsNumber) return false;
-  var newTable=document.createElement('TABLE');
-  newTable.style.width='100%';
-  while (this.cells.length>0) {
-    var newRow=newTable.insertRow();
+  var myRow=tableElement.rows[0].cloneNode();
+  var myCell=tableElement.rows[0].cells[0].cloneNode();
+  tableElement.innerHTML='';
+  while (elements.firstElementChild) {
+    var newRow=myRow.cloneNode();
+    tableElement.appendChild(newRow);
     var i=cellsNumber;
     while(i--) {
       var cellsWidth=Math.round(100/cellsNumber) + "%";
-      if (this.cells.length>0) {
-	this.cells[0].style.width=cellsWidth;
-	newRow.appendChild(this.cells[0]);
+      if (elements.firstElementChild) {
+	var newCell=myCell.cloneNode();
+	newCell.style.width=cellsWidth;
+	newCell.appendChild(elements.firstElementChild);
+	newRow.appendChild(newCell);
       }
       else {
-	var newCell=newRow.insertCell();
+	var newCell=myCell.cloneNode();
 	newCell.style.width=cellsWidth;
+	newRow.appendChild(newCell);
       }
     }
   }
-  return newTable;
+  return tableElement;
 }
 function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

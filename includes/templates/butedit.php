@@ -28,7 +28,7 @@
     thisElement.editelement=launcher.editelement;
     if (launcher.allowedHTML) thisElement.editelement.allowedHTML=true;
     var myForm=thisElement.parentElement.querySelector("template").content.querySelector("form").cloneNode(true);
-    thisNode.setView(myForm);
+    thisNode.render(myForm);
     thisElement.parentElement.appendChild(myForm);
     var editfield=document.createElement("input");
     editfield.name=editpropertyname;

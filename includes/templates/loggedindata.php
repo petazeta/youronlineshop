@@ -5,30 +5,27 @@
       thisElement.innerHTML=thisNode.properties.username;
     </script>
   </div>
-  <table class="formtable">
-    <tr>
-      <td>
-        <table>
-	  <tr></tr>
-	  <script>
-	  var datarel=thisNode.getRelationship("usersdata");
-	  function showdata(){
-	    datarel.children[0].refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
-	      var myTable=intoColumns.apply(thisElement, [2]);
-	      thisElement.innerHTML='';
-	      var myCell = thisElement.insertCell();
-	      myCell.appendChild(myTable);
-	    });
-	  }
-	  if (datarel.children.length==0) {
-	    datarel.loadfromhttp({action: "load my children", user_id: webuser.properties.id}, showdata)
-	  }
-	  else showdata();
-	  </script>
-        </table>
-      </td>
-    </tr>
-  </table>
+  <template>
+    <table class="formtable">
+      <tr>
+	<td>
+	</td>
+      </tr>
+    </table>
+  </template>
+  <div></div>
+  <script>
+    var datarel=thisNode.getRelationship("usersdata");
+    function showdata(){
+      datarel.children[0].refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
+	thisElement.appendChild(intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, 2));
+      });
+    }
+    if (datarel.children.length==0) {
+      datarel.loadfromhttp({action: "load my children", user_id: webuser.properties.id}, showdata)
+    }
+    else showdata();
+  </script>
   <div style="width:100%; text-align:center; padding-bottom: 1em;">
     <a href="" class="btn">Show orders</a>
     <script>

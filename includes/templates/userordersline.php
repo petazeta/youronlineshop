@@ -98,9 +98,7 @@
 </tr>
 <script>
   if (webuser.getUserType()=="orders administrator") {
-    var actionsTd=thisElement.querySelector("template").content.querySelector("td").cloneNode(true);
-    thisElement.appendChild(actionsTd);
-    thisNode.setView(actionsTd);
+    thisNode.appendThis(thisElement, thisElement.querySelector("template"), null, true)
   }
 </script>
 </template>

@@ -516,13 +516,14 @@ class NodeMale extends Node{
     if ($this->db_setmylink()===false) return false;
     $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
     //We try to update sort_order at the rest of elements
-    if (isset($this->sort_order) && $this->sort_order && $this->parentNode->properties->sort_order) {
-      $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-      . ' SET ' . '_' . $parentTableOriginalName . '_position' . '=' . '_' . $parentTableOriginalName . '_position + 1'
-      . ' WHERE ' . '_' . $parentTableOriginalName . '_position' . ' >= ' . $this->sort_order
-      . ' AND t.id !=' . $this->properties->id;
-      if (($result = $this->getdblink()->query($sql))===false) return false;
-    }
+    if (!isset($this->sort_order)) return;
+    $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
+    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=t.' . '_' . $parentTableOriginalName . '_position + 1'
+    . ' WHERE'
+    . ' t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' AND t.id !=' . $this->properties->id
+    . ' AND t.' . '_' . $parentTableOriginalName . '_position' . ' >= ' . $this->sort_order;
+    if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   
   function db_insertmytree($level=null) {
@@ -553,11 +554,10 @@ class NodeMale extends Node{
   function db_deletemyself() {
     if (!isset($this->properties->id) || $this->properties->id==null) return false;
     if (isset($this->parentNode->properties->childtablelocked) && $this->parentNode->properties->childtablelocked==1) return false;
-      $sql='DELETE FROM '
-      . constant($this->parentNode->properties->childtablename)
-      . ' WHERE id=' . $this->properties->id . ' LIMIT 1';
-      if (($result = $this->getdblink()->query($sql))===false) return false;
-    
+    $sql='DELETE FROM '
+    . constant($this->parentNode->properties->childtablename)
+    . ' WHERE id=' . $this->properties->id . ' LIMIT 1';
+    if (($result = $this->getdblink()->query($sql))===false) return false;
     if (isset($this->parentNode->properties->id) && isset($this->parentNode->partnerNode->properties->id)) {
       $this->db_deletemylink();
     }
@@ -570,10 +570,11 @@ class NodeMale extends Node{
     //We try to update sort_order at bro for that we need the object to be updated
     if (!isset($this->sort_order)) return;
     $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
-    $sql='UPDATE ' . constant($this->parentNode->properties->childtablename)
-    .' SET ' . '_' . $parentTableOriginalName . '_position' . '=' . '_' . $parentTableOriginalName . '_position' . '-1'
-    . ' WHERE '
-    . '_' . $parentTableOriginalName . '_position' . ' > ' . $this->sort_order;
+    $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
+    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=t.' . '_' . $parentTableOriginalName . '_position - 1'
+    . ' WHERE'
+    . ' t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' AND t.' . '_' . $parentTableOriginalName . '_position' . ' > ' . $this->sort_order;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   
@@ -621,13 +622,15 @@ class NodeMale extends Node{
   function db_updatemysort_order($new_sort_order){
     $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET ' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order
+    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order
     . ' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET ' . '_' . $parentTableOriginalName . '_position' . '=' . $this->sort_order
-    . ' WHERE ' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order;
+    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $this->sort_order
+    . ' WHERE'
+    . ' t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' AND t.' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
 
@@ -637,11 +640,17 @@ class NodeMale extends Node{
     //We replace child_id with new child_id
     $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET ' . '_' . $parentTableOriginalName . '=' . 'NULL'
+    . ' SET t.' . '_' . $parentTableOriginalName . '=' . 'NULL'
     . ' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET ' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' SET t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' WHERE ' . 't.id =' . $newchildid;
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    //update sort_order
+    if (!isset($this->sort_order)) return;
+    $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
+    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $this->sort_order
     . ' WHERE ' . 't.id =' . $newchildid;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }

@@ -94,7 +94,7 @@
 			thisNode.setActive();
 			var myrel=thisNode.cloneRelationship();
 			myrel.loadfromhttp({action:"load my children"}, function(){
-			  this.refreshView(document.getElementById("centralcontent"),document.querySelector("#catalogtp"));
+			  this.refreshView(document.getElementById("centralcontent"),"includes/templates/catalog.php");
 			});
 			return false;
 		      };
@@ -121,7 +121,7 @@
 			    thisElement.innerHTML='';
 			  }
 			  else {
-			    thisNode.setView(thisElement.nextElementSibling);
+			    thisNode.render(thisElement.nextElementSibling);
 			  }
 		      }, listenerId);
 		      thisNode.addEventListener("deleteNode", function() {
@@ -142,7 +142,6 @@
     </td>
   </tr>                                  
 </table>
-<?php include("includes/templates/catalog.php"); ?>
 <script>
 webuser.addEventListener("loadses", function(){
   var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"});
