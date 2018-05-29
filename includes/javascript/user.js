@@ -1,28 +1,21 @@
 function user() {
-	NodeMale.call(this);
+  NodeMale.call(this);
 }
 user.prototype=Object.create(NodeMale.prototype);
 user.prototype.constructor=user;
 
 user.prototype.logoff=function(){
+  //remove session and user data
   var FD  = new FormData();
   FD.append("parameters", JSON.stringify({action: "logout"}));
   FD.action="dblogin.php";
   this.loadfromhttp(FD, function() {
     if (this.extra && this.extra.logout) {
-      //clean the properties.
-      var myThis=this;
-      this.parentNode.childtablekeys.forEach(function(key){
-	myThis.properties[key.Field]=null;
-      });
-      this.relationships.forEach(function(rel){
-	rel.children=[];
-      });
-      this.loadfromhttp("sesload.php?sesname=user", function() {
-	this.dispatchEvent("log");
-      });
+      this.parentNode=null;
+      this.relationships=[];
+      this.properties=new Properties();
+      this.dispatchEvent("log");
     }
-    else this.dispatchEvent("log");
   });
 };
 user.prototype.loginproto=function(action, name, password, email, reqlistener){
@@ -36,6 +29,7 @@ user.prototype.loginproto=function(action, name, password, email, reqlistener){
   FD.action="dblogin.php";
   this.loadfromhttp(FD, function(){
     if (this.extra.login==true) {
+      //Now we load the user data (that is in the session)
       this.loadfromhttp("sesload.php?sesname=user", function() {
 	if (!this.extra) this.extra={};
 	this.extra.login=true;

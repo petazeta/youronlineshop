@@ -161,9 +161,7 @@ class NodeFemale extends Node{
     if ($this->properties->sort_order) $sql .= ', t._' . $parentTableOriginalName . '_position as sort_order';
     $sql .= ' FROM '
     . constant($this->properties->childtablename) . ' t'
-    . ' inner join ' . constant($this->properties->parenttablename). ' p'
-    . ' on p.id=t._' . $parentTableOriginalName
-    . ' WHERE p.id=' . $this->partnerNode->properties->id;
+    . ' WHERE t._' . $parentTableOriginalName . '=' . $this->partnerNode->properties->id;
     if ($filter) {
       $sql .= ' AND ' . $filter;
     }

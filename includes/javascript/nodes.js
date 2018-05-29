@@ -59,14 +59,18 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     else var myNode=document.createElement("div");
     myNode.innerHTML=this.responseText;
     thisNode.xmlTp=myNode.firstElementChild;
-    if (thisNode.xmlTp.tagName=="TEMPLATE") {thisNode.xmlTp=thisNode.xmlTp.content;}
-    reqlistener.call(thisNode);
-    if (thisNode.events && thisNode.events.onGetTp) {
-      var i=thisNode.events.onGetTp.length;
-      while(i--) {
-        thisNode.events.onGetTp[i].call(thisNode);
-      }
+    if (thisNode.xmlTp.tagName=="TEMPLATE") {
+      thisNode.xmlTp=thisNode.xmlTp.content;
     }
+    if (reqlistener) {
+      if (Array.isArray(reqlistener)) {
+	for (var i=0; i<reqlistener.length; i++) {
+	  reqlistener[i].call(thisNode);
+	}
+      }
+      else reqlistener.call(thisNode);
+    }
+    thisNode.dispatchEvent("onGetTp");
   }
   xmlhttp.open("GET",tpHref,true);
   xmlhttp.send();
@@ -192,13 +196,16 @@ Node.prototype.render = function (tp) {
 Node.prototype.refreshView=function (container, tp, reqlistener) {
   if (container) this.myContainer=container;
   this.myContainer.innerHTML='';
-  this.appendThis(container, tp, reqlistener);
-  if (this.events && this.events.refreshView) {
-    var i=this.events.refreshView.length;
-    while(i--) {
-      this.events.refreshView[i].call(this);
-    }
+  var eventHandler=function(){
+    this.dispatchEvent("refreshView");
   }
+  if (reqlistener) {
+    if (Array.isArray(reqlistener)) reqlistener.push(eventHandler);
+    else reqlistener=[reqlistener, eventHandler]
+  }
+  else reqlistener=eventHandler;
+  this.appendThis(container, tp, reqlistener);
+
 };
 
 Node.prototype.appendThis=function (container, tp, reqlistener) {
@@ -207,14 +214,15 @@ Node.prototype.appendThis=function (container, tp, reqlistener) {
     var clone=this.myTp.cloneNode(true);
     this.render(clone);
     this.myContainer.appendChild(clone);
-    
-    if (reqlistener) reqlistener.call(this);
-    if (this.events && this.events.appendThis) {
-      var i=this.events.appendThis.length;
-      while(i--) {
-        this.events.appendThis[i].call(this);
+    if (reqlistener) {
+      if (Array.isArray(reqlistener)) {
+	for (var i=0; i<reqlistener.length; i++) {
+	  reqlistener[i].call(this);
+	}
       }
+      else reqlistener.call(this);
     }
+    this.dispatchEvent("appendThis");
   };
   if (typeof tp=="string") {
     this.getTp(tp, function() {
@@ -234,13 +242,15 @@ Node.prototype.appendThis=function (container, tp, reqlistener) {
 Node.prototype.refreshPropertiesView=function (container, tp, reqlistener) {
   if (container) this.propertiesContainer=container;
   this.propertiesContainer.innerHTML='';
-  this.appendProperties(container, tp, reqlistener);
-  if (this.events && this.events.refreshPropertiesView) {
-    var i=this.events.refreshPropertiesView.length;
-    while(i--) {
-      this.events.refreshPropertiesView[i].call(this);
-    }
+  var eventHandler=function(){
+    this.dispatchEvent("refreshPropertiesView");
   }
+  if (reqlistener) {
+    if (Array.isArray(reqlistener)) reqlistener.push(eventHandler);
+    else reqlistener=[reqlistener, eventHandler]
+  }
+  else reqlistener=eventHandler;
+  this.appendProperties(container, tp, reqlistener);
 };
 //This function write a template record for each property
 Node.prototype.appendProperties = function (container, tp, reqlistener) {
@@ -278,13 +288,15 @@ Node.prototype.appendProperties = function (container, tp, reqlistener) {
       myThis.render(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
       container.appendChild(thiscol);
     });
-    if (reqlistener) reqlistener.call(this);
-    if (this.events && this.events.appendProperties) {
-      var i=this.events.appendProperties.length;
-      while(i--) {
-        this.events.appendProperties[i].call(this);
+    if (reqlistener) {
+      if (Array.isArray(reqlistener)) {
+	for (var i=0; i<reqlistener.length; i++) {
+	  reqlistener[i].call(this);
+	}
       }
+      else reqlistener.call(this);
     }
+    this.dispatchEvent("appendProperties");
   }
 }
 
@@ -293,6 +305,7 @@ Node.prototype.renderChildren=function (tp) {
   if (!tp) tp=this.childTp;
   var children="children";
   if (this.constructor.name=="NodeMale") children="relationships";
+  if (this[children]["length"]==0) return false;
   this[children]=this[children].sort(function(a,b){return a.sort_order-b.sort_order});
   var myreturn=document.createDocumentFragment();
   for (var i=0; i<this[children].length; i++) {
@@ -304,33 +317,38 @@ Node.prototype.renderChildren=function (tp) {
 Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
   if (container) this.childContainer=container;
   this.childContainer.innerHTML='';
-  this.appendChildren(container, tp, reqlistener);
-  if (this.events && this.events.refreshChildrenView) {
-    var i=this.events.refreshChildrenView.length;
-    while(i--) {
-      this.events.refreshChildrenView[i].call(this);
-    }
+  var eventHandler=function(){
+    this.dispatchEvent("refreshChildrenView");
   }
+  if (reqlistener) {
+    if (Array.isArray(reqlistener)) reqlistener.push(eventHandler);
+    else reqlistener=[reqlistener, eventHandler]
+  }
+  else reqlistener=eventHandler;
+  this.appendChildren(container, tp, reqlistener);
+
 };
 
 Node.prototype.appendChildren=function (container, tp, reqlistener) {
   if (container) this.childContainer=container;
   var refresh=function(){
-    this.childContainer.appendChild(this.renderChildren());
-    if (reqlistener) reqlistener.call(this);
-    if (this.events && this.events.appendChildren) {
-      var i=this.events.appendChildren.length;
-      while(i--) {
-        this.events.appendChildren[i].call(this);
+    var renderedChildren=this.renderChildren();
+    if (renderedChildren) this.childContainer.appendChild(renderedChildren);
+    if (reqlistener) {
+      if (Array.isArray(reqlistener)) {
+	for (var i=0; i<reqlistener.length; i++) {
+	  reqlistener[i].call(this);
+	}
       }
+      else reqlistener.call(this);
     }
+    this.dispatchEvent("appendChildren");
   };
   if (typeof tp=="string") {
-    var loadedtp=function() {
+    this.getTp(tp, function() {
       this.childTp=this.xmlTp;
       refresh.call(this);
-    };
-    this.getTp(tp, loadedtp);
+    });
   }
   else {
     if (tp) {
@@ -352,13 +370,15 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
       thisNode.load(responseobj);
       thisNode.loadasc(responseobj);
     }
-    if (typeof reqlistener == "function") reqlistener.call(thisNode);
-    if (thisNode.events && thisNode.events.loadFromHTTP) {
-      var i=thisNode.events.loadFromHTTP.length;
-      while(i--) {
-	thisNode.events.loadFromHTTP[i].call(thisNode);
+    if (reqlistener) {
+      if (Array.isArray(reqlistener)) {
+	for (var i=0; i<reqlistener.length; i++) {
+	  reqlistener[i].call(thisNode);
+	}
       }
+      else reqlistener.call(thisNode);
     }
+    thisNode.dispatchEvent("loadfromhttp");
   });
   xmlhttp.addEventListener('error', function(event) {
     alert('Oops! Something went wrong with the XMLHttpRequest.');
