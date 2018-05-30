@@ -16,38 +16,31 @@
   </head>
   <body>
     <script>
-//We load the dom elements text that will be included in some parts of the document
-var labelsRoot=null;
-var domelementsroot=null;
-domelementsrootmother=new NodeFemale();
-domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
-domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
-domelementsrootmother.loadfromhttp({action:"load root"}, function(){
-  domelementsroot=domelementsrootmother.children[0];
-  domelementsroot.addEventListener("loadtree", function(){
-    webuser.loadfromhttp('sesload.php?sesname=user', function(){
-      this.dispatchEvent("loadses");
-    });
-  });
-  domelementsroot.addEventListener("loadtree", function(){
-    myalert.hidealert();
-  });
-  domelementsroot.loadfromhttp({action:"load my relationships"}, function(){
-    this.relationships[0].loadfromhttp({action:"load my children"}, function(){
-      this.getChild({name: "labels"}).loadfromhttp({action:"load my tree"}, function(){
-	labelsRoot=this;
-	domelementsroot.dispatchEvent("loadtree");
+      var webuser=new user();
+      var myalert=new Alert();
+      myalert.myTp=document.getElementById("alerttp").content; //For error alerts
+      myalert.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
+      myalert.showalert();
+      //We load the dom elements text that will be included in some parts of the document
+      var labelsRoot=null;
+      var domelementsroot=null;
+      domelementsrootmother=new NodeFemale();
+      domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
+      domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
+      domelementsrootmother.loadfromhttp({action:"load root"}, function(){
+	domelementsroot=domelementsrootmother.children[0];
+	domelementsroot.loadfromhttp({action:"load my relationships"}, function(){
+	  this.relationships[0].loadfromhttp({action:"load my children"}, function(){
+	    this.getChild({name: "labels"}).loadfromhttp({action:"load my tree"}, function(){
+	      labelsRoot=this;
+	      webuser.loadfromhttp('sesload.php?sesname=user', function(){
+		this.dispatchEvent("loadses");
+		myalert.hidealert();
+	      });
+	    });
+	  });
+	});
       });
-    });
-  });
-});
-var myalert=new Alert();
-myalert.myTp=document.getElementById("alerttp").content; //For error alerts
-myalert.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
-myalert.showalert();
-
-var webuser=new user();
-//More about webuser at logbox.php
     </script>
     <table class="backgroundspace">
       <tr>
