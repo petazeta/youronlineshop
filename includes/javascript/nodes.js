@@ -51,17 +51,10 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
   var thisNode=this;
   xmlhttp.onload=function() {
-    if (this.responseText.search(/^\W*\<tbody/i)!=-1) var myNode=document.createElement("table");
-    else if (this.responseText.search(/^\W*\<tr/i)!=-1) var myNode=document.createElement("tbody");
-    else if (this.responseText.search(/^\W*\<td/i)!=-1) var myNode=document.createElement("tr");
-    else if (this.responseText.search(/^\W*\<li/i)!=-1) var myNode=document.createElement("ul");
-    else if (this.responseText.search(/^\W*\<option/i)!=-1) var myNode=document.createElement("select");
-    else var myNode=document.createElement("div");
-    myNode.innerHTML=this.responseText;
-    thisNode.xmlTp=myNode.firstElementChild;
-    if (thisNode.xmlTp.tagName=="TEMPLATE") {
-      thisNode.xmlTp=thisNode.xmlTp.content;
-    }
+    var container=document.createElement("template");
+    container.innerHTML=this.responseText;
+    if (container.content.querySelector("template")) thisNode.xmlTp=container.content.querySelector("template").content;
+    else thisNode.xmlTp=container.content;
     if (reqlistener) {
       reqlistener.call(thisNode);
     }
@@ -359,7 +352,7 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
       var request=this.toRequestFormData(request);
       request.action=myAction;
     }
-    if (!request.action) request.action="dbrequest.php";
+    if (!request.action) request.action=Config.dbRequestFilePath;
     xmlhttp.open("POST",request.action, true);
     if (request.tagName=="FORM") {
       xmlhttp.send(new FormData(request));

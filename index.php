@@ -3,6 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Online Shop</title>
+    <script type="text/javascript" src="includes/javascript/config.js"></script>
     <script type="text/javascript" src="includes/javascript/nodes.js"></script>
     <script type="text/javascript" src="includes/javascript/dommethods.js"></script>
     <script type="text/javascript" src="includes/javascript/cart.js"></script>
