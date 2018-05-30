@@ -63,12 +63,7 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
       thisNode.xmlTp=thisNode.xmlTp.content;
     }
     if (reqlistener) {
-      if (Array.isArray(reqlistener)) {
-	for (var i=0; i<reqlistener.length; i++) {
-	  reqlistener[i].call(thisNode);
-	}
-      }
-      else reqlistener.call(thisNode);
+      reqlistener.call(thisNode);
     }
     thisNode.dispatchEvent("onGetTp");
   }
@@ -193,18 +188,14 @@ Node.prototype.render = function (tp) {
   return tp;
 };
 
-Node.prototype.refreshView=function (container, tp, reqlistener) {
+Node.prototype.refreshView=function (container, tp, myReqlistener) {
   if (container) this.myContainer=container;
   this.myContainer.innerHTML='';
-  var eventHandler=function(){
+  var newReqlistener=function(){
+    if (myReqlistener) myReqlistener.call(this);
     this.dispatchEvent("refreshView");
   }
-  if (reqlistener) {
-    if (Array.isArray(reqlistener)) reqlistener.push(eventHandler);
-    else reqlistener=[reqlistener, eventHandler]
-  }
-  else reqlistener=eventHandler;
-  this.appendThis(container, tp, reqlistener);
+  this.appendThis(container, tp, newReqlistener);
 
 };
 
@@ -215,12 +206,7 @@ Node.prototype.appendThis=function (container, tp, reqlistener) {
     this.render(clone);
     this.myContainer.appendChild(clone);
     if (reqlistener) {
-      if (Array.isArray(reqlistener)) {
-	for (var i=0; i<reqlistener.length; i++) {
-	  reqlistener[i].call(this);
-	}
-      }
-      else reqlistener.call(this);
+      reqlistener.call(this);
     }
     this.dispatchEvent("appendThis");
   };
@@ -239,18 +225,15 @@ Node.prototype.appendThis=function (container, tp, reqlistener) {
   }
 };
 
-Node.prototype.refreshPropertiesView=function (container, tp, reqlistener) {
+Node.prototype.refreshPropertiesView=function (container, tp, myReqlistener) {
   if (container) this.propertiesContainer=container;
   this.propertiesContainer.innerHTML='';
-  var eventHandler=function(){
+
+  var newReqlistener=function(){
+    if (myReqlistener) myReqlistener.call(this);
     this.dispatchEvent("refreshPropertiesView");
   }
-  if (reqlistener) {
-    if (Array.isArray(reqlistener)) reqlistener.push(eventHandler);
-    else reqlistener=[reqlistener, eventHandler]
-  }
-  else reqlistener=eventHandler;
-  this.appendProperties(container, tp, reqlistener);
+  this.appendProperties(container, tp, newReqlistener);
 };
 //This function write a template record for each property
 Node.prototype.appendProperties = function (container, tp, reqlistener) {
@@ -289,12 +272,7 @@ Node.prototype.appendProperties = function (container, tp, reqlistener) {
       container.appendChild(thiscol);
     });
     if (reqlistener) {
-      if (Array.isArray(reqlistener)) {
-	for (var i=0; i<reqlistener.length; i++) {
-	  reqlistener[i].call(this);
-	}
-      }
-      else reqlistener.call(this);
+      reqlistener.call(this);
     }
     this.dispatchEvent("appendProperties");
   }
@@ -314,18 +292,15 @@ Node.prototype.renderChildren=function (tp) {
   return myreturn;
 };
 
-Node.prototype.refreshChildrenView=function (container, tp, reqlistener) {
+Node.prototype.refreshChildrenView=function (container, tp, myReqlistener) {
   if (container) this.childContainer=container;
   this.childContainer.innerHTML='';
-  var eventHandler=function(){
+
+  var newReqlistener=function(){
+    if (myReqlistener) myReqlistener.call(this);
     this.dispatchEvent("refreshChildrenView");
   }
-  if (reqlistener) {
-    if (Array.isArray(reqlistener)) reqlistener.push(eventHandler);
-    else reqlistener=[reqlistener, eventHandler]
-  }
-  else reqlistener=eventHandler;
-  this.appendChildren(container, tp, reqlistener);
+  this.appendChildren(container, tp, newReqlistener);
 
 };
 
@@ -335,12 +310,7 @@ Node.prototype.appendChildren=function (container, tp, reqlistener) {
     var renderedChildren=this.renderChildren();
     if (renderedChildren) this.childContainer.appendChild(renderedChildren);
     if (reqlistener) {
-      if (Array.isArray(reqlistener)) {
-	for (var i=0; i<reqlistener.length; i++) {
-	  reqlistener[i].call(this);
-	}
-      }
-      else reqlistener.call(this);
+      reqlistener.call(this);
     }
     this.dispatchEvent("appendChildren");
   };
@@ -371,12 +341,7 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
       thisNode.loadasc(responseobj);
     }
     if (reqlistener) {
-      if (Array.isArray(reqlistener)) {
-	for (var i=0; i<reqlistener.length; i++) {
-	  reqlistener[i].call(thisNode);
-	}
-      }
-      else reqlistener.call(thisNode);
+      reqlistener.call(thisNode);
     }
     thisNode.dispatchEvent("loadfromhttp");
   });

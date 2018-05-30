@@ -28,19 +28,8 @@ user.prototype.loginproto=function(action, name, password, email, reqlistener){
   }
   FD.action="dblogin.php";
   this.loadfromhttp(FD, function(){
-    if (this.extra.login==true) {
-      //Now we load the user data (that is in the session)
-      this.loadfromhttp("sesload.php?sesname=user", function() {
-	if (!this.extra) this.extra={};
-	this.extra.login=true;
-	this.dispatchEvent("log");
-	if (typeof reqlistener=="function") reqlistener.call(this);
-      });
-    }
-    else {
-      this.dispatchEvent("log");
-      if (typeof reqlistener=="function") reqlistener.call(this);
-    }
+    this.dispatchEvent("log");
+    if (typeof reqlistener=="function") reqlistener.call(this);
   });
 };
   

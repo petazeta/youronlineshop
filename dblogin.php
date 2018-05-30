@@ -42,7 +42,8 @@ if (!isset($loginresult->extra->error)) {
   $user->db_loadmyrelationships();
   $user->db_loadmytreeup();
   $_SESSION["user"]=serialize($user);
-  $loginresult->extra->login=true;
+  $loginresult=$user;
+  $loginresult->avoidrecursion();
 }
 $serelement=json_encode($loginresult);
 echo $serelement;
