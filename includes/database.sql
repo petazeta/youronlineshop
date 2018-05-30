@@ -106,7 +106,6 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 
 INSERT INTO `itemcategories` (`id`, `cname`, `_itemcategories`, `_itemcategories_position`) VALUES
 (1, 'root', NULL, 0),
-(34, '', 32, 1),
 (38, 'first cat', 1, 1),
 (39, 'first subcat', 38, 1);
 

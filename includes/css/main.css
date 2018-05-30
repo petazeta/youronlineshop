@@ -192,6 +192,7 @@ div.alert {
   left: 50%;
   transform: translateX(-50%);
   min-width: 200px;
+  max-width: 90%;
   border: 2px solid #F1C486;
   background: #F8EED3;
   padding: 0.5rem;
