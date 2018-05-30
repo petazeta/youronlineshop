@@ -70,12 +70,11 @@ body {
   background-color:#fbfaf6;
 }
 
-table.backgroundspace {
+.backgroundspace {
   width: 100%;
+  padding: 0.6em 0em;
 }
-table.backgroundspace td.topmargin {
-    height: 0.6em;
-}
+
 table.mainblock {
     min-width: 990px;
     width: 98%;
@@ -89,9 +88,6 @@ table.mainblock td.headermiddletransition {
 }
 table.mainblock td.middlebottomtransition {
     height: 2em;
-}
-table.backgroundspace td.bottommargin {
-    height: 0.6em;
 }
 
 /* Header */
@@ -190,10 +186,12 @@ div.centercolumn {
 
 /* alert highligting */
 div.alert {
+  display: table;
   position: fixed !important;
-    top: 20%;
-    left: 30%;
-  width: 300px;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
   border: 2px solid #F1C486;
   background: #F8EED3;
   padding: 0.5rem;

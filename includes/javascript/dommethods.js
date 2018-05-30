@@ -72,13 +72,22 @@ function closesttagname(tagname){
 };
 function intoColumns(tableElement, elements, cellsNumber) {
   // columns distribution applied to a row
-  //if (this.cells.length < cellsNumber) return false;
+  // tableElement a table template, elements a document fragment o dom element containing elements
   var myRow=tableElement.rows[0].cloneNode();
   var myCell=tableElement.rows[0].cells[0].cloneNode();
   tableElement.innerHTML='';
   while (elements.firstElementChild) {
     var newRow=myRow.cloneNode();
     tableElement.appendChild(newRow);
+    if (cellsNumber < 1) {
+      while (elements.firstElementChild) {
+	var newCell=myCell.cloneNode();
+	newCell.style.width=cellsWidth;
+	newCell.appendChild(elements.firstElementChild);
+	newRow.appendChild(newCell);
+      }
+      return tableElement;
+    }
     var i=cellsNumber;
     while(i--) {
       var cellsWidth=Math.round(100/cellsNumber) + "%";
