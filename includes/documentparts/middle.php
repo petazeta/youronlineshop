@@ -39,11 +39,15 @@ function fitincolumn() {
   var myTable=document.querySelector("#smartphoneboxestp").content.querySelector("table");
   var boxes=[catalogbox, cartbox, logbox];
   var boxColumns=0;
+  centralcontent.style.paddingLeft="0.8em";
+  centralcontent.style.paddingRight="0.8em";
   if (window.screen.width<400) {
-   boxes.splice(2,1);
-   var boxContainer=document.createDocumentFragment();
-   boxContainer.appendChild(logbox);
-   document.querySelector("header").appendChild(intoColumns(myTable.cloneNode(true), boxContainer, boxColumns));
+    centralcontent.style.paddingLeft="0";
+    centralcontent.style.paddingRight="0";
+    boxes.splice(2,1);
+    var boxContainer=document.createDocumentFragment();
+    boxContainer.appendChild(logbox);
+    document.querySelector("header").appendChild(intoColumns(myTable.cloneNode(true), boxContainer, boxColumns));
   }
   var boxContainer=document.createDocumentFragment();
   boxes.forEach(function(box){
