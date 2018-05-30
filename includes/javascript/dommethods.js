@@ -77,7 +77,6 @@ function intoColumns(tableElement, elements, cellsNumber) {
   var myCell=tableElement.rows[0].cells[0].cloneNode();
   tableElement.innerHTML='';
   while (elements.firstElementChild) {
-    console.log(elements.firstElementChild.tagName);
     if (!elements.firstElementChild.tagName) continue;
     if (elements.firstElementChild.tagName=="TEMPLATE") continue;
     if (elements.firstElementChild.tagName=="SCRIPT") continue;

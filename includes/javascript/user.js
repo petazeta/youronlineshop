@@ -6,6 +6,7 @@ user.prototype.constructor=user;
 
 user.prototype.logoff=function(){
   //remove session and user data
+  if (this.extra && this.extra.logout) delete(this.extra.logout); //remove previous error
   var FD  = new FormData();
   FD.append("parameters", JSON.stringify({action: "logout"}));
   FD.action="dblogin.php";
@@ -19,6 +20,7 @@ user.prototype.logoff=function(){
   });
 };
 user.prototype.loginproto=function(action, name, password, email, reqlistener){
+  if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
   var FD  = new FormData();
   FD.append("parameters", JSON.stringify({action: action}));
   FD.append("user_name", name);

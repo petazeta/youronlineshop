@@ -1,37 +1,30 @@
 <template id="admnbutstp">
   <template>
-    <tr></tr>
+    <table class="adminedit">
+      <tr>
+	<td style="padding:2px"></td>
+      </tr>
+    </table>
   </template>
-  <template>
-    <td style="padding:2px"></td>
-  </template>
-  <table class="adminedit"></table>
+  <div></div>
   <script>
   //Gets the a row of objects buttons: [{template: buttp, args: {optional args}}, {...}, ...]
-  //Gets the colsnum
   //Generate the buttons positioned table
   //normalize
   var launcher=thisNode;
   var thisNode=launcher.myNode;
-  var tableRow=thisElement.parentElement.querySelectorAll("template")[0].content.querySelector("tr").cloneNode(true);
+  var myTable=thisElement.parentElement.querySelector("template").content.querySelector("table").cloneNode(true);
+  var butsContainer=document.createDocumentFragment();
   launcher.buttons.forEach(function(myButton){
-    var tableCell=thisElement.parentElement.querySelectorAll("template")[1].content.querySelector("td").cloneNode(true);
-    var butlauncher=new NodeMale();
+     var butlauncher=new NodeMale();
     butlauncher.myNode=thisNode;
     if (myButton.args) {
       for (var key in myButton.args) {
 	butlauncher[key]=myButton.args[key];
       }
     }
-    butlauncher.refreshView(tableCell, myButton.template);
-    tableRow.appendChild(tableCell);
+    butlauncher.appendThis(butsContainer, myButton.template);
   });
-  thisElement.appendChild(tableRow);
-  if (launcher.colsnum) {
-    var myTable=intoColumns.apply(tableRow, [colsnum]);
-    tableRow.innerHTML='';
-    var myCell = thisElement.insertCell();
-    myCell.appendChild(myTable);
-  }
+  thisElement.appendChild(intoColumns(myTable, butsContainer, 0));
   </script>
 </template>
