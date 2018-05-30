@@ -28,6 +28,11 @@
 <script type="text/javascript">
 var smartPhonesTp=document.querySelector("#smartphoneboxestp");
 function fitincolumn() {
+  var newStyle=document.createElement("style");
+  newStyle.textContent="header h1 {font-size: 2em !important;}"
+  + " header h2 {font-size: 1.2em !important;}"
+  + " nav span { margin: 0.2em 0.4em !important;}";
+  document.head.appendChild(newStyle);
   var centralcontent=document.getElementById("centralcontent");
   var leftcolumn=closesttagname.call(document.querySelector("section.leftcolumn"), 'TD');
   var rightcolumn=closesttagname.call(document.querySelector("section.rightcolumn"), 'TD');
@@ -58,7 +63,7 @@ function fitincolumn() {
   leftcolumn.style.display="none";
   rightcolumn.style.display="none";
 }
-window.addEventListener("load", function(){
+webuser.addEventListener("loadses", function(){
   if (window.screen.width<700) {
     fitincolumn();
   }
