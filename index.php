@@ -29,14 +29,13 @@
       domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
       domelementsrootmother.loadfromhttp({action:"load root"}, function(){
 	domelementsroot=domelementsrootmother.children[0];
-	domelementsroot.loadfromhttp({action:"load my relationships"}, function(){
-	  this.relationships[0].loadfromhttp({action:"load my children"}, function(){
-	    this.getChild({name: "labels"}).loadfromhttp({action:"load my tree"}, function(){
-	      labelsRoot=this;
-	      webuser.loadfromhttp('sesload.php?sesname=user', function(){
-		this.dispatchEvent("loadses");
-		myalert.hidealert();
-	      });
+	domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 6}, function(){
+	  domelementsroot=this.getNextChild({name: "languages"}).getNextChild({name: "en"});
+	  domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree"}, function(){
+	    labelsRoot=this;
+	    webuser.loadfromhttp('sesload.php?sesname=user', function(){
+	      this.dispatchEvent("loadses");
+	      myalert.hidealert();
 	    });
 	  });
 	});

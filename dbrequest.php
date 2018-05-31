@@ -46,7 +46,7 @@ switch ($parameters->action) {
     break;
   case "load my tree":
     $myexecfunction="db_loadmytree";
-    if (isset($myelement->extra->level)) $argument=$myelement->extra->level;
+    if (isset($parameters->deepLevel)) $argument=$parameters->deepLevel;
     $callback="cutUp";
     break;
   case "load my partner":
@@ -72,6 +72,7 @@ switch ($parameters->action) {
     break;
   case "add myself":
     $myexecfunction="db_insertmyself";
+    if (isset($parameters->sort_order)) $argument=$parameters->sort_order;
     $callback=["cutDown", "cutUp"];
     break;
   case "add my tree":
