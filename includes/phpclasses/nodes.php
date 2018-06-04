@@ -37,7 +37,7 @@ class Node {
     if (isset($source->extra)) $this->extra=$source->extra;
   }
   function db_search($tablename=null, $proparray=null) {
-    if (!$tablename) $tablename=constant($this->parentNode->properties->childtablename);
+    if (!$tablename) $tablename=$this->parentNode->properties->childtablename;
     if (!$proparray) {
       $proparray=$this->properties;
     }
@@ -45,7 +45,7 @@ class Node {
     foreach($proparray as $key => $value) {
       array_push($searcharray, $key . '=\'' . $value . '\''); 
     }
-    $sql = 'SELECT * FROM ' . $tablename
+    $sql = 'SELECT * FROM ' . constant($tablename)
      . ' where ' . implode(' and ', $searcharray);
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $return=[];
@@ -59,6 +59,23 @@ class Node {
     $this->db_loadmytree();
     $this->db_deletemytree_proto();
   }
+  function session($sesname, $action="load") {
+    switch ($action) {
+      case "load":
+	if (!isset($_SESSION[$sesname])) return false;
+	$data=unserialize($_SESSION[$sesname]);
+	$this->load($data);
+	$this->loadasc($data);
+	break;
+      case "write":
+	$_SESSION[$sesname]=serialize($this);
+	break;
+      case "check":
+	if (isset($_SESSION[$sesname])) return true;
+	return false;
+	break;
+    }
+  }
 }
 
 class NodeFemale extends Node{
@@ -70,8 +87,7 @@ class NodeFemale extends Node{
     parent::load($source);
     if (isset($source->childtablekeys)) {
       foreach ($source->childtablekeys as $key => $value) {
-        $this->childtablekeys[$key]=new Properties();
-        $this->childtablekeys[$key]->cloneFromArray($value);
+        $this->childtablekeys[$key]=$value;
       }
     }
     if (isset($source->children)) {
@@ -87,8 +103,7 @@ class NodeFemale extends Node{
     parent::loadasc($source);
     if (isset($source->childtablekeys)) {
       foreach ($source->childtablekeys as $key => $value) {
-        $this->childtablekeys[$key]=new Properties();
-        $this->childtablekeys[$key]->cloneFromArray($value);
+        $this->childtablekeys[$key]=$value;
       }
     }
     if (!isset($source->partnerNode) || !$source->partnerNode) return false;
@@ -143,22 +158,43 @@ class NodeFemale extends Node{
     $sql='show columns from ' . constant($this->properties->childtablename);
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->childtablekeys=[];
+    $this->childtablekeystypes=[];
+    $this->syschildtablekeys=[];
+    if (isset($this->properties->parenttablename)) $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
+      //stablish the sort_order statment
+      if (isset($parentTableOriginalName)) {
+	$this->properties->sort_order=false;
+	if ($row['Field']=='_' . $parentTableOriginalName . '_position') {
+	  $this->properties->sort_order=true;
+	}
+      }
       if (preg_match('/^_+/', $row['Field'])) {
+	$this->syschildtablekeys[]=$row['Field'];
 	continue;
       }
-      $index=array_push($this->childtablekeys, new stdClass()) -1;
-      $this->childtablekeys[$index]->Field=$row['Field'];
-      $this->childtablekeys[$index]->Type=$row['Type'];
+      $this->childtablekeys[]=$row['Field'];
+      $this->childtablekeystypes[]=$row['Type'];
     }
     return true;
   }
 
   function db_loadmychildren($filter=null, $order=null, $limit=null) {
     $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+    $filterValid=[];
+    if ($filter && is_array($filter)) {
+      $filterKeys=array_keys($filter);
+      foreach ($filterKeys as $filterKey) {
+	if (isset($this->childtablekeys) && in_array($filterKey, $this->childtablekeys) ||
+	  isset($this->syschildtablekeys) && in_array($filterKey, $this->syschildtablekeys) ) {
+	  $filterValid[]=$filterKey . '=' . $filter[$filterKey];
+	}
+      }
+      $filter=implode(' AND ', $filterValid);
+    }
     $sql = 'SELECT t.*';
-    if ($this->properties->sort_order) $sql .= ', t._' . $parentTableOriginalName . '_position as sort_order';
+    if (isset($this->properties->sort_order) && $this->properties->sort_order) $sql .= ', t._' . $parentTableOriginalName . '_position as sort_order';
     $sql .= ' FROM '
     . constant($this->properties->childtablename) . ' t'
     . ' WHERE t._' . $parentTableOriginalName . '=' . $this->partnerNode->properties->id;
@@ -166,7 +202,7 @@ class NodeFemale extends Node{
       $sql .= ' AND ' . $filter;
     }
     if ($order) $sql .= ' ORDER BY ' . $order;
-    else if ($this->properties->sort_order) {
+    else if (isset($this->properties->sort_order) && $this->properties->sort_order) {
       $sql .= ' ORDER BY t._' . $parentTableOriginalName . '_position';
     }
     if ($limit) $sql .= ' LIMIT ' . $limit;
@@ -180,7 +216,7 @@ class NodeFemale extends Node{
     $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql = 'SELECT t.* FROM '
     . constant($this->properties->parenttablename) . ' t'
-    . ' inner join ' . constant($this->properties->childtablename). ' c'
+    . ' inner join ' . constant($this->properties->childtablename) . ' c'
     . ' on t.id=c._' . $parentTableOriginalName
     . ' WHERE c.id=' . $child->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
@@ -205,15 +241,14 @@ class NodeFemale extends Node{
       $this->partnerNode->properties->cloneFromArray($row);
       $this->partnerNode->relationships[0]=$this;
     }
-    return true;
   }
   
-  function db_loadmytree($level=null) {
+  function db_loadmytree($level=null, $filter=null, $order=null, $limit=null) {
     if ($level===0) return true;
     if ($level) $level--;
     if ($this->db_loadmychildren()===false) return false;
     for ($i=0; $i<count($this->children); $i++)  {
-      if ($this->children[$i]->db_loadmytree($level)===false) return false;
+      if ($this->children[$i]->db_loadmytree($level, $filter, $order, $limit)===false) return false;
     }
   }
   
@@ -228,15 +263,14 @@ class NodeFemale extends Node{
     }
     else if ($this->partnerNode && $this->partnerNode->db_loadmytreeup($level)===false) return false;
   }
-
+  function db_insertmytree($level=null) {
+    if ($level===0) return true;
+    if ($level) $level--;
+    for ($j=0; $j<count($this->children); $j++) {
+      if ($this->children[$j]->db_insertmytree($level)===false) return false;
+    }
+  }
   function db_loadroot() {
-    $sql = 'SELECT r.* FROM '
-    . TABLE_RELATIONSHIPS . ' r'
-    . ' WHERE' . ' r.parenttablename=\'' . $this->properties->parenttablename . '\''
-    . ' AND ' . ' r.childtablename=\'' . $this->properties->childtablename . '\'';
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $row=$result->fetch_array(MYSQLI_ASSOC);
-    $this->properties->cloneFromArray($row);
     $this->db_loadchildtablekeys();
     $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql = 'SELECT t.* FROM '
@@ -285,14 +319,19 @@ class NodeFemale extends Node{
   }
   function db_loadthisrel()  {
     $this->db_loadchildtablekeys();
-    $sql = "SELECT r.* FROM "
-      . TABLE_RELATIONSHIPS . " r"
-      . " WHERE" . " r.parenttablename='" . $this->properties->parenttablename . "'"
-      . " AND " . " r.childtablename='" . $this->properties->childtablename . "'";
+    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
+      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
+      . " WHERE"
+      . ' TABLE_SCHEMA= SCHEMA()'  
+      . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
+      . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
     if (($result = $this->getdblink()->query($sql))===false) return false;
     else if ($result->num_rows==1) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
       $this->properties->cloneFromArray($row);
+      $this->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->properties->name);
+      $this->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename));
+      $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
     }
   }
   function db_loadtables() {
@@ -393,16 +432,30 @@ class NodeMale extends Node{
   }
   //It load relationships of a determined node from its parentNode->properties->childtablename
   function db_loadmyrelationships() {
-    $sql = 'SELECT r.* FROM '
-      . TABLE_RELATIONSHIPS . ' r'
-      . ' WHERE' . ' r.parenttablename=\'' . $this->parentNode->properties->childtablename . '\'';
+    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
+      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
+      . " WHERE"
+      . ' TABLE_SCHEMA= SCHEMA()'  
+      . ' AND r.REFERENCED_TABLE_NAME=\'' . constant($this->parentNode->properties->childtablename) . '\'';
     if (($result = $this->getdblink()->query($sql))===false) return false;
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
       $this->relationships[$i] = new NodeFemale();
       $this->relationships[$i]->properties->cloneFromArray($row);
+      $this->relationships[$i]->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->name);
+      $this->relationships[$i]->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->childtablename));
+      $this->relationships[$i]->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->parenttablename));
       $this->relationships[$i]->partnerNode=$this;
       $this->relationships[$i]->db_loadchildtablekeys();
+    }
+    //we must set the first relationship the selfrelationship one
+    foreach($this->relationships as $key => $value) {
+      if ($value->properties->childtablename==$value->properties->parenttablename && $key!=0) {
+	$changedRel=$this->relationships[0];
+	$this->relationships[0]=$this->relationships[$key];
+	$this->relationships[$key]=$changedRel;
+	break;
+      }
     }
     return true;
   }
@@ -415,21 +468,11 @@ class NodeMale extends Node{
     else if (count($this->relationships) > 0) $mytablename=$this->relationships[0]->properties->parenttablename;
     else return false;
 
-    $sql = 'SELECT t.* FROM '
-    . constant($mytablename) . ' t'
-    . ' WHERE t.id=' . $this->properties->id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $row=$result->fetch_array(MYSQLI_ASSOC);
-    $candidates=[];
-    foreach ($row as $key => $value) {
-      if (preg_match('/^_+/', $key) && $row[$key]!=null && !preg_match('/_position$/', $key))
-	$candidates[]='\'' . 'TABLE_' . strtoupper(str_replace('_', '', $key)) . '\'';
-    }
-    if (count($candidates)==0) return false;
-    $sql = 'SELECT r.* FROM '
-    . TABLE_RELATIONSHIPS . ' r'
-    . ' WHERE' . ' r.childtablename=\'' . $mytablename . '\''
-    . ' AND r.parenttablename IN (' . implode(', ',$candidates) . ')';
+    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
+      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
+      . " WHERE"
+      . ' TABLE_SCHEMA= SCHEMA()'
+    . ' AND r.TABLE_NAME=\'' . constant($mytablename) . '\'';
     if (($result = $this->getdblink()->query($sql))===false) return false;
     if ($result->num_rows > 1) {
       $this->parentNode=[];
@@ -437,6 +480,9 @@ class NodeMale extends Node{
 	$row=$result->fetch_array(MYSQLI_ASSOC);
 	$this->parentNode[$i] = new NodeFemale();
 	$this->parentNode[$i]->properties->cloneFromArray($row);
+	$this->parentNode[$i]->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->name);
+	$this->parentNode[$i]->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->childtablename));
+	$this->parentNode[$i]->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->parenttablename));
 	$this->parentNode[$i]->db_loadchildtablekeys();
 	$this->parentNode[$i]->children[0]=$this;
       }
@@ -445,17 +491,20 @@ class NodeMale extends Node{
       $row=$result->fetch_array(MYSQLI_ASSOC);
       $this->parentNode = new NodeFemale();
       $this->parentNode->properties->cloneFromArray($row);
+      $this->parentNode->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->name);
+      $this->parentNode->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->childtablename));
+      $this->parentNode->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->parenttablename));
       $this->parentNode->db_loadchildtablekeys();
       $this->parentNode->children[0]=$this;
     }
   }
   
-  function db_loadmytree($level=null) {
+  function db_loadmytree($level=null, $filter=null, $order=null, $limit=null) {
     if ($level===0) return true;
     if ($level) $level--;
     if ($this->db_loadmyrelationships()===false) return false;
     for ($i=0; $i<count($this->relationships); $i++)  {
-      if ($this->relationships[$i]->db_loadmytree($level)===false) return false;
+      if ($this->relationships[$i]->db_loadmytree($level, $filter, $order, $limit)===false) return false;
     }
   }
   
@@ -472,7 +521,7 @@ class NodeMale extends Node{
   }
   
   function db_loadmyself(){
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql = 'SELECT t.*';
     if ($this->parentNode->properties->sort_order) $sql .= ', ' . '_' . $parentTableOriginalName . '_position' . 'AS sort_order';
     $sql .= ' FROM ' . constant($this->parentNode->properties->childtablename) . ' t';
@@ -491,9 +540,11 @@ class NodeMale extends Node{
   }
 
   function db_insertmyself() {
+    $myecho=null;
     $myproperties=get_object_vars($this->properties);
+    if (isset($myproperties['id'])) unset($myproperties['id']);
     foreach ($myproperties as $key => $value) {
-      $myproperties[$key]='"' . $value . '"';
+      $myproperties[$key]='\'' .  mysql_escape_string($value) . '\'';
     }
     $sql = 'INSERT INTO '
       . constant($this->parentNode->properties->childtablename)
@@ -509,10 +560,9 @@ class NodeMale extends Node{
     }
     return true;
   }
-  
   function db_insertmylink() {
     if ($this->db_setmylink()===false) return false;
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     //We try to update sort_order at the rest of elements
     if (!isset($this->sort_order)) return;
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
@@ -528,16 +578,14 @@ class NodeMale extends Node{
     if ($level===0) return true;
     if ($level) $level--;
     if ($this->db_insertmyself()===false) return false;
-    for ($i=0; $i<count($this->relationships); $i++)  {
-      for ($j=0; $j<count($this->relationships[$i]->children); $j++)  {
-        if ($this->relationships[$i]->children[$j]->db_insertmytree($level)===false) return false;
-      }
+    for ($i=0; $i<count($this->relationships); $i++) {
+      $this->relationships[$i]->db_insertmytree($level);
     }
   }
   
   function db_setmylink() {
     //we will insert the relationship
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET ' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id;
     if ($this->parentNode->properties->sort_order) {
@@ -551,7 +599,6 @@ class NodeMale extends Node{
   //Deletes a node. Must be a end node so nodes bellow could appear as linked to the deleted one.
   function db_deletemyself() {
     if (!isset($this->properties->id) || $this->properties->id==null) return false;
-    if (isset($this->parentNode->properties->childtablelocked) && $this->parentNode->properties->childtablelocked==1) return false;
     $sql='DELETE FROM '
     . constant($this->parentNode->properties->childtablename)
     . ' WHERE id=' . $this->properties->id . ' LIMIT 1';
@@ -567,7 +614,7 @@ class NodeMale extends Node{
     if ($this->db_releasemylink()===false) return false; //if there is any problem we abort
     //We try to update sort_order at bro for that we need the object to be updated
     if (!isset($this->sort_order)) return;
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=t.' . '_' . $parentTableOriginalName . '_position - 1'
     . ' WHERE'
@@ -594,7 +641,7 @@ class NodeMale extends Node{
     
   function db_releasemylink(){
     //Now we got to remove the relation from the database and update the sort_order of the borthers
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql='UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET ' . '_' . $parentTableOriginalName . '=NULL'
     . ' WHERE t.id=' . $this->properties->id;
@@ -605,12 +652,13 @@ class NodeMale extends Node{
       //We update the fields
       //First we search for the updatable fields
       $myproperties=get_object_vars($this->properties);
+      if (isset($myproperties['id'])) unset($myproperties['id']);
       $setSentences=array();
       foreach ($myproperties as $key =>$value) {
-        array_push($setSentences, $key . '=' . '"' . mysql_escape_string($value) . '"');
+        array_push($setSentences, $key . '=' . '\'' . mysql_escape_string($value) . '\'');
       }
-      $sql = 'UPDATE '.
-        constant($this->parentNode->properties->childtablename)  .
+      $sql = 'UPDATE '
+      . constant($this->parentNode->properties->childtablename)  .
         ' SET ';
       $sql .= implode(', ', $setSentences);
       $sql .=' WHERE id=' . $this->properties->id;
@@ -618,7 +666,7 @@ class NodeMale extends Node{
   }
   
   function db_updatemysort_order($new_sort_order){
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order
     . ' WHERE ' . 't.id =' . $this->properties->id;
@@ -637,7 +685,7 @@ class NodeMale extends Node{
     if (!$newchildid) return false;
     
     //We replace child_id with new child_id
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . '_' . $parentTableOriginalName . '=' . 'NULL'
     . ' WHERE ' . 't.id =' . $this->properties->id;

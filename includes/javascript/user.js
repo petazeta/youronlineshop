@@ -6,17 +6,20 @@ user.prototype.constructor=user;
 
 user.prototype.logoff=function(){
   //remove session and user data
-  if (this.extra && this.extra.logout) delete(this.extra.logout); //remove previous error
+  if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
   var FD  = new FormData();
   FD.append("parameters", JSON.stringify({action: "logout"}));
   FD.action="dblogin.php";
   this.loadfromhttp(FD, function() {
-    if (this.extra && this.extra.logout) {
+    if (this.extra && this.extra.error) {
+      alert("log out error");
+    }
+    else {
       this.parentNode=null;
       this.relationships=[];
       this.properties=new Properties();
-      this.dispatchEvent("log");
     }
+    this.dispatchEvent("log");
   });
 };
 user.prototype.loginproto=function(action, name, password, email, reqlistener){

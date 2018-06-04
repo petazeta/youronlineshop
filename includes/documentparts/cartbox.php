@@ -134,7 +134,7 @@
 </template>
 <script>
 var mycart=new cart();
-webuser.addEventListener("loadses", function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"});
   cartbox.refreshView(document.querySelector("#cartboxtp").previousElementSibling, document.querySelector("#cartboxtp"));
 });

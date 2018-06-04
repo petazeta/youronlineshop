@@ -15,7 +15,7 @@
   </table>
 </footer>
 <script type="text/javascript">
-webuser.addEventListener("loadses", function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var license=labelsRoot.getNextChild({"name":"bottom"}).getNextChild({"name":"license"});
   var licensecontainer=document.querySelector("footer > table").rows[0].cells[0];
   license.refreshView(licensecontainer, licensecontainer.nextElementSibling.content);

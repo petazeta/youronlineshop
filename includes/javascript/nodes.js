@@ -42,7 +42,6 @@ Node.prototype.loadasc=function(source) {
   if (source.extra) this.extra=source.extra;
 }
 Node.prototype.cloneNode=function(level) {
-  if (level!==true) level=false;
   var myClon=new this.constructor();
   myClon.load(this, level);
   return myClon;
@@ -94,6 +93,13 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "load my tree up":
       var node=new this.constructor;
       node.load(this,1);
+      node.avoidrecursion();
+      node.loadasc(this,2);
+      break;
+    case "add my tree":
+      var node=new this.constructor;
+      node.load(this);
+      node.avoidrecursion();
       node.loadasc(this,2);
       break;
     case "load all":
@@ -253,13 +259,12 @@ Node.prototype.appendProperties = function (container, tp, reqlistener) {
       var myKeys=[];
       Object.keys(this.properties).forEach(function(key){
 	if (!myThis.properties.isProperty(myThis.properties, key)) return false;
-	var index=myKeys.push({})-1;
-	myKeys[index].Field=key;
+	myKeys.push(key);
       });
     }
-    myKeys.forEach(function(tableKey){
-      if (tableKey.Field=="id") return false;
-      myThis.editpropertyname=tableKey.Field; //for knowing the key and for the edition facility
+    myKeys.forEach(function(key){
+      if (key=="id") return false;
+      myThis.editpropertyname=key; //for knowing the key and for the edition facility
       var thiscol=myThis.propertyTp.cloneNode(true);
       myThis.render(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
       container.appendChild(thiscol);
@@ -352,7 +357,7 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
       var request=this.toRequestFormData(request);
       request.action=myAction;
     }
-    if (!request.action) request.action=Config.dbRequestFilePath;
+    if (!request.action) request.action=Config.requestFilePath;
     xmlhttp.open("POST",request.action, true);
     if (request.tagName=="FORM") {
       xmlhttp.send(new FormData(request));
@@ -362,16 +367,14 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
     }
   }
 };
-Node.prototype.addEventListener=function (eventName, listenerFunction, id) {
+Node.prototype.addEventListener=function (eventsNames, listenerFunction, id) {
   if (!this.events) this.events={};
-  if (!this.events[eventName]) this.events[eventName]=[];
-  /*
-  var matchfound=false;
-  this.events[eventName].forEach(function(func) {
-    if (func.toString()==listenerFunction.toString()) matchfound=true;
-  });*/
+  if (!Array.isArray(eventsNames)) eventsNames=[eventsNames];
   if (id) listenerFunction.id=id;
-  this.events[eventName].push(listenerFunction);
+  for (var i=0; i<eventsNames.length; i++) {
+    if (!this.events[eventsNames[i]]) this.events[eventsNames[i]]=[];
+    this.events[eventsNames[i]].push(listenerFunction);
+  }
 }
 Node.prototype.removeEventListener=function (eventName, id) {
   if (this.events && this.events[eventName]) {
@@ -422,8 +425,7 @@ NodeFemale.prototype.load=function(source, level) {
   Node.prototype.load.call(this, source);
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
-      this.childtablekeys[i]=new Properties();
-      this.childtablekeys[i].cloneFromArray(source.childtablekeys[i]);
+      this.childtablekeys[i]=source.childtablekeys[i];
     }
   }
   if (level==0) return false;
@@ -440,8 +442,7 @@ NodeFemale.prototype.loadasc=function(source, level) {
   Node.prototype.loadasc.call(this, source);
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
-      this.childtablekeys[i]=new Properties();
-      this.childtablekeys[i].cloneFromArray(source.childtablekeys[i]);
+      this.childtablekeys[i]=source.childtablekeys[i];
     }
   }
   if (!source.partnerNode) return false;
@@ -562,6 +563,7 @@ NodeMale.prototype.load=function(source, level) {
 }
 
 NodeMale.prototype.getNextChild=function(obj) {
+  if (!obj) return this.relationships[0].children[0];
   return this.relationships[0].getChild(obj);
 }
 NodeMale.prototype.appendNextChildren=function(container, tp, reqlistener, append) {

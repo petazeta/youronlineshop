@@ -78,19 +78,13 @@ function intoColumns(tableElement, elements, cellsNumber) {
   tableElement.innerHTML='';
   while (elements.firstElementChild) {
     if (!elements.firstElementChild.tagName) continue;
-    if (elements.firstElementChild.tagName=="TEMPLATE") continue;
-    if (elements.firstElementChild.tagName=="SCRIPT") continue;
     var newRow=myRow.cloneNode();
     tableElement.appendChild(newRow);
-    if (cellsNumber < 1) {
+    if (cellsNumber == 0) {
       while (elements.firstElementChild) {
 	var newCell=myCell.cloneNode();
 	newCell.style.width=cellsWidth;
 	newCell.appendChild(elements.firstElementChild);
-	//don't forget the element script
-	if (elements.firstElementChild && elements.firstElementChild.tagName=="SCRIPT") {
-	  newCell.appendChild(elements.firstElementChild);
-	}
 	newRow.appendChild(newCell);
       }
       return tableElement;

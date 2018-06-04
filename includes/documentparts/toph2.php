@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-webuser.addEventListener("loadses", function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var headtt=labelsRoot.getNextChild({"name":"top"}).getNextChild({"name":"headsubtitle"});
   headtt.refreshView(document.querySelector("#topheadsubtitle div"), document.querySelector("#topheadsubtitle template"));
 });

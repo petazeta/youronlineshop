@@ -85,7 +85,7 @@
 </template>
 
 <script type="text/javascript">
-webuser.addEventListener("loadses", function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var menusroot=domelementsroot.getNextChild({name: "texts"});
   var myrel=menusroot.cloneRelationship();
   myrel.loadfromhttp({action:"load my children"}, function(){

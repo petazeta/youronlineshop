@@ -15,7 +15,6 @@ $loginresult=new NodeMale();
 $loginresult->extra=new stdClass();
 if ($parameters->action=="logout") {
   $_SESSION["user"]=null;
-  $loginresult->extra->logout=true;
   exit(json_encode($loginresult));
 }
 if (!isset($_POST["user_name"]) || !isset($_POST["user_password"])) {
@@ -41,7 +40,7 @@ if (!isset($loginresult->extra->error)) {
   $user->properties->id=$loginresult->properties->id;
   $user->db_loadmyrelationships();
   $user->db_loadmytreeup();
-  $_SESSION["user"]=serialize($user);
+  $user->session("user", "write");
   $loginresult=$user;
   $loginresult->avoidrecursion();
 }

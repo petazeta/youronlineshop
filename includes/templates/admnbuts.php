@@ -23,7 +23,9 @@
 	butlauncher[key]=myButton.args[key];
       }
     }
-    butlauncher.appendThis(butsContainer, myButton.template);
+    var divWrapper=document.createElement("div"); //To wrap all buttons elements (templates, scripts)
+    butlauncher.appendThis(divWrapper, myButton.template);
+    butsContainer.appendChild(divWrapper);
   });
   thisElement.appendChild(intoColumns(myTable, butsContainer, 0));
   </script>

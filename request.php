@@ -46,7 +46,12 @@ switch ($parameters->action) {
     break;
   case "load my tree":
     $myexecfunction="db_loadmytree";
-    if (isset($parameters->deepLevel)) $argument=$parameters->deepLevel;
+    $deepLevel=null; $filter=null;
+    if (isset($parameters->deepLevel)) $deepLevel=$parameters->deepLevel;
+    if (isset($parameters->language)) {
+      $filter=['_language' => $parameters->language->id];
+    }
+    if ($deepLevel || $filter) $argument=[$deepLevel, $filter];
     $callback="cutUp";
     break;
   case "load my partner":
@@ -77,7 +82,7 @@ switch ($parameters->action) {
     break;
   case "add my tree":
     $myexecfunction="db_insertmytree";
-    $callback=["cutDown", "cutUp"];
+    $callback=["cutUp"];
     break;
   case "add my link":
     $myexecfunction="db_insertmylink";
@@ -133,6 +138,14 @@ switch ($parameters->action) {
   case "load tables":
     $myexecfunction="db_loadtables";
     break;
+  case "load session":
+    $myexecfunction="session";
+    $argument=[$parameters->sesname, "load"];
+    break;
+  case "write session":
+    $myexecfunction="session";
+    $argument=[$parameters->sesname, "write"];
+    break;
   default: $myexecfunction=null;
 }
 if (isset($argument)) {
@@ -143,8 +156,7 @@ else $executed=$myelement->$myexecfunction();
 if ($executed===false) {
   $myelement->extra=new stdClass();
   $myelement->extra->error=true;
-  $myelement->extra->errorinfo=new stdClass();
-  $myelement->extra->errorinfo->type="database";
+  $myelement->extra->errorinfo="request";
 }
 $myelement->avoidrecursion(); //needed when insert
 if (isset($callback)) {

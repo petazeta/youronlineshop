@@ -143,7 +143,7 @@
   </tr>                                  
 </table>
 <script>
-webuser.addEventListener("loadses", function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"});
   cartbox.refreshView(document.querySelector("#catgboxheadtp").previousElementSibling, document.querySelector("#catgboxheadtp"));
 

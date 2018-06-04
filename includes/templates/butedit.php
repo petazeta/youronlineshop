@@ -1,7 +1,7 @@
 <template  id="butedittp">
   <a style="" href="" class="singleadminedit butedit">
     <img src="includes/css/images/pen.png"/>
-    <form action="dbrequest.php"  style="display:none">
+    <form  style="display:none">
       <input type="hidden">
       <script>
 	//normalize

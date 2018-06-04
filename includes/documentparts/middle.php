@@ -63,7 +63,7 @@ function fitincolumn() {
   leftcolumn.style.display="none";
   rightcolumn.style.display="none";
 }
-webuser.addEventListener("loadses", function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   if (window.screen.width<700) {
     fitincolumn();
   }

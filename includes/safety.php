@@ -1,6 +1,6 @@
 <?php
 function is_actionpermited($parameters, $myelement){
-
+  if (preg_match('/session/',$parameters->action)) return true;
   if (get_class($myelement)=="NodeFemale") {
     $tablename=$myelement->properties->childtablename;
   }

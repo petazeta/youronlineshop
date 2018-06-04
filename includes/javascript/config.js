@@ -1,3 +1,3 @@
 var Config={
-  dbRequestFilePath: "dbrequest.php"
+  requestFilePath: "request.php"
 }

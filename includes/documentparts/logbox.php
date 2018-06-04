@@ -110,7 +110,7 @@
 </template>
 <script>
 var mycart=new cart();
-webuser.addEventListener("loadses", function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var logboxparent=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"logbox"}).getRelationship({"name":"domelements"});
   logboxparent.refreshView(document.querySelector("#logboxtp").previousElementSibling, document.querySelector("#logboxtp"));
 });

@@ -48,9 +48,6 @@ class user extends NodeMale {
     }
 
     $user=new user();
-    //expiredata=get from license
-    //expiredata->limit;
-    //if ($user->db_num()->expiredata->limit) $this->expire();
     $user->properties->username=$username;
     $candidates=$user->db_search();
     if (count($candidates) != 0) { //candidates=1
@@ -63,16 +60,6 @@ class user extends NodeMale {
     if ($user->db_insertmyself()==true) {
       $result->properties->id=$user->properties->id;
       $user->db_loadmyrelationships();
-      /* lets not set any usertype. There was also an error that the insertion was duplicated
-      $usertyperel=$user->getRelationship(array("name"=>"userstypes"));
-      $defaultusertype=new NodeMale();
-      $defaultusertype->properties->id=2;
-      $usertyperel->children[0]=$defaultusertype;
-      $defaultusertype->parentNode=$usertyperel;
-      if ($usertyperel->children[0]->db_setmylink()!=false) {
-	$result->extra->error=false;
-      }
-      */
       $userdatarel=$user->getRelationship(array("name"=>"usersdata"));
       $defaultdata=new NodeMale();
       $userdatarel->children[0]=$defaultdata;
@@ -92,16 +79,6 @@ class user extends NodeMale {
       }
     }
     return $result;
-  }
-  function expire(){
-  //Check trial period
-  //get relationships data
-  //insert as text in a domelement named relationships
-  //remove relationship register
-  }
-  function checkexpired(){
-  //Check table relationships
-  //If not return true
   }
   function checklength($value, $min, $max){
     if (strlen($value) >= $min && strlen($value) <= $max) return true;

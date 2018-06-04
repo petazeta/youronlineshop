@@ -22,21 +22,47 @@
       myalert.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
       myalert.showalert();
       //We load the dom elements text that will be included in some parts of the document
-      var labelsRoot=null;
       var domelementsroot=null;
+      var emptyValue=null;
+      var languages=null;
       domelementsrootmother=new NodeFemale();
       domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
       domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
       domelementsrootmother.loadfromhttp({action:"load root"}, function(){
 	domelementsroot=domelementsrootmother.children[0];
-	domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 6}, function(){
-	  domelementsroot=this.getNextChild({name: "languages"}).getNextChild({name: "en"});
-	  domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree"}, function(){
-	    labelsRoot=this;
-	    webuser.loadfromhttp('sesload.php?sesname=user', function(){
-	      this.dispatchEvent("loadses");
-	      myalert.hidealert();
-	    });
+	domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 2}, function(){
+	  webuser.loadfromhttp({action: "load session", sesname: "user"}, function(){
+	    if (!webuser.extra) webuser.extra={};
+	    if (!webuser.extra.language) {
+	      languages=new NodeFemale();
+	      languages.properties.childtablename="TABLE_LANGUAGES";
+	      languages.properties.parenttablename="TABLE_LANGUAGES";
+	      languages.loadfromhttp({action:"load all"}, function(){
+		var webLanguages=[];
+		languages.children.forEach(function (child){
+		  webLanguages.push(child.properties.code);
+		});
+		for (var i=0; i<navigator.languages.length; i++) {
+		  navigator.languages[i]=navigator.languages[i].replace(/-.+/, "");
+		  if (webLanguages.indexOf(navigator.languages[i]) >= 0) {
+		    webuser.extra.language=this.getChild({code: navigator.languages[i]}).properties;
+		    break;
+		  }
+		}
+		if (!webuser.extra.language) webuser.extra.language=this.children[0].properties;
+		loadLabels();
+	      });
+	    }
+	    else loadLabels();
+	    function loadLabels() {
+	      var myLanguage=webuser.extra.language
+	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: webuser.extra.language}, function(){
+		emptyValue=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
+		domelementsrootmother.dispatchEvent("loadLabels1");
+		myalert.hidealert();
+		console.log(domelementsrootmother.children[0].getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"}).getRelationship({name: "domelementsdata"}).children[0].properties);
+	      });
+	    }
 	  });
 	});
       });

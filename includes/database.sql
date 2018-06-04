@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 29, 2018 at 11:58 PM
+-- Generation Time: Jun 04, 2018 at 11:15 PM
 -- Server version: 5.5.58-0+deb8u1
 -- PHP Version: 5.6.30-0+deb8u1
 
@@ -11,7 +11,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `test`
+-- Database: `ecommerce`
 --
 
 -- --------------------------------------------------------
@@ -46,46 +46,116 @@ INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 CREATE TABLE IF NOT EXISTS `domelements` (
 `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `innerHTML` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `_domelements` int(11) DEFAULT NULL,
   `_domelements_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1500 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
 --
 
-INSERT INTO `domelements` (`id`, `name`, `innerHTML`, `_domelements`, `_domelements_position`) VALUES
-(9, 'ctgbxtt', 'Shop', 60, 0),
-(14, 'title', 'Log out', 63, 0),
-(15, 'title', 'Log in', 64, 0),
-(19, 'username', 'Guest', 64, 0),
-(20, 'status', 'Not connected', 64, 0),
-(23, 'status', 'Connected', 63, 0),
-(25, 'crtbxtt', 'Shopping cart', 65, 0),
-(27, 'ckouttt', 'Check out', 65, 0),
-(32, 'license', '<a href="LICENSE.txt">License</a>', 61, 0),
-(33, 'designed', 'Powered by <a href="https://sourceforge.net/projects/youronlineshop/">YourOnlineShop</a>', 61, 0),
-(36, 'addcarttt', '+1 to the cart', 60, 0),
-(38, 'lgintt', 'Insert you account details or create a new account.', 60, 0),
-(41, 'headtitle', 'Shop Title', 59, 0),
-(42, 'headsubtitle', 'This is my first shop', 59, 0),
-(43, 'username', 'the user name', 63, 0),
-(44, 'emptyvallabel', 'Not any value', 73, 0),
-(58, 'root', '', NULL, 0),
-(59, 'top', '', 71, 0),
-(60, 'middle', '', 71, 0),
-(61, 'bottom', '', 71, 0),
-(62, 'logbox', '', 60, 0),
-(63, 'logboxin', '', 62, 0),
-(64, 'logboxout', '', 62, 0),
-(65, 'cartbox', '', 60, 0),
-(66, 'nav', '', 72, 0),
-(71, 'labels', '', 58, 0),
-(72, 'texts', '', 58, 0),
-(73, 'not located', '', 71, 0),
-(91, '', 'Hello', 66, 1),
-(92, '', 'Hello!<br>This is the first page. You can edit this and the other elements by login from webadmin/webadmin.', 91, 1);
+INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`) VALUES
+(9, 'ctgbxtt', 60, 0),
+(14, 'title', 63, 0),
+(15, 'title', 64, 0),
+(19, 'username', 64, 0),
+(20, 'status', 64, 0),
+(23, 'status', 63, 0),
+(25, 'crtbxtt', 65, 0),
+(27, 'ckouttt', 65, 0),
+(32, 'license', 61, 0),
+(33, 'designed', 61, 0),
+(36, 'addcarttt', 60, 0),
+(38, 'lgintt', 60, 0),
+(41, 'headtitle', 59, 0),
+(42, 'headsubtitle', 59, 0),
+(43, 'username', 63, 0),
+(44, 'emptyvallabel', 73, 0),
+(58, 'root', NULL, 0),
+(59, 'top', 71, 0),
+(60, 'middle', 71, 0),
+(61, 'bottom', 71, 0),
+(62, 'logbox', 60, 0),
+(63, 'logboxin', 62, 0),
+(64, 'logboxout', 62, 0),
+(65, 'cartbox', 60, 0),
+(66, 'nav', 72, 0),
+(71, 'labels', 58, 2),
+(72, 'texts', 58, 1),
+(73, 'not located', 71, 0),
+(93, '', 66, 1),
+(94, '', 93, 1),
+(97, 'TABLE_ADDRESSES', 60, 3),
+(98, 'street', 97, 3),
+(99, 'city', 97, 4),
+(100, 'state', 97, 2),
+(102, 'pc', 97, 1),
+(103, 'TABLE_USERSDATA', 60, 2),
+(104, 'name', 103, 4),
+(105, 'surname', 103, 3),
+(106, 'email', 103, 2),
+(107, 'phonenumber', 103, 1),
+(1493, 'langboxtt', 60, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `domelementsdata`
+--
+
+CREATE TABLE IF NOT EXISTS `domelementsdata` (
+`id` int(11) NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_domelements` int(11) DEFAULT NULL,
+  `_languages` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1496 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `domelementsdata`
+--
+
+INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALUES
+(9, 'Shop', 9, 1),
+(14, 'Log out', 14, 1),
+(15, 'Log in', 15, 1),
+(19, 'Guest', 19, 1),
+(20, 'Not connected', 20, 1),
+(23, 'Connected', 23, 1),
+(25, 'Shopping cart', 25, 1),
+(27, 'Check out', 27, 1),
+(32, '<a href="LICENSE.txt">License</a>', 32, 1),
+(33, 'Powered by <a href="https://sourceforge.net/projects/youronlineshop/">YourOnlineShop</a>', 33, 1),
+(36, '+1 to the cart', 36, 1),
+(38, 'Insert you account details or create a new account.', 38, 1),
+(41, 'Shop Title', 41, 1),
+(42, 'This is my first shop', 42, 1),
+(43, 'the user name', 43, 1),
+(44, 'Not any value', 44, 1),
+(58, '', 58, 1),
+(59, '', 59, 1),
+(60, '', 60, 1),
+(61, '', 61, 1),
+(62, '', 62, 1),
+(63, '', 63, 1),
+(64, '', 64, 1),
+(65, '', 65, 1),
+(66, '', 66, 1),
+(71, '', 71, 1),
+(72, '', 72, 1),
+(73, '', 73, 1),
+(93, 'tu', 93, 1),
+(94, 'www', 94, 1),
+(97, ' ', 97, 1),
+(98, 'street, num...', 98, 1),
+(99, 'city', 99, 1),
+(100, 'state', 100, 1),
+(102, 'postal code', 102, 1),
+(103, '', 103, 1),
+(104, 'name', 104, 1),
+(105, 'surname', 105, 1),
+(106, 'email', 106, 1),
+(107, 'phone number', 107, 1),
+(1493, 'language', 1493, 1);
 
 -- --------------------------------------------------------
 
@@ -95,19 +165,48 @@ INSERT INTO `domelements` (`id`, `name`, `innerHTML`, `_domelements`, `_domeleme
 
 CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
-  `cname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
 --
 
-INSERT INTO `itemcategories` (`id`, `cname`, `_itemcategories`, `_itemcategories_position`) VALUES
-(1, 'root', NULL, 0),
-(38, 'first cat', 1, 1),
-(39, 'first subcat', 38, 1);
+INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
+(1, NULL, 0),
+(38, 43, 1),
+(39, 38, 1),
+(40, 38, 2),
+(41, 38, 3),
+(42, 38, 4),
+(43, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemcategoriesdata`
+--
+
+CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
+`id` int(11) NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_itemcategories` int(11) DEFAULT NULL,
+  `_languages` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `itemcategoriesdata`
+--
+
+INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`) VALUES
+(1, 'languages', NULL, NULL),
+(38, 'first cat', NULL, NULL),
+(39, 'first subcat', NULL, NULL),
+(40, '', NULL, NULL),
+(41, '', NULL, NULL),
+(42, '', NULL, NULL),
+(43, 'en', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -117,21 +216,55 @@ INSERT INTO `itemcategories` (`id`, `cname`, `_itemcategories`, `_itemcategories
 
 CREATE TABLE IF NOT EXISTS `items` (
 `id` int(11) NOT NULL,
+  `_itemcategories` int(11) DEFAULT NULL,
+  `_itemcategories_position` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemsdata`
+--
+
+CREATE TABLE IF NOT EXISTS `itemsdata` (
+`id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `descriptionlarge` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `descriptionshort` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
-  `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `_itemcategories_position` int(11) NOT NULL,
+  `_items` int(11) DEFAULT NULL,
+  `_languages` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `items`
+-- Dumping data for table `itemsdata`
 --
 
-INSERT INTO `items` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`, `_itemcategories`, `_itemcategories_position`) VALUES
-(84, 'product p', '', 'p description<br>', '', 4.00, 39, 1);
+INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`, `_itemcategories`, `_itemcategories_position`, `_items`, `_languages`) VALUES
+(84, 'product p', '', 'p description<br>', 'file_84.png?1527704889290', 4.00, 39, 1, NULL, NULL),
+(85, '', '', '', '', 0.00, 39, 2, NULL, NULL),
+(86, '', '', '', '', 0.00, 40, 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `languages`
+--
+
+CREATE TABLE IF NOT EXISTS `languages` (
+`id` int(11) NOT NULL,
+  `code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `languages`
+--
+
+INSERT INTO `languages` (`id`, `code`) VALUES
+(1, 'en');
 
 -- --------------------------------------------------------
 
@@ -178,38 +311,6 @@ INSERT INTO `orders` (`id`, `creationdate`, `modificationdate`, `status`, `_user
 -- --------------------------------------------------------
 
 --
--- Table structure for table `relationships`
---
-
-CREATE TABLE IF NOT EXISTS `relationships` (
-`id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `parenttablename` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `parentunique` tinyint(1) NOT NULL DEFAULT '1',
-  `childtablename` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `childunique` tinyint(1) NOT NULL DEFAULT '0',
-  `childtablelocked` int(11) NOT NULL DEFAULT '0',
-  `parenttablelocked` int(11) NOT NULL DEFAULT '0',
-  `sort_order` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `relationships`
---
-
-INSERT INTO `relationships` (`id`, `name`, `parenttablename`, `parentunique`, `childtablename`, `childunique`, `childtablelocked`, `parenttablelocked`, `sort_order`) VALUES
-(1, 'users', 'TABLE_USERSTYPES', 1, 'TABLE_USERS', 0, 1, 1, 0),
-(2, 'usersdata', 'TABLE_USERS', 1, 'TABLE_USERSDATA', 1, 0, 0, 0),
-(3, 'itemcategories', 'TABLE_ITEMCATEGORIES', 1, 'TABLE_ITEMCATEGORIES', 0, 0, 0, 1),
-(4, 'items', 'TABLE_ITEMCATEGORIES', 1, 'TABLE_ITEMS', 0, 0, 0, 1),
-(5, 'domelements', 'TABLE_DOMELEMENTS', 1, 'TABLE_DOMELEMENTS', 0, 0, 0, 1),
-(6, 'orders', 'TABLE_USERS', 1, 'TABLE_ORDERS', 0, 0, 0, 0),
-(7, 'orderitems', 'TABLE_ORDERS', 1, 'TABLE_ORDERITEMS', 0, 0, 0, 0),
-(8, 'addresses', 'TABLE_USERS', 1, 'TABLE_ADDRESSES', 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -248,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
 --
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
-(1, '', '', '', 0, 1),
+(1, 'smy a', 'pep', '', 0, 1),
 (2, '', '', '', 0, 2);
 
 -- --------------------------------------------------------
@@ -284,19 +385,43 @@ ALTER TABLE `addresses`
 -- Indexes for table `domelements`
 --
 ALTER TABLE `domelements`
- ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `_domelementsstructure` (`_domelements`);
+
+--
+-- Indexes for table `domelementsdata`
+--
+ALTER TABLE `domelementsdata`
+ ADD PRIMARY KEY (`id`), ADD KEY `_domelementsstructure` (`_domelements`), ADD KEY `_languages` (`_languages`);
 
 --
 -- Indexes for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
- ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `_itemcategories` (`_itemcategories`);
+
+--
+-- Indexes for table `itemcategoriesdata`
+--
+ALTER TABLE `itemcategoriesdata`
+ ADD PRIMARY KEY (`id`), ADD KEY `_itemcategories` (`_itemcategories`,`_languages`), ADD KEY `_languages` (`_languages`);
 
 --
 -- Indexes for table `items`
 --
 ALTER TABLE `items`
  ADD PRIMARY KEY (`id`), ADD KEY `_itemcategories` (`_itemcategories`);
+
+--
+-- Indexes for table `itemsdata`
+--
+ALTER TABLE `itemsdata`
+ ADD PRIMARY KEY (`id`), ADD KEY `_itemcategories` (`_itemcategories`), ADD KEY `_groups` (`_items`), ADD KEY `_languages` (`_languages`);
+
+--
+-- Indexes for table `languages`
+--
+ALTER TABLE `languages`
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `orderitems`
@@ -309,12 +434,6 @@ ALTER TABLE `orderitems`
 --
 ALTER TABLE `orders`
  ADD PRIMARY KEY (`id`), ADD KEY `_users` (`_users`);
-
---
--- Indexes for table `relationships`
---
-ALTER TABLE `relationships`
- ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -342,52 +461,67 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1500;
+--
+-- AUTO_INCREMENT for table `domelementsdata`
+--
+ALTER TABLE `domelementsdata`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1496;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=46;
+--
+-- AUTO_INCREMENT for table `itemcategoriesdata`
+--
+ALTER TABLE `itemcategoriesdata`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `itemsdata`
+--
+ALTER TABLE `itemsdata`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=87;
+--
+-- AUTO_INCREMENT for table `languages`
+--
+ALTER TABLE `languages`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=106;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `relationships`
---
-ALTER TABLE `relationships`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- Constraints for dumped tables
 --
@@ -399,9 +533,43 @@ ALTER TABLE `addresses`
 ADD CONSTRAINT `addresses_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `domelements`
+--
+ALTER TABLE `domelements`
+ADD CONSTRAINT `domelements_ibfk_1` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `domelementsdata`
+--
+ALTER TABLE `domelementsdata`
+ADD CONSTRAINT `domelementsdata_ibfk_3` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `domelementsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `itemcategories`
+--
+ALTER TABLE `itemcategories`
+ADD CONSTRAINT `itemcategories_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `itemcategoriesdata`
+--
+ALTER TABLE `itemcategoriesdata`
+ADD CONSTRAINT `itemcategoriesdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `itemcategoriesdata_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `items`
 --
 ALTER TABLE `items`
+ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `itemsdata`
+--
+ALTER TABLE `itemsdata`
+ADD CONSTRAINT `itemsdata_ibfk_3` FOREIGN KEY (`_items`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `itemsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT `items_itemcategories` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
