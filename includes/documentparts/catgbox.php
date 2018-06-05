@@ -5,7 +5,7 @@
       <template id="catgboxheadtp">
 	<span></span>
 	<script>
-	  thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+	  thisElement.textContent=thisNode.properties.value || emptyValueText;
 	</script>
 	<div class="btrightedit"></div>
 	<script>
@@ -14,7 +14,7 @@
 	    admnlauncher.myNode=thisNode;
 	    admnlauncher.buttons=[{
 	      template: document.getElementById("butedittp"),
-	      args: {editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	      args: {editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
 	    }];
 	    admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
 	  }
@@ -23,7 +23,7 @@
 	  }
 	  webuser.addEventListener("log", function() {
 	    if (!this.isWebAdmin()) {
-	      thisElement.innerHTML='';
+	      thisElement.innerHTML="";
 	    }
 	    else {
 	      addadminbutts();
@@ -88,7 +88,7 @@
 		  <div class="adminlauncher adminsinglelauncher">
 		    <a href=""></a>
 		    <script>
-		      thisElement.innerHTML=thisNode.properties.cname || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+		      thisElement.textContent=thisNode.getRelationship({name: "itemcategoresdata"}).getChild().properties.name || emptyValueText;
 		      if (thisNode.selected) setSelected.call(closesttagname.call(thisElement, "TR"));
 		      thisElement.onclick=function(){
 			thisNode.setActive();
@@ -103,11 +103,11 @@
 		    <script>
 		      if (webuser.isWebAdmin()) {
 			var admnlauncher=new NodeMale();
-			admnlauncher.myNode=thisNode;
+			admnlauncher.myNode=thisNode.getRelationship({name: "itemcategoresdata"}).getChild();
 			admnlauncher.buttons=[
 			  {
 			    template: document.getElementById("butedittp"),
-			    args:{editpropertyname:"cname", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+			    args:{editpropertyname:"name", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
 			  },
 			  {template: document.getElementById("butvchpostp")},
 			  {template: document.getElementById("butaddnewnodetp"), args:{sort_order: thisNode.sort_order + 1}},
@@ -118,7 +118,7 @@
 		      var listenerId=thisNode.parentNode.properties.childtablename + "-" + thisNode.properties.id;
 		      webuser.addEventListener("log", function() {
 			  if (!this.isWebAdmin()) {
-			    thisElement.innerHTML='';
+			    thisElement.innerHTML="";
 			  }
 			  else {
 			    thisNode.render(thisElement.nextElementSibling);
@@ -144,7 +144,7 @@
 </table>
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  var cartbox=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"});
+  var cartbox=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
   cartbox.refreshView(document.querySelector("#catgboxheadtp").previousElementSibling, document.querySelector("#catgboxheadtp"));
 
   var categoriesrootmother=new NodeFemale();

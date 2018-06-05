@@ -57,7 +57,7 @@
 	    function loadLabels() {
 	      var myLanguage=webuser.extra.language
 	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: webuser.extra.language}, function(){
-		emptyValue=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
+		emptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
 		domelementsrootmother.dispatchEvent("loadLabels1");
 		myalert.hidealert();
 		console.log(domelementsrootmother.children[0].getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"}).getRelationship({name: "domelementsdata"}).children[0].properties);

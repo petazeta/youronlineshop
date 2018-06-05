@@ -11,7 +11,12 @@
       myresult.parentNode=new NodeFemale();
       myresult.parentNode.loadasc(thisNode.parentNode,1);
       if (launcher.sort_order) myresult.sort_order=launcher.sort_order;
-      myresult.loadfromhttp({action:"add myself", user_id: webuser.properties.id}, function(){
+      if (luancher.dataRel) {
+	var myrel=myresult.addRelationship(new NodeFemale());
+	myrel.load(luancher.dataRel,0);
+	var mychild=myrel.addChild(new NodeMale());
+      }
+      myresult.loadfromhttp({action:"add my tree", language:webuser.extra.language, user_id: webuser.properties.id}, function(){
 	var thisParent=thisNode.parentNode;
 	if (!thisNode.properties.id) thisParent.children=[]; //Adding first child
 	thisParent.addChild(myresult);

@@ -10,7 +10,7 @@
 	    if (webuser.properties.id) {
 	      logbox=thisNode.getChild({"name":"logboxin"});
 	    }
-	    thisElement.textContent=logbox.getNextChild({"name":"status"}).properties.innerHTML;
+	    thisElement.textContent=logbox.getNextChild({"name":"status"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
 	  }
 	  setlogstatus();
 	  webuser.addEventListener("log", function() {
@@ -47,7 +47,7 @@
 			if (webuser.properties.id) {
 			  logbox=thisNode.getChild({"name":"logboxin"});
 			}
-			thisElement.textContent=webuser.properties.username || logbox.getNextChild({"name":"username"}).properties.innerHTML;
+			thisElement.textContent=webuser.properties.username || logbox.getNextChild({"name":"username"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
 		      }
 		      setlogname();
 		      webuser.addEventListener("log", function() {
@@ -78,7 +78,7 @@
 			if (webuser.properties.id) {
 			  logbox=thisNode.getChild({"name":"logboxin"});
 			}
-			thisElement.textContent=logbox.getNextChild({"name":"title"}).properties.innerHTML;
+			thisElement.textContent=logbox.getNextChild({"name":"title"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
 		      }
 		      setlogtitle();
 		      webuser.addEventListener("log", function() {
@@ -111,7 +111,7 @@
 <script>
 var mycart=new cart();
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  var logboxparent=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"logbox"}).getRelationship({"name":"domelements"});
+  var logboxparent=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"logbox"}).getRelationship({"name":"domelements"});
   logboxparent.refreshView(document.querySelector("#logboxtp").previousElementSibling, document.querySelector("#logboxtp"));
 });
 webuser.addEventListener("log", function(){

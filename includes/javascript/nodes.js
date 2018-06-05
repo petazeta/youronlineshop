@@ -415,6 +415,8 @@ function NodeFemale() {
   this.partnerNode=null;
   this.children=[];
   this.childtablekeys=[];
+  this.childtablekeystypes=[];
+  this.syschildtablekeys=[];
   this.childTp=null;
   this.childContainer=null;
 }
@@ -426,6 +428,16 @@ NodeFemale.prototype.load=function(source, level) {
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
       this.childtablekeys[i]=source.childtablekeys[i];
+    }
+  }
+  if (source.childtablekeystypes) {
+    for (var i=0;i<source.childtablekeystypes.length;i++) {
+      this.childtablekeystypes[i]=source.childtablekeystypes[i];
+    }
+  }
+  if (source.syschildtablekeys) {
+    for (var i=0;i<source.syschildtablekeys.length;i++) {
+      this.syschildtablekeys[i]=source.syschildtablekeys[i];
     }
   }
   if (level==0) return false;
@@ -443,6 +455,16 @@ NodeFemale.prototype.loadasc=function(source, level) {
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
       this.childtablekeys[i]=source.childtablekeys[i];
+    }
+  }
+  if (source.childtablekeystypes) {
+    for (var i=0;i<source.childtablekeystypes.length;i++) {
+      this.childtablekeystypes[i]=source.childtablekeystypes[i];
+    }
+  }
+  if (source.syschildtablekeys) {
+    for (var i=0;i<source.syschildtablekeys.length;i++) {
+      this.syschildtablekeys[i]=source.syschildtablekeys[i];
     }
   }
   if (!source.partnerNode) return false;
@@ -530,6 +552,7 @@ NodeFemale.prototype.addChild=function(obj) {
 };
 
 NodeFemale.prototype.getChild=function(obj) {
+  if (!obj) return this.children[0];
   var keyname=Object.keys(obj)[0];
   var i= this.children.length;
   while(i--) {
@@ -563,7 +586,6 @@ NodeMale.prototype.load=function(source, level) {
 }
 
 NodeMale.prototype.getNextChild=function(obj) {
-  if (!obj) return this.relationships[0].children[0];
   return this.relationships[0].getChild(obj);
 }
 NodeMale.prototype.appendNextChildren=function(container, tp, reqlistener, append) {
@@ -606,6 +628,7 @@ NodeMale.prototype.cloneRelationship=function() {
 NodeMale.prototype.addRelationship=function(rel) {
   this.relationships.push(rel);
   rel.partnerNode=this;
+  return rel;
 }
 
 NodeMale.prototype.getrootnode=function() {
@@ -614,6 +637,7 @@ NodeMale.prototype.getrootnode=function() {
 }
 
 NodeMale.prototype.getRelationship=function(obj) {
+  if (!obj) return this.relationships[0];
   if (typeof obj == "string") obj={name: obj};
   var keyname=Object.keys(obj)[0];
   var i= this.relationships.length;

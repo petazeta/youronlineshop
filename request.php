@@ -82,6 +82,12 @@ switch ($parameters->action) {
     break;
   case "add my tree":
     $myexecfunction="db_insertmytree";
+    $deepLevel=null; $extra=null;
+    if (isset($parameters->deepLevel)) $deepLevel=$parameters->deepLevel;
+    if (isset($parameters->language)) {
+      $extra=['_language' => $parameters->language->id];
+    }
+    if ($deepLevel || $extra) $argument=[$deepLevel, $extra];
     $callback=["cutUp"];
     break;
   case "add my link":

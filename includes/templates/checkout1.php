@@ -1,9 +1,34 @@
 <template id="checkout1tp">
+  <template>
   <div class="msgbox">
     Check if your order is ok and then click on Continue to get to the next step.
   </div>
-  <p style="text-align:center;"><b>Your order:</b></p>
-  
+  <script>
+    thisElement.textContent=thisNode.getNextChild({"name":"chkt1add"}).getRelationship({name:"domelementsdata"}).getChild().properties.value;
+  </script>
+  <div class="btrightedit"></div>
+  <script>
+    var addadminbutts=function(){
+      var admnlauncher=new NodeMale();
+      admnlauncher.myNode=thisNode.getNextChild({"name":"chkt1add"}).getRelationship({name:"domelementsdata"}).getChild();
+      admnlauncher.buttons=[{
+	template: document.getElementById("butedittp"),
+	args: {editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+      }];
+      admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+    }
+    if (webuser.isWebAdmin()) {
+      addadminbutts();
+    }
+    webuser.addEventListener("log", function() {
+      if (!this.isWebAdmin()) {
+	thisElement.innerHTML="";
+      }
+      else {
+	addadminbutts();
+      }
+    });
+  </script>
   <div></div>
   <script>
     //First we must create a clone of mycart to not modify mycart.
@@ -14,8 +39,9 @@
     cartboxitems.refreshView(thisElement, "includes/templates/order.php");
   </script>
   <div style="width:100%; text-align:center;">
-    <a class="btn" href="">OK!! Continue</a>
+    <a class="btn" href="javascript:void(0)">Continue &raquo;</a>
     <script>
+      thisElement.textContent=thisNode.getNextChild({"name":"chkt1next"}).getRelationship({name:"domelementsdata"}).getChild().properties.value;
       //First we create a clone of mycart to not include modifications made at mycart.
       var ordercart=new NodeMale();
       ordercart.loadasc(mycart);
@@ -59,5 +85,33 @@
 	return false;
       };
     </script>
+    <div class="btrightedit"></div>
+    <script>
+      var addadminbutts=function(){
+	var admnlauncher=new NodeMale();
+	admnlauncher.myNode=thisNode.getNextChild({"name":"chkt1next"}).getRelationship({name:"domelementsdata"}).getChild();
+	admnlauncher.buttons=[{
+	  template: document.getElementById("butedittp"),
+	  args: {editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	}];
+	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+      }
+      if (webuser.isWebAdmin()) {
+	addadminbutts();
+      }
+      webuser.addEventListener("log", function() {
+	if (!this.isWebAdmin()) {
+	  thisElement.innerHTML="";
+	}
+	else {
+	  addadminbutts();
+	}
+      });
+    </script>
   </div>
+  </template>
+  <div></div>
+  <script>
+      domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"}).refreshView(thisElement,thisElement.prviousElementSibling);
+  </script>
 </template>
