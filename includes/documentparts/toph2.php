@@ -3,7 +3,7 @@
   <div class="adminlauncher adminsinglelauncher">
     <h2></h2>
     <script>
-      thisElement.textContent=thisNode.properties.innerHTML || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+      thisElement.textContent=thisNode.properties.value || emptyValueText;
     </script>
     <div class="btrightedit"></div>
     <script>
@@ -32,7 +32,7 @@
 </template>
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  var headtt=labelsRoot.getNextChild({"name":"top"}).getNextChild({"name":"headsubtitle"});
-  headtt.refreshView(document.querySelector("#topheadsubtitle div"), document.querySelector("#topheadsubtitle template"));
+  var headtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headsubtitle"});
+  headtt.getRelationship({name: "domelementsdata"}).getChild().refreshView(document.querySelector("#topheadsubtitle div"), document.querySelector("#topheadsubtitle template"));
 });
 </script>

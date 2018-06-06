@@ -10,7 +10,7 @@
       admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
     }
     else {
-      thisElement.innerHTML='';
+      thisElement.innerHTML="";
     }
   </script>
 </template>

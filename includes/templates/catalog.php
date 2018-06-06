@@ -47,7 +47,7 @@
 		  <div class="adminlauncher adminsinglelauncher">
 		    <a href=""></a>
 		    <script>
-		      thisElement.textContent=thisNode.properties.cname || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+		      thisElement.textContent=thisNode.properties.name || emptyValueText;
 		      thisElement.onclick=function() {
 			thisNode.setActive();
 			thisNode.loadfromhttp({action:"load my tree"}, function(){
@@ -151,8 +151,7 @@
 			<div class="adminlauncher adminsinglelauncher">
 			  <h3></h3>
 			  <script>
-			    thisElement.textContent=thisNode.properties.name ||
-			    labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+			    thisElement.textContent=thisNode.properties.name || emptyValueText;
 			  </script>
 			  <div class="btrightedit">
 			  </div>
@@ -172,8 +171,7 @@
 			  <div class="adminlauncher adminsinglelauncher">
 			    <div style="margin-bottom:1em;"></div>
 			    <script>
-			      thisElement.innerHTML=thisNode.properties.descriptionshort ||
-			      labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+			      thisElement.innerHTML=thisNode.properties.descriptionshort || emptyValueText;
 			    </script>
 			    <div class="btrightedit">
 			    </div>
@@ -200,7 +198,7 @@
 			      <div class="adminlauncher adminsinglelauncher">
 				<div style="padding-right:1em;">
 				  <span data-js='
-				      thisElement.textContent=thisNode.properties.price || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+				      thisElement.textContent=thisNode.properties.price || emptyValueText;
 				    '>
 				  </span>
 				  <span> &euro;</span>

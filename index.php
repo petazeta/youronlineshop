@@ -45,22 +45,22 @@
 		for (var i=0; i<navigator.languages.length; i++) {
 		  navigator.languages[i]=navigator.languages[i].replace(/-.+/, "");
 		  if (webLanguages.indexOf(navigator.languages[i]) >= 0) {
-		    webuser.extra.language=this.getChild({code: navigator.languages[i]}).properties;
+		    webuser.extra.language=this.getChild({code: navigator.languages[i]});
 		    break;
 		  }
 		}
-		if (!webuser.extra.language) webuser.extra.language=this.children[0].properties;
+		if (!webuser.extra.language) webuser.extra.language=this.getChild();
 		loadLabels();
 	      });
 	    }
 	    else loadLabels();
 	    function loadLabels() {
 	      var myLanguage=webuser.extra.language
-	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: webuser.extra.language}, function(){
+	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: webuser.extra.language.avoidrecursion()}, function(){
 		emptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
-		domelementsrootmother.dispatchEvent("loadLabels1");
+		domelementsrootmother.dispatchEvent("loadLabels");
 		myalert.hidealert();
-		console.log(domelementsrootmother.children[0].getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"}).getRelationship({name: "domelementsdata"}).children[0].properties);
+		console.log(domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"}).getRelationship({name: "domelementsdata"}).children[0].properties);
 	      });
 	    }
 	  });

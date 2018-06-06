@@ -89,7 +89,7 @@
 		<div class="adminlauncher adminsinglelauncher" style="text-align:center;">
 		<a href="" class="btn"></a>
 		<script>
-		  thisElement.textContent=thisNode.getNextChild({"name":"ckouttt"}).getRelationship({name: "domelementsdata"}).getChild().properties.textContent || emptyValueText;
+		  thisElement.textContent=thisNode.getNextChild({"name":"ckouttt"}).getRelationship({name: "domelementsdata"}).getChild().properties.value || emptyValueText;
 		  thisElement.onclick=function(){  
 		    mycart.tocheckout();
 		    return false;

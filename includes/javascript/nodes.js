@@ -408,6 +408,9 @@ Node.prototype.getMyDomNodes=function () {
   else if (this.myContainer) {
       return Array.from(this.myContainer.children);
   }
+  else if (this.childContainer) {
+      return Array.from(this.childContainer.children);
+  }
 }
 
 function NodeFemale() {
@@ -417,6 +420,7 @@ function NodeFemale() {
   this.childtablekeys=[];
   this.childtablekeystypes=[];
   this.syschildtablekeys=[];
+  this.syschildtablekeysinfo=[];
   this.childTp=null;
   this.childContainer=null;
 }
@@ -438,6 +442,11 @@ NodeFemale.prototype.load=function(source, level) {
   if (source.syschildtablekeys) {
     for (var i=0;i<source.syschildtablekeys.length;i++) {
       this.syschildtablekeys[i]=source.syschildtablekeys[i];
+    }
+  }
+  if (source.syschildtablekeysinfo) {
+    for (var i=0;i<source.syschildtablekeysinfo.length;i++) {
+      this.syschildtablekeysinfo[i]=source.syschildtablekeysinfo[i];
     }
   }
   if (level==0) return false;
@@ -467,6 +476,11 @@ NodeFemale.prototype.loadasc=function(source, level) {
       this.syschildtablekeys[i]=source.syschildtablekeys[i];
     }
   }
+  if (source.syschildtablekeysinfo) {
+    for (var i=0;i<source.syschildtablekeysinfo.length;i++) {
+      this.syschildtablekeysinfo[i]=source.syschildtablekeysinfo[i];
+    }
+  }
   if (!source.partnerNode) return false;
   if (level==0) return false;
   if (level) level--;
@@ -483,12 +497,35 @@ NodeFemale.prototype.loadasc=function(source, level) {
   }
 }
 
-NodeFemale.prototype.avoidrecursion=function () {
-  this.partnerNode=null;
-  for (var i=0;i<this.children.length;i++) {
-    this.children[i].avoidrecursion();
+NodeFemale.prototype.avoidrecursion=function(){
+  if (this.partnerNode) {
+    if (Array.isArray(this.partnerNode)) {
+      this.partnerNode.forEach(function (pNode) {
+	pNode.avoidrecursionup();
+      });
+    }
   }
-};
+  this.children.forEach(function(child) {
+    child.avoidrecursiondown();
+  });
+}
+NodeFemale.prototype.avoidrecursiondown=function(){
+  this.partnerNode=null;
+  this.children.forEach(function(child) {
+    child.avoidrecursiondown();
+  });
+}
+NodeFemale.prototype.avoidrecursionup=function(){
+  this.children=[];
+  if (this.partnerNode) {
+    if (Array.isArray(this.partnerNode)) {
+      this.parentNode.forEach(function(pNode) {
+	pNode.avoidrecursionup();
+      });
+    }
+    else this.partnerNode.avoidrecursionup();
+  }
+}
 
 NodeFemale.prototype.getrootnode=function() {
   if (!this.partnerNode) return this;
@@ -617,6 +654,37 @@ NodeMale.prototype.avoidrecursion=function () {
     this.relationships[i].avoidrecursion();
   }
 };
+
+NodeMale.prototype.avoidrecursion=function() {
+  if (this.parentNode) {
+    if (Array.isArray(this.parentNode)) {
+      this.partnerNode.forEach(function(pNode){
+	pNode.avoidrecursionup();
+      });
+    }
+    else this.parentNode.avoidrecursionup();
+  }
+  this.relationships.forEach(function(rel) {
+    rel.avoidrecursiondown();
+  });
+}
+NodeMale.prototype.avoidrecursionup=function(){
+  this.relationships=[];
+  if (this.parentNode) {
+    if (Array.isArray(this.parentNode)) {
+      this.partnerNode.forEach(function(pNode){
+	pNode.avoidrecursionup();
+      });
+    }
+    else this.parentNode.avoidrecursionup();
+  }
+}
+NodeMale.prototype.avoidrecursiondown=function(){
+  this.parentNode=null;
+  this.relationships.forEach(function(rel){
+    rel.avoidrecursiondown();
+  });
+}
 
 NodeMale.prototype.cloneRelationship=function() {
   var relClon=this.parentNode.cloneNode();

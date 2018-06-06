@@ -1,15 +1,14 @@
 <nav></nav>
 <template id="menutp">
   <span class="adminlauncher adminsinglelauncher">
-    <a href=""></a>
+    <a href="javascript:void(0)"></a>
     <script>
-      thisElement.textContent=thisNode.getRelationship({name: "domelementsdata"}).getChild().properties.value || emptyValueText;
       if (thisNode.selected) setSelected.call(thisElement.parentElement);
-      thisElement.onclick=function(){
+      thisElement.addEventListener('click', function(event){
+	event.preventDefault();
 	thisNode.setActive();
-	thisNode.loadfromhttp({action: "load my tree"}, function() {
-	  var elements=thisNode.getRelationship({"name":"domelements"});
-	  elements.addEventListener("refreshChildrenView", function() {
+	thisNode.getRelationship().loadfromhttp({action: "load my tree"}, function() {
+	  this.addEventListener("refreshChildrenView", function() {
 	    if (this.children==0){
 	      var element=this.addChild(new NodeMale());
 	      element.myTp=document.getElementById("nochildrentp").content;
@@ -17,10 +16,12 @@
 	      element.refreshView();
 	    }
 	  });
-	  elements.refreshChildrenView(document.getElementById("centralcontent"), document.querySelector("#menucontainer #domelementtp").content);
+	  this.refreshChildrenView(document.getElementById("centralcontent"), document.querySelector("#menucontainer #domelementtp").content);
 	});
-	return false;
-      };
+      });
+      thisNode.getRelationship("domelementsdata").loadfromhttp({action:"load my children"}, function(){
+	thisElement.textContent=this.getChild().properties.value || emptyValueText;
+      });
     </script>
     <div class="bttopadmn" data-info='this is for the open close element'></div>
     <div class="btrightnarrow"></div>
@@ -61,7 +62,7 @@
     <div class="adminlauncher adminsinglelauncher">
       <div></div>
       <script>
-	thisElement.innerHTML=thisNode.properties.value || emptyValueText;
+	thisElement.innerHTML=thisNode.getRelationship("domelementsdata").getChild().properties.value || emptyValueText;
       </script>
       <div class="btinside"></div>
       <script>
@@ -86,8 +87,9 @@
 
 <script type="text/javascript">
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  this.gitChild().getNextChild({name: "texts"}).loadfromhttp({action:"load my tree", deepLevel: 4}, function(){
+  this.getChild().getNextChild({name: "texts"}).loadfromhttp({action:"load my tree", deepLevel: 5}, function(){
     var menusMother=this.getNextChild({name: "nav"}).getRelationship();
+
     menusMother.addEventListener("refreshChildrenView", function() {
       if (this.children==0){
 	var element=this.addChild(new NodeMale());
@@ -113,8 +115,8 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       }
     });
     //showing menus (after the listeners to refreshChildrenView are added). Refreshing first time first menu is clicked
-    menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), document.querySelector("#menucontainer #menutp").content, function(){
-      if (this.children.length>0 && !webuser.isWebAdmin()) this.children[0].getMyDomNodes()[0].querySelector("a").click();
+    menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), document.querySelector("#menucontainer #menutp"), function(){
+      if (this.children.length>0 && !webuser.isWebAdmin()) {this.children[0].getMyDomNodes()[0].querySelector("a").click();}
     });
     //to refresh the nochildren element when log
     webuser.addEventListener("log", function(){

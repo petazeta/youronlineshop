@@ -84,6 +84,7 @@ class NodeFemale extends Node{
   public $childtablekeys=[];
   public $childtablekeystypes=[];
   public $syschildtablekeys=[];
+  public $syschildtablekeysinfo=[];
 
   function load($source) {
     parent::load($source);
@@ -100,6 +101,11 @@ class NodeFemale extends Node{
     if (isset($source->syschildtablekeys)) {
       foreach ($source->syschildtablekeys as $key => $value) {
         $this->syschildtablekeys[$key]=$value;
+      }
+    }
+    if (isset($source->syschildtablekeysinfo)) {
+      foreach ($source->syschildtablekeysinfo as $key => $value) {
+        $this->syschildtablekeysinfo[$key]=$value;
       }
     }
     if (isset($source->children)) {
@@ -126,6 +132,11 @@ class NodeFemale extends Node{
     if (isset($source->syschildtablekeys)) {
       foreach ($source->syschildtablekeys as $key => $value) {
         $this->syschildtablekeys[$key]=$value;
+      }
+    }
+    if (isset($source->syschildtablekeysinfo)) {
+      foreach ($source->syschildtablekeysinfo as $key => $value) {
+        $this->syschildtablekeysinfo[$key]=$value;
       }
     }
     if (!isset($source->partnerNode) || !$source->partnerNode) return false;
@@ -165,9 +176,9 @@ class NodeFemale extends Node{
   function cloneChildrenFromQuery($result){
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
-      //clean system vars _*
+      //clean system vars
       foreach ($row as $key => $value) {
-	if (preg_match('/^_+/', $key)) unset($row[$key]);
+	if (in_array($key, $this->syschildtablekeys)) unset($row[$key]);
       }
       $this->children[$i] = new NodeMale();
       if (isset($row['sort_order'])) $this->children[$i]->sort_order=$row['sort_order'];
@@ -177,17 +188,43 @@ class NodeFemale extends Node{
     }
   }
   function db_loadchildtablekeys() {
-    $sql='show columns from ' . constant($this->properties->childtablename);
-    if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->childtablekeys=[];
     $this->childtablekeystypes=[];
     $this->syschildtablekeys=[];
+    $this->syschildtablekeysinfo=[];
+    //lets load systablekeys (referenced columns)
+    $sql = 'SELECT r.REFERENCED_TABLE_NAME as parenttablename, r.COLUMN_NAME as name FROM '
+    . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
+    . " WHERE"
+    . ' TABLE_SCHEMA= SCHEMA()'
+    . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'"
+    . " AND r.REFERENCED_TABLE_NAME IS NOT NULL";
+    if (($result = $this->getdblink()->query($sql))===false) return false;
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
-      if (preg_match('/^_+/', $row['Field'])) {
+      $syskey=new Properties();
+      $syskey->type='foreignkey';
+      $syskey->cloneFromArray($row);
+      // to constant table names
+      $syskey->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $syskey->parenttablename));
+      $this->syschildtablekeysinfo[]=$syskey;
+      $this->syschildtablekeys[]=$syskey->name;
+    }
+    $sql='show columns from ' . constant($this->properties->childtablename);
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+
+    for ($i=0; $i<$result->num_rows; $i++) {
+      $row=$result->fetch_array(MYSQLI_ASSOC);
+      if (preg_match('/.+_position$/', $row['Field'])) {
+	$syskey=new Properties();
+	$syskey->name=$row['Field'];
+	$syskey->type='sort_order';
+	$syskey->parenttablename='TABLE_' . strtoupper(preg_replace('/(.+)_position$/', '$1', $row['Field']));
+	$this->syschildtablekeysinfo[]=$syskey;
 	$this->syschildtablekeys[]=$row['Field'];
 	continue;
       }
+      if (in_array($row['Field'], $this->syschildtablekeys)) continue;
       $this->childtablekeys[]=$row['Field'];
       $this->childtablekeystypes[]=$row['Type'];
     }
@@ -195,29 +232,34 @@ class NodeFemale extends Node{
   }
 
   function db_loadmychildren($filter=null, $order=null, $limit=null) {
-    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+    foreach ($this->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $filterValid=[];
     if ($filter && is_array($filter)) {
       $filterKeys=array_keys($filter);
       foreach ($filterKeys as $filterKey) {
 	if (isset($this->childtablekeys) && in_array($filterKey, $this->childtablekeys) ||
 	  isset($this->syschildtablekeys) && in_array($filterKey, $this->syschildtablekeys) ) {
-	  $filterValid[]=$filterKey . '=' . $filter[$filterKey];
+	  $filterValid[]=$filterKey . '=' . '\'' . $filter[$filterKey] . '\'';
 	}
       }
       $filter=implode(' AND ', $filterValid);
     }
     $sql = 'SELECT t.*';
-    if (isset($this->properties->sort_order) && $this->properties->sort_order) $sql .= ', t._' . $parentTableOriginalName . '_position as sort_order';
+    if (isset($this->properties->sort_order) && $this->properties->sort_order) $sql .= ', t.' . $positioncolumnname . ' as sort_order';
     $sql .= ' FROM '
     . constant($this->properties->childtablename) . ' t'
-    . ' WHERE t._' . $parentTableOriginalName . '=' . $this->partnerNode->properties->id;
+    . ' WHERE t.' . $foreigncolumnname . '=' . $this->partnerNode->properties->id;
     if ($filter) {
       $sql .= ' AND ' . $filter;
     }
     if ($order) $sql .= ' ORDER BY ' . $order;
     else if (isset($this->properties->sort_order) && $this->properties->sort_order) {
-      $sql .= ' ORDER BY t._' . $parentTableOriginalName . '_position';
+      $sql .= ' ORDER BY t.' . $positioncolumnname;
     }
     if ($limit) $sql .= ' LIMIT ' . $limit;
 
@@ -227,11 +269,16 @@ class NodeFemale extends Node{
   
   function db_loadmypartner($child) {
     if (!isset($this->properties->id)) return false; //Virtual mother case
-    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+    foreach ($this->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'SELECT t.* FROM '
     . constant($this->properties->parenttablename) . ' t'
     . ' inner join ' . constant($this->properties->childtablename) . ' c'
-    . ' on t.id=c._' . $parentTableOriginalName
+    . ' on t.id=c.' . $foreigncolumnname
     . ' WHERE c.id=' . $child->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     if ($result->num_rows > 1) {
@@ -239,7 +286,7 @@ class NodeFemale extends Node{
       for ($i=0; $i<$result->num_rows; $i++) {
 	$row=$result->fetch_array(MYSQLI_ASSOC);
 	foreach ($row as $key => $value) {
-	  if (preg_match('/^_+/', $key)) unset($row[$key]);
+	  if (in_array($key, $this->syschildtablekeys)) unset($row[$key]);
 	}
 	$this->partnerNode[$i] = new NodeMale();
 	$this->partnerNode[$i]->properties->cloneFromArray($row);
@@ -249,7 +296,7 @@ class NodeFemale extends Node{
     else if ($result->num_rows==1) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
       foreach ($row as $key => $value) {
-	if (preg_match('/^_+/', $key)) unset($row[$key]);
+	if (in_array($key, $this->syschildtablekeys)) unset($row[$key]);
       }
       $this->partnerNode = new NodeMale();
       $this->partnerNode->properties->cloneFromArray($row);
@@ -260,7 +307,7 @@ class NodeFemale extends Node{
   function db_loadmytree($level=null, $filter=null, $order=null, $limit=null) {
     if ($level===0) return true;
     if ($level) $level--;
-    if ($this->db_loadmychildren()===false) return false;
+    if ($this->db_loadmychildren($filter, $order, $limit)===false) return false;
     for ($i=0; $i<count($this->children); $i++)  {
       if ($this->children[$i]->db_loadmytree($level, $filter, $order, $limit)===false) return false;
     }
@@ -286,35 +333,55 @@ class NodeFemale extends Node{
   }
   function db_loadroot() {
     $this->db_loadchildtablekeys();
-    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+    foreach ($this->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'SELECT t.* FROM '
       . constant($this->properties->childtablename) . ' t'
-      . ' WHERE t._' . $parentTableOriginalName . ' IS NULL';
+      . ' WHERE t.' . $foreigncolumnname . ' IS NULL';
     if (($result = $this->getdblink()->query($sql))===false || $result->num_rows==0) return false;
     $this->cloneChildrenFromQuery($result);
   }
   
   function db_loadunlinked() {
-    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+    foreach ($this->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = "SELECT t.* FROM "
     . constant($this->properties->childtablename) . ' t'
-    . ' WHERE t._' . $parentTableOriginalName . ' IS NULL';
+    . ' WHERE t.' . $foreigncolumnname . ' IS NULL';
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->cloneChildrenFromQuery($result);
   }
   function db_loadlinked() {
-    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+    foreach ($this->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = "SELECT t.* FROM "
     . constant($this->properties->childtablename) . ' t'
-    . ' WHERE t._' . $parentTableOriginalName . ' IS NOT NULL';
+    . ' WHERE t.' . $foreigncolumnname . ' IS NOT NULL';
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->cloneChildrenFromQuery($result);
   }
   function db_loadmychildrennot() {
-    $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+    foreach ($this->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = "SELECT t.* FROM "
     . constant($this->properties->childtablename) . ' t'
-    . ' WHERE t._' . $parentTableOriginalName . ' != ' . $this->partnerNode->properties->id;
+    . ' WHERE t.' . $foreigncolumnname . ' != ' . $this->partnerNode->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->cloneChildrenFromQuery($result);
   }
@@ -336,7 +403,7 @@ class NodeFemale extends Node{
     $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
       . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
       . " WHERE"
-      . ' TABLE_SCHEMA= SCHEMA()'  
+      . ' TABLE_SCHEMA= SCHEMA()'
       . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
       . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
     if (($result = $this->getdblink()->query($sql))===false) return false;
@@ -347,11 +414,11 @@ class NodeFemale extends Node{
       $this->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename));
       $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
       //stablish the sort_order statment
-      $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
-      foreach ($this->syschildtablekeys as $syskey) {
+      foreach ($this->syschildtablekeysinfo as $syskey) {
 	$this->properties->sort_order=false;
-	if ($syskey=='_' . $parentTableOriginalName . '_position') {
+	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
 	  $this->properties->sort_order=true;
+	  break;
 	}
       }
     }
@@ -470,11 +537,11 @@ class NodeMale extends Node{
       $this->relationships[$i]->partnerNode=$this;
       $this->relationships[$i]->db_loadchildtablekeys();
       //stablish the sort_order statment
-      $parentTableOriginalName=strtolower(substr($this->relationships[$i]->properties->parenttablename, 6));
-      foreach ($this->relationships[$i]->syschildtablekeys as $syskey) {
+      foreach ($this->relationships[$i]->syschildtablekeysinfo as $syskey) {
 	$this->relationships[$i]->properties->sort_order=false;
-	if ($syskey=='_' . $parentTableOriginalName . '_position') {
+	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->relationships[$i]->properties->parenttablename) {
 	  $this->relationships[$i]->properties->sort_order=true;
+	  break;
 	}
       }
     }
@@ -515,11 +582,11 @@ class NodeMale extends Node{
 	$this->parentNode[$i]->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->parenttablename));
 	$this->parentNode[$i]->db_loadchildtablekeys();
 	//stablish the sort_order statment
-	$parentTableOriginalName=strtolower(substr($this->parentNode[$i]->properties->parenttablename, 6));
-	foreach ($this->parentNode[$i]->syschildtablekeys as $syskey) {
+	foreach ($this->parentNode[$i]->syschildtablekeysinfo as $syskey) {
 	  $this->parentNode[$i]->properties->sort_order=false;
-	  if ($syskey=='_' . $parentTableOriginalName . '_position') {
+	  if ($syskey->type=='sort_order' && $syskey->parenttablename==$this->parentNode[$i]->properties->parenttablename) {
 	    $this->parentNode[$i]->properties->sort_order=true;
+	    break;
 	  }
 	}
 	$this->parentNode[$i]->children[0]=$this;
@@ -534,11 +601,11 @@ class NodeMale extends Node{
       $this->parentNode->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->parenttablename));
       $this->parentNode->db_loadchildtablekeys();
       //stablish the sort_order statment
-      $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
-      foreach ($this->parentNode->syschildtablekeys as $syskey) {
+      foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
 	$this->parentNode->properties->sort_order=false;
-	if ($syskey=='_' . $parentTableOriginalName . '_position') {
+	if ($syskey->type=='sort_order' && $syskey->parenttablename==$this->parentNode->properties->parenttablename) {
 	  $this->parentNode->properties->sort_order=true;
+	  break;
 	}
       }
       $this->parentNode->children[0]=$this;
@@ -567,9 +634,13 @@ class NodeMale extends Node{
   }
   
   function db_loadmyself(){
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    if ($this->parentNode->properties->sort_order) {
+      foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
+	if ($syskey->parenttablename==$this->parentNode->properties->parenttablename && $syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'SELECT t.*';
-    if ($this->parentNode->properties->sort_order) $sql .= ', ' . '_' . $parentTableOriginalName . '_position' . 'AS sort_order';
+    if ($this->parentNode->properties->sort_order) $sql .= ', ' . $positioncolumnname . 'AS sort_order';
     $sql .= ' FROM ' . constant($this->parentNode->properties->childtablename) . ' t';
     $sql .=' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
@@ -579,7 +650,7 @@ class NodeMale extends Node{
       unset($row['sort_order']);
     }
     foreach ($row as $key => $value) {
-      if (preg_match('/^_+/', $key)) unset($row[$key]);
+      if (in_array($key, $this->parentNode->syschildtablekeys)) unset($row[$key]);
     }
     $this->properties->cloneFromArray($row);
     return true;
@@ -618,15 +689,20 @@ class NodeMale extends Node{
   }
   function db_insertmylink() {
     if ($this->db_setmylink()===false) return false;
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
     //We try to update sort_order at the rest of elements
     if (!isset($this->sort_order)) return;
+    foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=t.' . '_' . $parentTableOriginalName . '_position + 1'
+    . ' SET t.' . $positioncolumnname . '=t.' . $positioncolumnname . ' + 1'
     . ' WHERE'
-    . ' t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
     . ' AND t.id !=' . $this->properties->id
-    . ' AND t.' . '_' . $parentTableOriginalName . '_position' . ' >= ' . $this->sort_order;
+    . ' AND t.' . $positioncolumnname . ' >= ' . $this->sort_order;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   
@@ -642,12 +718,17 @@ class NodeMale extends Node{
   
   function db_setmylink() {
     //we will insert the relationship
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET ' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id;
+    . ' SET ' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id;
     if ($this->parentNode->properties->sort_order) {
       if (!isset($this->sort_order)) $this->sort_order=1; //first element by default
-      $sql .= ', ' . '_' . $parentTableOriginalName . '_position' . '=' . $this->sort_order;
+      $sql .= ', ' . $positioncolumnname . '=' . $this->sort_order;
     }
     $sql .=' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
@@ -671,12 +752,17 @@ class NodeMale extends Node{
     if ($this->db_releasemylink()===false) return false; //if there is any problem we abort
     //We try to update sort_order at bro for that we need the object to be updated
     if (!isset($this->sort_order)) return;
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=t.' . '_' . $parentTableOriginalName . '_position - 1'
+    . ' SET t.' . $positioncolumnname . '=t.' . $positioncolumnname . ' - 1'
     . ' WHERE'
-    . ' t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
-    . ' AND t.' . '_' . $parentTableOriginalName . '_position' . ' > ' . $this->sort_order;
+    . ' t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
+    . ' AND t.' . $positioncolumnname . ' > ' . $this->sort_order;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   
@@ -698,9 +784,14 @@ class NodeMale extends Node{
     
   function db_releasemylink(){
     //Now we got to remove the relation from the database and update the sort_order of the borthers
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql='UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET ' . '_' . $parentTableOriginalName . '=NULL'
+    . ' SET ' . $foreigncolumnname . '=NULL'
     . ' WHERE t.id=' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
@@ -723,18 +814,23 @@ class NodeMale extends Node{
   }
   
   function db_updatemysort_order($new_sort_order){
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order
+    . ' SET t.' . $positioncolumnname . '=' . $new_sort_order
     . ' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
 
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $this->sort_order
+    . ' SET t.' . $positioncolumnname . '=' . $this->sort_order
     . ' WHERE'
     . ' t.id !=' . $this->properties->id
-    . ' AND t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
-    . ' AND t.' . '_' . $parentTableOriginalName . '_position' . '=' . $new_sort_order;
+    . ' AND t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
+    . ' AND t.' . $positioncolumnname . '=' . $new_sort_order;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
 
@@ -742,19 +838,24 @@ class NodeMale extends Node{
     if (!$newchildid) return false;
     
     //We replace child_id with new child_id
-    $parentTableOriginalName=strtolower(substr($this->parentNode->properties->parenttablename, 6));
+    foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
+      if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
+	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
+	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+      }
+    }
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET t.' . '_' . $parentTableOriginalName . '=' . 'NULL'
+    . ' SET t.' . $foreigncolumnname . '=' . 'NULL'
     . ' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET t.' . '_' . $parentTableOriginalName . '=' . $this->parentNode->partnerNode->properties->id
+    . ' SET t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
     . ' WHERE ' . 't.id =' . $newchildid;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     //update sort_order
     if (!isset($this->sort_order)) return;
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
-    . ' SET t.' . '_' . $parentTableOriginalName . '_position' . '=' . $this->sort_order
+    . ' SET t.' . $positioncolumnname . '=' . $this->sort_order
     . ' WHERE ' . 't.id =' . $newchildid;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }

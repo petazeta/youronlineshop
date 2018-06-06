@@ -33,6 +33,7 @@
 </template>
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"}).getRelationship({name: "domelementsdata"}).getChild().refreshView(document.querySelector("#topheadtitle div"), document.querySelector("#topheadtitle template"));
+  var headtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"});
+  headtt.getRelationship({name: "domelementsdata"}).getChild().refreshView(document.querySelector("#topheadtitle div"), document.querySelector("#topheadtitle template"));
 });
 </script>

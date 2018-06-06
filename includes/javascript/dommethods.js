@@ -9,7 +9,7 @@ function activeedition(thisNode, field){
     }
     //empty values are not allowed
     if (this[myproperty]=="") {
-       this[myproperty]=field.value || labelsRoot.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).properties.innerHTML;
+       this[myproperty]=field.value || emptyValueText;
       return false;
     }
     else if (field.value != this[myproperty]) { //just when content change and not void
