@@ -219,7 +219,13 @@ class NodeFemale extends Node{
 	$syskey=new Properties();
 	$syskey->name=$row['Field'];
 	$syskey->type='sort_order';
-	$syskey->parenttablename='TABLE_' . strtoupper(preg_replace('/(.+)_position$/', '$1', $row['Field']));
+	$refkey=preg_replace('/(.+)_position$/', '$1', $row['Field']);
+	foreach($this->syschildtablekeysinfo as $keyinfo) {
+	  if ($keyinfo->name==$refkey) {
+	    $syskey->parenttablename=$keyinfo->parenttablename;
+	    break;
+	  }
+	}
 	$this->syschildtablekeysinfo[]=$syskey;
 	$this->syschildtablekeys[]=$row['Field'];
 	continue;
@@ -268,7 +274,7 @@ class NodeFemale extends Node{
   }
   
   function db_loadmypartner($child) {
-    if (!isset($this->properties->id)) return false; //Virtual mother case
+    if (!isset($this->syschildtablekeysinfo)) $this->db_loadchildtablekeys();
     foreach ($this->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->properties->parenttablename) {
 	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
@@ -569,7 +575,8 @@ class NodeMale extends Node{
       . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
       . " WHERE"
       . ' TABLE_SCHEMA= SCHEMA()'
-    . ' AND r.TABLE_NAME=\'' . constant($mytablename) . '\'';
+      . ' AND r.TABLE_NAME=\'' . constant($mytablename) . '\''
+      . ' AND r.REFERENCED_TABLE_NAME IS NOT NULL';
     if (($result = $this->getdblink()->query($sql))===false) return false;
     if ($result->num_rows > 1) {
       $this->parentNode=[];

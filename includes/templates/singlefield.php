@@ -1,5 +1,5 @@
 <template>
-  <td style="padding-right:1em;">
+  <div style="padding-right:1em;">
     <div class="adminlauncher adminsinglelauncher">
       <div class="form-group">
 	<label class="form-label"></label>
@@ -23,5 +23,5 @@
 	</script>
       </div>
     </div>
-  </td>
+  </div>
 </template>

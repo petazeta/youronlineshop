@@ -48,17 +48,17 @@ td,th{padding:0;vertical-align:top;} /* Padding 0 because this tables are used a
 .sidebox .boxbody a.selected{
   color: #4bab20;
 }
-.sidebox table{
+.sidebox table.boxlist{
   width: 100%;
 }
-.sidebox td{
+.sidebox table.boxlist td.boxlist{
   border-bottom:1px solid rgb(238, 237, 233);
   border-top:1px solid rgb(238, 237, 233);
   padding: 3px 8px 3px 8px;
 }
 
 
-
+/* old <--*/
 table.box {
     min-width: 10em;
 }
@@ -103,6 +103,7 @@ table.box table.boxInside {
   box-shadow: 0px 3px 6px rgb(136, 136, 136);
     border-radius: 0px 0px 8px 8px;
 }
+/* old -->*/
 
 /* Margins, Dimensions && background */
 body {
@@ -504,19 +505,19 @@ table.order tr.total {
   font-weight: bold;
   text-align: right;
 }
-#cartbox tr.product a, #cartbox tr.product span{
+#cartbox .product a, #cartbox tr.product span{
   font-size: 9pt !important;
 }
-#cartbox tr.product a{
+#cartbox .product a{
   margin: 0px 0.1em 0px 0px;
 }
-#cartbox tr.product td:hover{
+#cartbox .product td:hover{
   background: rgb(241, 228, 204);
 }
-#cartbox tr.product span{
+#cartbox .product span{
   color:#d2853c !important;
 }
-#cartbox span.remove {
+#cartbox span.remove_oldddd {
   vertical-align: 2px;
   font-size: 0.6em;
   border: 1px solid #D2853C;

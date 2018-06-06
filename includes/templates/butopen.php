@@ -6,7 +6,6 @@
     //thisNode,myNode, thisNode,editelement and thisNode.editpropertyname must have been initiated before. optional thisNode.allowedHTML
     //normalize
     var launcher=thisNode;
-    var thisNode=launcher.myNode;
     var containeradmin=thisElement.parentElement.previousElementSibling;
     var containeropen=thisElement.parentElement;
     thisElement.onclick=function(){

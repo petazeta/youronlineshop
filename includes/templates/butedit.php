@@ -6,7 +6,6 @@
       <script>
 	//normalize
 	var launcher=thisNode;
-	var thisNode=launcher.myNode;
 	thisElement.name=launcher.editpropertyname;
       </script>
       <input type="hidden" name="json">
@@ -14,6 +13,7 @@
 	//normalize
 	var launcher=thisNode;
 	var thisNode=launcher.myNode;
+	if (launcher.dataRelationship) thisNode=launcher.dataRelationship.getChild();
 	var mydata=new NodeMale();
 	mydata.properties.id=thisNode.properties.id;
 	mydata.parentNode=new NodeFemale();
@@ -31,6 +31,7 @@
     //normalize
     var launcher=thisNode;
     var thisNode=launcher.myNode;
+    if (launcher.dataRelationship) thisNode=launcher.dataRelationship.getChild();
     thisElement.editelement=launcher.editelement;
     if (launcher.allowedHTML) thisElement.editelement.allowedHTML=true;
     thisElement.onclick=function() {

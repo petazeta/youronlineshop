@@ -1,7 +1,7 @@
 <template id="rmboxtp">
   <div class="rmbox">
     <div class="btrighttop">
-      <a href="" class="btn">&times;</a>
+      <a href="" class="btn" style="font-size:1.4em;">&times;</a>
       <script>
 	//normalize
 	var launcher=thisNode;

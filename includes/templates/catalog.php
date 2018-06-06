@@ -7,10 +7,10 @@
 	  <script>
 	    thisNode.addEventListener("refreshChildrenView", function() {
 	      if (this.children==0){
-		var element=this.addChild(new NodeMale());
-		element.myTp=document.getElementById("nochildrentp").content;
-		element.myContainer=this.childContainer;
-		element.refreshView();
+		var noChildrenLauncher=new NodeMale();
+		noChildrenLauncher.args={dataRelationship: this.partnerNode.getRelationship({name: "itemcategoriesdata"})};
+		noChildrenLauncher.myNode=this;
+		noChildrenLauncher.refreshView(this.childContainer, document.getElementById("nochildrentp"));
 	      }
 	    });
 	    thisNode.addEventListener("addNewNode", function(newnodeadded) {
@@ -23,14 +23,14 @@
 		  this.children[0].getMyDomNodes()[0].querySelector("a").click();
 		}
 	      }
-	      if (this.children.length==1 && !this.children[0].properties.id) {
+	      if (this.children.length==0) {
 		//remove products in case we just remove all subcategories flaps
-		var itemContainer=closesttagname.call(thisElement, 'TD').querySelector('div.productscontainer');
+		var itemContainer=closesttagname.call(thisElement, 'TD').querySelector("div.productscontainer");
 		itemContainer.innerHTML="";
 	      }
 	    });
 	    //showing flaps (after the listeners to refreshChildrenView are added) after refreshing first time we choose the first tab
-	    thisNode.refreshChildrenView(thisElement, thisElement.parentElement.querySelector("template"), function(){
+	    thisNode.refreshChildrenView(thisElement, document.querySelector("#flaptp"), function(){
 	      if (this.children.length>0) this.children[0].getMyDomNodes()[0].querySelector("a").click();
 	    });
 	  </script>
@@ -47,26 +47,34 @@
 		  <div class="adminlauncher adminsinglelauncher">
 		    <a href=""></a>
 		    <script>
-		      thisElement.textContent=thisNode.properties.name || emptyValueText;
-		      thisElement.onclick=function() {
-			thisNode.setActive();
-			thisNode.loadfromhttp({action:"load my tree"}, function(){
-			  var items=thisNode.getRelationship({name:"items"});
-			  //lets search for the table that will contain the products
-			  items.addEventListener("refreshChildrenView", function() {
-			    if (this.children==0){
-			      var element=this.addChild(new NodeMale());
-			      element.refreshView(this.childContainer, document.getElementById("nochildrentp"));
-			    }
-			    var columns=Math.round((window.screen.width-524)/500);
-			    if (columns < 1) columns=1;
-			    this.childContainer.appendChild(intoColumns(document.getElementById('producttabletp').content.querySelector('table').cloneNode(true), this.childContainer, columns));
-			  
+		      thisNode.getRelationship("itemcategoriesdata").loadfromhttp({action: "load my children", language: webuser.extra.language}, function(){
+			thisElement.textContent=this.getChild().properties.name || emptyValueText;
+		      });
+		      thisNode.getRelationship("items").addEventListener("refreshChildrenView", function() {
+			if (this.children==0){
+			  //There is no rel like this present
+			  var noChild=new NodeMale();
+			  noChild.parentNode=this;
+			  noChild.loadfromhttp({action: "load my relationships"}, function(){
+			    var noChildrenLauncher=new NodeMale();
+			    noChildrenLauncher.args={dataRelationship: this.getRelationship()};
+			    noChildrenLauncher.myNode=this.parentNode;
+			    noChildrenLauncher.refreshView(this.parentNode.childContainer, document.getElementById("nochildrentp"));
 			  });
-			  items.refreshChildrenView(document.getElementById('producttabletp').parentElement.querySelector("div.productscontainer"), document.getElementById('producttp'));
+			}
+			var columns=Math.round((window.screen.width-524)/500);
+			if (columns < 1) columns=1;
+			this.childContainer.appendChild(intoColumns(document.getElementById('producttabletp').content.querySelector('table').cloneNode(true), this.childContainer, columns));
+		      });
+		      thisElement.addEventListener("click", function(event) {
+			event.preventDefault();
+			thisNode.setActive();
+			thisNode.getRelationship("items").loadfromhttp({action:"load my tree", language: webuser.extra.language}, function(){
+
+			  this.refreshChildrenView(document.getElementById('producttabletp').parentElement.querySelector("div.productscontainer"), document.getElementById('producttp'));
 			});
 			return false;
-		      };
+		      });
 		    </script>
 		    <div class="bttopadmn"></div>
 		    <div class="btrightnarrow"></div>
@@ -77,10 +85,13 @@
 			admnlauncher.buttons=[
 			  { 
 			    template: document.getElementById("butedittp"),
-			    args:{editpropertyname:"cname", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+			    args:{editpropertyname:"name", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild, dataRelationship: thisNode.getRelationship({name: "itemcategoriesdata"})}
 			  },
 			  {template: document.getElementById("buthchpostp")},
-			  {template: document.getElementById("butaddnewnodetp"), args:{sort_order: thisNode.sort_order + 1}},
+			  {
+			    template: document.getElementById("butaddnewnodetp"),
+			    args:{sort_order: thisNode.sort_order + 1, dataRelationship: thisNode.getRelationship({name: "itemcategoriesdata"})}
+			  },
 			  {template: document.getElementById("butdeletetp")}
 			];
 			admnlauncher.refreshView(thisElement, document.getElementById("butopentp"));
@@ -115,7 +126,10 @@
 		admnlauncher.myNode=thisNode;
 		admnlauncher.buttons=[
 		  {template: document.getElementById("butvchpostp")},
-		  {template: document.getElementById("butaddnewnodetp"), args:{sort_order: thisNode.sort_order + 1}},
+		  {
+		    template: document.getElementById("butaddnewnodetp"),
+		    args:{sort_order: thisNode.sort_order + 1, dataRelationship: thisNode.getRelationship({name: "itemsdata"})}
+		  },
 		  {template: document.getElementById("butdeletetp")}
 		];
 		admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
@@ -127,7 +141,7 @@
 		  <div class="adminlauncher adminsinglelauncher">
 		    <img class="productimg">
 		    <script>
-		    var img=thisNode.properties.image || "noimg.png";
+		    var img=thisNode.getRelationship("itemsdata").getChild().properties.image || "noimg.png";
 		    thisElement.src="catalog/images/small/" + img;
 		    </script>
 		    <div class="btinside"></div>
@@ -136,7 +150,7 @@
 			var launcher=new NodeMale();
 			launcher.editpropertyname="name";
 			launcher.editelement=thisElement.parentElement.firstElementChild;
-			launcher.myNode=thisNode;
+			launcher.myNode=thisNode.getRelationship("itemsdata").getChild();
 			launcher.myContainer=thisElement;
 			launcher.myTp="includes/templates/buteditimg.php";
 			launcher.refreshView(thisElement, "includes/templates/buteditimg.php");
@@ -151,14 +165,14 @@
 			<div class="adminlauncher adminsinglelauncher">
 			  <h3></h3>
 			  <script>
-			    thisElement.textContent=thisNode.properties.name || emptyValueText;
+			    thisElement.textContent=thisNode.getRelationship("itemsdata").getChild().properties.name || emptyValueText;
 			  </script>
 			  <div class="btrightedit">
 			  </div>
 			  <script>
 			    if (webuser.isWebAdmin()) {
 			      var admnlauncher=new NodeMale();
-			      admnlauncher.myNode=thisNode;
+			      admnlauncher.myNode=thisNode.getRelationship("itemsdata").getChild();
 			      admnlauncher.buttons=[{
 				template: document.getElementById("butedittp"),
 				args: {editpropertyname:"name", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
@@ -171,14 +185,14 @@
 			  <div class="adminlauncher adminsinglelauncher">
 			    <div style="margin-bottom:1em;"></div>
 			    <script>
-			      thisElement.innerHTML=thisNode.properties.descriptionshort || emptyValueText;
+			      thisElement.innerHTML=thisNode.getRelationship("itemsdata").getChild().properties.descriptionshort || emptyValueText;
 			    </script>
 			    <div class="btrightedit">
 			    </div>
 			    <script>
 			      if (webuser.isWebAdmin()) {
 				var admnlauncher=new NodeMale();
-				admnlauncher.myNode=thisNode;
+				admnlauncher.myNode=thisNode.getRelationship("itemsdata").getChild();
 				admnlauncher.buttons=[{
 				  template: document.getElementById("butedittp"),
 				  args: {editpropertyname:"descriptionshort", allowedHTML:true, editelement:thisElement.parentElement.firstElementChild}
@@ -197,17 +211,17 @@
 			    <td style="position:relative;">
 			      <div class="adminlauncher adminsinglelauncher">
 				<div style="padding-right:1em;">
-				  <span data-js='
-				      thisElement.textContent=thisNode.properties.price || emptyValueText;
-				    '>
-				  </span>
+				  <span></span>
+				  <script>
+				    thisElement.textContent=thisNode.getRelationship("itemsdata").getChild().properties.price || emptyValueText;
+				  </script>
 				  <span> &euro;</span>
 				    <div class="btrightedit">
 				  </div>
 				  <script>
 				    if (webuser.isWebAdmin()) {
 				      var admnlauncher=new NodeMale();
-				      admnlauncher.myNode=thisNode;
+				      admnlauncher.myNode=thisNode.getRelationship("itemsdata").getChild();
 				      admnlauncher.buttons=[{
 					template: document.getElementById("butedittp"),
 					args: {editpropertyname:"price", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
@@ -223,11 +237,12 @@
 				<img src="includes/css/images/cart.png"/>
 			      </a>
 			      <script>
-				thisElement.title=labelsRoot.getNextChild({"name":"middle"}).getNextChild({"name":"addcarttt"}).properties.innerHTML;
-				thisElement.onclick=function(){
-				  mycart.additem(thisNode);
+				thisElement.title=domelementsrootmother.getChild().getNextChild({"name":"labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"addcarttt"}).getRelationship("domelementsdata").getChild().properties.value;
+				thisElement.addEventListener("click",function(event){
+				  event.preventDefault();
+				  mycart.additem(thisNode.getRelationship("itemsdata").getChild());
 				  return false;
-				}
+				});
 			      </script>
 			    </td>
 			  </tr>

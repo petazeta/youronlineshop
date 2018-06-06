@@ -36,14 +36,8 @@ switch ($parameters->action) {
     $filter=null; $order=null; $limit = null;
     if (isset($parameters->filter)) $filter=$parameters->filter;
     if (isset($parameters->language)) {
-      foreach ($myelement->syschildtablekeysinfo as $syskey) {
-	if ($syskey->parenttablename==$parameters->language->parentNode->properties->childtablename) {
-	  if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
-	  break;
-	}
-      }
       if (!$filter) $filter=[];
-      $filter[$foreigncolumnname] = $parameters->language->properties->id;
+      $filter['_language'] = $parameters->language->properties->id;
     }
     if (isset($parameters->order)) $order=$parameters->order;
     if (isset($parameters->limit)) $limit=$parameters->limit;
@@ -59,20 +53,7 @@ switch ($parameters->action) {
     $deepLevel=null; $filter=null;
     if (isset($parameters->deepLevel)) $deepLevel=$parameters->deepLevel;
     if (isset($parameters->language)) {
-      $nodeclass=get_class($myelement);
-      if ($nodeclass=='NodeFemale') {
-	$syschildtablekeysinfo=$myelement->syschildtablekeysinfo;
-      }
-      else {
-	$syschildtablekeysinfo=$myelement->parentNode->syschildtablekeysinfo;
-      }
-      foreach ($syschildtablekeysinfo as $syskey) {
-	if ($syskey->parenttablename==$parameters->language->parentNode->properties->childtablename) {
-	  if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
-	  break;
-	}
-      }
-      $filter=[$foreigncolumnname => $parameters->language->properties->id];
+      $filter=['_language' => $parameters->language->properties->id];
     }
     if ($deepLevel || $filter) $argument=[$deepLevel, $filter];
     $callback="cutUp";
@@ -108,20 +89,8 @@ switch ($parameters->action) {
     $deepLevel=null; $extra=null;
     if (isset($parameters->deepLevel)) $deepLevel=$parameters->deepLevel;
     if (isset($parameters->language)) {
-      $nodeclass=get_class($myelement);
-      if ($nodeclass=='NodeFemale') {
-	$syschildtablekeysinfo=$myelement->syschildtablekeysinfo;
-      }
-      else {
-	$syschildtablekeysinfo=$myelement->parentNode->syschildtablekeysinfo;
-      }
-      foreach ($syschildtablekeysinfo as $syskey) {
-	if ($syskey->parenttablename==$parameters->language->parentNode->properties->childtablename) {
-	  if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
-	  break;
-	}
-      }
-      $extra=[$foreigncolumnname => $parameters->language->properties->id];
+      if (!$extra) $extra=[];
+      $extra['_language'] = $parameters->language->properties->id;
     }
     if ($deepLevel || $extra) $argument=[$deepLevel, $extra];
     $callback=["cutUp"];
