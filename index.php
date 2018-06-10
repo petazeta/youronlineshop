@@ -7,9 +7,7 @@
     <script src="includes/javascript/nodes.js"></script>
     <script src="includes/javascript/dommethods.js"></script>
     <script src="includes/javascript/cart.js"></script>
-    <script src="includes/javascript/setactive.js"></script>
     <script src="includes/javascript/user.js"></script>
-    <script src="includes/javascript/alert.js"></script>
     <link rel="stylesheet" type="text/css" href="includes/css/main.css">
     <link rel="icon" href="favicon.ico">
     <?php include("includes/templates.php"); ?>

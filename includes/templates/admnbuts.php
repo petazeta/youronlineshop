@@ -12,12 +12,10 @@
   //Generate the buttons positioned table
   //normalize
   var launcher=thisNode;
-  var thisNode=launcher.myNode;
   var myTable=thisElement.parentElement.querySelector("template").content.querySelector("table").cloneNode(true);
   var butsContainer=document.createDocumentFragment();
   launcher.buttons.forEach(function(myButton){
      var butlauncher=new NodeMale();
-    butlauncher.myNode=thisNode;
     if (myButton.args) {
       for (var key in myButton.args) {
 	butlauncher[key]=myButton.args[key];
@@ -27,6 +25,6 @@
     butlauncher.appendThis(divWrapper, myButton.template);
     butsContainer.appendChild(divWrapper);
   });
-  thisElement.appendChild(intoColumns(myTable, butsContainer, 0));
+  thisElement.appendChild(DomMethods.intoColumns(myTable, butsContainer, 0));
   </script>
 </template>

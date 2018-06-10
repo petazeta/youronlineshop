@@ -18,7 +18,7 @@ if ($parameters->action=="logout") {
   exit(json_encode($loginresult));
 }
 if (!isset($_POST["user_name"]) || !isset($_POST["user_password"])) {
-  $loginresult->extra->errorlogin=true;
+  $loginresult->extra->error=true;
   exit(json_encode($loginresult));
 }
 $user=new user();

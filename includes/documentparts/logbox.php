@@ -5,11 +5,11 @@
       <a href=""></a>
       <script>
 	var setlogstatus=function(){
-	  var logbox=thisNode.getChild({"name":"logboxout"});
+	  var logbox=thisNode.getChild({name:"logboxout"});
 	  if (webuser.properties.id) {
-	    logbox=thisNode.getChild({"name":"logboxin"});
+	    logbox=thisNode.getChild({name:"logboxin"});
 	  }
-	  thisElement.textContent=logbox.getNextChild({"name":"status"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+	  thisElement.textContent=logbox.getNextChild({name:"status"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
 	}
 	setlogstatus();
 	webuser.addEventListener("log", function() {
@@ -21,7 +21,8 @@
 	    webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php")
 	  }
 	  else {
-	    webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+	    var launcher=new NodeMale();
+	    launcherrefreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 	  }
 	  return false;
 	});
@@ -34,11 +35,11 @@
 	    <a href=""></a>
 	    <script>
 	      var setlogname=function(){
-		var logbox=thisNode.getChild({"name":"logboxout"});
+		var logbox=thisNode.getChild({name:"logboxout"});
 		if (webuser.properties.id) {
-		  logbox=thisNode.getChild({"name":"logboxin"});
+		  logbox=thisNode.getChild({name:"logboxin"});
 		}
-		thisElement.textContent=webuser.properties.username || logbox.getNextChild({"name":"username"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+		thisElement.textContent=webuser.properties.username || logbox.getNextChild({name:"username"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
 	      }
 	      setlogname();
 	      webuser.addEventListener("log", function() {
@@ -50,7 +51,7 @@
 		  webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php")
 		}
 		else {
-		  webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+		  (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 		}
 		return false;
 	      });
@@ -62,11 +63,11 @@
 	<a href="" class="btn"></a>
 	<script>
 	  var setlogtitle=function(){
-	    var logbox=thisNode.getChild({"name":"logboxout"});
+	    var logbox=thisNode.getChild({name:"logboxout"});
 	    if (webuser.properties.id) {
-	      logbox=thisNode.getChild({"name":"logboxin"});
+	      logbox=thisNode.getChild({name:"logboxin"});
 	    }
-	    thisElement.textContent=logbox.getNextChild({"name":"title"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+	    thisElement.textContent=logbox.getNextChild({name:"title"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
 	  }
 	  setlogtitle();
 	  webuser.addEventListener("log", function() {
@@ -78,7 +79,7 @@
 	      webuser.logoff();
 	    }
 	    else {
-	      webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+	      (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 	    }
 	    return false;
 	  });
@@ -90,12 +91,12 @@
 <script>
 var mycart=new cart();
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  var logboxparent=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"logbox"}).getRelationship({"name":"domelements"});
+  var logboxparent=this.getChild().getNextChild({name: "labels"}).getNextChild({name:"middle"}).getNextChild({name:"logbox"}).getRelationship({name:"domelements"});
   logboxparent.refreshView(document.querySelector("#logboxtp").previousElementSibling, document.querySelector("#logboxtp"));
 });
 webuser.addEventListener("log", function(){
   if (!this.properties.id) {
-    this.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
   }
   else {
     this.refreshView(document.getElementById("centralcontent"),  "includes/templates/loggedindata.php");

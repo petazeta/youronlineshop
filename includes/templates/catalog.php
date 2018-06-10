@@ -151,8 +151,6 @@
 			launcher.editpropertyname="name";
 			launcher.editelement=thisElement.parentElement.firstElementChild;
 			launcher.myNode=thisNode.getRelationship("itemsdata").getChild();
-			launcher.myContainer=thisElement;
-			launcher.myTp="includes/templates/buteditimg.php";
 			launcher.refreshView(thisElement, "includes/templates/buteditimg.php");
 		      }
 		    </script>

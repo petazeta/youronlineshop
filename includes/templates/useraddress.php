@@ -17,7 +17,7 @@
       this.children[0].appendProperties(thisElement,"includes/templates/singlefield.php");
       thisNode.getRelationship("addresses").loadfromhttp({action: "load my children", user_id: webuser.properties.id}, function() {
 	this.children[0].appendProperties(thisElement,"includes/templates/singlefield.php",function(){
-	  thisElement.appendChild(intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, addressColumns));
+	  thisElement.appendChild(DomMethods.intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, addressColumns));
 	  thisElement.style.visibility="visible";
 	});
       });

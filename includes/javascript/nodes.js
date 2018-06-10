@@ -29,21 +29,43 @@ function Node() {
   //optional variable this.extra
 }
 
-Node.prototype.load=function(source) {
+Node.prototype.load=function(source, thisProperties) {
   if (typeof source=="string") source=JSON.parse(source);
-  if (source.properties)
-    this.properties.cloneFromArray(source.properties);
+  if (source.properties) {
+    if (thisProperties) {
+      if (typeof thisProperties=="string") thisProperties=[thisProperties];
+      var myProperties={};
+      for (var i=0; i<thisProperties; i++) {
+	if (source.properties.keys().indexOf(thisProperties[i])) {
+	  myProperties[thisProperties[i]]=source.properties[thisProperties[i]];
+	}
+      }
+      this.properties.cloneFromArray(myProperties);
+    }
+    else this.properties.cloneFromArray(source.properties);
+  }
   if (source.extra) this.extra=source.extra;
 }
-Node.prototype.loadasc=function(source) {
+Node.prototype.loadasc=function(source, thisProperties) {
   if (typeof source=="string") source=JSON.parse(source);
-  if (source.properties)
-    this.properties.cloneFromArray(source.properties);
+  if (source.properties) {
+    if (thisProperties) {
+      if (typeof thisProperties=="string") thisProperties=[thisProperties];
+      var myProperties={};
+      for (var i=0; i<thisProperties; i++) {
+	if (source.properties.keys().indexOf(thisProperties[i])) {
+	  myProperties[thisProperties[i]]=source.properties[thisProperties[i]];
+	}
+      }
+      this.properties.cloneFromArray(myProperties);
+    }
+    else this.properties.cloneFromArray(source.properties);
+  }
   if (source.extra) this.extra=source.extra;
 }
-Node.prototype.cloneNode=function(level) {
+Node.prototype.cloneNode=function(level, thisProperties) {
   var myClon=new this.constructor();
-  myClon.load(this, level);
+  myClon.load(this, level, thisProperties);
   return myClon;
 }
 Node.prototype.getTp=function (tpHref, reqlistener) {
@@ -327,6 +349,36 @@ Node.prototype.appendChildren=function (container, tp, reqlistener) {
   }
 };
 
+Node.prototype.appendProperty=function(container, property, attribute, editable) {
+  var myAttribute="innerHTML"; //by default
+  if (attribute) myAttribute=attribute;
+  if (!property) {
+    var keys;
+    if (this.parentNode && this.parentNode.childtablekeys) {
+      keys=this.parentNode.childtablekeys;
+    }
+    else {
+      keys=Object.keys(this.properties);
+    }
+    for (var i=0; i<keys.length; i++) {
+      if (keys[i]!="id") {
+	property=key;
+	break;
+      }
+    }
+  }
+  container[myAttribute]=this.properties[property] || emptyValueText;
+  if (editable===false) {
+    container.editionEditable=false;
+  }
+  else {
+    container.editionEditable=true;
+    container.editionThisNode=this;
+    container.editionThisProperty=property;
+    container.editionThisAttribute=attribute;
+  }
+}
+
 //It loads a node tree from a php script that privides it in json format
 Node.prototype.loadfromhttp=function (request, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
@@ -427,8 +479,8 @@ function NodeFemale() {
 NodeFemale.prototype=Object.create(Node.prototype);
 NodeFemale.prototype.constructor=NodeFemale;
 
-NodeFemale.prototype.load=function(source, level) {
-  Node.prototype.load.call(this, source);
+NodeFemale.prototype.load=function(source, level, thisProperties) {
+  Node.prototype.load.call(this, source); //No thisProperties filter for females
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
       this.childtablekeys[i]=source.childtablekeys[i];
@@ -455,12 +507,12 @@ NodeFemale.prototype.load=function(source, level) {
   for (var i=0;i<source.children.length;i++) {
     this.children[i]=new NodeMale;
     this.children[i].parentNode=this;
-    this.children[i].load(source.children[i], level);
+    this.children[i].load(source.children[i], level, thisProperties);
   }
 }
 
-NodeFemale.prototype.loadasc=function(source, level) {
-  Node.prototype.loadasc.call(this, source);
+NodeFemale.prototype.loadasc=function(source, level, thisProperties) {
+  Node.prototype.loadasc.call(this, source); //No thisProperties filter for females
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
       this.childtablekeys[i]=source.childtablekeys[i];
@@ -488,12 +540,12 @@ NodeFemale.prototype.loadasc=function(source, level) {
     if (!Array.isArray(this.partnerNode)) this.partnerNode=[this.partnerNode];
     for (var i=0; i < source.partnerNode.length; i++) {
       this.partnerNode[i]=new NodeMale();
-      this.partnerNode[i].loadasc(source.partnerNode[i], level);
+      this.partnerNode[i].loadasc(source.partnerNode[i], level, thisProperties);
     }
   }
   else {
     if (!this.partnerNode) this.partnerNode=new NodeMale();
-    this.partnerNode.loadasc(source.partnerNode, level);
+    this.partnerNode.loadasc(source.partnerNode, level, thisProperties);
   }
 }
 
@@ -609,8 +661,8 @@ NodeMale.prototype=Object.create(Node.prototype);
 NodeMale.prototype.constructor=NodeMale;
 
   //It loads data from a json string or an object
-NodeMale.prototype.load=function(source, level) {
-  Node.prototype.load.call(this, source);
+NodeMale.prototype.load=function(source, level, thisProperties) {
+  Node.prototype.load.call(this, source, thisProperties);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (level==0) return false;
   if (level) level--;
@@ -618,7 +670,7 @@ NodeMale.prototype.load=function(source, level) {
   for (var i=0;i<source.relationships.length; i++) {
     this.relationships[i]=new NodeFemale();
     this.relationships[i].partnerNode=this;
-    this.relationships[i].load(source.relationships[i], level);
+    this.relationships[i].load(source.relationships[i], level, thisProperties);
   }
 }
 
@@ -629,8 +681,8 @@ NodeMale.prototype.appendNextChildren=function(container, tp, reqlistener, appen
   return this.relationships[0].appendChildren(container, tp, reqlistener, append);
 }
 
-NodeMale.prototype.loadasc=function(source, level) {
-  Node.prototype.loadasc.call(this, source);
+NodeMale.prototype.loadasc=function(source, level, thisProperties) {
+  Node.prototype.loadasc.call(this, source, thisProperties);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (!source.parentNode) return false;
   if (level==0) return false;
@@ -639,12 +691,12 @@ NodeMale.prototype.loadasc=function(source, level) {
     if (!Array.isArray(this.parentNode)) this.parentNode=[this.parentNode];
     for (var i=0; i < source.parentNode.length; i++) {
       this.parentNode[i]=new NodeFemale();
-      this.parentNode[i].loadasc(source.parentNode[i], level);
+      this.parentNode[i].loadasc(source.parentNode[i], level, thisProperties);
     }
   }
   else {
     if (!this.parentNode) this.parentNode=new NodeFemale();
-    this.parentNode.loadasc(source.parentNode, level);
+    this.parentNode.loadasc(source.parentNode, level, thisProperties);
   }
 }
 
@@ -685,12 +737,43 @@ NodeMale.prototype.avoidrecursiondown=function(){
     rel.avoidrecursiondown();
   });
 }
-
-NodeMale.prototype.cloneRelationship=function() {
-  var relClon=this.parentNode.cloneNode();
-  this.relationships[0]=relClon;
-  this.relationships[0].partnerNode=this;
-  return this.relationships[0];
+NodeMale.prototype.cloneRelationship=function(){
+  return this.cloneRelationships(null, "parent")[0];
+}
+NodeMale.prototype.cloneRelationships=function(selecting, keyword) {
+  if (typeof selecting=="string") selecting={name: selecting};
+  if (!selecting) {
+    selecting={};
+  }
+  var cloned=[];
+  switch (keyword) {
+    case "all":
+      for (var i=0; i<this.parent.partner.relationships.length; i++) {
+	cloned[i]=this.parent.partner.relationships[i].cloneNode(0);
+      }
+      break;
+    case "parent":
+      cloned[0]=this.parentNode.cloneNode(0);
+      break;
+    default:
+      for (var i=0; i<this.parentNode.partnerNode.relationships.length; i++) {
+	var keys=Object.keys(selecting);
+	var passed=true;
+	for (var j=0; j<keys.length; j++) {
+	  if (this.parentNode.partnerNode.relationships[i].properties[keys[j]]!=selecting[keys[j]]) {
+	    passed=false
+	    break;
+	  }
+	}
+	if (passed) cloned.push(this.parentNode.partnerNode.relationships[i].cloneNode(0));
+      }
+  }
+  //We don't everwrite existing rels (push)
+  for (var i=0; i<cloned.length; i++) {
+    this.relationships.push(cloned[i]);
+    cloned[i].partnerNode=this;
+  }
+  return this.relationships;
 };
 
 NodeMale.prototype.addRelationship=function(rel) {

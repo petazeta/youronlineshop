@@ -671,7 +671,6 @@ class NodeMale extends Node{
       $myproperties[$key]='\'' .  mysql_escape_string($value) . '\'';
     }
     if ($extra) {
-      $filterValid=[];
       foreach ($extra as $key => $value) {
 	if (isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
@@ -683,9 +682,9 @@ class NodeMale extends Node{
     $sql = 'INSERT INTO '
       . constant($this->parentNode->properties->childtablename)
       . ' ('
-        . implode(', ', array_keys($filterValid))
+        . implode(', ', array_keys($myproperties))
       . ' ) VALUES ('
-      . implode(', ', array_values($filterValid))
+      . implode(', ', array_values($myproperties))
       . ' )';
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->properties->id = $this->getdblink()->insert_id;

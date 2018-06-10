@@ -340,8 +340,10 @@ footer > table td{
 
 .btleftedit {
     position: absolute;
-    top: calc(50% - 16px);
-    left: -34px;
+    top: 50%;
+    left: 0;
+    transform: translateX(-50%);
+    transform: translateY(-50%);
 }
 /*
   .adminedit is the inner and adminlauncher is the outer so when mouse is over launcher => edit is visible.

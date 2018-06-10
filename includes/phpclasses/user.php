@@ -14,7 +14,7 @@ class user extends NodeMale {
     $candidates=$user->db_search();
     if (!(count($candidates) == 1)) { //candidates=0
       $result->extra->error=true;
-      $result->extra->errormsg="username error";
+      $result->extra->errorName="userError";
       return $result;
     }
     
@@ -22,7 +22,7 @@ class user extends NodeMale {
     $candidates=$user->db_search();
     if (!(count($candidates) == 1)) { //candidates=0
       $result->extra->error=true;
-      $result->extra->errormsg="password error";
+      $result->extra->errorName="pwdError";
     }
     else $result->properties->id = $candidates[0]["id"];
     return $result;
@@ -33,17 +33,17 @@ class user extends NodeMale {
     
     if (!$this->checklength($username, 4, 20)) {
       $result->extra->error=true;
-      $result->extra->errormsg="username characters error";
+      $result->extra->errorName="userCharError";
       return $result;
     }
     if (!$this->checklength($pwd, 4, 20)) {
       $result->extra->error=true;
-      $result->extra->errormsg="password characters error";
+      $result->extra->errorName="pwdCharError";
       return $result;
     }
     if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $result->extra->error=true;
-      $result->extra->errormsg="email error";
+      $result->extra->errorName="emailError";
       return $result;
     }
 
@@ -52,7 +52,7 @@ class user extends NodeMale {
     $candidates=$user->db_search();
     if (count($candidates) != 0) { //candidates=1
       $result->extra->error=true;
-      $result->extra->errormsg="username already taken";
+      $result->extra->errorName="userExistsError";
       return $result;
     }
     $user->properties->pwd=$pwd;

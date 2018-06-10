@@ -18,7 +18,7 @@
     var datarel=thisNode.getRelationship("usersdata");
     function showdata(){
       datarel.children[0].refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
-	thisElement.appendChild(intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, 2));
+	thisElement.appendChild(DomMethods.intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, 2));
       });
     }
     if (datarel.children.length==0) {

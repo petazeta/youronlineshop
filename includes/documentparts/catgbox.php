@@ -14,10 +14,9 @@
     <script>
       var addadminbutts=function(){
 	var admnlauncher=new NodeMale();
-	admnlauncher.myNode=thisNode;
 	admnlauncher.buttons=[{
 	  template: document.getElementById("butedittp"),
-	  args: {editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	  args: {myNode: thisNode, editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
 	}];
 	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
       }
@@ -26,6 +25,7 @@
       }
       webuser.addEventListener("log", function() {
 	if (!this.isWebAdmin()) {
+	  //to remove the editbutton when logs after webadmin
 	  thisElement.innerHTML="";
 	}
 	else {
@@ -52,25 +52,29 @@
 	thisElement.textContent=this.getChild().properties.name || emptyValueText;
 	function showButtons(){
 	  var admnlauncher=new NodeMale();
-	  admnlauncher.myNode=thisNode;
 	  admnlauncher.buttons=[
-	    {
+	    { 
 	      template: document.getElementById("butedittp"),
-	      args:{editpropertyname:"name", allowedHTML:false, editelement:thisElement, dataRelationship: thisNode.getRelationship({name: "itemcategoriesdata"})}
+	      args:{myNode: thisNode.getRelationship({name: "itemcategoriesdata"}).getChild(), editpropertyname:"name", allowedHTML:false, editelement:thisElement}
 	    },
-	    {template: document.getElementById("butvchpostp")},
+	    {
+	      template: document.getElementById("butvchpostp"),
+	      args:{myNode: thisNode}
+	    },
 	    {
 	      template: document.getElementById("butaddnewnodetp"),
-	      args:{sort_order: thisNode.sort_order + 1, dataRelationship: thisNode.getRelationship({name: "itemcategoriesdata"})}
+	      args:{myNode: thisNode, sort_order: thisNode.sort_order + 1, branch: thisNode.getRelationship("itemcategoriesdata")}
 	    },
-	    {template: document.getElementById("butdeletetp")}
+	    {
+	      template: document.getElementById("butdeletetp"),
+	      args:{myNode: thisNode}
+	    }
 	  ];
 	  admnlauncher.refreshView(thisElement.previousElementSibling, document.getElementById("admnbutstp"));
 	}
 	if (webuser.isWebAdmin()) {
 	  showButtons();
 	}
-	
 	var listenerId=thisNode.parentNode.properties.childtablename + "-" + thisNode.properties.id;
 	webuser.addEventListener("log", function() {
 	    if (!this.isWebAdmin()) {
@@ -108,14 +112,27 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     categoriesroot.loadfromhttp({action: "load my tree", deepLevel: 3}, function() {
       var categoriesMother=this.getRelationship();
       categoriesMother.addEventListener("refreshChildrenView", function() {
-	if (this.children==0){
-	  //Add the nochildren node that will be the container of the addnode button in case user is web admin
-	  var noChildrenLauncher=new NodeMale();
-	  noChildrenLauncher.args={dataRelationship: this.partnerNode.getRelationship({name: "itemcategoriesdata"})};
-	  noChildrenLauncher.myNode=this;
-	  noChildrenLauncher.refreshView(this.childContainer, document.getElementById("nochildrentp"));
+	if (this.children.length==0){
+	  if (webuser.isWebAdmin()) {
+	    //The node and a data node is inserted
+	    var childNode=new NodeMale();
+	    childNode.parentNode=this;
+	    childNode.relationships[0]=this.partnerNode.getRelationship({name: "itemcategoriesdata"}).cloneNode(0);
+	    childNode.getRelationship().addChild(new NodeMale());
+	    
+	    var admnlauncher=new NodeMale();
+	    admnlauncher.myNode=childNode;
+	    admnlauncher.buttons=[{
+	      template: document.getElementById("butaddnewnodetp"),
+	      args: {myNode: childNode, branch: childNode.getRelationship()}
+	    }];
+	    admnlauncher.refreshView(this.childContainer, document.getElementById("nochildrentp"));
+	  }
+	  //To remove the add element when log
+	  else this.childContainer.innerHTML="";
 	}
-	else catContainer.appendChild(intoColumns(document.querySelector("#categorytp").previousElementSibling.content.querySelector("table").cloneNode(true), catContainer, 1));
+	//refreshChildrenView listener to fit in columns
+	else document.querySelector("#catalogbox .boxbody").appendChild(intoColumns(document.querySelector("#categorytp").previousElementSibling.content.querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
       //When admin add a new node it will be selected
       categoriesMother.addEventListener("addNewNode", function(newnodeadded) {
@@ -130,12 +147,11 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 	}
 	if (this.children.length==0) {
 	  //remove subcategories flaps in case we just remove all categories
-	  document.getElementById("centralcontent").innerHTML='';
+	  nodedeleted.getRelationship().childContainer.innerHTML="";
 	}
       });
       //showing categories
-      var catContainer=document.querySelector("#catalogbox .boxbody");
-      categoriesMother.refreshChildrenView(catContainer,  document.querySelector("#categorytp"));
+      categoriesMother.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  document.querySelector("#categorytp"));
       //to refresh the nochildren element when log
       webuser.addEventListener("log", function(){
 	if (categoriesMother.children.length==0) {

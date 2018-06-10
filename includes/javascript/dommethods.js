@@ -1,124 +1,137 @@
 //Some functions that will be applied to dom elements
-function activeedition(thisNode, field){
-  function submit() {
-    this.setAttribute("contenteditable","false");
-    this.className=this.className.replace(/ contenteditableactive/g,'');
-    var tableAdmin=this.parentElement.querySelector("table.adminedit");
-    if (tableAdmin) {
-      tableAdmin.style.visibility="visible";
-    }
-    //empty values are not allowed
-    if (this[myproperty]=="") {
-       this[myproperty]=field.value || emptyValueText;
-      return false;
-    }
-    else if (field.value != this[myproperty]) { //just when content change and not void
-      field.setAttribute("value",this[myproperty]);
-      thisParent=thisNode.parentNode;
-      var myresult=new NodeMale();
-      var thisElement=this;
-      myresult.loadfromhttp(field.form, function(){
-        var myelement=new NodeMale();
-        myelement.properties.id=thisNode.properties.id;
-        myelement.properties[field.name]=field.value;
-        thisParent.updateChild(myelement);
-	thisNode.dispatchEvent("propertychange", [field.name]);
+DomMethods={
+  activeedition: function (thisNode, thisElement, propertyChange){
+    if (thisElement.editionInlineEdition) {
+      //disable Intro keyCode for new Line and enable it for submith
+      thisElement.addEventListener('keydown', function (e) {
+	var key = e.which || e.keyCode;
+	if (key == 13) { 
+	  propertyChange(thisNode, thisElement);
+	}
       });
     }
-  };
-  var tableAdmin=this.parentElement.querySelector("table.adminedit");
-  if (tableAdmin) {
-    tableAdmin.style.visibility="hidden";
-  }
-  
-  if (this.allowedHTML) var myproperty="innerHTML";
-  else {
-    var myproperty="textContent";
-    var myThis=this;
-    this.addEventListener('keydown', function (e) {
-      var key = e.which || e.keyCode;
-      if (key === 13) { 
-	submit.call(myThis);
+    //removing emptyValueText => property is null
+    if (thisElement[thisElement.editionThisProperty]==emptyValueText && thisNode.properties[thisElement.editionThisProperty]!=emptyValueText) {
+      thisElement[thisElement.editionThisProperty]=null;
+    }
+    thisElement.setAttribute("contenteditable","true");
+    thisElement.className=thisElement.className.replace(/ contenteditableactive/g,"");
+    thisElement.className+=" contenteditableactive";
+    thisElement.focus();
+    thisElement.addEventListener("blur", function(){propertyChange(thisNode, thisElement)});
+  },
+  setSelected: function(element) {
+    element.className=element.className.replace(/ selected/g,"");
+    element.className+=" selected";
+  },
+  setUnselected: function(element) {
+    element.className=element.className.replace(/ selected/g,'');
+  },
+  closesttagname: function(element, tagname){
+    //if !myreturn.parentElement.tagName => document fragment
+    var myreturn=element;
+    while(myreturn && myreturn.parentElement && myreturn.parentElement.tagName && myreturn.parentElement.tagName!=tagname) {
+      myreturn=myreturn.parentElement;
+    }
+    return myreturn.parentElement;
+  },
+  intoColumns: function(tableElement, elements, cellsNumber) {
+    // columns distribution applied to a row
+    // tableElement a table template, elements a document fragment o dom element containing elements
+    var myRow=tableElement.rows[0].cloneNode();
+    var myCell=tableElement.rows[0].cells[0].cloneNode();
+    tableElement.innerHTML='';
+    while (elements.firstElementChild) {
+      if (!elements.firstElementChild.tagName) continue;
+      var newRow=myRow.cloneNode();
+      tableElement.appendChild(newRow);
+      if (cellsNumber == 0) {
+	while (elements.firstElementChild) {
+	  var newCell=myCell.cloneNode();
+	  newCell.style.width=cellsWidth;
+	  newCell.appendChild(elements.firstElementChild);
+	  newRow.appendChild(newCell);
+	}
+	return tableElement;
       }
-    });
+      var i=cellsNumber;
+      while(i--) {
+	var cellsWidth=Math.round(100/cellsNumber) + "%";
+	if (elements.firstElementChild) {
+	  var newCell=myCell.cloneNode();
+	  newCell.style.width=cellsWidth;
+	  newCell.appendChild(elements.firstElementChild);
+	  //don't forget the element script
+	  if (elements.firstElementChild && elements.firstElementChild.tagName=="SCRIPT") {
+	    newCell.appendChild(elements.firstElementChild);
+	  }
+	  newRow.appendChild(newCell);
+	}
+	else {
+	  var newCell=myCell.cloneNode();
+	  newCell.style.width=cellsWidth;
+	  newRow.appendChild(newCell);
+	}
+      }
+    }
+    return tableElement;
+  },
+  validateEmail: function(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  },
+  checklength: function(value, min, max){
+    if (typeof value=="number") value=value.toString();
+    if (typeof value == "string") {
+      if (value.length >= min && value.length <= max) return true;
+    }
+    return false;
+  },
+  setActive: function(thisNode) {
+    thisNode.parentNode.activeChildren=thisNode;
+    var myPointer=thisNode.getrootnode();
+    myPointer.activeNode=thisNode;
+    var i= thisNode.parentNode.children.length;
+    while(i--) {
+      thisNode.parentNode.children[i].selected=false;
+      var doms=thisNode.parentNode.children[i].getMyDomNodes();
+      if (doms.length>0) {
+	DomMethods.setUnselected(doms[0]);
+      }
+    }
+    thisNode.selected=true;
+    var doms=thisNode.getMyDomNodes()
+    if (doms) {
+      DomMethods.setSelected(doms[0]);
+    }
   }
-  //field contains the previous value
-  //removing the initial value for null values
-  if (this[myproperty]!=thisNode.properties[field.name]) {
-    if (thisNode.properties[field.name]) this[myproperty]=thisNode.properties[field.name];
-    else this[myproperty]=null;
-  }
-  field.setAttribute("value",this[myproperty]);
-  this.setAttribute("contenteditable","true");
-  this.className+=" contenteditableactive";
-  this.focus();
-  
-  this.addEventListener("blur", submit);
+//get editable element
+//append a wrapp for onmouse over show if it isnt already
+//append the button container default is bteditright
+//create the array, define the attributes: lineEdit
+//and refreshView admnbuttns
 }
 
-function setSelected() {
-  this.className+=" selected";
-};
-function setUnselected() {
-  this.className=this.className.replace(/ selected/g,'');
-};
-function closesttagname(tagname){
-  //if !myreturn.parentElement.tagName => document fragment
-  var myreturn=this;
-  while(myreturn && myreturn.parentElement && myreturn.parentElement.tagName && myreturn.parentElement.tagName!=tagname) {
-    myreturn=myreturn.parentElement;
-  }
-  return myreturn.parentElement;
-};
-function intoColumns(tableElement, elements, cellsNumber) {
-  // columns distribution applied to a row
-  // tableElement a table template, elements a document fragment o dom element containing elements
-  var myRow=tableElement.rows[0].cloneNode();
-  var myCell=tableElement.rows[0].cells[0].cloneNode();
-  tableElement.innerHTML='';
-  while (elements.firstElementChild) {
-    if (!elements.firstElementChild.tagName) continue;
-    var newRow=myRow.cloneNode();
-    tableElement.appendChild(newRow);
-    if (cellsNumber == 0) {
-      while (elements.firstElementChild) {
-	var newCell=myCell.cloneNode();
-	newCell.style.width=cellsWidth;
-	newCell.appendChild(elements.firstElementChild);
-	newRow.appendChild(newCell);
-      }
-      return tableElement;
-    }
-    var i=cellsNumber;
-    while(i--) {
-      var cellsWidth=Math.round(100/cellsNumber) + "%";
-      if (elements.firstElementChild) {
-	var newCell=myCell.cloneNode();
-	newCell.style.width=cellsWidth;
-	newCell.appendChild(elements.firstElementChild);
-	//don't forget the element script
-	if (elements.firstElementChild && elements.firstElementChild.tagName=="SCRIPT") {
-	  newCell.appendChild(elements.firstElementChild);
-	}
-	newRow.appendChild(newCell);
-      }
-      else {
-	var newCell=myCell.cloneNode();
-	newCell.style.width=cellsWidth;
-	newRow.appendChild(newCell);
-      }
-    }
-  }
-  return tableElement;
+function Alert() {
+  NodeMale.call(this);
 }
-function validateEmail(email) {
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
-function checklength(value, min, max){
-  if (typeof value=="number") value=value.toString();
-  if (typeof value == "string") {
-    if (value.length >= min && value.length <= max) return true;
+Alert.prototype=Object.create(NodeMale.prototype);
+Alert.prototype.constructor=Alert;
+
+
+Alert.prototype.showalert=function() {
+  var alertcontainer=document.createElement("div");
+  document.body.appendChild(alertcontainer);
+  this.myContainer=alertcontainer;
+  this.refreshView();
+};
+Alert.prototype.hidealert=function() {
+  var remove=function(element){
+    element.parentElement.removeChild(element);
+  };
+  var myContainer=this.myContainer;
+  if (this.properties.timeout>0) {
+    window.setTimeout(function(){remove(myContainer);},this.properties.timeout);
   }
-  return false;
-}
+  else remove(myContainer);
+};

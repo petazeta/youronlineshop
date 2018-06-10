@@ -9,10 +9,9 @@
     <script>
       var addadminbutts=function(){
 	var admnlauncher=new NodeMale();
-	admnlauncher.myNode=thisNode;
 	admnlauncher.buttons=[{
 	  template: document.getElementById("butedittp"),
-	  args: {editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
+	  args: {thisNode: thisNode, editpropertyname:"innerHTML", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
 	}];
 	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
       }

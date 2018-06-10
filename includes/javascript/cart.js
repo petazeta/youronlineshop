@@ -73,6 +73,7 @@ cart.prototype.additem=function(item, quantity) {
   myalert.properties.alertmsg="+" + quantity + " " + item.properties.name;
   if (quantity<0) myalert.properties.alertmsg=quantity + " " + item.properties.name;
   myalert.showalert();
+  this.dispatchEvent("cartItem",[item]);
 };
 
 cart.prototype.refreshcartbox=function() {
@@ -90,13 +91,16 @@ cart.prototype.refreshcartbox=function() {
 }
 cart.prototype.tocheckout=function() {
   if (this.getRelationship("cartitem").children.length==0) {
-    myalert.load({properties:{alertmsg: "Cart is empty", timeout:2000}});
+    var cartbox=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"cartbox"});
+    myalert.properties.alertmsg=thisNode.getNextChild({name:"emptyCart"}).getRelationship("domelementsdata").getChild().properties.value;
+    myalert.properties.timeout=3000;
     myalert.showalert();
   }
   else if (!webuser.properties.id) {
-    webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
   }
   else {
-    webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/checkout1.php");
+    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/checkout1.php");
   }
+  this.dispatchEvent("checkout");
 }
