@@ -5,35 +5,16 @@
   </div>
 </div>
 <template id="catgboxheadtp">
-  <div class="adminlauncher adminsinglelauncher">
+  <span data-note="relative position container for admn buttons">
     <span></span>
     <script>
-      thisElement.textContent=thisNode.properties.value || emptyValueText;
+      thisNode.writeProperty(thisElement);
+      var launcher = new Node();
+      launcher.thisNode = thisNode;
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
     </script>
-    <div class="btrightedit"></div>
-    <script>
-      var addadminbutts=function(){
-	var admnlauncher=new NodeMale();
-	admnlauncher.buttons=[{
-	  template: document.getElementById("butedittp"),
-	  args: {myNode: thisNode, editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-	}];
-	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-      }
-      if (webuser.isWebAdmin()) {
-	addadminbutts();
-      }
-      webuser.addEventListener("log", function() {
-	if (!this.isWebAdmin()) {
-	  //to remove the editbutton when logs after webadmin
-	  thisElement.innerHTML="";
-	}
-	else {
-	  addadminbutts();
-	}
-      });
-    </script>
-  </div>
+  </span>
 </template>
 <template>
   <table class="boxlist">

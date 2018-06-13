@@ -6,7 +6,7 @@
 	<script>thisElement.innerHTML=thisNode.editpropertyname;</script>
 	<span></span>
 	<script>
-	  thisElement.innerHTML=thisNode.properties[thisNode.editpropertyname] || "Not any value";
+	  thisElement.innerHTML=thisNode.properties[thisNode.editpropertyname] || emptyValueText;
 	</script>
 	<div class="btrightedit"></div>
 	<script>

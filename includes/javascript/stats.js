@@ -1,6 +1,5 @@
-var statsLink=document.createElement("img");
-statsLink.style.display="none";
-statsLink.generateUrl=function(data){
+var statsRecorder={};
+statsRecorder.generateUrl=function(data){
   var urlStats="https://youronlineshop.sourceforge.io/stats/register.php";
   var sentences=[];
   data.forEach(function(data) {
@@ -8,43 +7,52 @@ statsLink.generateUrl=function(data){
   });
   return urlStats + "?" + sentences.join("&");
 }
-statsLink.makeRecord=function(data){
-  if (webuser.properties.username){
-    data.unshift({username: webuser.properties.username});
-  }
+statsRecorder.makeRecord=function(data){
   data.unshift({uniqueId: this.uniqueId});
-  data.push({timeDelay: new Date().getTime() - this.startTime});
-  this.src=this.generateUrl(data);
+  if (this.recordsNumber != 0) data.push({timeDelay: ((new Date().getTime() - this.startTime)/(1000 * 60)).toFixed(1) + "min"});
+  this.linkElement.src=this.generateUrl(data);
+  this.recordsNumber++;
 }
-statsLink.keepStats=function() {
-  statsLink.makeRecord([]);
-  window.setTimeout(function(){statsLink.keepStats()}, 300000);
+statsRecorder.keepStats=function() {
+  statsRecorder.makeRecord([]);
+  var delay=60000;
+  if (this.recordsNumber > 20) delay=300000;
+  if (this.recordsNumber > 100) delay=3000000;
+  window.setTimeout(function(){statsRecorder.keepStats()}, delay);
 }
-statsLink.startRecordingProcess=function(){
+statsRecorder.startRecordingProcess=function(){
+  this.recordsNumber=0;
   this.startTime= new Date().getTime();
   this.uniqueId=this.startTime.toString(32);
-  window.document.body.appendChild(this);
+  this.linkElement=window.document.getElementById("statsLink");
+  var thisNavigator="-";
+  if (window.navigator.userAgent.indexOf("Chrome")) thisNavigator="Chrome";
+  else if (window.navigator.userAgent.indexOf("Firefox")) thisNavigator="Firefox";
+  else if (window.navigator.userAgent.indexOf("Mozila")) thisNavigator="Mozilla";
+  if (window.navigator.userAgent.indexOf("Mobil")) thisNavigator+=" Mobil";
   var initData=[
     {httpaddress: window.location.href},
     {languages: window.navigator.languages.join(" ")},
-    {webbrowser: window.navigator.userAgent}
+    {yosversion: "1.0.7"},
+    {webbrowser: thisNavigator}
   ];
   this.makeRecord(initData);
-  window.setTimeout(function(){statsLink.keepStats()}, 180000);
+  window.setTimeout(function(){statsRecorder.keepStats()}, 180000);
   var myEvents=[
-    {name: "exitPage", eventListener: window, eventName: "beforeunload"},
-    {name: "clickWindow", eventListener: window, eventName: "click"},
-    {name: "log", eventListener: webuser, eventName: "log"},
-    {name: "cartItem", eventListener: mycart, eventName: "cartItem"}
+    {write: "exitPage", eventListener: window, eventName: "beforeunload"},
+    {write: "clickW", eventListener: window, eventName: "click"},
+    {write: "javascript:ev.write='log '+ (webuser.getUserType() || webuser.properties.name || 'out')", eventListener: webuser, eventName: "log"},
+    {write: "cartItem", eventListener: mycart, eventName: "cartItem"}
   ];
   myEvents.forEach(function(ev){
     ev.eventListener.addEventListener(ev.eventName, function(myArg){ //the argument sent at dispatchEvent
-      var data=[{[ev.name]: ev.name}];
-      statsLink.makeRecord(data);
+      if (ev.write.indexOf("javascript:"==0)) eval(ev.write.substr(11));
+      var data=[{[ev.eventName]: ev.write}];
+      statsRecorder.makeRecord(data);
     });
   });
 }
 window.onload=function(){
-  statsLink.startRecordingProcess();
+  statsRecorder.startRecordingProcess();
 }
 

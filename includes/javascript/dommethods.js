@@ -1,24 +1,49 @@
 //Some functions that will be applied to dom elements
 DomMethods={
-  activeedition: function (thisNode, thisElement, propertyChange){
-    if (thisElement.editionInlineEdition) {
-      //disable Intro keyCode for new Line and enable it for submith
-      thisElement.addEventListener('keydown', function (e) {
-	var key = e.which || e.keyCode;
-	if (key == 13) { 
-	  propertyChange(thisNode, thisElement);
-	}
-      });
+  activeEdition: function (thisNode, thisElement, thisProperty, thisAttribute, inlineEdition){
+    if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
+    if (thisElement.tagName=="input") {
+      thisAttribute="value";
+      inlineEdition=true;
+    }
+    if (!thisAttribute) {
+      thisAttribute="innerHTML";
     }
     //removing emptyValueText => property is null
-    if (thisElement[thisElement.editionThisProperty]==emptyValueText && thisNode.properties[thisElement.editionThisProperty]!=emptyValueText) {
-      thisElement[thisElement.editionThisProperty]=null;
+    if (thisElement[thisAttribute]==emptyValueText && thisNode.properties[thisProperty]!=emptyValueText) {
+      thisElement[thisAttribute]=null;
     }
-    thisElement.setAttribute("contenteditable","true");
-    thisElement.className=thisElement.className.replace(/ contenteditableactive/g,"");
-    thisElement.className+=" contenteditableactive";
+    if (thisAttribute=="innerHTML" || thisAttribute=="textContent") {
+      thisElement.setAttribute("contenteditable","true");
+      thisElement.className=thisElement.className.replace(/ contenteditableactive/g,"");
+      thisElement.className+=" contenteditableactive";
+    }
     thisElement.focus();
-    thisElement.addEventListener("blur", function(){propertyChange(thisNode, thisElement)});
+    // Hide edit button when write
+    if (thisElement.className.match(/adminsinglelauncher/)) var tableAdmin=thisElement.querySelector("table.adminedit");
+    else var tableAdmin=thisElement.parentElement.querySelector("table.adminedit");
+    if (tableAdmin) {
+      tableAdmin.style.visibility="hidden";
+    }
+  },
+  unActiveEdition: function(thisNode, thisElement, thisProperty, thisAttribute) {
+    //For empty values lets put some content in the element
+    if (thisElement.tagName=="input") {
+      thisAttribute="value";
+    }
+    if (thisElement[thisAttribute]=="") {
+      thisElement[thisAttribute]= emptyValueText;
+    }
+    if (thisElement.tagName=="input") {
+      return;
+    }
+    thisElement.setAttribute("contenteditable","false");
+    thisElement.className=thisElement.className.replace(/ contenteditableactive/g,'');
+    //Set visible edit button
+    var tableAdmin=thisElement.parentElement.querySelector("table.adminedit");
+    if (tableAdmin) {
+      tableAdmin.style.visibility="visible";
+    }
   },
   setSelected: function(element) {
     element.className=element.className.replace(/ selected/g,"");
@@ -104,12 +129,62 @@ DomMethods={
     if (doms) {
       DomMethods.setSelected(doms[0]);
     }
+  },
+  propertyToEdit_old: function(thisNode, thisElement, thisProperty, thisAttribute, butpos, inlineEdition) {
+    var editContainer=null;
+    function makeEditable() {
+      if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
+      if (thisElement.tagName=="INPUT") {
+	thisElement.style.display="inline-block";
+	thisNode.writeProperty(thisElement, null, "value");
+	DomMethods.activeEdition(thisNode, thisElement);
+	if (thisNode.properties[thisProperty] != thisElement.value) { //just when content change and not void
+	  DbMethods.changeProperty(thisNode);
+	}
+	DomMethods.unActiveEdition(thisNode, thisElement);
+      }
+      else {
+	thisElement.parentElement.style.position="relative";
+	editContainer=document.createElement("div");
+	if (!butpos) butpos="btrightedit";
+	editContainer.className=butpos + " visibleHover";
+	thisElement.parentElement.insertBefore(editContainer, thisElement.nextElementSibling);
+	thisElement.addEventListener("mouseover", function(ev){
+	  editContainer.className = editContainer.className.replace(/ visibleHover/g,"");
+	});
+	thisElement.addEventListener("mouseout", function(ev){
+	  editContainer.className += " visibleHover";
+	});
+	
+	var admnlauncher=new NodeMale();
+	admnlauncher.buttons=[{ 
+	  template: document.getElementById("butedittp"),
+	  args:{thisNode: thisNode, thisProperty: thisProperty, editElement: thisElement, thisAttribute: thisAttribute, inlineEdition: inlineEdition}
+	}]
+	admnlauncher.refreshView(editContainer, document.getElementById("admnbutstp"));
+      }
+    }
+    if (webuser.isWebAdmin()) {
+      makeEditable();
+    }
+    //Lets add the log event
+    var pointer=thisElement;
+    while (pointer && pointer != document.getElementById("centralcontent")) {
+      pointer=DomMethods.closesttagname(pointer, "div");
+    }
+    if (pointer != document.getElementById("centralcontent")) {
+      //it is outside of the central content so we got to add a log event listener
+      webuser.addEventListener("log", function() {
+	if (!this.isWebAdmin()) {
+	  //to remove the editbutton when logs after webadmin
+	  if (editContainer) editContainer.parentElement.removeChild(editContainer);
+	}
+	else {
+	  makeEditable();
+	}
+      });
+    }
   }
-//get editable element
-//append a wrapp for onmouse over show if it isnt already
-//append the button container default is bteditright
-//create the array, define the attributes: lineEdit
-//and refreshView admnbuttns
 }
 
 function Alert() {
@@ -134,4 +209,17 @@ Alert.prototype.hidealert=function() {
     window.setTimeout(function(){remove(myContainer);},this.properties.timeout);
   }
   else remove(myContainer);
+};
+
+DbMethods={
+  changeProperty: function (thisNode, thisProperty) {
+    if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
+    var writeNode=new NodeMale();
+    writeNode.loadasc(thisNode, 1, ["id", thisProperty]);
+    console.log(writeNode);
+    writeNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id}, function(){
+      thisNode.parentNode.updateChild(writeNode);
+      thisNode.dispatchEvent("propertychange", [thisProperty]);
+    });
+  }
 };

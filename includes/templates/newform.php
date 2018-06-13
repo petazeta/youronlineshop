@@ -31,7 +31,7 @@
 		</script>
 		<input type="password" class="form-control" placeholder="" name="user_password">
 		<script>
-		  thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, placeholder);
+		  thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "placeholder");
 		</script>
 	      </div>
 	    </td>
@@ -78,7 +78,7 @@
 	  }
 	  webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value, null, function(){
 	    if (this.extra && this.extra.error) {
-	      myalert.properties.alertmsg=thisElement.elements.[this.extra.errorName].value;
+	      myalert.properties.alertmsg=thisElement.elements[this.extra.errorName].value;
 	      myalert.properties.timeout=3000;
 	      myalert.showalert();
 	      return false;

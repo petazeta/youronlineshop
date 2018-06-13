@@ -13,6 +13,7 @@
       </template>
     </tr>
   </table>
+  <img id="statsLink" style="display:none">
 </footer>
 <script type="text/javascript">
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){

@@ -1,3 +1,6 @@
 var Config={
-  requestFilePath: "request.php"
+  requestFilePath: "request.php",
+  mode: "develop",
+  defaultEditButtonPosition: "btrightmiddle",
+  defaultAdmnsButtonsPosition: "bttopcenter"
 }

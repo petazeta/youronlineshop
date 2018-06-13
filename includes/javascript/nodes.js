@@ -52,8 +52,8 @@ Node.prototype.loadasc=function(source, thisProperties) {
     if (thisProperties) {
       if (typeof thisProperties=="string") thisProperties=[thisProperties];
       var myProperties={};
-      for (var i=0; i<thisProperties; i++) {
-	if (source.properties.keys().indexOf(thisProperties[i])) {
+      for (var i=0; i<thisProperties.length; i++) {
+	if (Object.keys(source.properties).indexOf(thisProperties[i])!=-1) {
 	  myProperties[thisProperties[i]]=source.properties[thisProperties[i]];
 	}
       }
@@ -329,10 +329,14 @@ Node.prototype.appendChildren=function (container, tp, reqlistener) {
   var refresh=function(){
     var renderedChildren=this.renderChildren();
     if (renderedChildren) this.childContainer.appendChild(renderedChildren);
-    if (reqlistener) {
-      reqlistener.call(this);
-    }
-    this.dispatchEvent("appendChildren");
+    //Lets give some time for the scripts appended to be executed
+    var myNode=this;
+    window.setTimeout(function(){
+      if (reqlistener) {
+	reqlistener.call(myNode);
+      }
+      myNode.dispatchEvent("appendChildren");
+    }, 1000);
   };
   if (typeof tp=="string") {
     this.getTp(tp, function() {
@@ -349,33 +353,27 @@ Node.prototype.appendChildren=function (container, tp, reqlistener) {
   }
 };
 
-Node.prototype.appendProperty=function(container, property, attribute, editable) {
+Node.prototype.writeProperty=function(container, property, attribute) {
   var myAttribute="innerHTML"; //by default
   if (attribute) myAttribute=attribute;
   if (!property) {
-    var keys;
-    if (this.parentNode && this.parentNode.childtablekeys) {
-      keys=this.parentNode.childtablekeys;
-    }
-    else {
-      keys=Object.keys(this.properties);
-    }
-    for (var i=0; i<keys.length; i++) {
-      if (keys[i]!="id") {
-	property=key;
-	break;
-      }
-    }
+    property=this.getFirstPropertyKey();
   }
   container[myAttribute]=this.properties[property] || emptyValueText;
-  if (editable===false) {
-    container.editionEditable=false;
+}
+
+Node.prototype.getFirstPropertyKey=function(){
+  var keys;
+  if (this.parentNode && this.parentNode.childtablekeys) {
+    keys=this.parentNode.childtablekeys;
   }
   else {
-    container.editionEditable=true;
-    container.editionThisNode=this;
-    container.editionThisProperty=property;
-    container.editionThisAttribute=attribute;
+    keys=Object.keys(this.properties);
+  }
+  for (var i=0; i<keys.length; i++) {
+    if (keys[i]!="id") {
+      return keys[i];
+    }
   }
 }
 
@@ -384,7 +382,7 @@ Node.prototype.loadfromhttp=function (request, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
   var thisNode=this;
   xmlhttp.addEventListener('load', function() {
-    console.log(this.responseText);
+    if (Config.mode=="develop") console.log(this.responseText);
     var responseobj=JSON.parse(this.responseText);
     if (typeof responseobj=="object") {
       thisNode.load(responseobj);

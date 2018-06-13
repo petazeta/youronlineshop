@@ -10,8 +10,10 @@
     var containeropen=thisElement.parentElement;
     thisElement.onclick=function(){
       launcher.refreshView(containeradmin, document.getElementById("admnbutstp"));
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php");
       launcher.refreshView(containeropen, document.getElementById("butclosetp"));
       return false;
     }
+    
   </script>
 </template>
