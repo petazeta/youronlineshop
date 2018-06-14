@@ -129,61 +129,6 @@ DomMethods={
     if (doms) {
       DomMethods.setSelected(doms[0]);
     }
-  },
-  propertyToEdit_old: function(thisNode, thisElement, thisProperty, thisAttribute, butpos, inlineEdition) {
-    var editContainer=null;
-    function makeEditable() {
-      if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
-      if (thisElement.tagName=="INPUT") {
-	thisElement.style.display="inline-block";
-	thisNode.writeProperty(thisElement, null, "value");
-	DomMethods.activeEdition(thisNode, thisElement);
-	if (thisNode.properties[thisProperty] != thisElement.value) { //just when content change and not void
-	  DbMethods.changeProperty(thisNode);
-	}
-	DomMethods.unActiveEdition(thisNode, thisElement);
-      }
-      else {
-	thisElement.parentElement.style.position="relative";
-	editContainer=document.createElement("div");
-	if (!butpos) butpos="btrightedit";
-	editContainer.className=butpos + " visibleHover";
-	thisElement.parentElement.insertBefore(editContainer, thisElement.nextElementSibling);
-	thisElement.addEventListener("mouseover", function(ev){
-	  editContainer.className = editContainer.className.replace(/ visibleHover/g,"");
-	});
-	thisElement.addEventListener("mouseout", function(ev){
-	  editContainer.className += " visibleHover";
-	});
-	
-	var admnlauncher=new NodeMale();
-	admnlauncher.buttons=[{ 
-	  template: document.getElementById("butedittp"),
-	  args:{thisNode: thisNode, thisProperty: thisProperty, editElement: thisElement, thisAttribute: thisAttribute, inlineEdition: inlineEdition}
-	}]
-	admnlauncher.refreshView(editContainer, document.getElementById("admnbutstp"));
-      }
-    }
-    if (webuser.isWebAdmin()) {
-      makeEditable();
-    }
-    //Lets add the log event
-    var pointer=thisElement;
-    while (pointer && pointer != document.getElementById("centralcontent")) {
-      pointer=DomMethods.closesttagname(pointer, "div");
-    }
-    if (pointer != document.getElementById("centralcontent")) {
-      //it is outside of the central content so we got to add a log event listener
-      webuser.addEventListener("log", function() {
-	if (!this.isWebAdmin()) {
-	  //to remove the editbutton when logs after webadmin
-	  if (editContainer) editContainer.parentElement.removeChild(editContainer);
-	}
-	else {
-	  makeEditable();
-	}
-      });
-    }
   }
 }
 

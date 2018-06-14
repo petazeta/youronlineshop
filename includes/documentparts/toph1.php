@@ -3,30 +3,14 @@
   <div class="adminlauncher adminsinglelauncher">
     <h1></h1>
     <script>
-      thisElement.textContent=thisNode.properties.value || emptyValueText;
-      if (thisNode.properties.value) document.title=thisNode.properties.value;
-    </script>
-    <div class="btrightedit"></div>
-    <script>
-      var addadminbutts=function(){
-	var admnlauncher=new NodeMale();
-	admnlauncher.buttons=[{
-	  template: document.getElementById("butedittp"),
-	  args: {myNode: thisNode, editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-	}];
-	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-      }
-      if (webuser.isWebAdmin()) {
-	addadminbutts();
-      }
-      webuser.addEventListener("log", function() {
-	if (!this.isWebAdmin()) {
-	  thisElement.innerHTML="";
-	}
-	else {
-	  addadminbutts();
-	}
-      });
+      thisNode.writeProperty(thisElement);
+      //adding the edition pencil
+      var launcher = new Node();
+      launcher.thisNode = thisNode;
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+      //header title
+      if (thisNode.properties.value) thisNode.writeProperty(document, null, "title");
     </script>
   </div>
 </template>

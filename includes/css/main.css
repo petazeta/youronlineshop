@@ -166,6 +166,9 @@ nav a.menu {
   font-weight: normal;
   font-size: 1.5em;
   color: rgb(80,80,80);
+}
+
+nav span.menu{
   margin: 0.6em 0.8em;
   display: inline-block; /* For the top margins */
 }

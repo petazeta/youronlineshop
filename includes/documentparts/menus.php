@@ -1,6 +1,6 @@
 <nav></nav>
 <template id="menutp">
-  <span data-note="relative position container for admn buttons">
+  <span class="menu" data-note="relative position container for admn buttons">
     <a data-button="true" class="menu" href="javascript:"></a>
     <script>
       if (thisNode.selected) DomMethods.setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
@@ -17,7 +17,27 @@
 	admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode();
 	admnlauncher.newNode.loadasc(thisNode.parentNode.newNode); // we duplicate it so newNode can be reused
 	admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
-	admnlauncher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php");
+	var closelauncher=new Node();
+	admnlauncher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php", function(){
+	  closelauncher.admnbuts=thisElement.parentElement.lastElementChild.previousElementSibling;
+	  if (webuser.isWebAdmin()) {
+	    closelauncher.appendThis(thisElement.parentElement.querySelector("[data-id=containeropen]"), "includes/templates/butclose.php");
+	  }
+	});
+	if (!webuser.eventExists("log",thisNode.parentNode.properties.childtablename + thisNode.properties.id + "butclose")) {
+	  webuser.addEventListener("log", function(){
+	    if (webuser.isWebAdmin()) {
+	      closelauncher.appendThis(thisElement.parentElement.querySelector("[data-id=containeropen]"), "includes/templates/butclose.php");
+	      closelauncher.admnbuts.style.display="block"; //we ensure they are in displayed mod
+	    }
+	    else {
+	      thisElement.parentElement.querySelector("[data-id=containeropen]").innerHTML="";
+	    }
+	  },thisNode.parentNode.properties.childtablename + thisNode.properties.id + "butclose");
+	  thisNode.addEventListener("deleteNode", function() {
+	    webuser.removeEventListener("log", thisNode.parentNode.properties.childtablename + thisNode.properties.id + "butclose");
+	  });
+	}
       });
       thisElement.addEventListener('click', function(event){
 	event.preventDefault();
@@ -29,6 +49,7 @@
 	});
       });
     </script>
+    <div class="btrightmiddle" data-id="containeropen"></div>
   </span>
 </template>
 <template id="domelementtp">

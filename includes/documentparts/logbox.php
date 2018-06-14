@@ -9,7 +9,8 @@
 	  if (webuser.properties.id) {
 	    logbox=thisNode.getChild({name:"logboxin"});
 	  }
-	  thisElement.textContent=logbox.getNextChild({name:"status"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+	  var myNode=logbox.getNextChild({name:"status"}).getRelationship({name: "domelementsdata"}).getChild();
+	  myNode.writeProperty(thisElement);
 	}
 	setlogstatus();
 	webuser.addEventListener("log", function() {
@@ -21,8 +22,7 @@
 	    webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php")
 	  }
 	  else {
-	    var launcher=new NodeMale();
-	    launcherrefreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+	    (new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 	  }
 	  return false;
 	});
@@ -51,7 +51,7 @@
 		  webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php")
 		}
 		else {
-		  (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+		  (new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 		}
 		return false;
 	      });
@@ -67,7 +67,8 @@
 	    if (webuser.properties.id) {
 	      logbox=thisNode.getChild({name:"logboxin"});
 	    }
-	    thisElement.textContent=logbox.getNextChild({name:"title"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+	    var myNode=logbox.getNextChild({name:"title"}).getRelationship({name: "domelementsdata"}).getChild();
+	    myNode.writeProperty(thisElement);
 	  }
 	  setlogtitle();
 	  webuser.addEventListener("log", function() {
@@ -79,7 +80,7 @@
 	      webuser.logoff();
 	    }
 	    else {
-	      (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+	      (new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
 	    }
 	    return false;
 	  });
@@ -96,7 +97,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 });
 webuser.addEventListener("log", function(){
   if (!this.properties.id) {
-    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
+    (new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
   }
   else {
     this.refreshView(document.getElementById("centralcontent"),  "includes/templates/loggedindata.php");

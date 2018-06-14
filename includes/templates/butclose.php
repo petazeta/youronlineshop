@@ -1,17 +1,14 @@
 <template  id="butclosetp">
-  <a style="" href="" class="singleadminedit butopen">
+  <a href="javascript:" class="butopen">
     <img src="includes/css/images/close.png"/>
   </a>
   <script>
-    //thisNode,myNode, thisNode,editelement and thisNode.editpropertyname must have been initiated before. optional thisNode.allowedHTML
     //normalize
     var launcher=thisNode;
-    var thisNode=launcher.myNode;
-    var containeradmin=thisElement.parentElement.previousElementSibling;
-    var containeropen=thisElement.parentElement;
+    var admnbuts=launcher.admnbuts;
     thisElement.onclick=function(){
-      containeradmin.innerHTML="";
-      launcher.refreshView(containeropen, document.getElementById("butopentp").content);
+      admnbuts.style.display="none";
+      launcher.refreshView(thisElement.parentElement, document.getElementById("butopentp"));
       return false;
     }
   </script>

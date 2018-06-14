@@ -8,39 +8,21 @@
 </div>
 
 <template id="cartboxheadtp">
-  <div class="adminlauncher adminsinglelauncher">
-    <a href=""></a>
+  <span>
+    <a href="javascript:"></a>
     <script>
-      thisElement.textContent=thisNode.properties.value || emptyValueText;
-      thisElement.onclick=function(){  
+      thisNode.writeProperty(thisElement);
+      //adding the edition pencil
+      var launcher = new Node();
+      launcher.thisNode = thisNode;
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+      thisElement.addEventListener("click", function(ev){
+	ev.preventDefault();
 	mycart.tocheckout();
-	return false;
-      }
-    </script>
-    <div class="btrightedit"></div>
-    <script>
-      var addadminbutts=function(){
-	var admnlauncher=new NodeMale();
-	admnlauncher.myNode=thisNode;
-	admnlauncher.buttons=[{
-	  template: document.getElementById("butedittp"),
-	  args: {editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-	}];
-	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-      }
-      if (webuser.isWebAdmin()) {
-	addadminbutts();
-      }
-      webuser.addEventListener("log", function() {
-	if (!webuser.isWebAdmin()) {
-	  thisElement.innerHTML="";
-	}
-	else {
-	  addadminbutts();
-	}
       });
     </script>
-  </div>
+  </span>
 </template>
 <template>
   <table class="boxlist">
@@ -54,62 +36,42 @@
   <div>
     <a href=""></a>
     <script>
-      thisElement.textContent=thisNode.properties.quantity;
-      thisElement.onclick=function(){
+      thisNode.writeProperty(thisElement, "quantity");
+      thisElement.addEventListener("click", function(ev){
+	ev.preventDefault();
 	mycart.additem(thisNode,-thisNode.properties.quantity);
 	mycart.refreshcartbox();
-	return false;
-      };
+      });
       thisElement.onmouseover=function(){
 	this.textContent="X";
 	this.style.fontWeight="bold";
       };
       thisElement.onmouseout=function(){
-	this.textContent=thisNode.properties.quantity;
+	thisNode.writeProperty(this, "quantity");
 	this.style.fontWeight="normal";
       };
     </script>
-    <a title="+ Info" href="javascript:void(0)"></a>
-    <script>thisElement.textContent=thisNode.properties.name;</script>
+    <a title="+ Info" href="javascript:"></a>
+    <script>thisNode.writeProperty(thisElement, "name");</script>
     <span></span>
-    <script>thisElement.textContent=thisNode.properties.price;</script>
+    <script>thisNode.writeProperty(thisElement, "price");</script>
     <span> €</span>
   </div>
 </template>
 <template id="cartboxckouttp">
-  <div class="adminlauncher adminsinglelauncher">
-    <a href="" class="btn"></a>
+  <span>
+    <button class="btn"></button>
     <script>
-      thisElement.textContent=thisNode.properties.value || emptyValueText;
+      thisNode.writeProperty(thisElement);
+      var launcher = new Node();
+      launcher.thisNode = thisNode;
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){  
 	mycart.tocheckout();
-	return false;
       }
     </script>
-    <div class="btrightedit"></div>
-    <script>
-      var addadminbutts=function(){
-	var admnlauncher=new NodeMale();
-	admnlauncher.myNode=thisNode;
-	admnlauncher.buttons=[{
-	  template: document.getElementById("butedittp"),
-	  args: {editpropertyname:"value", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-	}];
-	admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-      }
-      if (webuser.isWebAdmin()) {
-	addadminbutts();
-      }
-      webuser.addEventListener("log", function() {
-	if (!this.isWebAdmin()) {
-	  thisElement.innerHTML='';
-	}
-	else {
-	  addadminbutts();
-	}
-      });
-    </script>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -123,7 +85,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
   var cartContainer=document.querySelector("#cartbox .boxbody div");
   cartItems.refreshChildrenView(cartContainer,  document.querySelector("#itemlisttp"));
   cartItems.addEventListener("refreshChildrenView", function() {
-    cartContainer.appendChild(intoColumns(document.querySelector("#itemlisttp").previousElementSibling.content.querySelector("table").cloneNode(true), cartContainer, 1));
+    cartContainer.appendChild(DomMethods.intoColumns(document.querySelector("#itemlisttp").previousElementSibling.content.querySelector("table").cloneNode(true), cartContainer, 1));
   });
   var cartboxckout=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"}).getNextChild({name: "ckouttt"}).getRelationship({name: "domelementsdata"}).getChild()
   cartboxckout.refreshView(document.querySelectorAll("#cartbox .boxbody div")[1], document.querySelector("#cartboxckouttp"));

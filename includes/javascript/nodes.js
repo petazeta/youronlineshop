@@ -436,6 +436,17 @@ Node.prototype.removeEventListener=function (eventName, id) {
     }
   }
 }
+Node.prototype.eventExists=function (eventName, id) {
+  if (this.events && this.events[eventName]) {
+    var i=this.events[eventName].length;
+    while(i--) {
+      if (this.events[eventName][i].id==id) {
+	return true;
+      }
+    }
+  }
+  return false;
+}
 Node.prototype.dispatchEvent=function (eventName, args) {
   if (this.events && this.events[eventName]) {
     var i=this.events[eventName].length;
