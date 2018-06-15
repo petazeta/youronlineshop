@@ -35,23 +35,6 @@ Node.prototype.load=function(source, thisProperties) {
     if (thisProperties) {
       if (typeof thisProperties=="string") thisProperties=[thisProperties];
       var myProperties={};
-      for (var i=0; i<thisProperties; i++) {
-	if (source.properties.keys().indexOf(thisProperties[i])) {
-	  myProperties[thisProperties[i]]=source.properties[thisProperties[i]];
-	}
-      }
-      this.properties.cloneFromArray(myProperties);
-    }
-    else this.properties.cloneFromArray(source.properties);
-  }
-  if (source.extra) this.extra=source.extra;
-}
-Node.prototype.loadasc=function(source, thisProperties) {
-  if (typeof source=="string") source=JSON.parse(source);
-  if (source.properties) {
-    if (thisProperties) {
-      if (typeof thisProperties=="string") thisProperties=[thisProperties];
-      var myProperties={};
       for (var i=0; i<thisProperties.length; i++) {
 	if (Object.keys(source.properties).indexOf(thisProperties[i])!=-1) {
 	  myProperties[thisProperties[i]]=source.properties[thisProperties[i]];
@@ -63,10 +46,17 @@ Node.prototype.loadasc=function(source, thisProperties) {
   }
   if (source.extra) this.extra=source.extra;
 }
-Node.prototype.cloneNode=function(level, thisProperties) {
+Node.prototype.cloneNode=function(levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
   var myClon=new this.constructor();
-  myClon.load(this, level, thisProperties);
+  myClon.load(this, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown);
   return myClon;
+}
+
+Node.prototype.loaddesc=function(source) {
+  if (typeof source=="string") source=JSON.parse(source);
+}
+Node.prototype.loadasc=function(source) {
+  if (typeof source=="string") source=JSON.parse(source);
 }
 Node.prototype.getTp=function (tpHref, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
@@ -86,87 +76,41 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
 };
 Node.prototype.toRequestFormData=function(parameters) {
   switch (parameters.action) {
-    case "load myself":
-    case "load my children":
-    case "load my relationships":
-    case "load my tree":
+    case "load unlinked":
     case "load my partner":
+    case "load root":
+    case "load this relationship":
+    case "load my childtablekeys":
+    case "load all":
+      var node=this.cloneNode(0, 0);
+      break;
+    case "load my relationships":
+    case "load my children not":
+    case "load my children":
+    case "load my tree":
     case "delete my tree":
+    case "load myself":
+    case "edit my properties":
+      var node=this.cloneNode(1, 0, "id", "id");
+      break;
     case "add myself":
     case "edit my sort_order":
     case "delete my link":
-    case "load unlinked":
-    case "load my children not":
-      var node=new this.constructor;
-      node.loadasc(this,2);
-      break;
-    case "edit my properties":
-      var node=new this.constructor;
-      node.loadasc(this,2); //needs to for safety module
-      break;
-    case "load my childtablekeys":
-    case "load root":
-    case "myself":
-    case "load this relationship":
-      var node=new this.constructor;
-      node.load(this, 0);
+      var node=this.cloneNode(2, 0, "id", "id"); //we need the parent->partner
       break;
     case "load my parent":
     case "load my tree up":
-      var node=new this.constructor;
-      node.load(this,1);
-      node.avoidrecursion();
-      node.loadasc(this,2);
+      var node=this.cloneNode(1, 1, "id");
       break;
     case "add my tree":
-      var node=new this.constructor;
-      node.load(this);
-      node.avoidrecursion();
-      node.loadasc(this,2);
-      break;
-    case "load all":
-      var node=new this.constructor;
-      node.loadasc(this,1);
-      break;
-    case "with asc":
-      var node=new this.constructor;
-      node.loadasc(this,2);
-      break;
-    case "just asc":
-      var node=new this.constructor;
-      node.loadasc(this,2);
-      //next line is not good
-      node.properties.forEach(function(property){
-	delete(property);
-      });
-      break;
-    case "all":
-      var node=new this.constructor;
-      node.load(this);
-      node.avoidrecursion();
-      node.loadasc(this,3);
+      var node=this.cloneNode(2, null, null, "id"); //we need the parent->partner
       break;
     default:
-      var node=new this.constructor;
-      node.load(this);
-      node.avoidrecursion();
-      node.loadasc(this);
-  }
-  //we make a criv of properties not needed
-  if (parameters.action!="add myself" && parameters.action!="edit my properties") {
-    var myPointer=node;
-    while (myPointer) {
-      if (myPointer.constructor.name=="NodeMale") {
-	var nodeId=myPointer.properties.id;
-	myPointer.properties=new Properties();
-	myPointer.properties.id=nodeId;
-	myPointer=myPointer.parentNode;
-      }
-      else myPointer=myPointer.partnerNode;
-    }
+      var node=this.cloneNode();
   }
   var FD = new FormData();
   // Push our data into our FormData object
+  node.avoidrecursion();
   FD.append("json", JSON.stringify(node));
   FD.append("parameters", JSON.stringify(parameters));
   return FD;
@@ -378,43 +322,57 @@ Node.prototype.getFirstPropertyKey=function(){
 }
 
 //It loads a node tree from a php script that privides it in json format
-Node.prototype.loadfromhttp=function (request, reqlistener) {
+Node.prototype.loadfromhttp=function (requestData, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
   var thisNode=this;
+  var request=null, requesterFile=null, requestAction=null;
   xmlhttp.addEventListener('load', function() {
-    if (Config.mode=="develop") console.log(this.responseText);
-    var responseobj=JSON.parse(this.responseText);
-    if (typeof responseobj=="object") {
-      thisNode.load(responseobj);
-      thisNode.loadasc(responseobj);
+    try {
+      var responseobj=JSON.parse(this.responseText);
     }
+    catch(err) {
+      console.log(requesterFile, requestAction);
+      var parcialRes=this.responseText.replace(/.+\n/g,"");
+      var errMsg=this.responseText;
+      var divMsg=document.createElement("div");
+      divMsg.innerHTML=errMsg;
+      document.body.appendChild(divMsg);
+      console.log(JSON.parse(parcialRes));
+      throw err;
+    }
+    thisNode.load(responseobj);
     if (reqlistener) {
       reqlistener.call(thisNode);
     }
     thisNode.dispatchEvent("loadfromhttp");
+    if (responseobj.extra && responseobj.extra.error==true) console.log("Error response", responseobj);
   });
   xmlhttp.addEventListener('error', function(event) {
     alert('Oops! Something went wrong with the XMLHttpRequest.');
   });
   xmlhttp.overrideMimeType("application/json");
-  if (typeof request=="string") {
-    xmlhttp.open("GET", request, true);
+  if (typeof requestData=="string") { //request with no data or with ?vars
+    requesterFile=requestData;
+    xmlhttp.open("GET", requesterFile, true);
     xmlhttp.send();
   }
-  else if (typeof request=="object") {
-    if (request.constructor === Object) {
-      var myAction= request.requesterFile;
-      var request=this.toRequestFormData(request);
-      request.action=myAction;
+  else if (typeof requestData=="object") {
+    if (requestData.constructor === Object) {
+      requesterFile=requestData.requesterFile;
+      request=this.toRequestFormData(requestData);
+      requestAction=requestData.action;
     }
-    if (!request.action) request.action=Config.requestFilePath;
-    xmlhttp.open("POST",request.action, true);
-    if (request.tagName=="FORM") {
-      xmlhttp.send(new FormData(request));
+    else if (requestData.tagName=="FORM") {
+      requesterFile=requestData.action;
+      request=new FormData(requestData);
     }
-    else {
-      xmlhttp.send(request); //sending just formData (archives)
+    else { //it is formdata
+      request=requestData;
+      requesterFile=requestData.action;
     }
+    if (!requesterFile) requesterFile=Config.requestFilePath;
+    xmlhttp.open("POST",requesterFile, true);
+    xmlhttp.send(request); //sending just formData (archives)
   }
 };
 Node.prototype.addEventListener=function (eventsNames, listenerFunction, id) {
@@ -488,7 +446,7 @@ function NodeFemale() {
 NodeFemale.prototype=Object.create(Node.prototype);
 NodeFemale.prototype.constructor=NodeFemale;
 
-NodeFemale.prototype.load=function(source, level, thisProperties) {
+NodeFemale.prototype.load=function(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
   Node.prototype.load.call(this, source); //No thisProperties filter for females
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
@@ -510,50 +468,44 @@ NodeFemale.prototype.load=function(source, level, thisProperties) {
       this.syschildtablekeysinfo[i]=source.syschildtablekeysinfo[i];
     }
   }
-  if (level==0) return false;
+  if (levelup !== 0 && !(levelup < 0)) { //level null and undefined like infinite
+    this.loadasc(source, levelup, thisPropertiesUp);
+  }
+  if (leveldown !== 0 && !(leveldown < 0)) {
+    this.loaddesc(source, leveldown, thisPropertiesDown);
+  }
+}
+
+NodeFemale.prototype.loaddesc=function(source, level, thisProperties) {
+  Node.prototype.loaddesc.call(this, source); //No thisProperties filter for females
+  if (level===0) return false;
   if (level) level--;
   if (!source.children) return false;
   for (var i=0;i<source.children.length;i++) {
     this.children[i]=new NodeMale;
     this.children[i].parentNode=this;
-    this.children[i].load(source.children[i], level, thisProperties);
+    this.children[i].load(source.children[i], 0, 0, thisProperties);
+    this.children[i].loaddesc(source.children[i], level, thisProperties);
   }
 }
 
+
 NodeFemale.prototype.loadasc=function(source, level, thisProperties) {
   Node.prototype.loadasc.call(this, source); //No thisProperties filter for females
-  if (source.childtablekeys) {
-    for (var i=0;i<source.childtablekeys.length;i++) {
-      this.childtablekeys[i]=source.childtablekeys[i];
-    }
-  }
-  if (source.childtablekeystypes) {
-    for (var i=0;i<source.childtablekeystypes.length;i++) {
-      this.childtablekeystypes[i]=source.childtablekeystypes[i];
-    }
-  }
-  if (source.syschildtablekeys) {
-    for (var i=0;i<source.syschildtablekeys.length;i++) {
-      this.syschildtablekeys[i]=source.syschildtablekeys[i];
-    }
-  }
-  if (source.syschildtablekeysinfo) {
-    for (var i=0;i<source.syschildtablekeysinfo.length;i++) {
-      this.syschildtablekeysinfo[i]=source.syschildtablekeysinfo[i];
-    }
-  }
   if (!source.partnerNode) return false;
-  if (level==0) return false;
+  if (level===0) return false;
   if (level) level--;
   if (Array.isArray(source.partnerNode)) {
     if (!Array.isArray(this.partnerNode)) this.partnerNode=[this.partnerNode];
     for (var i=0; i < source.partnerNode.length; i++) {
       this.partnerNode[i]=new NodeMale();
+      this.partnerNode[i].load(source.partnerNode[i], 0, 0, thisProperties);
       this.partnerNode[i].loadasc(source.partnerNode[i], level, thisProperties);
     }
   }
   else {
     if (!this.partnerNode) this.partnerNode=new NodeMale();
+    this.partnerNode.load(source.partnerNode, 0, 0, thisProperties);
     this.partnerNode.loadasc(source.partnerNode, level, thisProperties);
   }
 }
@@ -670,16 +622,27 @@ NodeMale.prototype=Object.create(Node.prototype);
 NodeMale.prototype.constructor=NodeMale;
 
   //It loads data from a json string or an object
-NodeMale.prototype.load=function(source, level, thisProperties) {
+NodeMale.prototype.load=function(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
   Node.prototype.load.call(this, source, thisProperties);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
-  if (level==0) return false;
+  if (levelup !== 0 && !(levelup < 0)) { //level null and undefined like infinite
+    this.loadasc(source, levelup, thisPropertiesUp);
+  }
+  if (leveldown !== 0 && !(leveldown < 0)) {
+    this.loaddesc(source, leveldown, thisPropertiesDown);
+  }
+}
+NodeMale.prototype.loaddesc=function(source, level, thisProperties) {
+  Node.prototype.load.call(this, source, thisProperties);
+  if (source.sort_order) this.sort_order=Number(source.sort_order);
+  if (level===0) return false;
   if (level) level--;
   if (!source.relationships) return false;
   for (var i=0;i<source.relationships.length; i++) {
     this.relationships[i]=new NodeFemale();
     this.relationships[i].partnerNode=this;
-    this.relationships[i].load(source.relationships[i], level, thisProperties);
+    this.relationships[i].load(source.relationships[i], 0, 0, thisProperties);
+    this.relationships[i].loaddesc(source.relationships[i], level, thisProperties);
   }
 }
 
@@ -694,27 +657,22 @@ NodeMale.prototype.loadasc=function(source, level, thisProperties) {
   Node.prototype.loadasc.call(this, source, thisProperties);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (!source.parentNode) return false;
-  if (level==0) return false;
+  if (level===0) return false;
   if (level) level--;
   if (Array.isArray(source.parentNode)) {
     if (!Array.isArray(this.parentNode)) this.parentNode=[this.parentNode];
     for (var i=0; i < source.parentNode.length; i++) {
       this.parentNode[i]=new NodeFemale();
+      this.parentNode[i].load(source.parentNode[i], 0, 0, thisProperties);
       this.parentNode[i].loadasc(source.parentNode[i], level, thisProperties);
     }
   }
   else {
     if (!this.parentNode) this.parentNode=new NodeFemale();
+    this.parentNode.load(source.parentNode,0,0,thisProperties);
     this.parentNode.loadasc(source.parentNode, level, thisProperties);
   }
 }
-
-NodeMale.prototype.avoidrecursion=function () {
-  this.parentNode=null;
-  for (var i=0;i<this.relationships.length;i++) {
-    this.relationships[i].avoidrecursion();
-  }
-};
 
 NodeMale.prototype.avoidrecursion=function() {
   if (this.parentNode) {

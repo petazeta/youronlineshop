@@ -10,8 +10,7 @@
     var editElement=launcher.editElement;
     var inlineEdition=launcher.inlineEdition;
     var thisAttribute=launcher.thisAttribute;
-    thisElement.addEventListener("click", function(event) {
-      event.preventDefault();
+    thisElement.addEventListener("click", function() {
       DomMethods.activeEdition(thisNode, editElement, thisProperty, thisAttribute, inlineEdition);
       if (!(inlineEdition===false)) {
 	//disable Intro keyCode for new Line and enable it for submith
@@ -26,11 +25,13 @@
       }
     }
     function editionFinished(){
-      if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
       if (!thisAttribute) thisAttribute="innerHTML";
+      if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
       if (thisNode.properties[thisProperty] != editElement[thisAttribute]) { //just when content change and not void
-	thisNode.properties[thisProperty]=editElement[thisAttribute];
-	DbMethods.changeProperty(thisNode, thisProperty);
+	thisNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties:{[thisProperty]: editElement[thisAttribute]}}, function(){
+	  this.properties[thisProperty]=editElement[thisAttribute];
+	  this.dispatchEvent("propertychange", [thisProperty]);
+	});
       }
       DomMethods.unActiveEdition(thisNode, editElement, thisProperty, thisAttribute);
       if (!(inlineEdition===false)) {

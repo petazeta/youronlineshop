@@ -39,6 +39,7 @@ statsRecorder.startRecordingProcess=function(){
   this.makeRecord(initData);
   window.setTimeout(function(){statsRecorder.keepStats()}, 180000);
   var myEvents=[
+    {write: "loaded Dom labels", eventListener: domelementsrootmother, eventName: "loadLabels"},
     {write: "exitPage", eventListener: window, eventName: "beforeunload"},
     {write: "clickW", eventListener: window, eventName: "click"},
     {write: "javascript:ev.write='log '+ (webuser.getUserType() || webuser.properties.name || 'out')", eventListener: webuser, eventName: "log"},

@@ -60,6 +60,7 @@ switch ($parameters->action) {
     break;
   case "load my partner":
     $myexecfunction="db_loadmypartner";
+    if (isset($parameters->child_id)) $argument=$parameters->child_id;
     $callback="cutDown";
     break;
     
@@ -118,6 +119,7 @@ switch ($parameters->action) {
     break;
   case "edit my properties":
     $myexecfunction="db_updatemyproperties";
+    if (isset($parameters->properties)) $argument=$parameters->properties;
     $callback=["cutDown", "cutUp"];
     break;
   case "replace myself":

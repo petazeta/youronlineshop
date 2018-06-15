@@ -273,7 +273,7 @@ class NodeFemale extends Node{
     $this->cloneChildrenFromQuery($result);
   }
   
-  function db_loadmypartner($child) {
+  function db_loadmypartner($child_id) {
     if (!isset($this->syschildtablekeysinfo)) $this->db_loadchildtablekeys();
     foreach ($this->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->properties->parenttablename) {
@@ -285,7 +285,7 @@ class NodeFemale extends Node{
     . constant($this->properties->parenttablename) . ' t'
     . ' inner join ' . constant($this->properties->childtablename) . ' c'
     . ' on t.id=c.' . $foreigncolumnname
-    . ' WHERE c.id=' . $child->properties->id;
+    . ' WHERE c.id=' . $child_id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     if ($result->num_rows > 1) {
       $this->partnerNode=[];
@@ -322,7 +322,7 @@ class NodeFemale extends Node{
   function db_loadmytreeup($level=null) {
     if ($level===0) return true;
     if ($level) $level--;
-    if ($this->db_loadmypartner($this->children[0])===false) return false;
+    if ($this->db_loadmypartner($this->children[0]->properties->id)===false) return false;
     if (gettype($this->partnerNode)=='array') {
       for ($i=0; $i<count($this->partnerNode); $i++)  {
 	if ($this->partnerNode[$i]->db_loadmytreeup($level)===false) return false;
@@ -406,26 +406,13 @@ class NodeFemale extends Node{
   }
   function db_loadthisrel()  {
     $this->db_loadchildtablekeys();
-    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
-      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
-      . " WHERE"
-      . ' TABLE_SCHEMA= SCHEMA()'
-      . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
-      . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    else if ($result->num_rows==1) {
-      $row=$result->fetch_array(MYSQLI_ASSOC);
-      $this->properties->cloneFromArray($row);
-      $this->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->properties->name);
-      $this->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename));
-      $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
-      //stablish the sort_order statment
-      foreach ($this->syschildtablekeysinfo as $syskey) {
-	$this->properties->sort_order=false;
-	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
-	  $this->properties->sort_order=true;
-	  break;
-	}
+    $this->properties->name=strtolower(sbustr($this->properties->childtablename, 6));
+    //stablish the sort_order statment
+    foreach ($this->syschildtablekeysinfo as $syskey) {
+      $this->properties->sort_order=false;
+      if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
+	$this->properties->sort_order=true;
+	break;
       }
     }
   }
@@ -802,11 +789,10 @@ class NodeMale extends Node{
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   
-  function db_updatemyproperties(){
+  function db_updatemyproperties($properties){
       //We update the fields
       //First we search for the updatable fields
-      $myproperties=get_object_vars($this->properties);
-      if (isset($myproperties['id'])) unset($myproperties['id']);
+      $myproperties=get_object_vars($properties);
       $setSentences=array();
       foreach ($myproperties as $key =>$value) {
         array_push($setSentences, $key . '=' . '\'' . mysql_escape_string($value) . '\'');

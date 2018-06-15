@@ -47,7 +47,9 @@
       if (nodeDeleted.selected) {
 	if (this.children.length>0) {
 	  var button=null;
-	  this.children[this.children.length - 1].getMyDomNodes().forEach(function(domNode){
+	  var position=0;
+	  if (nodeDeleted.sort_order && nodeDeleted.sort_order > 1) position=nodeDeleted.sort_order-1;
+	  this.children[position-1].getMyDomNodes().forEach(function(domNode){
 	    button=domNode.querySelector("[data-button]");
 	  });
 	  if (button) button.click();

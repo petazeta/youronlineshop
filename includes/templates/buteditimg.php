@@ -51,43 +51,39 @@
 	</table>
       </form>
       <script>
-	//normalize
-	var launcher=thisNode;
-	var thisNode=launcher.myNode;
-	thisElement.onsubmit=function() {
-	  var myresult=new NodeMale();
-	  this.myFormData.action=this.action;
-	  myresult.loadfromhttp(this.myFormData, function(){
-	  var myalertmsg="";
-	  if (this.extra && this.extra.error==true) {
-	    myalertmsg="Error uploading file";
-	  }
-	  else {
-	    myalertmsg="Image uploaded";
-	  }
-	  myalert.load({properties:{alertmsg: myalertmsg, timeout:2000}});
-	  myalert.showalert();
-	  
-	  //Now we need to update item image column
-	  if (myresult.error!=true) {
-	    var myresultEdit=new NodeMale();
-	    myresultEdit.parentNode=new NodeFemale();
-	    myresultEdit.parentNode.loadasc(thisNode.parentNode,0);
-	    myresultEdit.properties.id=thisNode.properties.id;
-	    myresultEdit.properties.image="file_"+thisNode.properties.id+ ".png?" + new Date().getTime(); //to refresh image
-	    myresultEdit.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id}, function(){
-	      launcher.hidealert();
-	      thisNode.parentNode.partnerNode.getMyDomNodes()[0].querySelector("a").click();
-	    });
-	  }
-	    //submitted
-	});
-	//launcher.hidealert();
-	return false;
-      }
-      thisElement.elements.exit.onclick=function(){
+//normalize
+var launcher=thisNode;
+var thisNode=launcher.myNode;
+thisElement.onsubmit=function() {
+  this.myFormData.action=this.action;
+  (new Node()).loadfromhttp(this.myFormData, function(){
+    var myalertmsg="";
+    if (this.extra && this.extra.error==true) {
+      myalertmsg="Error uploading file";
+    }
+    else {
+      myalertmsg="Image uploaded";
+    }
+    myalert.load({properties:{alertmsg: myalertmsg, timeout:2000}});
+    myalert.showalert();
+    
+    //Now we need to update item image column
+    if (this.error!=true) {
+      //myresultEdit.properties.image="file_"+thisNode.properties.id+ ".png?" + new Date().getTime(); //to refresh image
+      thisNode.loadfromhttp({action:"edit my properties", properties:{image: "file_" + thisNode.properties.id + ".png"}, user_id: webuser.properties.id}, function(){
+	thisNode.properties.image += thisNode.properties.image + "?" + new Date().getTime();
 	launcher.hidealert();
-      }
+	thisNode.parentNode.refreshChildrenView(); //refresh the elements and the images
+      });
+    }
+      //submitted
+  });
+  //launcher.hidealert();
+  return false;
+}
+thisElement.elements.exit.onclick=function(){
+  launcher.hidealert();
+}
       
       
       

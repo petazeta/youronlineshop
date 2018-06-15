@@ -14,8 +14,8 @@
 	var admnlauncher=new Node();
 	admnlauncher.thisNode=thisNode;
 	admnlauncher.editElement = thisElement;
-	admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode();
-	admnlauncher.newNode.loadasc(thisNode.parentNode.newNode); // we duplicate it so newNode can be reused
+	admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
+	admnlauncher.newNode.loadasc(thisNode, 2, "id"); //the parent is not the same
 	admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
 	var closelauncher=new Node();
 	admnlauncher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php", function(){
@@ -43,7 +43,9 @@
 	event.preventDefault();
 	DomMethods.setActive(thisNode);
 	thisNode.getRelationship("domelements").loadfromhttp({action: "load my tree"}, function() {
-	  this.newNode=thisNode.parentNode.newNode;
+	  this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
+	  this.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
+	  this.newNode.loadasc(thisNode, 2, "id");
 	  this.appendThis(document.getElementById("centralcontent"), "includes/templates/admnlisteners.php")
 	  this.refreshChildrenView(document.getElementById("centralcontent"), document.querySelector("#domelementtp"));
 	});
@@ -60,13 +62,15 @@
 	var launcher = new Node();
 	launcher.thisNode = thisNode.getRelationship("domelementsdata").getChild();
 	launcher.editElement = thisElement;
+	launcher.btposition="btmiddleleft";
 	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 	var admnlauncher=new Node();
 	admnlauncher.thisNode=thisNode;
 	admnlauncher.editElement = thisElement;
+	admnlauncher.btposition="bttopleftinside";
 	//We create a schematic node to add also a domelementsdata child node to the database
-	admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode();
-	admnlauncher.newNode.loadasc(thisNode.parentNode.newNode); // we duplicate it so newNode can be reused
+	admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
+	admnlauncher.newNode.loadasc(thisNode, 2, "id")
 	admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
 	admnlauncher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php");
       </script>
@@ -81,10 +85,10 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     //new node schema
     var newNode=new NodeMale();
     newNode.parentNode=new NodeFemale();
-    newNode.parentNode.loadasc(menusMother, 1, ["id"]);
+    newNode.parentNode.load(menusMother, 1, 0, "id");
     //new node comes with datarelationship attached
-    newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelements"}).cloneNode(0));
-    newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelementsdata"}).cloneNode(0));
+    newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelements"}).cloneNode(0, 0));
+    newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelementsdata"}).cloneNode(0, 0));
     newNode.getRelationship({name: "domelementsdata"}).addChild(new NodeMale());
     menusMother.newNode=newNode;
     menusMother.appendThis(document.querySelector("#menucontainer nav"), "includes/templates/admnlisteners.php")

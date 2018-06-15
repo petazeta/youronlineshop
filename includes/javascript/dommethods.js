@@ -155,16 +155,3 @@ Alert.prototype.hidealert=function() {
   }
   else remove(myContainer);
 };
-
-DbMethods={
-  changeProperty: function (thisNode, thisProperty) {
-    if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
-    var writeNode=new NodeMale();
-    writeNode.loadasc(thisNode, 1, ["id", thisProperty]);
-    console.log(writeNode);
-    writeNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id}, function(){
-      thisNode.parentNode.updateChild(writeNode);
-      thisNode.dispatchEvent("propertychange", [thisProperty]);
-    });
-  }
-};

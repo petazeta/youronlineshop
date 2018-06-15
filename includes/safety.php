@@ -18,12 +18,8 @@ function is_actionpermited($parameters, $myelement){
     $user=unserialize($_SESSION["user"]);
     if (isset($user->parentNode) && isset($user->parentNode->partnerNode)) $usertype=$user->parentNode->partnerNode->properties->type;
   }
-  $systemtables=["TABLE_RELATIONSHIPS", "TABLE_LINKS"];
-  if (array_search($tablename, $systemtables)) {
-    return false;
-  }
   $privatetables=["TABLE_USERS", "TABLE_USERSDATA", "TABLE_ADDRESSES", "TABLE_ORDERS", "TABLE_ORDERITEMS"];
-  if (!array_search($tablename,$privatetables)) {
+  if (!array_search($tablename, $privatetables)) {
     if ($action=="write") {
       if ($usertype=="web administrator") return true;
     }

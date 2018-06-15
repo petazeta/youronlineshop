@@ -330,6 +330,7 @@ footer > table td{
   right: 0;
   transform: translateX(100%) translateY(-50%);
 }
+
 .btrightmiddle {
     position: absolute;
     top: 50%;
@@ -341,6 +342,24 @@ footer > table td{
     top: 0;
     left: 50%;
     transform: translateX(-50%) translateY(-100%);
+}
+.bttopleft{
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%) translateY(-100%);
+}
+.bttopleftinside{
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(-100%);
+}
+.btmiddleleft{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateX(-100%) translateY(-50%);
 }
 .btbottomcenter{
     position: absolute;
