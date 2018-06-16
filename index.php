@@ -8,6 +8,7 @@
     <script src="includes/javascript/dommethods.js"></script>
     <script src="includes/javascript/cart.js"></script>
     <script src="includes/javascript/user.js"></script>
+    <script src="includes/javascript/stats.js"></script>
     <link rel="stylesheet" type="text/css" href="includes/css/main.css">
     <link rel="icon" href="favicon.ico">
     <?php include("includes/templates.php"); ?>
@@ -58,7 +59,6 @@
 		emptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
 		domelementsrootmother.dispatchEvent("loadLabels");
 		myalert.hidealert();
-		console.log(domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"}).getRelationship({name: "domelementsdata"}).children[0].properties);
 	      });
 	    }
 	  });

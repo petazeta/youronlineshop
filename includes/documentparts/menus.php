@@ -46,15 +46,21 @@
 	  this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
 	  this.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
 	  this.newNode.loadasc(thisNode, 2, "id");
-	  this.appendThis(document.getElementById("centralcontent"), "includes/templates/admnlisteners.php")
-	  this.refreshChildrenView(document.getElementById("centralcontent"), document.querySelector("#domelementtp"));
+	  var pageframe=document.getElementById("pageframetp").content.firstElementChild.cloneNode(true);
+	  document.getElementById("centralcontent").innerHTML="";
+	  document.getElementById("centralcontent").appendChild(pageframe);
+	  this.appendThis(pageframe, "includes/templates/admnlisteners.php");
+	  this.refreshChildrenView(pageframe, document.querySelector("#paragraphtp"));
 	});
       });
     </script>
     <div class="btrightmiddle" data-id="containeropen"></div>
   </span>
 </template>
-<template id="domelementtp">
+<template id="pageframetp">
+  <div style="padding-top:1em;"></div>
+</template>
+<template id="paragraphtp">
   <div class="paragraph">
       <div></div>
       <script>
@@ -62,12 +68,14 @@
 	var launcher = new Node();
 	launcher.thisNode = thisNode.getRelationship("domelementsdata").getChild();
 	launcher.editElement = thisElement;
-	launcher.btposition="btmiddleleft";
+	launcher.btposition="bttopleft";
+	launcher.inlineEdition=false;
 	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 	var admnlauncher=new Node();
 	admnlauncher.thisNode=thisNode;
 	admnlauncher.editElement = thisElement;
 	admnlauncher.btposition="bttopleftinside";
+	admnlauncher.elementsListPos="vertical";
 	//We create a schematic node to add also a domelementsdata child node to the database
 	admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
 	admnlauncher.newNode.loadasc(thisNode, 2, "id")
@@ -91,7 +99,18 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelementsdata"}).cloneNode(0, 0));
     newNode.getRelationship({name: "domelementsdata"}).addChild(new NodeMale());
     menusMother.newNode=newNode;
-    menusMother.appendThis(document.querySelector("#menucontainer nav"), "includes/templates/admnlisteners.php")
+    menusMother.appendThis(document.querySelector("#menucontainer nav"), "includes/templates/admnlisteners.php");
+    //For convenience we start with admnbuts set to visible so we then we got to set themo to hidden
+    var closeButtons=function(){
+      if (webuser.isWebAdmin()) {
+	var butlist=menusMother.childContainer.querySelectorAll("a.butopen");
+	for (i=0; i<butlist.length; i++) {
+	  butlist[i].click();
+	}
+      }
+    };
+    menusMother.addEventListener("refreshChildrenView", closeButtons);
+    webuser.addEventListener("log", closeButtons);
     menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), document.querySelector("#menucontainer #menutp"), function(){
       if (this.children.length > 0) {
 	var button=null;

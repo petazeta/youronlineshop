@@ -54,9 +54,11 @@ Node.prototype.cloneNode=function(levelup, leveldown, thisProperties, thisProper
 
 Node.prototype.loaddesc=function(source) {
   if (typeof source=="string") source=JSON.parse(source);
+  return source;
 }
 Node.prototype.loadasc=function(source) {
   if (typeof source=="string") source=JSON.parse(source);
+  return source;
 }
 Node.prototype.getTp=function (tpHref, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
@@ -333,19 +335,23 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
     catch(err) {
       console.log(requesterFile, requestAction);
       var parcialRes=this.responseText.replace(/.+\n/g,"");
-      var errMsg=this.responseText;
-      var divMsg=document.createElement("div");
-      divMsg.innerHTML=errMsg;
-      document.body.appendChild(divMsg);
+      console.log(this.responseText);
       console.log(JSON.parse(parcialRes));
       throw err;
     }
     thisNode.load(responseobj);
+    if (Config.mode=="developer") {
+      console.log(requesterFile, requestAction);
+      console.log(responseobj);
+    }
     if (reqlistener) {
       reqlistener.call(thisNode);
     }
     thisNode.dispatchEvent("loadfromhttp");
-    if (responseobj.extra && responseobj.extra.error==true) console.log("Error response", responseobj);
+    if (responseobj.extra && responseobj.extra.error==true) {
+      console.log("Error response", requesterFile, requestAction);
+      console.log(responseobj);
+    }
   });
   xmlhttp.addEventListener('error', function(event) {
     alert('Oops! Something went wrong with the XMLHttpRequest.');
@@ -477,7 +483,7 @@ NodeFemale.prototype.load=function(source, levelup, leveldown, thisProperties, t
 }
 
 NodeFemale.prototype.loaddesc=function(source, level, thisProperties) {
-  Node.prototype.loaddesc.call(this, source); //No thisProperties filter for females
+  source=Node.prototype.loaddesc.call(this, source);
   if (level===0) return false;
   if (level) level--;
   if (!source.children) return false;
@@ -489,9 +495,8 @@ NodeFemale.prototype.loaddesc=function(source, level, thisProperties) {
   }
 }
 
-
 NodeFemale.prototype.loadasc=function(source, level, thisProperties) {
-  Node.prototype.loadasc.call(this, source); //No thisProperties filter for females
+  source=Node.prototype.loadasc.call(this, source);
   if (!source.partnerNode) return false;
   if (level===0) return false;
   if (level) level--;
@@ -633,7 +638,7 @@ NodeMale.prototype.load=function(source, levelup, leveldown, thisProperties, thi
   }
 }
 NodeMale.prototype.loaddesc=function(source, level, thisProperties) {
-  Node.prototype.load.call(this, source, thisProperties);
+  source=Node.prototype.loaddesc.call(this, source);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (level===0) return false;
   if (level) level--;
@@ -654,7 +659,7 @@ NodeMale.prototype.appendNextChildren=function(container, tp, reqlistener, appen
 }
 
 NodeMale.prototype.loadasc=function(source, level, thisProperties) {
-  Node.prototype.loadasc.call(this, source, thisProperties);
+  source=Node.prototype.loadasc.call(this, source);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (!source.parentNode) return false;
   if (level===0) return false;

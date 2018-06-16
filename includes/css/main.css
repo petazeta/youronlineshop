@@ -219,10 +219,7 @@ div.centercolumn {
 
 /* Documents */
 .paragraph {
-  padding: 0.5em 0 1em 0;
-}
-#centralcontent:first-child .paragraph{
-  padding: 1em 0;
+  padding: 0.2em 0 1.2em 0;
 }
 
 /* alert highligting */
@@ -292,51 +289,7 @@ footer > table td{
      padding: 5px 10px;
      color: white;
 }
-/* adminedit*/
-.contenteditableactive {
-  background-color: white;
-  color: rgb(27,31,35) !important;
-  padding: 2px 4px;
-  border: 1px solid rgba(27,31,35,0.8);
-}
-.rmbox {
-  position:relative;
-  display: table;
-  margin: auto;
-}
-.btrighttop {
-    position: absolute;
-    top: -16px;
-    right: -16px;
-}
-.bttopadmn {
-    position: absolute;
-    top: -38px;
-    left: 0px;
-}
-.bttopedit {
-  position: absolute;
-  top:-16px;
-  right:-34px;
-}
-.btinside {
-  position: absolute;
-  left: 2px;
-  top:-12px;
-}
-.btrightmidtop {
-  position: absolute;
-  top: 0;
-  right: 0;
-  transform: translateX(100%) translateY(-50%);
-}
-
-.btrightmiddle {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateX(100%) translateY(-50%);
-}
+/* administration buttons*/
 .bttopcenter{
     position: absolute;
     top: 0;
@@ -361,12 +314,32 @@ footer > table td{
     left: 0;
     transform: translateX(-100%) translateY(-50%);
 }
+.btmiddleright{
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateX(100%) translateY(-50%);
+}
 .btbottomcenter{
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%) translateY(100%);
 }
+
+
+.contenteditableactive {
+  background-color: white;
+  color: rgb(27,31,35) !important;
+  padding: 2px 4px;
+  border: 1px solid rgba(27,31,35,0.8);
+}
+.rmbox {
+  position:relative;
+  display: table;
+  margin: auto;
+}
+
 .btleftmiddle {
     position: absolute;
     top: 50%;

@@ -24,17 +24,35 @@ class Node {
     }
     return $dblink;
   }
-  function load($source){
+  function load($source, $thisProperties=null){
     if (gettype($source)=='string') $source=json_decode($source);
-    if (isset($source->properties))
-      $this->properties->cloneFromArray($source->properties);
-    if (isset($source->extra)) $this->extra=$source->extra;
+    if (isset($source->properties)) {
+      if ($thisProperties) {
+	if (gettype($thisProperties=="string")) $thisProperties=[$thisProperties];
+	$myProperties=new stdClass();
+	for ($i=0; $i < count($thisProperties); $i++) {
+	  if (in_array($thisProperties[$i], array_keys($source->properties))) {
+	    $myProperties[$thisProperties[$i]]=$source->properties[$thisProperties[$i]];
+	  }
+	}
+	$this->properties->cloneFromArray($myProperties);
+      }
+      else $this->properties->cloneFromArray($source->properties);
+    }
+    if (isset($source->extra)) $this->extra=$source->extra;    
+  }
+  function cloneNode($levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
+    $myClon=new get_class($this);
+    $myClon->load($this, $levelup, $leveldown, $thisProperties, $thisPropertiesUp, $thisPropertiesDown);
+    return $myClon;
   }
   function loadasc($source){
     if (gettype($source)=='string') $source=json_decode($source);
-    if (isset($source->properties))
-      $this->properties->cloneFromArray($source->properties);
-    if (isset($source->extra)) $this->extra=$source->extra;
+    return $source;
+  }
+  function loaddesc($source){
+    if (gettype($source)=='string') $source=json_decode($source);
+    return $source;
   }
   function db_search($tablename=null, $proparray=null) {
     if (!$tablename) $tablename=$this->parentNode->properties->childtablename;
@@ -62,10 +80,10 @@ class Node {
   function session($sesname, $action="load") {
     switch ($action) {
       case "load":
-	if (!isset($_SESSION[$sesname])) return false;
-	$data=unserialize($_SESSION[$sesname]);
-	$this->load($data);
-	$this->loadasc($data);
+	if (isset($_SESSION[$sesname])) {
+	  $data=unserialize($_SESSION[$sesname]);
+	  $this->load($data);
+	}
 	break;
       case "write":
 	$_SESSION[$sesname]=serialize($this);
@@ -86,7 +104,7 @@ class NodeFemale extends Node{
   public $syschildtablekeys=[];
   public $syschildtablekeysinfo=[];
 
-  function load($source) {
+  function load($source, $levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
     parent::load($source);
     if (isset($source->childtablekeys)) {
       foreach ($source->childtablekeys as $key => $value) {
@@ -108,51 +126,45 @@ class NodeFemale extends Node{
         $this->syschildtablekeysinfo[$key]=$value;
       }
     }
-    if (isset($source->children)) {
-      foreach ($source->children as $key => $value) {
-        $this->children[$key]=new NodeMale();
-        $this->children[$key]->parentNode=$this;
-        $this->children[$key]->load($value);
-      }
+    if ($levelup !== 0 && !($levelup < 0)) { //level null and undefined like infinite
+      $this->loadasc($source, $levelup, $thisPropertiesUp);
+    }
+    if ($leveldown !== 0 && !($leveldown < 0)) {
+      $this->loaddesc($source, $leveldown, $thisPropertiesDown);
+    }
+  }
+  
+  function loaddesc($source, $level=null, $thisProperties=null) {
+    $source=parent::loaddesc($source); //No thisProperties filter for females
+    if ($level===0) return false;
+    if ($level) $level--;
+    if (!isset($source->children) || !$source->children) return false;
+    for ($i = 0; $i < count($source->children); $i++) {
+      $this->children[$i]=new NodeMale();
+      $this->children[$i]->parentNode=$this;
+      $this->children[$i]->load($source->children[$i], 0, 0, $thisProperties);
+      $this->children[$i]->loaddesc($source->children[$i], $level, $thisProperties);
     }
   }
     //It loads data from a json, if update is true only fields and relationship present at original will be updated
-  function loadasc($source) {
-    parent::loadasc($source);
-    if (isset($source->childtablekeys)) {
-      foreach ($source->childtablekeys as $key => $value) {
-        $this->childtablekeys[$key]=$value;
-      }
-    }
-    if (isset($source->childtablekeystypes)) {
-      foreach ($source->childtablekeystypes as $key => $value) {
-        $this->childtablekeystypes[$key]=$value;
-      }
-    }
-    if (isset($source->syschildtablekeys)) {
-      foreach ($source->syschildtablekeys as $key => $value) {
-        $this->syschildtablekeys[$key]=$value;
-      }
-    }
-    if (isset($source->syschildtablekeysinfo)) {
-      foreach ($source->syschildtablekeysinfo as $key => $value) {
-        $this->syschildtablekeysinfo[$key]=$value;
-      }
-    }
+  function loadasc($source, $level=null, $thisProperties=null) {
+    $source=parent::loadasc($source); //No thisProperties filter for females
     if (!isset($source->partnerNode) || !$source->partnerNode) return false;
+    if ($level===0) return false;
+    if ($level) $level--;
     if (gettype($source->partnerNode)=='array') {
-      $this->partnerNode=[];
-      foreach($source->partnerNode as $sourcePartnerNode) {
-	$partnerNode=new NodeMale();
-	$partnerNode->loadasc($sourcePartnerNode);
-	$this->partnerNode[]=$partnerNode;
+      if (gettype($this->partnerNode)!="array") $this->partnerNode=[$this->partnerNode];
+      for ($i=0; $i < count($source->partnerNode); $i++) {
+	$this->partnerNode[$i]=new NodeMale();
+	$this->partnerNode[$i]->load($source->partnerNode[$i], 0, 0, $thisProperties);
+	$this->partnerNode[$i]->loadasc($source->partnerNode[$i], $level, $thisProperties);
       }
     }
     else {
-      $this->partnerNode= new NodeMale();
-      $this->partnerNode->loadasc($source->partnerNode);
+      if (!$this->partnerNode) $this->partnerNode=new NodeMale();
+      $this->partnerNode->load($source->partnerNode, 0, 0, $thisProperties);
+      $this->partnerNode->loadasc($source->partnerNode, $level, $thisProperties);
     }
-    return true;
   }
   function cutUp(){
     $this->partnerNode=null;
@@ -164,7 +176,7 @@ class NodeFemale extends Node{
     $keyname=array_keys($obj)[0];
     $i=count($this->children);
     while($i--) {
-      if (isset($this->children[$i]->properties->$keyname) && $this->children[$i]->properties->$keyname==obj.$keyname)
+      if (isset($this->children[$i]->properties->$keyname) && $this->children[$i]->properties->$keyname==$obj->$keyname)
         return $this->children[$i];
     }
     return false;
@@ -406,13 +418,73 @@ class NodeFemale extends Node{
   }
   function db_loadthisrel()  {
     $this->db_loadchildtablekeys();
-    $this->properties->name=strtolower(sbustr($this->properties->childtablename, 6));
-    //stablish the sort_order statment
-    foreach ($this->syschildtablekeysinfo as $syskey) {
-      $this->properties->sort_order=false;
-      if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
-	$this->properties->sort_order=true;
-	break;
+    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
+      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
+      . " WHERE"
+      . ' TABLE_SCHEMA= SCHEMA()'  
+      . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
+      . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    else if ($result->num_rows==1) {
+      $row=$result->fetch_array(MYSQLI_ASSOC);
+      $this->properties->cloneFromArray($row);
+      $this->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->properties->name);
+      $this->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename));
+      $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
+      //stablish the sort_order statment
+      $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
+      foreach ($this->syschildtablekeys as $syskey) {
+	$this->properties->sort_order=false;
+	if ($syskey=='_' . $parentTableOriginalName . '_position') {
+	  $this->properties->sort_order=true;
+	}
+      }
+    }
+
+    $this->db_loadchildtablekeys();
+    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
+      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
+      . " WHERE"
+      . ' TABLE_SCHEMA= SCHEMA()'
+      . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
+      . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    else if ($result->num_rows==1) {
+      $row=$result->fetch_array(MYSQLI_ASSOC);
+      $this->properties->cloneFromArray($row);
+      $this->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->properties->name);
+      $this->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename));
+      $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
+      //stablish the sort_order statment
+      foreach ($this->syschildtablekeysinfo as $syskey) {
+	$this->properties->sort_order=false;
+	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
+	  $this->properties->sort_order=true;
+	  break;
+	}
+      }
+    }
+  
+    $this->db_loadchildtablekeys();
+    //We check if the current relationshiop actually exists
+    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename FROM '
+      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
+      . " WHERE"
+      . ' TABLE_SCHEMA= SCHEMA()'
+      . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
+      . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if ($result->num_rows==0) return false;
+    else {
+      //The relationship actually exists, we fill some data
+      $this->properties->name=strtolower(sbustr($this->properties->childtablename, 6));
+      //stablish the sort_order statment
+      foreach ($this->syschildtablekeysinfo as $syskey) {
+	$this->properties->sort_order=false;
+	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
+	  $this->properties->sort_order=true;
+	  break;
+	}
       }
     }
   }
@@ -463,36 +535,48 @@ class NodeMale extends Node{
   //optional variable $sort_order
 
   //It loads data from a json, if update is true only fields and relationship present at original will be updated
-  function load($source) {
-    parent::load($source);
+  function load($source, $levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
+    parent::load($source, $thisProperties);
     if (isset($source->sort_order)) $this->sort_order=$source->sort_order;
-    if (isset($source->relationships)) {
-      foreach ($source->relationships as $i => $value) {
-        $this->relationships[$i]=new NodeFemale();
-        $this->relationships[$i]->partnerNode=$this;
-        $this->relationships[$i]->load($value);
-      }
+    if ($levelup !== 0 && !($levelup < 0)) { //level null and undefined like infinite
+      $this->loadasc($source, $levelup, $thisPropertiesUp);
     }
-    return true;
+    if ($leveldown !== 0 && !($leveldown < 0)) {
+      $this->loaddesc($source, $leveldown, $thisPropertiesDown);
+    }
   }
-  
-    //It loads data from a json, just direct ascendents
-  function loadasc($source) {
-    parent::loadasc($source);
+  function loaddesc($source, $level=null, $thisProperties=null) {
+    $source=parent::loaddesc($source);
+    if (isset($source->sort_order)) $this->sort_order=$source->sort_order;
+    if ($level===0) return false;
+    if ($level) $level--;
+    if (!isset($source->relationships) || !$source->relationships) return false;
+    for ($i = 0; $i < count($source->relationships); $i++) {
+      $this->relationships[$i]=new NodeFemale();
+      $this->relationships[$i]->partnerNode=$this;
+      $this->relationships[$i]->load($source->relationships[$i], 0, 0, $thisProperties);
+      $this->relationships[$i]->loaddesc($source->relationships[$i], $level, $thisProperties);
+    }
+  }
+  function loadasc($source, $level, $thisProperties) {
+    $source=parent::loadasc($source);
+    if (isset($source->sort_order)) $this->sort_order=$source->sort_order;
     if (!isset($source->parentNode) || !$source->parentNode) return false;
-    if (gettype($source->parentNode)=='array') {
-      $this->parentNode=[];
-      foreach($source->parentNode as $sourceparentNode) {
-	$parentNode=new NodeFemale();
-	$parentNode->loadasc($sourceparentNode);
-	$this->parentNode[]=$parentNode;
+    if ($level===0) return false;
+    if ($level) $level--;
+    if (gettype($source->parentNode)=="array") {
+      if (gettype($this->parentNode)!="array") $this->parentNode=[$this->parentNode];
+      for ($i=0; $i < count($source->parentNode); $i++) {
+	$this->parentNode[$i]=new NodeFemale();
+	$this->parentNode[$i]->load($source->parentNode[$i], 0, 0, $thisProperties);
+	$this->parentNode[$i]->loadasc($source->parentNode[$i], $level, $thisProperties);
       }
     }
     else {
-      $this->parentNode=new NodeFemale();
-      $this->parentNode->loadasc($source->parentNode);
+      if (!$this->parentNode) $this->parentNode=new NodeFemale();
+      $this->parentNode->load($source->parentNode, 0, 0, $thisProperties);
+      $this->parentNode->loadasc($source->parentNode, $level, $thisProperties);
     }
-    return true;
   }
   function cutUp(){
     $this->parentNode=null;

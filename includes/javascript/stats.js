@@ -36,8 +36,6 @@ statsRecorder.startRecordingProcess=function(){
     {yosversion: "1.0.7"},
     {webbrowser: thisNavigator}
   ];
-  this.makeRecord(initData);
-  window.setTimeout(function(){statsRecorder.keepStats()}, 180000);
   var myEvents=[
     {write: "loaded Dom labels", eventListener: domelementsrootmother, eventName: "loadLabels"},
     {write: "exitPage", eventListener: window, eventName: "beforeunload"},
@@ -45,6 +43,8 @@ statsRecorder.startRecordingProcess=function(){
     {write: "javascript:ev.write='log '+ (webuser.getUserType() || webuser.properties.name || 'out')", eventListener: webuser, eventName: "log"},
     {write: "cartItem", eventListener: mycart, eventName: "cartItem"}
   ];
+  this.makeRecord(initData);
+  window.setTimeout(function(){statsRecorder.keepStats()}, 180000);
   myEvents.forEach(function(ev){
     ev.eventListener.addEventListener(ev.eventName, function(myArg){ //the argument sent at dispatchEvent
       if (ev.write.indexOf("javascript:"==0)) eval(ev.write.substr(11));
@@ -53,7 +53,8 @@ statsRecorder.startRecordingProcess=function(){
     });
   });
 }
-window.onload=function(){
-  statsRecorder.startRecordingProcess();
+if (Config.statsOn) {
+  window.onload=function(){
+    statsRecorder.startRecordingProcess();
+  }
 }
-

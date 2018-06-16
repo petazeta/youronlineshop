@@ -20,7 +20,6 @@ if (array_key_exists("partnerNode", $json)) $myelement=new NodeFemale();
 else $myelement=new NodeMale();
 
 $myelement->load($json);
-$myelement->loadasc($json);
 
 unset($fields["json"]);
 unset($fields["parameters"]);

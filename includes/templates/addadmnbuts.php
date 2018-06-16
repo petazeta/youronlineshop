@@ -6,6 +6,7 @@
     var editElement=launcher.editElement;
     var newNode=launcher.newNode;
     var btposition=launcher.btposition;
+    var elementsListPos=launcher.elementsListPos;
     
     if (btposition) thisElement.className=btposition;
     else thisElement.className=Config.defaultAdmnsButtonsPosition;
@@ -20,11 +21,12 @@
       editElement.addEventListener("mouseout", function(ev){
 	thisElement.className += " visibleHover";
       });
-    
+      var posTp="buthchpostp";
+      if (elementsListPos=="vertical") posTp="butvchpostp";
       var admnlauncher=new Node();
       admnlauncher.buttons=[
 	{
-	  template: document.getElementById("buthchpostp"),
+	  template: document.getElementById(posTp),
 	  args:{thisNode: thisNode}
 	},
 	{
