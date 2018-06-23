@@ -1,50 +1,5 @@
 //Some functions that will be applied to dom elements
 DomMethods={
-  activeEdition: function (thisNode, thisElement, thisProperty, thisAttribute, inlineEdition){
-    if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
-    if (thisElement.tagName=="input") {
-      thisAttribute="value";
-      inlineEdition=true;
-    }
-    if (!thisAttribute) {
-      thisAttribute="innerHTML";
-    }
-    //removing emptyValueText => property is null
-    if (thisElement[thisAttribute]==emptyValueText && thisNode.properties[thisProperty]!=emptyValueText) {
-      thisElement[thisAttribute]=null;
-    }
-    if (thisAttribute=="innerHTML" || thisAttribute=="textContent") {
-      thisElement.setAttribute("contenteditable","true");
-      thisElement.className=thisElement.className.replace(/ contenteditableactive/g,"");
-      thisElement.className+=" contenteditableactive";
-    }
-    thisElement.focus();
-    // Hide edit button when write
-    if (thisElement.className.match(/adminsinglelauncher/)) var tableAdmin=thisElement.querySelector("table.adminedit");
-    else var tableAdmin=thisElement.parentElement.querySelector("table.adminedit");
-    if (tableAdmin) {
-      tableAdmin.style.visibility="hidden";
-    }
-  },
-  unActiveEdition: function(thisNode, thisElement, thisProperty, thisAttribute) {
-    //For empty values lets put some content in the element
-    if (thisElement.tagName=="input") {
-      thisAttribute="value";
-    }
-    if (thisElement[thisAttribute]=="") {
-      thisElement[thisAttribute]= emptyValueText;
-    }
-    if (thisElement.tagName=="input") {
-      return;
-    }
-    thisElement.setAttribute("contenteditable","false");
-    thisElement.className=thisElement.className.replace(/ contenteditableactive/g,'');
-    //Set visible edit button
-    var tableAdmin=thisElement.parentElement.querySelector("table.adminedit");
-    if (tableAdmin) {
-      tableAdmin.style.visibility="visible";
-    }
-  },
   setSelected: function(element) {
     element.className=element.className.replace(/ selected/g,"");
     element.className+=" selected";
@@ -155,3 +110,57 @@ Alert.prototype.hidealert=function() {
   }
   else remove(myContainer);
 };
+
+//Change the size of a file
+//var file = fileInput.files[0];  fd.append(filename, blob, filename + ".png");
+function resizeImage(imageFile, imageSizeX, blobResult) {
+  var imageType = /image.*/;
+
+  if (imageFile.type.match(imageType)) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      // Create a new image.
+      var img = new Image();
+      // Set the img src property using the data URL.
+      img.src = reader.result;
+      img.onload = function() {
+        var image=this;
+        var max_width=imageSizeX;
+	var width = image.width;
+	var height = image.height;
+	
+	if (width > max_width) {
+	  height *= max_width / width;
+	  width = max_width;
+	}
+	var canvas = document.createElement("canvas");
+	canvas.width = width;
+	canvas.height = height;
+
+	canvas.getContext("2d").drawImage(image, 0, 0, width, height);
+	var dataUrl = canvas.toDataURL("image/png");
+	
+	blobResult.push(dataURLtoBlob(dataUrl));
+
+        function dataURLtoBlob(dataURL) {
+	  // convert base64/URLEncoded data component to raw binary data held in a string
+	  var byteString;
+          if (dataURL.split(",")[0].indexOf("base64") >= 0) byteString = atob(dataURL.split(",")[1]);
+          else byteString = unescape(dataURL.split(",")[1]);
+	  // separate out the mime component
+	  var mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+	  // write the bytes of the string to a typed array
+	  var ia = new Uint8Array(byteString.length);
+	  for (var i = 0; i < byteString.length; i++) {
+	    ia[i] = byteString.charCodeAt(i);
+	  }
+          return new Blob([ia], {type:mimeString});
+        }
+      };
+    }
+    reader.readAsDataURL(imageFile); 
+  }
+  else {
+    return false;
+  }
+}

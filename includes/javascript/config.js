@@ -1,7 +1,9 @@
 var Config={
   requestFilePath: "request.php",
   mode: "developer",
-  defaultEditButtonPosition: "btrightmiddle",
+  defaultEditButtonPosition: "btmiddleright",
   defaultAdmnsButtonsPosition: "bttopcenter",
-  statsOn: false
+  defaultImg: "noimg.png",
+  statsOn: false,
+  onEmptyValueText: null
 }

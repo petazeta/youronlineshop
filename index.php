@@ -8,7 +8,7 @@
     <script src="includes/javascript/dommethods.js"></script>
     <script src="includes/javascript/cart.js"></script>
     <script src="includes/javascript/user.js"></script>
-    <script src="includes/javascript/stats.js"></script>
+    <script async src="includes/javascript/stats.js.php"></script>
     <link rel="stylesheet" type="text/css" href="includes/css/main.css">
     <link rel="icon" href="favicon.ico">
     <?php include("includes/templates.php"); ?>
@@ -22,7 +22,6 @@
       myalert.showalert();
       //We load the dom elements text that will be included in some parts of the document
       var domelementsroot=null;
-      var emptyValue=null;
       var languages=null;
       domelementsrootmother=new NodeFemale();
       domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
@@ -56,7 +55,7 @@
 	    function loadLabels() {
 	      var myLanguage=webuser.extra.language
 	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: webuser.extra.language.avoidrecursion()}, function(){
-		emptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
+		if (!Config.onEmptyValueText) Config.onEmptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
 		domelementsrootmother.dispatchEvent("loadLabels");
 		myalert.hidealert();
 	      });

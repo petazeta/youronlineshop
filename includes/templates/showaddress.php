@@ -1,17 +1,32 @@
 <template>
-  <div style="padding-bottom: 1em">
-    <div class="msgbox">Address</div>
+  <div style="margin:auto; display:table">
+    <div class="msgbox"></div>
+    <script>
+      var addresstt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"addresstt"});
+      addresstt.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+      //adding the edition pencil
+      var launcher = new Node();
+      launcher.thisNode = addresstt.getRelationship("domelementsdata").getChild();
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+    </script>
   </div>
   <div></div>
   <script>
     webuser.refreshView(thisElement,"includes/templates/useraddress.php");
   </script>
-  <div style="width:100%; text-align:center; padding-bottom: 1em;">
-    <a href="" class="btn">Go back to login page</a>
+  <div style="margin:auto; display:table;">
+    <button class="btn"></button>
     <script>
+      var bckloginlabel=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"});
+      bckloginlabel.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+      //adding the edition pencil
+      var launcher = new Node();
+      launcher.thisNode = bckloginlabel.getRelationship("domelementsdata").getChild();
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){
 	webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php");
-	return false;
       }
     </script>
   </div>

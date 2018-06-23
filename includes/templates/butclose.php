@@ -1,5 +1,5 @@
 <template  id="butclosetp">
-  <a href="javascript:" class="butopen">
+  <a href="javascript:" class="minibtn">
     <img src="includes/css/images/close.png"/>
   </a>
   <script>
@@ -7,7 +7,11 @@
     var launcher=thisNode;
     var admnbuts=launcher.admnbuts;
     thisElement.onclick=function(){
-      admnbuts.style.display="none";
+      var admnbuts=thisElement.parentElement.parentElement.querySelectorAll(".adminedit");
+      console.log(admnbuts);
+      for (var i=0; i<admnbuts.length; i++) {
+	admnbuts[i].style.display="none";
+      }
       launcher.refreshView(thisElement.parentElement, document.getElementById("butopentp"));
       return false;
     }

@@ -1,36 +1,34 @@
 <template>
   <template>
-    <div style="padding-bottom: 1rem">
+    <div style="padding-bottom: 1rem; margin:auto; display:table">
       <div class="msgbox"></div>
       <script>
 	var myNode=thisNode.getNextChild({name:"lgintt"}).getRelationship("domelementsdata").getChild();
 	myNode.writeProperty(thisElement);
-	DomMethods.propertyToEdit(myNode, thisElement)
+	//adding the edition pencil
+	var launcher = new Node();
+	launcher.thisNode = myNode;
+	launcher.editElement = thisElement;
+	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       </script>
     </div>
     <div>
       <form>
 	<table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
 	  <tr>
-	    <td>
+	    <td style="padding-top:1em;">
 	      <div class="form-group">
-		<div class="adminsinglelauncher">
+		<span>
 		  <label class="form-label"></label>
 		  <script>
-		    thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+		    var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
+		    myNode.writeProperty(thisElement);
+		    var launcher = new Node();
+		    launcher.thisNode = myNode;
+		    launcher.editElement = thisElement;
+		    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		  </script>
-		  <div class="btrightedit"></div>
-		  <script>
-		    if (webuser.isWebAdmin()) {
-		      var admnlauncher=new NodeMale();
-		      admnlauncher.buttons=[{ 
-			template: document.getElementById("butedittp"),
-			args:{thisNode: thisNode.getNextChild({name:"userName"}).getRelationship({name: "domelementsdata"}).getChild(), editElement:thisElement.parentElement.firstElementChild}
-		      }]
-		      admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-		    }
-		  </script>
-		</div>
+		</span>
 		<input class="form-control" placeholder="" name="user_name">
 		<script>
 		  thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
@@ -41,23 +39,17 @@
 	  <tr>
 	    <td>
 	      <div class="form-group">
-		<div class="adminsinglelauncher">
+		<span>
 		  <label class="form-label"></label>
 		  <script>
-		    thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+		    var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
+		    myNode.writeProperty(thisElement);
+		    var launcher = new Node();
+		    launcher.thisNode = myNode;
+		    launcher.editElement = thisElement;
+		    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		  </script>
-		  <div class="btrightedit"></div>
-		  <script>
-		    if (webuser.isWebAdmin()) {
-		      var admnlauncher=new NodeMale();
-		      admnlauncher.buttons=[{ 
-			template: document.getElementById("butedittp"),
-			args:{thisNode: thisNode.getNextChild({name:"userName"}).getRelationship({name: "domelementsdata"}).getChild(), editElement:thisElement.parentElement.firstElementChild}
-		      }]
-		      admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-		    }
-		  </script>
-		</div>
+		</span>
 		<input type="password" class="form-control" placeholder="" name="user_password">
 		<script>
 		  thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
@@ -67,44 +59,24 @@
 	  </tr>
 	  <tr>
 	    <td style="text-align:center">
-	      <div style="padding-bottom: 1rem">
+	      <div style="padding-bottom: 1rem; display:table; margin: auto;">
 		<input type="submit" class="btn" value="" style="font-size:medium;">
 		<script>
-		  thisNode.getNextChild({name:"login"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
-		</script>
-		<input type="hidden">
-		<script>
-		  var thisNode=thisNode.getNextChild({name:"login"}).getRelationship("domelementsdata").getChild();
-		  if (webuser.isWebAdmin()) {
-		    thisNode.writeProperty(thisElement, null, "value");
-		    thisElement.type="text";
-		    DomMethods.activeEdition(thisNode, thisElement,
-		      function() {
-			if (thisNode.properties[thisNode.getFirstPropertyKey()] != editElement.value) { //just when content change and not void
-			  DbMethods.changeProperty(thisNode);
-			}
-		      }
-		    );
-		  }
+		  var myNode=thisNode.getNextChild({name:"login"}).getRelationship("domelementsdata").getChild();
+		  myNode.writeProperty(thisElement, null, "value");
+		  var launcher = new Node();
+		  launcher.thisNode = myNode;
+		  launcher.editElement = thisElement;
+		  launcher.thisAttribute = "value";
+		  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		</script>
 	      </div>
 	    </td>
 	  </tr>
 	</table>
-	<input type="text" name="userCharError" style="display:none">
+	<input type="hidden" name="userCharError">
 	<script>
-	  var myNode=thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild();
-	  if (webuser.isWebAdmin()) {
-	    myNode.writeProperty(myElement, null, "value");
-
-	    DomMethods.activeEdition(myNode, myElement,
-	      function() {
-		if (myNode.properties[myNode.getFirstPropertyKey()] != myElement.value) { //just when content change and not void
-		  DbMethods.changeProperty(myNode);
-		}
-	      }
-	    );
-	  }
+	  thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
 	</script>
 	<input type="hidden" name="pwdCharError">
 	<script>

@@ -17,7 +17,7 @@
     </script>
   </span>
 </template>
-<template>
+<template id="categorytbtp">
   <table class="boxlist">
     <tr>
       <td class="boxlist">
@@ -26,60 +26,40 @@
   </table>
 </template>
 <template id="categorytp">
-  <div class="adminlauncher adminsinglelauncher">
-    <div class="btrightadmn"></div>
+  <span style="z-index:1">
     <a href=""></a>
     <script>
       thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language}, function(){
-	thisElement.textContent=this.getChild().properties.name || emptyValueText;
-	function showButtons(){
-	  var admnlauncher=new NodeMale();
-	  admnlauncher.buttons=[
-	    { 
-	      template: document.getElementById("butedittp"),
-	      args:{myNode: thisNode.getRelationship({name: "itemcategoriesdata"}).getChild(), editpropertyname:"name", allowedHTML:false, editelement:thisElement}
-	    },
-	    {
-	      template: document.getElementById("butvchpostp"),
-	      args:{myNode: thisNode}
-	    },
-	    {
-	      template: document.getElementById("butaddnewnodetp"),
-	      args:{myNode: thisNode, sort_order: thisNode.sort_order + 1, branch: thisNode.getRelationship("itemcategoriesdata")}
-	    },
-	    {
-	      template: document.getElementById("butdeletetp"),
-	      args:{myNode: thisNode}
-	    }
-	  ];
-	  admnlauncher.refreshView(thisElement.previousElementSibling, document.getElementById("admnbutstp"));
-	}
-	if (webuser.isWebAdmin()) {
-	  showButtons();
-	}
-	var listenerId=thisNode.parentNode.properties.childtablename + "-" + thisNode.properties.id;
-	webuser.addEventListener("log", function() {
-	    if (!this.isWebAdmin()) {
-	      thisElement.previousElementSibling.innerHTML="";
-	    }
-	    else {
-	      showButtons();
-	    }
-	}, listenerId);
-	thisNode.addEventListener("deleteNode", function() {
-	  webuser.removeEventListener("log", listenerId);
-	});
+	this.getChild().writeProperty(thisElement);
+	var launcher = new Node();
+	launcher.thisNode = this.getChild();
+	launcher.editElement = thisElement;
+	launcher.btposition="btmiddleleft";
+	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	var admnlauncher=new Node();
+	admnlauncher.thisNode=thisNode;
+	admnlauncher.editElement = thisElement;
+	admnlauncher.btposition="btmiddleright";
+	admnlauncher.elementsListPos="vertical";
+	admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
+	admnlauncher.newNode.loadasc(thisNode, 2, "id"); //the parent is not the same
+	admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
+	admnlauncher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php");
       });
       thisElement.addEventListener("click", function(event) {
 	event.preventDefault();
-	thisNode.setActive();
+	DomMethods.setActive(thisNode);
 	thisNode.getRelationship().loadfromhttp({action:"load my tree", deepLevel: 2}, function(){
+	  this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
+	  this.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
+	  this.newNode.parentNode.load(this, 1, 0, null, "id");
+	  this.appendThis(document.getElementById("centralcontent"), "includes/templates/admnlisteners.php");
 	  this.refreshView(document.getElementById("centralcontent"),"includes/templates/catalog.php");
 	});
 	return false;
       });
     </script>
-  </div>
+  </span>
 </template>
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
@@ -93,52 +73,21 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     var categoriesroot=this.getChild();
     categoriesroot.loadfromhttp({action: "load my tree", deepLevel: 3}, function() {
       var categoriesMother=this.getRelationship();
-      categoriesMother.addEventListener("refreshChildrenView", function() {
-	if (this.children.length==0){
-	  if (webuser.isWebAdmin()) {
-	    //The node and a data node is inserted
-	    var childNode=new NodeMale();
-	    childNode.parentNode=this;
-	    childNode.relationships[0]=this.partnerNode.getRelationship({name: "itemcategoriesdata"}).cloneNode(0);
-	    childNode.getRelationship().addChild(new NodeMale());
-	    
-	    var admnlauncher=new NodeMale();
-	    admnlauncher.myNode=childNode;
-	    admnlauncher.buttons=[{
-	      template: document.getElementById("butaddnewnodetp"),
-	      args: {myNode: childNode, branch: childNode.getRelationship()}
-	    }];
-	    admnlauncher.refreshView(this.childContainer, document.getElementById("nochildrentp"));
-	  }
-	  //To remove the add element when log
-	  else this.childContainer.innerHTML="";
-	}
-	//refreshChildrenView listener to fit in columns
-	else document.querySelector("#catalogbox .boxbody").appendChild(intoColumns(document.querySelector("#categorytp").previousElementSibling.content.querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
+      var newNode=new NodeMale();
+      newNode.parentNode=new NodeFemale();
+      newNode.parentNode.load(categoriesMother, 1, 0, "id");
+      //new node comes with datarelationship attached
+      newNode.addRelationship(categoriesMother.partnerNode.getRelationship("itemcategories").cloneNode(0, 0));
+      newNode.addRelationship(categoriesMother.partnerNode.getRelationship("itemcategoriesdata").cloneNode(0, 0));
+      newNode.addRelationship(categoriesMother.partnerNode.getRelationship("items").cloneNode(0, 0));
+      newNode.getRelationship("itemcategoriesdata").addChild(new NodeMale());
+      categoriesMother.newNode=newNode;
+      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php");
+      categoriesMother.addEventListener("refreshChildrenView", function(){
+	//to set the result in a one column table
+	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(document.querySelector("#categorytbtp").content.querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
-      //When admin add a new node it will be selected
-      categoriesMother.addEventListener("addNewNode", function(newnodeadded) {
-	newnodeadded.getMyDomNodes()[0].querySelector("a").click();
-      });
-      //When admin delete a node si estaba seleccionado seleccionamos otro y si era el último borramos lo de la parte central
-      categoriesMother.addEventListener("deleteNode", function(nodedeleted) {
-	if (nodedeleted.selected) {
-	  if (this.children.length>0) {
-	    this.children[0].getMyDomNodes()[0].querySelector("a").click();
-	  }
-	}
-	if (this.children.length==0) {
-	  //remove subcategories flaps in case we just remove all categories
-	  nodedeleted.getRelationship().childContainer.innerHTML="";
-	}
-      });
-      //showing categories
-      categoriesMother.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  document.querySelector("#categorytp"));
-      //to refresh the nochildren element when log
-      webuser.addEventListener("log", function(){
-	if (categoriesMother.children.length==0) {
-	  categoriesMother.refreshChildrenView();
-	}
+      categoriesMother.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  document.querySelector("#categorytp"), function(){
       });
     });
   });

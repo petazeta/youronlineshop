@@ -8,6 +8,8 @@
     var inlineEdition=launcher.inlineEdition;
     var thisAttribute=launcher.thisAttribute;
     var btposition=launcher.btposition;
+    var autoeditFunc=launcher.autoeditFunc;
+    var editable=launcher.editable;
     
     if (btposition) thisElement.className=btposition;
     else thisElement.className=Config.defaultEditButtonPosition;
@@ -28,11 +30,11 @@
       var admnlauncher=new NodeMale();
       admnlauncher.buttons=[{ 
 	template: document.getElementById("butedittp"),
-	args:{thisNode: thisNode, thisProperty: thisProperty, editElement: editElement, thisAttribute: thisAttribute, inlineEdition: inlineEdition}
+	args:{thisNode: thisNode, thisProperty: thisProperty, editElement: editElement, thisAttribute: thisAttribute, inlineEdition: inlineEdition, autoeditFunc: autoeditFunc}
       }]
       admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
     }
-    if (webuser.isWebAdmin()) {
+    if (editable || webuser.isWebAdmin()) {
       showEditButton();
     }
     //Lets add the log event

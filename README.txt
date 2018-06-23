@@ -1,4 +1,9 @@
 ***************
+*YOS Version:
+***************
+1.0.8
+
+***************
 *Autor Note*
 ***************
 This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to those people that have developed software in which I got inspiration. This version of the software is free to use and modify.

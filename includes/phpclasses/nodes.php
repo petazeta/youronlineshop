@@ -477,10 +477,10 @@ class NodeFemale extends Node{
     if ($result->num_rows==0) return false;
     else {
       //The relationship actually exists, we fill some data
-      $this->properties->name=strtolower(sbustr($this->properties->childtablename, 6));
+      $this->properties->name=strtolower(substr($this->properties->childtablename, 6));
       //stablish the sort_order statment
+      $this->properties->sort_order=false;
       foreach ($this->syschildtablekeysinfo as $syskey) {
-	$this->properties->sort_order=false;
 	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
 	  $this->properties->sort_order=true;
 	  break;

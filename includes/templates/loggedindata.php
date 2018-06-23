@@ -1,8 +1,8 @@
 <template>
-  <div style="padding-bottom: 1em">
+  <div style="padding-bottom: 1em; text-align:center">
     <div class="msgbox"></div>
     <script>
-      thisElement.innerHTML=thisNode.properties.username;
+      thisNode.writeProperty(thisElement, "username");
     </script>
   </div>
   <template>
@@ -17,7 +17,7 @@
   <script>
     var datarel=thisNode.getRelationship("usersdata");
     function showdata(){
-      datarel.children[0].refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
+      datarel.getChild().refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
 	thisElement.appendChild(DomMethods.intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, 2));
       });
     }
@@ -26,23 +26,33 @@
     }
     else showdata();
   </script>
-  <div style="width:100%; text-align:center; padding-bottom: 1em;">
-    <a href="" class="btn">Show orders</a>
+  <div style="margin:auto; display:table; margin-bottom: 1em;">
+    <button class="btn"></button>
     <script>
+      var btShowOrd=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btShowOrd"});
+      btShowOrd.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+      //adding the edition pencil
+      var launcher = new Node();
+      launcher.thisNode = btShowOrd.getRelationship("domelementsdata").getChild();
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){
-	var launcher=new NodeMale();
-	launcher.refreshView(document.getElementById("centralcontent"), "includes/templates/showorders.php");
-	return false;
+	(new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/showorders.php");
       }
     </script>
   </div>
-  <div style="width:100%; text-align:center; padding-bottom: 1em;">
-    <a href="" class="btn">Show address</a>
+  <div style="margin:auto; display:table;">
+    <button class="btn"></button>
     <script>
+      var btShowAdd=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btShowAdd"});
+      btShowAdd.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+      //adding the edition pencil
+      var launcher = new Node();
+      launcher.thisNode = btShowAdd.getRelationship("domelementsdata").getChild();
+      launcher.editElement = thisElement;
+      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){
-	var launcher=new NodeMale();
-	launcher.refreshView(document.getElementById("centralcontent"), "includes/templates/showaddress.php");
-	return false;
+	(new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/showaddress.php");
       }
     </script>
   </div>

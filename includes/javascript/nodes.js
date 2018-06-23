@@ -234,6 +234,7 @@ Node.prototype.appendProperties = function (container, tp, reqlistener) {
       if (key=="id") return false;
       myThis.editpropertyname=key; //for knowing the key and for the edition facility
       var thiscol=myThis.propertyTp.cloneNode(true);
+      thiscol.firstElementChild.setAttribute("data-property", key);
       myThis.render(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
       container.appendChild(thiscol);
     });
@@ -299,13 +300,15 @@ Node.prototype.appendChildren=function (container, tp, reqlistener) {
   }
 };
 
-Node.prototype.writeProperty=function(container, property, attribute) {
+Node.prototype.writeProperty=function(container, property, attribute, onEmptyValueText) {
+  if (!onEmptyValueText) onEmptyValueText=Config.onEmptyValueText;
   var myAttribute="innerHTML"; //by default
+  if (container.tagName=="INPUT") myAttribute="value";
   if (attribute) myAttribute=attribute;
   if (!property) {
     property=this.getFirstPropertyKey();
   }
-  container[myAttribute]=this.properties[property] || emptyValueText;
+  container[myAttribute]=this.properties[property] || onEmptyValueText;
 }
 
 Node.prototype.getFirstPropertyKey=function(){
@@ -341,8 +344,15 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
     }
     thisNode.load(responseobj);
     if (Config.mode=="developer") {
-      console.log(requesterFile, requestAction);
+      var childtablename= responseobj.properties && responseobj.properties.childtablename ? responseobj.properties.childtablename :
+      (responseobj.parentNode && responseobj.parentNode.properties && responseobj.parentNode.childtablename) ?
+      responseobj.parentNode.properties.childtablename : null;
+      
+      console.log(requesterFile);
+      if (childtablename) console.log(childtablename.substr(6));
+      if (requestAction) console.log(requestAction);
       console.log(responseobj);
+      console.log(thisNode);
     }
     if (reqlistener) {
       reqlistener.call(thisNode);
@@ -350,12 +360,14 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
     thisNode.dispatchEvent("loadfromhttp");
     if (responseobj.extra && responseobj.extra.error==true) {
       console.log("Error response", requesterFile, requestAction);
-      console.log(responseobj);
+      console.log(responseobj, this.responseText);
     }
   });
-  xmlhttp.addEventListener('error', function(event) {
-    alert('Oops! Something went wrong with the XMLHttpRequest.');
-  });
+  xmlhttp.onreadystatechange=function() {  
+    if (xmlhttp.readyState==4 && xmlhttp.status!==200) {     
+      alert('Oops! Something went wrong with the XMLHttpRequest.');
+    }
+  }
   xmlhttp.overrideMimeType("application/json");
   if (typeof requestData=="string") { //request with no data or with ?vars
     requesterFile=requestData;
@@ -377,20 +389,26 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
       requesterFile=requestData.action;
     }
     if (!requesterFile) requesterFile=Config.requestFilePath;
+    
     xmlhttp.open("POST",requesterFile, true);
     xmlhttp.send(request); //sending just formData (archives)
   }
 };
-Node.prototype.addEventListener=function (eventsNames, listenerFunction, id) {
+Node.prototype.addEventListener=function (eventsNames, listenerFunction, label) {
+  if (label) var id=this.produceEventId(label);
   if (!this.events) this.events={};
   if (!Array.isArray(eventsNames)) eventsNames=[eventsNames];
   if (id) listenerFunction.id=id;
   for (var i=0; i<eventsNames.length; i++) {
+    if (id && this.eventExists(eventsNames[i], id)) {
+      continue;
+    }
     if (!this.events[eventsNames[i]]) this.events[eventsNames[i]]=[];
     this.events[eventsNames[i]].push(listenerFunction);
   }
 }
-Node.prototype.removeEventListener=function (eventName, id) {
+Node.prototype.removeEventListener=function (eventName, label) {
+  var id=this.produceEventId(label);
   if (this.events && this.events[eventName]) {
     var i=this.events[eventName].length;
     while(i--) {
@@ -411,10 +429,22 @@ Node.prototype.eventExists=function (eventName, id) {
   }
   return false;
 }
+Node.prototype.produceEventId=function (label) {
+  //produce a unique identifier to recognize te event
+  var evId=false;
+  if (this.constructor.name=="NodeFemale") {
+    evId=this.properties.parenttablename + this.properties.childtablename + label;
+  }
+  else {
+    evId=this.properties.id + label;
+  }
+  return evId;
+}
 Node.prototype.dispatchEvent=function (eventName, args) {
   if (this.events && this.events[eventName]) {
     var i=this.events[eventName].length;
     while(i--) {
+      if (typeof this.events[eventName][i]!="function") console.log("no funcion " + this.events[eventName][i]);
       this.events[eventName][i].apply(this, args);
     }
   }

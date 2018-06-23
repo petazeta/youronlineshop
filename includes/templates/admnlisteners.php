@@ -12,7 +12,7 @@
 	if (thisNode.children.length==0) {
 	  thisNode.refreshChildrenView();
 	}
-      });
+      }, "nochildren");
     }
     //adding the only-addbutton when is no records
     thisNode.addEventListener("refreshChildrenView", function() {
@@ -32,25 +32,28 @@
 	  this.childContainer.innerHTML="";
 	}
       }
-    });  
+    }, "butaddnewnode");  
     //When admin add a new node it will be selected (what if there is not a menu thing?)
     thisNode.addEventListener("addNewNode", function(newnodeadded) {
       //we must add relationship domelements
       var button=null;
-      newnodeadded.getMyDomNodes().forEach(function(domNode){
+      newnodeadded.getMyDomNodes().every(function(domNode){
 	button=domNode.querySelector("[data-button]");
+	if (button) return false;
       });
       if (button) button.click();
-    });
+    }, "clicknewnode");
     //When admin delete a node si estaba seleccionado seleccionamos otro y si era el último borramos lo de la parte central
     thisNode.addEventListener("deleteNode", function(nodeDeleted) {
       if (nodeDeleted.selected) {
 	if (this.children.length>0) {
 	  var button=null;
-	  var position=0;
+	  var position=1;
 	  if (nodeDeleted.sort_order && nodeDeleted.sort_order > 1) position=nodeDeleted.sort_order-1;
-	  this.children[position-1].getMyDomNodes().forEach(function(domNode){
+	  console.log(position, this.children);
+	  this.children[position-1].getMyDomNodes().every(function(domNode){
 	    button=domNode.querySelector("[data-button]");
+	    if (button) return false;
 	  });
 	  if (button) button.click();
 	}
@@ -61,6 +64,6 @@
 	//to show no children when webadmin
 	this.refreshChildrenView();
       }
-    });
+    }, "clickanynode");
   </script>
 </template>
