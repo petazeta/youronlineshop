@@ -8,7 +8,6 @@
     var admnbuts=launcher.admnbuts;
     thisElement.onclick=function(){
       var admnbuts=thisElement.parentElement.parentElement.querySelectorAll(".adminedit");
-      console.log(admnbuts);
       for (var i=0; i<admnbuts.length; i++) {
 	admnbuts[i].style.display="none";
       }

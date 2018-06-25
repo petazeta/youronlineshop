@@ -9,28 +9,31 @@
     var thisAttribute=launcher.thisAttribute;
     var btposition=launcher.btposition;
     var autoeditFunc=launcher.autoeditFunc;
-    var editable=launcher.editable;
+    var editable=launcher.editable; //For address fields for example
+    var createInput=launcher.createInput; //For elements that can be contenteditable
     
     if (btposition) thisElement.className=btposition;
     else thisElement.className=Config.defaultEditButtonPosition;
     
     function showEditButton() {
-      if (!thisElement.parentElement) editElement.parentElement.appendChild(thisElement); //after the log out thisElement is removed from parent
       thisElement.parentElement.style.position="relative";
       
-      thisElement.parentElement.style.position="relative";
-      thisElement.className += " visibleHover";
-      editElement.addEventListener("mouseover", function(ev){
-	thisElement.className = thisElement.className.replace(/ visibleHover/g,"");
-      });
-      editElement.addEventListener("mouseout", function(ev){
+      if (thisElement.originalParentElement && !thisElement.parentElement) editElement.parentElement.appendChild(thisElement); //after the log out thisElement is removed from parent
+
+      if (!createInput) { //input is allways visible¿?
 	thisElement.className += " visibleHover";
-      });
       
+	editElement.addEventListener("mouseover", function(ev){
+	  thisElement.className = thisElement.className.replace(/ visibleHover/g,"");
+	});
+	editElement.addEventListener("mouseout", function(ev){
+	  thisElement.className += " visibleHover";
+	});
+      }
       var admnlauncher=new NodeMale();
       admnlauncher.buttons=[{ 
 	template: document.getElementById("butedittp"),
-	args:{thisNode: thisNode, thisProperty: thisProperty, editElement: editElement, thisAttribute: thisAttribute, inlineEdition: inlineEdition, autoeditFunc: autoeditFunc}
+	args:{thisNode: thisNode, thisProperty: thisProperty, editElement: editElement, thisAttribute: thisAttribute, inlineEdition: inlineEdition, autoeditFunc: autoeditFunc, createInput: createInput}
       }]
       admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
     }
@@ -48,7 +51,10 @@
       webuser.addEventListener("log", function() {
 	  if (!this.isWebAdmin()) {
 	    //to remove the editbutton when logs after webadmin
-	    if (thisElement && thisElement.parentElement) thisElement.parentElement.removeChild(thisElement);
+	    if (thisElement && thisElement.parentElement) {
+	      thisElement.originalParentElement=thisElement.parentElement;
+	      thisElement.parentElement.removeChild(thisElement);
+	    }
 	  }
 	  else {
 	    showEditButton();
