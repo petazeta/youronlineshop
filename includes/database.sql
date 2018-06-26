@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 04, 2018 at 11:15 PM
+-- Generation Time: Jun 26, 2018 at 06:13 AM
 -- Server version: 5.5.58-0+deb8u1
 -- PHP Version: 5.6.30-0+deb8u1
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `domelements` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `_domelements` int(11) DEFAULT NULL,
   `_domelements_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1500 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
@@ -66,7 +66,7 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (32, 'license', 61, 0),
 (33, 'designed', 61, 0),
 (36, 'addcarttt', 60, 0),
-(38, 'lgintt', 60, 0),
+(38, 'lgintt', 182, 0),
 (41, 'headtitle', 59, 0),
 (42, 'headsubtitle', 59, 0),
 (43, 'username', 63, 0),
@@ -83,8 +83,6 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (71, 'labels', 58, 2),
 (72, 'texts', 58, 1),
 (73, 'not located', 71, 0),
-(93, '', 66, 1),
-(94, '', 93, 1),
 (97, 'TABLE_ADDRESSES', 60, 3),
 (98, 'street', 97, 3),
 (99, 'city', 97, 4),
@@ -95,7 +93,37 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (105, 'surname', 103, 3),
 (106, 'email', 103, 2),
 (107, 'phonenumber', 103, 1),
-(1493, 'langboxtt', 60, 1);
+(108, 'langboxtt', 60, 1),
+(109, 'checkout', 60, 4),
+(110, 'chkt1next', 109, 1),
+(111, 'chkt1add', 109, 2),
+(182, 'logform', 60, 0),
+(183, 'userName', 182, 0),
+(184, 'password', 182, 0),
+(185, 'login', 182, 0),
+(186, 'pwdCharError', 182, 0),
+(187, 'userCharError', 182, 0),
+(188, 'userError', 182, 0),
+(189, 'pwdError', 182, 0),
+(190, 'loginOk', 182, 0),
+(191, 'emailError', 182, 0),
+(192, 'userExistsError', 182, 0),
+(193, 'signIn', 182, 0),
+(194, 'signedIn', 182, 0),
+(195, 'loginBack', 182, 0),
+(196, 'emptyCart', 65, 0),
+(197, 'chk2add', 109, 0),
+(198, 'chk2next', 109, 0),
+(271, '', 66, 3),
+(275, 'loadImgError', 60, 0),
+(276, '', 66, 4),
+(277, 'backToLoginLb', 279, 0),
+(278, 'addresstt', 279, 0),
+(279, 'loggedin', 60, 0),
+(280, 'archived', 279, 0),
+(281, 'new', 279, 0),
+(282, 'btShowOrd', 279, 0),
+(283, 'btShowAdd', 279, 0);
 
 -- --------------------------------------------------------
 
@@ -108,14 +136,14 @@ CREATE TABLE IF NOT EXISTS `domelementsdata` (
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `_domelements` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1496 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelementsdata`
 --
 
 INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALUES
-(9, 'Shop', 9, 1),
+(9, 'pjhh', 9, 1),
 (14, 'Log out', 14, 1),
 (15, 'Log in', 15, 1),
 (19, 'Guest', 19, 1),
@@ -128,7 +156,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (36, '+1 to the cart', 36, 1),
 (38, 'Insert you account details or create a new account.', 38, 1),
 (41, 'Shop Title', 41, 1),
-(42, 'This is my first shop', 42, 1),
+(42, 'kThis is my first shop', 42, 1),
 (43, 'the user name', 43, 1),
 (44, 'Not any value', 44, 1),
 (58, '', 58, 1),
@@ -143,8 +171,6 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (71, '', 71, 1),
 (72, '', 72, 1),
 (73, '', 73, 1),
-(93, 'tu', 93, 1),
-(94, 'www', 94, 1),
 (97, ' ', 97, 1),
 (98, 'street, num...', 98, 1),
 (99, 'city', 99, 1),
@@ -152,10 +178,37 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (102, 'postal code', 102, 1),
 (103, '', 103, 1),
 (104, 'name', 104, 1),
-(105, 'surname', 105, 1),
+(105, '<div><span style="font-size: 0.875rem;">surname</span><br></div>', 105, 1),
 (106, 'email', 106, 1),
 (107, 'phone number', 107, 1),
-(1493, 'language', 1493, 1);
+(108, 'language', 108, 1),
+(109, 'Continue &raquo;', 110, 1),
+(110, 'Check if your order is ok and then click on Continue to get to the next step.', 111, 1),
+(180, 'User Name', 183, 1),
+(181, 'Password', 184, 1),
+(182, 'Log in', 185, 1),
+(183, '"Password between " + min + " and " + max + " characters!"', 186, 1),
+(184, '"User name between " + min + " and " + max + " characters!"', 187, 1),
+(185, 'User Name Incorrect', 188, 1),
+(186, 'Password Incorrect', 189, 1),
+(187, 'Login Ok', 190, 1),
+(188, 'Incorrect Email', 191, 1),
+(189, 'User Name aready taken', 192, 1),
+(190, 'Sign in', 193, 1),
+(191, 'Signed In correctly', 194, 1),
+(192, '&laquo; Back to Log in', 195, 1),
+(193, 'Cart is Empty', 196, 1),
+(194, 'Just one last thing.<br>Check if your address is ok, change it or fill it.<br>Use street field to write also street number and so on.<br>pc is postal code.', 197, 1),
+(195, 'Finish Order', 198, 1),
+(263, 'jjj', 271, 1),
+(270, 'Error loading image', 275, 1),
+(271, '', 276, 1),
+(272, 'Back to login', 277, 1),
+(273, 'Address', 278, 1),
+(274, 'Show archived orders', 280, 1),
+(275, 'Show new orders', 281, 1),
+(276, 'Show Orders', 282, 1),
+(277, 'Show Address', 283, 1);
 
 -- --------------------------------------------------------
 
@@ -167,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
@@ -175,12 +228,9 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 
 INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
 (1, NULL, 0),
-(38, 43, 1),
-(39, 38, 1),
-(40, 38, 2),
-(41, 38, 3),
-(42, 38, 4),
-(43, 1, 1);
+(6, 1, 3),
+(7, 6, 1),
+(8, 6, 2);
 
 -- --------------------------------------------------------
 
@@ -193,20 +243,17 @@ CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategoriesdata`
 --
 
 INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`) VALUES
-(1, 'languages', NULL, NULL),
-(38, 'first cat', NULL, NULL),
-(39, 'first subcat', NULL, NULL),
-(40, '', NULL, NULL),
-(41, '', NULL, NULL),
-(42, '', NULL, NULL),
-(43, 'en', NULL, NULL);
+(1, 'root', NULL, 1),
+(6, 'lllkjskldfj', 6, NULL),
+(7, '', 7, NULL),
+(8, '', 8, NULL);
 
 -- --------------------------------------------------------
 
@@ -218,7 +265,14 @@ CREATE TABLE IF NOT EXISTS `items` (
 `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `items`
+--
+
+INSERT INTO `items` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
+(8, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -233,20 +287,16 @@ CREATE TABLE IF NOT EXISTS `itemsdata` (
   `descriptionshort` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `_itemcategories` int(11) DEFAULT NULL,
-  `_itemcategories_position` int(11) NOT NULL,
   `_items` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemsdata`
 --
 
-INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`, `_itemcategories`, `_itemcategories_position`, `_items`, `_languages`) VALUES
-(84, 'product p', '', 'p description<br>', 'file_84.png?1527704889290', 4.00, 39, 1, NULL, NULL),
-(85, '', '', '', '', 0.00, 39, 2, NULL, NULL),
-(86, '', '', '', '', 0.00, 40, 1, NULL, NULL);
+INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`, `_items`, `_languages`) VALUES
+(8, '', '', '', 'file_8.png', 0.00, 8, NULL);
 
 -- --------------------------------------------------------
 
@@ -349,7 +399,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
 --
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
-(1, 'smy a', 'pep', '', 0, 1),
+(1, 'fsmy a', 'pep', 'kkpjjjjj', 0, 1),
 (2, '', '', '', 0, 2);
 
 -- --------------------------------------------------------
@@ -415,7 +465,7 @@ ALTER TABLE `items`
 -- Indexes for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
- ADD PRIMARY KEY (`id`), ADD KEY `_itemcategories` (`_itemcategories`), ADD KEY `_groups` (`_items`), ADD KEY `_languages` (`_languages`);
+ ADD PRIMARY KEY (`id`), ADD KEY `_groups` (`_items`), ADD KEY `_languages` (`_languages`);
 
 --
 -- Indexes for table `languages`
@@ -466,32 +516,32 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1500;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=284;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1496;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=278;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=46;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=44;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=87;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `languages`
 --
@@ -542,8 +592,8 @@ ADD CONSTRAINT `domelements_ibfk_1` FOREIGN KEY (`_domelements`) REFERENCES `dom
 -- Constraints for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-ADD CONSTRAINT `domelementsdata_ibfk_3` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `domelementsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `domelementsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `domelementsdata_ibfk_3` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `itemcategories`
@@ -555,8 +605,8 @@ ADD CONSTRAINT `itemcategories_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCE
 -- Constraints for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-ADD CONSTRAINT `itemcategoriesdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `itemcategoriesdata_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `itemcategoriesdata_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `itemcategoriesdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `items`
@@ -568,9 +618,8 @@ ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemca
 -- Constraints for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-ADD CONSTRAINT `itemsdata_ibfk_3` FOREIGN KEY (`_items`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT `itemsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `items_itemcategories` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `itemsdata_ibfk_3` FOREIGN KEY (`_items`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orderitems`
