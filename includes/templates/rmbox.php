@@ -1,7 +1,7 @@
 <template id="rmboxtp">
   <div class="rmbox">
-    <div class="btrighttop">
-      <a href="" class="btn" style="font-size:1.4em;">&times;</a>
+    <div class="bttopinsiderightinside">
+      <button class="minibtn transp" style="font-size:1.4em; font-weight: bold">&times;</button>
       <script>
 	//normalize
 	var launcher=thisNode;
@@ -9,7 +9,6 @@
 	thisElement.onclick=function(){
 	  launcher.myContainer.innerHTML="";
 	  launcher.dispatchEvent("closewindow");
-	  return false;
 	}
       </script>
     </div>

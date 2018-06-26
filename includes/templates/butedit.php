@@ -1,6 +1,6 @@
 <template id="butedittp">
   <template>
-    <input type="text">
+    <input type="hidden">
   </template>
   <template>
     <button type="button" class="butedit">
@@ -24,16 +24,53 @@
     }
     if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
     if (createInput) {
-      originalEditElement=editElement;
-      originalAttribute=thisAttribute;
+      var originalEditElement=editElement;
       editElement=thisElement.parentElement.querySelector("template").content.querySelector("input").cloneNode(true);
-      thisNode.writeProperty(editElement, thisProperty, "value");
+      var originalAttribute=thisAttribute;
       thisAttribute="value";
       inlineEdition=true;
+      thisElement.appendChild(editElement);
+    }
+    var buttonElement=thisElement.parentElement.querySelectorAll("template")[1].content.querySelector("button").cloneNode(true);
+    thisElement.appendChild(buttonElement);
+    if (typeof autoeditFunc=="function") buttonElement.onclick=function() {
+      thisNode.addEventListener("finishAutoEdit", changeProperty, "autoedit");
+      autoeditFunc();
+    }
+    else if (createInput) buttonElement.onclick=function() {
+      var activeEdition=function(){
+	editElement.type="text";
+	//removing Config.onEmptyValueText => property is null
+	if (editElement[thisAttribute]==Config.onEmptyValueText && thisNode.properties[thisProperty]!=Config.onEmptyValueText) {
+	  editElement[thisAttribute]="";
+	}
+	// Hide admin buttons when write
+	var editButton=editElement.parentElement.querySelector("button"); //edit and admin buttons
+	editButton.style.display="none";
+	editElement.focus();
+      };
+      var unActiveEdition=function() {
+	editElement.type="hidden";
+	//For empty values lets put some content in the element
+	if (editElement[thisAttribute]=="") {
+	  editElement[thisAttribute]= Config.onEmptyValueText;
+	}
+	if (!createInput) {
+	  editElement.setAttribute("contenteditable","false");
+	  editElement.className=editElement.className.replace(/ contenteditableactive/g,'');
+	}
+	//Set visible edit and admin buttons
+	var editButton=editElement.parentElement.querySelector("button"); //edit and admin buttons
+	editButton.style.display="inline-block";
+      };
+      thisNode.writeProperty(editElement, thisProperty, thisAttribute);
+      // Hide admin buttons when write
+      activeEdition();
       editElement.addEventListener("blur", function(e){
 	if (!thisNode.changedByIntroKey) {
 	  changeProperty(function(){
-	      originalEditElement[originalAttribute]=thisNode.properties[thisProperty];
+	    originalEditElement[originalAttribute]=thisNode.properties[thisProperty];
+	    unActiveEdition();
 	  });
 	}
 	thisNode.changedByIntroKey=false; //reset
@@ -42,71 +79,62 @@
 	introKey(e, function(){
 	  changeProperty(function(){
 	    originalEditElement[originalAttribute]=thisNode.properties[thisProperty];
+	    unActiveEdition();
 	  });
 	  thisNode.changedByIntroKey=true;
 	});
       });
-      thisElement.appendChild(editElement);
     }
     else {
-      var buttonElement=thisElement.parentElement.querySelectorAll("template")[1].content.querySelector("button").cloneNode(true);
-      thisElement.appendChild(buttonElement);
-    
-      if (typeof autoeditFunc=="function") buttonElement.onclick=function() {
-	thisNode.addEventListener("finishAutoEdit", changeProperty, "autoedit");
-	autoeditFunc();
-      }
-      else {
-	var activeEdition=function(){
-	  //removing Config.onEmptyValueText => property is null
-	  if (editElement[thisAttribute]==Config.onEmptyValueText && thisNode.properties[thisProperty]!=Config.onEmptyValueText) {
-	    editElement[thisAttribute]=null;
-	  }
-	  editElement.setAttribute("contenteditable","true");
-	  editElement.className=editElement.className.replace(/ contenteditableactive/g,"");
-	  editElement.className+=" contenteditableactive";
-	  // Hide admin buttons when write
-	  var tablesAdmin=editElement.parentElement.querySelectorAll("table.adminedit"); //edit and admin buttons
-	  for (var i=0; i<tablesAdmin.length; i++) {
-	    tablesAdmin[i].style.visibility="hidden";
-	  }
-	  editElement.focus();
-	};
-	var unActiveEdition=function() {
-	  //For empty values lets put some content in the element
-	  if (editElement[thisAttribute]=="") {
-	    editElement[thisAttribute]= Config.onEmptyValueText;
-	  }
-	  editElement.setAttribute("contenteditable","false");
-	  editElement.className=editElement.className.replace(/ contenteditableactive/g,'');
-	  //Set visible edit and admin buttons
-	  var tablesAdmin=editElement.parentElement.querySelectorAll("table.adminedit"); //edit and admin buttons
-	  for (var i=0; i<tablesAdmin.length; i++) {
-	    tablesAdmin[i].style.visibility="visible";
-	  }
-	};
-	var listenerIntroKey=function(e) {
-	   introKey(e, finishEdition);
-	};
-	var finishEdition=function(){
-	  changeProperty();
-	  unActiveEdition();
-	  if (!(inlineEdition===false)) {
-	    //disable Intro keyCode for new Line and enable it for submith
-	    editElement.removeEventListener('keydown', listenerIntroKey);
-	  }
-	  editElement.removeEventListener("blur", finishEdition);
-	};
-	
-	buttonElement.onclick=function() {
-	  activeEdition();
-	  if (!(inlineEdition===false)) {
-	    //disable Intro keyCode for new Line and enable it for submith
-	    editElement.addEventListener('keydown', listenerIntroKey);
-	  }
-	  editElement.addEventListener("blur", finishEdition);
-	};
-      }
+      var activeEdition=function(){
+	//removing Config.onEmptyValueText => property is null
+	if (editElement[thisAttribute]==Config.onEmptyValueText && thisNode.properties[thisProperty]!=Config.onEmptyValueText) {
+	  editElement[thisAttribute]="";
+	}
+	editElement.setAttribute("contenteditable","true");
+	editElement.className=editElement.className.replace(/ contenteditableactive/g,"");
+	editElement.className+=" contenteditableactive";
+	// Hide admin buttons when write
+	var tablesAdmin=editElement.parentElement.querySelectorAll("table.adminedit"); //edit and admin buttons
+	for (var i=0; i<tablesAdmin.length; i++) {
+	  tablesAdmin[i].style.visibility="hidden";
+	}
+	editElement.focus();
+      };
+      var unActiveEdition=function() {
+	//For empty values lets put some content in the element
+	if (editElement[thisAttribute]=="") {
+	  editElement[thisAttribute]= Config.onEmptyValueText;
+	}
+	editElement.setAttribute("contenteditable","false");
+	editElement.className=editElement.className.replace(/ contenteditableactive/g,'');
+	//Set visible edit and admin buttons
+	var tablesAdmin=editElement.parentElement.querySelectorAll("table.adminedit"); //edit and admin buttons
+	for (var i=0; i<tablesAdmin.length; i++) {
+	  tablesAdmin[i].style.visibility="visible";
+	}
+      };
+      var listenerIntroKey=function(e) {
+	  introKey(e, finishEdition);
+      };
+      var finishEdition=function(){
+	changeProperty();
+	unActiveEdition();
+	if (!(inlineEdition===false)) {
+	  //disable Intro keyCode for new Line and enable it for submith
+	  editElement.removeEventListener('keydown', listenerIntroKey);
+	}
+	editElement.removeEventListener("blur", finishEdition);
+      };
+      
+      buttonElement.onclick=function() {
+	activeEdition();
+	if (!(inlineEdition===false)) {
+	  //disable Intro keyCode for new Line and enable it for submith
+	  editElement.addEventListener('keydown', listenerIntroKey);
+	}
+	editElement.addEventListener("blur", finishEdition);
+      };
     }
     function introKey(e, callBack) {
       var key = e.which || e.keyCode;

@@ -4,7 +4,7 @@
       <select name="ordersStatus" class="btn">
 	<option value="new"></option>
 	<script>
-	  var unarchivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"unarchived"});
+	  var unarchivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"new"});
 	  unarchivedtt.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
 	</script>
 	<option value="archived"></option>
@@ -19,15 +19,18 @@
 	  var launcher=new Node();
 	  launcher.filterorders=thisElement.options[thisElement.selectedIndex].value;
 	  launcher.refreshView(container,"includes/templates/userorders.php");
+	  thisElement.form.parentElement.removeChild(thisElement.form.parentElement.lastElementChild);
+	  thisElement.form.parentElement.removeChild(thisElement.form.parentElement.lastElementChild);
+	  (new Node()).render(thisElement.form.nextElementSibling);
 	}
       </script>
     </form>
     <script>
-      var unarchivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"unarchived"});
       //adding the edition pencil
       var launcher = new Node();
+      launcher.editElement=thisElement.elements.ordersStatus.options[thisElement.elements.ordersStatus.selectedIndex];
+      var unarchivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:launcher.editElement.value});
       launcher.thisNode = unarchivedtt.getRelationship("domelementsdata").getChild();
-      launcher.editElement=thisElement.elements.ordersStatus.options[0];
       launcher.createInput=true;
       launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
     </script>

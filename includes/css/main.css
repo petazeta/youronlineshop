@@ -288,10 +288,17 @@ footer > table td{
   color: #666666 !important;
   background-color: #eff3f6;
   display: inline-block;
-  padding: 0.1em;
+  padding: 0 0.3em;
   border: 1px solid rgba(27,31,35,0.2);
   border-radius: 0.25em;
   cursor: pointer;
+}
+.transp{
+  background: transparent;
+  border: transparent;
+}
+.transp:hover{
+  color: #3705D2 !important;
 }
 .btnplane{
    background-color: #316cbe;
@@ -322,6 +329,11 @@ footer > table td{
     position: absolute;
     top: 0;
     left: 0;
+}
+.bttopinsiderightinside{
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 .btmiddleleft{
     position: absolute;

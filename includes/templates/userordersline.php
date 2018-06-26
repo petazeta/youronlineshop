@@ -31,14 +31,14 @@
       //Show the address
       var launcher=new NodeMale();
       launcher.addEventListener("closewindow", function(){
-	var orderContainerRow=closesttagname.call(this.myContainer, "TR");
-	closesttagname.call(orderContainerRow, "TABLE").deleteRow(orderContainerRow.rowIndex);
+	var orderContainerRow=DomMethods.closesttagname(this.myContainer, "TR");
+	DomMethods.closesttagname(orderContainerRow, "TABLE").deleteRow(orderContainerRow.rowIndex);
 	this.openview=false;
       });
       thisElement.onclick=function(){
       	if (launcher.openview) return false;
-	var thisRow=closesttagname.call(thisElement, "TR");
-	var thisTable=closesttagname.call(thisElement, "TABLE");
+	var thisRow=DomMethods.closesttagname(thisElement, "TR");
+	var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
 	myrow=thisTable.insertRow(thisRow.rowIndex+1);
 	mycell=myrow.insertCell(0);
 	mycell.colSpan=5;
@@ -57,15 +57,15 @@
       var launcher=new NodeMale();
       //To remove not only de order but the order row container
       launcher.addEventListener("closewindow", function(){
-	var orderContainerRow=closesttagname.call(this.myContainer, "TR");
-	closesttagname.call(orderContainerRow, "TABLE").deleteRow(orderContainerRow.rowIndex);
+	var orderContainerRow=DomMethods.closesttagname(this.myContainer, "TR");
+	DomMethods.closesttagname(orderContainerRow, "TABLE").deleteRow(orderContainerRow.rowIndex);
 	this.openview=false;
       });
       thisElement.onclick=function(){
 	if (launcher.openview) return false;
         thisNode.loadfromhttp({action: "load my tree", user_id: webuser.properties.id}, function() {
-	  var thisRow=closesttagname.call(thisElement, "TR");
-	  var thisTable=closesttagname.call(thisElement, "TABLE");
+	  var thisRow=DomMethods.closesttagname(thisElement, "TR");
+	  var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
 	  myrow=thisTable.insertRow(thisRow.rowIndex+1);
 	  mycell=myrow.insertCell(0);
 	  mycell.colSpan=5;
