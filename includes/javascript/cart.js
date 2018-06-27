@@ -34,6 +34,9 @@ function cart() {
   cartboxrel.addChild(cartboxchild);
   var cartboxchildrel=new NodeFemale();
   cartboxchildrel.properties.name="cartboxitem";
+  cartboxchildrel.parenttable="TABLE_ORDERS";
+  cartboxchildrel.childtable="TABLE_ORDERITEMS";
+  cartboxchildrel.childtablekeys=["id", "quantity", "name", "price"];
   cartboxchild.addRelationship(cartboxchildrel);
   
   this.properties.subTotal=0;

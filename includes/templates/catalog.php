@@ -161,7 +161,8 @@
 			    thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "name");
 			    //adding the edition pencil
 			    var launcher = new Node();
-			    launcher.thisNode = thisNode;
+			    launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
+			    launcher.thisProperty = "name";
 			    launcher.editElement = thisElement;
 			    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 			  </script>
@@ -172,7 +173,8 @@
 			    thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionshort");
 			    //adding the edition pencil
 			    var launcher = new Node();
-			    launcher.thisNode = thisNode;
+			    launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
+			    launcher.thisProperty = "descriptionshort";
 			    launcher.editElement = thisElement;
 			    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 			  </script>
@@ -183,14 +185,15 @@
 		      <td>
 			<table class="addtocart">
 			  <tr>
-			    <td style="position:relative;">
+			    <td>
 			      <div style="display:table">
 				<span></span>
 				<script>
 				  thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "price");
 				  //adding the edition pencil
 				  var launcher = new Node();
-				  launcher.thisNode = thisNode;
+				  launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
+				  launcher.thisProperty = "price";
 				  launcher.editElement = thisElement;
 				  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 				</script>
@@ -198,7 +201,7 @@
 			    </td>
 			    <td>
 			      <div style="padding-left:1em;">
-				<button href="" title="" class="btn">
+				<button class="btn">
 				  <img src="includes/css/images/cart.png"/>
 				</button>
 				<script>
@@ -207,6 +210,13 @@
 				  thisElement.addEventListener("click",function(event){
 				    mycart.additem(thisNode.getRelationship("itemsdata").getChild());
 				  });
+				  //adding the edition pencil
+				  var launcher = new Node();
+				  launcher.thisNode = myTitle;
+				  launcher.createInput = true;
+				  launcher.editElement = thisElement;
+				  launcher.thisAttribute = "title";
+				  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 				</script>
 			      </div>
 			    </td>

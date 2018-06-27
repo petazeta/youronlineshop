@@ -23,6 +23,8 @@ It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As w
 5 - Give write permisions to the folder catalog/images/small (To allow upload product images).
 6 - For further database control install the complement DbManager: https://sourceforge.net/projects/freshhh-dbmanager/ .
 
+ADVISE: If you got any problem with the installation or the software doesn't work in your system please contact us at: melchorherrera@gmail.com.
+
 *****************
 *Getting started*
 *****************

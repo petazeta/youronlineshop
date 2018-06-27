@@ -1,71 +1,25 @@
 <template>
-  <tr>
-    <td>
-      <div class="adminlauncher adminsinglelauncher">
-	<span title="" href="" data-js='
-	  thisElement.textContent=thisNode.properties.quantity;
-	'>
-	</span>
-	<div class="btrightedit"></div>
-	<script>
-	if (webuser.getUserType()=="orders administrator") {
-	  thisElement.parentElement.style.paddingRight="1em";
-	  var admnlauncher=new NodeMale();
-	  admnlauncher.myNode=thisNode;
-	  admnlauncher.buttons=[{
-	    template: document.getElementById("butedittp"),
-	    args: {editpropertyname:"quantity", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-	  }];
-	  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-	  thisNode.addEventListener("propertychange", function(propertyname){
-	    if (propertyname=="quantity" || propertyname=="price") {
-	      thisNode.parentNode.refreshView();
-	    }
-	  });
-	}
-	</script>
-      </div>
-      </td>
-      <td>
-      <div class="adminlauncher adminsinglelauncher">
-	<span data-js='
-	  thisElement.innerHTML=thisNode.properties.name;
-	'></span>
-	<div class="btrightedit"></div>
-	<script>
-	if (webuser.getUserType()=="orders administrator") {
-	  thisElement.parentElement.style.paddingRight="1em";
-	  var admnlauncher=new NodeMale();
-	  admnlauncher.myNode=thisNode;
-	  admnlauncher.buttons=[{
-	    template: document.getElementById("butedittp"),
-	    args: {editpropertyname:"name", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-	  }];
-	  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-	}
-	</script>
-      </div>
-      </td>
-      <td>
-      <div class="adminlauncher adminsinglelauncher">
-	<span data-js='
-	  thisElement.innerHTML=thisNode.properties.price;
-	'></span>
-	<div class="btrightedit"></div>
-	<script>
-	if (webuser.getUserType()=="orders administrator") {
-	  var admnlauncher=new NodeMale();
-	  admnlauncher.myNode=thisNode;
-	  admnlauncher.buttons=[{
-	    template: document.getElementById("butedittp"),
-	    args: {editpropertyname:"price", allowedHTML:false, editelement:thisElement.parentElement.firstElementChild}
-	  }];
-	  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
-	}
-	</script>
-	<span> &euro;</span>
-      </div>
-      
-    </td>
-  </tr>
+  <template>
+    <table style="width:100%">
+      <tr>
+	<td>
+	</td>
+      </tr>
+    </table>
+  </template>
+  <div></div>
+  <script>
+    thisNode.addEventListener("changeProperty", function(propertyname){
+      if (propertyname=="quantity" || propertyname=="price") {
+	thisNode.parentNode.refreshView();
+      }
+    }, "reCaluculate");
+    thisNode.showLabel=false;
+    thisNode.appendProperties(thisElement,"includes/templates/singlefield.php",function(){
+      thisElement.lastElementChild.querySelector("span").parentElement.appendChild(document.createTextNode(" €"));
+      thisElement.appendChild(DomMethods.intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, 0));
+      thisElement.querySelector("table").rows[0].cells[0].style.width="2em";
+      thisElement.querySelector("table").rows[0].cells[2].style.width="7em";
+    });
+  </script>
 </template>

@@ -66,6 +66,7 @@
       var launcher = new Node();
       launcher.thisNode = thisNode;
       launcher.editElement = thisElement;
+      launcher.createInput=true;
       launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){  
 	mycart.tocheckout();

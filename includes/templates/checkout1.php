@@ -1,9 +1,17 @@
 <template id="checkout1tp">
   <template>
-    <div class="msgbox"></div>
-    <script>
-      thisNode.getNextChild({"name":"chkt1add"}).getRelationship({name:"domelementsdata"}).getChild().appendProperty(thisElement);
-    </script>
+    <div class="msgbox">
+      <span></span>
+      <script>
+	var title=thisNode.getNextChild({"name":"chkt1add"}).getRelationship({name:"domelementsdata"}).getChild();
+	title.writeProperty(thisElement);
+	//adding the edition pencil
+	var launcher = new Node();
+	launcher.thisNode = title;
+	launcher.editElement = thisElement;
+	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+      </script>
+    </div>
     <div></div>
     <script>
       //First we must create a clone of mycart to not modify mycart.
@@ -11,12 +19,20 @@
       var cartboxitems=ordercart.getRelationship({name:"cartbox"}).children[0].getRelationship({name:"cartboxitem"});
       cartboxitems.refreshView(thisElement, "includes/templates/order.php");
     </script>
-    <div style="width:100%; text-align:center;">
-      <button class="btn"></botton>
+    <div style="display:table; margin:auto;">
+      <button class="btn"></button>
       <script>
-	thisNode.getNextChild({"name":"chkt1next"}).getRelationship({name:"domelementsdata"}).getChild().appendProperty(thisElement);
+	var buttonLabel=thisNode.getNextChild({"name":"chkt1next"}).getRelationship({name:"domelementsdata"}).getChild();
+	buttonLabel.writeProperty(thisElement);
+	var launcher = new Node();
+	launcher.thisNode = buttonLabel;
+	launcher.editElement = thisElement;
+	launcher.createInput=true;
+	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	
 	//First we create a clone of mycart to not include modifications made at mycart.
 	var ordercart=mycart.cloneNode();
+	
 	thisElement.onclick=function(){
 	  var insertuser=webuser.cloneNode();
 	  //Now we start to load rels so webuser clon: insertuser will be empty of any data

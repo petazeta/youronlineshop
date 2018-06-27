@@ -1,10 +1,10 @@
 <template>
-  <div style="padding-right:1em;">
+  <div style="padding-right:2.2em;">
     <div class="form-group">
-      <div style="display:table">
+      <template>
 	<span class="form-label"></span>
 	<script>
-	  var propertyName=new Node();
+	  var propertyName=null;
 	  var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
 	  if (tableProperties) {
 	    var propertyData=tableProperties.getNextChild({name: thisNode.editpropertyname});
@@ -22,7 +22,8 @@
 	  }
 	  propertyName.writeProperty(thisElement);
 	</script>
-      </div>
+      </template>
+      <div style="display:table"></div>
       <div style="display:table">
 	<span></span>
 	<script>
@@ -34,6 +35,7 @@
 	  launcher.thisProperty = thisNode.editpropertyname;
 	  launcher.editable = true;
 	  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	  if (thisNode.showLabel!==false) thisNode.appendThis(thisElement.parentElement.previousElementSibling, thisElement.parentElement.parentElement.querySelector("template"));
 	</script>
       </div>
     </div>

@@ -24,9 +24,10 @@
       var launcher = new Node();
       launcher.thisNode = bckloginlabel.getRelationship("domelementsdata").getChild();
       launcher.editElement = thisElement;
+      launcher.createInput=true;
       launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){
-	webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php");
+	(new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php");
       }
     </script>
   </div>

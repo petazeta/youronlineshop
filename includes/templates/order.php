@@ -1,17 +1,20 @@
 <template>
   <table class="formtable">
     <tr>
-      <td style="pading-bottom:0.5em; border-bottom:1px solid #666;">
-	<table style="width:100%" class="productlist" data-js='
-	  thisNode.refreshChildrenView(thisElement, "includes/templates/orderitem.php");
-	'>
-	</table>
-      </td>
+      <td style="pading-bottom:0.5em; border-bottom:1px solid #666;"></td>
+      <script>
+	thisNode.addEventListener("propertychange", function(propertyname){
+	  if (propertyname=="quantity" || propertyname=="price") {
+	    thisNode.parentNode.refreshView();
+	  }
+	});
+	thisNode.refreshChildrenView(thisElement, "includes/templates/orderitem.php");
+      </script>
     </tr>
     <tr>
       <td>
-	<div class="form-group" style="text-align:right;">
-	  <label class="form-label">Total</label>
+	<div class="form-group" style="text-align:right;padding-right:2.2em">
+	  <span class="form-label">Total</span>
 	  <span></span>
 	  <script>
 	    thisNode.sumTotal=function() {
