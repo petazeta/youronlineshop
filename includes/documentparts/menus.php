@@ -42,8 +42,8 @@
 	DomMethods.setActive(thisNode);
 	thisNode.getRelationship("domelements").loadfromhttp({action: "load my tree"}, function() {
 	  this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
-	  this.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
-	  this.newNode.loadasc(thisNode, 2, "id");
+	  this.newNode.parentNode=new NodeFemale();
+	  this.newNode.parentNode.load(this, 1, "id");
 	  var pageframe=document.getElementById("pageframetp").content.firstElementChild.cloneNode(true);
 	  document.getElementById("centralcontent").innerHTML="";
 	  document.getElementById("centralcontent").appendChild(pageframe);
@@ -90,10 +90,10 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     //showing menus (after the listeners to refreshChildrenView are added). Refreshing first time first menu is clicked
     //new node schema
     var newNode=new NodeMale();
-    newNode.parentNode=new NodeFemale();
+    newNode.parentNode=new NodeFemale;
     newNode.parentNode.load(menusMother, 1, 0, "id");
     //new node comes with datarelationship attached
-    newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelements"}).cloneNode(0, 0));
+    newNode.addRelationship(menusMother.cloneNode(0, 0));
     newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelementsdata"}).cloneNode(0, 0));
     newNode.getRelationship({name: "domelementsdata"}).addChild(new NodeMale());
     menusMother.newNode=newNode;

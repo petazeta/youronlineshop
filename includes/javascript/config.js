@@ -5,5 +5,5 @@ var Config={
   defaultAdmnsButtonsPosition: "bttopcenter",
   defaultImg: "noimg.png",
   statsOn: false,
-  onEmptyValueText: null
+  onEmptyValueText: null //It will be setled later
 }

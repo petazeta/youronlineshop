@@ -29,7 +29,7 @@
   <span style="z-index:1">
     <a href=""></a>
     <script>
-      thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language}, function(){
+      thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
 	this.getChild().writeProperty(thisElement);
 	var launcher = new Node();
 	launcher.thisNode = this.getChild();
@@ -71,7 +71,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
   categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
   categoriesrootmother.loadfromhttp({action:"load root"}, function(){
     var categoriesroot=this.getChild();
-    categoriesroot.loadfromhttp({action: "load my tree", deepLevel: 3}, function() {
+    categoriesroot.loadfromhttp({action: "load my tree", deepLevel: 3, language: webuser.extra.language.properties.id}, function() {
       var categoriesMother=this.getRelationship();
       var newNode=new NodeMale();
       newNode.parentNode=new NodeFemale();

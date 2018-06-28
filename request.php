@@ -36,7 +36,7 @@ switch ($parameters->action) {
     if (isset($parameters->filter)) $filter=$parameters->filter;
     if (isset($parameters->language)) {
       if (!$filter) $filter=[];
-      $filter['_language'] = $parameters->language->properties->id;
+      $filter['_language'] = $parameters->language;
     }
     if (isset($parameters->order)) $order=$parameters->order;
     if (isset($parameters->limit)) $limit=$parameters->limit;
@@ -52,7 +52,7 @@ switch ($parameters->action) {
     $deepLevel=null; $filter=null;
     if (isset($parameters->deepLevel)) $deepLevel=$parameters->deepLevel;
     if (isset($parameters->language)) {
-      $filter=['_language' => $parameters->language->properties->id];
+      $filter=['_language' => $parameters->language];
     }
     if ($deepLevel || $filter) $argument=[$deepLevel, $filter];
     $callback="cutUp";
@@ -81,7 +81,7 @@ switch ($parameters->action) {
     break;
   case "add myself":
     $myexecfunction="db_insertmyself";
-    if (isset($parameters->sort_order)) $argument=$parameters->sort_order;
+    if (isset($parameters->language)) $argument=['_language' => $parameters->language];
     $callback=["cutDown", "cutUp"];
     break;
   case "add my tree":
@@ -90,7 +90,7 @@ switch ($parameters->action) {
     if (isset($parameters->deepLevel)) $deepLevel=$parameters->deepLevel;
     if (isset($parameters->language)) {
       if (!$extra) $extra=[];
-      $extra['_language'] = $parameters->language->properties->id;
+      $extra['_language'] = $parameters->language;
     }
     if ($deepLevel || $extra) $argument=[$deepLevel, $extra];
     $callback=["cutUp"];

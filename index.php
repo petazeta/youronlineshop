@@ -53,8 +53,8 @@
 	    }
 	    else loadLabels();
 	    function loadLabels() {
-	      var myLanguage=webuser.extra.language
-	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: webuser.extra.language.avoidrecursion()}, function(){
+	      var myLanguage=webuser.extra.language.properties.id;
+	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: myLanguage}, function(){
 		if (!Config.onEmptyValueText) Config.onEmptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
 		domelementsrootmother.dispatchEvent("loadLabels");
 		myalert.hidealert();

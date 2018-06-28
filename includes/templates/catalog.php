@@ -12,7 +12,7 @@
 	  <div style="display:inline-block; z-index: 2">
 	    <a href="javascript:" data-button="true"></a>
 	    <script>
-	      thisNode.getRelationship("itemcategoriesdata").loadfromhttp({action: "load my children", language: webuser.extra.language}, function(){
+	      thisNode.getRelationship("itemcategoriesdata").loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
 		this.getChild().writeProperty(thisElement);
 		var launcher = new Node();
 		launcher.thisNode = this.getChild();
@@ -23,7 +23,7 @@
 		admnlauncher.thisNode=thisNode;
 		admnlauncher.editElement = thisElement;
 		admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
-		admnlauncher.newNode.load(thisNode, 2, null, "id"); //the parent is not the same
+		admnlauncher.newNode.loadasc(thisNode, 2, "id"); //the parent is not the same
 		admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
 		var closelauncher=new Node();
 		admnlauncher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php");
@@ -45,7 +45,7 @@
 	      thisElement.addEventListener("click", function(event) {
 		event.preventDefault();
 		DomMethods.setActive(thisNode);
-		thisNode.getRelationship("items").loadfromhttp({action:"load my tree", language: webuser.extra.language}, function(){
+		thisNode.getRelationship("items").loadfromhttp({action:"load my tree", language: webuser.extra.language.properties.id}, function(){
 		  var newNode=new NodeMale(); //new Item
 		  newNode.parentNode=new NodeFemale();
 		  newNode.parentNode.load(thisNode.getRelationship("items"), 1, 0, "id");
