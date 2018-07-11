@@ -258,6 +258,9 @@ class NodeFemale extends Node{
     }
     $filterValid=[];
     if ($filter && is_array($filter)) {
+      $myfilter=implode(' AND ', $filter);
+    $this->extra=new stdclass();
+    $this->extra->filter=$myfilter;
       $filterKeys=array_keys($filter);
       foreach ($filterKeys as $filterKey) {
 	if (isset($this->childtablekeys) && in_array($filterKey, $this->childtablekeys) ||

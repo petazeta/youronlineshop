@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.12deb2+deb8u2
+-- version 4.2.12deb2+deb8u3
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 26, 2018 at 06:13 AM
--- Server version: 5.5.58-0+deb8u1
--- PHP Version: 5.6.30-0+deb8u1
+-- Generation Time: Jul 11, 2018 at 05:20 PM
+-- Server version: 5.5.60-0+deb8u1
+-- PHP Version: 5.6.36-0+deb8u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 --
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
-(23, '', '', '', '9222', 1),
+(23, 'hhh', '', '', '9222', 1),
 (24, '', '', '', '', 2);
 
 -- --------------------------------------------------------
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `domelements` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `_domelements` int(11) DEFAULT NULL,
   `_domelements_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
@@ -114,16 +114,20 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (196, 'emptyCart', 65, 0),
 (197, 'chk2add', 109, 0),
 (198, 'chk2next', 109, 0),
-(271, '', 66, 3),
 (275, 'loadImgError', 60, 0),
-(276, '', 66, 4),
 (277, 'backToLoginLb', 279, 0),
 (278, 'addresstt', 279, 0),
 (279, 'loggedin', 60, 0),
 (280, 'archived', 279, 0),
 (281, 'new', 279, 0),
 (282, 'btShowOrd', 279, 0),
-(283, 'btShowAdd', 279, 0);
+(283, 'btShowAdd', 279, 0),
+(284, 'TABLE_ORDERITEMS', 60, 0),
+(285, 'quantity', 284, 0),
+(286, 'name', 284, 0),
+(287, 'price', 284, 0),
+(314, '', 66, 1),
+(315, '', 314, 1);
 
 -- --------------------------------------------------------
 
@@ -136,27 +140,27 @@ CREATE TABLE IF NOT EXISTS `domelementsdata` (
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `_domelements` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=309 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelementsdata`
 --
 
 INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALUES
-(9, 'pjhh', 9, 1),
+(9, 'pppjhh', 9, 1),
 (14, 'Log out', 14, 1),
 (15, 'Log in', 15, 1),
 (19, 'Guest', 19, 1),
 (20, 'Not connected', 20, 1),
 (23, 'Connected', 23, 1),
-(25, 'Shopping cart', 25, 1),
+(25, 'phopping cart', 25, 1),
 (27, 'Check out', 27, 1),
 (32, '<a href="LICENSE.txt">License</a>', 32, 1),
 (33, 'Powered by <a href="https://sourceforge.net/projects/youronlineshop/">YourOnlineShop</a>', 33, 1),
-(36, '+1 to the cart', 36, 1),
+(36, '+ 1 to the cart', 36, 1),
 (38, 'Insert you account details or create a new account.', 38, 1),
 (41, 'Shop Title', 41, 1),
-(42, 'kThis is my first shop', 42, 1),
+(42, 'This is my first shop', 42, 1),
 (43, 'the user name', 43, 1),
 (44, 'Not any value', 44, 1),
 (58, '', 58, 1),
@@ -200,15 +204,18 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (193, 'Cart is Empty', 196, 1),
 (194, 'Just one last thing.<br>Check if your address is ok, change it or fill it.<br>Use street field to write also street number and so on.<br>pc is postal code.', 197, 1),
 (195, 'Finish Order', 198, 1),
-(263, 'jjj', 271, 1),
 (270, 'Error loading image', 275, 1),
-(271, '', 276, 1),
 (272, 'Back to login', 277, 1),
 (273, 'Address', 278, 1),
 (274, 'Show archived orders', 280, 1),
 (275, 'Show new orders', 281, 1),
 (276, 'Show Orders', 282, 1),
-(277, 'Show Address', 283, 1);
+(277, 'Show Address', 283, 1),
+(278, 'Quantity', 285, 1),
+(279, 'Name', 286, 1),
+(280, 'Price', 287, 1),
+(307, 'first menu', 314, 1),
+(308, 'Some text', 315, 1);
 
 -- --------------------------------------------------------
 
@@ -220,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
@@ -228,9 +235,8 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 
 INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
 (1, NULL, 0),
-(6, 1, 3),
-(7, 6, 1),
-(8, 6, 2);
+(6, 1, 1),
+(11, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -243,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategoriesdata`
@@ -251,9 +257,8 @@ CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
 
 INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`) VALUES
 (1, 'root', NULL, 1),
-(6, 'lllkjskldfj', 6, NULL),
-(7, '', 7, NULL),
-(8, '', 8, NULL);
+(6, 'first category', 6, 1),
+(11, 'First subcategory', 11, 1);
 
 -- --------------------------------------------------------
 
@@ -265,14 +270,14 @@ CREATE TABLE IF NOT EXISTS `items` (
 `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `items`
 --
 
 INSERT INTO `items` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
-(8, 7, 1);
+(10, 11, 1);
 
 -- --------------------------------------------------------
 
@@ -289,14 +294,14 @@ CREATE TABLE IF NOT EXISTS `itemsdata` (
   `price` decimal(10,2) NOT NULL,
   `_items` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemsdata`
 --
 
 INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`, `_items`, `_languages`) VALUES
-(8, '', '', '', 'file_8.png', 0.00, 8, NULL);
+(10, 'First Product', '', 'P description', '', 8.00, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -324,18 +329,20 @@ INSERT INTO `languages` (`id`, `code`) VALUES
 
 CREATE TABLE IF NOT EXISTS `orderitems` (
 `id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `quantity` int(11) NOT NULL,
   `_orders` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orderitems`
 --
 
-INSERT INTO `orderitems` (`id`, `name`, `price`, `quantity`, `_orders`) VALUES
-(105, '', 0.00, 2, 6);
+INSERT INTO `orderitems` (`id`, `quantity`, `name`, `price`, `_orders`) VALUES
+(105, 1, 'my producto', 888883.00, 6),
+(106, 1, 'casa', 98.99, 7),
+(107, 1, 'kkkkkkkkkkkkkkkkkkkkfire place', 43.00, 7);
 
 -- --------------------------------------------------------
 
@@ -349,14 +356,15 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0',
   `_users` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
 INSERT INTO `orders` (`id`, `creationdate`, `modificationdate`, `status`, `_users`) VALUES
-(6, '2018-05-28 20:34:35', '0000-00-00 00:00:00', 0, 1);
+(6, '2018-05-28 20:34:35', '0000-00-00 00:00:00', 0, 1),
+(7, '2018-06-27 05:43:47', '0000-00-00 00:00:00', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -399,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
 --
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
-(1, 'fsmy a', 'pep', 'kkpjjjjj', 0, 1),
+(1, 'fsmy pa', 'pep', 'kkpjjjjj', 0, 1),
 (2, '', '', '', 0, 2);
 
 -- --------------------------------------------------------
@@ -516,32 +524,32 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=284;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=316;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=278;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=309;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `languages`
 --
@@ -551,12 +559,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=106;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=108;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --

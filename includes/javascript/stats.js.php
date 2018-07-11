@@ -81,6 +81,8 @@ echo md5($filecontent);
 }
 if (Config.statsOn) {
   window.onload=function(){
-    statsRecorder.startRecordingProcess();
+    window.setTimeout(function(){
+      statsRecorder.startRecordingProcess();
+    }, 5000);
   }
 }
