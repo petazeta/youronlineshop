@@ -1,4 +1,9 @@
 <?php
+if (isset($_SESSION["user"])) {
+  $user=unserialize($_SESSION["user"]);
+  $userid=$user->properties->id;
+}
+if (!$userid) exit("safety cut request");
 /* 
  * Upload a single file at the destination folder
 */

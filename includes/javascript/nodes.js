@@ -328,7 +328,15 @@ Node.prototype.getFirstPropertyKey=function(){
 
 //It loads a node tree from a php script that privides it in json format
 Node.prototype.loadfromhttp=function (requestData, reqlistener) {
-  var xmlhttp=new XMLHttpRequest();
+  var xmlhttp;
+  if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp = new XMLHttpRequest();
+  }
+  else {
+    // code for IE6, IE5
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
   var thisNode=this;
   var request=null, requesterFile=null, requestAction=null;
   xmlhttp.addEventListener('load', function() {

@@ -195,6 +195,17 @@
 				  launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
 				  launcher.thisProperty = "price";
 				  launcher.editElement = thisElement;
+				  launcher.btposition = "btmiddleleft";
+				  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+				</script>
+				<span></span>
+				<script>
+				  var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
+				  currency.writeProperty(thisElement);
+				  //adding the edition pencil
+				  var launcher = new Node();
+				  launcher.thisNode = currency;
+				  launcher.editElement = thisElement;
 				  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 				</script>
 			      </div>
