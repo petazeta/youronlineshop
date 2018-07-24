@@ -12,6 +12,10 @@ a {
   text-decoration: none;
 }
 
+template {
+  display: none;
+}
+
 /* Table for formating. Transparent. */
 table{border-collapse:collapse;} /* It is needed for the table border to be 0 width */
 td,th{padding:0;vertical-align:top;} /* Padding 0 because this tables are used as boxes to locate the content. vertical-align:top because the content in the table should be as appear in the dom that is positioning from top to down */

@@ -64,14 +64,25 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
   var thisNode=this;
   xmlhttp.onload=function() {
-    var container=document.createElement("template");
-    container.innerHTML=this.responseText;
-    if (container.content.querySelector("template")) thisNode.xmlTp=container.content.querySelector("template").content;
-    else thisNode.xmlTp=container.content;
+    function supportsTemplate() {
+      return 'content' in document.createElement('template');
+    }
+    if (supportsTemplate()) {
+      var container=document.createElement("template");
+      container.innerHTML=this.responseText;
+      if (container.content.querySelector("template")) thisNode.xmlTp=container.content.querySelector("template").content;
+      else thisNode.xmlTp=container.content;
+    }
+    else {
+      var container=document.createElement("div");
+      container.innerHTML=this.responseText;
+      if (container.querySelector("template")) thisNode.xmlTp=container.querySelector("template").innerHTML;
+      else thisNode.xmlTp=container.innerHTML;
+    }
     if (reqlistener) {
       reqlistener.call(thisNode);
     }
-    thisNode.dispatchEvent("onGetTp");
+    thisNode.dispatchEvent("getTp");
   }
   xmlhttp.open("GET",tpHref,true);
   xmlhttp.send();
