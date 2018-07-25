@@ -64,7 +64,7 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
   var xmlhttp=new XMLHttpRequest();
   var thisNode=this;
   xmlhttp.onload=function() {
-    function supportsTemplate() {
+    function supportsTemplate() { //It is duplicated at dommethods.js but we can use it here cause dommethods use either nodes object
       return 'content' in document.createElement('template');
     }
     if (supportsTemplate()) {

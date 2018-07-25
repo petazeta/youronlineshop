@@ -17,7 +17,13 @@
     <script>
       var webuser=new user();
       var myalert=new Alert();
-      myalert.myTp=document.getElementById("alerttp").content; //For error alerts
+      if (supportsTemplate()) {
+	myalert.myTp=document.getElementById("alerttp").content; //For error alerts
+      }
+      else {
+	myalert.myTp=document.createElement("div");
+	myalert.myTp.innerHTML=document.getElementById("alerttp").innerHTML;
+      }
       myalert.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
       myalert.showalert();
       //We load the dom elements text that will be included in some parts of the document

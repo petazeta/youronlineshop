@@ -111,6 +111,10 @@ Alert.prototype.hidealert=function() {
   else remove(myContainer);
 };
 
+function supportsTemplate() {
+  return 'content' in document.createElement('template');
+}
+
 //Change the size of a file
 //var file = fileInput.files[0];  fd.append(filename, blob, filename + ".png");
 function resizeImage(imageFile, imageSizeX, blobResult) {
