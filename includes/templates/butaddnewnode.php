@@ -1,4 +1,4 @@
-<template id="butaddnewnodetp">
+<template>
   <a href="" class="butadd">
     <img src="includes/css/images/plus.png"/>
   </a>

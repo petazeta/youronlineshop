@@ -21,8 +21,8 @@
       editElement.addEventListener("mouseout", function(ev){
 	thisElement.className += " visibleHover";
       });
-      var posTp="buthchpostp";
-      if (elementsListPos=="vertical") posTp="butvchpostp";
+      var posTp="includes/templates/buthchpos.php";
+      if (elementsListPos=="vertical") posTp="includes/templates/butvchpos.php";
       var admnlauncher=new Node();
       admnlauncher.buttons=[
 	{
@@ -30,15 +30,15 @@
 	  args:{thisNode: thisNode}
 	},
 	{
-	  template: document.getElementById("butaddnewnodetp"),
+	  template: "includes/templates/butaddnewnode.php",
 	  args:{thisParent: thisNode.parentNode, newNode: newNode}
 	},
 	{
-	  template: document.getElementById("butdeletetp"),
+	  template: "includes/butdelete.php",
 	  args:{thisNode: thisNode}
 	}
       ];
-      admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+      admnlauncher.refreshView(thisElement, "includes/templates/admnbuts.php");
     }
     
     if (webuser.isWebAdmin()) {

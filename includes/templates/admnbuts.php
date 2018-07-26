@@ -1,4 +1,4 @@
-<template id="admnbutstp">
+<template>
   <template>
     <table class="adminedit">
       <tr>
@@ -12,7 +12,12 @@
   //Generate the buttons positioned table
   //normalize
   var launcher=thisNode;
-  var myTable=thisElement.parentElement.querySelector("template").content.querySelector("table").cloneNode(true);
+  if (supportsTemplate()) { // for IE
+    var myTable=thisElement.parentElement.querySelector("template").content.querySelector("table").cloneNode(true);
+  }
+  else {
+    var myTable=thisElement.parentElement.querySelector("template").querySelector("table").cloneNode(true);
+  }
   var butsContainer=document.createDocumentFragment();
   launcher.buttons.forEach(function(myButton){
      var butlauncher=new NodeMale();

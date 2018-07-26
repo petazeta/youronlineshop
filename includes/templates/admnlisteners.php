@@ -22,10 +22,10 @@
 	  //The node and a data node is inserted
 	  var admnlauncher=new Node();
 	  admnlauncher.buttons=[{
-	    template: document.getElementById("butaddnewnodetp"),
+	    template: "includes/templates/butaddnewnode.php",
 	    args: {thisParent: this, newNode: newNode}
 	  }];
-	  admnlauncher.refreshView(this.childContainer, document.getElementById("nochildrentp"));
+	  admnlauncher.refreshView(this.childContainer, "includes/templates/nochildren.php");
 	}
 	//remove the add buton when log after webadmin
 	else {

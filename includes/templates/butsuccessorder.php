@@ -1,4 +1,4 @@
-<template id="butsuccessordertp">
+<template>
   <a title="Archive" href="" class="butsucs">
     <img src="includes/css/images/success.png" data-js='if (thisNode.newStatus==0) thisElement.src="includes/css/images/undo.png";'/>
   </a>

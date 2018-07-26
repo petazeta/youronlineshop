@@ -1,4 +1,4 @@
-<template id="butedittp">
+<template>
   <template>
     <input type="hidden">
   </template>

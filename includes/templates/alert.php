@@ -1,4 +1,4 @@
-<template id="alerttp">
+<template>
   <div class="alert"
     data-js='
       thisElement.innerHTML=thisNode.properties.alertmsg;

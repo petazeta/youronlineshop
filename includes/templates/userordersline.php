@@ -87,10 +87,10 @@
 	  if (thisNode.properties.status==1) myNewStatus=0;
 	  admnlauncher.myNode=thisNode;
 	  admnlauncher.buttons=[
-	    {template: document.getElementById("butsuccessordertp"), args:{newStatus: myNewStatus}},
-	    {template: document.getElementById("butdeletetp")}
+	    {template: "includes/templates/butsuccessorder.php", args:{newStatus: myNewStatus}},
+	    {template: "includes/templates/butdelete.php"}
 	  ];
-	  admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+	  admnlauncher.refreshView(thisElement, "includes/templates/admnbuts.php");
 	}
       </script>
     </td>

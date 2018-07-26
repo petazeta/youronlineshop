@@ -1,4 +1,4 @@
-<template id="butvchpostp">
+<template>
   <table style="margin-top:1px" class="arrows">
     <tbody>
       <tr>

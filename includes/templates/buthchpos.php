@@ -1,4 +1,4 @@
-<template id="buthchpostp">
+<template>
   <table style="margin-top:4px;" class="arrows">
     <tbody>
       <tr>

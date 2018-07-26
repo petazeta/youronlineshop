@@ -32,10 +32,10 @@
       }
       var admnlauncher=new NodeMale();
       admnlauncher.buttons=[{ 
-	template: document.getElementById("butedittp"),
+	template: "includes/templates/butedit.php",
 	args:{thisNode: thisNode, thisProperty: thisProperty, editElement: editElement, thisAttribute: thisAttribute, inlineEdition: inlineEdition, autoeditFunc: autoeditFunc, createInput: createInput}
       }]
-      admnlauncher.refreshView(thisElement, document.getElementById("admnbutstp"));
+      admnlauncher.refreshView(thisElement, "includes/templates/admnbuts.php");
     }
     if (editable || webuser.isWebAdmin()) {
       showEditButton();

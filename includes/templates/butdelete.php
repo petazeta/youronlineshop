@@ -1,4 +1,4 @@
-<template id="butdeletetp">
+<template>
   <template>
     <div class="alert">
       <table class="mytable">

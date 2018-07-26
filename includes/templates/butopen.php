@@ -1,4 +1,4 @@
-<template  id="butopentp">
+<template>
   <a href="javascript:" class="minibtn">
     <img src="includes/css/images/open.png"/>
   </a>
@@ -11,7 +11,7 @@
       for (var i=0; i<admnbuts.length; i++) {
 	admnbuts[i].style.display="block";
       }
-      launcher.refreshView(thisElement.parentElement, document.getElementById("butclosetp"));
+      launcher.refreshView(thisElement.parentElement, "includes/templates/butclose.php"));
       return false;
     }
   </script>

@@ -11,21 +11,18 @@
     <script async src="includes/javascript/stats.js.php"></script>
     <link rel="stylesheet" type="text/css" href="includes/css/main.css">
     <link rel="icon" href="favicon.ico">
-    <?php include("includes/templates.php"); ?>
   </head>
   <body>
     <script>
       var webuser=new user();
       var myalert=new Alert();
-      if (supportsTemplate()) {
-	myalert.myTp=document.getElementById("alerttp").content; //For error alerts
-      }
-      else {
-	myalert.myTp=document.createElement("div");
-	myalert.myTp.innerHTML=document.getElementById("alerttp").innerHTML;
-      }
-      myalert.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
-      myalert.showalert();
+      myalert.getTp("includes/templates/alert.php", function(){
+	this.myTp=this.xmlTp;
+	this.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
+	this.showalert();
+      });
+
+
       //We load the dom elements text that will be included in some parts of the document
       var domelementsroot=null;
       var languages=null;
