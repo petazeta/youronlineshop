@@ -53,7 +53,7 @@
     var thisNode=launcher.thisNode;
     thisElement.onclick=function() {
       var launcher=new Alert();
-      launcher.myTp=thisElement.parentElement.querySelector("template").content;
+      launcher.myTp=getTpContent(thisElement.parentElement.querySelector("template"));
       //normailize
       launcher.thisNode=thisNode;
       launcher.showalert();

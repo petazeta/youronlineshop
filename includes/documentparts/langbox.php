@@ -82,7 +82,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       languagesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php");
       languagesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
-	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(document.querySelector("#categorytbtp").content.querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
+	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
       languagesMother.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  document.querySelector("#categorytp"), function(){
       });

@@ -85,7 +85,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php");
       categoriesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
-	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(document.querySelector("#categorytbtp").content.querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
+	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
       categoriesMother.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  document.querySelector("#categorytp"), function(){
       });

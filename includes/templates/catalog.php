@@ -1,4 +1,4 @@
-<template id="catalogtp">
+<template>
   <template id="flaptp">
     <table class="flap" style="position:relative;">
       <tr>
@@ -40,7 +40,7 @@
 	      thisNode.getRelationship("items").addEventListener("refreshChildrenView", function() {
 		var columns=Math.round((window.screen.width-524)/500);
 		if (columns < 1) columns=1;
-		this.childContainer.appendChild(DomMethods.intoColumns(document.getElementById('producttabletp').content.querySelector('table').cloneNode(true), this.childContainer, columns));
+		this.childContainer.appendChild(DomMethods.intoColumns(getTpContent(document.getElementById('producttabletp')).querySelector('table').cloneNode(true), this.childContainer, columns));
 	      }, "intoColumns");
 	      thisElement.addEventListener("click", function(event) {
 		event.preventDefault();

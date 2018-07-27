@@ -13,7 +13,7 @@
 	//first we load orders from database
 	if (webuser.getUserType()=="orders administrator") {
 	  //create virtual ordersmother
-	  var actionsHead=thisElement.querySelector("template").content.cloneNode(true);
+	  var actionsHead=getTpContent(thisElement.querySelector("template")).cloneNode(true);
 	  thisElement.appendChild(actionsHead);
 	}
       </script>

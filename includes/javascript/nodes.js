@@ -81,21 +81,10 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     var thisNode=this;
     var xmlhttp=new XMLHttpRequest();
     xmlhttp.onload=function() {
-      function supportsTemplate() { //It is duplicated at dommethods.js but we can use it here cause dommethods use either nodes object
-	return 'content' in document.createElement('template');
-      }
-      if (supportsTemplate()) {
-	var container=document.createElement("template");
-	container.innerHTML=this.responseText;
-	if (container.content.querySelector("template")) thisNode.xmlTp=container.content.querySelector("template").content;
-	else thisNode.xmlTp=container.content;
-      }
-      else {
-	var container=document.createElement("div");
-	container.innerHTML=this.responseText;
-	if (container.querySelector("template")) thisNode.xmlTp=container.querySelector("template").innerHTML;
-	else thisNode.xmlTp=container.innerHTML;
-      }
+      var container=document.createElement("template");
+      container.innerHTML=this.responseText;
+      if (getTpContent(container).querySelector("template")) thisNode.xmlTp=getTpContent(getTpContent(container).querySelector("template"));
+      else thisNode.xmlTp=getTpContent(container);
       var newTp={};
       newTp[tpHref]=thisNode.xmlTp.cloneNode(true);
       templatesCache.push(newTp);
@@ -217,7 +206,7 @@ Node.prototype.appendThis=function (container, tp, reqlistener) {
   }
   else {
     if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") tp=tp.content;
+      if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
       this.myTp=tp;
     }
     refresh.call(this);
@@ -245,7 +234,7 @@ Node.prototype.appendProperties = function (container, tp, reqlistener) {
   }
   else {
     if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") tp=tp.content;
+      if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
       this.propertyTp=tp;
     }
     refresh.call(this);
@@ -325,7 +314,7 @@ Node.prototype.appendChildren=function (container, tp, reqlistener) {
   }
   else {
     if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") tp=tp.content;
+      if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
       this.childTp=tp;
     }
     refresh.call(this);

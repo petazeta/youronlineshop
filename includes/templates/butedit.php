@@ -25,13 +25,13 @@
     if (!thisProperty) thisProperty=thisNode.getFirstPropertyKey();
     if (createInput) {
       var originalEditElement=editElement;
-      editElement=thisElement.parentElement.querySelector("template").content.querySelector("input").cloneNode(true);
+      editElement=getTpContent(thisElement.parentElement.querySelector("template")).querySelector("input").cloneNode(true);
       var originalAttribute=thisAttribute;
       thisAttribute="value";
       inlineEdition=true;
       thisElement.appendChild(editElement);
     }
-    var buttonElement=thisElement.parentElement.querySelectorAll("template")[1].content.querySelector("button").cloneNode(true);
+    var buttonElement=getTpContent(thisElement.parentElement.querySelectorAll("template")[1]).querySelector("button").cloneNode(true);
     thisElement.appendChild(buttonElement);
     if (typeof autoeditFunc=="function") buttonElement.onclick=function() {
       thisNode.addEventListener("finishAutoEdit", changeProperty, "autoedit");

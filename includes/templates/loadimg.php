@@ -1,4 +1,4 @@
-<template id="buteditimgtp">
+<template>
   <template>
     <div class="alert">
       <form action="uploadfile.php" enctype="multipart/form-data" id="form-file">
@@ -59,7 +59,7 @@
     //normalize
     var myalert=new Alert();
     myalert.thisNode=thisNode;
-    myalert.myTp=thisElement.content.cloneNode(true);
+    myalert.myTp=getTpContent(thisElement).cloneNode(true);
     myalert.showalert();
   </script>
 </template>

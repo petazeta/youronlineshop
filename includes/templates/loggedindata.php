@@ -19,7 +19,7 @@
       var datarel=webuser.getRelationship("usersdata");
       function showdata(){
 	datarel.getChild().refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
-	  thisElement.appendChild(DomMethods.intoColumns(thisElement.previousElementSibling.content.querySelector("table").cloneNode(true), thisElement, 2));
+	  thisElement.appendChild(DomMethods.intoColumns(getTpContent(thisElement.previousElementSibling).querySelector("table").cloneNode(true), thisElement, 2));
 	});
       }
       if (datarel.children.length==0) {

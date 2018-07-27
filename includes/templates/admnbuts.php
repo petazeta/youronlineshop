@@ -13,7 +13,7 @@
   //normalize
   var launcher=thisNode;
   if (supportsTemplate()) { // for IE
-    var myTable=thisElement.parentElement.querySelector("template").content.querySelector("table").cloneNode(true);
+    var myTable=getTpContent(thisElement.parentElement.querySelector("template")).querySelector("table").cloneNode(true);
   }
   else {
     var myTable=thisElement.parentElement.querySelector("template").querySelector("table").cloneNode(true);
