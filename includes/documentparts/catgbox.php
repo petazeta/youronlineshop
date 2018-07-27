@@ -33,12 +33,12 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       newNode.addRelationship(categoriesMother.partnerNode.getRelationship("items").cloneNode(0, 0));
       newNode.getRelationship("itemcategoriesdata").addChild(new NodeMale());
       categoriesMother.newNode=newNode;
-      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php");
       categoriesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
 	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
-      categoriesMother.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "includes/templates/category.php", function(){
+      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php", function() {
+	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "includes/templates/category.php");
       });
     });
   });
