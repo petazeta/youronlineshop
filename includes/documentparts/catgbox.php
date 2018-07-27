@@ -4,19 +4,6 @@
   <div class="boxbody">
   </div>
 </div>
-<template id="catgboxheadtp">
-  <span data-note="relative position container for admn buttons">
-    <span></span>
-    <script>
-      thisNode.writeProperty(thisElement);
-      //adding the edition pencil
-      var launcher = new Node();
-      launcher.thisNode = thisNode;
-      launcher.editElement = thisElement;
-      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
-    </script>
-  </span>
-</template>
 <template id="categorytbtp">
   <table class="boxlist">
     <tr>
@@ -25,11 +12,10 @@
     </tr>
   </table>
 </template>
-
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var cartboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
-  cartboxtt.refreshView(document.querySelector("#catalogbox .boxtitle"), document.querySelector("#catgboxheadtp"));
+  cartboxtt.refreshView(document.querySelector("#catalogbox .boxtitle"), "includes/templates/ctgbxhead.php");
 
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
