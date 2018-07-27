@@ -9,7 +9,7 @@ function getTpContent(tp) {
 
 if (!window.navigator.languages) {
   window.navigator.languages=[];
-  window.lavigator.languages.push(window.navigator.language);
+  window.navigator.languages.push(window.navigator.language);
 }
 
 // Production steps of ECMA-262, Edition 6, 22.1.2.1
