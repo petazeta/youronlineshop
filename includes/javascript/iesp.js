@@ -4,7 +4,13 @@ function supportsTemplate() {
 
 function getTpContent(tp) {
   if (supportsTemplate()) return tp.content;
-  else return tp;
+  else {
+    var container=document.createDocumentFragment();
+    tp.children.forEach(function(child){
+      container.appendChild(child);
+    });
+    return container;
+  }
 }
 
 if (!window.navigator.languages) {
