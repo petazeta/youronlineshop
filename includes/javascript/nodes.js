@@ -79,7 +79,15 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
   }
   else {
     var thisNode=this;
-    var xmlhttp=new XMLHttpRequest();
+    var xmlhttp;
+    if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp = new XMLHttpRequest();
+    }
+    else {
+      // code for IE6, IE5
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
     xmlhttp.onload=function() {
       var container=document.createElement("template");
       container.innerHTML=this.responseText;
@@ -153,7 +161,6 @@ Node.prototype.render = function (tp) {
       //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
       //Also to execute script <script> for an already loaded element when we use render
       var myScript=document.createElement("SCRIPT");
-      if (document.currentScript===undefined) document.currentScript=myScript; //IE11 support
       var scriptTop="var thisElement=document.currentScript.previousElementSibling; var thisNode=document.currentScript.thisNode;";
       myScript.textContent="(function(){" + scriptTop + myElements[i].textContent + "})();"; //adding scope (encapsulation) so this variables are local and can't be modified from another scripts.
       myScript.thisNode=this;
