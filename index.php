@@ -5,7 +5,7 @@
     <title>Your Online Shop</title>
     <script src="includes/javascript/config.js"></script>
     <script src="includes/javascript/iesp.js?<?=time()?>"></script>
-    <script src="includes/javascript/nodes.js"></script>
+    <script src="includes/javascript/nodes.js?<?=time()?>"></script>
     <script src="includes/javascript/dommethods.js"></script>
     <script src="includes/javascript/cart.js"></script>
     <script src="includes/javascript/user.js"></script>
