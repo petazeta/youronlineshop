@@ -6,9 +6,9 @@ function getTpContent(tp) {
   if (supportsTemplate()) return tp.content;
   else {
     var container=document.createDocumentFragment();
-    tp.children.forEach(function(child){
-      container.appendChild(child);
-    });
+    for (var i=0; i<tp.children.length; i++) {
+      container.appendChild(tp.children[i]);
+    }
     return container;
   }
 }
