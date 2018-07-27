@@ -44,10 +44,10 @@
 		languages.children.forEach(function (child){
 		  webLanguages.push(child.properties.code);
 		});
-		for (var i=0; i<navigator.languages.length; i++) {
-		  navigator.languages[i]=navigator.languages[i].replace(/-.+/, "");
-		  if (webLanguages.indexOf(navigator.languages[i]) >= 0) {
-		    webuser.extra.language=this.getChild({code: navigator.languages[i]});
+		for (var i=0; i<window.navigator.languages.length; i++) {
+		  window.navigator.languages[i]=window.navigator.languages[i].replace(/-.+/, "");
+		  if (webLanguages.indexOf(window.navigator.languages[i]) >= 0) {
+		    webuser.extra.language=this.getChild({code: window.navigator.languages[i]});
 		    break;
 		  }
 		}
