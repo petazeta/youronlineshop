@@ -7,6 +7,7 @@ function getTpContent(tp) {
   else {
     var container=document.createDocumentFragment();
     console.log(tp);
+    if (!tp) return;
     for (var i=0; i<tp.children.length; i++) {
       container.appendChild(tp.children[i]);
     }
