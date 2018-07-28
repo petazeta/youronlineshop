@@ -63,6 +63,7 @@ Node.prototype.loadasc=function(source) {
   return source;
 }
 Node.prototype.getTp=function (tpHref, reqlistener) {
+  console.log(tpHref);
   function getTpCache(tpHref) {
     var cached=false;
     for (var i=0; i<templatesCache.length; i++) {
@@ -90,7 +91,9 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     }
     xmlhttp.onload=function() {
       var container=document.createElement("template");
+      console.log(container);
       container.innerHTML=this.responseText;
+      console.log(container);
       if (getTpContent(container).querySelector("template")) thisNode.xmlTp=getTpContent(getTpContent(container).querySelector("template"));
       else thisNode.xmlTp=getTpContent(container);
       var newTp={};
