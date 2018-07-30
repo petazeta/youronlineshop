@@ -3,6 +3,7 @@ function supportsTemplate() {
 }
 
 function getTpContent(tp) {
+  console.log(tp, tp.innerHTML);
   if (supportsTemplate()) {
     return tp.content;
   }

@@ -26,7 +26,6 @@
   </table>
 </template>
 <script type="text/javascript">
-var smartPhonesTp=document.querySelector("#smartphoneboxestp");
 function fitincolumn() {
   var newStyle=document.createElement("style");
   newStyle.textContent="header h1 {font-size: 2em !important;}"

@@ -1,14 +1,11 @@
 <div class="sidebox" id="catalogbox">
-  <div class="boxtitle">
-  </div>
-  <div class="boxbody">
-  </div>
+  <div class="boxtitle"></div>
+  <div class="boxbody"></div>
 </div>
-<template id="categorytbtp">
+<template id="categorytbxtp">
   <table class="boxlist">
     <tr>
-      <td class="boxlist">
-      </td>
+      <td class="boxlist"></td>
     </tr>
   </table>
 </template>
@@ -35,7 +32,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       categoriesMother.newNode=newNode;
       categoriesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
-	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
+	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php", function() {
 	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "includes/templates/category.php");
