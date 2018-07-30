@@ -32,6 +32,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       categoriesMother.newNode=newNode;
       categoriesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
+	console.log(document.querySelector("#categorytbxtp"));
 	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php", function() {
