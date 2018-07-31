@@ -63,6 +63,7 @@ Node.prototype.loadasc=function(source) {
   return source;
 }
 Node.prototype.getTp=function (tpHref, reqlistener) {
+  console.log("getTp", tpHref);
   function getTpCache(tpHref) {
     var cached=false;
     for (var i=0; i<templatesCache.length; i++) {
@@ -91,6 +92,7 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     xmlhttp.onload=function() {
       var container=document.createElement("template");
       container.innerHTML=this.responseText;
+      console.log(container.children.length);
       if (getTpContent(container).querySelector("template")) thisNode.xmlTp=getTpContent(getTpContent(container).querySelector("template"));
       else thisNode.xmlTp=getTpContent(container);
       var newTp={};
@@ -198,6 +200,7 @@ Node.prototype.refreshView=function (container, tp, myReqlistener) {
 Node.prototype.appendThis=function (container, tp, reqlistener) {
   if (container) this.myContainer=container;
   var refresh=function() {
+    console.log("appendThis", this.myTp);
     var clone=this.myTp.cloneNode(true);
     this.render(clone);
     this.myContainer.appendChild(clone);
@@ -233,6 +236,7 @@ Node.prototype.refreshPropertiesView=function (container, tp, myReqlistener) {
 };
 //This function write a template record for each property
 Node.prototype.appendProperties = function (container, tp, reqlistener) {
+  console.log("appendProperties", tp);
   if (container) this.propertiesContainer=container;
   if (typeof tp=="string") {
     this.getTp(tp, function() {

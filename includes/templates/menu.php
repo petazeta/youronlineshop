@@ -43,7 +43,7 @@
 	  this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
 	  this.newNode.parentNode=new NodeFemale();
 	  this.newNode.parentNode.load(this, 1, "id");
-	  console.log(document.getElementById("pageframetp"));
+	  console.log("pageframetp",document.getElementById("pageframetp"));
 	  var pageframe=getTpContent(document.getElementById("pageframetp")).firstElementChild.cloneNode(true);
 	  document.getElementById("centralcontent").innerHTML="";
 	  document.getElementById("centralcontent").appendChild(pageframe);
