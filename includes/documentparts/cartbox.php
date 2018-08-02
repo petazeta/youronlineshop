@@ -25,7 +25,6 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
   var cartContainer=document.querySelector("#cartbox .boxbody div");
   cartItems.refreshChildrenView(cartContainer,  "includes/templates/itemlist.php");
   cartItems.addEventListener("refreshChildrenView", function() {
-    console.log("cartboxlist", document.getElementById("cartboxlist"));
     cartContainer.appendChild(DomMethods.intoColumns(getTpContent(document.getElementById("cartboxlist")).querySelector("table").cloneNode(true), cartContainer, 1));
   });
   var cartboxckout=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"}).getNextChild({name: "ckouttt"}).getRelationship({name: "domelementsdata"}).getChild()

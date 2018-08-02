@@ -1,5 +1,5 @@
 <template>
-  <span class="menu" data-note="relative position container for admn buttons">
+  <span class="menu" data-hbutton="true" data-note="relative position container for admn buttons">
     <a data-button="true" class="menu" href="javascript:"></a>
     <script>
       if (thisNode.selected) DomMethods.setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
@@ -43,8 +43,7 @@
 	  this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
 	  this.newNode.parentNode=new NodeFemale();
 	  this.newNode.parentNode.load(this, 1, "id");
-	  console.log("pageframetp",document.getElementById("pageframetp"));
-	  var pageframe=getTpContent(document.getElementById("pageframetp")).firstElementChild.cloneNode(true);
+	  var pageframe=getTpContent(document.getElementById("pageframetp")).querySelector("*").cloneNode(true);
 	  document.getElementById("centralcontent").innerHTML="";
 	  document.getElementById("centralcontent").appendChild(pageframe);
 	  this.appendThis(pageframe, "includes/templates/admnlisteners.php");

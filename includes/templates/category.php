@@ -1,6 +1,6 @@
 <template>
   <span style="z-index:1">
-    <a href=""></a>
+    <a href="" data-hbutton="true"></a>
     <script>
       thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
 	this.getChild().writeProperty(thisElement);

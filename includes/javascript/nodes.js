@@ -63,7 +63,17 @@ Node.prototype.loadasc=function(source) {
   return source;
 }
 Node.prototype.getTp=function (tpHref, reqlistener) {
-  console.log("getTp", tpHref);
+  if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
+    var tpid="tp" + tpHref.match(/\/(\w+)\..+/, '$1')[1];
+    if (document.getElementById(tpid)) {
+      this.xmlTp=getTpContent(document.getElementById(tpid).cloneNode(true));
+      if (reqlistener) {
+	reqlistener.call(this);
+      }
+      this.dispatchEvent("getTp");
+      return;
+    }
+  }
   function getTpCache(tpHref) {
     var cached=false;
     for (var i=0; i<templatesCache.length; i++) {
@@ -74,7 +84,10 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     }
     return cached;
   }
-  var cached=getTpCache(tpHref);
+  var cached=false;
+  if (Config.templatesCacheOn!==false) {
+    cached=getTpCache(tpHref);
+  }
   if (cached) {
     thisNode.xmlTp=cached.cloneNode(true);
   }
@@ -92,18 +105,20 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     xmlhttp.onload=function() {
       var container=document.createElement("template");
       container.innerHTML=this.responseText;
-      console.log(container.children.length);
-      if (getTpContent(container).querySelector("template")) thisNode.xmlTp=getTpContent(getTpContent(container).querySelector("template"));
+      //When the tp content is just a template we get that tp content
+      if (getTpContent(container).querySelectorAll("template").length==1) thisNode.xmlTp=getTpContent(getTpContent(container).querySelector("template"));
       else thisNode.xmlTp=getTpContent(container);
       var newTp={};
       newTp[tpHref]=thisNode.xmlTp.cloneNode(true);
-      templatesCache.push(newTp);
+      if (Config.templatesCacheOn!==false) {
+	templatesCache.push(newTp);
+      }
       if (reqlistener) {
 	reqlistener.call(thisNode);
       }
       thisNode.dispatchEvent("getTp");
     }
-    xmlhttp.open("GET",tpHref,true);
+    xmlhttp.open("GET",tpHref + "?<?=time()?>",true);
     xmlhttp.send();
   }
 };
@@ -156,16 +171,33 @@ Node.prototype.render = function (tp) {
   if (!tp) tp=this.myTp;
   var elementsToBeModified=[];
   var myElements=[];
-  myElements.push(tp);
+  myElements.push(tp); //To get the outerHTML
   myElements=myElements.concat(Array.from(tp.querySelectorAll("*"))); //inner elements
+  //document.thisScript=[];
   for (var i=0; i<myElements.length; i++) {
+    var j=0; //the for loop is executing before the script
     if (myElements[i].tagName=="SCRIPT") {
       //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
       //Also to execute script <script> for an already loaded element when we use render
       var myScript=document.createElement("SCRIPT");
-      var scriptTop="var thisElement=document.currentScript.previousElementSibling; var thisNode=document.currentScript.thisNode;";
+      if (document.currentScript===undefined) { //IE
+	var currTime= new Date().getTime();
+	function getRandomInt(max) {
+	  return Math.floor(Math.random() * Math.floor(max));
+	}
+	var uniqueId=currTime + getRandomInt(99999);
+	uniqueId=uniqueId.toString(32);
+	myScript.id=uniqueId;
+	var scriptTop="var thisScript=document.getElementById('" + uniqueId + "');";
+	//var scriptTop="var thisScript=document.thisScript[" + j + "];" 
+      }
+      else {
+	var scriptTop="var thisScript=document.currentScript;";
+      }
+      scriptTop +="var thisElement=thisScript.previousElementSibling; var thisNode=thisScript.thisNode;"
       myScript.textContent="(function(){" + scriptTop + myElements[i].textContent + "})();"; //adding scope (encapsulation) so this variables are local and can't be modified from another scripts.
       myScript.thisNode=this;
+      //document.thisScript.push(myScript);
       var container=myElements[i].parentNode;  //!!Document Fragment is not an Element => *parentNode*
       container.insertBefore(myScript, myElements[i])
       container.removeChild(myElements[i]);
@@ -200,7 +232,6 @@ Node.prototype.refreshView=function (container, tp, myReqlistener) {
 Node.prototype.appendThis=function (container, tp, reqlistener) {
   if (container) this.myContainer=container;
   var refresh=function() {
-    console.log("appendThis", this.myTp);
     var clone=this.myTp.cloneNode(true);
     this.render(clone);
     this.myContainer.appendChild(clone);
@@ -236,7 +267,6 @@ Node.prototype.refreshPropertiesView=function (container, tp, myReqlistener) {
 };
 //This function write a template record for each property
 Node.prototype.appendProperties = function (container, tp, reqlistener) {
-  console.log("appendProperties", tp);
   if (container) this.propertiesContainer=container;
   if (typeof tp=="string") {
     this.getTp(tp, function() {
@@ -496,10 +526,12 @@ Node.prototype.getMyDomNodes=function () {
     //Get index
     var index=this.parentNode.children.indexOf(this);
     var length=1;
-    if (!this.parentNode.childTp.tagName) length=this.parentNode.childTp.children.length; //there is a fragment
+    if (this.parentNode.childTp.tagName=="DOCUMENTFRAGMENT" || !this.parentNode.childTp.tagName) {
+      length=this.parentNode.childTp.querySelectorAll("*").length; //there is a fragment
+    }
     var startindex=index*length;
     var endindex=startindex+length;
-    return Array.from(this.parentNode.childContainer.children).slice(startindex,endindex);
+    return Array.from(this.parentNode.childContainer.querySelectorAll("*")).slice(startindex,endindex);
   }
   else if (this.myContainer) {
       return Array.from(this.myContainer.children);

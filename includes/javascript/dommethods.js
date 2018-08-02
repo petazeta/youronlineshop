@@ -80,9 +80,17 @@ DomMethods={
       }
     }
     thisNode.selected=true;
-    var doms=thisNode.getMyDomNodes()
+    var doms=thisNode.getMyDomNodes();
+    var hbutton=null;
     if (doms) {
-      DomMethods.setSelected(doms[0]);
+      for (var i=0; i<doms.length; i++) {
+	if (doms[i].getAttribute("data-hbutton")) hbutton=doms[i];
+	else hbutton=doms[i].querySelector("[data-hbutton]");
+	if (hbutton) {
+	  DomMethods.setSelected(hbutton);
+	  break;
+	}
+      }
     }
   }
 }

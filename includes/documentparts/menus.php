@@ -33,11 +33,14 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), "includes/templates/menu.php", function(){
       if (this.children.length > 0 && !webuser.isWebAdmin()) {
 	var button=null;
-	this.children[0].getMyDomNodes().every(function(domNode){
-	  button=domNode.querySelector("[data-button]");
-	  if (button) return false;
-	});
-	if (button) button.click();
+	var myDomNodes=this.children[0].getMyDomNodes();
+	for (var i=0; i<myDomNodes.length; i++) {
+	  button=myDomNodes[i].querySelector("[data-button]");
+	  if (button) {
+	    button.click()
+	    break;
+	  }
+	}
       }
     });
   });

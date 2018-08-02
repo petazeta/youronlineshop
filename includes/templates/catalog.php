@@ -1,6 +1,6 @@
 <template>
   <template id="flaptp">
-    <table class="flap" style="position:relative;">
+    <table class="flap" style="position:relative;" data-hbutton="true">
       <tr>
 	<td class="tl"></td>
 	<td class="t"></td>

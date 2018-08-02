@@ -15,6 +15,20 @@
   </head>
   <body>
     <script>
+      function loadTemplates(callback) {
+	//We load all the templates at once
+	var tpLoader=new Node();
+	tpLoader.appendThis(document.body, "includes/templates.php", function(){
+	  if (callback) callback();
+	});
+      }
+      function loadLabels(callback) {
+	var myLanguage=webuser.extra.language.properties.id;
+	domelementsrootmother.children[0].getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: myLanguage}, function(){
+	  if (!Config.onEmptyValueText) Config.onEmptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
+	  if (callback) callback();
+	});
+      }
       var webuser=new user();
       var myalert=new Alert();
       myalert.getTp("includes/templates/alert.php", function(){
@@ -22,7 +36,6 @@
 	this.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
 	this.showalert();
       });
-
 
       //We load the dom elements text that will be included in some parts of the document
       var domelementsroot=null;
@@ -52,16 +65,32 @@
 		  }
 		}
 		if (!webuser.extra.language) webuser.extra.language=this.getChild();
-		loadLabels();
+		loadLabels(function(){
+		  if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
+		    loadTemplates(function(){
+		      domelementsrootmother.dispatchEvent("loadLabels");
+		      myalert.hidealert();
+		    });
+		  }
+		  else {
+		    domelementsrootmother.dispatchEvent("loadLabels");
+		    myalert.hidealert();
+		  }
+		});
 	      });
 	    }
-	    else loadLabels();
-	    function loadLabels() {
-	      var myLanguage=webuser.extra.language.properties.id;
-	      domelementsroot.getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: myLanguage}, function(){
-		if (!Config.onEmptyValueText) Config.onEmptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
-		domelementsrootmother.dispatchEvent("loadLabels");
-		myalert.hidealert();
+	    else {
+	      loadLabels(function(){
+		if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
+		  loadTemplates(function(){
+		    domelementsrootmother.dispatchEvent("loadLabels");
+		    myalert.hidealert();
+		  });
+		}
+		else {
+		  domelementsrootmother.dispatchEvent("loadLabels");
+		  myalert.hidealert();
+		}
 	      });
 	    }
 	  });

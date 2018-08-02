@@ -40,7 +40,6 @@ function fitincolumn() {
   var catalogbox=leftcolumn.querySelector('div[data-phone]');
   var logbox=rightcolumn.querySelector('div[data-phone]');
   var cartbox=rightcolumn.querySelectorAll('div[data-phone]')[1];
-  console.log("smartphoneboxestp", document.querySelector("#smartphoneboxestp"));
   var myTable=getTpContent(document.querySelector("#smartphoneboxestp")).querySelector("table");
   var boxes=[catalogbox, cartbox, logbox];
   var boxColumns=0;

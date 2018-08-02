@@ -11,8 +11,8 @@
 </template>
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  var cartboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
-  cartboxtt.refreshView(document.querySelector("#catalogbox .boxtitle"), "includes/templates/ctgbxhead.php");
+  var catgboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
+  catgboxtt.refreshView(document.querySelector("#catalogbox .boxtitle"), "includes/templates/boxhead.php");
 
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
@@ -32,7 +32,6 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       categoriesMother.newNode=newNode;
       categoriesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
-	console.log("categorytbxtp", document.querySelector("#categorytbxtp"));
 	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php", function() {
