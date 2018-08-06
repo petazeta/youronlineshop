@@ -5,7 +5,7 @@
     var launcher=thisNode;
     var thisNode=launcher.thisNode;
     thisElement.onclick=function() {
-      var newSortOrder=thisNode.sort_order<?php echo $orderchange;?>;
+      var newSortOrder=thisNode.sort_order + launcher.orderchange;
       if (newSortOrder < 1 || newSortOrder > thisNode.parentNode.children.length) return false;
       thisNode.loadfromhttp({action:"edit my sort_order", newsort_order: newSortOrder}, function(){
 	var updatedChild=new NodeMale();

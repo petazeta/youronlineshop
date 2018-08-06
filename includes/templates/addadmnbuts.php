@@ -26,7 +26,7 @@
       var admnlauncher=new Node();
       admnlauncher.buttons=[
 	{
-	  template: document.getElementById(posTp),
+	  template: posTp,
 	  args:{thisNode: thisNode}
 	},
 	{
@@ -34,7 +34,7 @@
 	  args:{thisParent: thisNode.parentNode, newNode: newNode}
 	},
 	{
-	  template: "includes/butdelete.php",
+	  template: "includes/templates/butdelete.php",
 	  args:{thisNode: thisNode}
 	}
       ];

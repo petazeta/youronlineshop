@@ -8,10 +8,14 @@
 	  height: 6px;
 	  padding:0px;
 	">
-	  <?php
-	    $orderchange="-1";
-	    include "changeorder.php";
-	  ?>
+	  <div></div>
+	  <script>
+	    //normalize
+	    var launcher=thisNode;
+	    var thisNode=launcher.thisNode;
+	    launcher.orderchange=-1;
+	    launcher.appendThis(thisElement, "includes/templates/changeorder.php")
+	  </script>
 	</td>
       </tr>
       <tr>
@@ -24,10 +28,14 @@
 	  height: 6px;
 	  padding:0px;
 	">
-	  <?php 
-	    $orderchange="+1";
-	    include "changeorder.php";
-	  ?>
+	  <div></div>
+	  <script>
+	    //normalize
+	    var launcher=thisNode;
+	    var thisNode=launcher.thisNode;
+	    launcher.orderchange=1;
+	    launcher.appendThis(thisElement, "includes/templates/changeorder.php")
+	  </script>
 	</td>
       </tr>
     </tbody>

@@ -95,7 +95,7 @@ cart.prototype.refreshcartbox=function() {
 cart.prototype.tocheckout=function() {
   if (this.getRelationship("cartitem").children.length==0) {
     var cartbox=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"cartbox"});
-    myalert.properties.alertmsg=thisNode.getNextChild({name:"emptyCart"}).getRelationship("domelementsdata").getChild().properties.value;
+    myalert.properties.alertmsg=cartbox.getNextChild({name:"emptyCart"}).getRelationship("domelementsdata").getChild().properties.value;
     myalert.properties.timeout=3000;
     myalert.showalert();
   }

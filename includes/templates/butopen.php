@@ -11,7 +11,7 @@
       for (var i=0; i<admnbuts.length; i++) {
 	admnbuts[i].style.display="block";
       }
-      launcher.refreshView(thisElement.parentElement, "includes/templates/butclose.php"));
+      launcher.refreshView(thisElement.parentElement, "includes/templates/butclose.php");
       return false;
     }
   </script>

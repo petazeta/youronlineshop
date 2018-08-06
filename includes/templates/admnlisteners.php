@@ -50,7 +50,6 @@
 	  var button=null;
 	  var position=1;
 	  if (nodeDeleted.sort_order && nodeDeleted.sort_order > 1) position=nodeDeleted.sort_order-1;
-	  console.log(position, this.children);
 	  this.children[position-1].getMyDomNodes().every(function(domNode){
 	    button=domNode.querySelector("[data-button]");
 	    if (button) return false;

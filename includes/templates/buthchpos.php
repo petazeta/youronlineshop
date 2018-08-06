@@ -7,10 +7,16 @@
 	  min-width: 8px;
 	  height: 11px;
 	">
-	  <?php 
-	    $orderchange="-1";
-	    include "changeorder.php";
-	  ?>
+	  <div style="display:block;height:100%;"></div>
+	  <script>
+	    //normalize
+	    var launcher=thisNode;
+	    var thisNode=launcher.thisNode;
+	    var leftLauncher=new Node();
+	    leftLauncher.orderchange=-1;
+	    leftLauncher.thisNode=launcher.thisNode;
+	    leftLauncher.appendThis(thisElement, "includes/templates/changeorder.php")
+	  </script>
 	</td>
 	<td style="min-width:2px">
 	</td>
@@ -19,10 +25,16 @@
 	  min-width: 8px;
 	  height: 11px;
 	">
-	  <?php 
-	    $orderchange="+1";
-	    include "changeorder.php";
-	  ?>
+	  <div style="display:block;height:100%;"></div>
+	  <script>
+	    //normalize
+	    var launcher=thisNode;
+	    var thisNode=launcher.thisNode;
+	    var rightLauncher=new Node();
+	    rightLauncher.orderchange=1;
+	    rightLauncher.thisNode=launcher.thisNode;
+	    rightLauncher.appendThis(thisElement, "includes/templates/changeorder.php")
+	  </script>
 	</td>
       </tr>
     </tbody>

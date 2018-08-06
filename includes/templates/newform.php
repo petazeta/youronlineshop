@@ -1,23 +1,37 @@
 <template>
   <template>
-    <div style="padding-bottom: 1rem">
-      <div class="msgbox">
-	Insert the required data to create new user.
-      </div>
+    <div style="padding-bottom: 1rem; margin:auto; display:table">
+      <div class="msgbox"></div>
+      <script>
+	var myNode=thisNode.getNextChild({name:"signuptt"}).getRelationship("domelementsdata").getChild();
+	myNode.writeProperty(thisElement);
+	//adding the edition pencil
+	var launcher = new Node();
+	launcher.thisNode = myNode;
+	launcher.editElement = thisElement;
+	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+      </script>
     </div>
     <div>
       <form>
 	<table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
 	  <tr>
-	    <td>
+	    <td style="padding-top:1em;">
 	      <div class="form-group">
-		<label class="form-label"></label>
-		<script>
-		  thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement);
-		</script>
+		<span>
+		  <label class="form-label"></label>
+		  <script>
+		    var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
+		    myNode.writeProperty(thisElement);
+		    var launcher = new Node();
+		    launcher.thisNode = myNode;
+		    launcher.editElement = thisElement;
+		    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+		  </script>
+		</span>
 		<input class="form-control" placeholder="" name="user_name">
 		<script>
-		  thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "placeholder");
+		  thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
 		</script>
 	      </div>
 	    </td>
@@ -25,23 +39,36 @@
 	  <tr>
 	    <td>
 	      <div class="form-group">
-		<label class="form-label"></label>
-		<script>
-		  thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement);
-		</script>
+		<span>
+		  <label class="form-label"></label>
+		  <script>
+		    var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
+		    myNode.writeProperty(thisElement);
+		    var launcher = new Node();
+		    launcher.thisNode = myNode;
+		    launcher.editElement = thisElement;
+		    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+		  </script>
+		</span>
 		<input type="password" class="form-control" placeholder="" name="user_password">
 		<script>
-		  thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "placeholder");
+		  thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
 		</script>
 	      </div>
 	    </td>
 	  </tr>
 	  <tr>
 	    <td style="text-align:center">
-	      <div style="padding-bottom: 1rem">
-		<input type="submit" class="btn" value="" style="font-size:medium">
+	      <div style="padding-bottom: 1rem; display:table; margin: auto;">
+		<input type="submit" class="btn" value="" style="font-size:medium;">
 		<script>
-		  thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "value");
+		  var myNode=thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild();
+		  myNode.writeProperty(thisElement, null, "value");
+		  var launcher = new Node();
+		  launcher.thisNode = myNode;
+		  launcher.editElement = thisElement;
+		  launcher.thisAttribute = "value";
+		  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		</script>
 	      </div>
 	    </td>
@@ -49,19 +76,19 @@
 	</table>
 	<input type="hidden" name="userCharError">
 	<script>
-	  thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "value");
+	  thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
 	</script>
 	<input type="hidden" name="pwdCharError">
 	<script>
-	  thisNode.getNextChild({name:"pwdCharError"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "value");
+	  thisNode.getNextChild({name:"pwdCharError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
 	</script>
-	<input type="hidden" name="loginOk">
+	<input type="hidden" name="signedIn">
 	<script>
-	  thisNode.getNextChild({name:"signedIn"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "value");
+	  thisNode.getNextChild({name:"signedIn"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
 	</script>
 	<input type="hidden" name="userExistsError">
 	<script>
-	  thisNode.getNextChild({name:"userExistsError"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement, null, "value");
+	  thisNode.getNextChild({name:"userExistsError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
 	</script>
       </form>
       <script>
@@ -93,10 +120,9 @@
       <div style="text-align:center;">
 	<button class="btn"></button>
 	<script>
-	  thisNode.getNextChild({name:"loginBack"}).getRelationship("domelementsdata").getChild().appendProperty(thisElement);
+	  thisNode.getNextChild({name:"loginBack"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement);
 	  thisElement.onclick=function(){
 	    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/loginform.php");
-	    return false;
 	  }
 	</script>
       </div>

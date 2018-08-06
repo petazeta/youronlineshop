@@ -66,7 +66,9 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
   if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
     var tpid="tp" + tpHref.match(/\/(\w+)\..+/, '$1')[1];
     if (document.getElementById(tpid)) {
-      this.xmlTp=getTpContent(document.getElementById(tpid).cloneNode(true));
+      var newElement=document.getElementById(tpid).cloneNode(true);
+      newElement.id=null;
+      this.xmlTp=getTpContent(newElement);
       if (reqlistener) {
 	reqlistener.call(this);
       }
@@ -89,7 +91,7 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     cached=getTpCache(tpHref);
   }
   if (cached) {
-    thisNode.xmlTp=cached.cloneNode(true);
+    this.xmlTp=cached.cloneNode(true);
   }
   else {
     var thisNode=this;
@@ -122,6 +124,9 @@ Node.prototype.getTp=function (tpHref, reqlistener) {
     xmlhttp.send();
   }
 };
+Node.prototype.avoidrecursion=function(){
+  if (this.extra) this.extra=null;
+}
 Node.prototype.toRequestFormData=function(parameters) {
   switch (parameters.action) {
     case "load unlinked":
@@ -169,6 +174,7 @@ Node.prototype.toRequestFormData=function(parameters) {
 //node.render(domelement), node.render(scriptelement)
 Node.prototype.render = function (tp) {
   if (!tp) tp=this.myTp;
+  if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp); //templates are not valid just its content
   var elementsToBeModified=[];
   var myElements=[];
   myElements.push(tp); //To get the outerHTML
@@ -176,6 +182,10 @@ Node.prototype.render = function (tp) {
   //document.thisScript=[];
   for (var i=0; i<myElements.length; i++) {
     var j=0; //the for loop is executing before the script
+    if (!supportsTemplate()) {
+      if (myElements[i].tagName=="SCRIPT" && DomMethods.closesttagname(myElements[i], 'TEMPLATE', tp) ) continue;
+      //We still dont execute scripts inside of cascading templates (IE)
+    }
     if (myElements[i].tagName=="SCRIPT") {
       //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
       //Also to execute script <script> for an already loaded element when we use render
@@ -204,16 +214,17 @@ Node.prototype.render = function (tp) {
       continue;
     }
     if (typeof myElements[i].getAttribute != 'function') continue;
-    if (typeof myElements[i].getAttribute("data-js")!="string" || !myElements[i].getAttribute("data-js")) continue;
-    var execeval=function(thisNode,thisElement,myjs) {
-      try {
-        eval(myjs);
-      } catch(e) {
-        var err = e.constructor(e.message + ' (Error in Evaled Script) '  + '\nScript content: \n' + myjs);
-        throw err;
+    if (typeof myElements[i].getAttribute("data-js")=="string") {
+      var execeval=function(thisNode,thisElement,myjs) {
+	try {
+	  eval(myjs);
+	} catch(e) {
+	  var err = e.constructor(e.message + ' (Error in Evaled Script) '  + '\nScript content: \n' + myjs);
+	  throw err;
+	}
       }
+      execeval(this,myElements[i],myElements[i].getAttribute("data-js")); //this way we will have a local copy of node and element so if there are onclick=funcion(){thisElement... it will get the correct one)
     }
-    execeval(this,myElements[i],myElements[i].getAttribute("data-js")); //this way we will have a local copy of node and element so if there are onclick=funcion(){thisElement... it will get the correct one)
   }
   return tp;
 };
@@ -230,10 +241,12 @@ Node.prototype.refreshView=function (container, tp, myReqlistener) {
 };
 
 Node.prototype.appendThis=function (container, tp, reqlistener) {
-  if (container) this.myContainer=container;
   var refresh=function() {
     var clone=this.myTp.cloneNode(true);
     this.render(clone);
+    if (container) {
+      this.myContainer=container;
+    }
     this.myContainer.appendChild(clone);
     if (reqlistener) {
       reqlistener.call(this);
@@ -242,7 +255,7 @@ Node.prototype.appendThis=function (container, tp, reqlistener) {
   };
   if (typeof tp=="string") {
     this.getTp(tp, function() {
-      this.myTp=this.xmlTp;
+      this.myTp=this.xmlTp.cloneNode(true);
       refresh.call(this);
     });
   }
@@ -414,7 +427,7 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
       throw err;
     }
     thisNode.load(responseobj);
-    if (Config.mode=="developer") {
+    if (Config.logRequests==true) {
       var childtablename= responseobj.properties && responseobj.properties.childtablename ? responseobj.properties.childtablename :
       (responseobj.parentNode && responseobj.parentNode.properties && responseobj.parentNode.childtablename) ?
       responseobj.parentNode.properties.childtablename : null;
@@ -619,11 +632,15 @@ NodeFemale.prototype.loadasc=function(source, level, thisProperties) {
 }
 
 NodeFemale.prototype.avoidrecursion=function(){
+  Node.prototype.avoidrecursion.call(this);
   if (this.partnerNode) {
     if (Array.isArray(this.partnerNode)) {
       this.partnerNode.forEach(function (pNode) {
 	pNode.avoidrecursionup();
       });
+    }
+    else {
+      this.partnerNode.avoidrecursionup();
     }
   }
   this.children.forEach(function(child) {
@@ -631,12 +648,14 @@ NodeFemale.prototype.avoidrecursion=function(){
   });
 }
 NodeFemale.prototype.avoidrecursiondown=function(){
+  Node.prototype.avoidrecursion.call(this);
   this.partnerNode=null;
   this.children.forEach(function(child) {
     child.avoidrecursiondown();
   });
 }
 NodeFemale.prototype.avoidrecursionup=function(){
+  Node.prototype.avoidrecursion.call(this);
   this.children=[];
   if (this.partnerNode) {
     if (Array.isArray(this.partnerNode)) {
@@ -783,6 +802,7 @@ NodeMale.prototype.loadasc=function(source, level, thisProperties) {
 }
 
 NodeMale.prototype.avoidrecursion=function() {
+  Node.prototype.avoidrecursion.call(this);
   if (this.parentNode) {
     if (Array.isArray(this.parentNode)) {
       this.partnerNode.forEach(function(pNode){
@@ -796,6 +816,7 @@ NodeMale.prototype.avoidrecursion=function() {
   });
 }
 NodeMale.prototype.avoidrecursionup=function(){
+  Node.prototype.avoidrecursion.call(this);
   this.relationships=[];
   if (this.parentNode) {
     if (Array.isArray(this.parentNode)) {
@@ -807,6 +828,7 @@ NodeMale.prototype.avoidrecursionup=function(){
   }
 }
 NodeMale.prototype.avoidrecursiondown=function(){
+  Node.prototype.avoidrecursion.call(this);
   this.parentNode=null;
   this.relationships.forEach(function(rel){
     rel.avoidrecursiondown();

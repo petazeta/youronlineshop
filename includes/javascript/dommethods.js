@@ -7,13 +7,15 @@ DomMethods={
   setUnselected: function(element) {
     element.className=element.className.replace(/ selected/g,'');
   },
-  closesttagname: function(element, tagname){
+  closesttagname: function(element, tagname, limitElement){ //tagname capitals
     //if !myreturn.parentElement.tagName => document fragment
     var myreturn=element;
     while(myreturn && myreturn.parentElement && myreturn.parentElement.tagName && myreturn.parentElement.tagName!=tagname) {
+      if (limitElement && myreturn.parentElement==limitElement) break;
       myreturn=myreturn.parentElement;
     }
-    return myreturn.parentElement;
+    if (myreturn.parentElement && myreturn.parentElement.tagName==tagname) return myreturn.parentElement;
+    else return false;
   },
   intoColumns: function(tableElement, elements, cellsNumber) {
     // columns distribution applied to a row

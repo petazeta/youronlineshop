@@ -20,7 +20,7 @@
   }
   var butsContainer=document.createDocumentFragment();
   launcher.buttons.forEach(function(myButton){
-     var butlauncher=new NodeMale();
+    var butlauncher=new NodeMale();
     if (myButton.args) {
       for (var key in myButton.args) {
 	butlauncher[key]=myButton.args[key];

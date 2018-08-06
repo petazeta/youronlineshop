@@ -1,4 +1,4 @@
-<template id="checkout1tp">
+<template>
   <template>
     <div class="msgbox">
       <span></span>
