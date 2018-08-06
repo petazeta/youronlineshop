@@ -11,7 +11,7 @@ DomMethods={
     //if !myreturn.parentElement.tagName => document fragment
     var myreturn=element;
     while(myreturn && myreturn.parentElement && myreturn.parentElement.tagName && myreturn.parentElement.tagName!=tagname) {
-      if (limitElement && myreturn.parentElement==limitElement) break;
+      if (limitElement && myreturn.parentElement==limitElement) return false;
       myreturn=myreturn.parentElement;
     }
     if (myreturn.parentElement && myreturn.parentElement.tagName==tagname) return myreturn.parentElement;

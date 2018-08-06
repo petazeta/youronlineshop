@@ -3,12 +3,12 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Online Shop</title>
-    <script src="includes/javascript/config.js"></script>
+    <script src="includes/javascript/config.js?<?=time()?>"></script>
     <script src="includes/javascript/iesp.js?<?=time()?>"></script>
     <script src="includes/javascript/nodes.js?<?=time()?>"></script>
-    <script src="includes/javascript/dommethods.js"></script>
-    <script src="includes/javascript/cart.js"></script>
-    <script src="includes/javascript/user.js"></script>
+    <script src="includes/javascript/dommethods.js?<?=time()?>"></script>
+    <script src="includes/javascript/cart.js?<?=time()?>"></script>
+    <script src="includes/javascript/user.js?<?=time()?>"></script>
     <script async src="includes/javascript/stats.js.php"></script>
     <link rel="stylesheet" type="text/css" href="includes/css/main.css">
     <link rel="icon" href="favicon.ico">
