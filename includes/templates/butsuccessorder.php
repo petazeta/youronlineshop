@@ -5,7 +5,7 @@
   <script type="text/javascript">
     //normalize
     var launcher=thisNode;
-    var thisNode=launcher.myNode;
+    var thisNode=launcher.thisNode;
     if (launcher.newStatus==0) thisElement.setAttribute("title","Unset Archive");
     thisElement.onclick=function() {
       thisNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties:{status: launcher.newStatus}}, function(){

@@ -1,14 +1,9 @@
 <template>
 <tr class="adminlauncher" style="display:table-row">
-  <td >
+  <td>
     <span></span>
     <script>
-      if (thisNode.properties.creationdateformat) {
-	thisElement.innerHTML=thisNode.properties.creationdateformat;
-      }
-      else {
-	thisElement.innerHTML=thisNode.properties.creationdate;
-      }
+      thisNode.writeProperty(thisElement, "creationdate");
     </script>
   </td>
   <td >
@@ -85,10 +80,9 @@
 	  var admnlauncher=new NodeMale();
 	  var myNewStatus=1;
 	  if (thisNode.properties.status==1) myNewStatus=0;
-	  admnlauncher.myNode=thisNode;
 	  admnlauncher.buttons=[
-	    {template: "includes/templates/butsuccessorder.php", args:{newStatus: myNewStatus}},
-	    {template: "includes/templates/butdelete.php"}
+	    {template: "includes/templates/butsuccessorder.php", args:{thisNode: thisNode, newStatus: myNewStatus}},
+	    {template: "includes/templates/butdelete.php", args:{thisNode: thisNode}}
 	  ];
 	  admnlauncher.refreshView(thisElement, "includes/templates/admnbuts.php");
 	}

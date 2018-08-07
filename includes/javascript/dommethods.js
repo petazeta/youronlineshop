@@ -11,10 +11,10 @@ DomMethods={
     //if !myreturn.parentElement.tagName => document fragment
     var myreturn=element;
     while(myreturn && myreturn.parentElement && myreturn.parentElement.tagName && myreturn.parentElement.tagName!=tagname) {
-      if (limitElement && myreturn.parentElement==limitElement) return false;
       myreturn=myreturn.parentElement;
     }
-    if (myreturn.parentElement && myreturn.parentElement.tagName==tagname) return myreturn.parentElement;
+    if (limitElement && myreturn.parentElement==limitElement) return false;
+    else if (myreturn.parentElement && myreturn.parentElement.tagName==tagname) return myreturn.parentElement;
     else return false;
   },
   intoColumns: function(tableElement, elements, cellsNumber) {

@@ -174,18 +174,34 @@ Node.prototype.toRequestFormData=function(parameters) {
 //node.render(domelement), node.render(scriptelement)
 Node.prototype.render = function (tp) {
   if (!tp) tp=this.myTp;
-  if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp); //templates are not valid just its content
+  if (tp.nodeType==3 && tp.tagName=="TEMPLATE") {
+    tp=getTpContent(tp); //templates are not valid just its content
+  }
   var elementsToBeModified=[];
   var myElements=[];
   myElements.push(tp); //To get the outerHTML
   myElements=myElements.concat(Array.from(tp.querySelectorAll("*"))); //inner elements
   //document.thisScript=[];
+  //get inside Tps
+  if (!supportsTemplate()) {
+    console.log(tp);
+    //We still dont execute scripts inside of cascading templates (IE)
+    var inTps=tp.querySelectorAll("TEMPLATE");
+    var inTpElements=[];
+    for (var k=0; k<inTps.length; k++) {
+      inTpElements=inTpElements.concat(Array.from(getTpContent(inTps[k]).querySelectorAll("*")));
+    }
+    var newElements=[];
+    for (var i=0; i<myElements.length; i++) {
+      var pos=inTpElements.indexOf(myElements[i]);
+      if (pos==-1) {
+	newElements.push(myElements[i]);
+      }
+    }
+    myElements=newElements;
+  }
   for (var i=0; i<myElements.length; i++) {
     var j=0; //the for loop is executing before the script
-    if (!supportsTemplate()) {
-      if (myElements[i].tagName=="SCRIPT" && DomMethods.closesttagname(myElements[i], 'TEMPLATE', tp) ) continue;
-      //We still dont execute scripts inside of cascading templates (IE)
-    }
     if (myElements[i].tagName=="SCRIPT") {
       //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
       //Also to execute script <script> for an already loaded element when we use render

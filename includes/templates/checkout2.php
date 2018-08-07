@@ -3,13 +3,13 @@
     <div class="msgbox">
       <span></span>
       <script>
-	  var title=thisNode.getNextChild({"name":"chkt2add"}).getRelationship({name:"domelementsdata"}).getChild();
-	  title.writeProperty(thisElement);
-	  //adding the edition pencil
-	  var launcher = new Node();
-	  launcher.thisNode = title;
-	  launcher.editElement = thisElement;
-	  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	var title=thisNode.getNextChild({"name":"chkt2add"}).getRelationship({name:"domelementsdata"}).getChild();
+	title.writeProperty(thisElement);
+	//adding the edition pencil
+	var launcher = new Node();
+	launcher.thisNode = title;
+	launcher.editElement = thisElement;
+	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       </script>
     </div>
     <div></div>
