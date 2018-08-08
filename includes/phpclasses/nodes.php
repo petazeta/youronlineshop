@@ -806,7 +806,7 @@ class NodeMale extends Node{
     }
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET ' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id;
-    if ($this->parentNode->properties->sort_order) {
+    if (isset($this->parentNode->properties->sort_order)) {
       if (!isset($this->sort_order)) $this->sort_order=1; //first element by default
       $sql .= ', ' . $positioncolumnname . '=' . $this->sort_order;
     }

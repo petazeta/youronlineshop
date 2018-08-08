@@ -149,6 +149,7 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "add myself":
     case "edit my sort_order":
     case "delete my link":
+    case "add my link":
       var node=this.cloneNode(2, 0, "id", "id"); //we need the parent->partner
       break;
     case "load my parent":
@@ -184,7 +185,6 @@ Node.prototype.render = function (tp) {
   //document.thisScript=[];
   //get inside Tps
   if (!supportsTemplate()) {
-    console.log(tp);
     //We still dont execute scripts inside of cascading templates (IE)
     var inTps=tp.querySelectorAll("TEMPLATE");
     var inTpElements=[];
