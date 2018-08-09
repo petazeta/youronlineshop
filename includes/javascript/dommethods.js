@@ -77,8 +77,16 @@ DomMethods={
     while(i--) {
       thisNode.parentNode.children[i].selected=false;
       var doms=thisNode.parentNode.children[i].getMyDomNodes();
-      if (doms.length>0) {
-	DomMethods.setUnselected(doms[0]);
+      var hbutton=null;
+      if (doms) {
+	for (var j=0; j<doms.length; j++) {
+	  if (doms[j].getAttribute("data-hbutton")) hbutton=doms[j];
+	  else hbutton=doms[j].querySelector("[data-hbutton]");
+	  if (hbutton) {
+	    DomMethods.setUnselected(hbutton);
+	    break;
+	  }
+	}
       }
     }
     thisNode.selected=true;
@@ -86,6 +94,7 @@ DomMethods={
     var hbutton=null;
     if (doms) {
       for (var i=0; i<doms.length; i++) {
+	console.log(thisNode, thisNode.getMyDomNodes());
 	if (doms[i].getAttribute("data-hbutton")) hbutton=doms[i];
 	else hbutton=doms[i].querySelector("[data-hbutton]");
 	if (hbutton) {

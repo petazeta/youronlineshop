@@ -81,7 +81,7 @@ switch ($parameters->action) {
     break;
   case "add myself":
     $myexecfunction="db_insertmyself";
-    if (isset($parameters->language)) $argument=(object) ['_languages' => $parameters->language];
+    if (isset($parameters->language)) $argument=[ ['_languages' => $parameters->language] ];
     $callback=["cutDown", "cutUp"];
     break;
   case "add my tree":

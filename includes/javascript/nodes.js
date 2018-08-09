@@ -143,14 +143,18 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "load my tree":
     case "delete my tree":
     case "load myself":
-    case "edit my properties":
       var node=this.cloneNode(1, 0, "id", "id");
       break;
-    case "add myself":
     case "edit my sort_order":
     case "delete my link":
     case "add my link":
       var node=this.cloneNode(2, 0, "id", "id"); //we need the parent->partner
+      break;
+    case "add myself":
+      var node=this.cloneNode(2, 0, null, "id"); //we need the parent->partner
+      break;
+    case "edit my properties":
+      var node=this.cloneNode(1, 0, null, "id");
       break;
     case "load my parent":
     case "load my tree up":
@@ -555,7 +559,7 @@ Node.prototype.getMyDomNodes=function () {
     //Get index
     var index=this.parentNode.children.indexOf(this);
     var length=1;
-    if (this.parentNode.childTp.tagName=="DOCUMENTFRAGMENT" || !this.parentNode.childTp.tagName) {
+    if (this.parentNode.childTp.nodeType==11) { //document fragment
       length=this.parentNode.childTp.querySelectorAll("*").length; //there is a fragment
     }
     var startindex=index*length;

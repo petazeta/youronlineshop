@@ -715,13 +715,13 @@ class NodeMale extends Node{
   }
   
   function db_loadmyself(){
-    if ($this->parentNode->properties->sort_order) {
+    if (isset($this->parentNode->properties->sort_order) && $this->parentNode->properties->sort_order) {
       foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
 	if ($syskey->parenttablename==$this->parentNode->properties->parenttablename && $syskey->type=='sort_order') $positioncolumnname=$syskey->name;
       }
     }
     $sql = 'SELECT t.*';
-    if ($this->parentNode->properties->sort_order) $sql .= ', ' . $positioncolumnname . 'AS sort_order';
+    if (isset($this->parentNode->properties->sort_order) && $this->parentNode->properties->sort_order) $sql .= ', ' . $positioncolumnname . 'AS sort_order';
     $sql .= ' FROM ' . constant($this->parentNode->properties->childtablename) . ' t';
     $sql .=' WHERE ' . 't.id =' . $this->properties->id;
     if (($result = $this->getdblink()->query($sql))===false) return false;
@@ -742,11 +742,16 @@ class NodeMale extends Node{
     $myproperties=get_object_vars($this->properties);
     if (isset($myproperties['id'])) unset($myproperties['id']);
     foreach ($myproperties as $key => $value) {
-      $myproperties[$key]='\'' .  mysql_escape_string($value) . '\'';
+      if (!isset($this->parentNode->childtablekeys) ||
+	isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
+	isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
+	$myproperties[$key]='\'' .  mysql_escape_string($value) . '\'';
+      }
     }
     if ($extra) {
       foreach ($extra as $key => $value) {
-	if (isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
+	if (!isset($this->parentNode->childtablekeys) ||
+	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
 	  $myproperties[$key]='\'' .  mysql_escape_string($value) . '\'';
 	}
@@ -801,12 +806,12 @@ class NodeMale extends Node{
     foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
 	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
-	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
+	else if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
       }
     }
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET ' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id;
-    if (isset($this->parentNode->properties->sort_order)) {
+    if (isset($this->parentNode->properties->sort_order) && $this->parentNode->properties->sort_order) {
       if (!isset($this->sort_order)) $this->sort_order=1; //first element by default
       $sql .= ', ' . $positioncolumnname . '=' . $this->sort_order;
     }
@@ -882,7 +887,11 @@ class NodeMale extends Node{
       $myproperties=get_object_vars($properties);
       $setSentences=array();
       foreach ($myproperties as $key =>$value) {
-        array_push($setSentences, $key . '=' . '\'' . mysql_escape_string($value) . '\'');
+	if (!isset($this->parentNode->childtablekeys) ||
+	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
+	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
+	  array_push($setSentences, $key . '=' . '\'' . mysql_escape_string($value) . '\'');
+	}
       }
       $sql = 'UPDATE '
       . constant($this->parentNode->properties->childtablename)  .
