@@ -198,6 +198,9 @@ Node.prototype.render = function (tp) {
     var newElements=[];
     for (var i=0; i<myElements.length; i++) {
       var pos=inTpElements.indexOf(myElements[i]);
+      console.dir(inTpElements);
+      console.dir(myElements[i]);
+      console.log(inTpElements.indexOf(myElements[i]));
       if (pos==-1) {
 	newElements.push(myElements[i]);
       }

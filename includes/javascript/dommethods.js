@@ -94,7 +94,6 @@ DomMethods={
     var hbutton=null;
     if (doms) {
       for (var i=0; i<doms.length; i++) {
-	console.log(thisNode, thisNode.getMyDomNodes());
 	if (doms[i].getAttribute("data-hbutton")) hbutton=doms[i];
 	else hbutton=doms[i].querySelector("[data-hbutton]");
 	if (hbutton) {
