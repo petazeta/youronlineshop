@@ -73,7 +73,7 @@ echo md5($filecontent);
 
   myEvents.forEach(function(ev){
     ev.eventListener.addEventListener(ev.eventName, function(myArg){ //the argument sent at dispatchEvent
-      if (ev.write.indexOf("javascript:"==0)) eval(ev.write.substr(11));
+      if (ev.write.indexOf("javascript:")==0) eval(ev.write.substr(11));
       var data=[];
       var myObject={};
       myObject[ev.eventName]=ev.write;
