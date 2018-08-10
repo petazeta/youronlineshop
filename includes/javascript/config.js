@@ -4,8 +4,8 @@ var Config={
   defaultEditButtonPosition: "btmiddleright",
   defaultAdmnsButtonsPosition: "bttopcenter",
   defaultImg: "noimg.png",
-  statsOn: false, //false for production
+  statsOn: true, //false for production
   onEmptyValueText: null, //It will be setled later
-  templatesCacheOn: false,
-  loadTemplatesAtOnce: false //false for production
+  templatesCacheOn: true,
+  loadTemplatesAtOnce: true //false for production
 }
