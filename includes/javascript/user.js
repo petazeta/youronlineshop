@@ -7,10 +7,12 @@ user.prototype.constructor=user;
 user.prototype.logoff=function(){
   //remove session and user data
   if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
+  if (this.extra && this.extra.language) var language=this.extra.language;
   var FD  = new FormData();
   FD.append("parameters", JSON.stringify({action: "logout"}));
   FD.action="dblogin.php";
   this.loadfromhttp(FD, function() {
+    this.extra.language=language;
     if (this.extra && this.extra.error) {
       alert("log out error");
     }
@@ -24,6 +26,7 @@ user.prototype.logoff=function(){
 };
 user.prototype.loginproto=function(action, name, password, email, reqlistener){
   if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
+  if (this.extra && this.extra.language) var language=this.extra.language;
   var FD  = new FormData();
   FD.append("parameters", JSON.stringify({action: action}));
   FD.append("user_name", name);
@@ -33,6 +36,8 @@ user.prototype.loginproto=function(action, name, password, email, reqlistener){
   }
   FD.action="dblogin.php";
   this.loadfromhttp(FD, function(){
+    if (!this.extra) this.extra={};
+    this.extra.language=language;
     this.dispatchEvent("log");
     if (typeof reqlistener=="function") reqlistener.call(this);
   });

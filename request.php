@@ -84,6 +84,11 @@ switch ($parameters->action) {
     if (isset($parameters->language)) $argument=[ ['_languages' => $parameters->language] ];
     $callback=["cutDown", "cutUp"];
     break;
+  case "add my children":
+    $myexecfunction="db_insertmychildren";
+    if (isset($parameters->language)) $argument=[ ['_languages' => $parameters->language] ];
+    $callback=["cutDown", "cutUp"];
+    break;
   case "add my tree":
     $myexecfunction="db_insertmytree";
     $deepLevel=null; $extra=null;
@@ -105,6 +110,10 @@ switch ($parameters->action) {
     break;
   case "delete my tree":
     $myexecfunction="db_deletemytree";
+    $callback=["cutDown", "cutUp"];
+    break;
+  case "delete my children":
+    $myexecfunction="db_deletemychildren";
     $callback=["cutDown", "cutUp"];
     break;
   case "delete my link":

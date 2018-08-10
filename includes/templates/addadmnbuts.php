@@ -7,6 +7,7 @@
     var newNode=launcher.newNode;
     var btposition=launcher.btposition;
     var elementsListPos=launcher.elementsListPos;
+    var excludeButtons=launcher.excludeButtons;
     
     if (btposition) thisElement.className=btposition;
     else thisElement.className=Config.defaultAdmnsButtonsPosition;
@@ -38,6 +39,16 @@
 	  args:{thisNode: thisNode}
 	}
       ];
+      var buttons=admnlauncher.buttons.slice(0);
+      if (excludeButtons) {
+	for (var i=0; i<excludeButtons.length; i++) {
+	  for (var j=0; j<buttons.length; j++) {
+	    if (excludeButtons[i]==buttons[j].template) {
+	      admnlauncher.buttons.splice(j, 1);
+	    }
+	  }
+	}
+      }
       admnlauncher.refreshView(thisElement, "includes/templates/admnbuts.php");
     }
     

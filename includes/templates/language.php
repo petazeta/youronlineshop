@@ -17,6 +17,7 @@
       admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
       admnlauncher.newNode.loadasc(thisNode, 2, "id"); //the parent is not the same
       admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
+      if (thisNode.parentNode.children.length==1) admnlauncher.excludeButtons=["includes/templates/butdelete.php"]
       admnlauncher.appendThis(thisElement.parentElement, "includes/templates/addadmnbuts.php");
 
       thisElement.addEventListener("click", function(event) {

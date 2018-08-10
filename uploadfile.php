@@ -1,4 +1,7 @@
 <?php
+session_start();
+require('includes/phpclasses/nodes.php');
+require('includes/phpclasses/user.php');
 if (isset($_SESSION["user"])) {
   $user=unserialize($_SESSION["user"]);
   $userid=$user->properties->id;

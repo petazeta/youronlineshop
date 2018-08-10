@@ -424,30 +424,6 @@ class NodeFemale extends Node{
     $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
       . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
       . " WHERE"
-      . ' TABLE_SCHEMA= SCHEMA()'  
-      . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
-      . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    else if ($result->num_rows==1) {
-      $row=$result->fetch_array(MYSQLI_ASSOC);
-      $this->properties->cloneFromArray($row);
-      $this->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->properties->name);
-      $this->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename));
-      $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
-      //stablish the sort_order statment
-      $parentTableOriginalName=strtolower(substr($this->properties->parenttablename, 6));
-      foreach ($this->syschildtablekeys as $syskey) {
-	$this->properties->sort_order=false;
-	if ($syskey=='_' . $parentTableOriginalName . '_position') {
-	  $this->properties->sort_order=true;
-	}
-      }
-    }
-
-    $this->db_loadchildtablekeys();
-    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
-      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
-      . " WHERE"
       . ' TABLE_SCHEMA= SCHEMA()'
       . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
       . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
@@ -460,33 +436,11 @@ class NodeFemale extends Node{
       $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
       //stablish the sort_order statment
       foreach ($this->syschildtablekeysinfo as $syskey) {
-	$this->properties->sort_order=false;
 	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
 	  $this->properties->sort_order=true;
-	  break;
 	}
-      }
-    }
-  
-    $this->db_loadchildtablekeys();
-    //We check if the current relationshiop actually exists
-    $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename FROM '
-      . 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE' . ' r'
-      . " WHERE"
-      . ' TABLE_SCHEMA= SCHEMA()'
-      . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
-      . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    if ($result->num_rows==0) return false;
-    else {
-      //The relationship actually exists, we fill some data
-      $this->properties->name=strtolower(substr($this->properties->childtablename, 6));
-      //stablish the sort_order statment
-      $this->properties->sort_order=false;
-      foreach ($this->syschildtablekeysinfo as $syskey) {
-	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
-	  $this->properties->sort_order=true;
-	  break;
+	if ($syskey->type=='foreignkey' &&  $syskey->parenttablename=='TABLE_LANGUAGES') {
+	  $this->properties->language=true;
 	}
       }
     }
@@ -528,6 +482,16 @@ class NodeFemale extends Node{
 	}
       }
       else $this->partnerNode->avoidrecursionup();
+    }
+  }
+  function db_deletemychildren(){
+    for ($i=0; $i<count($this->children); $i++) {
+      $this->children[$i]->db_deletemyself();
+    }
+  }
+  function db_insertmychildren($extra=null){
+    for ($i=0; $i<count($this->children); $i++) {
+      $this->children[$i]->db_insertmyself($extra);
     }
   }
 }
@@ -618,10 +582,11 @@ class NodeMale extends Node{
       $this->relationships[$i]->db_loadchildtablekeys();
       //stablish the sort_order statment
       foreach ($this->relationships[$i]->syschildtablekeysinfo as $syskey) {
-	$this->relationships[$i]->properties->sort_order=false;
 	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->relationships[$i]->properties->parenttablename) {
 	  $this->relationships[$i]->properties->sort_order=true;
-	  break;
+	}
+	if ($syskey->type=='foreignkey' &&  $syskey->parenttablename=='TABLE_LANGUAGES') {
+	  $this->relationships[$i]->properties->language=true;
 	}
       }
     }
@@ -664,10 +629,11 @@ class NodeMale extends Node{
 	$this->parentNode[$i]->db_loadchildtablekeys();
 	//stablish the sort_order statment
 	foreach ($this->parentNode[$i]->syschildtablekeysinfo as $syskey) {
-	  $this->parentNode[$i]->properties->sort_order=false;
 	  if ($syskey->type=='sort_order' && $syskey->parenttablename==$this->parentNode[$i]->properties->parenttablename) {
 	    $this->parentNode[$i]->properties->sort_order=true;
-	    break;
+	  }
+	  if ($syskey->type=='foreignkey' &&  $syskey->parenttablename=='TABLE_LANGUAGES') {
+	    $this->parentNode[$i]->properties->language=true;
 	  }
 	}
 	$this->parentNode[$i]->children[0]=$this;
@@ -683,10 +649,11 @@ class NodeMale extends Node{
       $this->parentNode->db_loadchildtablekeys();
       //stablish the sort_order statment
       foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
-	$this->parentNode->properties->sort_order=false;
 	if ($syskey->type=='sort_order' && $syskey->parenttablename==$this->parentNode->properties->parenttablename) {
 	  $this->parentNode->properties->sort_order=true;
-	  break;
+	}
+	if ($syskey->type=='foreignkey' &&  $syskey->parenttablename=='TABLE_LANGUAGES') {
+	  $this->parentNode->properties->language=true;
 	}
       }
       $this->parentNode->children[0]=$this;
@@ -836,7 +803,7 @@ class NodeMale extends Node{
     //Now we got to remove the relation from the database and update the sort_order of the borothers
     if ($this->db_releasemylink()===false) return false; //if there is any problem we abort
     //We try to update sort_order at bro for that we need the object to be updated
-    if (!isset($this->sort_order)) return;
+    if (!isset($this->sort_order) || !$this->sort_order) return;
     foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
 	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
@@ -941,7 +908,7 @@ class NodeMale extends Node{
     . ' WHERE ' . 't.id =' . $newchildid;
     if (($result = $this->getdblink()->query($sql))===false) return false;
     //update sort_order
-    if (!isset($this->sort_order)) return;
+    if (!isset($this->sort_order) || !$this->sort_order) return;
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . $positioncolumnname . '=' . $this->sort_order
     . ' WHERE ' . 't.id =' . $newchildid;

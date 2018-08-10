@@ -142,6 +142,7 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "load my children":
     case "load my tree":
     case "delete my tree":
+    case "delete my children":
     case "load myself":
       var node=this.cloneNode(1, 0, "id", "id");
       break;
@@ -179,28 +180,32 @@ Node.prototype.toRequestFormData=function(parameters) {
 //node.render(domelement), node.render(scriptelement)
 Node.prototype.render = function (tp) {
   if (!tp) tp=this.myTp;
-  if (tp.nodeType==3 && tp.tagName=="TEMPLATE") {
-    tp=getTpContent(tp); //templates are not valid just its content
+  if (tp.nodeType==3 && tp.tagName=="TEMPLATE" && supportsTemplate()) {
+    tp=tp.content; //templates are not valid just its content
   }
   var elementsToBeModified=[];
   var myElements=[];
-  myElements.push(tp); //To get the outerHTML
+  myElements.push(tp); //To get the outerHTML in case there is not template (DEPRECATED?)
   myElements=myElements.concat(Array.from(tp.querySelectorAll("*"))); //inner elements
   //document.thisScript=[];
   //get inside Tps
   if (!supportsTemplate()) {
     //We still dont execute scripts inside of cascading templates (IE)
     var inTps=tp.querySelectorAll("TEMPLATE");
+    inTps=Array.from(inTps);
+    if (inTps[0]==tp) {
+      inTps.splice(0, 1);
+      console.log("excluding tp");
+    }
     var inTpElements=[];
+    console.log("inTps", inTps.length, inTps, tp);
     for (var k=0; k<inTps.length; k++) {
-      inTpElements=inTpElements.concat(Array.from(getTpContent(inTps[k]).querySelectorAll("*")));
+      inTpElements=inTpElements.concat(Array.from(inTps[k].querySelectorAll("*")));
     }
     var newElements=[];
+    console.log(myElements.length, inTpElements.length);
     for (var i=0; i<myElements.length; i++) {
       var pos=inTpElements.indexOf(myElements[i]);
-      console.dir(inTpElements);
-      console.dir(myElements[i]);
-      console.log(inTpElements.indexOf(myElements[i]));
       if (pos==-1) {
 	newElements.push(myElements[i]);
       }
@@ -563,11 +568,27 @@ Node.prototype.getMyDomNodes=function () {
     var index=this.parentNode.children.indexOf(this);
     var length=1;
     if (this.parentNode.childTp.nodeType==11) { //document fragment
-      length=this.parentNode.childTp.querySelectorAll("*").length; //there is a fragment
+      length=this.parentNode.childTp.children.length; //there is a fragment
+    }
+    var elements=Array.from(this.parentNode.childContainer.children);
+    for (var i=0; i<elements.length; i++) {
+      if (elements[i].tagName=="SCRIPT") elements.splice(i,1);
+    }
+    if (elements.length==1 && this.parentNode.children.length>1) {
+      //in this case we are wrapped the elements in a table
+      if (elements[0].tagName=="TABLE") {
+	var myTable=elements[0];
+	elements=[];
+	for (var i=0; i<myTable.rows.length; i++) {
+	  for (var j=0; j<myTable.rows[i].cells.length; j++) {
+	    elements.push(myTable.rows[i].cells[j]);
+	  }
+	}
+      }
     }
     var startindex=index*length;
-    var endindex=startindex+length;
-    return Array.from(this.parentNode.childContainer.querySelectorAll("*")).slice(startindex,endindex);
+    var endindex=startindex + length;
+    return elements.slice(startindex, endindex);
   }
   else if (this.myContainer) {
       return Array.from(this.myContainer.children);
@@ -575,6 +596,21 @@ Node.prototype.getMyDomNodes=function () {
   else if (this.childContainer) {
       return Array.from(this.childContainer.children);
   }
+}
+Node.prototype.arrayFromTree=function () {
+  var container=[];
+  container.push(this);
+  if (this.constructor==NodeFemale) {
+    for (var i=0; i<this.children.length; i++) {
+      container=container.concat(this.children[i].arrayFromTree());
+    }
+  }
+  else {
+    for (var i=0; i<this.relationships.length; i++) {
+      container=container.concat(this.relationships[i].arrayFromTree());
+    }
+  }
+  return container;
 }
 
 function NodeFemale() {

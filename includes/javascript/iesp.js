@@ -8,8 +8,9 @@ function getTpContent(tp) {
   }
   else {
     var container=document.createDocumentFragment();
-    for (var i=0; i<tp.children.length; i++) {
-      container.appendChild(tp.children[i].cloneNode(true));
+    var tpClone=tp.cloneNode(true);
+    while (tpClone.firstElementChild) {
+      container.appendChild(tpClone.firstElementChild);
     }
     return container;
   }

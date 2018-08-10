@@ -16,10 +16,8 @@
     else thisElement.className=Config.defaultEditButtonPosition;
     
     function showEditButton() {
-      thisElement.parentElement.style.position="relative";
-      
       if (thisElement.originalParentElement && !thisElement.parentElement) editElement.parentElement.appendChild(thisElement); //after the log out thisElement is removed from parent
-
+      thisElement.parentElement.style.position="relative";
       if (!createInput) { //input is allways visible¿?
 	thisElement.className += " visibleHover";
       
