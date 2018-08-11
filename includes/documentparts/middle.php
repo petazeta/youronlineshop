@@ -33,31 +33,34 @@ function fitincolumn() {
   + " nav span { margin: 0.2em 0.4em !important;}";
   document.head.appendChild(newStyle);
   var centralcontent=document.getElementById("centralcontent");
-  var leftcolumn=closesttagname.call(document.querySelector("section.leftcolumn"), 'TD');
-  var rightcolumn=closesttagname.call(document.querySelector("section.rightcolumn"), 'TD');
+  var leftcolumn=DomMethods.closesttagname(document.querySelector("section.leftcolumn"), 'TD');
+  var rightcolumn=DomMethods.closesttagname(document.querySelector("section.rightcolumn"), 'TD');
   document.querySelector("[class=mainblock]").style.minWidth="300px";
   document.querySelector("[class=mainblock]").style.width="100%";
   var catalogbox=leftcolumn.querySelector('div[data-phone]');
+  var langbox=leftcolumn.querySelectorAll('div[data-phone]')[1];
   var logbox=rightcolumn.querySelector('div[data-phone]');
   var cartbox=rightcolumn.querySelectorAll('div[data-phone]')[1];
   var myTable=getTpContent(document.querySelector("#smartphoneboxestp")).querySelector("table");
-  var boxes=[catalogbox, cartbox, logbox];
+  var boxes=[catalogbox, cartbox, logbox, langbox];
   var boxColumns=0;
   centralcontent.style.paddingLeft="0.8em";
   centralcontent.style.paddingRight="0.8em";
   if (window.screen.width<400) {
     centralcontent.style.paddingLeft="0";
     centralcontent.style.paddingRight="0";
-    boxes.splice(2,1);
+    var myboxes=boxes.splice(2,2);
     var boxContainer=document.createDocumentFragment();
-    boxContainer.appendChild(logbox);
-    document.querySelector("header").appendChild(intoColumns(myTable.cloneNode(true), boxContainer, boxColumns));
+    myboxes.forEach(function(box){
+      boxContainer.appendChild(box);
+    });
+    document.querySelector("header").appendChild(DomMethods.intoColumns(myTable.cloneNode(true), boxContainer, boxColumns));
   }
   var boxContainer=document.createDocumentFragment();
   boxes.forEach(function(box){
     boxContainer.appendChild(box);
   });
-  document.querySelector("header").appendChild(intoColumns(myTable.cloneNode(true), boxContainer, boxColumns));
+  document.querySelector("header").appendChild(DomMethods.intoColumns(myTable.cloneNode(true), boxContainer, boxColumns));
 
   leftcolumn.style.display="none";
   rightcolumn.style.display="none";
