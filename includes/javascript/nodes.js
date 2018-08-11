@@ -568,9 +568,9 @@ Node.prototype.getMyDomNodes=function () {
     var index=this.parentNode.children.indexOf(this);
     var length=1;
     if (this.parentNode.childTp.nodeType==11) { //document fragment
-      length=this.parentNode.childNodes.length; //there is a fragment. IE doesn't support children property
-      for (var i=0; i<this.parentNode.childNodes.length; i++) {
-	if (this.parentNode.childNodes[i].nodeType!=1) length--;
+      length=this.parentNode.childTp.childNodes.length; //there is a fragment. IE doesn't support children property
+      for (var i=0; i<this.parentNode.childTp.childNodes.length; i++) {
+	if (this.parentNode.childTp.childNodes[i].nodeType!=1) length--;
       }
     }
     var elements=Array.from(this.parentNode.childContainer.children);
