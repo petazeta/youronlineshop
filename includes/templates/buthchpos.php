@@ -15,7 +15,7 @@
 	    var leftLauncher=new Node();
 	    leftLauncher.orderchange=-1;
 	    leftLauncher.thisNode=launcher.thisNode;
-	    leftLauncher.appendThis(thisElement, "includes/templates/changeorder.php")
+	    leftLauncher.appendThis(thisElement, "includes/templates/changeorder.php");;
 	  </script>
 	</td>
 	<td style="min-width:2px">
@@ -33,7 +33,7 @@
 	    var rightLauncher=new Node();
 	    rightLauncher.orderchange=1;
 	    rightLauncher.thisNode=launcher.thisNode;
-	    rightLauncher.appendThis(thisElement, "includes/templates/changeorder.php")
+	    rightLauncher.appendThis(thisElement, "includes/templates/changeorder.php");
 	  </script>
 	</td>
       </tr>

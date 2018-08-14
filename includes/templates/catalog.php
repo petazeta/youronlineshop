@@ -187,27 +187,33 @@
 			  <tr>
 			    <td>
 			      <div style="display:table">
-				<span></span>
-				<script>
-				  thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "price");
-				  //adding the edition pencil
-				  var launcher = new Node();
-				  launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
-				  launcher.thisProperty = "price";
-				  launcher.editElement = thisElement;
-				  launcher.btposition = "btmiddleleft";
-				  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
-				</script>
-				<span></span>
-				<script>
-				  var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
-				  currency.writeProperty(thisElement);
-				  //adding the edition pencil
-				  var launcher = new Node();
-				  launcher.thisNode = currency;
-				  launcher.editElement = thisElement;
-				  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
-				</script>
+				<span data-note="relative position container for admn buttons">
+				  <span></span>
+				  <script>
+				    thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "price");
+				    //adding the edition pencil
+				    var launcher = new Node();
+				    launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
+				    launcher.thisProperty = "price";
+				    launcher.editElement = thisElement;
+				    launcher.btposition = "btmiddleleft";
+				    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+				  </script>
+				</span>
+				<span data-note="relative position container for admn buttons">
+				  <span></span>
+				  <script>
+				    var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
+				    currency.writeProperty(thisElement);
+				    //adding the edition pencil
+				    /* We still don't add edition pencil cause is confusing with the price
+				    var launcher = new Node();
+				    launcher.thisNode = currency;
+				    launcher.editElement = thisElement;
+				    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+				    */
+				  </script>
+				</span>
 			      </div>
 			    </td>
 			    <td>

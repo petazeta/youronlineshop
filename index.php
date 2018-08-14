@@ -66,7 +66,7 @@
 		}
 		if (!webuser.extra.language) webuser.extra.language=this.getChild();
 		loadLabels(function(){
-		  if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
+		  if (Config.loadTemplatesAtOnce!==false) {
 		    loadTemplates(function(){
 		      domelementsrootmother.dispatchEvent("loadLabels");
 		      myalert.hidealert();
