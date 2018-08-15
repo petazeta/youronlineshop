@@ -41,7 +41,7 @@
 	      if(!data.properties.hasOwnProperty(key)) continue;
 	      if (key=="id") continue;
 	      if (!value ||
-	      (!checklength(value, minchar, maxchar))) {
+	      (!DomMethods.checklength(value, minchar, maxchar))) {
 		result.extra.charsNum=0;
 		result.extra.error=true;
 		result.extra.errorkey=key;
@@ -55,7 +55,7 @@
 	  checkInput(userdata);
 	  if (!result.extra.error) checkInput(addressdata);
 	  if (!result.extra.error) {
-	    if (!validateEmail(userdata.properties.email)) {
+	    if (!DomMethods.validateEmail(userdata.properties.email)) {
 	      result.extra.error=true;
 	      result.extra.errorkey="email";
 	      result.extra.errormsg="Error: Email not correct";

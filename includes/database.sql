@@ -219,7 +219,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (273, 'Address', 278, 1),
 (274, 'Show archived orders', 280, 1),
 (275, 'Show new orders', 281, 1),
-(276, 'button nameShow Orders', 282, 1),
+(276, 'Show Orders', 282, 1),
 (277, 'Show Address', 283, 1),
 (278, 'Quantity', 285, 1),
 (279, 'Name', 286, 1),
