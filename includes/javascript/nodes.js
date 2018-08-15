@@ -412,7 +412,24 @@ Node.prototype.writeProperty=function(container, property, attribute, onEmptyVal
   if (!property) {
     property=this.getFirstPropertyKey();
   }
-  container[myAttribute]=this.properties[property] || onEmptyValueText;
+  if (!this.properties[property] && this.properties[property]!==0) {
+    if (this.parentNode && this.parentNode.childtablekeys) {
+      var pos = this.parentNode.childtablekeys.indexOf(property);
+      if (pos!=-1 && this.parentNode.childtablekeystypes[pos].indexOf("int")!=-1) {
+	//Is a integer
+	container[myAttribute]="0";
+      }
+      else {
+	container[myAttribute]=onEmptyValueText;
+      }
+    }
+    else {
+      container[myAttribute]=onEmptyValueText;
+    }
+  }
+  else {
+    container[myAttribute]=this.properties[property];
+  }
 }
 
 Node.prototype.getFirstPropertyKey=function(){

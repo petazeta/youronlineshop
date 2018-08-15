@@ -206,13 +206,23 @@
 				    var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
 				    currency.writeProperty(thisElement);
 				    //adding the edition pencil
-				    /* We still don't add edition pencil cause is confusing with the price
+				    // We still don't add edition pencil cause is confusing with the price
 				    var launcher = new Node();
 				    launcher.thisNode = currency;
 				    launcher.editElement = thisElement;
 				    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
-				    */
+				    var currencyNote=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelements"}).getChild().getRelationship({name: "domelementsdata"}).getChild();
+				    if (webuser.isWebAdmin()) {
+				      thisElement.parentElement.querySelector("[data-id=currencynote]").style.visibility="visible";
+				    }
 				  </script>
+				  <div class="btmiddleright" data-id="currencynote" style="font-size: 60%; visibility:hidden;">Edit Symbol</div>
+				  <script>
+				    var currencyNote=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelements"}).getChild().getRelationship({name: "domelementsdata"}).getChild();
+				    if (webuser.isWebAdmin()) {
+				      thisElement.style.visibility="visible";
+				    }
+				    </script>
 				</span>
 			      </div>
 			    </td>
