@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 10, 2018 at 02:25 AM
+-- Generation Time: Aug 15, 2018 at 01:09 PM
 -- Server version: 5.5.60-0+deb8u1
 -- PHP Version: 5.6.36-0+deb8u1
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `domelements` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `_domelements` int(11) DEFAULT NULL,
   `_domelements_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=319 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=326 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
@@ -126,10 +126,18 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (285, 'quantity', 284, 0),
 (286, 'name', 284, 0),
 (287, 'price', 284, 0),
-(314, '', 66, 1),
+(314, '', 66, 2),
 (315, '', 314, 1),
 (316, 'currency', 60, 0),
-(317, 'signuptt', 182, 0);
+(317, 'signuptt', 182, 0),
+(318, '', 66, 3),
+(319, '', 318, 1),
+(320, '', 318, 2),
+(321, '', 66, 1),
+(322, '', 321, 1),
+(323, '', 321, 2),
+(324, '', 321, 3),
+(325, 'currencyNote', 316, 0);
 
 -- --------------------------------------------------------
 
@@ -142,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `domelementsdata` (
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `_domelements` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=455 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=319 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelementsdata`
@@ -161,8 +169,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (33, 'Powered by <a href="https://sourceforge.net/projects/youronlineshop/">YourOnlineShop</a>', 33, 1),
 (36, '+ 1 to the cart', 36, 1),
 (38, 'Insert you account details or create a new account.', 38, 1),
-(41, 'Shop Title', 41, 1),
-(42, 'This is my first shop', 42, 1),
+(41, 'tienda de ropa', 41, 1),
+(42, 'Hello my friends', 42, 1),
 (43, 'the user name', 43, 1),
 (44, 'Not any value', 44, 1),
 (58, '', 58, 1),
@@ -211,15 +219,23 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (273, 'Address', 278, 1),
 (274, 'Show archived orders', 280, 1),
 (275, 'Show new orders', 281, 1),
-(276, 'Show Orders', 282, 1),
+(276, 'button nameShow Orders', 282, 1),
 (277, 'Show Address', 283, 1),
 (278, 'Quantity', 285, 1),
 (279, 'Name', 286, 1),
 (280, 'Price', 287, 1),
 (307, 'first menu', 314, 1),
 (308, 'Some text', 315, 1),
-(309, '&nbsp;€', 316, 1),
-(310, 'Insert the required data to create new user.', 317, 1);
+(309, '€', 316, 1),
+(310, 'Insert the required data to create new user.', 317, 1),
+(311, 'about us', 318, 1),
+(312, 'Some paragraph<div>&nbsp;bla bla</div>', 319, 1),
+(313, 'text from us<div>haha</div>', 320, 1),
+(314, 'third', 321, 1),
+(315, 'third content<div>sss</div>', 322, 1),
+(316, '', 323, 1),
+(317, '<div>kkkk</div>mor text.<div>hh</div><div><br></div><div><br></div><div>kk</div>', 324, 1),
+(318, 'Edit Symbol', 325, 1);
 
 -- --------------------------------------------------------
 
@@ -231,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
@@ -239,8 +255,14 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 
 INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
 (1, NULL, 0),
-(6, 1, 1),
-(11, 6, 1);
+(6, 1, 3),
+(11, 6, 1),
+(12, 1, 1),
+(13, 12, 2),
+(14, 6, 3),
+(15, 6, 2),
+(16, 1, 2),
+(17, 12, 1);
 
 -- --------------------------------------------------------
 
@@ -253,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategoriesdata`
@@ -262,7 +284,13 @@ CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
 INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`) VALUES
 (1, 'root', NULL, 1),
 (6, 'first category', 6, 1),
-(11, 'First subcategory', 11, 1);
+(11, 'First subcategory', 11, 1),
+(12, 'second category', 12, 1),
+(13, 'subcategory name', 13, 1),
+(14, 'subcat 2', 14, 1),
+(15, 'name sub', 15, 1),
+(16, '', 16, 1),
+(17, '', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -274,14 +302,24 @@ CREATE TABLE IF NOT EXISTS `items` (
 `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `items`
 --
 
 INSERT INTO `items` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
-(10, 11, 1);
+(11, 13, 1),
+(12, 13, 2),
+(13, 13, 3),
+(14, 14, 1),
+(15, 14, 3),
+(16, 14, 2),
+(17, 15, 1),
+(18, 15, 2),
+(19, 15, 3),
+(20, 11, 2),
+(21, 17, 1);
 
 -- --------------------------------------------------------
 
@@ -298,14 +336,24 @@ CREATE TABLE IF NOT EXISTS `itemsdata` (
   `price` decimal(10,2) NOT NULL,
   `_items` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemsdata`
 --
 
 INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `image`, `price`, `_items`, `_languages`) VALUES
-(10, 'First Product', '', 'P description', '', 8.00, 10, 1);
+(11, 'product tit', '', 'jjj', '', 7.00, 11, 1),
+(12, 'my p examle', '', '', '', 0.00, 12, 1),
+(13, 'product tit', '', '', 'file_13.png', 0.00, 13, 1),
+(14, '', '', '', '', 0.00, 14, 1),
+(15, '', '', '', '', 0.00, 15, 1),
+(16, '', '', '', '', 0.00, 16, 1),
+(17, 'p name', '', '', '', 0.00, 17, 1),
+(18, '', '', '', '', 0.00, 18, 1),
+(19, 'p name', '', '', '', 0.00, 19, 1),
+(20, '', '', '', '', 7.00, 20, 1),
+(21, 'kk', '', '', '', 980.00, 21, 1);
 
 -- --------------------------------------------------------
 
@@ -316,7 +364,7 @@ INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `
 CREATE TABLE IF NOT EXISTS `languages` (
 `id` int(11) NOT NULL,
   `code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `languages`
@@ -337,7 +385,7 @@ CREATE TABLE IF NOT EXISTS `orderitems` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `_orders` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orderitems`
@@ -359,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0',
   `_users` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orders`
@@ -526,47 +574,47 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=319;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=326;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=455;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=319;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=110;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=108;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --
