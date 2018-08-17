@@ -14,8 +14,10 @@
       addressColumns=2;
     }
     thisNode.getRelationship("usersdata").loadfromhttp({action: "load my children", user_id: webuser.properties.id}, function() {
+      this.getChild().editable=true;
       this.getChild().appendProperties(thisElement,"includes/templates/singlefield.php");
       thisNode.getRelationship("addresses").loadfromhttp({action: "load my children", user_id: webuser.properties.id}, function() {
+	this.getChild().editable=true;
 	this.getChild().appendProperties(thisElement,"includes/templates/singlefield.php",function(){
 	  thisElement.appendChild(DomMethods.intoColumns(getTpContent(thisElement.previousElementSibling).querySelector("table").cloneNode(true), thisElement, addressColumns));
 	  thisElement.style.visibility="visible";

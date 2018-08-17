@@ -3,7 +3,7 @@
     <a data-button="true" class="menu" href="javascript:"></a>
     <script>
       if (thisNode.selected) DomMethods.setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
-      thisNode.getRelationship("domelementsdata").loadfromhttp({action:"load my children"}, function(){
+      thisNode.getRelationship("domelementsdata").loadfromhttp({action:"load my children", language: webuser.extra.language.properties.id}, function(){
 	this.getChild().writeProperty(thisElement);
 	var closelauncher=new Node();
 	closelauncher.admnbuts=[];
@@ -39,7 +39,7 @@
       thisElement.addEventListener('click', function(event){
 	event.preventDefault();
 	DomMethods.setActive(thisNode);
-	thisNode.getRelationship("domelements").loadfromhttp({action: "load my tree"}, function() {
+	thisNode.getRelationship("domelements").loadfromhttp({action: "load my tree", language: webuser.extra.language.properties.id}, function() {
 	  this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
 	  this.newNode.parentNode=new NodeFemale();
 	  this.newNode.parentNode.load(this, 1, "id");

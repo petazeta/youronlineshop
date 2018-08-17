@@ -18,6 +18,7 @@
     <script>
       var datarel=webuser.getRelationship("usersdata");
       function showdata(){
+	datarel.getChild().editable=true;
 	datarel.getChild().refreshPropertiesView(thisElement,"includes/templates/singlefield.php", function(){
 	  thisElement.appendChild(DomMethods.intoColumns(getTpContent(document.getElementById("userdatatp")).querySelector("table").cloneNode(true), thisElement, 2));
 	});

@@ -33,7 +33,14 @@
 	  launcher.thisNode = thisNode;
 	  launcher.editElement = thisElement;
 	  launcher.thisProperty = thisNode.editpropertyname;
-	  launcher.editable = true;
+	  if (Array.isArray(thisNode.editable)) {
+	    if (thisNode.editable.indexOf(launcher.thisProperty)!=-1) {
+	      launcher.editable=true;
+	    }
+	  }
+	  else if (typeof thisNode.editable == "boolean") {
+	    launcher.editable=thisNode.editable;
+	  }
 	  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 	  if (thisNode.showLabel!==false) thisNode.appendThis(thisElement.parentElement.previousElementSibling, thisElement.parentElement.parentElement.querySelector("template"));
 	</script>
