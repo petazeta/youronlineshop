@@ -18,6 +18,7 @@ DomMethods={
     else return false;
   },
   intoColumns: function(tableElement, elements, cellsNumber) {
+    if (!cellsNumber) cellsNumber=0;
     // columns distribution applied to a row
     // tableElement a table template, elements a document fragment o dom element containing elements
     var myRow=tableElement.rows[0].cloneNode();

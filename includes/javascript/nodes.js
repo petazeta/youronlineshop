@@ -135,6 +135,7 @@ Node.prototype.toRequestFormData=function(parameters) {
     case "load this relationship":
     case "load my childtablekeys":
     case "load all":
+    case "load tables":
       var node=this.cloneNode(0, 0);
       break;
     case "load my relationships":
@@ -185,74 +186,51 @@ Node.prototype.render = function (tp) {
   }
   var elementsToBeModified=[];
   var myElements=[];
-  myElements.push(tp); //To get the outerHTML in case there is not template (DEPRECATED?)
-  myElements=myElements.concat(Array.from(tp.querySelectorAll("*"))); //inner elements
+  //myElements.push(tp); //To get the outerHTML in case there is not template DEPRECATED
+  myElements=Array.from(tp.querySelectorAll("SCRIPT")); //inner elements
   //document.thisScript=[];
   //get inside Tps
   if (!supportsTemplate()) {
     //We still dont execute scripts inside of cascading templates (IE)
     var inTps=tp.querySelectorAll("TEMPLATE");
-    inTps=Array.from(inTps);
-    if (inTps[0]==tp) {
-      inTps.splice(0, 1);
-      console.log("excluding tp");
-    }
-    var inTpElements=[];
-    console.log("inTps", inTps.length, inTps, tp);
-    for (var k=0; k<inTps.length; k++) {
-      inTpElements=inTpElements.concat(Array.from(inTps[k].querySelectorAll("*")));
-    }
-    var newElements=[];
-    console.log(myElements.length, inTpElements.length);
-    for (var i=0; i<myElements.length; i++) {
-      var pos=inTpElements.indexOf(myElements[i]);
-      if (pos==-1) {
-	newElements.push(myElements[i]);
+    if (inTps.length) {
+      console.log(inTps.length, inTps);
+      for (var i=1; i<inTps.length; i++) { //we exclude the master tp cause somehow querySelectorAll(template) get it also
+	var inTpElements=Array.from(inTps[i].querySelectorAll("SCRIPT"));
+	for (var k=0; k<inTpElements.length; k++) {
+	  var pos=myElements.indexOf(inTpElements[k]);
+	  if (pos!=-1) {
+	    console.log("encontrado", myElements[pos], myElements.length);
+	    myElements.splice(pos, 1);
+	  }
+	}
       }
     }
-    myElements=newElements;
   }
-  for (var i=0; i<myElements.length; i++) {
-    var j=0; //the for loop is executing before the script
-    if (myElements[i].tagName=="SCRIPT") {
-      //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
-      //Also to execute script <script> for an already loaded element when we use render
-      var myScript=document.createElement("SCRIPT");
-      if (document.currentScript===undefined) { //IE
-	var currTime= new Date().getTime();
-	function getRandomInt(max) {
-	  return Math.floor(Math.random() * Math.floor(max));
-	}
-	var uniqueId=currTime + getRandomInt(99999);
-	uniqueId=uniqueId.toString(32);
-	myScript.id=uniqueId;
-	var scriptTop="var thisScript=document.getElementById('" + uniqueId + "');";
-	//var scriptTop="var thisScript=document.thisScript[" + j + "];" 
+  for (var i=0; i<myElements.length; i++) {  
+    //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
+    //Also to execute script <script> for an already loaded element when we use render
+    var myScript=document.createElement("SCRIPT");
+    if (document.currentScript===undefined) { //IE
+      var currTime= new Date().getTime();
+      function getRandomInt(max) {
+	return Math.floor(Math.random() * Math.floor(max));
       }
-      else {
-	var scriptTop="var thisScript=document.currentScript;";
-      }
-      scriptTop +="var thisElement=thisScript.previousElementSibling; var thisNode=thisScript.thisNode;"
-      myScript.textContent="(function(){" + scriptTop + myElements[i].textContent + "})();"; //adding scope (encapsulation) so this variables are local and can't be modified from another scripts.
-      myScript.thisNode=this;
-      //document.thisScript.push(myScript);
-      var container=myElements[i].parentNode;  //!!Document Fragment is not an Element => *parentNode*
-      container.insertBefore(myScript, myElements[i])
-      container.removeChild(myElements[i]);
-      continue;
+      var uniqueId=currTime + getRandomInt(99999);
+      uniqueId=uniqueId.toString(32);
+      myScript.id=uniqueId;
+      var scriptTop="var thisScript=document.getElementById('" + uniqueId + "');"; 
     }
-    if (typeof myElements[i].getAttribute != 'function') continue;
-    if (typeof myElements[i].getAttribute("data-js")=="string") {
-      var execeval=function(thisNode,thisElement,myjs) {
-	try {
-	  eval(myjs);
-	} catch(e) {
-	  var err = e.constructor(e.message + ' (Error in Evaled Script) '  + '\nScript content: \n' + myjs);
-	  throw err;
-	}
-      }
-      execeval(this,myElements[i],myElements[i].getAttribute("data-js")); //this way we will have a local copy of node and element so if there are onclick=funcion(){thisElement... it will get the correct one)
+    else {
+      var scriptTop="var thisScript=document.currentScript;";
     }
+    scriptTop +="var thisElement=thisScript.previousElementSibling; var thisNode=thisScript.thisNode;"
+    myScript.textContent="(function(){" + scriptTop + myElements[i].textContent + "})();"; //adding scope (encapsulation) so this variables are local and can't be modified from another scripts.
+    myScript.thisNode=this;
+    //document.thisScript.push(myScript);
+    var container=myElements[i].parentNode;  //!!Document Fragment is not an Element => *parentNode*
+    container.insertBefore(myScript, myElements[i])
+    container.removeChild(myElements[i]);
   }
   return tp;
 };
@@ -289,7 +267,9 @@ Node.prototype.appendThis=function (container, tp, reqlistener) {
   }
   else {
     if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
+      if (tp.tagName && tp.tagName=="TEMPLATE") {
+	tp=getTpContent(tp);
+      }
       this.myTp=tp;
     }
     refresh.call(this);
@@ -434,7 +414,7 @@ Node.prototype.writeProperty=function(container, property, attribute, onEmptyVal
 
 Node.prototype.getFirstPropertyKey=function(){
   var keys;
-  if (this.parentNode && this.parentNode.childtablekeys) {
+  if (this.parentNode && this.parentNode.childtablekeys && this.parentNode.childtablekeys.length>0) {
     keys=this.parentNode.childtablekeys;
   }
   else {

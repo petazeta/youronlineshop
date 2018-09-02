@@ -21,10 +21,8 @@
 	if (webuser.isWebAdmin()) {
 	  //The node and a data node is inserted
 	  var admnlauncher=new Node();
-	  admnlauncher.buttons=[{
-	    template: "includes/templates/butaddnewnode.php",
-	    args: {thisParent: this, newNode: newNode}
-	  }];
+	  admnlauncher.thisNode=thisNode; //parent
+	  admnlauncher.newNode=newNode;
 	  admnlauncher.refreshView(this.childContainer, "includes/templates/nochildren.php");
 	}
 	//remove the add buton when log after webadmin
@@ -61,7 +59,7 @@
 	//remove the subcontents (only when are displayed)
 	if (nodeDeleted.getRelationship() && nodeDeleted.getRelationship().childContainer) nodeDeleted.getRelationship().childContainer.innerHTML="";
 	//to show no children when webadmin
-	this.refreshChildrenView();
+	//this.refreshChildrenView();
       }
     }, "clickanynode");
   </script>

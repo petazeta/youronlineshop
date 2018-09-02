@@ -393,6 +393,17 @@ class NodeFemale extends Node{
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->cloneChildrenFromQuery($result);
   }
+  function db_loadtables() {
+    $sql="SHOW TABLES";
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    $this->cloneChildrenFromQuery($result);
+    //table key label is something like Tables_in_dbname and we make it in a key like name
+    foreach($this->children as $key => $value) {
+      $myKey=array_keys((array)$value->properties)[0];
+      $this->children[$key]->properties->name = $value->properties->$myKey;
+      unset($this->children[$key]->properties->$myKey);
+    }
+  }
   function db_loadmychildrennot() {
     foreach ($this->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->properties->parenttablename) {
@@ -444,11 +455,6 @@ class NodeFemale extends Node{
 	}
       }
     }
-  }
-  function db_loadtables() {
-    $sql = "SHOW TABLES";
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
   }
   function db_deletemytree_proto(){
     for ($i=0; $i<count($this->children); $i++) {

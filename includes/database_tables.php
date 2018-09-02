@@ -7,19 +7,11 @@
 $sql="SHOW TABLES";
 
 $tablesRequester=new NodeFemale();
+$tablesRequester->db_loadtables();
 
-if (($result = $tablesRequester->getdblink()->query($sql))===false) return false;
-
-for ($i=0; $i<$result->num_rows; $i++) {
-  $row=$result->fetch_array(MYSQLI_ASSOC);
-  $tablesRequester->children[$i] = new NodeMale();
-  $tablesRequester->children[$i]->properties->cloneFromArray($row);
-  $tablesRequester->children[$i]->parentNode=$tablesRequester;
-}
 $databaseTableNames=[];
 foreach($tablesRequester->children as $myTable) {
-  $key=array_keys((array)$myTable->properties)[0];
-  $databaseTableNames[] = $myTable->properties->$key;
+  $databaseTableNames[] = $myTable->properties->name;
 }
 $standardTables=preg_replace('/.*__(.+)$/', '$1', $databaseTableNames);
 for ($i=0; $i<count($databaseTableNames); $i++) {

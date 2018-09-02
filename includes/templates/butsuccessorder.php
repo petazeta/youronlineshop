@@ -1,6 +1,11 @@
 <template>
   <a title="Archive" href="" class="butsucs">
-    <img src="includes/css/images/success.png" data-js='if (thisNode.newStatus==0) thisElement.src="includes/css/images/undo.png";'/>
+    <img src="includes/css/images/success.png">
+    <script>
+      if (thisNode.newStatus==0) {
+	thisElement.src="includes/css/images/undo.png";
+      }
+    </script>
   </a>
   <script type="text/javascript">
     //normalize

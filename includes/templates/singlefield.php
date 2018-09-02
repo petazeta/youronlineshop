@@ -5,8 +5,10 @@
 	<span class="form-label"></span>
 	<script>
 	  var propertyName=null;
-	  var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
-	  if (tableProperties) {
+	  if (typeof domelementsrootmother != "undefined") {
+	    var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
+	  }
+	  else if (tableProperties) {
 	    var propertyData=tableProperties.getNextChild({name: thisNode.editpropertyname});
 	    if (propertyData) {
 	      propertyName=propertyData.getRelationship("domelementsdata").getChild();
@@ -19,6 +21,7 @@
 	  if (!propertyName) {
 	    propertyName=new Node();
 	    propertyName.properties.value=thisNode.editpropertyname;
+	    
 	  }
 	  propertyName.writeProperty(thisElement);
 	</script>

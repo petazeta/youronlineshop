@@ -30,6 +30,10 @@ switch ($parameters->action) {
     $myexecfunction="db_loadmyself";
     $callback="cutUp";
     break;
+  case "load tables":
+    $myexecfunction="db_loadtables";
+    $callback="cutUp";
+    break;
   case "load my children":
     $myexecfunction="db_loadmychildren";
     $filter=null; $order=null; $limit = null;
@@ -132,8 +136,7 @@ switch ($parameters->action) {
     break;
   case "replace myself":
     $myexecfunction="db_replacemyself";
-    $argument=$myelement->properties->newid;
-    unset($myelement->properties->newid);
+    if (isset($parameters->newid)) $argument=$parameters->newid;
     $callback=["cutDown", "cutUp"];
     break;
   case "load unlinked":

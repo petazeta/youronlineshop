@@ -1,3 +1,4 @@
+<template>
 <?php
 //Load all files from folder includes/templates
 //add to the template the id=filename
@@ -16,3 +17,4 @@ foreach ($tpfiles as $key => $value) {
   echo $template . "\n";
 }
 ?>
+</template>
