@@ -3,6 +3,7 @@
       <div></div>
       <script>
 	thisNode.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+	thisNode.render(thisElement); //To execute scripts
 	var launcher = new Node();
 	launcher.thisNode = thisNode.getRelationship("domelementsdata").getChild();
 	launcher.editElement = thisElement;

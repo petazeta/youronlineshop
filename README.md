@@ -19,11 +19,11 @@
 
 ## Live Demo
 
-Shop only -> [Your Online Shop Demo Shop](http://youronlineshop.sourceforge.net/sample/)
+Shop with example products -> [Your Online Shop Demo Shop](http://youronlineshop.sourceforge.net/sample/)
 
-Shop & Administration -> [Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/test/)
+Shop without example products -> [Your Online Shop Demo Admin](http://youronlineshop.sourceforge.net/test/)
 
-user/pass -> webadmin/webadmin & ordersadmin/ordersadmin
+Admin -> (usr/password) webadmin/webadmin & ordersadmin/ordersadmin
 
 ## Free Online Web
 
