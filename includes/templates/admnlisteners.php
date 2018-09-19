@@ -12,7 +12,7 @@
 	if (thisNode.children.length==0) {
 	  thisNode.refreshChildrenView();
 	}
-      }, "nochildren");
+      }, thisNode);
     }
     //adding the only-addbutton when is no records
     thisNode.addEventListener("refreshChildrenView", function() {

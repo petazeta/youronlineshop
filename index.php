@@ -2,7 +2,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Online Shop</title>
+    <title></title>
     <script src="includes/javascript/config.js?<?=time()?>"></script>
     <script src="includes/javascript/iesp.js?<?=time()?>"></script>
     <script src="includes/javascript/nodes.js?<?=time()?>"></script>

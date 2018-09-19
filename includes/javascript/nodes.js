@@ -504,7 +504,8 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
   }
 };
 Node.prototype.addEventListener=function (eventsNames, listenerFunction, label) {
-  if (label) var id=this.produceEventId(label);
+  if (typeof label=="string") var id=this.produceEventId(label);
+  else var id=label; //label is object
   if (!this.events) this.events={};
   if (!Array.isArray(eventsNames)) eventsNames=[eventsNames];
   if (id) listenerFunction.id=id;
