@@ -115,10 +115,10 @@
 		  <div style="display:table">
 		    <img class="productimg">
 		    <script>
-		      thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "image", "src", Config.defaultImg)
+		      thisNode.writeProperty(thisElement, "image", "src", Config.defaultImg)
 		      thisElement.src="catalog/images/small/" + thisElement.getAttribute("src");
 		      //adding the edition pencil
-		      thisNode.getRelationship("itemsdata").getChild().addEventListener("changeProperty", function(property){
+		      thisNode.addEventListener("changeProperty", function(property){
 			if (property=="image") {
 			  thisElement.src="catalog/images/small/" + this.properties.image;
 			  thisElement.src += "?" + new Date().getTime(); //we force the browser tu update picture
@@ -126,7 +126,7 @@
 		      }, "img");
 		      var launcher = new Node();
 		      launcher.btposition="bttopinsideleftinside";
-		      launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
+		      launcher.thisNode = thisNode;
 		      launcher.editElement = thisElement;
 		      launcher.thisProperty="image";
 		      launcher.thisAttribute="src";
@@ -142,7 +142,7 @@
 			  }
 			  else {
 			    thisElement[launcher.thisAttribute]=this.fileName + ".png";
-			    thisNode.getRelationship("itemsdata").getChild().dispatchEvent("finishAutoEdit");
+			    thisNode.dispatchEvent("finishAutoEdit");
 			  }
 			});
 		      };

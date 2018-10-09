@@ -4,8 +4,6 @@
   In case there would be prefix (__***) it is removed from the contastant name
 */
 
-$sql="SHOW TABLES";
-
 $tablesRequester=new NodeFemale();
 $tablesRequester->db_loadtables();
 
