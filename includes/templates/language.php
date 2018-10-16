@@ -24,8 +24,9 @@
 	event.preventDefault();
 	DomMethods.setActive(thisNode);
 	webuser.extra.language=thisNode;
-	loadLabels();
-	domelementsrootmother.dispatchEvent("changeLanguage");
+	loadLabels(function(){ 
+	  domelementsrootmother.dispatchEvent("changeLanguage");
+	});
 	return false;
       });
     </script>

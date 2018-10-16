@@ -218,7 +218,8 @@ class NodeFemale extends Node{
       $syskey->type='foreignkey';
       $syskey->cloneFromArray($row);
       // to constant table names
-      $syskey->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $syskey->parenttablename));
+      if (DB_REMOVE_PREFIX) $syskey->parenttablename = preg_replace('/.*__(.+)$/', '$1', $syskey->parenttablename);
+      $syskey->parenttablename='TABLE_' . strtoupper($syskey->parenttablename);
       $this->syschildtablekeysinfo[]=$syskey;
       $this->syschildtablekeys[]=$syskey->name;
     }
@@ -442,9 +443,11 @@ class NodeFemale extends Node{
     else if ($result->num_rows==1) {
       $row=$result->fetch_array(MYSQLI_ASSOC);
       $this->properties->cloneFromArray($row);
-      $this->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->properties->name);
-      $this->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename));
-      $this->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename));
+      if (DB_REMOVE_PREFIX) $this->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->properties->name);
+      if (DB_REMOVE_PREFIX) $this->properties->childtablename=preg_replace('/.*__(.+)$/', '$1', $this->properties->childtablename);
+      $this->properties->childtablename='TABLE_' . strtoupper($this->properties->childtablename);
+      if (DB_REMOVE_PREFIX) $this->properties->parenttablename=preg_replace('/.*__(.+)$/', '$1', $this->properties->parenttablename);
+      $this->properties->parenttablename='TABLE_' . strtoupper($this->properties->parenttablename);
       //stablish the sort_order statment
       foreach ($this->syschildtablekeysinfo as $syskey) {
 	if ($syskey->type=='sort_order' &&  $syskey->parenttablename==$this->properties->parenttablename) {
@@ -581,9 +584,11 @@ class NodeMale extends Node{
       $row=$result->fetch_array(MYSQLI_ASSOC);
       $this->relationships[$i] = new NodeFemale();
       $this->relationships[$i]->properties->cloneFromArray($row);
-      $this->relationships[$i]->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->name);
-      $this->relationships[$i]->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->childtablename));
-      $this->relationships[$i]->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->parenttablename));
+      if (DB_REMOVE_PREFIX) $this->relationships[$i]->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->name);
+      if (DB_REMOVE_PREFIX) $this->relationships[$i]->properties->childtablename=preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->childtablename);
+      $this->relationships[$i]->properties->childtablename='TABLE_' . strtoupper($this->relationships[$i]->properties->childtablename);
+      if (DB_REMOVE_PREFIX) $this->relationships[$i]->properties->parenttablename=preg_replace('/.*__(.+)$/', '$1', $this->relationships[$i]->properties->parenttablename);
+      $this->relationships[$i]->properties->parenttablename='TABLE_' . strtoupper($this->relationships[$i]->properties->parenttablename);
       $this->relationships[$i]->partnerNode=$this;
       $this->relationships[$i]->db_loadchildtablekeys();
       //stablish the sort_order statment
@@ -629,9 +634,11 @@ class NodeMale extends Node{
 	$row=$result->fetch_array(MYSQLI_ASSOC);
 	$this->parentNode[$i] = new NodeFemale();
 	$this->parentNode[$i]->properties->cloneFromArray($row);
-	$this->parentNode[$i]->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->name);
-	$this->parentNode[$i]->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->childtablename));
-	$this->parentNode[$i]->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->parenttablename));
+	if (DB_REMOVE_PREFIX) $this->parentNode[$i]->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->name);
+	if (DB_REMOVE_PREFIX) $this->parentNode[$i]->properties->childtablename=preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->childtablename);
+	$this->parentNode[$i]->properties->childtablename='TABLE_' . strtoupper($this->parentNode[$i]->properties->childtablename);
+	if (DB_REMOVE_PREFIX) $this->parentNode[$i]->properties->parenttablename=preg_replace('/.*__(.+)$/', '$1', $this->parentNode[$i]->properties->parenttablename);
+	$this->parentNode[$i]->properties->parenttablename='TABLE_' . strtoupper($this->parentNode[$i]->properties->parenttablename);
 	$this->parentNode[$i]->db_loadchildtablekeys();
 	//stablish the sort_order statment
 	foreach ($this->parentNode[$i]->syschildtablekeysinfo as $syskey) {
@@ -649,9 +656,11 @@ class NodeMale extends Node{
       $row=$result->fetch_array(MYSQLI_ASSOC);
       $this->parentNode = new NodeFemale();
       $this->parentNode->properties->cloneFromArray($row);
-      $this->parentNode->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->name);
-      $this->parentNode->properties->childtablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->childtablename));
-      $this->parentNode->properties->parenttablename='TABLE_' . strtoupper(preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->parenttablename));
+      if (DB_REMOVE_PREFIX) $this->parentNode->properties->name=preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->name);
+      if (DB_REMOVE_PREFIX) $this->parentNode->properties->childtablename=preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->childtablename);
+      $this->parentNode->properties->childtablename='TABLE_' . strtoupper($this->parentNode->properties->childtablename);
+      if (DB_REMOVE_PREFIX) $this->parentNode->properties->parenttablename=preg_replace('/.*__(.+)$/', '$1', $this->parentNode->properties->parenttablename);
+      $this->parentNode->properties->parenttablename='TABLE_' . strtoupper($this->parentNode->properties->parenttablename);
       $this->parentNode->db_loadchildtablekeys();
       //stablish the sort_order statment
       foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
