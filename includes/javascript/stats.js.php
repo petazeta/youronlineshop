@@ -45,7 +45,7 @@ $myfile = fopen('../config.php', 'r') or die('Unable to open file!');
 // Output one line until end-of-file
 $filecontent='';
 while(!feof($myfile)) {
-  $filecontent+=fgets($myfile);
+  $filecontent .= fgets($myfile);
 }
 fclose($myfile);
 $filecontent= preg_replace('/\n/', '', $filecontent);
