@@ -31,7 +31,7 @@ statsRecorder.startRecordingProcess=function(){
   else if (window.navigator.userAgent.indexOf("Firefox")!=-1) thisNavigator="Firefox";
   else if (window.navigator.userAgent.indexOf("Mozila")!=-1) thisNavigator="Mozilla";
   var softversion="<?php
-$myfile = fopen("../../README.txt", "r") or die("Unable to open file!");
+$myfile = fopen('../../README.txt', 'r') or die('Unable to open file!');
 // Output one line until end-of-file
 $i=4;
 while($i-- && !feof($myfile)) {
@@ -41,9 +41,9 @@ fclose($myfile);
 echo preg_replace('/\n/', '', $version);
 ?>";
   var installId="<?php
-$myfile = fopen("../config.php", "r") or die("Unable to open file!");
+$myfile = fopen('../config.php', 'r') or die('Unable to open file!');
 // Output one line until end-of-file
-$filecontent="";
+$filecontent='';
 while(!feof($myfile)) {
   $filecontent+=fgets($myfile);
 }
