@@ -534,7 +534,7 @@ class NodeMale extends Node{
       $this->relationships[$i]->loaddesc($source->relationships[$i], $level, $thisProperties);
     }
   }
-  function loadasc($source, $level, $thisProperties) {
+  function loadasc($source, $level=null, $thisProperties=null) {
     $source=parent::loadasc($source);
     if (isset($source->sort_order)) $this->sort_order=$source->sort_order;
     if (!isset($source->parentNode) || !$source->parentNode) return false;
