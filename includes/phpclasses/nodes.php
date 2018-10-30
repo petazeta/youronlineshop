@@ -24,7 +24,7 @@ class Node {
     }
     return $dblink;
   }
-  function load($source, $thisProperties=null){
+  function load($source, $levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null){
     if (gettype($source)=='string') $source=json_decode($source);
     if (isset($source->properties)) {
       if ($thisProperties) {
@@ -46,11 +46,11 @@ class Node {
     $myClon->load($this, $levelup, $leveldown, $thisProperties, $thisPropertiesUp, $thisPropertiesDown);
     return $myClon;
   }
-  function loadasc($source){
+  function loadasc($source, $level=null, $thisProperties=null){
     if (gettype($source)=='string') $source=json_decode($source);
     return $source;
   }
-  function loaddesc($source){
+  function loaddesc($source, $level=null, $thisProperties=null){
     if (gettype($source)=='string') $source=json_decode($source);
     return $source;
   }
@@ -512,7 +512,7 @@ class NodeMale extends Node{
 
   //It loads data from a json, if update is true only fields and relationship present at original will be updated
   function load($source, $levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
-    parent::load($source, $thisProperties);
+    parent::load($source, null, null, $thisProperties);
     if (isset($source->sort_order)) $this->sort_order=$source->sort_order;
     if ($levelup !== 0 && !($levelup < 0)) { //level null and undefined like infinite
       $this->loadasc($source, $levelup, $thisPropertiesUp);
