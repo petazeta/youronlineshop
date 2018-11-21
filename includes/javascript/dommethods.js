@@ -113,11 +113,11 @@ Alert.prototype=Object.create(NodeMale.prototype);
 Alert.prototype.constructor=Alert;
 
 
-Alert.prototype.showalert=function() {
+Alert.prototype.showalert=function(listener) {
   var alertcontainer=document.createElement("div");
   document.body.appendChild(alertcontainer);
   this.myContainer=alertcontainer;
-  this.refreshView();
+  this.refreshView(null, null, listener);
 };
 Alert.prototype.hidealert=function() {
   var remove=function(element){

@@ -2,8 +2,6 @@
 session_start();
 require('includes/config.php');
 require('includes/phpclasses/nodes.php');
-require('includes/database_tables.php');
-require('includes/phpclasses/user.php');
 
 if (isset($_GET["json"])) {
   $json=json_decode($_GET["json"]);
@@ -24,14 +22,24 @@ $myelement->load($json);
 unset($fields["json"]);
 unset($fields["parameters"]);
 $myelement->properties->cloneFromArray($fields);  //For the case when some data comes from a form
+
+switch ($parameters->action) {
+  case 'check db link':
+  case 'load tables':
+  case 'load session':
+  case 'write session':
+    break;
+  default:
+    require('includes/database_tables.php');
+}
 require('includes/safety.php');
 switch ($parameters->action) {
-  case "load myself":
-    $myexecfunction="db_loadmyself";
+  case "check db link":
+    $myexecfunction="checkdblink";
     $callback="cutUp";
     break;
-  case "load tables":
-    $myexecfunction="db_loadtables";
+  case "load myself":
+    $myexecfunction="db_loadmyself";
     $callback="cutUp";
     break;
   case "load my children":

@@ -24,6 +24,20 @@ class Node {
     }
     return $dblink;
   }
+  function checkdblink(){
+    global $dblink;
+    //error handler function
+    function customError($errno, $errstr) {
+      //if (!$dblink->connect_errno) echo "<b>Error:</b> [$errno] $errstr";
+    }
+    //set error handler
+    set_error_handler("customError");
+    
+    $dblink=new mysqli(DB_HOST, DB_USERNAME, DB_USERPWD, DB_DATABASENAME);
+    restore_error_handler();
+    if ($dblink->connect_errno) return false;
+    return true;
+  }
   function load($source, $levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null){
     if (gettype($source)=='string') $source=json_decode($source);
     if (isset($source->properties)) {
@@ -727,7 +741,7 @@ class NodeMale extends Node{
       if (!isset($this->parentNode->childtablekeys) ||
 	isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	$myproperties[$key]='\'' .  mysql_escape_string($value) . '\'';
+	$myproperties[$key]='\'' .  mysqli_escape_string($value) . '\'';
       }
     }
     if ($extra) {
@@ -735,7 +749,7 @@ class NodeMale extends Node{
 	if (!isset($this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	  $myproperties[$key]='\'' .  mysql_escape_string($value) . '\'';
+	  $myproperties[$key]='\'' .  mysqli_escape_string($value) . '\'';
 	}
       }
     }
@@ -872,7 +886,7 @@ class NodeMale extends Node{
 	if (!isset($this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	  array_push($setSentences, $key . '=' . '\'' . mysql_escape_string($value) . '\'');
+	  array_push($setSentences, $key . '=' . '\'' . mysqli_escape_string($value) . '\'');
 	}
       }
       $sql = 'UPDATE '

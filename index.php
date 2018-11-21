@@ -41,32 +41,53 @@
       var domelementsroot=null;
       var languages=null;
       domelementsrootmother=new NodeFemale();
-      domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
-      domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
-      domelementsrootmother.loadfromhttp({action:"load root"}, function(){
-	domelementsroot=domelementsrootmother.children[0];
-	domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 2}, function(){
-	  webuser.loadfromhttp({action: "load session", sesname: "user"}, function(){
-	    if (!webuser.extra) webuser.extra={};
-	    if (!webuser.extra.language) {
-	      languages=new NodeFemale();
-	      languages.properties.childtablename="TABLE_LANGUAGES";
-	      languages.properties.parenttablename="TABLE_LANGUAGES";
-	      languages.loadfromhttp({action:"load all"}, function(){
-		var webLanguages=[];
-		languages.children.forEach(function (child){
-		  webLanguages.push(child.properties.code);
-		});
-		for (var i=0; i<window.navigator.languages.length; i++) {
-		  window.navigator.languages[i]=window.navigator.languages[i].replace(/-.+/, "");
-		  if (webLanguages.indexOf(window.navigator.languages[i]) >= 0) {
-		    webuser.extra.language=this.getChild({code: window.navigator.languages[i]});
-		    break;
+      //First of all we check that the database connection is ok
+      domelementsrootmother.loadfromhttp({action:"check db link"}, function(){
+	if (this.extra && this.extra.error) {
+	  myalert.properties.alertmsg='<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.</p>';
+	  myalert.showalert((function(){throw 'Database Connection Failed';}));
+	}
+	domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
+	domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
+	domelementsrootmother.loadfromhttp({action:"load root"}, function(){
+	  domelementsroot=domelementsrootmother.children[0];
+	  domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 2}, function(){
+	    webuser.loadfromhttp({action: "load session", sesname: "user"}, function(){
+	      if (!webuser.extra) webuser.extra={};
+	      if (!webuser.extra.language) {
+		languages=new NodeFemale();
+		languages.properties.childtablename="TABLE_LANGUAGES";
+		languages.properties.parenttablename="TABLE_LANGUAGES";
+		languages.loadfromhttp({action:"load all"}, function(){
+		  var webLanguages=[];
+		  languages.children.forEach(function (child){
+		    webLanguages.push(child.properties.code);
+		  });
+		  for (var i=0; i<window.navigator.languages.length; i++) {
+		    window.navigator.languages[i]=window.navigator.languages[i].replace(/-.+/, "");
+		    if (webLanguages.indexOf(window.navigator.languages[i]) >= 0) {
+		      webuser.extra.language=this.getChild({code: window.navigator.languages[i]});
+		      break;
+		    }
 		  }
-		}
-		if (!webuser.extra.language) webuser.extra.language=this.getChild();
+		  if (!webuser.extra.language) webuser.extra.language=this.getChild();
+		  loadLabels(function(){
+		    if (Config.loadTemplatesAtOnce!==false) {
+		      loadTemplates(function(){
+			domelementsrootmother.dispatchEvent("loadLabels");
+			myalert.hidealert();
+		      });
+		    }
+		    else {
+		      domelementsrootmother.dispatchEvent("loadLabels");
+		      myalert.hidealert();
+		    }
+		  });
+		});
+	      }
+	      else {
 		loadLabels(function(){
-		  if (Config.loadTemplatesAtOnce!==false) {
+		  if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
 		    loadTemplates(function(){
 		      domelementsrootmother.dispatchEvent("loadLabels");
 		      myalert.hidealert();
@@ -77,22 +98,8 @@
 		    myalert.hidealert();
 		  }
 		});
-	      });
-	    }
-	    else {
-	      loadLabels(function(){
-		if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
-		  loadTemplates(function(){
-		    domelementsrootmother.dispatchEvent("loadLabels");
-		    myalert.hidealert();
-		  });
-		}
-		else {
-		  domelementsrootmother.dispatchEvent("loadLabels");
-		  myalert.hidealert();
-		}
-	      });
-	    }
+	      }
+	    });
 	  });
 	});
       });
