@@ -734,6 +734,7 @@ class NodeMale extends Node{
   }
 
   function db_insertmyself($extra=null) {
+    global $dblink;
     $myecho=null;
     $myproperties=get_object_vars($this->properties);
     if (isset($myproperties['id'])) unset($myproperties['id']);
@@ -741,7 +742,7 @@ class NodeMale extends Node{
       if (!isset($this->parentNode->childtablekeys) ||
 	isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	$myproperties[$key]='\'' .  mysqli_escape_string($value) . '\'';
+	$myproperties[$key]='\'' .  mysqli_escape_string($dblink, $value) . '\'';
       }
     }
     if ($extra) {
@@ -749,7 +750,7 @@ class NodeMale extends Node{
 	if (!isset($this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	  $myproperties[$key]='\'' .  mysqli_escape_string($value) . '\'';
+	  $myproperties[$key]='\'' .  mysqli_escape_string($dblink, $value) . '\'';
 	}
       }
     }
@@ -878,6 +879,7 @@ class NodeMale extends Node{
   }
   
   function db_updatemyproperties($properties){
+    global $dblink;
       //We update the fields
       //First we search for the updatable fields
       $myproperties=get_object_vars($properties);
@@ -886,7 +888,7 @@ class NodeMale extends Node{
 	if (!isset($this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
 	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	  array_push($setSentences, $key . '=' . '\'' . mysqli_escape_string($value) . '\'');
+	  array_push($setSentences, $key . '=' . '\'' . mysqli_escape_string($dblink, $value) . '\'');
 	}
       }
       $sql = 'UPDATE '
