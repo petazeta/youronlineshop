@@ -37,6 +37,7 @@ function cart() {
   cartboxchildrel.parenttable="TABLE_ORDERS";
   cartboxchildrel.childtable="TABLE_ORDERITEMS";
   cartboxchildrel.childtablekeys=["id", "quantity", "name", "price"];
+  cartboxchildrel.childtablekeystypes=["int", "int", "varchar", "decimal"];
   cartboxchild.addRelationship(cartboxchildrel);
   
   this.properties.subTotal=0;
