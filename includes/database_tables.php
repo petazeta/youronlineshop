@@ -11,7 +11,9 @@ $databaseTableNames=[];
 foreach($tablesRequester->children as $myTable) {
   $databaseTableNames[] = $myTable->properties->name;
 }
-$standardTables=preg_replace('/.*__(.+)$/', '$1', $databaseTableNames);
+if (DB_REMOVE_PREFIX) $standardTables=preg_replace('/.*__(.+)$/', '$1', $databaseTableNames);
+else $standardTables=$databaseTableNames;
+
 for ($i=0; $i<count($databaseTableNames); $i++) {
   define('TABLE_' . strtoupper($standardTables[$i]), $databaseTableNames[$i]);
 }
