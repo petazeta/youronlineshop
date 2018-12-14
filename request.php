@@ -1,6 +1,9 @@
 <?php
 session_start();
-require('includes/config.php');
+//To avoid the php error so when the config file doesnt exist we can manage json error
+if (file_exists('includes/config.php')) {
+  require('includes/config.php');
+}
 require('includes/phpclasses/nodes.php');
 
 if (isset($_GET["json"])) {
