@@ -14,7 +14,7 @@
 	</tr>
       </table>
     </template>
-    <div></div>
+    <div style="text-align:center"></div>
     <script>
       var datarel=webuser.getRelationship("usersdata");
       function showdata(){

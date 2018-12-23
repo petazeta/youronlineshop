@@ -187,7 +187,8 @@ Node.prototype.render = function (tp) {
   var elementsToBeModified=[];
   var myElements=[];
   //myElements.push(tp); //To get the outerHTML in case there is not template DEPRECATED
-  myElements=Array.from(tp.querySelectorAll("SCRIPT")); //inner elements
+  if (tp.tagName=="SCRIPT") myElements.push(tp); //For when there is no descendents
+  else myElements=Array.from(tp.querySelectorAll("SCRIPT")); //inner elements
   //document.thisScript=[];
   //get inside Tps
   if (!supportsTemplate()) {
