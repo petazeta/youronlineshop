@@ -53,7 +53,7 @@ echo md5($filecontent);
 ?>";
   var initData=[
     {httpaddress: window.location.href},
-    {ipaddress: '<?php echo $_SERVER['REMOTE_ADDR']; ?>'},
+    {ipaddress: "<?php echo $_SERVER['REMOTE_ADDR']; ?>"},
     {languages: window.navigator.languages.join(" ")},
     {yosversion: softversion},
     {webbrowser: thisNavigator}
@@ -68,7 +68,7 @@ echo md5($filecontent);
     {write: "javascript:ev.write='log '+ (webuser.getUserType() || webuser.properties.name || 'out')", eventListener: webuser, eventName: "log"},
     {write: "cartItem", eventListener: mycart, eventName: "cartItem"}
   ];
-  //this.makeRecord(initData);  
+  this.makeRecord(initData);  
   window.setTimeout(function(){statsRecorder.keepStats()}, 180000);
 
   myEvents.forEach(function(ev){
