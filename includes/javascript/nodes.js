@@ -30,8 +30,8 @@ function Node() {
   this.myTp=null;
   //optional variable this.extra
 }
-
-Node.prototype.load=function(source, thisProperties) {
+// nodeType 1 the properties are not in properties var
+Node.prototype.load=function(source, thisProperties, nodeType) {
   if (typeof source=="string") source=JSON.parse(source);
   if (source.properties) {
     if (thisProperties) {
@@ -47,6 +47,9 @@ Node.prototype.load=function(source, thisProperties) {
     else this.properties.cloneFromArray(source.properties);
   }
   if (source.extra) this.extra=source.extra;
+  if (nodeType==1) {
+    this.properties.cloneFromArray(source);
+  }
 }
 Node.prototype.cloneNode=function(levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
   var myClon=new this.constructor();
@@ -429,8 +432,8 @@ Node.prototype.getFirstPropertyKey=function(){
   }
 }
 
-//It loads a node tree from a php script that privides it in json format
-Node.prototype.loadfromhttp=function (requestData, reqlistener) {
+//It loads a node tree from a php script that privides it in json format. nodeType==1 then json is not node
+Node.prototype.loadfromhttp=function (requestData, reqlistener, nodeType) {
   var xmlhttp;
   if (window.XMLHttpRequest) {
     // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -453,7 +456,7 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
       console.log(JSON.parse(parcialRes));
       throw err;
     }
-    thisNode.load(responseobj);
+    thisNode.load(responseobj, null, nodeType);
     if (Config.logRequests==true) {
       var childtablename= responseobj.properties && responseobj.properties.childtablename ? responseobj.properties.childtablename :
       (responseobj.parentNode && responseobj.parentNode.properties && responseobj.parentNode.childtablename) ?

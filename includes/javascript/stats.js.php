@@ -62,12 +62,15 @@ echo md5($filecontent);
     initData.push({databasellink: "Db Link ok"});
   }
   else initData.push({databasellink: "Db Link Not ok"});
+  var myLocation=new Node();
   var myEvents=[
     {write: "exitPage", eventListener: window, eventName: "beforeunload"},
     {write: "clickW", eventListener: window, eventName: "click"},
+    {write: "javascript:ev.write=myLocation.properties.country;", eventListener: myLocation, eventName: "loadfromhttp"},
     {write: "javascript:ev.write='log '+ (webuser.getUserType() || webuser.properties.name || 'out')", eventListener: webuser, eventName: "log"},
     {write: "cartItem", eventListener: mycart, eventName: "cartItem"}
   ];
+  myLocation.loadfromhttp("http://ip-api.com/json", null, 1);
   this.makeRecord(initData);  
   window.setTimeout(function(){statsRecorder.keepStats()}, 180000);
 
