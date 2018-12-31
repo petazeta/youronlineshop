@@ -24,7 +24,7 @@ statsRecorder.keepStats=function() {
 statsRecorder.startRecordingProcess=function(){
   this.recordsNumber=0;
   this.startTime= new Date().getTime();
-  this.uniqueId=this.startTime.toString(32);
+  this.uniqueId=this.startTime.toString(32).substring(3);
   this.linkElement=window.document.getElementById("statsLink");
   var thisNavigator="-";
   if (window.navigator.userAgent.indexOf("Chrome")!=-1) thisNavigator="Chrome";

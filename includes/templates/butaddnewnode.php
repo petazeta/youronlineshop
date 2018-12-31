@@ -14,8 +14,11 @@
 	//We copy the data row to any language
 	if (languages.children.length>1) {
 	  var restLanguages=languages.children.slice(0); //copy languages
-	  var pos=restLanguages.indexOf(webuser.extra.language);
-	  restLanguages.splice(pos,1);
+	  var pos;
+	  for (pos=0; pos<restLanguages.length; pos++) {
+	    if (restLanguages[pos].properties.id==webuser.extra.language.properties.id) break;
+	  }
+	  restLanguages.splice(pos,1); //remove the active language from the list
 	  var newNodes=launcher.newNode.arrayFromTree();
 	  for (var j=0; j<restLanguages.length; j++) {
 	    for (var i=0;i<newNodes.length;i++) {

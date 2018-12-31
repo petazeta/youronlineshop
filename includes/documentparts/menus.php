@@ -31,7 +31,8 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     });
 
     menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), "includes/templates/menu.php", function(){
-      if (this.children.length > 0 && !webuser.isWebAdmin()) {
+      document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged
+      if (this.children.length > 0 && !webuser.isWebAdmin()) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
 	var button=null;
 	var myDomNodes=this.children[0].getMyDomNodes();
 	for (var i=0; i<myDomNodes.length; i++) {
