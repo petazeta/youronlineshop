@@ -46,10 +46,10 @@ Node.prototype.load=function(source, thisProperties, nodeType) {
     }
     else this.properties.cloneFromArray(source.properties);
   }
-  if (source.extra) this.extra=source.extra;
   if (nodeType==1) {
-    this.properties.cloneFromArray(source);
+    this.properties=source;
   }
+  if (source.extra) this.extra=source.extra;
 }
 Node.prototype.cloneNode=function(levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
   var myClon=new this.constructor();

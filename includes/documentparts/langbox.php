@@ -37,8 +37,10 @@ domelementsrootmother.addEventListener(["loadLabels"], function(){
       
       
       function languageIncrease(newLangNode, action) {
-	myalert.properties.alertmsg="<p>Performing some actions ...</p><p>Please wait</p>";
-	myalert.showalert();
+	var alertNewLanguage=new Alert();
+	alertNewLanguage.myTp=myalert.myTp.cloneNode(true);
+	alertNewLanguage.properties.alertmsg="<p>Performing some actions ...</p><p>Please wait</p>";
+	alertNewLanguage.showalert();
 	newLangNode.loadfromhttp({action:"load my relationships", user_id: webuser.properties.id}, function(){
 	  for (var i=0; i<this.relationships.length; i++) {
 	    var dataTableName=this.relationships[i].properties.childtablename;
@@ -60,7 +62,7 @@ domelementsrootmother.addEventListener(["loadLabels"], function(){
 		      if (action=="delete") {
 			this.elementsMother.children[k].getRelationship().loadfromhttp({action:"load my children", language:newLangNode.properties.id, user_id: webuser.properties.id}, function(){
 			  if (dataRel.elementsMother.dataTableName==newLangNode.relationships[newLangNode.relationships.length-1].properties.childtablename && this.partnerNode.parentNode.children.indexOf(this.partnerNode)==dataRel.elementsMother.children.length-1) {
-			    myalert.hidealert(); //as request are asyncronous it doesn't actually mean that the actions have finished
+			    alertNewLanguage.hidealert(); //as request are asyncronous it doesn't actually mean that the actions have finished
 			  }
 			  if (this.getChild()) {
 			    this.getChild().loadfromhttp({action:"delete myself", user_id: webuser.properties.id}, function(){
@@ -71,7 +73,7 @@ domelementsrootmother.addEventListener(["loadLabels"], function(){
 		      else {
 			this.elementsMother.children[k].getRelationship().loadfromhttp({action:"load my children", language:webuser.extra.language.properties.id, user_id: webuser.properties.id}, function(){
 			  if (dataRel.elementsMother.dataTableName==newLangNode.relationships[newLangNode.relationships.length-1].properties.childtablename && this.partnerNode.parentNode.children.indexOf(this.partnerNode)==dataRel.elementsMother.children.length-1) {
-			    myalert.hidealert(); //as request are asyncronous it doesn't actually mean that the actions have finished
+			    alertNewLanguage.hidealert(); //as request are asyncronous it doesn't actually mean that the actions have finished
 			  }
 			  if (this.getChild()) {
 			    this.getChild().loadfromhttp({action:"add myself", language:newLangNode.properties.id, user_id: webuser.properties.id}, function(){
