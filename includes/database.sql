@@ -35,8 +35,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 (23, 'hhh', '', '', '9222', 2),
-(24, 'ffff', 'jjjj', 'oooo', '4444', 1),
-(30, '', '', '', '', NULL);
+(24, 'ffff', 'jjjj', 'oooo', '4444', 1);
 
 -- --------------------------------------------------------
 
@@ -473,8 +472,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
 (1, 'fsmy pa', 'upep', 'kkpjjjjj@caca.com', 666, 1),
-(2, '', '', '', 0, 2),
-(8, '', '', '', 0, NULL);
+(2, '', '', '', 0, 2);
 
 -- --------------------------------------------------------
 
