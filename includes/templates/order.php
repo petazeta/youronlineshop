@@ -9,7 +9,7 @@
     </tr>
     <tr>
       <td style="pading-bottom:0.5em; border-bottom:1px solid #666;">
-	<div class="form-group" style="text-align:right;padding-right:2.6em"></div>
+	<div class="form-group" style="text-align:right;padding-right:2.2em"></div>
 	<script>
 	  var myordership=thisNode.getRelationship({name:"ordershippingtypes"});
 	  myordership.refreshChildrenView(thisElement, "includes/templates/ordershipping.php");

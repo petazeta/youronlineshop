@@ -11,7 +11,7 @@
   <script>
     thisNode.addEventListener("changeProperty", function(propertyname){
       if (propertyname=="quantity" || propertyname=="price") {
-	thisNode.parentNode.refreshView();
+	thisNode.parentNode.partnerNode.refreshView();
       }
     }, "reCaluculate");
     thisNode.showLabel=false;
