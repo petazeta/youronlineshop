@@ -64,7 +64,7 @@
 	  myrow=thisTable.insertRow(thisRow.rowIndex+1);
 	  mycell=myrow.insertCell(0);
 	  mycell.colSpan=5;
-	  launcher.myNode=this.getRelationship({name:"orderitems"});
+	  launcher.myNode=this;
 	  launcher.myNode.myTp="includes/templates/order.php";
           launcher.refreshView(mycell, "includes/templates/rmbox.php", function(){this.openview=true});
         });

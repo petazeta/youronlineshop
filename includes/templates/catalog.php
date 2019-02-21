@@ -12,6 +12,9 @@
 	  <div style="display:inline-block; z-index: 2">
 	    <a href="javascript:" data-button="true"></a>
 	    <script>
+	      var prevUrl='?category=' + thisNode.parentNode.partnerNode.properties.id;
+	      var url= prevUrl + '&subcategory=' + thisNode.properties.id;
+	      thisElement.href=url;
 	      thisNode.getRelationship("itemcategoriesdata").loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
 		this.getChild().writeProperty(thisElement);
 		var launcher = new Node();
@@ -61,6 +64,9 @@
 		    thisNode.getRelationship("items").refreshChildrenView(document.getElementById('producttabletp').parentElement.querySelector("div.productscontainer"), document.querySelector("#producttp"));
 		  });
 		});
+		//it doesn't record when go back or when it is the subcategory selected by default
+		if (history.state && history.state.url==url || history.state && history.state.url==prevUrl && thisNode.parentNode.children[0]==thisNode) return; //we dont grab if it is selected by default after category clicking
+		history.pushState({url:url}, null, url);
 	      });
 	    </script>
 	    <div class="btmiddleright" data-id="containeropen"></div>
@@ -89,6 +95,17 @@
 	  });
 
 	  thisNode.refreshChildrenView(thisElement, document.querySelector("#flaptp"), function(){
+	    if (window.location.search) {
+	      regex = /subcategory=(\d+)/;
+	      if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
+	      if (id) {
+		var link=document.querySelector("a[href='?subcategory=" + id + "']");
+		if (link) {
+		  link.click();
+		  return;
+		}
+	      }
+	    }
 	    if (this.children.length > 0) {
 	      var button=null;
 	      this.getChild().getMyDomNodes().every(function(domNode){
@@ -196,34 +213,14 @@
 				    launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
 				    launcher.thisProperty = "price";
 				    launcher.editElement = thisElement;
-				    launcher.btposition = "btmiddleleft";
 				    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 				  </script>
 				</span>
-				<span data-note="relative position container for admn buttons">
 				  <span></span>
 				  <script>
 				    var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
 				    currency.writeProperty(thisElement);
-				    //adding the edition pencil
-				    // We still don't add edition pencil cause is confusing with the price
-				    var launcher = new Node();
-				    launcher.thisNode = currency;
-				    launcher.editElement = thisElement;
-				    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
-				    var currencyNote=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelements"}).getChild().getRelationship({name: "domelementsdata"}).getChild();
-				    if (webuser.isWebAdmin()) {
-				      thisElement.parentElement.querySelector("[data-id=currencynote]").style.visibility="visible";
-				    }
 				  </script>
-				  <div class="btmiddleright" data-id="currencynote" style="font-size: 60%; visibility:hidden;">Edit Symbol</div>
-				  <script>
-				    var currencyNote=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelements"}).getChild().getRelationship({name: "domelementsdata"}).getChild();
-				    if (webuser.isWebAdmin()) {
-				      thisElement.style.visibility="visible";
-				    }
-				    </script>
-				</span>
 			      </div>
 			    </td>
 			    <td>

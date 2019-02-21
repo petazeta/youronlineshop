@@ -1,33 +1,58 @@
 <template>
   <table class="formtable">
     <tr>
-      <td style="pading-bottom:0.5em; border-bottom:1px solid #666;"></td>
+      <td style="pading-bottom:0.5em;"></td>
       <script>
-	thisNode.addEventListener("propertychange", function(propertyname){
-	  if (propertyname=="quantity" || propertyname=="price") {
-	    thisNode.parentNode.refreshView();
-	  }
-	});
-	thisNode.refreshChildrenView(thisElement, "includes/templates/orderitem.php");
+	var myorderitems=thisNode.getRelationship({name:"orderitems"});
+	myorderitems.refreshChildrenView(thisElement, "includes/templates/orderitem.php");
       </script>
     </tr>
     <tr>
+      <td style="pading-bottom:0.5em; border-bottom:1px solid #666;">
+	<div class="form-group" style="text-align:right;padding-right:2.6em"></div>
+	<script>
+	  var myordership=thisNode.getRelationship({name:"ordershippingtypes"});
+	  myordership.refreshChildrenView(thisElement, "includes/templates/ordershipping.php");
+	</script>
+      </td>
+    </tr>
+    <tr>
       <td>
-	<div class="form-group" style="text-align:right;padding-right:2.2em">
-	  <span class="form-label">Total</span>
+	<div class="form-group" style="text-align:right;padding-right:2.6em">
+	  <span class="form-label" style="display:inline-block;margin-right:0.5em"></span>
+	  <script>
+	    var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
+	    var total=checkout.getNextChild({"name":"order"}).getNextChild({"name":"total"}).getRelationship({name:"domelementsdata"}).getChild();
+	    total.writeProperty(thisElement);
+	    //adding the edition pencil
+	    var launcher = new Node();
+	    launcher.thisNode = total;
+	    launcher.editElement = thisElement;
+	    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	  </script>
 	  <span></span>
 	  <script>
-	    thisNode.sumTotal=function() {
+	    //valid also for cart view: checkout1.php and userordersline.php
+	    var myorderitems=thisNode.getRelationship({name:"orderitems"});
+	    var myordership=thisNode.getRelationship({name:"ordershippingtypes"});
+	    var sumTotal=function(node) {
 	      var total=0;
-	      var i=this.children.length;
+	      var i=node.children.length;
 	      while (i--) {
-		total=total+this.children[i].properties.quantity * this.children[i].properties.price;
+		var quantity=node.children[i].properties.quantity;
+		if (!quantity) quantity=1;
+		total=total+quantity * node.children[i].properties.price;
 	      }
 	      return total;
 	    }
-	    thisElement.textContent=thisNode.sumTotal();
+	    var total=sumTotal(myorderitems) + sumTotal(myordership);
+	    thisElement.textContent=total;
 	  </script>
-	  <span> &euro;</span>
+	  <span></span>
+	  <script>
+	    var currency=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
+	    currency.writeProperty(thisElement);
+	  </script>
 	</div>
       </td>
     </tr>

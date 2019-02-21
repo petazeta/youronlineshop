@@ -16,61 +16,61 @@
     <script>
       webuser.refreshView(thisElement,"includes/templates/useraddress.php");
     </script>
-    <button class="btn"></button>
-    <script>
-      var buttonLabel=thisNode.getNextChild({"name":"chkt2next"}).getRelationship({name:"domelementsdata"}).getChild();
-      buttonLabel.writeProperty(thisElement);
-      var launcher = new Node();
-      launcher.thisNode = buttonLabel;
-      launcher.editElement = thisElement;
-      launcher.createInput=true;
-      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
-	
-      thisElement.onclick=function(){
-	var addressdata=webuser.getRelationship({"name":"addresses"}).children[0];
-	var userdata=webuser.getRelationship({"name":"usersdata"}).children[0];
-	var result=new NodeMale();
-	result.extra={};
-	myalert.properties.timeout=5000;
-	var minchar=3;
-	var maxchar=120;
-	function checkInput(data) {
-	  for (var key in data.properties) {
-	    var value=data.properties[key];
-	    if(!data.properties.hasOwnProperty(key)) continue;
-	    if (key=="id") continue;
-	    if (!value ||
-	    (!DomMethods.checklength(value, minchar, maxchar))) {
-	      result.extra.charsNum=0;
-	      result.extra.error=true;
-	      result.extra.errorkey=key;
-	      result.extra.errorvalue=value;
-	      result.extra.errormsg="Error: Not enought characters at " + result.extra.errorkey + ".";
-	      result.extra.errormsg += " Enter at least " + minchar + " characters.";
-	      break;
+    <div style="margin:auto; display:table;">
+      <button class="btn"></button>
+      <script>
+	var buttonLabel=thisNode.getNextChild({"name":"chkt2next"}).getRelationship({name:"domelementsdata"}).getChild();
+	buttonLabel.writeProperty(thisElement);
+	var launcher = new Node();
+	launcher.thisNode = buttonLabel;
+	launcher.editElement = thisElement;
+	launcher.createInput=true;
+	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	  
+	thisElement.onclick=function(){
+	  var addressdata=webuser.getRelationship({"name":"addresses"}).children[0];
+	  var userdata=webuser.getRelationship({"name":"usersdata"}).children[0];
+	  var result=new NodeMale();
+	  result.extra={};
+	  myalert.properties.timeout=5000;
+	  var minchar=3;
+	  var maxchar=120;
+	  function checkInput(data) {
+	    for (var key in data.properties) {
+	      var value=data.properties[key];
+	      if(!data.properties.hasOwnProperty(key)) continue;
+	      if (key=="id") continue;
+	      if (!value ||
+	      (!DomMethods.checklength(value, minchar, maxchar))) {
+		result.extra.charsNum=0;
+		result.extra.error=true;
+		result.extra.errorkey=key;
+		result.extra.errorvalue=value;
+		result.extra.errormsg="Error: Not enought characters at " + result.extra.errorkey + ".";
+		result.extra.errormsg += " Enter at least " + minchar + " characters.";
+		break;
+	      }
 	    }
 	  }
-	}
-	checkInput(userdata);
-	if (!result.extra.error) checkInput(addressdata);
-	if (!result.extra.error) {
-	  if (!DomMethods.validateEmail(userdata.properties.email)) {
-	    result.extra.error=true;
-	    result.extra.errorkey="email";
-	    result.extra.errormsg="Error: Email not correct";
+	  checkInput(userdata);
+	  if (!result.extra.error) checkInput(addressdata);
+	  if (!result.extra.error) {
+	    if (!DomMethods.validateEmail(userdata.properties.email)) {
+	      result.extra.error=true;
+	      result.extra.errorkey="email";
+	      result.extra.errormsg="Error: Email not correct";
+	    }
 	  }
-	}
-	if (result.extra.error) {
-	  myalert.properties.alertmsg=result.extra.errormsg;
-	  myalert.showalert();
+	  if (result.extra.error) {
+	    myalert.properties.alertmsg=result.extra.errormsg;
+	    myalert.showalert();
+	    return false;
+	  }
+	  thisNode.refreshView(document.getElementById("centralcontent"),"includes/templates/checkout3.php");
 	  return false;
-	}
-	myalert.properties.alertmsg="Order done";
-	myalert.showalert();
-	webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php");
-	return false;
-      };
-    </script>
+	};
+      </script>
+    </div>
   </template>
   <div style="text-align:center"></div>
   <script>

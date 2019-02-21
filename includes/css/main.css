@@ -22,6 +22,8 @@ td,th{padding:0;vertical-align:top;} /* Padding 0 because this tables are used a
 
 /* Table for forms */
 
+
+
 /* Boxes */
 .sidebox {
   border-radius: 6px;
@@ -350,6 +352,12 @@ footer > table td{
     top: 50%;
     right: 0;
     transform: translateX(100%) translateY(-50%);
+}
+.btmiddlecenter{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 .btbottomcenter{
     position: absolute;

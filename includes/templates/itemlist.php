@@ -21,6 +21,10 @@
     <script>thisNode.writeProperty(thisElement, "name");</script>
     <span></span>
     <script>thisNode.writeProperty(thisElement, "price");</script>
-    <span> €</span>
+    <span></span>
+    <script>
+      var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
+      currency.writeProperty(thisElement);
+    </script>
   </div>
 </template>

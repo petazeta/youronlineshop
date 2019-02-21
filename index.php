@@ -15,6 +15,12 @@
   </head>
   <body>
     <script>
+      //history facility
+      window.onpopstate = function(event) {
+	if (!event.state) return;
+	var link=document.querySelector("a[href='" + event.state.url + "']");
+	if (link) link.click();
+      };
       function loadTemplates(callback) {
 	//We load all the templates at once
 	var tpLoader=new Node();

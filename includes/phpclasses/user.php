@@ -17,14 +17,13 @@ class user extends NodeMale {
       $result->extra->errorName="userError";
       return $result;
     }
-    
-    $user->properties->pwd=$pwd;
-    $candidates=$user->db_search();
-    if (!(count($candidates) == 1)) { //candidates=0
+    if (password_verify($pwd, $candidates[0]["pwd"]) ) {
+      $result->properties->id = $candidates[0]["id"];
+    }
+    else {
       $result->extra->error=true;
       $result->extra->errorName="pwdError";
     }
-    else $result->properties->id = $candidates[0]["id"];
     return $result;
   }
   function create($username, $pwd, $email=null) {
@@ -55,7 +54,7 @@ class user extends NodeMale {
       $result->extra->errorName="userExistsError";
       return $result;
     }
-    $user->properties->pwd=$pwd;
+    $user->properties->pwd=password_hash($pwd, PASSWORD_DEFAULT);
     
     if ($user->db_insertmyself()==true) {
       $result->properties->id=$user->properties->id;

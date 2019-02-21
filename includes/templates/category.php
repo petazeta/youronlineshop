@@ -2,6 +2,8 @@
   <span style="z-index:1">
     <a href="" data-hbutton="true"></a>
     <script>
+      var url='?category=' + thisNode.properties.id;
+      thisElement.href=url;
       thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
 	this.getChild().writeProperty(thisElement);
 	var launcher = new Node();
@@ -29,7 +31,10 @@
 	  this.appendThis(document.getElementById("centralcontent"), "includes/templates/admnlisteners.php");
 	  this.refreshView(document.getElementById("centralcontent"),"includes/templates/catalog.php");
 	});
-	return false;
+	if (history.state && history.state.url==url) {
+	  return;
+	}
+	history.pushState({url:url}, null, url);
       });
     </script>
   </span>

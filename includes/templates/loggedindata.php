@@ -68,7 +68,13 @@
       (new Node()).refreshView(document.getElementById("centralcontent"), 'includes/templates/checkout1.php');
     }
     else {
-      (new Node()).refreshView(document.getElementById("centralcontent"), thisElement.parentElement.querySelector("template"));
+      (new Node()).refreshView(document.getElementById("centralcontent"), thisElement.parentElement.querySelector("template"), function(){
+	var url='?userarea=1';
+	if (history.state && history.state.url==url) {
+	  return;
+	}
+	history.pushState({url:url}, null, url);
+      });
     }
   </script>
 </template>

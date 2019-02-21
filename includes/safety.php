@@ -20,7 +20,7 @@ function is_actionpermited($parameters, $myelement){
     $user=unserialize($_SESSION["user"]);
     if (isset($user->parentNode) && isset($user->parentNode->partnerNode)) $usertype=$user->parentNode->partnerNode->properties->type;
   }
-  $privatetables=["TABLE_USERS", "TABLE_USERSDATA", "TABLE_ADDRESSES", "TABLE_ORDERS", "TABLE_ORDERITEMS"];
+  $privatetables=["TABLE_USERS", "TABLE_USERSDATA", "TABLE_ADDRESSES", "TABLE_ORDERS", "TABLE_ORDERITEMS", "TABLE_ORDERSHIPPINGTYPES"];
   if (!array_search($tablename, $privatetables)) {
     if ($action=="write") {
       if ($usertype=="web administrator") return true;
@@ -33,7 +33,7 @@ function is_actionpermited($parameters, $myelement){
       if ($usertype=="web administrator")  return true;
       else return false;
     }
-    if ($tablename=="TABLE_ADDRESSES" || $tablename=="TABLE_USERSDATA" || $tablename=="TABLE_ORDERS" || $tablename=="TABLE_ORDERITEMS") {
+    if ($tablename=="TABLE_ADDRESSES" || $tablename=="TABLE_USERSDATA" || $tablename=="TABLE_ORDERS" || $tablename=="TABLE_ORDERITEMS" || $tablename=="TABLE_ORDERSHIPPINGTYPES") {
       if ($usertype=="orders administrator") return true;
       //we must check the user owner of the table
       if (isset($parameters->user_id)) {

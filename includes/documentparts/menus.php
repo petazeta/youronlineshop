@@ -32,7 +32,20 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 
     menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), "includes/templates/menu.php", function(){
       document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged
-      if (this.children.length > 0 && !webuser.isWebAdmin()) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+      //Now we click first menu (page start) or the menu selected at the parameters send by the url
+      if (window.location.search) {
+	regex = /menu=(\d+)/;
+	if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
+	
+	if (id) {
+	  var link=document.querySelector("a[href='?menu=" + id + "']");
+	  if (link) {
+	    link.click();
+	    return;
+	  }
+	}
+      }
+      else if (this.children.length > 0 && !webuser.isWebAdmin()) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
 	var button=null;
 	var myDomNodes=this.children[0].getMyDomNodes();
 	for (var i=0; i<myDomNodes.length; i++) {

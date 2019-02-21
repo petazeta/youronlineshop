@@ -2,6 +2,8 @@
   <span class="menu" data-hbutton="true" data-note="relative position container for admn buttons">
     <a data-button="true" class="menu" href="javascript:"></a>
     <script>
+      var url='?menu=' + thisNode.properties.id;
+      thisElement.href=url;
       if (thisNode.selected) DomMethods.setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
       thisNode.getRelationship("domelementsdata").loadfromhttp({action:"load my children", language: webuser.extra.language.properties.id}, function(){
 	this.getChild().writeProperty(thisElement);
@@ -49,6 +51,8 @@
 	  this.appendThis(pageframe, "includes/templates/admnlisteners.php");
 	  this.refreshChildrenView(pageframe, "includes/templates/paragraph.php");
 	});
+	if (history.state && history.state.url==url || thisNode.sort_order==1 && history.state==null) return; //we dont grab if it is selected by default after category clicking
+	history.pushState({url:url}, null, url);
       });
     </script>
     <div class="btmiddleright" data-id="containeropen"></div>

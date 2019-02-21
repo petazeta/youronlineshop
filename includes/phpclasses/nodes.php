@@ -68,25 +68,6 @@ class Node {
     if (gettype($source)=='string') $source=json_decode($source);
     return $source;
   }
-  function db_search($tablename=null, $proparray=null) {
-    if (!$tablename) $tablename=$this->parentNode->properties->childtablename;
-    if (!$proparray) {
-      $proparray=$this->properties;
-    }
-    $searcharray=[];
-    foreach($proparray as $key => $value) {
-      array_push($searcharray, $key . '=\'' . $value . '\''); 
-    }
-    $sql = 'SELECT * FROM ' . constant($tablename)
-     . ' where ' . implode(' and ', $searcharray);
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $return=[];
-    for ($i=0; $i<$result->num_rows; $i++) {
-      $row=$result->fetch_array(MYSQLI_ASSOC);
-      array_push($return, $row);
-    }
-    return $return;
-  }
   function db_deletemytree(){
     $this->db_loadmytree();
     $this->db_deletemytree_proto();
@@ -315,8 +296,13 @@ class NodeFemale extends Node{
     . constant($this->properties->parenttablename) . ' t'
     . ' inner join ' . constant($this->properties->childtablename) . ' c'
     . ' on t.id=c.' . $foreigncolumnname
-    . ' WHERE c.id=' . $child_id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    . ' WHERE c.id=?';
+    
+    $stmt = $this->getdblink()->prepare($sql);
+    $stmt->bind_param('i', $child_id);
+    $stmt->execute();
+    if (($result = $stmt->get_result()) === false) return false;
+    
     if ($result->num_rows > 1) {
       $this->partnerNode=[];
       for ($i=0; $i<$result->num_rows; $i++) {
@@ -719,9 +705,14 @@ class NodeMale extends Node{
     $sql = 'SELECT t.*';
     if (isset($this->parentNode->properties->sort_order) && $this->parentNode->properties->sort_order) $sql .= ', ' . $positioncolumnname . 'AS sort_order';
     $sql .= ' FROM ' . constant($this->parentNode->properties->childtablename) . ' t';
-    $sql .=' WHERE ' . 't.id =' . $this->properties->id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $row=$result->fetch_array(MYSQLI_ASSOC);
+    $sql .=' WHERE ' . 't.id = ?';
+    
+    $param_types="i";
+    $param_values=[$this->properties->id];
+    
+    $return=$this->stmt_get_result($param_types, $param_values, $sql);
+    if ($return===false || count($return)==0) return false;
+    $row=$return[0];
     if (isset($row['sort_order'])) {
       $this->sort_order=$row['sort_order'];
       unset($row['sort_order']);
@@ -735,35 +726,42 @@ class NodeMale extends Node{
 
   function db_insertmyself($extra=null) {
     global $dblink;
-    $myecho=null;
     $myproperties=get_object_vars($this->properties);
     if (isset($myproperties['id'])) unset($myproperties['id']);
-    foreach ($myproperties as $key => $value) {
-      if (!isset($this->parentNode->childtablekeys) ||
-	isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
-	isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	$myproperties[$key]='\'' .  mysqli_escape_string($dblink, $value) . '\'';
-      }
-    }
-    if ($extra) {
-      foreach ($extra as $key => $value) {
-	if (!isset($this->parentNode->childtablekeys) ||
-	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
-	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	  $myproperties[$key]='\'' .  mysqli_escape_string($dblink, $value) . '\'';
-	}
-      }
-    }
     
-    $sql = 'INSERT INTO '
-      . constant($this->parentNode->properties->childtablename)
-      . ' ('
-        . implode(', ', array_keys($myproperties))
-      . ' ) VALUES ('
-      . implode(', ', array_values($myproperties))
-      . ' )';
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->properties->id = $this->getdblink()->insert_id;
+    if ($extra) $myproperties = array_merge($myproperties, $extra);
+
+      $param_keys = [];
+      $param_types = "";
+      $param_values = [];
+      $mysqlproperties = []; // search string array
+      
+      $this->stmt_generate_params($param_types, $param_values, $param_keys, $myproperties);
+      
+      if (count($param_keys)==0) {
+	$sql = 'INSERT INTO '
+	  . constant($this->parentNode->properties->childtablename)
+	  . ' VALUES ()';
+	if (($result = $this->getdblink()->query($sql))===false) return false;
+	$this->properties->id = $this->getdblink()->insert_id;
+      }
+      else {
+	foreach ($param_keys as $key => $value) {
+	  $mysqlproperties[$value]='?';
+	}
+	$sql = 'INSERT INTO '
+	  . constant($this->parentNode->properties->childtablename)
+	  . ' ('
+	    . implode(', ', array_keys($mysqlproperties))
+	  . ' ) VALUES ('
+	  . implode(', ', array_values($mysqlproperties))
+	  . ' )';
+	$stmt = $this->getdblink()->prepare($sql);
+	$stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
+	if ($stmt->execute()===false) return false;
+	$this->properties->id = $stmt->insert_id;
+      }
+
     if (isset($this->parentNode->partnerNode->properties->id)) {
       if ($this->db_insertmylink()===false) return false;
     }
@@ -779,6 +777,8 @@ class NodeMale extends Node{
 	if ($syskey->type=='sort_order') $positioncolumnname=$syskey->name;
       }
     }
+    $param_types="";
+    $param_values=[];
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . $positioncolumnname . '=t.' . $positioncolumnname . ' + 1'
     . ' WHERE'
@@ -799,6 +799,7 @@ class NodeMale extends Node{
   }
   
   function db_setmylink() {
+    if ( !is_numeric($this->properties->id)) return false;
     //we will insert the relationship
     foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
@@ -818,7 +819,7 @@ class NodeMale extends Node{
   
   //Deletes a node. Must be a end node so nodes bellow could appear as linked to the deleted one.
   function db_deletemyself() {
-    if (!isset($this->properties->id) || $this->properties->id==null) return false;
+    if ( !is_numeric($this->properties->id)) return false;
     $sql='DELETE FROM '
     . constant($this->parentNode->properties->childtablename)
     . ' WHERE id=' . $this->properties->id . ' LIMIT 1';
@@ -830,10 +831,10 @@ class NodeMale extends Node{
   }
 
   function db_deletemylink() {
+    if ( !is_numeric($this->sort_order) || $this->sort_order<1) return false;
     //Now we got to remove the relation from the database and update the sort_order of the borothers
     if ($this->db_releasemylink()===false) return false; //if there is any problem we abort
     //We try to update sort_order at bro for that we need the object to be updated
-    if (!isset($this->sort_order) || !$this->sort_order) return;
     foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
 	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
@@ -865,6 +866,7 @@ class NodeMale extends Node{
   }
     
   function db_releasemylink(){
+    if ( !is_numeric($this->properties->id)) return false;
     //Now we got to remove the relation from the database and update the sort_order of the borthers
     foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
@@ -878,28 +880,39 @@ class NodeMale extends Node{
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   
-  function db_updatemyproperties($properties){
+  function db_updatemyproperties($proparray){
+    if ( !is_numeric($this->properties->id)) return false;
     global $dblink;
-      //We update the fields
-      //First we search for the updatable fields
-      $myproperties=get_object_vars($properties);
-      $setSentences=array();
-      foreach ($myproperties as $key =>$value) {
-	if (!isset($this->parentNode->childtablekeys) ||
-	  isset($this->parentNode->childtablekeys) && in_array($key, $this->parentNode->childtablekeys) ||
-	  isset($this->parentNode->syschildtablekeys) && in_array($key, $this->parentNode->syschildtablekeys) ) {
-	  array_push($setSentences, $key . '=' . '\'' . mysqli_escape_string($dblink, $value) . '\'');
-	}
-      }
-      $sql = 'UPDATE '
-      . constant($this->parentNode->properties->childtablename)  .
-        ' SET ';
-      $sql .= implode(', ', $setSentences);
-      $sql .=' WHERE id=' . $this->properties->id;
-      if (($result = $this->getdblink()->query($sql))===false) return false;
+    //We update the fields
+    //We take in acount for sql injections
+      
+    $param_keys = [];
+    $param_types = "";
+    $param_values = [];
+    $updatearray = []; // search string array
+    
+    $this->stmt_generate_params($param_types, $param_values, $param_keys, $proparray);
+    
+    if (count($param_keys)==0) {
+      return false;
+    }
+    
+    foreach ($param_keys as $key => $value) {
+      array_push($updatearray, $value . '= ?');
+    }
+    $sql = 'UPDATE '
+    . constant($this->parentNode->properties->childtablename)  .
+      ' SET ';
+    $sql .= implode(', ', $updatearray);
+    $sql .=' WHERE id=' . $this->properties->id;
+
+    $stmt = $this->getdblink()->prepare($sql);
+    $stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
+    return $stmt->execute();
   }
   
   function db_updatemysort_order($new_sort_order){
+    if ( !is_numeric($this->properties->id)) return false;
     foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->parentNode->properties->parenttablename) {
 	if ($syskey->type=='foreignkey') $foreigncolumnname=$syskey->name;
@@ -921,7 +934,7 @@ class NodeMale extends Node{
   }
 
   function db_replacemyself($newchildid=null) {
-    if (!$newchildid) return false;
+    if ( !is_numeric($this->properties->id) || !is_numeric($newchildid) ) return false;
     
     //We replace child_id with new child_id
     foreach ($this->parentNode->syschildtablekeysinfo as $syskey) {
@@ -945,6 +958,112 @@ class NodeMale extends Node{
     . ' WHERE ' . 't.id =' . $newchildid;
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
+  
+  //Search in the database for the records equal to the element properties
+  function db_search($tablename=null, $proparray=null) {
+    if (!$tablename) $tablename = $this->parentNode->properties->childtablename;
+    if (!$proparray) {
+      $proparray = $this->properties;
+    }
+    $param_keys = [];
+    $param_types = "";
+    $param_values = [];
+    $searcharray = []; // search string array
+    
+    $this->stmt_generate_params($param_types, $param_values, $param_keys, $proparray);
+    
+    if (count($param_keys)==0) {
+      $sql = 'SELECT * FROM ' . constant($tablename);
+      $return = $this->getdblink()->query($sql);
+      return $return;
+    }
+    
+    foreach ($param_keys as $key => $value) {
+      array_push($searcharray, $value . '= ?');
+    }
+    
+    $sql = 'SELECT * FROM ' . constant($tablename) . ' where ' . implode(' and ', $searcharray);
+
+    $return=$this->stmt_get_result($param_types, $param_values, $sql);
+
+    return $return;
+  }
+  function stmt_generate_params(&$param_types, &$param_values, &$param_keys, $proparray){
+    // $param_keys = []; the valid keys: excluding  no database column keys
+    // $param_types = ""; the types for the binded parameters, see https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
+    // $param_values = []; the values for the binded parameters  . '= ?'
+    if (!$proparray) {
+      $proparray = $this->properties;
+    }
+    //first we search if the properties are actual table columns
+    foreach ($proparray as $key => $value) {
+      if (isset($this->parentNode->childtablekeys) ) {
+	if (!in_array($key, $this->parentNode->childtablekeys) ) {
+	  if (isset($this->parentNode->syschildtablekeys) ) {
+	    if (!in_array($key, $this->parentNode->syschildtablekeys) ) {
+	      continue;
+	    }
+	  }
+	  else {
+	    continue;
+	  }
+	}
+      }
+      array_push($param_values, $value);
+      array_push($param_keys, $key);
+      if (isset($this->parentNode->childtablekeystypes) || isset($this->parentNode->syschildtablekeys) ) {
+	$keypos=array_search($key, $this->parentNode->childtablekeys);
+	if ($keypos!==false) {
+	  if (strpos('int',$this->parentNode->childtablekeystypes[$keypos])!==false) {
+	    $param_types .= "i";
+	  }
+	  else if (strpos('decimal',$this->parentNode->childtablekeystypes[$keypos])!==false) {
+	    $param_types .= "d";
+	  }
+	  else {
+	    $param_types .= "s";
+	  }
+	}
+	else { //it is syskey
+	  $param_types .= "i";
+	}
+      }
+      else {
+	if ($key === "id" || substr($key, 0, 1) === "_") {
+	  // The key or a foreign key is probably an integer
+	  $param_types .= "i";
+	} else {
+	  // Is is probably a string
+	  $param_types .= "s";
+	}
+      }
+    }
+  }
+  
+  function stmt_get_result($param_types, $param_values, $sql) {
+    //generates an associative array containing the request result
+    //it is an alternative for mysqli get_result function that needs an extra php module
+    $stmt = $this->getdblink()->prepare($sql);
+    $stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
+    $stmt->execute();
+    
+    $result_fields = $stmt->result_metadata();
+    $field_keys=[];
+    $result_values=[];
+    for ($i=0; $i<$stmt->field_count; $i++) {
+      array_push($field_keys, $result_fields->fetch_field()->name);
+      $result_values[$i]=null;
+    }
+    $stmt->bind_result(...$result_values);
+    $return=[];
+    /* fetch values */
+    while ($stmt->fetch()) {
+      $row = array_combine($field_keys, $result_values);
+      array_push($return, $row);
+    }
+    return $return;
+  }
+  
   function avoidrecursion() {
     if ($this->parentNode) {
       if (gettype($this->parentNode)=='array') {

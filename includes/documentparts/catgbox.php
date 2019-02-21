@@ -35,7 +35,19 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       });
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php", function() {
-	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "includes/templates/category.php");
+	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "includes/templates/category.php", function(){
+	  if (window.location.search) {
+	    regex = /category=(\d+)/;
+	    if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
+	    if (id) {
+	      var link=document.querySelector("a[href='?category=" + id + "']");
+	      if (link) {
+		link.click();
+		return;
+	      }
+	    }
+	  }
+	});
       });
     });
   });

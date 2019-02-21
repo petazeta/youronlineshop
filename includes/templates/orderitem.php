@@ -19,10 +19,14 @@
       thisNode.editable=["quantity"];
     }
     thisNode.appendProperties(thisElement,"includes/templates/singlefield.php",function(){
-      thisElement.lastElementChild.querySelector("span").parentElement.appendChild(document.createTextNode(" €"));
+      var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+      thisElement.lastElementChild.querySelector("span").parentElement.appendChild(document.createTextNode(currency));
       thisElement.appendChild(DomMethods.intoColumns(getTpContent(thisElement.previousElementSibling).querySelector("table").cloneNode(true), thisElement, 0));
       thisElement.querySelector("table").rows[0].cells[0].style.width="2em";
       thisElement.querySelector("table").rows[0].cells[2].style.width="7em";
+      //Price formating
+      thisElement.querySelector("table").rows[0].cells[2].firstElementChild.style.textAlign="right";
+      thisElement.querySelector("table").rows[0].cells[2].firstElementChild.firstElementChild.querySelector("span").parentElement.style.display="inline";
     });
     //We must remove now the 
   </script>

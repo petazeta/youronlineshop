@@ -113,7 +113,8 @@ Alert.prototype=Object.create(NodeMale.prototype);
 Alert.prototype.constructor=Alert;
 
 
-Alert.prototype.showalert=function(listener) {
+Alert.prototype.showalert=function(text, listener) {
+  if (text) this.properties.alertmsg=text;
   var alertcontainer=document.createElement("div");
   document.body.appendChild(alertcontainer);
   this.myContainer=alertcontainer;
