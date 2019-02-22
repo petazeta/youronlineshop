@@ -1,6 +1,6 @@
 <template>
   <a href="javascript:" class="minibtn">
-    <img src="includes/css/images/open.png"/>
+    <img src="includes/css/images/dots.png"/>
   </a>
   <script>
     //normalize

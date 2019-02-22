@@ -757,7 +757,16 @@ class NodeMale extends Node{
 	  . implode(', ', array_values($mysqlproperties))
 	  . ' )';
 	$stmt = $this->getdblink()->prepare($sql);
-	$stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
+	$bind_param_args=[];
+	array_push($bind_param_args, $stmt, $param_types);
+	$param_values_by_reference=[];
+	for ($i=0; $i<count($param_values); $i++) {
+	  $param_values_by_reference[$i]=&$param_values[$i];
+	}
+	$bind_param_args=array_merge($bind_param_args, $param_values_by_reference);
+	mysqli_stmt_bind_param(...$bind_param_args);
+	//call_user_func_array("mysqli_stmt_bind_param", $bind_param_args);
+	//$stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values. doesn't work on php5.4
 	if ($stmt->execute()===false) return false;
 	$this->properties->id = $stmt->insert_id;
       }
