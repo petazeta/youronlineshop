@@ -19,6 +19,18 @@ class user extends NodeMale {
     }
     if ( version_compare(phpversion(),'5.6')<0) {
       //patch for php 5.4 password_verify
+      if(!function_exists('hash_equals')) {
+	function hash_equals($str1, $str2) {
+	  if(strlen($str1) != strlen($str2)) {
+	    return false;
+	  } else {
+	    $res = $str1 ^ $str2;
+	    $ret = 0;
+	    for($i = strlen($res) - 1; $i >= 0; $i--) $ret |= ord($res[$i]);
+	    return !$ret;
+	  }
+	}
+      }
       if (hash_equals($candidates[0]["pwd"], crypt($pwd, $candidates[0]["pwd"]))) {
 	$result->properties->id = $candidates[0]["id"];
       }
