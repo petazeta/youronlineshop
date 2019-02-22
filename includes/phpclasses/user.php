@@ -17,12 +17,25 @@ class user extends NodeMale {
       $result->extra->errorName="userError";
       return $result;
     }
-    if (password_verify($pwd, $candidates[0]["pwd"]) ) {
-      $result->properties->id = $candidates[0]["id"];
+    if ( version_compare(phpversion(),'5.6')<0) {
+      //patch for php 5.4 password_verify
+      if (hash_equals($candidates[0]["pwd"], crypt($pwd, $candidates[0]["pwd"]))) {
+	$result->properties->id = $candidates[0]["id"];
+      }
+      else {
+	$result->extra->error=true;
+	$result->extra->errorName="pwdError";
+      }
+      //patch for php 5.4 password_verify
     }
     else {
-      $result->extra->error=true;
-      $result->extra->errorName="pwdError";
+      if (password_verify($pwd, $candidates[0]["pwd"]) ) {
+	$result->properties->id = $candidates[0]["id"];
+      }
+      else {
+	$result->extra->error=true;
+	$result->extra->errorName="pwdError";
+      }
     }
     return $result;
   }
@@ -54,7 +67,14 @@ class user extends NodeMale {
       $result->extra->errorName="userExistsError";
       return $result;
     }
-    $user->properties->pwd=password_hash($pwd, PASSWORD_DEFAULT);
+    if (version_compare(phpversion(),'5.6')<0) {
+      //patch for php 5.4 password_hash
+      $user->properties->pwd=crypt($pwd);
+      //patch for php 5.4 password_hash
+    }
+    else {
+      $user->properties->pwd=password_hash($pwd, PASSWORD_DEFAULT);
+    }
     
     if ($user->db_insertmyself()==true) {
       $result->properties->id=$user->properties->id;

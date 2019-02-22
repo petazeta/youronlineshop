@@ -51,11 +51,15 @@ fclose($myfile);
 $filecontent= preg_replace('/\n/', '', $filecontent);
 echo md5($filecontent);
 ?>";
+  var php="<?php
+echo phpversion();
+?>";
   var initData=[
     {httpaddress: window.location.href},
     {ipaddress: "<?php echo $_SERVER['REMOTE_ADDR']; ?>"},
     {languages: window.navigator.languages.join(" ")},
     {yosversion: softversion},
+    {php: php},
     {webbrowser: thisNavigator}
   ];
   if (domelementsrootmother && domelementsrootmother.children[0]) {
