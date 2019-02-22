@@ -52,7 +52,7 @@ $filecontent= preg_replace('/\n/', '', $filecontent);
 echo md5($filecontent);
 ?>";
   var php="<?php
-echo phpversion();
+echo 'php' + phpversion();
 ?>";
   var initData=[
     {httpaddress: window.location.href},
