@@ -770,7 +770,7 @@ class NodeMale extends Node{
 	  //patch for php 5.4 alternative to splat operator
 	}
 	else {
-	  $stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator
+	  eval('$stmt->bind_param($param_types, ...$param_values);'); // ... = "splat" operator
 	}
 	if ($stmt->execute()===false) return false;
 	$this->properties->id = $stmt->insert_id;
@@ -934,7 +934,7 @@ class NodeMale extends Node{
       //patch for php 5.4 alternative to splat operator
     }
     else {
-      $stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator
+      eval('$stmt->bind_param($param_types, ...$param_values);'); // ... = "splat" operator
     }
     return $stmt->execute();
   }
@@ -1085,7 +1085,7 @@ class NodeMale extends Node{
       //patch for php 5.4 alternative to splat operator
     }
     else {
-      $stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator
+      eval('$stmt->bind_param($param_types, ...$param_values);'); // ... = "splat" operator
     }
     $stmt->execute();
     
@@ -1109,7 +1109,7 @@ class NodeMale extends Node{
       //patch for php 5.4 alternative to splat operator
     }
     else {
-      $stmt->bind_result(...$result_values);
+      eval('$stmt->bind_result(...$result_values);');
     }
     $return=[];
     /* fetch values */
