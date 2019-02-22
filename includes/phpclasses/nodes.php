@@ -757,6 +757,7 @@ class NodeMale extends Node{
 	  . implode(', ', array_values($mysqlproperties))
 	  . ' )';
 	$stmt = $this->getdblink()->prepare($sql);
+	//patch for php 5.4
 	$bind_param_args=[];
 	array_push($bind_param_args, $stmt, $param_types);
 	$param_values_by_reference=[];
@@ -764,8 +765,8 @@ class NodeMale extends Node{
 	  $param_values_by_reference[$i]=&$param_values[$i];
 	}
 	$bind_param_args=array_merge($bind_param_args, $param_values_by_reference);
-	mysqli_stmt_bind_param(...$bind_param_args);
-	//call_user_func_array("mysqli_stmt_bind_param", $bind_param_args);
+	call_user_func_array("mysqli_stmt_bind_param", $bind_param_args);
+	//patch for php 5.4
 	//$stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values. doesn't work on php5.4
 	if ($stmt->execute()===false) return false;
 	$this->properties->id = $stmt->insert_id;
@@ -916,7 +917,17 @@ class NodeMale extends Node{
     $sql .=' WHERE id=' . $this->properties->id;
 
     $stmt = $this->getdblink()->prepare($sql);
-    $stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
+	//patch for php 5.4
+	$bind_param_args=[];
+	array_push($bind_param_args, $stmt, $param_types);
+	$param_values_by_reference=[];
+	for ($i=0; $i<count($param_values); $i++) {
+	  $param_values_by_reference[$i]=&$param_values[$i];
+	}
+	$bind_param_args=array_merge($bind_param_args, $param_values_by_reference);
+	call_user_func_array("mysqli_stmt_bind_param", $bind_param_args);
+	//patch for php 5.4
+    //$stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
     return $stmt->execute();
   }
   
@@ -1053,7 +1064,17 @@ class NodeMale extends Node{
     //generates an associative array containing the request result
     //it is an alternative for mysqli get_result function that needs an extra php module
     $stmt = $this->getdblink()->prepare($sql);
-    $stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
+    	//patch for php 5.4
+	$bind_param_args=[];
+	array_push($bind_param_args, $stmt, $param_types);
+	$param_values_by_reference=[];
+	for ($i=0; $i<count($param_values); $i++) {
+	  $param_values_by_reference[$i]=&$param_values[$i];
+	}
+	$bind_param_args=array_merge($bind_param_args, $param_values_by_reference);
+	call_user_func_array("mysqli_stmt_bind_param", $bind_param_args);
+	//patch for php 5.4
+    //$stmt->bind_param($param_types, ...$param_values); // ... = "splat" operator. split the array in its values
     $stmt->execute();
     
     $result_fields = $stmt->result_metadata();
@@ -1063,7 +1084,17 @@ class NodeMale extends Node{
       array_push($field_keys, $result_fields->fetch_field()->name);
       $result_values[$i]=null;
     }
-    $stmt->bind_result(...$result_values);
+	//patch for php 5.4
+	$bind_result_args=[];
+	array_push($bind_result_args, $stmt);
+	$result_values_by_reference=[];
+	for ($i=0; $i<count($result_values); $i++) {
+	  $result_values_by_reference[$i]=&$result_values[$i];
+	}
+	$bind_result_args=array_merge($bind_result_args, $result_values_by_reference);
+	call_user_func_array("mysqli_stmt_bind_result", $bind_result_args);
+	//patch for php 5.4
+    //$stmt->bind_result(...$result_values);
     $return=[];
     /* fetch values */
     while ($stmt->fetch()) {
