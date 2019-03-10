@@ -20,8 +20,9 @@ function is_actionpermited($parameters, $myelement){
     $user=unserialize($_SESSION["user"]);
     if (isset($user->parentNode) && isset($user->parentNode->partnerNode)) $usertype=$user->parentNode->partnerNode->properties->type;
   }
+  //Tables that can be accessed by users and that contain private data = private tables
   $privatetables=["TABLE_USERS", "TABLE_USERSDATA", "TABLE_ADDRESSES", "TABLE_ORDERS", "TABLE_ORDERITEMS", "TABLE_ORDERSHIPPINGTYPES"];
-  if (!array_search($tablename, $privatetables)) {
+  if (array_search($tablename, $privatetables)===false) {
     if ($action=="write") {
       if ($usertype=="web administrator") return true;
     }
