@@ -26,7 +26,7 @@
       shippingtypesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
 	thisElement.appendChild(DomMethods.intoColumns(getTpContent(thisElement.previousElementSibling).querySelector("table").cloneNode(true), thisElement, 1));
-      });
+      }, "1column");
       shippingtypesMother.appendThis(thisElement, "includes/templates/admnlisteners.php", function() {
 	this.refreshChildrenView(thisElement,  "includes/templates/shippingtype.php");
       });

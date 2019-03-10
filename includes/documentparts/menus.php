@@ -17,18 +17,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelementsdata"}).cloneNode(0, 0));
     newNode.getRelationship({name: "domelementsdata"}).addChild(new NodeMale());
     menusMother.newNode=newNode;
-    menusMother.appendThis(document.querySelector("#menucontainer nav"), "includes/templates/admnlisteners.php", function(){
-      //For convenience we start with admnbuts set to visible so we then we got to set themo to hidden
-      var closeButtons=function(){
-	if (webuser.isWebAdmin()) {
-	  var butlist=menusMother.childContainer.querySelectorAll("[data-id=containeropen] a");
-	  for (i=0; i<butlist.length; i++) {
-	    butlist[i].click();
-	  }
-	}
-      };
-      menusMother.addEventListener("refreshChildrenView", closeButtons, "closeButtons");
-    });
+    menusMother.appendThis(document.querySelector("#menucontainer nav"), "includes/templates/admnlisteners.php");
 
     menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), "includes/templates/menu.php", function(){
       document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged

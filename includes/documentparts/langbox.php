@@ -15,7 +15,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
   var langboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langboxtt"}).getRelationship("domelementsdata").getChild();
   langboxtt.refreshView(document.querySelector("#langbox .boxtitle"), "includes/templates/boxhead.php");
 });
-domelementsrootmother.addEventListener(["loadLabels"], function(){
+domelementsrootmother.addEventListener("loadLabels", function(){
   var languagesMother=new NodeFemale();
   languagesMother.properties.childtablename="TABLE_LANGUAGES";
   languagesMother.properties.parenttablename="TABLE_LANGUAGES";
@@ -28,10 +28,10 @@ domelementsrootmother.addEventListener(["loadLabels"], function(){
       languagesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
 	document.querySelector("#langbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#langtbxtp")).querySelector("table").cloneNode(true), document.querySelector("#langbox .boxbody"), 1));
-      });
+      }, "1column");
       languagesMother.appendThis(document.querySelector("#langbox .boxbody"), "includes/templates/admnlisteners.php", function() {
 	this.refreshChildrenView(document.querySelector("#langbox .boxbody"),  "includes/templates/language.php");
-      });
+      }, "1column");
       
       //AVOIDREMOVING ALL LANGUAGES
       
@@ -91,10 +91,10 @@ domelementsrootmother.addEventListener(["loadLabels"], function(){
       }
       languagesMother.addEventListener("addNewNode", function(newLangNode) {
 	languageIncrease(newLangNode);
-      });
+      }, "addNewNode");
       languagesMother.addEventListener("deleteNode", function(newLangNode) {
 	languageIncrease(newLangNode, "delete");
-      });
+      }, "deleteNode");
     });
   });
 });

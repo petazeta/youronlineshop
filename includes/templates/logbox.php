@@ -14,7 +14,7 @@
 	setlogstatus();
 	webuser.addEventListener("log", function() {
 	  setlogstatus();
-	});
+	}, "setlogstatus");
 	thisElement.addEventListener("click", function(event){
 	  event.preventDefault();
 	  if (webuser.properties.id) {
@@ -43,7 +43,7 @@
 	      setlogname();
 	      webuser.addEventListener("log", function() {
 		setlogname();
-	      });
+	      }, "setlogname");
 	      thisElement.addEventListener("click", function(event){
 		event.preventDefault();
 		if (webuser.properties.id) {
@@ -72,7 +72,7 @@
 	  setlogtitle();
 	  webuser.addEventListener("log", function() {
 	    setlogtitle();
-	  });
+	  }, "setlogtitle");
 	  thisElement.addEventListener("click", function(event){
 	    event.preventDefault();
 	    if (webuser.properties.id) {

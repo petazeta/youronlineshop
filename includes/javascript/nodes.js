@@ -479,7 +479,7 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener, nodeType) {
   });
   xmlhttp.onreadystatechange=function() {  
     if (xmlhttp.readyState==4 && xmlhttp.status!==200) {     
-      alert('Oops! Something went wrong with the XMLHttpRequest.');
+      console.log('Oops! Something went wrong with the XMLHttpRequest.');
     }
   }
   xmlhttp.overrideMimeType("application/json");
@@ -508,52 +508,67 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener, nodeType) {
     xmlhttp.send(request); //sending just formData (archives)
   }
 };
-Node.prototype.addEventListener=function (eventsNames, listenerFunction, label) {
-  if (typeof label=="string") var id=this.produceEventId(label);
-  else var id=label; //label is object
+Node.prototype.addEventListener=function (eventsNames, listenerFunction, id, targetNode) {
   if (!this.events) this.events={};
   if (!Array.isArray(eventsNames)) eventsNames=[eventsNames];
   if (id) listenerFunction.id=id;
+  if (targetNode) listenerFunction.targetNode=targetNode;
   for (var i=0; i<eventsNames.length; i++) {
-    if (id && this.eventExists(eventsNames[i], id)) {
-      continue;
+    if (id) {
+      var position=this.eventExists(eventsNames[i], id, targetNode);
+      //if there is the event name we update it
+      if (position!==false) {
+	this.events[eventsNames[i]][position]=listenerFunction;
+	continue;
+      }
     }
     if (!this.events[eventsNames[i]]) this.events[eventsNames[i]]=[];
     this.events[eventsNames[i]].push(listenerFunction);
   }
 }
-Node.prototype.removeEventListener=function (eventName, label) {
-  var id=this.produceEventId(label);
+Node.prototype.removeEventListener=function (eventName, id, targetNode) {
+  if (!id && !targetNode) return false; //id || targetNode is required
   if (this.events && this.events[eventName]) {
     var i=this.events[eventName].length;
     while(i--) {
-      if (this.events[eventName][i].id==id) {
-	this.events[eventName].splice(i,1);
+      if (id && this.events[eventName][i].id==id || !id) {
+	if (targetNode && this.events[eventName][i].targetNode==targetNode || !targetNode)
+	{
+	  this.events[eventName].splice(i,1);
+	}
       }
     }
   }
 }
-Node.prototype.eventExists=function (eventName, id) {
+//Better for internal use only
+Node.prototype.eventExists=function (eventName, id, targetNode) {
+  if (!id && !targetNode) return false; //id || targetNode is required
   if (this.events && this.events[eventName]) {
     var i=this.events[eventName].length;
     while(i--) {
-      if (this.events[eventName][i].id==id) {
-	return true;
+      if (id && this.events[eventName][i].id==id || !id) {
+	if (targetNode)
+	{
+	  //When loading nodes the object can be different so we check by properties.id combined with the table name
+	  if (targetNode.constructor.name=="NodeFemale") {
+	    if (targetNode.properties.name==this.events[eventName][i].targetNode.properties.name
+	      && targetNode.partnerNode && targetNode.partnerNode.properties.id == this.events[eventName][i].targetNode.partnerNode.properties.id) {
+	      return i;
+	    }
+	  }
+	  else if (targetNode.properties.id && this.events[eventName][i].targetNode.properties.id==targetNode.properties.id) {
+	    if (targetNode.parentNode && targetNode.parentNode.properties.childtablename==this.events[eventName][i].targetNode.parentNode.properties.childtablename) {
+	      return i;
+	    }
+	  }
+	}
+	else {
+	  return i;
+	}
       }
     }
   }
   return false;
-}
-Node.prototype.produceEventId=function (label) {
-  //produce a unique identifier to recognize te event
-  var evId=false;
-  if (this.constructor.name=="NodeFemale") {
-    evId=this.properties.parenttablename + this.properties.childtablename + label;
-  }
-  else {
-    evId=this.properties.id + label;
-  }
-  return evId;
 }
 Node.prototype.dispatchEvent=function (eventName, args) {
   if (this.events && this.events[eventName]) {

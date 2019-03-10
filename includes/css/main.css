@@ -331,6 +331,12 @@ footer > table td{
     left: 0;
     transform: translateY(-100%);
 }
+.bttopleftinsideafteredit{
+    position: absolute;
+    top: 0;
+    left: 40px;
+    transform: translateY(-100%);
+}
 .bttopinsideleftinside{
     position: absolute;
     top: 0;

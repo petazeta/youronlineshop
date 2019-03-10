@@ -86,6 +86,17 @@
       });
     }
     else {
+      function setVisibilityButtons(vis){
+	function changeVisibility(buts, vis){
+	  for (var i=0; i<buts.length; i++) {
+	    buts[i].style.visibility=vis;
+	  }
+	}
+	var editbuts=editElement.parentElement.parentElement.querySelectorAll("[data-id=butedit]");
+	changeVisibility(editbuts, vis);
+	var admnbuts=editElement.parentElement.parentElement.querySelectorAll("[data-id=admnbuts]");
+	changeVisibility(admnbuts, vis);
+      }
       var activeEdition=function(){
 	//removing Config.onEmptyValueText => property is null
 	if (editElement[thisAttribute]==Config.onEmptyValueText && thisNode.properties[thisProperty]!=Config.onEmptyValueText) {
@@ -95,10 +106,7 @@
 	editElement.className=editElement.className.replace(/ contenteditableactive/g,"");
 	editElement.className+=" contenteditableactive";
 	// Hide admin buttons when write
-	var tablesAdmin=editElement.parentElement.querySelectorAll("table.adminedit"); //edit and admin buttons
-	for (var i=0; i<tablesAdmin.length; i++) {
-	  tablesAdmin[i].style.visibility="hidden";
-	}
+	setVisibilityButtons("hidden");
 	editElement.focus();
       };
       var unActiveEdition=function() {
@@ -109,10 +117,7 @@
 	editElement.setAttribute("contenteditable","false");
 	editElement.className=editElement.className.replace(/ contenteditableactive/g,'');
 	//Set visible edit and admin buttons
-	var tablesAdmin=editElement.parentElement.querySelectorAll("table.adminedit"); //edit and admin buttons
-	for (var i=0; i<tablesAdmin.length; i++) {
-	  tablesAdmin[i].style.visibility="visible";
-	}
+	setVisibilityButtons("visible");
       };
       var listenerIntroKey=function(e) {
 	  introKey(e, finishEdition);

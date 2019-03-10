@@ -33,7 +33,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       categoriesMother.addEventListener("refreshChildrenView", function(){
 	//to set the result in a one column table
 	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
-      });
+      }, "1column");
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php", function() {
 	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "includes/templates/category.php", function(){
 	  if (window.location.search) {
