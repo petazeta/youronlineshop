@@ -247,6 +247,10 @@ div.alert {
     border-radius: 12px;
     box-shadow: 0px 0px 12px rgb(136, 136, 136);
 }
+.alerttopleft{
+    top: 2% !important;
+    left: 12% !important;
+}
 div.note{
   background-color:#F8F8F8;
   border: 1px solid #d6d6d6;

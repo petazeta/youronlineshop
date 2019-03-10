@@ -41,6 +41,9 @@
 	this.myTp=this.xmlTp;
 	this.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
 	this.showalert();
+	if (window.screen.width<700) {
+	  myalert.myContainer.querySelector(".alert").className+=" alerttopleft";
+	}
       });
 
       //We load the dom elements text that will be included in some parts of the document
