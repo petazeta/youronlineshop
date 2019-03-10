@@ -92,9 +92,9 @@
 	    buts[i].style.visibility=vis;
 	  }
 	}
-	var editbuts=editElement.parentElement.parentElement.querySelectorAll("[data-id=butedit]");
+	var editbuts=editElement.parentElement.querySelectorAll("[data-id=butedit]");
 	changeVisibility(editbuts, vis);
-	var admnbuts=editElement.parentElement.parentElement.querySelectorAll("[data-id=admnbuts]");
+	var admnbuts=editElement.parentElement.querySelectorAll("[data-id=admnbuts]");
 	changeVisibility(admnbuts, vis);
       }
       var activeEdition=function(){
