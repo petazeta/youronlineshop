@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 10, 2019 at 03:32 PM
+-- Generation Time: Mar 10, 2019 at 04:19 PM
 -- Server version: 5.5.62-0+deb8u1
 -- PHP Version: 5.6.39-0+deb8u2
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `domelements` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `_domelements` int(11) DEFAULT NULL,
   `_domelements_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=356 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=357 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `domelementsdata` (
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `_domelements` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=806 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=807 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelementsdata`
@@ -237,8 +237,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (706, 'Go to my user area', 342, 1),
 (707, 'SubTotal', 343, 1),
 (708, 'Go back', 344, 1),
-(796, 'menu 1', 351, 1),
-(800, 'pp', 353, 1);
+(796, 'Menu 1', 351, 1),
+(800, 'paragraph', 353, 1);
 
 -- --------------------------------------------------------
 
@@ -250,7 +250,7 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
@@ -259,7 +259,8 @@ CREATE TABLE IF NOT EXISTS `itemcategories` (
 INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
 (1, NULL, 0),
 (2, 1, 1),
-(3, 2, 1);
+(3, 2, 1),
+(5, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -272,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategoriesdata`
@@ -281,7 +282,8 @@ CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
 INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`) VALUES
 (1, 'root', NULL, 1),
 (2, 'First Category', 2, 1),
-(3, 'First Subcategory', 3, 1);
+(3, 'ddFirst Subcategory', 3, 1),
+(8, 'ddd', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -358,27 +360,6 @@ CREATE TABLE IF NOT EXISTS `orderitems` (
   `_orders` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `orderitems`
---
-
-INSERT INTO `orderitems` (`id`, `quantity`, `name`, `price`, `_orders`) VALUES
-(1, 1, 'item1', '10.00', 1),
-(2, 1, 'item1', '10.00', 2),
-(3, 1, 'item1', '10.00', 3),
-(4, 1, 'item1', '10.00', 4),
-(5, 1, 'item1', '10.00', 5),
-(6, 1, 'item1', '10.00', 6),
-(7, 1, 'item1', '10.00', 7),
-(8, 1, 'item1', '10.00', 8),
-(9, 1, 'item1', '10.00', 9),
-(10, 1, 'item1', '10.00', 10),
-(11, 1, 'item1', '10.00', 11),
-(12, 1, 'item1', '10.00', 12),
-(13, 1, 'item1', '10.00', 13),
-(14, 1, 'item1', '10.00', 14),
-(15, 1, 'item1', '10.00', 15);
-
 -- --------------------------------------------------------
 
 --
@@ -392,27 +373,6 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `status` int(11) NOT NULL DEFAULT '0',
   `_users` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `creationdate`, `modificationdate`, `status`, `_users`) VALUES
-(1, '2019-02-22 07:50:09', '0000-00-00 00:00:00', 0, 1),
-(2, '2019-03-03 09:50:54', '0000-00-00 00:00:00', 0, 1),
-(3, '2019-03-03 09:53:54', '0000-00-00 00:00:00', 0, 1),
-(4, '2019-03-03 09:57:26', '0000-00-00 00:00:00', 0, 1),
-(5, '2019-03-03 10:02:51', '0000-00-00 00:00:00', 0, 1),
-(6, '2019-03-03 10:04:26', '0000-00-00 00:00:00', 0, 1),
-(7, '2019-03-03 10:13:44', '0000-00-00 00:00:00', 0, 1),
-(8, '2019-03-03 10:18:58', '0000-00-00 00:00:00', 0, 1),
-(9, '2019-03-03 10:29:22', '0000-00-00 00:00:00', 0, 1),
-(10, '2019-03-03 10:31:29', '0000-00-00 00:00:00', 0, 1),
-(11, '2019-03-03 10:35:45', '0000-00-00 00:00:00', 0, 1),
-(12, '2019-03-03 10:42:56', '0000-00-00 00:00:00', 0, 1),
-(13, '2019-03-03 10:43:33', '0000-00-00 00:00:00', 0, 1),
-(14, '2019-03-03 10:45:42', '0000-00-00 00:00:00', 0, 1),
-(15, '2019-03-03 10:53:07', '0000-00-00 00:00:00', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -654,22 +614,22 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=356;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=357;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=806;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=807;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `items`
 --
