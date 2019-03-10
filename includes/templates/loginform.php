@@ -1,16 +1,18 @@
 <template>
   <template>
-    <div style="padding-bottom: 1rem; margin:auto; display:table">
-      <div class="msgbox"></div>
-      <script>
-	var myNode=thisNode.getNextChild({name:"lgintt"}).getRelationship("domelementsdata").getChild();
-	myNode.writeProperty(thisElement);
-	//adding the edition pencil
-	var launcher = new Node();
-	launcher.thisNode = myNode;
-	launcher.editElement = thisElement;
-	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
-      </script>
+    <div style="text-align:center">
+      <div class="msgbox">
+	<span></span>
+	<script>
+	  var title=thisNode.getNextChild({"name":"lgintt"}).getRelationship({name:"domelementsdata"}).getChild();
+	  title.writeProperty(thisElement);
+	  //adding the edition pencil
+	  var launcher = new Node();
+	  launcher.thisNode = title;
+	  launcher.editElement = thisElement;
+	  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	</script>
+      </div>
     </div>
     <div>
       <form>
@@ -18,8 +20,8 @@
 	  <tr>
 	    <td style="padding-top:1em;">
 	      <div class="form-group">
-		<span>
-		  <label class="form-label"></label>
+		<div style="display:table;">
+		  <span class="form-label"></span>
 		  <script>
 		    var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
 		    myNode.writeProperty(thisElement);
@@ -28,10 +30,18 @@
 		    launcher.editElement = thisElement;
 		    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		  </script>
-		</span>
+		</div>
 		<input class="form-control" placeholder="" name="user_name">
 		<script>
-		  thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
+		  var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
+		  myNode.writeProperty(thisElement, null, "placeholder");
+		  var launcher = new Node();
+		  launcher.thisNode = myNode;
+		  launcher.editElement = thisElement;
+		  launcher.thisAttribute = "placeholder";
+		  launcher.createInput=true;
+		  launcher.visibility="visible";
+		  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		</script>
 	      </div>
 	    </td>
@@ -39,8 +49,8 @@
 	  <tr>
 	    <td>
 	      <div class="form-group">
-		<span>
-		  <label class="form-label"></label>
+		<div style="display:table;">
+		  <span class="form-label"></span>
 		  <script>
 		    var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
 		    myNode.writeProperty(thisElement);
@@ -49,10 +59,18 @@
 		    launcher.editElement = thisElement;
 		    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		  </script>
-		</span>
+		</div>
 		<input type="password" class="form-control" placeholder="" name="user_password">
 		<script>
-		  thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
+		  var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
+		  myNode.writeProperty(thisElement, null, "placeholder");
+		  var launcher = new Node();
+		  launcher.thisNode = myNode;
+		  launcher.editElement = thisElement;
+		  launcher.thisAttribute = "placeholder";
+		  launcher.createInput=true;
+		  launcher.visibility="visible";
+		  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		</script>
 	      </div>
 	    </td>
@@ -68,32 +86,79 @@
 		  launcher.thisNode = myNode;
 		  launcher.editElement = thisElement;
 		  launcher.thisAttribute = "value";
+		  launcher.createInput=true;
+		  launcher.visibility="visible";
 		  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 		</script>
 	      </div>
 	    </td>
 	  </tr>
 	</table>
-	<input type="hidden" name="userCharError">
-	<script>
-	  thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
-	</script>
-	<input type="hidden" name="pwdCharError">
-	<script>
-	  thisNode.getNextChild({name:"pwdCharError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
-	</script>
-	<input type="hidden" name="loginOk">
-	<script>
-	  thisNode.getNextChild({name:"loginOk"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
-	</script>
-	<input type="hidden" name="userError">
-	<script>
-	  thisNode.getNextChild({name:"userError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
-	</script>
-	<input type="hidden" name="pwdError">
-	<script>
-	  thisNode.getNextChild({name:"pwdError"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement, null, "value");
-	</script>
+	<div style="display:table;">
+	  <input type="hidden" name="userCharError">
+	  <script>
+	    var myNode=thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild();
+	    myNode.writeProperty(thisElement, null, "value");
+	    var launcher = new Node();
+	    launcher.thisNode = myNode;
+	    launcher.editElement = thisElement;
+	    launcher.thisAttribute = "value";
+	    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	    if (webuser.isWebAdmin()) thisElement.type="input";
+	  </script>
+	</div>
+	<div style="display:table;">
+	  <input type="hidden" name="pwdCharError">
+	  <script>
+	    var myNode=thisNode.getNextChild({name:"pwdCharError"}).getRelationship("domelementsdata").getChild();
+	    myNode.writeProperty(thisElement, null, "value");
+	    var launcher = new Node();
+	    launcher.thisNode = myNode;
+	    launcher.editElement = thisElement;
+	    launcher.thisAttribute = "value";
+	    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	    if (webuser.isWebAdmin()) thisElement.type="input";
+	  </script>
+	</div>
+	<div style="display:table;">
+	  <input type="hidden" name="loginOk">
+	  <script>
+	    var myNode=thisNode.getNextChild({name:"loginOk"}).getRelationship("domelementsdata").getChild();
+	    myNode.writeProperty(thisElement, null, "value");
+	    var launcher = new Node();
+	    launcher.thisNode = myNode;
+	    launcher.editElement = thisElement;
+	    launcher.thisAttribute = "value";
+	    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	    if (webuser.isWebAdmin()) thisElement.type="input";
+	  </script>
+	</div>
+	<div style="display:table;">
+	  <input type="hidden" name="userError">
+	  <script>
+	    var myNode=thisNode.getNextChild({name:"userError"}).getRelationship("domelementsdata").getChild();
+	    myNode.writeProperty(thisElement, null, "value");
+	    var launcher = new Node();
+	    launcher.thisNode = myNode;
+	    launcher.editElement = thisElement;
+	    launcher.thisAttribute = "value";
+	    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	    if (webuser.isWebAdmin()) thisElement.type="input";
+	  </script>
+	</div>
+	<div style="display:table;">
+	  <input type="hidden" name="pwdError">
+	  <script>
+	    var myNode=thisNode.getNextChild({name:"pwdError"}).getRelationship("domelementsdata").getChild();
+	    myNode.writeProperty(thisElement, null, "value");
+	    var launcher = new Node();
+	    launcher.thisNode = myNode;
+	    launcher.editElement = thisElement;
+	    launcher.thisAttribute = "value";
+	    launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
+	    if (webuser.isWebAdmin()) thisElement.type="input";
+	  </script>
+	</div>
       </form>
       <script>
 	thisElement.onsubmit=function() {
@@ -120,13 +185,20 @@
 	  return false;
 	}
       </script>
-      <div style="text-align:center;">
+      <div style="margin:auto;  display:table;">
 	<button class="btn"></button>
 	<script>
-	  thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+	  var myNode=thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild();
+	  myNode.writeProperty(thisElement);
 	  thisElement.onclick=function(){
 	    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "includes/templates/newform.php");
 	  }
+	  var launcher = new Node();
+	  launcher.thisNode = myNode;
+	  launcher.createInput=true;
+	  launcher.visibility="visible";
+	  launcher.editElement = thisElement;
+	  launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 	</script>
       </div>
     </div>

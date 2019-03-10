@@ -1,11 +1,11 @@
 var Config={
-  requestFilePath: "request.php",
-  logRequests: false, //true sometimes for production
-  defaultEditButtonPosition: "btmiddleright",
-  defaultAdmnsButtonsPosition: "bttopcenter",
-  defaultImg: "noimg.png",
-  statsOn: true, //false for production
-  onEmptyValueText: null, //It will be setled later
-  templatesCacheOn: true,
-  loadTemplatesAtOnce: true //better sometimes false for production
+  requestFilePath: "request.php", //"request.php"
+  logRequests: false, //false, true sometimes for production
+  defaultEditButtonPosition: "btmiddleright", //"btmiddleright"
+  defaultAdmnsButtonsPosition: "bttopcenter", //"bttopcenter"
+  defaultImg: "noimg.png", //"noimg.png"
+  statsOn: true, //true, false for production
+  onEmptyValueText: null, //null, It will be setled later
+  templatesCacheOn: true, //true
+  loadTemplatesAtOnce: true //true, better sometimes false for production
 }

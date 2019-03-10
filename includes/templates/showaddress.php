@@ -25,6 +25,7 @@
       launcher.thisNode = bckloginlabel.getRelationship("domelementsdata").getChild();
       launcher.editElement = thisElement;
       launcher.createInput=true;
+      launcher.visibility="visible";
       launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){
 	(new Node()).refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php");

@@ -32,6 +32,7 @@
       var unarchivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:launcher.editElement.value});
       launcher.thisNode = unarchivedtt.getRelationship("domelementsdata").getChild();
       launcher.createInput=true;
+      launcher.visibility="visible";
       launcher.refreshView(thisElement, "includes/templates/addbutedit.php");
     </script>
   </div>
@@ -51,6 +52,7 @@
     launcher.thisNode = bckloginlabel.getRelationship("domelementsdata").getChild();
     launcher.editElement = thisElement;
     launcher.createInput = true;
+    launcher.visibility="visible";
     launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
     thisElement.onclick=function(){
       webuser.refreshView(document.getElementById("centralcontent"), "includes/templates/loggedindata.php");

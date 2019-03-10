@@ -2,6 +2,7 @@
   <div class="boxtitle"></div>
   <div class="boxbody"></div>
 </div>
+<div id="extraedition"></div>
 <template id="categorytbxtp">
   <table class="boxlist">
     <tr>
@@ -47,6 +48,28 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 	      }
 	    }
 	  }
+	  //We add the currency symbol editor and extra pages
+	  function showExtraEdition(){ 
+	    var containerExtraNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "extraEdition"});
+	    var containerExtra=document.querySelector("#extraedition");
+	    containerExtraNode.appendThis(containerExtra,"includes/templates/extraedition.php");
+	  }
+	  if (webuser.isWebAdmin()) {
+	    showExtraEdition();
+	  }
+	  webuser.addEventListener("log",
+	    function() {
+	      if (!this.isWebAdmin()) {
+		//to remove the openbutton when logs after webadmin
+		var containerExtra=document.querySelector("#extraedition");
+		containerExtra.innerHTML="";
+	      }
+	      else {
+		showExtraEdition();
+	      }
+	    },
+	    "extraButton"
+	  );
 	});
       });
     });

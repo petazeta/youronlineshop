@@ -5,25 +5,34 @@
 	<span class="form-label"></span>
 	<script>
 	  var propertyName=null;
-	  if (typeof domelementsrootmother != "undefined") {
-	    var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
+	  if (thisNode.editpropertylabel) { //just a label for information
+	    propertyName=new Node();
+	    propertyName.properties.value=thisNode.editpropertylabel;
+	    propertyName.noeditable=true;
 	  }
-	  else if (tableProperties) {
-	    var propertyData=tableProperties.getNextChild({name: thisNode.editpropertyname});
-	    if (propertyData) {
-	      propertyName=propertyData.getRelationship("domelementsdata").getChild();
+	  else if (thisNode.editpropertynode) { //the label is editable
+	    propertyName=thisNode.editpropertynode;
+	  }
+	  else if (thisNode.editpropertyname) { //the editproperty means there is an actual property
+	    var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
+	    if (tableProperties) {
+	      propertyName=tableProperties.getNextChild({name: thisNode.editpropertyname}).getRelationship("domelementsdata").getChild();
+	    }
+	    else {
+	      propertyName=new Node();
+	      propertyName.properties.value=thisNode.editpropertyname;
+	      propertyName.noeditable=true;
+	    }
+	  }
+	  if (propertyName) {
+	    propertyName.writeProperty(thisElement);
+	    if (!propertyName.noeditable) {
 	      var launcher = new Node();
 	      launcher.thisNode = propertyName;
 	      launcher.editElement = thisElement;
 	      launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 	    }
 	  }
-	  if (!propertyName) {
-	    propertyName=new Node();
-	    propertyName.properties.value=thisNode.editpropertyname;
-	    
-	  }
-	  propertyName.writeProperty(thisElement);
 	</script>
       </template>
       <div style="display:table"></div>

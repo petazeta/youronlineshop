@@ -28,6 +28,7 @@
 	launcher.thisNode = buttonLabel;
 	launcher.editElement = thisElement;
 	launcher.createInput=true;
+	launcher.visibility="visible";
 	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 	
 	//First we create a clone of mycart to not include modifications made at mycart.
@@ -74,6 +75,7 @@
 	launcher.thisNode = buttonLabel;
 	launcher.editElement = thisElement;
 	launcher.createInput=true;
+	launcher.visibility="visible";
 	launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
 	
 	thisElement.onclick=function(){
