@@ -7,7 +7,6 @@
       launcher.thisNode = thisNode;
       launcher.editElement = thisElement;
       launcher.createInput=true;
-      launcher.visibility="visible";
       launcher.appendThis(thisElement.parentElement, "includes/templates/addbutedit.php");
       thisElement.onclick=function(){  
 	mycart.tocheckout();

@@ -52,7 +52,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 	  function showExtraEdition(){ 
 	    var containerExtraNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "extraEdition"});
 	    var containerExtra=document.querySelector("#extraedition");
-	    containerExtraNode.appendThis(containerExtra,"includes/templates/extraedition.php");
+	    containerExtraNode.refreshView(containerExtra,"includes/templates/extraedition.php");
 	  }
 	  if (webuser.isWebAdmin()) {
 	    showExtraEdition();
