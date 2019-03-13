@@ -1,6 +1,6 @@
 # Your Online Shop System V 1.0.9
 
-<a href="https://www.patreon.com/bePatron?u=18217513" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+[Support this project!](https://www.patreon.com/bePatron?u=18217513)
 
 <table>
   <tr>
