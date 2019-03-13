@@ -64,10 +64,12 @@ function fitincolumn() {
 
   leftcolumn.style.display="none";
   rightcolumn.style.display="none";
+  return true;
 }
+  var isSmall=false;
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   if (window.screen.width<700) {
-    fitincolumn();
+    if (!isSmall) isSmall=fitincolumn();
     //Restablish the alert position after a brake while the desktop view was still displayed
     myalert.myContainer.querySelector(".alert").className=myalert.myContainer.querySelector(".alert").className.replace(/ alerttopleft/g,'');
   }
