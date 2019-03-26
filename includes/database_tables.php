@@ -4,8 +4,10 @@
   In case there would be prefix (__***) it is removed from the contastant name
 */
 
+$tablePrefix=DB_PREFIX;
+
 $tablesRequester=new NodeFemale();
-$tablesRequester->db_loadtables();
+$tablesRequester->db_loadtables($tablePrefix);
 
 $databaseTableNames=[];
 foreach($tablesRequester->children as $myTable) {

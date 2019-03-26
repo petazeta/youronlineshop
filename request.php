@@ -172,6 +172,7 @@ switch ($parameters->action) {
     break;
   case "load tables":
     $myexecfunction="db_loadtables";
+    if (isset($parameters->prefix)) $argument=$parameters->prefix;
     break;
   case "load session":
     $myexecfunction="session";

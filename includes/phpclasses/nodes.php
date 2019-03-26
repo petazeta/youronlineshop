@@ -394,8 +394,16 @@ class NodeFemale extends Node{
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->cloneChildrenFromQuery($result);
   }
-  function db_loadtables() {
-    $sql="SHOW TABLES";
+  function db_loadtables($prefix=null) {
+    if ($prefix) {
+      $colname="Tables_in_" . DB_DATABASENAME;
+      $sql="SHOW TABLES" .
+      " WHERE " . $colname .
+      " LIKE " . "'%" . $prefix . "__%'";
+    }
+    else {
+      $sql="SHOW TABLES";
+    }
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->cloneChildrenFromQuery($result);
     //table key label is something like Tables_in_dbname and we make it in a key like name

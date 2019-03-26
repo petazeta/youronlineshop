@@ -1,3 +1,6 @@
+<?php
+  require('includes/config.php');
+?>
 <!DOCTYPE html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
@@ -54,7 +57,16 @@
       domelementsrootmother.loadfromhttp({action:"check db link"}, function(){
 	if (this.extra && this.extra.error) {
 	  myalert.properties.alertmsg='<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.</p>';
-	  myalert.showalert((function(){throw 'Database Connection Failed';}));
+	  myalert.showalert(null, (function(){throw 'Database Connection Failed';}));
+	}
+	else {
+	  var mytables=new NodeFemale();
+	  mytables.loadfromhttp({action:"load tables"<?php if (DB_PREFIX) echo ', prefix:"' . DB_PREFIX . '"';?>}, function(){
+	    if (mytables.children.length==0) {
+	      myalert.properties.alertmsg='<p><b>No Database Tables.</p>';
+	      myalert.showalert(null, (function(){throw 'No Database Tables';}));
+	    }
+	  });
 	}
 	domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
 	domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
