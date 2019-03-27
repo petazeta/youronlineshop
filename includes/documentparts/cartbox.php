@@ -19,16 +19,16 @@
   //Preparing cart items containers
   var cartItems=mycart.getRelationship({name:"cartbox"}).getChild().getRelationship({name:"cartboxitem"});
   var cartContainer=document.querySelector("#cartbox [data-id=itemlistcontainer]");
-  cartItems.refreshChildrenView(cartContainer,  "includes/templates/itemlist.php");
+  cartItems.refreshChildrenView(cartContainer,  "templates/itemlist.php");
   cartItems.addEventListener("refreshChildrenView", function() {
     cartContainer.appendChild(DomMethods.intoColumns(getTpContent(document.getElementById("cartboxlist")).querySelector("table").cloneNode(true), cartContainer, 1));
   });
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var cartboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"}).getNextChild({name: "crtbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
-  cartboxtt.refreshView(document.querySelector("#cartbox .boxtitle"), "includes/templates/cartboxhead.php");
+  cartboxtt.refreshView(document.querySelector("#cartbox .boxtitle"), "templates/cartboxhead.php");
   
 
   var cartboxckout=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"}).getNextChild({name: "ckouttt"}).getRelationship({name: "domelementsdata"}).getChild()
-  cartboxckout.refreshView(document.querySelector("#cartbox [data-id=checkoutcontainer]"), "includes/templates/cartboxckout.php");
+  cartboxckout.refreshView(document.querySelector("#cartbox [data-id=checkoutcontainer]"), "templates/cartboxckout.php");
 });
 </script>

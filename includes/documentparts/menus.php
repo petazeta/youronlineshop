@@ -17,9 +17,9 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelementsdata"}).cloneNode(0, 0));
     newNode.getRelationship({name: "domelementsdata"}).addChild(new NodeMale());
     menusMother.newNode=newNode;
-    menusMother.appendThis(document.querySelector("#menucontainer nav"), "includes/templates/admnlisteners.php");
+    menusMother.appendThis(document.querySelector("#menucontainer nav"), "templates/admnlisteners.php");
 
-    menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), "includes/templates/menu.php", function(){
+    menusMother.refreshChildrenView(document.querySelector("#menucontainer nav"), "templates/menu.php", function(){
       document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged
       //Now we click first menu (page start) or the menu selected at the parameters send by the url
       if (window.location.search) {

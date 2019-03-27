@@ -13,7 +13,7 @@
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var langboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langboxtt"}).getRelationship("domelementsdata").getChild();
-  langboxtt.refreshView(document.querySelector("#langbox .boxtitle"), "includes/templates/boxhead.php");
+  langboxtt.refreshView(document.querySelector("#langbox .boxtitle"), "templates/boxhead.php");
 });
 domelementsrootmother.addEventListener("loadLabels", function(){
   var languagesMother=new NodeFemale();
@@ -29,8 +29,8 @@ domelementsrootmother.addEventListener("loadLabels", function(){
 	//to set the result in a one column table
 	document.querySelector("#langbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#langtbxtp")).querySelector("table").cloneNode(true), document.querySelector("#langbox .boxbody"), 1));
       }, "1column");
-      languagesMother.appendThis(document.querySelector("#langbox .boxbody"), "includes/templates/admnlisteners.php", function() {
-	this.refreshChildrenView(document.querySelector("#langbox .boxbody"),  "includes/templates/language.php");
+      languagesMother.appendThis(document.querySelector("#langbox .boxbody"), "templates/admnlisteners.php", function() {
+	this.refreshChildrenView(document.querySelector("#langbox .boxbody"),  "templates/language.php");
       }, "1column");
       
       //AVOIDREMOVING ALL LANGUAGES

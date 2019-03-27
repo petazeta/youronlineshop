@@ -89,6 +89,17 @@ class Node {
 	break;
     }
   }
+  function dataToExtra($data){
+    if (!isset($this->extra)) $this->extra=new stdClass();
+    if (gettype($data)!='object') {
+      $myObj=new stdClass();
+      $myObj->data=$data;
+      $data=$myObj;
+    }
+    foreach($data as $key => $value) {
+      $this->extra->$key=$value;
+    }
+  }
 }
 
 class NodeFemale extends Node{
@@ -785,6 +796,7 @@ class NodeMale extends Node{
       }
 
     if (isset($this->parentNode->partnerNode->properties->id)) {
+      $this->dataToExtra($this->properties->id . $this->parentNode->partnerNode->properties->id);
       if ($this->db_insertmylink()===false) return false;
     }
     return true;
@@ -807,6 +819,7 @@ class NodeMale extends Node{
     . ' t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
     . ' AND t.id !=' . $this->properties->id
     . ' AND t.' . $positioncolumnname . ' >= ' . $this->sort_order;
+    
     if (($result = $this->getdblink()->query($sql))===false) return false;
   }
   

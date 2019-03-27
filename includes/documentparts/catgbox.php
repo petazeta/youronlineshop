@@ -13,7 +13,7 @@
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var catgboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
-  catgboxtt.refreshView(document.querySelector("#catalogbox .boxtitle"), "includes/templates/boxhead.php");
+  catgboxtt.refreshView(document.querySelector("#catalogbox .boxtitle"), "templates/boxhead.php");
 
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
@@ -35,8 +35,8 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 	//to set the result in a one column table
 	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       }, "1column");
-      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "includes/templates/admnlisteners.php", function() {
-	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "includes/templates/category.php", function(){
+      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "templates/admnlisteners.php", function() {
+	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php", function(){
 	  if (window.location.search) {
 	    regex = /category=(\d+)/;
 	    if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
@@ -52,7 +52,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 	  function showExtraEdition(){ 
 	    var containerExtraNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "extraEdition"});
 	    var containerExtra=document.querySelector("#extraedition");
-	    containerExtraNode.refreshView(containerExtra,"includes/templates/extraedition.php");
+	    containerExtraNode.refreshView(containerExtra,"templates/extraedition.php");
 	  }
 	  if (webuser.isWebAdmin()) {
 	    showExtraEdition();

@@ -6,14 +6,14 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <script src="includes/javascript/config.js?<?=time()?>"></script>
-    <script src="includes/javascript/iesp.js?<?=time()?>"></script>
-    <script src="includes/javascript/nodes.js?<?=time()?>"></script>
-    <script src="includes/javascript/dommethods.js?<?=time()?>"></script>
-    <script src="includes/javascript/cart.js?<?=time()?>"></script>
-    <script src="includes/javascript/user.js?<?=time()?>"></script>
-    <script async src="includes/javascript/stats.js.php"></script>
-    <link rel="stylesheet" type="text/css" href="includes/css/main.css">
+    <script src="javascript/config.js?<?=time()?>"></script>
+    <script src="javascript/iesp.js?<?=time()?>"></script>
+    <script src="javascript/nodes.js?<?=time()?>"></script>
+    <script src="javascript/dommethods.js?<?=time()?>"></script>
+    <script src="javascript/cart.js?<?=time()?>"></script>
+    <script src="javascript/user.js?<?=time()?>"></script>
+    <script async src="javascript/stats.js.php"></script>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="icon" href="favicon.ico">
   </head>
   <body>
@@ -27,7 +27,7 @@
       function loadTemplates(callback) {
 	//We load all the templates at once
 	var tpLoader=new Node();
-	tpLoader.appendThis(document.body, "includes/templates.php", function(){
+	tpLoader.appendThis(document.body, "templates.php", function(){
 	  if (callback) callback();
 	});
       }
@@ -40,7 +40,7 @@
       }
       var webuser=new user();
       var myalert=new Alert();
-      myalert.getTp("includes/templates/alert.php", function(){
+      myalert.getTp("templates/alert.php", function(){
 	this.myTp=this.xmlTp;
 	this.properties.alertmsg="<p>Retrieving data ...</p><p>Please wait</p>";
 	this.showalert();
