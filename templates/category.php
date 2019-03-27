@@ -1,6 +1,6 @@
 <template>
   <span style="z-index:1">
-    <a href="" data-hbutton="true"></a>
+    <a href="javascript:" data-button="true" data-hbutton="true"></a>
     <script>
       var url='?category=' + thisNode.properties.id;
       thisElement.href=url;
