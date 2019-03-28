@@ -12,5 +12,5 @@ webuser.addEventListener("log", function(){
   else {
     this.refreshView(document.getElementById("centralcontent"),  "templates/loggedindata.php");
   }
-});
+}, "logchangecentralcontent");
 </script>
