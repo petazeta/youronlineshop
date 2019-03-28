@@ -410,7 +410,7 @@ class NodeFemale extends Node{
       $colname="Tables_in_" . DB_DATABASENAME;
       $sql="SHOW TABLES" .
       " WHERE " . $colname .
-      " LIKE " . "'%" . $prefix . "__%'";
+      " LIKE " . "'" . $prefix . "\_\_%'";
     }
     else {
       $sql="SHOW TABLES";
