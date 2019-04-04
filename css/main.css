@@ -415,47 +415,11 @@ footer > table td{
   .adminedit is the inner and adminlauncher is the outer so when mouse is over launcher => edit is visible.
   the single part is for the edit button¿?
  */
-.singleadminedit {
-  background-color: rgba(0, 0, 0, 0);
-  opacity:0;
-}
-.adminedit {
-  position:relative;
-  z-index: 1;
-  /* background-color: rgba(0, 0, 0, 0); */
-}
 .visibleHover{
   opacity: 0;
 }
 .visibleHover:hover {
   opacity: 1;
-}
-.adminlauncher {
-  position: relative;
-  display: inline-block;
-}
-.adminlauncher:hover
-.adminedit {
-    opacity: 1;
-    transition: opacity 0.2s ease 0.2s;
-}
-.adminsinglelauncher {
-  position: relative;
-  display: inline-block;
-}
-.adminsinglelauncher:hover
-.singleadminedit {
-    opacity: 1;
-    transition: opacity 0.2s ease 0.2s;
-}
-.adminlauncherfix {
-  position: relative;
-  display: inline-block;
-}
-.adminlauncherfix
-.adminedit {
-    opacity: 1;
-    transition: opacity 0.2s ease 0.2s;
 }
 .butedit, .butdel, .butadd, .butsucs, table.arrows{
   background-color: #eff3f6;

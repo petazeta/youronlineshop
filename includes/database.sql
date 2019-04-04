@@ -235,7 +235,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (707, 'SubTotal', 343, 1),
 (708, 'Go back', 344, 1),
 (796, 'Menu 1', 351, 1),
-(800, 'paragraph', 353, 1),
+(800, 'For editing this site Log in with the username: webadmin, password: webadmin', 353, 1),
 (807, 'Extra Elements', 357, 1);
 
 -- --------------------------------------------------------

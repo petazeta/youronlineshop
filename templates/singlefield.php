@@ -14,7 +14,9 @@
 	    propertyName=thisNode.editpropertynode;
 	  }
 	  else if (thisNode.editpropertyname) { //the editproperty means there is an actual property
-	    var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
+	    if (typeof domelementsrootmother != "undefined") {
+	      var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
+	    }
 	    if (tableProperties) {
 	      propertyName=tableProperties.getNextChild({name: thisNode.editpropertyname}).getRelationship("domelementsdata").getChild();
 	    }

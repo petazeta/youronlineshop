@@ -1,6 +1,6 @@
 <template>
   <template>
-    <table class="adminedit">
+    <table style="position:relative; z-index: 1;">
       <tr>
 	<td style="padding:2px"></td>
       </tr>

@@ -1,5 +1,5 @@
 <template>
-  <div class="adminlauncher adminsinglelauncher">
+  <div>
     <h2></h2>
     <script>
       thisNode.writeProperty(thisElement);

@@ -1,5 +1,5 @@
 <template>
-  <div class="adminlauncherfix"></div>
+  <div></div>
   <script>
     var launcher=thisNode;
     var thisNode=launcher.thisNode;

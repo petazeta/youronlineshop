@@ -1,5 +1,5 @@
 <template>
-<tr class="adminlauncher" style="display:table-row">
+<tr style="display:table-row">
   <td>
     <span></span>
     <script>

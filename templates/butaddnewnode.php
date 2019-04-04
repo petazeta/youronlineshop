@@ -12,7 +12,7 @@
 	launcher.thisParent.refreshChildrenView();
 	launcher.thisParent.dispatchEvent("addNewNode", [launcher.newNode]);
 	//We copy the data row to any language
-	if (languages.children.length>1) {
+	if (languages && languages.children.length>1) {
 	  var restLanguages=languages.children.slice(0); //copy languages
 	  var pos;
 	  for (pos=0; pos<restLanguages.length; pos++) {
