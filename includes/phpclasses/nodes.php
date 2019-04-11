@@ -374,7 +374,8 @@ class NodeFemale extends Node{
     }
     $sql = 'SELECT t.* FROM '
       . constant($this->properties->childtablename) . ' t'
-      . ' WHERE t.' . $foreigncolumnname . ' IS NULL';
+      . ' WHERE t.' . $foreigncolumnname . ' IS NULL'
+      . ' LIMIT 1';
     if (($result = $this->getdblink()->query($sql))===false || $result->num_rows==0) return false;
     $this->cloneChildrenFromQuery($result);
   }
