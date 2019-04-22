@@ -20,33 +20,33 @@ class user extends NodeMale {
     if ( version_compare(phpversion(),'5.6')<0) {
       //patch for php 5.4 password_verify
       if(!function_exists('hash_equals')) {
-	function hash_equals($str1, $str2) {
-	  if(strlen($str1) != strlen($str2)) {
-	    return false;
-	  } else {
-	    $res = $str1 ^ $str2;
-	    $ret = 0;
-	    for($i = strlen($res) - 1; $i >= 0; $i--) $ret |= ord($res[$i]);
-	    return !$ret;
-	  }
-	}
+        function hash_equals($str1, $str2) {
+          if(strlen($str1) != strlen($str2)) {
+            return false;
+          } else {
+            $res = $str1 ^ $str2;
+            $ret = 0;
+            for($i = strlen($res) - 1; $i >= 0; $i--) $ret |= ord($res[$i]);
+            return !$ret;
+          }
+        }
       }
       if (hash_equals($candidates[0]["pwd"], crypt($pwd, $candidates[0]["pwd"]))) {
-	$result->properties->id = $candidates[0]["id"];
+        $result->properties->id = $candidates[0]["id"];
       }
       else {
-	$result->extra->error=true;
-	$result->extra->errorName="pwdError";
+        $result->extra->error=true;
+        $result->extra->errorName="pwdError";
       }
       //patch for php 5.4 password_verify
     }
     else {
       if (password_verify($pwd, $candidates[0]["pwd"]) ) {
-	$result->properties->id = $candidates[0]["id"];
+        $result->properties->id = $candidates[0]["id"];
       }
       else {
-	$result->extra->error=true;
-	$result->extra->errorName="pwdError";
+        $result->extra->error=true;
+        $result->extra->errorName="pwdError";
       }
     }
     return $result;
@@ -87,7 +87,7 @@ class user extends NodeMale {
     else {
       $user->properties->pwd=password_hash($pwd, PASSWORD_DEFAULT);
     }
-    
+    $user->properties->access=time();
     if ($user->db_insertmyself()==true) {
       $result->properties->id=$user->properties->id;
       $user->db_loadmyrelationships();
@@ -114,6 +114,11 @@ class user extends NodeMale {
   function checklength($value, $min, $max){
     if (strlen($value) >= $min && strlen($value) <= $max) return true;
     return false;
+  }
+  function db_updateaccess() {
+    $this->properties->access=time();
+    $proparray["access"]=$this->properties->access;
+    $this->db_updatemyproperties($proparray);
   }
 }
 ?>

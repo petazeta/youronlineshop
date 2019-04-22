@@ -43,7 +43,6 @@ user.prototype.loginproto=function(action, name, password, email, reqlistener){
   });
 };
   
-  
 user.prototype.login=function(name, password, reqlistener){
   this.loginproto("login", name, password, null, reqlistener);
 }
@@ -61,4 +60,14 @@ user.prototype.isWebAdmin=function(){
 
 user.prototype.getUserType=function(){
   if (this.parentNode && this.parentNode.partnerNode) return this.parentNode.partnerNode.properties.type;
+}
+function get_liveusers(){
+  var FD  = new FormData();
+  FD.action="liveusers.php";
+  var loadNode=new NodeMale();
+  loadNode.loadfromhttp(FD, function(){
+    if (!webuser.extra) webuser.extra={};
+    webuser.extra.liveusersnum=this.properties.num;
+    webuser.dispatchEvent("getliveusers");
+  });
 }

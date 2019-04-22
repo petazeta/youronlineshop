@@ -42,14 +42,13 @@ class Node {
     if (gettype($source)=='string') $source=json_decode($source);
     if (isset($source->properties)) {
       if ($thisProperties) {
-	if (gettype($thisProperties=="string")) $thisProperties=[$thisProperties];
-	$myProperties=new stdClass();
-	for ($i=0; $i < count($thisProperties); $i++) {
-	  if (in_array($thisProperties[$i], array_keys($source->properties))) {
-	    $myProperties[$thisProperties[$i]]=$source->properties[$thisProperties[$i]];
-	  }
-	}
-	$this->properties->cloneFromArray($myProperties);
+        for ($i=0; $i < count($thisProperties); $i++) {
+          if (in_array($thisProperties[$i], array_keys((array)$source->properties))) {
+            $propkey=$thisProperties[$i];
+            $myProperties[$propkey]=$source->properties->$propkey;
+          }
+        }
+        $this->properties->cloneFromArray($myProperties);
       }
       else $this->properties->cloneFromArray($source->properties);
     }
@@ -72,21 +71,21 @@ class Node {
     $this->db_loadmytree();
     $this->db_deletemytree_proto();
   }
-  function session($sesname, $action="load") {
+  function session($sesname=null, $action="load") {
     switch ($action) {
       case "load":
-	if (isset($_SESSION[$sesname])) {
-	  $data=unserialize($_SESSION[$sesname]);
-	  $this->load($data);
-	}
-	break;
+        if (isset($_SESSION[$sesname])) {
+          $data=unserialize($_SESSION[$sesname]);
+          $this->load($data);
+        }
+        break;
       case "write":
-	$_SESSION[$sesname]=serialize($this);
-	break;
+        $_SESSION[$sesname]=serialize($this);
+        break;
       case "check":
-	if (isset($_SESSION[$sesname])) return true;
-	return false;
-	break;
+        if (isset($_SESSION[$sesname])) return true;
+        return false;
+        break;
     }
   }
   function dataToExtra($data){
@@ -1010,7 +1009,7 @@ class NodeMale extends Node{
   }
   
   //Search in the database for the records equal to the element properties
-  function db_search($tablename=null, $proparray=null) {
+  function db_search($tablename=null, $proparray=null, $condarray=null) {
     if (!$tablename) $tablename = $this->parentNode->properties->childtablename;
     if (!$proparray) {
       $proparray = $this->properties;
@@ -1027,9 +1026,14 @@ class NodeMale extends Node{
       $return = $this->getdblink()->query($sql);
       return $return;
     }
-    
+    if (!$condarray) {
+      $condarray=[];
+    }
     foreach ($param_keys as $key => $value) {
-      array_push($searcharray, $value . '= ?');
+      if (!isset($condarray[$value])) {
+        $condarray[$value] = '= ?';
+      }
+      array_push($searcharray, $value . $condarray[$value]);
     }
     
     $sql = 'SELECT * FROM ' . constant($tablename) . ' where ' . implode(' and ', $searcharray);

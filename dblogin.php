@@ -1,9 +1,17 @@
 <?php
-session_start();
 require('includes/config.php');
 require('includes/phpclasses/nodes.php');
 require('includes/database_tables.php');
 require('includes/phpclasses/user.php');
+require('includes/phpclasses/sessions.php');
+
+$mysession = new session();
+if ($mysession->session_none()) {
+  if (defined('DB_SESSIONS') && DB_SESSIONS==true) {
+    $mysession->set_session_to_db();
+  }
+  session_start();
+}
 
 header("Content-type: application/json");
 if (isset($_POST["parameters"])) {
@@ -41,6 +49,7 @@ if (!isset($loginresult->extra->error)) {
   $user->db_loadmyrelationships();
   $user->db_loadmytreeup();
   $user->session("user", "write");
+  $user->db_updateaccess(); //We update the access time
   $loginresult=$user;
   $loginresult->avoidrecursion();
 }

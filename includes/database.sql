@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.12deb2+deb8u3
--- http://www.phpmyadmin.net
+-- version 4.6.6deb4
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Apr 11, 2019 at 10:54 AM
--- Server version: 5.5.62-0+deb8u1
--- PHP Version: 5.6.39-0+deb8u2
+-- Host: localhost:3306
+-- Generation Time: Apr 22, 2019 at 09:50 PM
+-- Server version: 10.1.37-MariaDB-0+deb9u1
+-- PHP Version: 7.0.33-0+deb9u3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -20,14 +20,14 @@ SET time_zone = "+00:00";
 -- Table structure for table `addresses`
 --
 
-CREATE TABLE IF NOT EXISTS `addresses` (
-`id` int(11) NOT NULL,
+CREATE TABLE `addresses` (
+  `id` int(11) NOT NULL,
   `street` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `city` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `state` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pc` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_users` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `addresses`
@@ -35,8 +35,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 (23, 'hhh', '', '', '9222', 2),
-(24, 'ffff', 'jjjj', 'oooo', '4444', 1),
-(25, '', '', '', '', 3);
+(24, 'ffff', 'jjjj', 'oooo', '4444', 1);
 
 -- --------------------------------------------------------
 
@@ -44,12 +43,12 @@ INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 -- Table structure for table `domelements`
 --
 
-CREATE TABLE IF NOT EXISTS `domelements` (
-`id` int(11) NOT NULL,
+CREATE TABLE `domelements` (
+  `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `_domelements` int(11) DEFAULT NULL,
   `_domelements_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=361 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelements`
@@ -138,8 +137,8 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (343, 'subtotal', 339, 2),
 (344, 'chktback', 109, 8),
 (357, 'extraEdition', 60, 5),
-(359, '', 66, 1),
-(360, '', 66, 2);
+(360, '', 66, 2),
+(361, 'online', 62, 1);
 
 -- --------------------------------------------------------
 
@@ -147,12 +146,12 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 -- Table structure for table `domelementsdata`
 --
 
-CREATE TABLE IF NOT EXISTS `domelementsdata` (
-`id` int(11) NOT NULL,
+CREATE TABLE `domelementsdata` (
+  `id` int(11) NOT NULL,
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `_domelements` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=811 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `domelementsdata`
@@ -167,8 +166,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (23, 'Connected', 23, 1),
 (25, 'Shoping cart', 25, 1),
 (27, 'Check out', 27, 1),
-(32, '<a href="LICENSE.txt">License</a>', 32, 1),
-(33, 'Powered by <a href="https://sourceforge.net/projects/youronlineshop/">YourOnlineShop</a>', 33, 1),
+(32, '<a href=\"LICENSE.txt\">License</a>', 32, 1),
+(33, 'Powered by <a href=\"https://sourceforge.net/projects/youronlineshop/\">YourOnlineShop</a>', 33, 1),
 (36, '+ 1 to the cart', 36, 1),
 (38, 'Insert you account details or create a new account.', 38, 1),
 (41, 'title', 41, 1),
@@ -203,8 +202,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (180, 'User Name', 183, 1),
 (181, 'Password', 184, 1),
 (182, 'Log in', 185, 1),
-(183, '"Password between " + min + " and " + max + " characters!"', 186, 1),
-(184, '"User name between " + min + " and " + max + " characters!"', 187, 1),
+(183, '\"Password between \" + min + \" and \" + max + \" characters!\"', 186, 1),
+(184, '\"User name between \" + min + \" and \" + max + \" characters!\"', 187, 1),
 (185, 'User Name Incorrect', 188, 1),
 (186, 'Password Incorrect', 189, 1),
 (187, 'Login Ok', 190, 1),
@@ -236,8 +235,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (707, 'SubTotal', 343, 1),
 (708, 'Go back', 344, 1),
 (807, 'Extra Elements', 357, 1),
-(809, '', 359, 1),
-(810, '', 360, 1);
+(810, '', 360, 1),
+(811, 'Users online', 361, 1);
 
 -- --------------------------------------------------------
 
@@ -245,11 +244,11 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 -- Table structure for table `itemcategories`
 --
 
-CREATE TABLE IF NOT EXISTS `itemcategories` (
-`id` int(11) NOT NULL,
+CREATE TABLE `itemcategories` (
+  `id` int(11) NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategories`
@@ -265,12 +264,12 @@ INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position
 -- Table structure for table `itemcategoriesdata`
 --
 
-CREATE TABLE IF NOT EXISTS `itemcategoriesdata` (
-`id` int(11) NOT NULL,
+CREATE TABLE `itemcategoriesdata` (
+  `id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `itemcategoriesdata`
@@ -286,8 +285,8 @@ INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`)
 -- Table structure for table `items`
 --
 
-CREATE TABLE IF NOT EXISTS `items` (
-`id` int(11) NOT NULL,
+CREATE TABLE `items` (
+  `id` int(11) NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
@@ -299,8 +298,8 @@ CREATE TABLE IF NOT EXISTS `items` (
 -- Table structure for table `itemsdata`
 --
 
-CREATE TABLE IF NOT EXISTS `itemsdata` (
-`id` int(11) NOT NULL,
+CREATE TABLE `itemsdata` (
+  `id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `descriptionlarge` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `descriptionshort` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -315,10 +314,10 @@ CREATE TABLE IF NOT EXISTS `itemsdata` (
 -- Table structure for table `languages`
 --
 
-CREATE TABLE IF NOT EXISTS `languages` (
-`id` int(11) NOT NULL,
+CREATE TABLE `languages` (
+  `id` int(11) NOT NULL,
   `code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `languages`
@@ -333,8 +332,8 @@ INSERT INTO `languages` (`id`, `code`) VALUES
 -- Table structure for table `logs`
 --
 
-CREATE TABLE IF NOT EXISTS `logs` (
-`id` int(11) NOT NULL,
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL,
   `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `session_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -347,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `logs` (
 -- Table structure for table `miscelaneous`
 --
 
-CREATE TABLE IF NOT EXISTS `miscelaneous` (
+CREATE TABLE `miscelaneous` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -358,8 +357,8 @@ CREATE TABLE IF NOT EXISTS `miscelaneous` (
 -- Table structure for table `orderitems`
 --
 
-CREATE TABLE IF NOT EXISTS `orderitems` (
-`id` int(11) NOT NULL,
+CREATE TABLE `orderitems` (
+  `id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
@@ -372,8 +371,8 @@ CREATE TABLE IF NOT EXISTS `orderitems` (
 -- Table structure for table `orders`
 --
 
-CREATE TABLE IF NOT EXISTS `orders` (
-`id` int(11) NOT NULL,
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL DEFAULT '0',
@@ -386,8 +385,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Table structure for table `ordershippingtypes`
 --
 
-CREATE TABLE IF NOT EXISTS `ordershippingtypes` (
-`id` int(11) NOT NULL,
+CREATE TABLE `ordershippingtypes` (
+  `id` int(11) NOT NULL,
   `name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `delay_hours` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL,
@@ -400,11 +399,19 @@ CREATE TABLE IF NOT EXISTS `ordershippingtypes` (
 -- Table structure for table `sessions`
 --
 
-CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `sessions` (
+  `id` int(11) NOT NULL,
+  `sesid` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `access` int(10) DEFAULT NULL,
   `data` mediumtext COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `sesid`, `access`, `data`) VALUES
+(2, 'muflgsu8asuacc5o9r5crupa43', 1555962511, 'user|N;');
 
 -- --------------------------------------------------------
 
@@ -412,14 +419,14 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 -- Table structure for table `shippingtypes`
 --
 
-CREATE TABLE IF NOT EXISTS `shippingtypes` (
-`id` int(11) NOT NULL,
+CREATE TABLE `shippingtypes` (
+  `id` int(11) NOT NULL,
   `image` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `delay_hours` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `_shippingtypes` int(11) DEFAULT NULL,
   `_shippingtypes_position` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `shippingtypes`
@@ -436,13 +443,13 @@ INSERT INTO `shippingtypes` (`id`, `image`, `delay_hours`, `price`, `_shippingty
 -- Table structure for table `shippingtypesdata`
 --
 
-CREATE TABLE IF NOT EXISTS `shippingtypesdata` (
-`id` int(11) NOT NULL,
+CREATE TABLE `shippingtypesdata` (
+  `id` int(11) NOT NULL,
   `name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_shippingtypes` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `shippingtypesdata`
@@ -458,22 +465,22 @@ INSERT INTO `shippingtypesdata` (`id`, `name`, `description`, `_shippingtypes`, 
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-`id` int(11) NOT NULL,
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pwd` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
+  `access` int(11) NOT NULL,
   `_userstypes` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 7),
-(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 3),
-(3, 'prueba', '$2y$10$nUgRBdrgyL3uKGtyTDI0CepiPuEHb2pbHWtx5oLiXw3/7vlMlwse.', 0, NULL);
+INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1555961494, 7),
+(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 2147483647, 3);
 
 -- --------------------------------------------------------
 
@@ -481,14 +488,14 @@ INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `_userstypes`) VALUES
 -- Table structure for table `usersdata`
 --
 
-CREATE TABLE IF NOT EXISTS `usersdata` (
-`id` int(11) NOT NULL,
+CREATE TABLE `usersdata` (
+  `id` int(11) NOT NULL,
   `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `surname` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phonenumber` int(11) NOT NULL,
   `_users` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `usersdata`
@@ -496,8 +503,7 @@ CREATE TABLE IF NOT EXISTS `usersdata` (
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
 (1, 'fsmy pa', 'kkkkkkkkkkkkkkkupep', 'kkpjjjjj@caca.com', 666, 1),
-(2, 'order', '', '', 0, 2),
-(3, '', '', '', 0, 3);
+(2, 'order', '', '', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -505,10 +511,10 @@ INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_user
 -- Table structure for table `userstypes`
 --
 
-CREATE TABLE IF NOT EXISTS `userstypes` (
-`id` int(11) NOT NULL,
+CREATE TABLE `userstypes` (
+  `id` int(11) NOT NULL,
   `type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `userstypes`
@@ -526,103 +532,129 @@ INSERT INTO `userstypes` (`id`, `type`) VALUES
 -- Indexes for table `addresses`
 --
 ALTER TABLE `addresses`
- ADD PRIMARY KEY (`id`), ADD KEY `_users` (`_users`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_users` (`_users`);
 
 --
 -- Indexes for table `domelements`
 --
 ALTER TABLE `domelements`
- ADD PRIMARY KEY (`id`), ADD KEY `_domelementsstructure` (`_domelements`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_domelementsstructure` (`_domelements`);
 
 --
 -- Indexes for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
- ADD PRIMARY KEY (`id`), ADD KEY `_domelementsstructure` (`_domelements`), ADD KEY `_languages` (`_languages`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_domelementsstructure` (`_domelements`),
+  ADD KEY `_languages` (`_languages`);
 
 --
 -- Indexes for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
- ADD PRIMARY KEY (`id`), ADD KEY `_itemcategories` (`_itemcategories`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_itemcategories` (`_itemcategories`);
 
 --
 -- Indexes for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
- ADD PRIMARY KEY (`id`), ADD KEY `_languages` (`_languages`), ADD KEY `_itemcategories` (`_itemcategories`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_languages` (`_languages`),
+  ADD KEY `_itemcategories` (`_itemcategories`);
 
 --
 -- Indexes for table `items`
 --
 ALTER TABLE `items`
- ADD PRIMARY KEY (`id`), ADD KEY `_itemcategories` (`_itemcategories`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_itemcategories` (`_itemcategories`);
 
 --
 -- Indexes for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
- ADD PRIMARY KEY (`id`), ADD KEY `_groups` (`_items`), ADD KEY `_languages` (`_languages`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_groups` (`_items`),
+  ADD KEY `_languages` (`_languages`);
 
 --
 -- Indexes for table `languages`
 --
 ALTER TABLE `languages`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `logs`
 --
 ALTER TABLE `logs`
- ADD PRIMARY KEY (`id`), ADD KEY `_users` (`_users`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_users` (`_users`);
 
 --
 -- Indexes for table `orderitems`
 --
 ALTER TABLE `orderitems`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `id` (`id`), ADD KEY `_orders` (`_orders`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`),
+  ADD KEY `_orders` (`_orders`);
 
 --
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
- ADD PRIMARY KEY (`id`), ADD KEY `_users` (`_users`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_users` (`_users`);
 
 --
 -- Indexes for table `ordershippingtypes`
 --
 ALTER TABLE `ordershippingtypes`
- ADD PRIMARY KEY (`id`), ADD KEY `_orders` (`_orders`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_orders` (`_orders`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `shippingtypes`
 --
 ALTER TABLE `shippingtypes`
- ADD PRIMARY KEY (`id`), ADD KEY `_shippingtypes` (`_shippingtypes`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_shippingtypes` (`_shippingtypes`);
 
 --
 -- Indexes for table `shippingtypesdata`
 --
 ALTER TABLE `shippingtypesdata`
- ADD PRIMARY KEY (`id`), ADD KEY `_shipmenttypes` (`_shippingtypes`), ADD KEY `_language` (`_languages`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_shipmenttypes` (`_shippingtypes`),
+  ADD KEY `_language` (`_languages`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`id`), ADD KEY `_userstypes` (`_userstypes`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_userstypes` (`_userstypes`);
 
 --
 -- Indexes for table `usersdata`
 --
 ALTER TABLE `usersdata`
- ADD PRIMARY KEY (`id`), ADD KEY `_users` (`_users`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_users` (`_users`);
 
 --
 -- Indexes for table `userstypes`
 --
 ALTER TABLE `userstypes`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -632,87 +664,92 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=361;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=362;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=811;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=812;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 --
 -- AUTO_INCREMENT for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `ordershippingtypes`
 --
 ALTER TABLE `ordershippingtypes`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `sessions`
+--
+ALTER TABLE `sessions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `shippingtypes`
 --
 ALTER TABLE `shippingtypes`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `shippingtypesdata`
 --
 ALTER TABLE `shippingtypesdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- Constraints for dumped tables
 --
@@ -721,92 +758,92 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 -- Constraints for table `addresses`
 --
 ALTER TABLE `addresses`
-ADD CONSTRAINT `addresses_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `addresses_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `domelements`
 --
 ALTER TABLE `domelements`
-ADD CONSTRAINT `domelements_ibfk_1` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `domelements_ibfk_1` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-ADD CONSTRAINT `domelementsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `domelementsdata_ibfk_3` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `domelementsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `domelementsdata_ibfk_3` FOREIGN KEY (`_domelements`) REFERENCES `domelements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-ADD CONSTRAINT `itemcategories_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `itemcategories_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-ADD CONSTRAINT `itemcategoriesdata_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `itemcategoriesdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `itemcategoriesdata_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `itemcategoriesdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `items`
 --
 ALTER TABLE `items`
-ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-ADD CONSTRAINT `itemsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `itemsdata_ibfk_3` FOREIGN KEY (`_items`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `itemsdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `itemsdata_ibfk_3` FOREIGN KEY (`_items`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `logs`
 --
 ALTER TABLE `logs`
-ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orderitems`
 --
 ALTER TABLE `orderitems`
-ADD CONSTRAINT `orderitems_orders` FOREIGN KEY (`_orders`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orderitems_orders` FOREIGN KEY (`_orders`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-ADD CONSTRAINT `orders_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `orders_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `ordershippingtypes`
 --
 ALTER TABLE `ordershippingtypes`
-ADD CONSTRAINT `ordershippingtypes_ibfk_1` FOREIGN KEY (`_orders`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `ordershippingtypes_ibfk_1` FOREIGN KEY (`_orders`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `shippingtypes`
 --
 ALTER TABLE `shippingtypes`
-ADD CONSTRAINT `shippingtypes_ibfk_1` FOREIGN KEY (`_shippingtypes`) REFERENCES `shippingtypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `shippingtypes_ibfk_1` FOREIGN KEY (`_shippingtypes`) REFERENCES `shippingtypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `shippingtypesdata`
 --
 ALTER TABLE `shippingtypesdata`
-ADD CONSTRAINT `shippingtypesdata_ibfk_3` FOREIGN KEY (`_shippingtypes`) REFERENCES `shippingtypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `shippingtypesdata_ibfk_4` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `shippingtypesdata_ibfk_3` FOREIGN KEY (`_shippingtypes`) REFERENCES `shippingtypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `shippingtypesdata_ibfk_4` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-ADD CONSTRAINT `users_userstypes` FOREIGN KEY (`_userstypes`) REFERENCES `userstypes` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_userstypes` FOREIGN KEY (`_userstypes`) REFERENCES `userstypes` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `usersdata`
 --
 ALTER TABLE `usersdata`
-ADD CONSTRAINT `usersdata_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `usersdata_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

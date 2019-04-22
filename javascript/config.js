@@ -7,5 +7,6 @@ var Config={
   statsOn: true, //true, false for production
   onEmptyValueText: null, //null, It will be setled later
   templatesCacheOn: true, //true, better sometimes false for production
-  loadTemplatesAtOnce: true //true, better sometimes false for production
+  loadTemplatesAtOnce: true, //true, better sometimes false for production
+  dbSessionsOn: true //true or false if deactivated
 }

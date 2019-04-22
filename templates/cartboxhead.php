@@ -9,8 +9,8 @@
       launcher.editElement = thisElement;
       launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
       thisElement.addEventListener("click", function(ev){
-	ev.preventDefault();
-	mycart.tocheckout();
+        ev.preventDefault();
+        mycart.tocheckout();
       });
     </script>
   </span>

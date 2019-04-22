@@ -1,5 +1,4 @@
 <?php
-session_start();
 //To avoid the php error so when the config file doesnt exist we can manage json error
 if (file_exists('includes/config.php')) {
   require('includes/config.php');
@@ -29,11 +28,17 @@ $myelement->properties->cloneFromArray($fields);  //For the case when some data 
 switch ($parameters->action) {
   case 'check db link':
   case 'load tables':
-  case 'load session':
-  case 'write session':
     break;
   default:
     require('includes/database_tables.php');
+    require('includes/phpclasses/sessions.php');
+    $mysession = new session();
+    if ($mysession->session_none()) {
+      if (defined('DB_SESSIONS') && DB_SESSIONS==true) {
+        $mysession->set_session_to_db();
+      }
+      session_start();
+    }
 }
 require('includes/safety.php');
 switch ($parameters->action) {
