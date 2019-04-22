@@ -80,7 +80,7 @@
 	      <div style="padding-bottom: 1rem; display:table; margin: auto;">
 		<input type="submit" class="btn" value="" style="font-size:medium;">
 		<script>
-		  var myNode=thisNode.getNextChild({name:"login"}).getRelationship("domelementsdata").getChild();
+		  var myNode=thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild();
 		  myNode.writeProperty(thisElement, null, "value");
 		  var launcher = new Node();
 		  launcher.thisNode = myNode;
