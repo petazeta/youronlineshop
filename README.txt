@@ -1,7 +1,7 @@
 ***************
 *YOS Version:
 ***************
-1.0.9 09/04/2019
+1.1 23/04/2019
 
 ***************
 *Support this Project:
@@ -11,7 +11,7 @@ https://www.patreon.com/bePatron?u=18217513
 ***************
 *Autor Note*
 ***************
-This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to those people that have developed software in which I got inspiration. This version of the software is free to use and modify.
+This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to those people that have developed software in which I got inspiration. This version of the software is free to use and modify. I am available at the email for support or any other issues.
 
 ***************
 *About*
@@ -42,6 +42,8 @@ User "ordersadmin" is order administrator and can watch and edit all the orders.
 User "webadmin" is web administrator user and can edit the web page content and the catalog (categories and items).
 
 Once editing some content press Intro or click outside from the editable area to save changes.
+
+For system configuration edit file javascript/config.js
 
 *****************
 *More*
