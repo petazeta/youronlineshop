@@ -5,19 +5,19 @@
       <table>
         <tr>
           <td>
-            <input type="radio" name="shipping">
+            <input type="radio" name="payment">
             <script>
               thisElement.addEventListener("change", function(event) {
-                var shippingtypesRel=webuser.getRelationship({name:"orders"}).getChild().getRelationship({name:"ordershippingtypes"});
-                shippingtypesRel.children=[]; //In case we already selected
-                var orderShippingType=shippingtypesRel.addChild(new NodeMale());
-                orderShippingType.properties.cloneFromArray(thisNode.getRelationship({name:"shippingtypesdata"}).getChild().properties);
-                orderShippingType.properties.cloneFromArray(thisNode.properties);
+                var paymenttypesRel=webuser.getRelationship({name:"orders"}).getChild().getRelationship({name:"orderpaymenttypes"});
+                paymenttypesRel.children=[]; //In case we already selected
+                var orderPaymentType=paymenttypesRel.addChild(new NodeMale());
+                orderPaymentType.properties.cloneFromArray(thisNode.getRelationship({name:"paymenttypesdata"}).getChild().properties);
+                orderPaymentType.properties.cloneFromArray(thisNode.properties);
                 DomMethods.setActive(thisNode);
               });
               //selecting first option
               if (thisNode.parentNode.getChild()==thisNode) {
-          thisElement.click();
+                thisElement.click();
               }
             </script>
           </td>
@@ -25,7 +25,7 @@
             <div style="margin-right:2.2em">
               <a href="" data-hbutton="true" title=""></a>
               <script>
-                thisNodeData=thisNode.getRelationship({name: "shippingtypesdata"}).getChild();
+                thisNodeData=thisNode.getRelationship({name: "paymenttypesdata"}).getChild();
                 thisNodeData.writeProperty(thisElement, "name");
                 thisNodeData.writeProperty(thisElement, "description", "title");
                 var launcher = new Node();
@@ -47,6 +47,21 @@
                   description_launcher.thisProperty = "description";
                   description_launcher.editElement = mySpan;
                   description_launcher.appendThis(myDiv, "templates/addbutedit.php");
+                  
+                  //We add a table cell for vars to be editable
+                  var myRow=DomMethods.closesttagname(thisElement, "TR");
+                  var myCell = myRow.insertCell(2);
+                  var myDiv = document.createElement('div');
+                  myDiv.style.marginRight="2.2em";
+                  var mySpan=document.createElement('span');
+                  myDiv.appendChild(mySpan);
+                  myCell.appendChild(myDiv);
+                  thisNode.writeProperty(mySpan, "vars");
+                  var description_launcher = new Node();
+                  description_launcher.thisNode = thisNode;
+                  description_launcher.thisProperty = "vars";
+                  description_launcher.editElement = mySpan;
+                  description_launcher.appendThis(myDiv, "templates/addbutedit.php");
                 }
 
                 thisElement.addEventListener("click", function(event) {
@@ -57,46 +72,12 @@
               </script>
             </div>
           </td>
-          <td>
-            <div style="margin-right:2.2em">
-              <span>
-                <span></span>
-                <script>
-                  thisNode.writeProperty(thisElement, "delay_hours");
-                  var launcher = new Node();
-                  launcher.thisNode = thisNode;
-                  launcher.editElement = thisElement;
-                  launcher.thisProperty="delay_hours";
-                  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-                </script>
-              </span>
-              <span> h</span>
-            </div>
-          </td>
-          <td>
-            <span>
-              <span></span>
-              <script>
-                thisNode.writeProperty(thisElement, "price");
-                var launcher = new Node();
-                launcher.thisNode = thisNode;
-                launcher.editElement = thisElement;
-                launcher.thisProperty="price";
-                launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-              </script>
-            </span>
-            <span></span>
-            <script>
-              var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
-              currency.writeProperty(thisElement);
-            </script>
-          </td>
         </tr>
       </table>
     </template>
     <div style="padding-right:2.2em"></div>
     <script>
-      thisNode.getRelationship({name: "shippingtypesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
+      thisNode.getRelationship({name: "paymenttypesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
         thisNode.refreshView(thisElement,thisElement.previousElementSibling);
         var admnlauncher=new Node();
         admnlauncher.thisNode=thisNode;

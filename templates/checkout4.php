@@ -1,44 +1,54 @@
 <template>
-  <!-- we show order made and give the option to go to the user area-->
   <template>
     <div class="msgbox">
       <span></span>
       <script>
-	var title=thisNode.getNextChild({"name":"chkt4add"}).getRelationship({name:"domelementsdata"}).getChild();
-	title.writeProperty(thisElement);
-	//adding the edition pencil
-	var launcher = new Node();
-	launcher.thisNode = title;
-	launcher.editElement = thisElement;
-	launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+        var title=thisNode.getNextChild({"name":"chkt4add"}).getRelationship({name:"domelementsdata"}).getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        var launcher = new Node();
+        launcher.thisNode = title;
+        launcher.editElement = thisElement;
+        launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
       </script>
     </div>
     <div></div>
     <script>
-      //We show the order
-      webuser.getRelationship({name:"orders"}).getChild().refreshView(thisElement, "templates/order.php");
+      //We show the payment types available
+      (new Node()).refreshView(thisElement, "templates/paymentlist.php");
     </script>
-    <div style="margin:1em auto; display:table;">
+    <div style="margin:auto; display:table;">
       <button class="btn"></button>
       <script>
-	var bckloginlabel=thisNode.getNextChild({"name":"chkt4userarea"}).getRelationship({name:"domelementsdata"}).getChild();
-	bckloginlabel.writeProperty(thisElement);
-	//adding the edition pencil
-	var launcher = new Node();
-	launcher.thisNode = bckloginlabel;
-	launcher.editElement = thisElement;
-	launcher.createInput = true;
-	launcher.visibility="visible";
-	launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	thisElement.onclick=function(){
-	  webuser.refreshView(document.getElementById("centralcontent"), "templates/loggedindata.php");
-	};
+        var buttonLabel=thisNode.getNextChild({"name":"chkt4next"}).getRelationship({name:"domelementsdata"}).getChild();
+        buttonLabel.writeProperty(thisElement);
+        var launcher = new Node();
+        launcher.thisNode = buttonLabel;
+        launcher.editElement = thisElement;
+        launcher.createInput=true;
+        launcher.visibility="visible";
+        launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+        
+        thisElement.onclick=function(){
+          //we save the selected payment type main characterisitics at orderpaymenttypes table. add myself or add my tree
+          var orderpaymenttype=webuser.getRelationship({name:"orders"}).children[0].getRelationship({name:"orderpaymenttypes"}).children[0];
+          orderpaymenttype.loadfromhttp({action: "add myself", user_id: webuser.properties.id}, function(){
+          //We have added the orderpaymenttype to the order
+            (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout5.php");
+          });
+          return false;
+        };
       </script>
     </div>
   </template>
   <div style="text-align:center"></div>
   <script>
     var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
-    checkout.refreshView(thisElement,thisElement.previousElementSibling);
+    if (Config.chkt4_On==false) {
+      (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout5.php");
+    }
+    else {
+      checkout.refreshView(thisElement,thisElement.previousElementSibling);
+    }
   </script>
 </template>

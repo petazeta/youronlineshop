@@ -67,7 +67,7 @@
 	    myalert.showalert();
 	    return false;
 	  }
-	  thisNode.refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
+	  (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
 	  return false;
 	};
       </script>
@@ -76,6 +76,11 @@
   <div style="text-align:center"></div>
   <script>
     var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
-    checkout.refreshView(thisElement,thisElement.previousElementSibling);
+    if (Config.chkt2_On==false) {
+      (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
+    }
+    else {
+      checkout.refreshView(thisElement,thisElement.previousElementSibling);
+    }
   </script>
 </template>

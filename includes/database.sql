@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 22, 2019 at 09:50 PM
+-- Generation Time: Apr 23, 2019 at 03:14 PM
 -- Server version: 10.1.37-MariaDB-0+deb9u1
 -- PHP Version: 7.0.33-0+deb9u3
 
@@ -35,7 +35,8 @@ CREATE TABLE `addresses` (
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 (23, 'hhh', '', '', '9222', 2),
-(24, 'ffff', 'jjjj', 'oooo', '4444', 1);
+(24, 'ffff', 'jjjj', 'oooo', '4444', 1),
+(25, '522221', 'ssss', 'ssasa', '21111', 3);
 
 -- --------------------------------------------------------
 
@@ -95,8 +96,8 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (107, 'phonenumber', 103, 1),
 (108, 'langboxtt', 60, 1),
 (109, 'checkout', 60, 4),
-(110, 'chkt1next', 109, 3),
-(111, 'chkt1add', 109, 4),
+(110, 'chkt1next', 109, 4),
+(111, 'chkt1add', 109, 5),
 (182, 'logform', 60, 0),
 (183, 'userName', 182, 0),
 (184, 'password', 182, 0),
@@ -129,16 +130,19 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (316, 'currency', 60, 0),
 (317, 'signuptt', 182, 0),
 (337, 'chkt3next', 109, 1),
-(338, 'chkt3add', 109, 2),
-(339, 'order', 109, 9),
+(338, 'chkt3add', 109, 3),
+(339, 'order', 109, 12),
 (340, 'total', 339, 1),
-(341, 'chkt4add', 109, 5),
-(342, 'chkt4userarea', 109, 6),
+(341, 'chkt4add', 109, 6),
+(342, 'chkt4userarea', 109, 9),
 (343, 'subtotal', 339, 2),
-(344, 'chktback', 109, 8),
+(344, 'chktback', 109, 11),
 (357, 'extraEdition', 60, 5),
 (360, '', 66, 2),
-(361, 'online', 62, 1);
+(361, 'online', 62, 1),
+(362, 'chkt5add', 109, 7),
+(363, 'chkt4next', 109, 2),
+(364, 'chkt5pay', 109, 8);
 
 -- --------------------------------------------------------
 
@@ -230,13 +234,16 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (702, 'Continue »', 337, 1),
 (703, 'Please select your preferred shipping type', 338, 1),
 (704, 'Total', 340, 1),
-(705, 'The order has been successfully created', 341, 1),
+(705, '<div>Please select your preferred payment type</div>', 341, 1),
 (706, 'Go to my user area', 342, 1),
 (707, 'SubTotal', 343, 1),
 (708, 'Go back', 344, 1),
 (807, 'Extra Elements', 357, 1),
 (810, '', 360, 1),
-(811, 'Users online', 361, 1);
+(811, 'Users online', 361, 1),
+(812, 'The order has been successfully created', 362, 1),
+(813, 'Continue »', 363, 1),
+(814, 'Make payment', 364, 1);
 
 -- --------------------------------------------------------
 
@@ -256,7 +263,8 @@ CREATE TABLE `itemcategories` (
 
 INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position`) VALUES
 (1, NULL, 0),
-(59, 1, 1);
+(59, 1, 1),
+(60, 59, 1);
 
 -- --------------------------------------------------------
 
@@ -277,7 +285,8 @@ CREATE TABLE `itemcategoriesdata` (
 
 INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`) VALUES
 (1, 'root', NULL, 1),
-(56, '', 59, 1);
+(56, 'first cat', 59, 1),
+(57, '', 60, 1);
 
 -- --------------------------------------------------------
 
@@ -291,6 +300,13 @@ CREATE TABLE `items` (
   `_itemcategories` int(11) DEFAULT NULL,
   `_itemcategories_position` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `items`
+--
+
+INSERT INTO `items` (`id`, `image`, `_itemcategories`, `_itemcategories_position`) VALUES
+(1, '', 60, 1);
 
 -- --------------------------------------------------------
 
@@ -307,6 +323,13 @@ CREATE TABLE `itemsdata` (
   `_items` int(11) DEFAULT NULL,
   `_languages` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `itemsdata`
+--
+
+INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `price`, `_items`, `_languages`) VALUES
+(1, 'prod1', '', '', '3.00', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -365,6 +388,33 @@ CREATE TABLE `orderitems` (
   `_orders` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `orderitems`
+--
+
+INSERT INTO `orderitems` (`id`, `quantity`, `name`, `price`, `_orders`) VALUES
+(13, 1, 'prod1', '3.00', 13);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderpaymenttypes`
+--
+
+CREATE TABLE `orderpaymenttypes` (
+  `id` int(11) NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `details` text NOT NULL,
+  `_orders` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `orderpaymenttypes`
+--
+
+INSERT INTO `orderpaymenttypes` (`id`, `name`, `details`, `_orders`) VALUES
+(10, 'Paypal', '', 13);
+
 -- --------------------------------------------------------
 
 --
@@ -379,6 +429,13 @@ CREATE TABLE `orders` (
   `_users` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `creationdate`, `modificationdate`, `status`, `_users`) VALUES
+(13, '2019-04-23 12:46:59', '0000-00-00 00:00:00', 0, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -392,6 +449,56 @@ CREATE TABLE `ordershippingtypes` (
   `price` decimal(10,2) NOT NULL,
   `_orders` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ordershippingtypes`
+--
+
+INSERT INTO `ordershippingtypes` (`id`, `name`, `delay_hours`, `price`, `_orders`) VALUES
+(13, 'ship1', 24, '10.00', 13);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paymenttypes`
+--
+
+CREATE TABLE `paymenttypes` (
+  `id` int(11) NOT NULL,
+  `image` varchar(60) NOT NULL,
+  `vars` text NOT NULL,
+  `_paymenttypes` int(11) DEFAULT NULL,
+  `_paymenttypes_position` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `paymenttypes`
+--
+
+INSERT INTO `paymenttypes` (`id`, `image`, `vars`, `_paymenttypes`, `_paymenttypes_position`) VALUES
+(1, '', '', NULL, 0),
+(2, '', '{\"total\":\"amount\",\"total_name\":\"item_name\",\"action\":\"https://www.paypal.com/cgi-bin/webscr\",\"business\":\"youremail\",\"cmd\":\"_xclick\",\"currency_code\":\"USD\"}', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paymenttypesdata`
+--
+
+CREATE TABLE `paymenttypesdata` (
+  `id` int(11) NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `description` varchar(200) NOT NULL,
+  `_paymenttypes` int(11) DEFAULT NULL,
+  `_languages` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `paymenttypesdata`
+--
+
+INSERT INTO `paymenttypesdata` (`id`, `name`, `description`, `_paymenttypes`, `_languages`) VALUES
+(1, 'Paypal', 'Paypal payment system', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -411,7 +518,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `sesid`, `access`, `data`) VALUES
-(2, 'muflgsu8asuacc5o9r5crupa43', 1555962511, 'user|N;');
+(2, 'muflgsu8asuacc5o9r5crupa43', 1556025120, 'user|N;');
 
 -- --------------------------------------------------------
 
@@ -479,8 +586,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1555961494, 7),
-(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 2147483647, 3);
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1556025081, 7),
+(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1556023835, 3),
+(3, 'prueba', '$2y$10$arCRCrTm1fQAcU5mQF/67uWQPV.SSgf2xhCkWTfvMOvqjkmjwVwSK', 0, 1556023037, NULL);
 
 -- --------------------------------------------------------
 
@@ -503,7 +611,8 @@ CREATE TABLE `usersdata` (
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
 (1, 'fsmy pa', 'kkkkkkkkkkkkkkkupep', 'kkpjjjjj@caca.com', 666, 1),
-(2, 'order', '', '', 0, 2);
+(2, 'order', '', '', 0, 2),
+(3, 'SSS', 'SSS', 'mmm@mm.com', 2220, 3);
 
 -- --------------------------------------------------------
 
@@ -602,6 +711,13 @@ ALTER TABLE `orderitems`
   ADD KEY `_orders` (`_orders`);
 
 --
+-- Indexes for table `orderpaymenttypes`
+--
+ALTER TABLE `orderpaymenttypes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_orders` (`_orders`);
+
+--
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
@@ -614,6 +730,21 @@ ALTER TABLE `orders`
 ALTER TABLE `ordershippingtypes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `_orders` (`_orders`);
+
+--
+-- Indexes for table `paymenttypes`
+--
+ALTER TABLE `paymenttypes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_paymenttypes` (`_paymenttypes`);
+
+--
+-- Indexes for table `paymenttypesdata`
+--
+ALTER TABLE `paymenttypesdata`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `_paymenttypes` (`_paymenttypes`),
+  ADD KEY `_languages` (`_languages`);
 
 --
 -- Indexes for table `sessions`
@@ -669,32 +800,32 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=362;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=365;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=812;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=815;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 --
 -- AUTO_INCREMENT for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `languages`
 --
@@ -709,17 +840,32 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT for table `orderpaymenttypes`
+--
+ALTER TABLE `orderpaymenttypes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `ordershippingtypes`
 --
 ALTER TABLE `ordershippingtypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT for table `paymenttypes`
+--
+ALTER TABLE `paymenttypes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `paymenttypesdata`
+--
+ALTER TABLE `paymenttypesdata`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `sessions`
 --
@@ -812,6 +958,12 @@ ALTER TABLE `orderitems`
   ADD CONSTRAINT `orderitems_orders` FOREIGN KEY (`_orders`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `orderpaymenttypes`
+--
+ALTER TABLE `orderpaymenttypes`
+  ADD CONSTRAINT `orderpaymenttypes_ibfk_1` FOREIGN KEY (`_orders`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
@@ -822,6 +974,19 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `ordershippingtypes`
   ADD CONSTRAINT `ordershippingtypes_ibfk_1` FOREIGN KEY (`_orders`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `paymenttypes`
+--
+ALTER TABLE `paymenttypes`
+  ADD CONSTRAINT `paymenttypes_ibfk_1` FOREIGN KEY (`_paymenttypes`) REFERENCES `paymenttypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `paymenttypesdata`
+--
+ALTER TABLE `paymenttypesdata`
+  ADD CONSTRAINT `paymenttypesdata_ibfk_1` FOREIGN KEY (`_paymenttypes`) REFERENCES `paymenttypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `paymenttypesdata_ibfk_2` FOREIGN KEY (`_languages`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `shippingtypes`
