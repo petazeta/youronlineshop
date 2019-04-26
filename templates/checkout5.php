@@ -26,7 +26,13 @@
         if (orderpaymenttype && orderpaymenttype.properties.vars) {
           thisElement.style.visibility="visible";
           //We create the form
-          var f = document.createElement("form");
+          var f;
+          f=document.getElementById('fpayment');
+          if (!f) {
+            f = document.createElement("form");
+            f.id='fpayment';
+          }
+          f.style.display='none';
           f.setAttribute('method',"post");
           var myVars=JSON.parse(orderpaymenttype.properties.vars);
           var sendVars={};
