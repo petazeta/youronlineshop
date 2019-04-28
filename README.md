@@ -33,7 +33,7 @@ Admin -> (usr/password) webadmin/webadmin & ordersadmin/ordersadmin
 
 ## Autor Note
 
-This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to those people that have developed software in which I got inspiration. This version of the software is free to use and modify. I am available at the email for support or any other issues.
+This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to the people that have developed software in which I got inspiration. This version of the software is free to use and modify. I am available at the email for any support and other issues.
 
 
 ## About
@@ -49,7 +49,7 @@ It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As w
 4. Edit database settings at: includes/config.sample.php and rename it to config.php.
 5. Give write permisions to the folder catalog/images/small (To allow upload product images).
 6. For further database control install the complement [DbManager](https://sourceforge.net/projects/freshhh-dbmanager/).
-7. Also you can check file: javascript/config.js for some system settings.
+7. Also you can change some system settiings at file: javascript/config.js.
 
 ## Getting started
 
@@ -59,9 +59,9 @@ There are two already created users: "webadmin" and "ordersadmin". These are the
 
 User "ordersadmin" is order administrator and can watch and edit all the orders. Once you log in with this user click at "Show orders" button.
 
-User "webadmin" is web administrator user and can edit the web page content and the catalog (categories and items).
+User "webadmin" is web administrator user and can edit the web page content, the catalog (categories and items) and the checkout process options.
 
-Once editing some content press Intro or click outside from the editable area to save changes.
+Once editing some content press Intro or click outside of the editable area to save changes.
 
 To reach checkout process edition you should log in with the webadmin user and make an order as you were logged in as a normal user. Once you get to some checkout steps you should be able to edit the checkout step options. Some extra edition elements that can not be reached as a web user can be accessed by cicking the Extra Elements button that will appear at the left bar just after log in as webadmin.
 
@@ -76,8 +76,6 @@ To change admin password you should, by now, doing manually. You must get into t
 - How can I enable the paypal account for the payment process?
 
 You must add your email in the required parameter. That parameter can be accessed by getting to the checkout payment step logged in as webadmin.
-
-More at:  [Wiki F.A.Q.](https://github.com/petazeta/youronlineshop/wiki/Frequently-Asked-Questions)
 
 ## More Info
 

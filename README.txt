@@ -1,7 +1,7 @@
 ***************
 *YOS Version:
 ***************
-1.1.0 23/04/2019
+1.1.0 28/04/2019
 
 ***************
 *Support this Project:
@@ -11,12 +11,12 @@ https://www.patreon.com/bePatron?u=18217513
 ***************
 *Autor Note*
 ***************
-This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to those people that have developed software in which I got inspiration. This version of the software is free to use and modify. I am available at the email for support or any other issues.
+This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmail.com. I am greateful to the people that have developed software in which I got inspiration. This version of the software is free to use and modify. I am available at the email for any support and other issues.
 
 ***************
 *About*
 ***************
-It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As well as HTML, CSS and JavaScript). It uses MariaDB/Mysql (InnoDB) for a database.
+It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As well as HTML, CSS and JavaScript). It uses MariaDB/Mysql (InnoDB) for a database.
 
 **************
 *Installation*
@@ -27,9 +27,7 @@ It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As w
 4 - Edit database settings at: includes/config.sample.php and rename it to config.php.
 5 - Give write permisions to the folder catalog/images/small (To allow upload product images).
 6 - For further database control install the complement DbManager: https://sourceforge.net/projects/freshhh-dbmanager/ .
-7 - Also you can check file: javascript/config.js for some system settings.
-
-ADVISE: If you got any problem with the installation or the software doesn't work in your system please contact us at: melchorherrera@gmail.com.
+7 - Also you can change some system settiings at file: javascript/config.js.
 
 *****************
 *Getting started*
@@ -59,11 +57,9 @@ How can I enable the paypal account for the payment process?
 
 You must add your email in the required parameter. That parameter can be accessed by getting to the checkout payment step logged in as webadmin.
 
-More at:  https://github.com/petazeta/youronlineshop/wiki/Frequently-Asked-Questions
-
 *****************
 *More*
 *****************
 Find us at https://sourceforge.net/projects/youronlineshop/ for more information.
 
-Project documentation: https://github.com/petazeta/youronlineshop/wiki/
+Project documentation (Wiki): https://github.com/petazeta/youronlineshop/wiki/
