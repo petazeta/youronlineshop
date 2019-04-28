@@ -49,7 +49,7 @@ It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As 
 4. Edit database settings at: includes/config.sample.php and rename it to config.php.
 5. Give write permisions to the folder catalog/images/small (To allow upload product images).
 6. For further database control install the complement [DbManager](https://sourceforge.net/projects/freshhh-dbmanager/).
-7. Also you can change some system settiings at file: javascript/config.js.
+7. Also you can change some system settings at file: javascript/config.js.
 
 ## Getting started
 
