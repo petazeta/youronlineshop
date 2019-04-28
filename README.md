@@ -38,7 +38,7 @@ This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmai
 
 ## About
 
-It implements an e-commerce system. Ajax and WYSIWYG. It is written in PHP (As well as HTML, CSS and JavaScript). It uses MariaDB/Mysql (InnoDB) for a database.
+It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As well as HTML, CSS and JavaScript). It uses MariaDB/Mysql (InnoDB) for a database.
 
 
 ## Installation
