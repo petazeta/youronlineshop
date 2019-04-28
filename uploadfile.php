@@ -1,6 +1,7 @@
 <?php
 require('includes/config.php');
 require('includes/phpclasses/nodes.php');
+require('includes/database_tables.php');
 require('includes/phpclasses/user.php');
 require('includes/phpclasses/sessions.php');
 $mysession = new session();
