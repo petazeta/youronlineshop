@@ -71,7 +71,7 @@ For system configuration edit file javascript/config.js
 
 - How can I change admin password?
 
-To change admin password you should, by now, doing manually. You must get into the database record where the passord is saved and change it. As password is encrypted I suggest you to sign up as a new user and write your password there so you will be able to copy and paste the encryption result.
+Admin password edition must be done manually. You must get into the database record where the passord is saved and change it. As password is encrypted I suggest you to sign up as a new user and write your password there so you will be able to copy and paste the encryption result.
 
 - How can I enable the paypal account for the payment process?
 
