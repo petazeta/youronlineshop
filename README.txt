@@ -21,6 +21,9 @@ It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As 
 **************
 *Installation*
 **************
+
+I want you to use this program so I would do as much as I can to support you in the installation process or with any other issue: melchorherrera@gmail.com
+
 1 - Upload the files to your web server.
 2 - Unpack it to the destination folder.
 3 - Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.

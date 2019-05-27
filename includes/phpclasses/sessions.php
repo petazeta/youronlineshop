@@ -3,8 +3,10 @@ class session extends NodeMale {
   public function __construct() {
     parent::__construct();
     $this->parentNode=new NodeFemale();
-    $this->parentNode->properties->childtablename="TABLE_SESSIONS";
-    $this->parentNode->db_loadchildtablekeys();
+    if (defined('DB_SESSIONS') && DB_SESSIONS==true) {
+      $this->parentNode->properties->childtablename="TABLE_SESSIONS";
+      $this->parentNode->db_loadchildtablekeys();
+    }
   }
   function open() {
     return true;
