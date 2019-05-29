@@ -1,12 +1,12 @@
 ***************
 *YOS Version:
 ***************
-1.1.0 28/04/2019
+1.1.0 29/05/2019
 
 ***************
-*Support this Project:
+*Free Support:
 ***************
-https://www.patreon.com/bePatron?u=18217513
+Please write me: melchorherrera@gmail.com
 
 ***************
 *Autor Note*
@@ -22,7 +22,7 @@ It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As 
 *Installation*
 **************
 
-I want you to use this program so I would do as much as I can to support you in the installation process or with any other issue: melchorherrera@gmail.com
+I would support you in the installation process or with any other issue: melchorherrera@gmail.com
 
 1 - Upload the files to your web server.
 2 - Unpack it to the destination folder.
