@@ -13,6 +13,7 @@ class session extends NodeMale {
   }
 
   function close() {
+    $this->gc(get_cfg_var("session.gc_maxlifetime")); // ubuntu and debian php needs this sentence
     return true;
   }
 
@@ -106,12 +107,13 @@ class session extends NodeMale {
     register_shutdown_function('session_write_close');
   }
   
-  function readall($count=false) {
+  function readall($count=false, $sys=false) {
     //It returns a list of users logged in, it returns only users ids and names.
     $candidates=new NodeFemale();
     $candidates->load($this->parentNode);
     $candidates->db_loadall();
     if ($count) return count($candidates->children);
+    if ($sys) return $candidates->children;
     $onlineUsers=[];
     if (count($candidates->children)) {
       // store our current session

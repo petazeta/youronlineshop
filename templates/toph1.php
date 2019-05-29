@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display:inline-block">
     <h1></h1>
     <script>
       thisNode.writeProperty(thisElement);

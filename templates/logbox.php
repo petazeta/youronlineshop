@@ -85,12 +85,20 @@
           });
         </script>
       </div>
+      <?php
+      require('../includes/config.php');
+      if (defined('DB_SESSIONS') && DB_SESSIONS==true) {
+      ?>
       <div></div>
       <script>
+
         if (Config.dbSessionsOn) {
           thisNode.refreshView(thisElement, "templates/liveusers.php");
         }
       </script>
+      <?php
+      }
+      ?>
     </div>                                  
   </div>
 </template>
