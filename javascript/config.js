@@ -9,7 +9,7 @@ var Config={
   templatesCacheOn: true, //true, better sometimes false for production
   loadTemplatesAtOnce: true, //true, better sometimes false for production
   dbSessionsOn: true, //true or false if deactivated
-  chkt2_On: true, //false skip address insertion
-  chkt3_On: true, //false skip shipping type selection
-  chkt4_On: true //false skip payment type selection
+  chkt2_On: true, //if false skip address insertion
+  chkt3_On: true, //if false skip shipping type selection
+  chkt4_On: true //if false skip payment type selection
 }

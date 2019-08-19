@@ -32,45 +32,44 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       newNode.getRelationship("itemcategoriesdata").addChild(new NodeMale());
       categoriesMother.newNode=newNode;
       categoriesMother.addEventListener("refreshChildrenView", function(){
-	//to set the result in a one column table
-	document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
+        //to set the result in a one column table
+        document.querySelector("#catalogbox .boxbody").appendChild(DomMethods.intoColumns(getTpContent(document.querySelector("#categorytbxtp")).querySelector("table").cloneNode(true), document.querySelector("#catalogbox .boxbody"), 1));
       }, "1column");
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "templates/admnlisteners.php", function() {
-	this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php", function(){
-	  if (window.location.search) {
-	    regex = /category=(\d+)/;
-	    if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
-	    if (id) {
-	      var link=document.querySelector("a[href='?category=" + id + "']");
-	      if (link) {
-		link.click();
-		return;
-	      }
-	    }
-	  }
-	  //We add the currency symbol editor and extra pages
-	  function showExtraEdition(){ 
-	    var containerExtraNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "extraEdition"});
-	    var containerExtra=document.querySelector("#extraedition");
-	    containerExtraNode.refreshView(containerExtra,"templates/extraedition.php");
-	  }
-	  if (webuser.isWebAdmin()) {
-	    showExtraEdition();
-	  }
-	  webuser.addEventListener("log",
-	    function() {
-	      if (!this.isWebAdmin()) {
-		//to remove the openbutton when logs after webadmin
-		var containerExtra=document.querySelector("#extraedition");
-		containerExtra.innerHTML="";
-	      }
-	      else {
-		showExtraEdition();
-	      }
-	    },
-	    "extraButton"
-	  );
-	});
+        this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php", function(){
+          //We add the currency symbol editor and extra pages
+          function showExtraEdition(){
+            var containerExtraNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "extraEdition"});
+            var containerExtra=document.querySelector("#extraedition");
+            containerExtraNode.refreshView(containerExtra,"templates/extraedition.php");
+          }
+          if (webuser.isWebAdmin()) {
+            showExtraEdition();
+          }
+          webuser.addEventListener("log",
+            function() {
+              if (!this.isWebAdmin()) {
+                //to remove the openbutton when logs after webadmin
+                var containerExtra=document.querySelector("#extraedition");
+                containerExtra.innerHTML="";
+              }
+              else {
+                showExtraEdition();
+              }
+            },
+            "extraButton"
+          );
+          if (window.location.search) {
+            regex = /category=(\d+)/;
+            if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
+            if (id) {
+              var link=document.querySelector("a[href='?category=" + id + "']");
+              if (link) {
+                link.click();
+              }
+            }
+          }
+        });
       });
     });
   });

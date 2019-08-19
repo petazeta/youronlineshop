@@ -30,11 +30,11 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
           var link=document.querySelector("a[href='?menu=" + id + "']");
           if (link) {
             link.click();
-            return;
+            return; //end here
           }
         }
       }
-      else if (this.children.length > 0 && !webuser.isWebAdmin()) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+      if (this.children.length > 0 && !webuser.isWebAdmin()) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
         var button=null;
         var myDomNodes=this.children[0].getMyDomNodes();
         for (var i=0; i<myDomNodes.length; i++) {

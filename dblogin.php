@@ -2,9 +2,8 @@
 require('includes/config.php');
 require('includes/phpclasses/nodes.php');
 require('includes/database_tables.php');
-require('includes/phpclasses/user.php');
 require('includes/phpclasses/sessions.php');
-
+require('includes/phpclasses/user.php');
 $mysession = new session();
 if ($mysession->session_none()) {
   if (defined('DB_SESSIONS') && DB_SESSIONS==true) {

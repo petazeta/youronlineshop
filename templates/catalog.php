@@ -109,18 +109,18 @@
 	      regex = /subcategory=(\d+)/;
 	      if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
 	      if (id) {
-		var link=document.querySelector("a[href='?subcategory=" + id + "']");
-		if (link) {
-		  link.click();
-		  return;
-		}
+          var link=document.querySelector("a[href='?subcategory=" + id + "']");
+          if (link) {
+            link.click();
+            return; //Finish here
+          }
 	      }
 	    }
 	    if (this.children.length > 0) {
 	      var button=null;
 	      this.getChild().getMyDomNodes().every(function(domNode){
-		button=domNode.querySelector("[data-button]");
-		if (button) return false;
+          button=domNode.querySelector("[data-button]");
+          if (button) return false;
 	      });
 	      if (button) button.click();
 	    }

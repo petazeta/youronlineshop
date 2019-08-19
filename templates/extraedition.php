@@ -1,14 +1,14 @@
 <template>
   <template id="extraedittp">
     <template id="logedittp">
-      <div display:table;">
-	<div></div>
-	<script>
-	  var myNode=thisNode.getRelationship("domelementsdata").getChild();
-	  var myLabel=thisNode.properties.name;
-	  myNode.editpropertylabel=myLabel;
-	  myNode.appendThis(thisElement,"templates/singlefield.php");
-	</script>
+      <div style="display:table;">
+        <div></div>
+        <script>
+          var myNode=thisNode.getRelationship("domelementsdata").getChild();
+          var myLabel=thisNode.properties.name;
+          myNode.editpropertylabel=myLabel;
+          myNode.appendThis(thisElement,"templates/singlefield.php");
+        </script>
       </div>
     </template>
     <div>
