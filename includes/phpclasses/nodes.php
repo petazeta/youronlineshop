@@ -491,6 +491,18 @@ class NodeFemale extends Node{
     if (($result = $this->getdblink()->query($sql))===false) return false;
     $this->cloneChildrenFromQuery($result);
   }
+  function db_removeall($filter=null, $limit=null) {
+    $sql = 'DELETE FROM '
+    . constant($this->properties->childtablename)
+    .  ' WHERE 1';
+    if ($filter) {
+      $sql .= ' AND ' . $filter;
+    }
+    if ($limit) $sql .= ' LIMIT ' . $limit;
+    
+    if (($result = $this->getdblink()->query($sql))===false) return false;
+    $this->cloneChildrenFromQuery($result);
+  }
   function db_loadthisrel()  {
     $this->db_loadchildtablekeys();
     $sql = 'SELECT r.TABLE_NAME as childtablename, r.REFERENCED_TABLE_NAME as parenttablename, r.TABLE_NAME as name FROM '
@@ -929,6 +941,7 @@ class NodeMale extends Node{
     $sql='DELETE FROM '
     . constant($this->parentNode->properties->childtablename)
     . ' WHERE id=' . $this->properties->id . ' LIMIT 1';
+
     if (($result = $this->getdblink()->query($sql))===false) return false;
     if (isset($this->parentNode->properties->id) && isset($this->parentNode->partnerNode->properties->id)) {
       $this->db_deletemylink();

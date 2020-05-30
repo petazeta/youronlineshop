@@ -154,6 +154,7 @@ Node.prototype.toRequestData=function(parameters) {
     case "load this relationship":
     case "load my childtablekeys":
     case "load all":
+    case "remove all":
     case "load tables":
     case "load children":
       var node=this.cloneNode(0, 0);
@@ -163,7 +164,6 @@ Node.prototype.toRequestData=function(parameters) {
     case "load my children":
     case "load my tree":
     case "delete my tree":
-    case "delete my children":
     case "load myself":
       var node=this.cloneNode(1, 0, "id", "id");
       break;
@@ -174,6 +174,9 @@ Node.prototype.toRequestData=function(parameters) {
       break;
     case "add myself":
       var node=this.cloneNode(2, 0, null, "id"); //we need the parent->partner
+      break;
+    case "delete my children":
+      var node=this.cloneNode(1, 1, "id", "id"); //we need the partner
       break;
     case "edit my properties":
       var node=this.cloneNode(1, 0, null, "id");

@@ -10,8 +10,6 @@
       launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
       thisElement.addEventListener("click", function(ev){
         ev.preventDefault();
-        var cartbox=document.getElementById("cartbox");
-        cartbox.style.visibility="hidden";
       });
     </script>
   </span>

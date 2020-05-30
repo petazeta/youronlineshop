@@ -51,7 +51,6 @@ header div.menuscontainer {
   flex-direction: row;
   flex-wrap: wrap;
   padding-bottom:1em;
-  padding-left: 2em;
   min-height: 2em;
   margin-top: 10px;
 }
@@ -560,4 +559,52 @@ div.quantityselect {
 	border: 2px solid grey;
 	background: white;
 	padding: 2px 4px;
+}
+
+@media screen and (max-width: 481px){
+	header {
+	  display: block;
+	}
+	div.mainblock {
+	  display: block;
+	  width: 100%;
+	}
+	div.centercolumn {
+		margin: 1em;
+		margin-left: 1.5em;
+	}
+	header h1 {
+		font-size: 2em;
+	}
+	header h2 {
+		font-size: 1em;
+	}
+	header div.menuscontainer a.menu {
+		font-size: 1.2em;
+		margin: 0.2em;
+	}
+	#centralcontent {
+		padding: 1em;
+	}
+	header div.toolbar {
+		justify-content: space-between;
+	}
+	div.productlistgrid {
+		grid-template-columns: 1fr;
+	}
+	nav.categories div.boxtitle {
+		display: none;
+	}
+	div.space {
+		height: 1em;
+	}
+	header div.toolbar a.toolbaricon {
+		font-size: 0.9em;
+	}
+	#cartbox {
+	  top: 2%;
+	  left: 50%;
+	  transform: translateX(-50%);
+	  margin: 0;
+	}
 }

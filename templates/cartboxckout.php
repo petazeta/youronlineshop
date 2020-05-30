@@ -10,7 +10,6 @@
       launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
       thisElement.onclick=function(){  
 	mycart.tocheckout();
-        document.getElementById("cartbox").style.visibility="hidden";
       }
     </script>
   </span>

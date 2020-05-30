@@ -36,8 +36,7 @@ domelementsrootmother.addEventListener("loadLabels", function(){
               loadActions.push(myparameters);
             }
           }
-          //Now we have to send the load request and get the result. the usual loadfromhttp method doesnt accept multiple request so we must
-          //first develop the request.php file to accept request multiple
+          //Now we have to send the load request and get the result.
           var element=new Node();
           element.loadfromhttp({"parameters":loadActions, "nodes":loadRequest}, function(){
             var insertRequest=[];

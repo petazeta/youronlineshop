@@ -211,6 +211,14 @@ function makerequest($parameters, $json) {
       if ($filter || $order || $limit) $argument=[$filter, $order, $limit];
       $callback="cutUp";
       break;
+    case "remove all":
+      $myexecfunction="db_removeall";
+      $filter=null; $limit = null;
+      if (isset($parameters->filter)) $filter=$parameters->filter;
+      if (isset($parameters->limit)) $limit=$parameters->limit;
+      if ($filter || $limit) $argument=[$filter, $limit];
+      $callback="cutUp";
+      break;
     case "load this relationship":
       $myexecfunction="db_loadthisrel";
       break;

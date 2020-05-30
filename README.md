@@ -1,4 +1,4 @@
-# Your Online Shop System V 1.7.0
+# Your Online Shop System V 1.7.1
 
 <table>
   <tr>
@@ -36,7 +36,7 @@ It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As 
 ## Installation
 
 1. Upload the files to your web server.
-2. Unpack it to the destination folder.
+2. Unpack it to the destination folder (you must create it first).
 3. Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.
 4. Edit database settings at: includes/config.php.
 5. Give write permisions to the folder catalog/images/small (To allow upload product images).
@@ -48,7 +48,7 @@ It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As 
 
 Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear.
 
-There are two already created users: "webadmin" and "ordersadmin". These are the users names, and users passwords are the same as users names.
+There are some already created users: "webadmin" and "ordersadmin". These are the users names, and users passwords are the same as users names.
 
 User "ordersadmin" is order administrator and can watch and edit all the orders. Once you log in with this user click at "Show orders" button.
 
@@ -74,4 +74,8 @@ You must add your email in the required parameter. That parameter can be accesse
 
 Find us at [YourOnlineShop.net](http://www.youronlineshop.net) for more information.
 
-Project documentation: [project wiki](https://github.com/petazeta/youronlineshop/wiki/).
+Some project documentation: [project wiki](https://github.com/petazeta/youronlineshop/wiki/).
+
+## Support
+
+melchorherrera@gmail.com

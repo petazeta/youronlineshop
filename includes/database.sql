@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 10, 2020 at 08:40 PM
+-- Generation Time: May 29, 2020 at 10:18 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -36,7 +36,8 @@ CREATE TABLE `addresses` (
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 (23, '5555555555', 'asdfasdf', 'asdfasdf', '9222', 2),
 (24, 'asdfasdf', 'jjjj', 'oooo', '444436', 1),
-(25, '', '', '', '', 4);
+(25, '', '', '', '', 4),
+(26, '', '', '', '', 6);
 
 -- --------------------------------------------------------
 
@@ -161,7 +162,8 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (436, 'expcatg', 392, 9),
 (437, 'impnoselection', 392, 7),
 (438, 'exptit', 392, 11),
-(440, 'exptext', 392, 10);
+(440, 'exptext', 392, 10),
+(441, 'expusers', 392, 12);
 
 -- --------------------------------------------------------
 
@@ -276,17 +278,18 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1065, 'Text Edition Tool', 432, 2),
 (1066, 'You can use the text box below to create html formated text. Once you have created the content you can copy / paste into the text content of the actual elements you need to edit.', 433, 2),
 (1067, 'Performing some operations please wait...', 434, 2),
-(1068, 'Menus &amp; Pages', 435, 2),
+(1068, 'Menus / Pages', 435, 2),
 (1069, 'Catalog', 436, 2),
 (1070, 'Please select any option', 437, 2),
 (1071, 'Site title', 438, 2),
-(1072, 'Site Text content', 440, 2),
+(1072, 'Text except catalog and menus / pages', 440, 2),
 (1073, '', 284, 2),
 (1074, '', 279, 2),
 (1075, '', 182, 2),
 (1076, '', 109, 2),
 (1077, '', 429, 2),
-(1078, '', 339, 2);
+(1078, '', 339, 2),
+(1079, 'Users', 441, 2);
 
 -- --------------------------------------------------------
 
@@ -598,9 +601,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1589133969, 7),
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1589211176, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1588506282, 3),
-(4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9);
+(4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
+(6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
 
 -- --------------------------------------------------------
 
@@ -624,7 +628,8 @@ CREATE TABLE `usersdata` (
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
 (1, 'nana', 'kkupep', 'admn@dmin.com', 666, 1),
 (2, 'order', 'llll', 'oadmn@dd.com', 220, 2),
-(3, '', '', '', 0, 4);
+(3, '', '', '', 0, 4),
+(4, '', '', '', 0, 6);
 
 -- --------------------------------------------------------
 
@@ -645,7 +650,9 @@ INSERT INTO `userstypes` (`id`, `type`) VALUES
 (3, 'orders administrator'),
 (7, 'web administrator'),
 (9, 'product administrator'),
-(10, 'product seller');
+(10, 'product seller'),
+(11, 'user administrator'),
+(12, 'customer');
 
 --
 -- Indexes for dumped tables
@@ -811,17 +818,17 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=441;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=442;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1079;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1080;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
@@ -901,17 +908,17 @@ ALTER TABLE `shippingtypesdata`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- Constraints for dumped tables
 --
@@ -953,7 +960,7 @@ ALTER TABLE `itemcategoriesdata`
 --
 ALTER TABLE `items`
   ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`_itemcategories`) REFERENCES `itemcategories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `items_ibfk_2` FOREIGN KEY (`_itemusers`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `items_ibfk_2` FOREIGN KEY (`_itemusers`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `itemsdata`

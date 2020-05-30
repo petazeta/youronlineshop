@@ -1,10 +1,24 @@
 <?php
 class user extends NodeMale {
-  public function __construct() {
+  public function __construct($user_type="customer") {
     parent::__construct();
+    
     $this->parentNode=new NodeFemale();
+    $this->parentNode->properties->parenttablename="TABLE_USERSTYPES";
     $this->parentNode->properties->childtablename="TABLE_USERS";
     $this->parentNode->db_loadchildtablekeys();
+    
+    //First we get the usertype (parent)
+    $parentPartner=new NodeMale();
+    $parentPartner->parentNode=new NodeFemale();
+    $parentPartner->parentNode->properties->childtablename="TABLE_USERSTYPES";
+    $parentPartner->parentNode->db_loadchildtablekeys();
+    $parentPartner->properties->type=$user_type;
+    $return=$parentPartner->db_search();
+    $row=$return[0];
+    $parentPartner->properties->cloneFromArray($row);
+
+    $this->parentNode->partnerNode=$parentPartner;
   }
   function usercheck($username, $pwd) {
     $result=new NodeMale();

@@ -75,6 +75,10 @@ user.prototype.isProductSeller=function(){
   return (this.isUserType("product seller"));
 }
 
+user.prototype.isUserAdmin=function(){
+  return (this.isUserType("user administrator"));
+}
+
 user.prototype.getUserType=function(){
   if (this.parentNode && this.parentNode.partnerNode) return this.parentNode.partnerNode.properties.type;
 }

@@ -7,6 +7,10 @@
   </div>
 </div>
 <script>
+  document.getElementById("cartbox").addEventListener("click",  function(){
+    this.style.visibility="hidden";
+  });
+  
   var mycart=new cart();
   //Preparing cart items containers
   var cartItems=mycart.getRelationship({name:"cartbox"}).getChild().getRelationship({name:"cartboxitem"});
