@@ -33,7 +33,7 @@
 	ordersRel.children=[];
       }
       var myFilter="t.status = 0";
-      if (thisNode.filterorders=="archived") myFilter="t.status = 1"
+      if (thisNode.filterorders=="archived") myFilter="t.status = 1";
       ordersRel.loadfromhttp({action: myaction, filter: myFilter, user_id: webuser.properties.id}, function(){
 	if (this.children.length == 0) {
 	  thisElement.innerHTML="";
@@ -50,24 +50,23 @@
 	      ordersRel.refreshChildrenView();
 	    });
 	  }
-	  this.addEventListener("loadedUser", function(){
-	    var finished=true;
-	    for (var i=0; i<this.children.length; i++) {
-	      if (!this.children[i].parentNode.partnerNode) finished=false;
-	    }
-	    if (finished) {
-	      this.refreshChildrenView(thisElement, "templates/userordersline.php");
-	    }
-	  });
+          var myparams=[];
+          var mydatanodes=[];
 	  for (var i=0; i<this.children.length; i++) {
 	    this.children[i].parentNode=new NodeFemale();
 	    this.children[i].parentNode.properties.cloneFromArray(ordersRel.properties);
-	    this.children[i].loadfromhttp({action: "load my tree up", user_id: webuser.properties.id}, function(){
-	      this.parentNode.partnerNode.parentNode=new NodeFemale();
-	      this.parentNode.partnerNode.parentNode.properties.childtablename=this.parentNode.properties.parenttablename;
-	      ordersRel.dispatchEvent("loadedUser");
-	    });
+            myparams.push({action:"load my tree up"});
+            mydatanodes.push(this.children[i].toRequestData({action:"load my tree up"}));
 	  }
+          var nodeRequest=new Node();
+          nodeRequest.loadfromhttp({"parameters":myparams, "nodes":mydatanodes}, function(){
+            for (var i=0; i<this.nodelist.length; i++) {
+              ordersRel.children[i].parentNode=this.nodelist[i].parentNode;
+              ordersRel.children[i].parentNode.partnerNode.parentNode=new NodeFemale();
+              ordersRel.children[i].parentNode.partnerNode.parentNode.properties.childtablename=ordersRel.children[i].parentNode.properties.parenttablename;
+            }
+            ordersRel.refreshChildrenView(thisElement, "templates/userordersline.php");
+          });
 	}
 	else ordersRel.refreshChildrenView(thisElement, "templates/userordersline.php");
       });
