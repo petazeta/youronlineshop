@@ -1,4 +1,4 @@
-# Your Online Shop System V 1.7.1
+# Your Online Shop System V 1.8.0
 
 <table>
   <tr>
