@@ -1,4 +1,7 @@
 <div class="sidebox" id="cartbox" style="visibility:hidden;">
+    <div class="bttopinsideleftinside">
+      <button class="minibtn transp" style="font-size:1.4em; font-weight: bold">&times;</button>
+    </div>
   <div class="boxtitle">
   </div>
   <div class="boxbody">
@@ -7,10 +10,9 @@
   </div>
 </div>
 <script>
-  document.getElementById("cartbox").addEventListener("click",  function(){
-    this.style.visibility="hidden";
+  document.getElementById("cartbox").getElementsByTagName("button")[0].addEventListener("click",  function(){
+    document.getElementById("cartbox").style.visibility="hidden";
   });
-  
   var mycart=new cart();
   //Preparing cart items containers
   var cartItems=mycart.getRelationship({name:"cartbox"}).getChild().getRelationship({name:"cartboxitem"});

@@ -1,4 +1,4 @@
-<template id="rmboxtp">
+<template>
   <div class="rmbox">
     <div class="bttopinsiderightinside">
       <button class="minibtn transp" style="font-size:1.4em; font-weight: bold">&times;</button>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 29, 2020 at 10:18 PM
+-- Generation Time: Jun 05, 2020 at 10:12 AM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -163,7 +163,8 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (437, 'impnoselection', 392, 7),
 (438, 'exptit', 392, 11),
 (440, 'exptext', 392, 10),
-(441, 'expusers', 392, 12);
+(441, 'expusers', 392, 12),
+(442, 'newuserbt', 182, 1);
 
 -- --------------------------------------------------------
 
@@ -229,7 +230,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (187, 'Login Ok', 190, 2),
 (188, 'Incorrect Email', 191, 2),
 (189, 'User Name aready taken', 192, 2),
-(190, 'Sign up', 193, 2),
+(190, 'Sign in', 193, 2),
 (191, 'Signed In correctly', 194, 2),
 (192, '&laquo; Back to Log in', 195, 2),
 (193, 'Cart is Empty', 196, 2),
@@ -289,7 +290,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1076, '', 109, 2),
 (1077, '', 429, 2),
 (1078, '', 339, 2),
-(1079, 'Users', 441, 2);
+(1079, 'Users', 441, 2),
+(1080, 'I don\'t have an account', 442, 2);
 
 -- --------------------------------------------------------
 
@@ -601,7 +603,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1589211176, 7),
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1591343771, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1588506282, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
@@ -823,12 +825,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=442;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=443;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1080;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1081;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --

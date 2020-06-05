@@ -560,6 +560,9 @@ div.quantityselect {
 	background: white;
 	padding: 2px 4px;
 }
+#cartbox .boxtitle span{
+  margin-left: 8px;
+}
 
 @media screen and (max-width: 481px){
 	header {

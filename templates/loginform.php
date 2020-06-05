@@ -19,6 +19,22 @@
 	<table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
 	  <tr>
 	    <td style="padding-top:1em;">
+              <div style="margin-bottom: 10px;  display:table;">
+                <button class="btn"></button>
+                <script>
+                  var myNode=thisNode.getNextChild({name:"newuserbt"}).getRelationship("domelementsdata").getChild();
+                  myNode.writeProperty(thisElement);
+                  thisElement.onclick=function(){
+                    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "templates/newform.php");
+                  }
+                  var launcher = new Node();
+                  launcher.thisNode = myNode;
+                  launcher.createInput=true;
+                  launcher.visibility="visible";
+                  launcher.editElement = thisElement;
+                  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+                </script>
+              </div>
 	      <div class="form-group">
 		<div style="display:table;">
 		  <label class="form-label" for="user_name"></label>
@@ -185,22 +201,6 @@
 	  return false;
 	}
       </script>
-      <div style="margin:auto;  display:table;">
-	<button class="btn"></button>
-	<script>
-	  var myNode=thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild();
-	  myNode.writeProperty(thisElement);
-	  thisElement.onclick=function(){
-	    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "templates/newform.php");
-	  }
-	  var launcher = new Node();
-	  launcher.thisNode = myNode;
-	  launcher.createInput=true;
-	  launcher.visibility="visible";
-	  launcher.editElement = thisElement;
-	  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	</script>
-      </div>
     </div>
   </template>
   <div></div>
