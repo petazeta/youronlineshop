@@ -37,7 +37,7 @@ statsRecorder.startRecordingProcess=function(){
   var softversion="<?php
 $myfile = fopen('../README.txt', 'r') or die('Unable to open file!');
 // Output one line until end-of-file
-$i=4;
+$i=5;
 while($i-- && !feof($myfile)) {
   $version=fgets($myfile);
 }
