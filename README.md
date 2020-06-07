@@ -11,7 +11,7 @@
     <td style="padding:1em">
       <h2>YouTube</h2>
       <a title="You Tube Video" rel="section" href="https://www.youtube.com/channel/UC2z0Kj-fLkCilGg2tSztG-w/">
-        <img src="https://img.youtube.com/vi/zajRGCuGF38/hqdefault.jpg" width="245" height="183">
+        <img src="https://img.youtube.com/vi/b41mUXtEn8I/hqdefault.jpg" width="245" height="183">
       </a>
     </td>
   </tr>
