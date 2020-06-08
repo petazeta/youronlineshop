@@ -14,6 +14,18 @@ function is_actionpermited($parameters, $myelement){
 
   if (preg_match('/^load/',$parameters->action)) $action="read";
   if (preg_match('/^add/',$parameters->action) || preg_match('/^delete/',$parameters->action) || preg_match('/^edit/',$parameters->action) || preg_match('/^replace/',$parameters->action)) $action="write";
+  
+  //Avoid HTML Tags for normal user insertions
+  if ($action=="write" && $usertype!="web administrator") {
+    $elementClone=$myelement->CloneNode();
+    $elementClone->avoidrecursion();
+    $elementJson=json_encode($elementClone);
+    if($elementJson != strip_tags($elementJson)) {
+      return false;
+    }
+  }
+
+  
 
   $usertype=null;
   $user=null;
