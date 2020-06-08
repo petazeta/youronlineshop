@@ -23,16 +23,13 @@ function is_actionpermited($parameters, $myelement){
     if (isset($user->parentNode) && isset($user->parentNode->partnerNode)) $usertype=$user->parentNode->partnerNode->properties->type;
   }
   //Avoid HTML Tags for normal user insertions
-  if ($action=="write" && $usertype!="web administrator") {
-
+  if ($action=="write" && $usertype!="web administrator" && $usertype!="product administrator") {
     $elementClone=unserialize(serialize($myelement));
     $elementClone->avoidrecursion();
-
     $elementJson=json_encode($elementClone);
     if($elementJson != strip_tags($elementJson)) {
       return false;
     }
-
   }
   //Tables that can be accessed by users and that contain private data = private tables
   $privatetables=["TABLE_USERS", "TABLE_USERSDATA", "TABLE_ADDRESSES", "TABLE_ORDERS", "TABLE_ORDERITEMS", "TABLE_ORDERSHIPPINGTYPES", "TABLE_ORDERPAYMENTTYPES", "TABLE_LOGS"];
