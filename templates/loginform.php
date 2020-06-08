@@ -17,9 +17,9 @@
     <div>
       <form>
 	<table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
-	  <tr>
+          <tr>
 	    <td style="padding-top:1em;">
-              <div style="margin-bottom: 10px;  display:table;">
+              <div style="margin-bottom: 10px; display:table;">
                 <button class="btn"></button>
                 <script>
                   var myNode=thisNode.getNextChild({name:"newuserbt"}).getRelationship("domelementsdata").getChild();
@@ -35,6 +35,10 @@
                   launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
                 </script>
               </div>
+            </td>
+          </tr>
+	  <tr>
+	    <td style="padding-top:1em;">
 	      <div class="form-group">
 		<div style="display:table;">
 		  <label class="form-label" for="user_name"></label>

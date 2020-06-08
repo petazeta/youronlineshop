@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 05, 2020 at 10:12 AM
+-- Generation Time: Jun 08, 2020 at 11:33 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -291,7 +291,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1077, '', 429, 2),
 (1078, '', 339, 2),
 (1079, 'Users', 441, 2),
-(1080, 'I don\'t have an account', 442, 2);
+(1080, 'Create new account', 442, 2);
 
 -- --------------------------------------------------------
 
@@ -603,7 +603,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1591343771, 7),
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1591651904, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1588506282, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
