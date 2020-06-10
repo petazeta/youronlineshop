@@ -63,7 +63,7 @@
               <input type="radio" value="catalog" name="dataoption">
               <span></span>
               <script>
-                if (!webuser.isWebAdmin()) {
+                if (!webuser.isWebAdmin() && !webuser.isProductAdmin()) {
                   thisElement.parentElement.parentElement.style.display="none"
                 }
                 var title=thisNode.getNextChild({"name":"expcatg"}).getRelationship({name:"domelementsdata"}).getChild();

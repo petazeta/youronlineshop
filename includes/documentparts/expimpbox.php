@@ -29,12 +29,12 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     var containerExp=document.querySelector("#expimp");
     containerExpNode.refreshView(containerExp, containerExp.previousElementSibling);
   }
-  if (webuser.isWebAdmin() || webuser.isUserAdmin()) {
+  if (webuser.isWebAdmin() || webuser.isUserAdmin() || webuser.isProductAdmin()) {
     showExpImp();
   }
   webuser.addEventListener("log",
     function() {
-      if (!this.isWebAdmin() && !webuser.isUserAdmin()) {
+      if (!this.isWebAdmin() && !webuser.isUserAdmin() && !webuser.isProductAdmin()) {
         //to remove the openbutton when logs after webadmin
         var containerExp=document.querySelector("#expimp");
         containerExp.innerHTML="";
