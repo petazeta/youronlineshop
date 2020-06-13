@@ -6,24 +6,6 @@
         <table style="margin:auto; text-align:left; margin-bottom:1em;">
           <tr>
             <td>
-              <input type="radio" value="text" name="dataoption">
-              <span></span>
-              <script>
-                if (!webuser.isWebAdmin()) {
-                  thisElement.parentElement.parentElement.style.display="none"
-                }
-                var title=thisNode.getNextChild({"name":"exptext"}).getRelationship({name:"domelementsdata"}).getChild();
-                title.writeProperty(thisElement);
-                //adding the edition pencil
-                var launcher = new Node();
-                launcher.thisNode = title;
-                launcher.editElement = thisElement;
-                launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-              </script>
-            </td>
-          </tr>
-          <tr>
-            <td>
               <input type="radio" value="tit" name="dataoption">
               <span></span>
               <script>
@@ -129,9 +111,6 @@
           }
           else if (thisElement.form.dataoption.value=="tit") {
             exportData(domelementsroot.getRelationship("domelements").getChild({name:"labels"}).getRelationship("domelements").getChild({name:"top"}));
-          }
-          else if (thisElement.form.dataoption.value=="text") {
-            exportData(domelementsroot.getRelationship("domelements").getChild({name:"labels"}));
           }
           else if (thisElement.form.dataoption.value=="catalog") {
             var categoriesrootmother=new NodeFemale();
@@ -336,9 +315,6 @@
           }
           else if (thisElement.form.dataoption.value=="tit") {
             impData(domelementsroot.getRelationship("domelements").getChild({name:"labels"}).getRelationship("domelements").getChild({name:"top"}));
-          }
-          else if (thisElement.form.dataoption.value=="text") {
-            impData(domelementsroot.getRelationship("domelements").getChild({name:"labels"}));
           }
           else if  (thisElement.form.dataoption.value=="catalog") {
             var categoriesrootmother=new NodeFemale();

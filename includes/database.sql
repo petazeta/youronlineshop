@@ -1,9 +1,11 @@
+-- YOS database version: 1.1.0
+
 -- phpMyAdmin SQL Dump
 -- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 08, 2020 at 11:33 PM
+-- Generation Time: Jun 13, 2020 at 06:16 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -162,7 +164,6 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (436, 'expcatg', 392, 9),
 (437, 'impnoselection', 392, 7),
 (438, 'exptit', 392, 11),
-(440, 'exptext', 392, 10),
 (441, 'expusers', 392, 12),
 (442, 'newuserbt', 182, 1);
 
@@ -283,7 +284,6 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1069, 'Catalog', 436, 2),
 (1070, 'Please select any option', 437, 2),
 (1071, 'Site title', 438, 2),
-(1072, 'Text except catalog and menus / pages', 440, 2),
 (1073, '', 284, 2),
 (1074, '', 279, 2),
 (1075, '', 182, 2),
@@ -603,7 +603,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1591651904, 7),
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1592064960, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1588506282, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
