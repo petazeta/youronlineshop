@@ -5,7 +5,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 13, 2020 at 06:16 PM
+-- Generation Time: Jun 14, 2020 at 08:31 AM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -165,7 +165,8 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (437, 'impnoselection', 392, 7),
 (438, 'exptit', 392, 11),
 (441, 'expusers', 392, 12),
-(442, 'newuserbt', 182, 1);
+(442, 'newuserbt', 182, 1),
+(443, 'implangerror', 392, 13);
 
 -- --------------------------------------------------------
 
@@ -291,7 +292,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1077, '', 429, 2),
 (1078, '', 339, 2),
 (1079, 'Users', 441, 2),
-(1080, 'Create new account', 442, 2);
+(1080, 'Create new account', 442, 2),
+(1081, 'Languages don\'t match', 443, 2);
 
 -- --------------------------------------------------------
 
@@ -825,12 +827,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=443;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=444;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1081;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1082;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
@@ -910,7 +912,7 @@ ALTER TABLE `shippingtypesdata`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --

@@ -238,6 +238,19 @@
           if (webuser.isWebAdmin()) thisElement.type="input";
         </script>
       </div>
+      <div style="display:table;">
+        <input type="hidden" name="implangerror">
+        <script>
+          var myNode=thisNode.getNextChild({"name":"implangerror"}).getRelationship({name:"domelementsdata"}).getChild();
+          myNode.writeProperty(thisElement, null, "value");
+          var launcher = new Node();
+          launcher.thisNode = myNode;
+          launcher.editElement = thisElement;
+          launcher.thisAttribute = "value";
+          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          if (webuser.isWebAdmin()) thisElement.type="input";
+        </script>
+      </div>
       <span>
         <button type="button" class="btn"></button>
         <script>
@@ -289,6 +302,27 @@
           var data=JSON.parse(thisElement.form.impdata.value);
 
           var datalang=data.languages;
+          
+          //Now we check that the languages meet the site languages
+          var languagesmatch=false;
+          if (datalang.children.length==languages.children.length) {
+            languagesmatch=true;
+            for (var i=0; i<datalang.children.length; i++) {
+              if (datalang.children[i].properties.id!=languages.children[i].properties.id) {
+                languagesmatch=false;
+                break;
+              }
+            }
+          }
+          
+          if (!languagesmatch) {
+            var mylangerror=new Alert();
+            mylangerror.properties.alertclass="alertmsg";
+            mylangerror.properties.timeout=2000;
+            mylangerror.properties.alertmsg=thisElement.form.elements.implangerror.value;
+            mylangerror.showalert();
+            return false;
+          }
 
           var datatree=new NodeMale();
           datatree.load(data.tree);
