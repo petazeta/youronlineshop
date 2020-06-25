@@ -838,12 +838,21 @@ NodeFemale.prototype.updateChild=function(obj) {
 }
 
 NodeFemale.prototype.removeChild=function(obj) {
-  var i= this.children.length;
-  while(i--) {
-    if (obj.sort_order && (this.children[i].sort_order > obj.sort_order)) {
-      this.children[i].sort_order--;
+  var removed=false;
+  for (var i=0; i<this.children.length; i++) {
+    if (this.children[i]==obj || (obj.properties.id && this.children[i].properties.id==obj.properties.id)) {
+      this.children.splice(i,1);
+      removed=true;
+      break;
     }
-    if (this.children[i].properties.id==obj.properties.id) this.children.splice(i,1);
+  }
+  if (removed && obj.sort_order) {
+    var i= this.children.length;
+    while(i--) {
+      if (this.children[i].sort_order > obj.sort_order) {
+        this.children[i].sort_order--;
+      }
+    }
   }
 };
 

@@ -17,13 +17,11 @@ domelementsrootmother.addEventListener("loadLabels", function(){
       this.newNode=newNode;
       this.appendThis(document.querySelector("#langbox .boxbody"), "templates/admnlisteners.php", function() {
         this.refreshChildrenView(document.querySelector("#langbox .boxbody"), "templates/language.php");
-      }, "1column");
-      //AVOIDREMOVING ALL LANGUAGES
-      
-      function languageIncrease(newLangNode) {
+      });
+      function languageIncreaseCloneFirstLang(newAddedLangNode, listener){
         var newNode=languages.getChild().cloneNode();
-        newNode.loadfromhttp({"action":"load my tree", user_id: webuser.properties.id}, function(){
-          this.properties.id=newLangNode.properties.id;
+        newNode.loadfromhttp({"action":"load my tree"}, function(){
+          this.properties.id=newAddedLangNode.properties.id;
           var loadActions=[];
           var loadRequest=[];
           var datavalue=[];
@@ -51,19 +49,20 @@ domelementsrootmother.addEventListener("loadLabels", function(){
                 }  
               }
               this.nodelist[i].properties=datavalue[i];
-              var myparameters={"action":"add myself", language: newLangNode.properties.id, user_id: webuser.properties.id};
+              var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
               var myInsertRequestData=this.nodelist[i].toRequestData(myparameters);
               insertRequest.push(myInsertRequestData);
               insertActions.push(myparameters);
             }
             var ielement=new Node();
             ielement.loadfromhttp({"parameters":insertActions, "nodes":insertRequest}, function(){
+              if (listener) listener.call(this);
             });
           });
         });
-      }
+      };
       this.addEventListener("addNewNode", function(newLangNode) {
-        languageIncrease(newLangNode);
+        languageIncreaseCloneFirstLang(newLangNode);
       }, "addNewNode");
   });
 });

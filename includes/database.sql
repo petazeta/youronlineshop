@@ -1,11 +1,11 @@
--- YOS database version: 1.1.0
+-- YOS database version: 1.1.0 25/06/2020
 
 -- phpMyAdmin SQL Dump
 -- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 14, 2020 at 08:31 AM
+-- Generation Time: Jun 25, 2020 at 08:12 AM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -151,13 +151,13 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (419, 'nav1', 66, 1),
 (424, 'btLogOut', 279, 1),
 (425, '', 419, 1),
-(426, 'hours', 60, 8),
+(426, 'hours', 60, 9),
 (427, 'save', 73, 1),
 (428, 'saved', 73, 2),
-(429, 'userdataform', 60, 9),
+(429, 'userdataform', 60, 10),
 (430, 'fieldCharError', 429, 1),
 (431, 'emailCharError', 429, 2),
-(432, 'textEdit', 60, 7),
+(432, 'textEdit', 60, 8),
 (433, 'advice', 432, 1),
 (434, 'imploadingmsg', 392, 6),
 (435, 'expmenus', 392, 8),
@@ -166,7 +166,20 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (438, 'exptit', 392, 11),
 (441, 'expusers', 392, 12),
 (442, 'newuserbt', 182, 1),
-(443, 'implangerror', 392, 13);
+(443, 'implangerror', 392, 13),
+(444, 'expimplang', 60, 7),
+(445, 'tit', 444, 1),
+(446, 'butexp', 444, 2),
+(447, 'titexp', 444, 3),
+(448, 'titimp', 444, 4),
+(449, 'butimp', 444, 5),
+(450, 'butload', 444, 6),
+(451, 'nolangsalert', 444, 7),
+(452, 'loadedlangs', 444, 8),
+(453, 'errornolangs', 444, 9),
+(454, 'errornolangssel', 444, 11),
+(455, 'errornodata', 444, 10),
+(456, 'waitimp', 444, 12);
 
 -- --------------------------------------------------------
 
@@ -293,7 +306,20 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1078, '', 339, 2),
 (1079, 'Users', 441, 2),
 (1080, 'Create new account', 442, 2),
-(1081, 'Languages don\'t match', 443, 2);
+(1081, 'Languages don\'t match', 443, 2),
+(1082, 'Export and Import Languages', 445, 2),
+(1083, 'Languages export/import', 444, 2),
+(1084, 'Export', 446, 2),
+(1085, 'Export Area', 447, 2),
+(1086, 'Import Area', 448, 2),
+(1087, 'Import', 449, 2),
+(1088, 'Load', 450, 2),
+(1089, 'Error: Not any languages', 451, 2),
+(1090, 'Select langs to be imported:', 452, 2),
+(1091, 'No languages loaded', 453, 2),
+(1092, 'Error: Please select some language', 454, 2),
+(1093, 'Error: No data to be loaded, please paste.', 455, 2),
+(1094, 'Please wait... Importing...', 456, 2);
 
 -- --------------------------------------------------------
 
@@ -605,7 +631,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1592064960, 7),
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1593020201, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1588506282, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
@@ -827,12 +853,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=444;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1082;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1095;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
