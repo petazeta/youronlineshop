@@ -80,7 +80,12 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
         domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
         domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
         domelementsrootmother.loadfromhttp({action:"load root"}, function(){
-          domelementsroot=domelementsrootmother.children[0];
+          //if no root means that table domelements doesn't exist or has no elements
+          if (this.children.length==0) {
+            myalert.properties.alertmsg='<p><b>Database Content Error</b></p><p>Please import includes/database.sql file.</p>';
+            myalert.showalert(null, null, (function(){throw 'Database Content Failed';}));
+          }
+          domelementsroot=this.children[0];
           domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 2}, function(){
             webuser.loadfromhttp({action: "load session", sesname: "user"}, function(){
               if (!webuser.extra) webuser.extra={};

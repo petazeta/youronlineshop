@@ -324,101 +324,104 @@
             }
           }
           var langsToInsert=[];
-          for (var i=0; i<filterdatatrees.length; i++) {
-            var myLabelNode=domelementsroot.getNextChild({"name":"labels"}).cloneNode();
-            var myTextNode=domelementsroot.getNextChild({"name":"texts"}).cloneNode();
-            replaceMyTreeLangData.call(myLabelNode, filterdatatrees[i].parentNode);
-            var rootNode=domelementsroot.cloneNode(1,1);
-            rootNode.getRelationship("domelementsdata").addChild(domelementsroot.getRelationship("domelementsdata").getChild().cloneNode());
-            rootNode.getRelationship("domelements").addChild(myTextNode);
-            rootNode.getRelationship("domelements").addChild(myLabelNode);
-            langsToInsert.push({"lang":filterlangs[i], "domdata": rootNode});
-          }
-          function createdomnodesarray(myroot) {
-            var treearray=myroot.arrayFromTree();
-            var domdataarray=[];
-            for (var i=0; i<treearray.length;i++) {
-              if (treearray[i].constructor.name=="NodeMale") {
-                if (treearray[i].parentNode.properties.name=="domelementsdata") {
-                  domdataarray.push(treearray[i]);
+          //We load domelements textNode data
+          var myTextNode=domelementsroot.getNextChild({"name":"texts"}).cloneNode();
+          myTextNode.loadfromhttp({action: "load my tree", language: languages.getChild().properties.id}, function(){
+            for (var i=0; i<filterdatatrees.length; i++) {
+              var myLabelNode=domelementsroot.getNextChild({"name":"labels"}).cloneNode();
+              replaceMyTreeLangData.call(myLabelNode, filterdatatrees[i].parentNode);
+              var rootNode=domelementsroot.cloneNode(1,1);
+              rootNode.getRelationship("domelementsdata").addChild(domelementsroot.getRelationship("domelementsdata").getChild().cloneNode());
+              rootNode.getRelationship("domelements").addChild(myTextNode);
+              rootNode.getRelationship("domelements").addChild(myLabelNode);
+              langsToInsert.push({"lang":filterlangs[i], "domdata": rootNode});
+            }
+            function createdomnodesarray(myroot) {
+              var treearray=myroot.arrayFromTree();
+              var domdataarray=[];
+              for (var i=0; i<treearray.length;i++) {
+                if (treearray[i].constructor.name=="NodeMale") {
+                  if (treearray[i].parentNode.properties.name=="domelementsdata") {
+                    domdataarray.push(treearray[i]);
+                  }
                 }
               }
+              return domdataarray;
             }
-            return domdataarray;
-          }
-          function languageAddCloneFirstLang(newLangNode, domdatachildren, listener){
-            var newAddedLangNode=newLangNode.cloneNode();
-            newAddedLangNode.loadfromhttp({action: "add myself", user_id: webuser.properties.id}, function(){
-              //We fill the lang
-              var newNode=languages.getChild().cloneNode();
-              newNode.loadfromhttp({"action":"load my tree"}, function(){
-                this.properties.id=newAddedLangNode.properties.id;
-                var loadActions=[];
-                var loadRequest=[];
-                var datavalue=[];
-                var myparameters={"action":"load my tree up"};
-                for (var i=0; i<this.relationships.length; i++) {
-                  if (this.relationships[i].properties.name=="domelementsdata") {
-                    break;
-                  }
-                  for (var j=0; j<this.relationships[i].children.length; j++) {
-                    var myLoadRequestData=this.relationships[i].children[j].toRequestData(myparameters);
-                    loadRequest.push(myLoadRequestData);
-                    datavalue.push(this.relationships[i].children[j].properties);
-                    loadActions.push(myparameters);
-                  }
-                }
-                //Now we have to send the load request and get the result.
-                var element=new Node();
-                element.loadfromhttp({"parameters":loadActions, "nodes":loadRequest}, function(){
-                  var insertRequest=[];
-                  var insertActions=[];
-                  for (var i=0; i<this.nodelist.length; i++) {
-                    if (Array.isArray(this.nodelist[i].parentNode)) {
-                      for (var j=0;j<this.nodelist[i].parentNode.length;j++) {
-                        if (this.nodelist[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
-                          this.nodelist[i].parentNode=this.nodelist[i].parentNode[j];
-                          break;
-                        }
-                      }  
+            function languageAddCloneFirstLang(newLangNode, domdatachildren, listener){
+              var newAddedLangNode=newLangNode.cloneNode();
+              newAddedLangNode.loadfromhttp({action: "add myself", user_id: webuser.properties.id}, function(){
+                //We fill the lang
+                var newNode=languages.getChild().cloneNode();
+                newNode.loadfromhttp({"action":"load my tree"}, function(){
+                  this.properties.id=newAddedLangNode.properties.id;
+                  var loadActions=[];
+                  var loadRequest=[];
+                  var datavalue=[];
+                  var myparameters={"action":"load my tree up"};
+                  for (var i=0; i<this.relationships.length; i++) {
+                    if (this.relationships[i].properties.name=="domelementsdata") {
+                      break;
                     }
-                    this.nodelist[i].properties=datavalue[i];
-                    var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
-                    var myInsertRequestData=this.nodelist[i].toRequestData(myparameters);
-                    insertRequest.push(myInsertRequestData);
-                    insertActions.push(myparameters);
+                    for (var j=0; j<this.relationships[i].children.length; j++) {
+                      var myLoadRequestData=this.relationships[i].children[j].toRequestData(myparameters);
+                      loadRequest.push(myLoadRequestData);
+                      datavalue.push(this.relationships[i].children[j].properties);
+                      loadActions.push(myparameters);
+                    }
                   }
-                  //Now we add the domelementsdata
-                  
-                  for (var i=0; i<domdatachildren.length; i++) {
-                    var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
-                    var myInsertRequestData=domdatachildren[i].toRequestData(myparameters);
-                    insertRequest.push(myInsertRequestData);
-                    insertActions.push(myparameters);
-                  }
-                  var ielement=new Node();
-                  ielement.loadfromhttp({"parameters":insertActions, "nodes":insertRequest}, function(){
-                    if (listener) listener.call(this);
+                  //Now we have to send the load request and get the result.
+                  var element=new Node();
+                  element.loadfromhttp({"parameters":loadActions, "nodes":loadRequest}, function(){
+                    var insertRequest=[];
+                    var insertActions=[];
+                    for (var i=0; i<this.nodelist.length; i++) {
+                      if (Array.isArray(this.nodelist[i].parentNode)) {
+                        for (var j=0;j<this.nodelist[i].parentNode.length;j++) {
+                          if (this.nodelist[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
+                            this.nodelist[i].parentNode=this.nodelist[i].parentNode[j];
+                            break;
+                          }
+                        }  
+                      }
+                      this.nodelist[i].properties=datavalue[i];
+                      var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
+                      var myInsertRequestData=this.nodelist[i].toRequestData(myparameters);
+                      insertRequest.push(myInsertRequestData);
+                      insertActions.push(myparameters);
+                    }
+                    //Now we add the domelementsdata
+                    
+                    for (var i=0; i<domdatachildren.length; i++) {
+                      var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
+                      var myInsertRequestData=domdatachildren[i].toRequestData(myparameters);
+                      insertRequest.push(myInsertRequestData);
+                      insertActions.push(myparameters);
+                    }
+                    var ielement=new Node();
+                    ielement.loadfromhttp({"parameters":insertActions, "nodes":insertRequest}, function(){
+                      if (listener) listener.call(this);
+                    });
                   });
                 });
               });
-            });
-          };
-          //Now we have to create the new languageAddCloneFirstLang(newLangNode, domdatachildren, listener)langs
-          for (var i=0; i<langsToInsert.length; i++) {
-            //Now we have to make the tree to a serial data
-            var domdataInsert=createdomnodesarray(langsToInsert[i].domdata);
-            //send error
-            var waitalert=new Alert();
-            waitalert.properties.alertclass="alertmsg";
-            waitalert.properties.alertmsg=thisElement.form.elements.waitimp.value;
-            waitalert.showalert();
-            document.getElementById("butimp").disabled=true;
-            languageAddCloneFirstLang(langsToInsert[i].lang, domdataInsert, function(){
-              waitalert.hidealert();
-              location.reload();
-            });
-          }
+            };
+            //Now we have to create the new languageAddCloneFirstLang(newLangNode, domdatachildren, listener)langs
+            for (var i=0; i<langsToInsert.length; i++) {
+              //Now we have to make the tree to a serial data
+              var domdataInsert=createdomnodesarray(langsToInsert[i].domdata);
+              //send error
+              var waitalert=new Alert();
+              waitalert.properties.alertclass="alertmsg";
+              waitalert.properties.alertmsg=thisElement.form.elements.waitimp.value;
+              waitalert.showalert();
+              document.getElementById("butimp").disabled=true;
+              languageAddCloneFirstLang(langsToInsert[i].lang, domdataInsert, function(){
+                waitalert.hidealert();
+                location.reload();
+              });
+            }
+          });
           return false;
         };
         </script>

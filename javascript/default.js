@@ -10,7 +10,7 @@ var Config={
   templatesCacheOn: true, //true, better sometimes false for production
   loadTemplatesAtOnce: true, //true, better sometimes false for production
   dbSessionsOn: false, //true or false if deactivated
-  languagesOn: false, //true or false if deactivated
+  languagesOn: true, //true or false if deactivated
   importExportOn: false, //true or false if deactivated
   chkt2_On: true, //if false skip user data insertion
   chktaddressOn: true, //if false skip address data insertion
