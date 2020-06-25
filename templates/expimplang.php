@@ -13,38 +13,23 @@
       </script>
     </div>
     <form>
-      <div class="msgbox">
-        <div style="margin:auto; text-align:left; margin-bottom:1em;"></div>
-        <template>
+      <div class="msgbox" id="containerlangsexp"></div>
+      <template id="tplangsexp">
+        <div style="margin:auto; text-align:left; margin-bottom:0.2em;">
           <input type="checkbox" value="" name="">
+          <script>
+            thisNode.writeProperty(thisElement, "id", "value");
+            thisNode.writeProperty(thisElement, "code", "name");
+          </script>
           <span></span>
-        </template>
-        <script>
-            var myCheckBox=thisElement.content.children[0];
-            var myLabel=thisElement.content.children[1];
-            var myWrap=thisElement.parentElement;
-            function createLangCheckBoxs(myLangs, container){
-              var checkBoxes=[];
-              var myLabels=[];
-              for (var i=0; i<myLangs.children.length; i++) {
-                var newCheckBox=myCheckBox.cloneNode();
-                newCheckBox.name=myLangs.children[i].properties.code;
-                newCheckBox.value=myLangs.children[i].properties.id;
-                checkBoxes.push(newCheckBox);
-                var newSpan=myLabel.cloneNode();
-                newSpan.textContent=newCheckBox.name;
-                myLabels.push(newSpan);
-              }
-              container.innerHTML="";
-              for (var i=0; i<checkBoxes.length; i++) {
-                container.appendChild(checkBoxes[i]);
-                container.appendChild(myLabels[i]);
-              }
-            }
-            window.createLangCheckBoxs=createLangCheckBoxs;
-            createLangCheckBoxs(languages, thisElement.previousElementSibling);
-        </script>
-      </div>
+          <script>
+            thisNode.writeProperty(thisElement, "code");
+          </script>
+        </div>
+      </template>
+      <script>
+        languages.refreshChildrenView(document.getElementById("containerlangsexp"), document.getElementById("tplangsexp"));
+      </script>
       <div>
         <div class="msgbox">
           <span></span>
@@ -85,52 +70,55 @@
         
         //This facility is for export/import the customized data of a shop so we could update the shop software and keep the data
         thisElement.onclick=function(){
-            var rootelement=domelementsroot.getRelationship("domelements").getChild({name:"labels"});
-            //data from the languages
-            var langdata=languages.cloneNode();
-            var myLangs=thisElement.form.querySelectorAll('input[type="checkbox"]');
-            var selectedLangs=[];
-            
-            for (var i=0; i<myLangs.length; i++) {
-              if (myLangs[i].checked) selectedLangs.push(Number(myLangs[i].value));
+          var rootelement=domelementsroot.getRelationship("domelements").getChild({name:"labels"});
+          //data from the languages
+          var langdata=languages.cloneNode();
+          var myLangs=thisElement.form.querySelectorAll('input[type="checkbox"]');
+          var selectedLangs=[];
+          
+          for (var i=0; i<myLangs.length; i++) {
+            if (myLangs[i].checked) selectedLangs.push(Number(myLangs[i].value));
+          }
+          
+          if (!selectedLangs.length) {
+            //send error
+            var nolangsalert=new Alert();
+            nolangsalert.properties.alertclass="alertmsg";
+            nolangsalert.properties.timeout=2000;
+            nolangsalert.properties.alertmsg=thisElement.form.elements.errornolangssel.value;
+            nolangsalert.showalert();
+            return false;
+          }
+          //Now we filter the languages selected from the datalang
+          var noselectedchildren=[];
+          for (var i=0; i<langdata.children.length; i++) {
+            if (!selectedLangs.includes(langdata.children[i].properties.id)) {
+              noselectedchildren.push(langdata.children[i]);
             }
-            
-            if (!selectedLangs.length) {
-              //send error
-              var nolangsalert=new Alert();
-              nolangsalert.properties.alertclass="alertmsg";
-              nolangsalert.properties.timeout=2000;
-              nolangsalert.properties.alertmsg=thisElement.form.elements.errornolangssel.value;
-              nolangsalert.showalert();
-              return false;
+          }
+          for (var i=0; i<noselectedchildren.length; i++) {
+            langdata.removeChild(noselectedchildren[i]);
+          }
+          langdata=langdata.toRequestData({action: "add my tree"});
+          //data from the structure
+          var rootClone=rootelement.cloneNode(null, 0);
+          var myNodes=[];
+          var myParams=[];
+          for (var i=0; i<langdata.children.length; i++) {
+            myNodes.push(rootClone.toRequestData({action: "load my tree"}));
+            myParams.push({action: "load my tree", language: langdata.children[i].properties.id});
+          }
+          var nodeRequest=new Node();
+          nodeRequest.loadfromhttp({"parameters":myParams, "nodes":myNodes}, function(){
+            var nodesInsert=[];
+            for (var i=0; i<this.nodelist.length; i++) {
+              //we restables rootnode properties data
+              this.nodelist[i].properties=rootClone.properties;
+              nodesInsert.push(this.nodelist[i].toRequestData({action: "add my tree"}));
             }
-            
-            //Now we filter the languages selected from the datalang
-            for (var i=0; i<langdata.children.length; i++) {
-              if (!selectedLangs.includes(langdata.children[i].properties.id)) {
-                langdata.removeChild(langdata.children[i]);
-              }
-            }
-            langdata=langdata.toRequestData({action: "add my tree"});
-            //data from the structure
-            var rootClone=rootelement.cloneNode(null, 0);
-            var myNodes=[];
-            var myParams=[];
-            for (var i=0; i<langdata.children.length; i++) {
-              myNodes.push(rootClone.toRequestData({action: "load my tree"}));
-              myParams.push({action: "load my tree", language: langdata.children[i].properties.id});
-            }
-            var nodeRequest=new Node();
-            nodeRequest.loadfromhttp({"parameters":myParams, "nodes":myNodes}, function(){
-              var nodesInsert=[];
-              for (var i=0; i<this.nodelist.length; i++) {
-                //we restables rootnode properties data
-                this.nodelist[i].properties=rootClone.properties;
-                nodesInsert.push(this.nodelist[i].toRequestData({action: "add my tree"}));
-              }
-              var datatoinsert={"languages": langdata, "trees": nodesInsert};
-              thisElement.form.result.value=JSON.stringify(datatoinsert);
-            });
+            var datatoinsert={"languages": langdata, "trees": nodesInsert};
+            thisElement.form.result.value=JSON.stringify(datatoinsert);
+          });
 
           return false;
         };
@@ -220,7 +208,8 @@
           var data=JSON.parse(thisElement.form.impdata.value);
           window.dataImport=data;
 
-          var datalang=data.languages;
+          var datalang=new NodeFemale();
+          datalang.load(data.languages);
           var datatrees=data.trees;
           
           //Lets check if there are langs
@@ -236,7 +225,7 @@
           }
           
           //Now we have to show langs
-          createLangCheckBoxs(datalang, document.getElementById("loadedlangscontainer"));
+          datalang.refreshChildrenView(document.getElementById("loadedlangscontainer"), document.getElementById("tplangsexp"));
           //Lets put a notice
           var notice=thisNode.getNextChild({"name":"loadedlangs"}).getRelationship({name:"domelementsdata"}).getChild();
           notice.writeProperty(document.getElementById("loadedlangsnotice"));
