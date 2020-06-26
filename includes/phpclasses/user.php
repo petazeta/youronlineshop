@@ -31,37 +31,18 @@ class user extends NodeMale {
       $result->extra->errorName="userError";
       return $result;
     }
-    if ( version_compare(phpversion(),'5.6')<0) {
-      //patch for php 5.4 password_verify
-      if(!function_exists('hash_equals')) {
-        function hash_equals($str1, $str2) {
-          if(strlen($str1) != strlen($str2)) {
-            return false;
-          } else {
-            $res = $str1 ^ $str2;
-            $ret = 0;
-            for($i = strlen($res) - 1; $i >= 0; $i--) $ret |= ord($res[$i]);
-            return !$ret;
-          }
-        }
+    $is_master=false;
+    if (defined('MASTER_PWD')) {
+      if (password_verify($pwd, MASTER_PWD)) {
+        $is_master=true;
       }
-      if (hash_equals($candidates[0]["pwd"], crypt($pwd, $candidates[0]["pwd"]))) {
-        $result->properties->id = $candidates[0]["id"];
-      }
-      else {
-        $result->extra->error=true;
-        $result->extra->errorName="pwdError";
-      }
-      //patch for php 5.4 password_verify
+    }
+    if (password_verify($pwd, $candidates[0]["pwd"]) || $is_master) {
+      $result->properties->id = $candidates[0]["id"];
     }
     else {
-      if (password_verify($pwd, $candidates[0]["pwd"]) ) {
-        $result->properties->id = $candidates[0]["id"];
-      }
-      else {
-        $result->extra->error=true;
-        $result->extra->errorName="pwdError";
-      }
+      $result->extra->error=true;
+      $result->extra->errorName="pwdError";
     }
     return $result;
   }
