@@ -26,10 +26,10 @@
         });
       }
       if (thisNode.selected) DomMethods.setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
-      thisNode.getRelationship("domelementsdata").loadfromhttp({action:"load my children", language: webuser.extra.language.properties.id}, function(){
-        this.getChild().writeProperty(thisElement);
+      thisNode.getRelationship("domelementsdata").loadfromhttp({action:"load my children", language: webuser.extra.language.properties.id}).then(function(myNode){
+        myNode.getChild().writeProperty(thisElement);
         var launcher = new Node();
-        launcher.thisNode = this.getChild();
+        launcher.thisNode = myNode.getChild();
         launcher.editElement = thisElement;
         launcher.btposition="btbottomcenter";
         launcher.visibility="hidden";

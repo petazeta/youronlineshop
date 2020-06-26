@@ -278,100 +278,109 @@ Node.prototype.render = function (tp) {
 };
 
 Node.prototype.refreshView=function (container, tp, myReqlistener) {
-  if (container) this.myContainer=container;
-  this.myContainer.classList.add("refreshviewloader");
-  this.myContainer.innerHTML='';
-  var newReqlistener=function(){
-    if (myReqlistener) myReqlistener.call(this);
-    this.dispatchEvent("refreshView");
-    this.myContainer.classList.remove("refreshviewloader");
-  }
-  this.appendThis(container, tp, newReqlistener);
+  return new Promise((resolve, reject) => {
+    if (container) this.myContainer=container;
+    this.myContainer.classList.add("refreshviewloader");
+    this.myContainer.innerHTML='';
+    this.appendThis(container, tp).then(()=>{
+      if (myReqlistener) myReqlistener.call(this);
+      resolve(this);
+      this.dispatchEvent("refreshView");
+      this.myContainer.classList.remove("refreshviewloader");
+    });
+  });
 };
 
 Node.prototype.appendThis=function (container, tp, reqlistener) {
-  var refresh=function() {
-    var clone=this.myTp.cloneNode(true);
-    this.render(clone);
-    if (container) {
-      this.myContainer=container;
-    }
-    this.myContainer.appendChild(clone);
-    if (typeof this.config.onAppend == 'function') {
-      this.config.onAppend.call(this);
-    }
-    if (reqlistener) {
-      reqlistener.call(this);
-    }
-    this.dispatchEvent("appendThis");
-  };
-  if (typeof tp=="string") {
-    this.getTp(tp, function() {
-      this.myTp=this.xmlTp.cloneNode(true);
-      refresh.call(this);
-    });
-  }
-  else {
-    if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") {
-	tp=getTpContent(tp);
+  return new Promise((resolve, reject) => {
+    var refresh=() => {
+      var clone=this.myTp.cloneNode(true);
+      this.render(clone);
+      if (container) {
+        this.myContainer=container;
       }
-      this.myTp=tp;
+      this.myContainer.appendChild(clone);
+      if (typeof this.config.onAppend == 'function') {
+        this.config.onAppend.call(this);
+      }
+      if (reqlistener) {
+        reqlistener.call(this);
+      }
+      resolve(this);
+      this.dispatchEvent("appendThis");
+    };
+    if (typeof tp=="string") {
+      this.getTp(tp, function() {
+        this.myTp=this.xmlTp.cloneNode(true);
+        refresh();
+      });
     }
-    refresh.call(this);
-  }
+    else {
+      if (tp) {
+        if (tp.tagName && tp.tagName=="TEMPLATE") {
+          tp=getTpContent(tp);
+        }
+        this.myTp=tp;
+      }
+      refresh();
+    }
+  });
 };
 Node.prototype.refreshPropertiesView=function (container, tp, myReqlistener) {
-  if (container) this.propertiesContainer=container;
-  this.propertiesContainer.innerHTML='';
+  return new Promise((resolve, reject) => {
+    if (container) this.propertiesContainer=container;
+    this.propertiesContainer.innerHTML='';
 
-  var newReqlistener=function(){
-    if (myReqlistener) myReqlistener.call(this);
-    this.dispatchEvent("refreshPropertiesView");
-  }
-  this.appendProperties(container, tp, newReqlistener);
+    this.appendProperties(container, tp).then(() => {
+      if (myReqlistener) myReqlistener.call(this);
+      resolve(this);
+      this.dispatchEvent("refreshPropertiesView");
+    });
+  });
 };
 //This function write a template record for each property
 Node.prototype.appendProperties = function (container, tp, reqlistener) {
-  if (container) this.propertiesContainer=container;
-  if (typeof tp=="string") {
-    this.getTp(tp, function() {
-      this.propertyTp=this.xmlTp;
-      refresh.call(this);
-    });
-  }
-  else {
-    if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
-      this.propertyTp=tp;
-    }
-    refresh.call(this);
-  }
-  function refresh() {
-    var myThis=this;
-    if (this.parentNode && this.parentNode.childtablekeys) {
-      var myKeys=this.parentNode.childtablekeys;
-    }
-    else {
-      var myKeys=[];
-      Object.keys(this.properties).forEach(function(key){
-	if (!myThis.properties.isProperty(myThis.properties, key)) return false;
-	myKeys.push(key);
+  return new Promise((resolve, reject) => {
+    if (container) this.propertiesContainer=container;
+    var refresh=() => {
+      if (this.parentNode && this.parentNode.childtablekeys) {
+        var myKeys=this.parentNode.childtablekeys;
+      }
+      else {
+        var myKeys=[];
+        Object.keys(this.properties).forEach((key) => {
+          if (!this.properties.isProperty(this.properties, key)) return false;
+          myKeys.push(key);
+        });
+      }
+      myKeys.forEach((key) => {
+        if (key=="id") return false;
+        this.editpropertyname=key; //for knowing the key and for the edition facility
+        var thiscol=this.propertyTp.cloneNode(true);
+        thiscol.firstElementChild.setAttribute("data-property", key);
+        this.render(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
+        container.appendChild(thiscol);
+      });
+      if (reqlistener) {
+        reqlistener.call(this);
+      }
+      resolve(this);
+      this.dispatchEvent("appendProperties");
+    };
+    if (typeof tp=="string") {
+      this.getTp(tp, function() {
+        this.propertyTp=this.xmlTp;
+        refresh();
       });
     }
-    myKeys.forEach(function(key){
-      if (key=="id") return false;
-      myThis.editpropertyname=key; //for knowing the key and for the edition facility
-      var thiscol=myThis.propertyTp.cloneNode(true);
-      thiscol.firstElementChild.setAttribute("data-property", key);
-      myThis.render(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
-      container.appendChild(thiscol);
-    });
-    if (reqlistener) {
-      reqlistener.call(this);
+    else {
+      if (tp) {
+        if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
+        this.propertyTp=tp;
+      }
+      refresh();
     }
-    this.dispatchEvent("appendProperties");
-  }
+  });
 }
 
 // Set children results from the given arguments and refresh the view. It uses this.childTp and this.childContainer
@@ -389,45 +398,48 @@ Node.prototype.renderChildren=function (tp) {
 };
 
 Node.prototype.refreshChildrenView=function (container, tp, myReqlistener) {
-  if (container) this.childContainer=container;
-  this.childContainer.classList.add("refreshchildrenloader");
-  this.childContainer.innerHTML='';
-  
-  var newReqlistener=function(){
-    if (myReqlistener) myReqlistener.call(this);
-    this.dispatchEvent("refreshChildrenView");
-    this.childContainer.classList.remove("refreshchildrenloader");
-  }
-  this.appendChildren(container, tp, newReqlistener);
+  return new Promise((resolve, reject) => {
+    if (container) this.childContainer=container;
+    this.childContainer.classList.add("refreshchildrenloader");
+    this.childContainer.innerHTML='';
+    this.appendChildren(container, tp).then(()=>{
+      if (myReqlistener) myReqlistener.call(this);
+      resolve(this);
+      this.dispatchEvent("refreshChildrenView");
+      this.childContainer.classList.remove("refreshchildrenloader");
+    });
+  });
 };
 
 Node.prototype.appendChildren=function (container, tp, reqlistener) {
-  if (container) this.childContainer=container;
-  var refresh=function(){
-    var renderedChildren=this.renderChildren();
-    if (renderedChildren) this.childContainer.appendChild(renderedChildren);
-    //Lets give some time for the scripts appended to be executed
-    var myNode=this;
-    window.setTimeout(function(){
-      if (reqlistener) {
-	reqlistener.call(myNode);
-      }
-      myNode.dispatchEvent("appendChildren");
-    }, 1000);
-  };
-  if (typeof tp=="string") {
-    this.getTp(tp, function() {
-      this.childTp=this.xmlTp;
-      refresh.call(this);
-    });
-  }
-  else {
-    if (tp) {
-      if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
-      this.childTp=tp;
+ return new Promise((resolve, reject) => {
+    if (container) this.childContainer=container;
+    var refresh=() => {
+      var renderedChildren=this.renderChildren();
+      if (renderedChildren) this.childContainer.appendChild(renderedChildren);
+      //Lets give some time for the scripts appended to be executed
+      window.setTimeout(() => {
+        if (reqlistener) {
+          reqlistener.call(this);
+        }
+        resolve(this);
+        this.dispatchEvent("appendChildren");
+      }, 1000);
+    };
+    if (typeof tp=="string") {
+      this.getTp(tp, function() {
+        this.childTp=this.xmlTp;
+        refresh();
+      });
     }
-    refresh.call(this);
-  }
+    else {
+      if (tp) {
+        if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
+        this.childTp=tp;
+      }
+      refresh();
+    }
+  });
 };
 
 Node.prototype.writeProperty=function(container, property, attribute, onEmptyValueText) {
@@ -476,79 +488,83 @@ Node.prototype.getFirstPropertyKey=function(){
 
 //It loads a node tree from a php script that privides it in json format. nodeType==1 then json is not node
 Node.prototype.loadfromhttp=function (requestData, reqlistener, nodeType) {
-  var xmlhttp;
-  if (window.XMLHttpRequest) {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp = new XMLHttpRequest();
-  }
-  else {
-    // code for IE6, IE5
-    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  var thisNode=this;
-  var request=null, requesterFile=null, requestAction=null;
-  xmlhttp.addEventListener('load', function() {
-    try {
-      var responseobj=JSON.parse(this.responseText);
+  return new Promise((resolve, reject) => {
+    var xmlhttp;
+    if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp = new XMLHttpRequest();
     }
-    catch(err) {
-      console.log(requesterFile, requestAction);
-      var parcialRes=this.responseText.replace(/.+\n/g,"");
-      console.log(this.responseText);
-      console.log(JSON.parse(parcialRes));
-      throw err;
+    else {
+      // code for IE6, IE5
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    thisNode.load(responseobj, null, nodeType);
-    if (Config.logRequests==true) {
-      var childtablename= responseobj.properties && responseobj.properties.childtablename ? responseobj.properties.childtablename :
-      (responseobj.parentNode && responseobj.parentNode.properties && responseobj.parentNode.childtablename) ?
-      responseobj.parentNode.properties.childtablename : null;
+    var thisNode=this;
+    var request=null, requesterFile=null, requestAction=null;
+    xmlhttp.addEventListener('load', function() {
+      try {
+        var responseobj=JSON.parse(this.responseText);
+      }
+      catch(err) {
+        console.log(requesterFile, requestAction);
+        var parcialRes=this.responseText.replace(/.+\n/g,"");
+        console.log(this.responseText);
+        console.log(JSON.parse(parcialRes));
+        throw err;
+      }
+      thisNode.load(responseobj, null, nodeType);
+      if (Config.logRequests==true) {
+        var childtablename= responseobj.properties && responseobj.properties.childtablename ? responseobj.properties.childtablename :
+        (responseobj.parentNode && responseobj.parentNode.properties && responseobj.parentNode.childtablename) ?
+        responseobj.parentNode.properties.childtablename : null;
+        
+        console.log(requesterFile);
+        if (childtablename) console.log(childtablename.substr(6));
+        if (requestAction) console.log(requestAction);
+        console.log(responseobj);
+        console.log(thisNode);
+      }
+      if (reqlistener) {
+        reqlistener.call(thisNode);
+      }
+      resolve(thisNode);
+      thisNode.dispatchEvent("loadfromhttp");
+      if (responseobj.extra && responseobj.extra.error==true) {
+        console.log("Error response", requesterFile, requestAction);
+        console.log(responseobj, this.responseText);
+        reject(thisNode);
+      }
+    });
+    xmlhttp.onreadystatechange=function() {  
+      if (xmlhttp.readyState==4 && xmlhttp.status!==200) {     
+        console.log('Oops! Something went wrong with the XMLHttpRequest.');
+      }
+    }
+    xmlhttp.overrideMimeType("application/json");
+    if (typeof requestData=="string") { //request with no data or with ?vars
+      requesterFile=requestData;
+      xmlhttp.open("GET", requesterFile, true);
+      xmlhttp.send();
+    }
+    else if (typeof requestData=="object") {
+      if (requestData.constructor === Object) {
+        requesterFile=requestData.requesterFile;
+        request=this.toRequestFormData(requestData);
+        requestAction=requestData.action;
+      }
+      else if (requestData.tagName=="FORM") {
+        requesterFile=requestData.action;
+        request=new FormData(requestData);
+      }
+      else { //it is formdata
+        request=requestData;
+        requesterFile=requestData.action;
+      }
+      if (!requesterFile) requesterFile=Config.requestFilePath;
       
-      console.log(requesterFile);
-      if (childtablename) console.log(childtablename.substr(6));
-      if (requestAction) console.log(requestAction);
-      console.log(responseobj);
-      console.log(thisNode);
-    }
-    if (reqlistener) {
-      reqlistener.call(thisNode);
-    }
-    thisNode.dispatchEvent("loadfromhttp");
-    if (responseobj.extra && responseobj.extra.error==true) {
-      console.log("Error response", requesterFile, requestAction);
-      console.log(responseobj, this.responseText);
+      xmlhttp.open("POST",requesterFile, true);
+      xmlhttp.send(request); //sending just formData (archives)
     }
   });
-  xmlhttp.onreadystatechange=function() {  
-    if (xmlhttp.readyState==4 && xmlhttp.status!==200) {     
-      console.log('Oops! Something went wrong with the XMLHttpRequest.');
-    }
-  }
-  xmlhttp.overrideMimeType("application/json");
-  if (typeof requestData=="string") { //request with no data or with ?vars
-    requesterFile=requestData;
-    xmlhttp.open("GET", requesterFile, true);
-    xmlhttp.send();
-  }
-  else if (typeof requestData=="object") {
-    if (requestData.constructor === Object) {
-      requesterFile=requestData.requesterFile;
-      request=this.toRequestFormData(requestData);
-      requestAction=requestData.action;
-    }
-    else if (requestData.tagName=="FORM") {
-      requesterFile=requestData.action;
-      request=new FormData(requestData);
-    }
-    else { //it is formdata
-      request=requestData;
-      requesterFile=requestData.action;
-    }
-    if (!requesterFile) requesterFile=Config.requestFilePath;
-    
-    xmlhttp.open("POST",requesterFile, true);
-    xmlhttp.send(request); //sending just formData (archives)
-  }
 };
 Node.prototype.addEventListener=function (eventsNames, listenerFunction, id, targetNode) {
   if (!this.events) this.events={};

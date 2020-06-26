@@ -9,10 +9,10 @@
         <script>
           var url='?category=' + thisNode.properties.id;
           thisElement.href=url;
-          thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
-            this.getChild().writeProperty(thisElement);
+          thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}).then((myNode) => {
+            myNode.getChild().writeProperty(thisElement);
             var launcher = new Node();
-            launcher.thisNode = this.getChild();
+            launcher.thisNode = myNode.getChild();
             launcher.editElement = thisElement;
             launcher.btposition="btmiddleleft";
             launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
@@ -25,7 +25,7 @@
             admnlauncher.newNode.loadasc(thisNode, 2, "id"); //the parent is not the same
             admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
             admnlauncher.appendThis(thisElement.parentElement, "templates/addadmnbuts.php");
-            //Now we add the listener so eachtime the subcategories refresh we render in the columns
+            //Now we add the listener
             thisNode.getRelationship().addEventListener("refreshChildrenView", function(){
               //remove loader if exists
               if (thisElement.parentElement.parentElement) var myLoader=thisElement.parentElement.parentElement.querySelector(".loader");
@@ -42,16 +42,16 @@
             this.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="none";
             document.getElementById("centralcontent").innerHTML="";//We remove central content (To avoid keep content that could be confusing)
             DomMethods.setActive(thisNode);
-            thisNode.getRelationship().loadfromhttp({action:"load my tree", deepLevel: 2}, function(){
+            thisNode.getRelationship().loadfromhttp({action:"load my tree", deepLevel: 2}).then((myNode) => {
               //deepLevel=2 => It load relationship (level is also for female)
-              this.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
-              this.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
-              this.newNode.parentNode.load(this, 1, 0, null, "id");
-              this.appendThis(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "templates/admnlisteners.php");
+              myNode.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
+              myNode.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
+              myNode.newNode.parentNode.load(this, 1, 0, null, "id");
+              myNode.appendThis(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "templates/admnlisteners.php");
               //we show subcategories
-              this.refreshChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"),"templates/subcategory.php", function(){
+              myNode.refreshChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"),"templates/subcategory.php").then((myNode) => {
                 //Now would click at the subcategory if there is a path in url
-                if (this.children.length > 0) {
+                if (myNode.children.length > 0) {
                   if (window.location.search) {
                     var regex = new RegExp('category=' + thisNode.properties.id + '&subcategory=(\d+)');
                     if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
@@ -66,7 +66,7 @@
                   //If not we would click at first subcategory
                   if (!id) {
                     var button=null;
-                    this.getChild().getMyDomNodes().every(function(domNode){
+                    myNode.getChild().getMyDomNodes().every(function(domNode){
                       button=domNode.querySelector("[data-button]");
                       if (button) return false;
                     });

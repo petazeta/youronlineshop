@@ -10,10 +10,10 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
   var categoriesrootmother=new NodeFemale();
   categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
   categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
-  categoriesrootmother.loadfromhttp({action:"load root"}, function(){
-    var categoriesroot=this.getChild();
-    categoriesroot.loadfromhttp({action: "load my tree", deepLevel: 3, language: webuser.extra.language.properties.id}, function() {
-      var categoriesMother=this.getRelationship();
+  categoriesrootmother.loadfromhttp({action:"load root"}).then(function(myNode){
+    var categoriesroot=myNode.getChild();
+    categoriesroot.loadfromhttp({action: "load my tree", deepLevel: 3, language: webuser.extra.language.properties.id}).then(function(myNode) {
+      var categoriesMother=myNode.getRelationship();
       var newNode=new NodeMale();
       newNode.parentNode=new NodeFemale();
       newNode.parentNode.load(categoriesMother, 1, 0, "id");
@@ -23,8 +23,8 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       newNode.addRelationship(categoriesMother.partnerNode.getRelationship("items").cloneNode(0, 0));
       newNode.getRelationship("itemcategoriesdata").addChild(new NodeMale());
       categoriesMother.newNode=newNode;
-      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "templates/admnlisteners.php", function() {
-        this.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php", function(){
+      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "templates/admnlisteners.php").then(function(myNode) {
+        myNode.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php").then(function(myNode){
           if (window.location.search) {
             regex = /category=(\d+)/;
             if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
@@ -36,11 +36,11 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
             }
           }
           //Now we click first cat at page start (if no url)
-          if (this.children.length > 0 && !webuser.isWebAdmin() && Config.defaultcat_On) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+          if (myNode.children.length > 0 && !webuser.isWebAdmin() && Config.defaultcat_On) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
             regex = /(\d+)/; //No number then no url state
             if (!(window.location.search && window.location.search.match(regex))) {
               var button=null;
-              var myDomNodes=this.children[0].getMyDomNodes();
+              var myDomNodes=myNode.children[0].getMyDomNodes();
               for (var i=0; i<myDomNodes.length; i++) {
                 button=myDomNodes[i].querySelector("[data-button]");
                 if (button) {

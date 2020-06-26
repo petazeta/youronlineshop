@@ -6,10 +6,10 @@
         var prevUrl='?category=' + thisNode.parentNode.partnerNode.properties.id;
         var url= prevUrl + '&subcategory=' + thisNode.properties.id;
         thisElement.href=url;
-        thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}, function(){
-          this.getChild().writeProperty(thisElement);
+        thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}).then((myNode) => {
+          myNode.getChild().writeProperty(thisElement);
           var launcher = new Node();
-          launcher.thisNode = this.getChild();
+          launcher.thisNode = myNode.getChild();
           launcher.editElement = thisElement;
           launcher.btposition="btmiddleleft";
           launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");

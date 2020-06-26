@@ -13,7 +13,7 @@
       var thisNodeData= [thisNode.toRequestData({action: "load my children"}), webuser.getRelationship("items").toRequestData({action: "load my children"})];
       parameters={action:"load children", language: webuser.extra.language.properties.id, reqnodes: thisNodeData};      
     }
-    thisNode.loadfromhttp(parameters, function(){
+    thisNode.loadfromhttp(parameters).then(function(){
       var newNode=new NodeMale(); //new Item
       newNode.parentNode=new NodeFemale();
       newNode.parentNode.load(thisNode, 1, 0, "id");
@@ -21,8 +21,8 @@
       var itemDataRel=new NodeFemale();
       itemDataRel.properties.childtablename="TABLE_ITEMSDATA";
       itemDataRel.properties.parenttablename="TABLE_ITEMS";
-      itemDataRel.loadfromhttp({action:"load this relationship"}, function() {
-        newNode.addRelationship(this);
+      itemDataRel.loadfromhttp({action:"load this relationship"}).then(function(myNode) {
+        newNode.addRelationship(myNode);
         newNode.getRelationship("itemsdata").addChild(new NodeMale());
         thisNode.newNode=newNode;
         thisNode.appendThis(thisElement, "templates/admnlisteners.php");
@@ -35,9 +35,9 @@
             //thisNode.children[i].loadfromhttp(, function(){});
           }
           var loadelement=new Node();
-          loadelement.loadfromhttp({"parameters": myActions, "nodes": myChildNodes}, function(){
+          loadelement.loadfromhttp({"parameters": myActions, "nodes": myChildNodes}).then(function(myNode){
             for (var i=0; i<thisNode.children.length; i++) {
-              thisNode.children[i].load(this.nodelist[i]);
+              thisNode.children[i].load(myNode.nodelist[i]);
             }
             thisNode.refreshChildrenView(thisElement, "templates/itemlistpicture.php");
           });
