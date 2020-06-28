@@ -4,53 +4,52 @@
   <div class="boxbody"></div>
 </div> 
 <script> 
-domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], 
-function(){
+domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var langboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langboxtt"}).getRelationship("domelementsdata").getChild();
   langboxtt.refreshView(document.querySelector("#langbox .boxtitle"), "templates/boxhead.php");
 });
 domelementsrootmother.addEventListener("loadLabels", function(){
-   languages.loadfromhttp({"action":"load my childtablekeys"}, function(){
+   languages.loadfromhttp({"action":"load my childtablekeys"}).then(function(myNode){
       var newNode=new NodeMale();
       newNode.parentNode=new NodeFemale();
       newNode.parentNode=languages;
-      this.newNode=newNode;
-      this.appendThis(document.querySelector("#langbox .boxbody"), "templates/admnlisteners.php", function() {
-        this.refreshChildrenView(document.querySelector("#langbox .boxbody"), "templates/language.php");
+      myNode.newNode=newNode;
+      myNode.appendThis(document.querySelector("#langbox .boxbody"), "templates/admnlisteners.php").then(function(myNode) {
+        myNode.refreshChildrenView(document.querySelector("#langbox .boxbody"), "templates/language.php");
       });
       function languageIncreaseCloneFirstLang(newAddedLangNode, listener){
         var newNode=languages.getChild().cloneNode();
-        newNode.loadfromhttp({"action":"load my tree"}, function(){
-          this.properties.id=newAddedLangNode.properties.id;
+        newNode.loadfromhttp({"action":"load my tree"}).then(function(myNode){
+          myNode.properties.id=newAddedLangNode.properties.id;
           var loadActions=[];
           var loadRequest=[];
           var datavalue=[];
           var myparameters={"action":"load my tree up"};
-          for (var i=0; i<this.relationships.length; i++) {
-            for (var j=0; j<this.relationships[i].children.length; j++) {
-              var myLoadRequestData=this.relationships[i].children[j].toRequestData(myparameters);
+          for (var i=0; i<myNode.relationships.length; i++) {
+            for (var j=0; j<myNode.relationships[i].children.length; j++) {
+              var myLoadRequestData=myNode.relationships[i].children[j].toRequestData(myparameters);
               loadRequest.push(myLoadRequestData);
-              datavalue.push(this.relationships[i].children[j].properties);
+              datavalue.push(myNode.relationships[i].children[j].properties);
               loadActions.push(myparameters);
             }
           }
           //Now we have to send the load request and get the result.
           var element=new Node();
-          element.loadfromhttp({"parameters":loadActions, "nodes":loadRequest}, function(){
+          element.loadfromhttp({"parameters":loadActions, "nodes":loadRequest}).then(function(myNode){
             var insertRequest=[];
             var insertActions=[];
-            for (var i=0; i<this.nodelist.length; i++) {
-              if (Array.isArray(this.nodelist[i].parentNode)) {
-                for (var j=0;j<this.nodelist[i].parentNode.length;j++) {
-                  if (this.nodelist[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
-                    this.nodelist[i].parentNode=this.nodelist[i].parentNode[j];
+            for (var i=0; i<myNode.nodelist.length; i++) {
+              if (Array.isArray(myNode.nodelist[i].parentNode)) {
+                for (var j=0;j<myNode.nodelist[i].parentNode.length;j++) {
+                  if (myNode.nodelist[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
+                    myNode.nodelist[i].parentNode=myNode.nodelist[i].parentNode[j];
                     break;
                   }
                 }  
               }
-              this.nodelist[i].properties=datavalue[i];
+              myNode.nodelist[i].properties=datavalue[i];
               var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
-              var myInsertRequestData=this.nodelist[i].toRequestData(myparameters);
+              var myInsertRequestData=myNode.nodelist[i].toRequestData(myparameters);
               insertRequest.push(myInsertRequestData);
               insertActions.push(myparameters);
             }
@@ -61,7 +60,7 @@ domelementsrootmother.addEventListener("loadLabels", function(){
           });
         });
       };
-      this.addEventListener("addNewNode", function(newLangNode) {
+      myNode.addEventListener("addNewNode", function(newLangNode) {
         languageIncreaseCloneFirstLang(newLangNode);
       }, "addNewNode");
   });

@@ -38,14 +38,14 @@
           return false;
         }
         //Now we save the data: save tree
-        webuser.getRelationship("usersdata").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.userdata.properties}, function(){
+        webuser.getRelationship("usersdata").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.userdata.properties}).then(function(){
           for (var i=0; i<webuser.getRelationship("usersdata").childtablekeys.length; i++) {
             var propname=webuser.getRelationship("usersdata").childtablekeys[i];
             if (propname=="id") continue;
             webuser.getRelationship("usersdata").getChild().properties[propname]=webuser.userdata.properties[propname];
           }
           if (Config.chktaddressOn) {
-            webuser.getRelationship("addresses").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.addressdata.properties}, function(){
+            webuser.getRelationship("addresses").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.addressdata.properties}).then(function(){
               for (var i=0; i<webuser.getRelationship("addresses").childtablekeys.length; i++) {
                 var propname=webuser.getRelationship("addresses").childtablekeys[i];
                 if (propname=="id") continue;

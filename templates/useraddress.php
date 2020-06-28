@@ -12,17 +12,22 @@
     if (thisNode.formMode) {
       myaddressTp=myaddressInputTp;
     }
-    thisNode.getRelationship("usersdata").loadfromhttp({action: "load my children", user_id: thisNode.properties.id}, function() {
-      this.getChild().editable=thisNode.editable;
-      this.getChild().appendProperties(thisElement, myaddressTp);
-      if (Config.chktaddressOn) {
-        thisNode.getRelationship("addresses").loadfromhttp({action: "load my children", user_id: thisNode.properties.id}, function() {
-          this.getChild().editable=thisNode.editable;
-          this.getChild().appendProperties(thisElement, myaddressTp);
-          //Resset addressFieldTp
-          thisNode.addressFieldTp=null;
-        });
-      }
+    thisNode.getRelationship("usersdata").loadfromhttp({action: "load my children", user_id: thisNode.properties.id}).then(function(myNode) {
+      return new Promise((resolve, reject) => {
+        myNode.getChild().editable=thisNode.editable;
+        myNode.getChild().appendProperties(thisElement, myaddressTp);
+        if (Config.chktaddressOn) {
+          thisNode.getRelationship("addresses").loadfromhttp({action: "load my children", user_id: thisNode.properties.id}).then(function(myNode) {
+            resolve(myNode);
+          });
+        }
+      });
+    })
+    .then(function(myNode){
+      myNode.getChild().editable=thisNode.editable;
+      myNode.getChild().appendProperties(thisElement, myaddressTp);
+      //Resset addressFieldTp
+      thisNode.addressFieldTp=null;
     });
     //Check data valideza and save in userdata and addressdata if formMode
     thisNode.checkValidData=function(myform) {

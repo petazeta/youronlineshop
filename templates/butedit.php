@@ -153,9 +153,9 @@
       // src, href we want the relative address (attribute rather than property) but for value we want the actual value (proerty rather than attribute
       else elementValue=editElement[thisAttribute];
       if (thisNode.properties[thisProperty] != elementValue) { //just when content change and not void
-	thisNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties:{[thisProperty]: elementValue}}, function(){
-	  this.properties[thisProperty]=elementValue;
-	  this.dispatchEvent("changeProperty", [thisProperty]);
+	thisNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties:{[thisProperty]: elementValue}}).then(function(myNode){
+	  myNode.properties[thisProperty]=elementValue;
+	  myNode.dispatchEvent("changeProperty", [thisProperty]);
 	  if (callBack) callBack();
 	});
       }

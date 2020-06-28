@@ -13,11 +13,13 @@
       if (webuser.getUserType()=="orders administrator") {
       //Complit user information
         thisUser=thisNode.parentNode.partnerNode;
-        thisUser.loadfromhttp({action: "load my relationships"}, function() {
-          var datarel=this.getRelationship({name:"usersdata"});
-          datarel.loadfromhttp({action: "load my children"}, function() {
-            thisElement.textContent=this.children[0].properties.name + " " + this.children[0].properties.surname;
+        thisUser.loadfromhttp({action: "load my relationships"}).then(function(myNode) {
+          return new Promise((resolve, reject) => {
+            resolve(myNode.getRelationship({name:"usersdata"}));
           });
+        })
+        .then((myNode) => {
+          thisElement.textContent=myNode.children[0].properties.name + " " + myNode.children[0].properties.surname;
         });
       }
       else {
@@ -44,7 +46,9 @@
         mycell.colSpan=5;
         launcher.myNode=thisUser;
         launcher.myNode.myTp="templates/useraddress.php";
-        launcher.refreshView(mycell, "templates/rmbox.php", function(){this.openview=true});
+        launcher.refreshView(mycell, "templates/rmbox.php").then(function(myNode){
+          myNode.openview=true;
+        });
         return false;
       }
     </script>

@@ -191,9 +191,9 @@
 	    alert(eval(this.elements.pwdCharError.value));
 	    return false;
 	  }
-	  webuser.login(thisElement.elements.user_name.value, thisElement.elements.user_password.value, function(){
-	    if (this.extra.error) {
-	      myalert.properties.alertmsg=thisElement.elements[this.extra.errorName].value;
+	  webuser.login(thisElement.elements.user_name.value, thisElement.elements.user_password.value).then(function(myNode){
+	    if (myNode.extra.error) {
+	      myalert.properties.alertmsg=thisElement.elements[myNode.extra.errorName].value;
 	      myalert.properties.timeout=3000;
 	      myalert.showalert();
 	      return false;

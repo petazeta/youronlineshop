@@ -11,44 +11,47 @@ user.prototype.logoff=function(){
   var FD  = new FormData();
   FD.append("parameters", JSON.stringify({action: "logout"}));
   FD.action="dblogin.php";
-  this.loadfromhttp(FD, function() {
-    this.extra.language=language;
-    if (this.extra && this.extra.error) {
+  this.loadfromhttp(FD).then((myNode) => {
+    myNode.extra.language=language;
+    if (myNode.extra && myNode.extra.error) {
       alert("log out error");
     }
     else {
-      this.parentNode=null;
-      this.relationships=[];
-      this.properties=new Properties();
+      myNode.parentNode=null;
+      myNode.relationships=[];
+      myNode.properties=new Properties();
     }
-    this.dispatchEvent("log");
+    myNode.dispatchEvent("log");
   });
 };
 user.prototype.loginproto=function(action, name, password, email, reqlistener){
-  if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
-  if (this.extra && this.extra.language) var language=this.extra.language;
-  var FD  = new FormData();
-  FD.append("parameters", JSON.stringify({action: action}));
-  FD.append("user_name", name);
-  FD.append("user_password", password);
-  if (email) {
-    FD.append("user_email", email);
-  }
-  FD.action="dblogin.php";
-  this.loadfromhttp(FD, function(){
-    if (!this.extra) this.extra={};
-    this.extra.language=language;
-    this.dispatchEvent("log");
-    if (typeof reqlistener=="function") reqlistener.call(this);
+  return new Promise((resolve, reject) => {
+    if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
+    if (this.extra && this.extra.language) var language=this.extra.language;
+    var FD  = new FormData();
+    FD.append("parameters", JSON.stringify({action: action}));
+    FD.append("user_name", name);
+    FD.append("user_password", password);
+    if (email) {
+      FD.append("user_email", email);
+    }
+    FD.action="dblogin.php";
+    this.loadfromhttp(FD).then((myNode) => {
+      if (!myNode.extra) myNode.extra={};
+      myNode.extra.language=language;
+      myNode.dispatchEvent("log");
+      if (typeof reqlistener=="function") reqlistener.call(myNode);
+      resolve(myNode);
+    });
   });
 };
   
 user.prototype.login=function(name, password, reqlistener){
-  this.loginproto("login", name, password, null, reqlistener);
+  return this.loginproto("login", name, password, null, reqlistener);
 }
 
 user.prototype.create=function(name, password, email, reqlistener){
-  this.loginproto("create", name, password, email, reqlistener);
+  return this.loginproto("create", name, password, email, reqlistener);
 }
 
 user.prototype.isUserType=function(utype){

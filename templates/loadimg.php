@@ -47,7 +47,7 @@
 	  var myFormData=new FormData();
 	  myFormData.append(fileName, newImage[0], fileName + ".png");
 	  myFormData.action=this.action;
-	  thisNode.loadfromhttp(myFormData, function(){
+	  thisNode.loadfromhttp(myFormData).then(function(){
 	    launcher.hidealert();
 	    thisNode.dispatchEvent("loadImage");
 	  });

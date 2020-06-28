@@ -13,12 +13,12 @@
     var thisNode=launcher.thisNode;
     if (launcher.newStatus==0) thisElement.setAttribute("title","Unset Archive");
     thisElement.onclick=function() {
-      thisNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties:{status: launcher.newStatus}}, function(){
-	this.parentNode.removeChild(this);
+      thisNode.loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties:{status: launcher.newStatus}}).then(function(myNode){
+	myNode.parentNode.removeChild(myNode);
 	//for no children add a eventlistener to refreshChildrenView event
-	if (this.parentNode.childContainer) this.parentNode.refreshChildrenView();
-	this.parentNode.dispatchEvent("change order status", [this]);
-	this.dispatchEvent("change order status")
+	if (myNode.parentNode.childContainer) myNode.parentNode.refreshChildrenView();
+	myNode.parentNode.dispatchEvent("change order status", [myNode]);
+	myNode.dispatchEvent("change order status")
       });
       return false;
     }

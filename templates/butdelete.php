@@ -26,12 +26,12 @@
 	      var thisNode=launcher.thisNode;
 	      thisElement.addEventListener("submit", function(ev) {
 		ev.preventDefault();
-		thisNode.loadfromhttp({action:"delete my tree", user_id: webuser.properties.id}, function(){
-		  this.parentNode.removeChild(this);
+		thisNode.loadfromhttp({action:"delete my tree", user_id: webuser.properties.id}).then(function(myNode){
+		  myNode.parentNode.removeChild(myNode);
 		  //for no children add a eventlistener to refreshChildrenView event
-		  if (this.parentNode.childContainer) this.parentNode.refreshChildrenView();
-		  this.parentNode.dispatchEvent("deleteNode", [this]);
-		  this.dispatchEvent("deleteNode");
+		  if (myNode.parentNode.childContainer) myNode.parentNode.refreshChildrenView();
+		  myNode.parentNode.dispatchEvent("deleteNode", [myNode]);
+		  myNode.dispatchEvent("deleteNode");
 		});
 		launcher.hidealert();
 	      });

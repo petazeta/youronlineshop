@@ -8,15 +8,20 @@
     </div>
     <div style="display:grid; grid-template-columns: auto auto; width:40em;" class="formtable"></div>
     <script>
-      var datarel=webuser.getRelationship("usersdata");
-      function showdata(){
-	datarel.getChild().editable=true;
-	datarel.getChild().refreshPropertiesView(thisElement,"templates/singlefield.php");
-      }
-      if (datarel.children.length==0) {
-	datarel.loadfromhttp({action: "load my children", user_id: webuser.properties.id}, showdata)
-      }
-      else showdata();
+      var getuserdata=new Promise((resolve, reject) => {
+        var datarel=webuser.getRelationship("usersdata");
+        if (datarel.children.length==0) {
+          datarel.loadfromhttp({action: "load my children", user_id: webuser.properties.id}).then((myNode) => {
+            resolve(myNode.getChild());
+          });
+        }
+        else resolve(datarel.getChild());
+      });
+      getuserdata.then((myNode) => {
+	myNode.editable=true;
+	myNode.refreshPropertiesView(thisElement,"templates/singlefield.php");
+      });
+      
     </script>
     <div style="margin:auto; display:table; margin-bottom: 1em;">
       <button class="btn"></button>
@@ -80,7 +85,7 @@
       (new Node()).refreshView(document.getElementById("centralcontent"), 'templates/checkout1.php');
     }
     else {
-      (new Node()).refreshView(document.getElementById("centralcontent"), thisElement.parentElement.querySelector("template"), function(){
+      (new Node()).refreshView(document.getElementById("centralcontent"), thisElement.parentElement.querySelector("template")).then(function(){
 	var url='?userarea=1';
 	if (history.state && history.state.url==url) {
 	  return;

@@ -8,7 +8,7 @@
     thisElement.addEventListener("click", function(event) {
       event.preventDefault();
       var newNode=launcher.newNode.cloneNode();
-      newNode.loadfromhttp({action:"add my tree", language:webuser.extra.language.properties.id, user_id: webuser.properties.id}, function(){
+      newNode.loadfromhttp({action:"add my tree", language:webuser.extra.language.properties.id, user_id: webuser.properties.id}).then(function(){
         launcher.thisParent.addChild(newNode);
         launcher.thisParent.refreshChildrenView();
         launcher.thisParent.dispatchEvent("addNewNode", [newNode]);

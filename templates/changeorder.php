@@ -7,12 +7,12 @@
     thisElement.onclick=function() {
       var newSortOrder=thisNode.sort_order + launcher.orderchange;
       if (newSortOrder < 1 || newSortOrder > thisNode.parentNode.children.length) return false;
-      thisNode.loadfromhttp({action:"edit my sort_order", newsort_order: newSortOrder}, function(){
+      thisNode.loadfromhttp({action:"edit my sort_order", newsort_order: newSortOrder}).then(function(myNode){
 	var updatedChild=new NodeMale();
-	updatedChild.properties.id=this.properties.id;
+	updatedChild.properties.id=myNode.properties.id;
 	updatedChild.sort_order=newSortOrder;
-	this.parentNode.updateChild(updatedChild); //it will refresh children sort_orders
-	this.parentNode.refreshChildrenView();
+	myNode.parentNode.updateChild(updatedChild); //it will refresh children sort_orders
+	myNode.parentNode.refreshChildrenView();
       });
       return false;
     }

@@ -2,8 +2,8 @@
 <script type="text/javascript">
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   //We load menus and its relationships. We would like to load menus domelementsdata children but not domelements children
-  this.getChild().getNextChild({name: "texts"}).loadfromhttp({action:"load my tree", deepLevel: 5}, function(){
-    var menusMother=this.getNextChild({name: "nav"}).getRelationship();
+  this.getChild().getNextChild({name: "texts"}).loadfromhttp({action:"load my tree", deepLevel: 5}).then(function(myNode){
+    var menusMother=myNode.getNextChild({name: "nav"}).getRelationship();
     //showing menus (after the listeners to refreshChildrenView are added). Refreshing first time first menu is clicked
     //new node schema
     var newNode=new NodeMale();
@@ -16,7 +16,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     menusMother.newNode=newNode;
     menusMother.appendThis(document.querySelector("header div.menuscontainer"), "templates/admnlisteners.php");
 
-    menusMother.refreshChildrenView(document.querySelector("header div.menuscontainer"), "templates/menu.php", function(){
+    menusMother.refreshChildrenView(document.querySelector("header div.menuscontainer"), "templates/menu.php").then(function(myNode){
       document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged
       //Now we click the menu selected at the parameters send by the url
       if (window.location.search) {
@@ -30,11 +30,11 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
         }
       }
       //Now we click first menu at page start (if no url)
-      if (this.children.length > 0 && !webuser.isWebAdmin() && Config.defaultmenu_On) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+      if (myNode.children.length > 0 && !webuser.isWebAdmin() && Config.defaultmenu_On) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
         regex = /(\d+)/; //No number then no url state
         if (!(window.location.search && window.location.search.match(regex))) {
           var button=null;
-          var myDomNodes=this.children[0].getMyDomNodes();
+          var myDomNodes=myNode.children[0].getMyDomNodes();
           for (var i=0; i<myDomNodes.length; i++) {
             button=myDomNodes[i].querySelector("[data-button]");
             if (button) {

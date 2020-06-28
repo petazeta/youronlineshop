@@ -31,8 +31,8 @@
         
         thisElement.onclick=function(){
           //we save the selected shipping type main characterisitics at ordershippingtypes table. add myself or add my tree
-          var ordershippingtype=webuser.getRelationship({name:"orders"}).children[0].getRelationship({name:"ordershippingtypes"}).children[0];
-          ordershippingtype.loadfromhttp({action: "add myself", user_id: webuser.properties.id}, function(){
+          var ordershippingtype=webuser.getRelationship({name:"orders"}).getChild().getRelationship({name:"ordershippingtypes"}).getChild();
+          ordershippingtype.loadfromhttp({action: "add myself", user_id: webuser.properties.id}).then(function(){
           //We have added the ordershippingtype to the order
             (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout4.php");
           });

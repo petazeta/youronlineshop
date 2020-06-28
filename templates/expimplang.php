@@ -109,12 +109,12 @@
             myParams.push({action: "load my tree", language: langdata.children[i].properties.id});
           }
           var nodeRequest=new Node();
-          nodeRequest.loadfromhttp({"parameters":myParams, "nodes":myNodes}, function(){
+          nodeRequest.loadfromhttp({"parameters":myParams, "nodes":myNodes}).then(function(myNode){
             var nodesInsert=[];
-            for (var i=0; i<this.nodelist.length; i++) {
+            for (var i=0; i<myNode.nodelist.length; i++) {
               //we restables rootnode properties data
-              this.nodelist[i].properties=rootClone.properties;
-              nodesInsert.push(this.nodelist[i].toRequestData({action: "add my tree"}));
+              myNode.nodelist[i].properties=rootClone.properties;
+              nodesInsert.push(myNode.nodelist[i].toRequestData({action: "add my tree"}));
             }
             var datatoinsert={"languages": langdata, "trees": nodesInsert};
             thisElement.form.result.value=JSON.stringify(datatoinsert);
@@ -315,7 +315,7 @@
           var langsToInsert=[];
           //We load domelements textNode data
           var myTextNode=domelementsroot.getNextChild({"name":"texts"}).cloneNode();
-          myTextNode.loadfromhttp({action: "load my tree", language: languages.getChild().properties.id}, function(){
+          myTextNode.loadfromhttp({action: "load my tree", language: languages.getChild().properties.id}).then(function(myNode){
             for (var i=0; i<filterdatatrees.length; i++) {
               var myLabelNode=domelementsroot.getNextChild({"name":"labels"}).cloneNode();
               replaceMyTreeLangData.call(myLabelNode, filterdatatrees[i].parentNode);
@@ -337,66 +337,68 @@
               }
               return domdataarray;
             }
-            function languageAddCloneFirstLang(newLangNode, domdatachildren, listener){
-              var newAddedLangNode=newLangNode.cloneNode();
-              newAddedLangNode.loadfromhttp({action: "add myself", user_id: webuser.properties.id}, function(){
-                //We fill the lang
-                var newNode=languages.getChild().cloneNode();
-                newNode.loadfromhttp({"action":"load my tree"}, function(){
-                  this.properties.id=newAddedLangNode.properties.id;
-                  var loadActions=[];
-                  var loadRequest=[];
-                  var datavalue=[];
-                  var myparameters={"action":"load my tree up"};
-                  for (var i=0; i<this.relationships.length; i++) {
-                    if (this.relationships[i].properties.name=="domelementsdata") {
-                      break;
-                    }
-                    for (var j=0; j<this.relationships[i].children.length; j++) {
-                      var myLoadRequestData=this.relationships[i].children[j].toRequestData(myparameters);
-                      loadRequest.push(myLoadRequestData);
-                      datavalue.push(this.relationships[i].children[j].properties);
-                      loadActions.push(myparameters);
-                    }
-                  }
-                  //Now we have to send the load request and get the result.
-                  var element=new Node();
-                  element.loadfromhttp({"parameters":loadActions, "nodes":loadRequest}, function(){
-                    var insertRequest=[];
-                    var insertActions=[];
-                    for (var i=0; i<this.nodelist.length; i++) {
-                      if (Array.isArray(this.nodelist[i].parentNode)) {
-                        for (var j=0;j<this.nodelist[i].parentNode.length;j++) {
-                          if (this.nodelist[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
-                            this.nodelist[i].parentNode=this.nodelist[i].parentNode[j];
-                            break;
-                          }
-                        }  
+            var languageAddCloneFirstLang=(newLangNode, domdatachildren) => {
+              return new Promise((resolve, reject) => {
+                var newAddedLangNode=newLangNode.cloneNode();
+                newAddedLangNode.loadfromhttp({action: "add myself", user_id: webuser.properties.id}).then(function(){
+                  //We fill the lang
+                  var newNode=languages.getChild().cloneNode();
+                  newNode.loadfromhttp({"action":"load my tree"}).then(function(myNode){
+                    myNode.properties.id=newAddedLangNode.properties.id;
+                    var loadActions=[];
+                    var loadRequest=[];
+                    var datavalue=[];
+                    var myparameters={"action":"load my tree up"};
+                    for (var i=0; i<myNode.relationships.length; i++) {
+                      if (myNode.relationships[i].properties.name!="domelementsdata") {
+                        for (var j=0; j<myNode.relationships[i].children.length; j++) {
+                          var myLoadRequestData=myNode.relationships[i].children[j].toRequestData(myparameters);
+                          loadRequest.push(myLoadRequestData);
+                          datavalue.push(myNode.relationships[i].children[j].properties);
+                          loadActions.push(myparameters);
+                        }
                       }
-                      this.nodelist[i].properties=datavalue[i];
-                      var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
-                      var myInsertRequestData=this.nodelist[i].toRequestData(myparameters);
-                      insertRequest.push(myInsertRequestData);
-                      insertActions.push(myparameters);
                     }
-                    //Now we add the domelementsdata
-                    
-                    for (var i=0; i<domdatachildren.length; i++) {
-                      var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
-                      var myInsertRequestData=domdatachildren[i].toRequestData(myparameters);
-                      insertRequest.push(myInsertRequestData);
-                      insertActions.push(myparameters);
-                    }
-                    var ielement=new Node();
-                    ielement.loadfromhttp({"parameters":insertActions, "nodes":insertRequest}, function(){
-                      if (listener) listener.call(this);
+                    //Now we have to send the load request and get the result.
+                    var element=new Node();
+                    element.loadfromhttp({"parameters":loadActions, "nodes":loadRequest}).then(function(myNode){
+                      var insertRequest=[];
+                      var insertActions=[];
+                      for (var i=0; i<myNode.nodelist.length; i++) {
+                        if (Array.isArray(myNode.nodelist[i].parentNode)) {
+                          for (var j=0;j<myNode.nodelist[i].parentNode.length;j++) {
+                            if (myNode.nodelist[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
+                              myNode.nodelist[i].parentNode=myNode.nodelist[i].parentNode[j];
+                              break;
+                            }
+                          }  
+                        }
+                        myNode.nodelist[i].properties=datavalue[i];
+                        var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
+                        var myInsertRequestData=myNode.nodelist[i].toRequestData(myparameters);
+                        insertRequest.push(myInsertRequestData);
+                        insertActions.push(myparameters);
+                      }
+                      //Now we add the domelementsdata
+                      
+                      for (var i=0; i<domdatachildren.length; i++) {
+                        var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
+                        var myInsertRequestData=domdatachildren[i].toRequestData(myparameters);
+                        insertRequest.push(myInsertRequestData);
+                        insertActions.push(myparameters);
+                      }
+                      var ielement=new Node();
+                      ielement.loadfromhttp({"parameters":insertActions, "nodes":insertRequest}).then(function(myNode){
+                        resolve(myNode);
+                      });
                     });
                   });
                 });
               });
             };
             //Now we have to create the new languageAddCloneFirstLang(newLangNode, domdatachildren, listener)langs
-            for (var i=0; i<langsToInsert.length; i++) {
+            iterationAddLangs=[];
+            for (let i=0; i<langsToInsert.length; i++) {
               //Now we have to make the tree to a serial data
               var domdataInsert=createdomnodesarray(langsToInsert[i].domdata);
               //send error
@@ -405,11 +407,12 @@
               waitalert.properties.alertmsg=thisElement.form.elements.waitimp.value;
               waitalert.showalert();
               document.getElementById("butimp").disabled=true;
-              languageAddCloneFirstLang(langsToInsert[i].lang, domdataInsert, function(){
-                waitalert.hidealert();
-                location.reload();
-              });
+              iterationAddLangs.push(languageAddCloneFirstLang(langsToInsert[i].lang, domdataInsert));
             }
+            Promise.all(iterationAddLangs).then(function(){
+              waitalert.hidealert();
+              location.reload();
+            });
           });
           return false;
         };

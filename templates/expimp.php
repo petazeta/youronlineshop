@@ -116,43 +116,43 @@
             var categoriesrootmother=new NodeFemale();
             categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
             categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
-            categoriesrootmother.loadfromhttp({action:"load root"}, function(){
-              exportData(this.getChild());
+            categoriesrootmother.loadfromhttp({action:"load root"}).then(function(myNode){
+              exportData(myNode.getChild());
             });
           }
           else if (thisElement.form.dataoption.value=="users") {
             var usertypemother=new NodeFemale();
             usertypemother.properties.childtablename="TABLE_USERSTYPES";
-            usertypemother.loadfromhttp({action:"load all", filter: "type='customer'"}, function(){
-              this.children[0].loadfromhttp({action:"load my tree"}, function(){
+            usertypemother.loadfromhttp({action:"load all", filter: "type='customer'"}).then(function(myNode){
+              myNode.children[0].loadfromhttp({action:"load my tree"}, function(){
                 var myparams=[];
                 var mydatanodes=[];
-                var usersrootmother=this.getRelationship("users");
+                var usersrootmother=myNode.getRelationship("users");
                 for (var i=0; i<usersrootmother.children.length; i++) {
                   myparams.push({action:"load my relationships"});
                   mydatanodes.push(usersrootmother.children[i].toRequestData({action:"load my relationships"}));
                 }
                 var nodeRequest=new Node();
-                nodeRequest.loadfromhttp({"parameters":myparams, "nodes":mydatanodes}, function(){
+                nodeRequest.loadfromhttp({"parameters":myparams, "nodes":mydatanodes}).then(function(myNode){
                   var myparams=[];
                   var mydatanodes=[];
-                  for (var i=0; i<this.nodelist.length; i++) {
-                    usersrootmother.children[i].load(this.nodelist[i]);
+                  for (var i=0; i<myNode.nodelist.length; i++) {
+                    usersrootmother.children[i].load(myNode.nodelist[i]);
                     myparams.push({action:"load my children"});
                     mydatanodes.push(usersrootmother.children[i].getRelationship("usersdata").toRequestData({action:"load my children"}));
                     myparams.push({action:"load my children"});
                     mydatanodes.push(usersrootmother.children[i].getRelationship("addresses").toRequestData({action:"load my children"}));
                   }
                   var nodeRequest=new Node();
-                  nodeRequest.loadfromhttp({"parameters":myparams, "nodes":mydatanodes}, function(){
+                  nodeRequest.loadfromhttp({"parameters":myparams, "nodes":mydatanodes}).then(function(myNode){
                     var arrayusersdata=[];
                     var arrayaddresses=[];
-                    for (var i=0; i<this.nodelist.length; i++) {
-                      if (this.nodelist[i].properties.name=="usersdata") {
-                        arrayusersdata.push(this.nodelist[i]);
+                    for (var i=0; i<myNode.nodelist.length; i++) {
+                      if (myNode.nodelist[i].properties.name=="usersdata") {
+                        arrayusersdata.push(myNode.nodelist[i]);
                       }
-                      else if (this.nodelist[i].properties.name=="addresses") {
-                         arrayaddresses.push(this.nodelist[i]);
+                      else if (myNode.nodelist[i].properties.name=="addresses") {
+                         arrayaddresses.push(myNode.nodelist[i]);
                       }
                     }
                     for (var i=0; i<usersrootmother.children.length; i++) {
@@ -167,9 +167,9 @@
                       mydatanodes.push(usersrootmother.children[i].toRequestData({action:"load my tree up"}));
                     }
                     var nodeRequest=new Node();
-                    nodeRequest.loadfromhttp({"parameters":myparams, "nodes":mydatanodes}, function(){
-                      for (var i=0; i<this.nodelist.length; i++) {
-                        usersrootmother.children[i].parentNode=this.nodelist[i].parentNode;
+                    nodeRequest.loadfromhttp({"parameters":myparams, "nodes":mydatanodes}).then(function(myNode){
+                      for (var i=0; i<myNode.nodelist.length; i++) {
+                        usersrootmother.children[i].parentNode=myNode.nodelist[i].parentNode;
                       }
                     });
                     usersrootmother.avoidrecursion();
@@ -184,8 +184,8 @@
             var langdata=languages.toRequestData({action: "add my tree"});
             //data from the structure
             var rootClone=rootelement.cloneNode(null, 0);
-            rootClone.loadfromhttp({action: "load my tree"},  function() {
-              var datatoinsert={"languages": langdata, "tree": this.toRequestData({action: "add my tree"})};
+            rootClone.loadfromhttp({action: "load my tree"}).then(function(myNode) {
+              var datatoinsert={"languages": langdata, "tree": myNode.toRequestData({action: "add my tree"})};
               thisElement.form.result.value=JSON.stringify(datatoinsert);
             });
           };
@@ -279,9 +279,9 @@
              //First we add the remove tree request
             var usertypemother=new NodeFemale();
             usertypemother.properties.childtablename="TABLE_USERSTYPES";
-            usertypemother.loadfromhttp({action:"load all", filter: "type='customer'"}, function(){
-              this.children[0].loadfromhttp({action:"load my tree"}, function(){
-                this.getRelationship("users").loadfromhttp({action:"delete my children"}, function(){
+            usertypemother.loadfromhttp({action:"load all", filter: "type='customer'"}).then(function(myNode){
+              myNode.children[0].loadfromhttp({action:"load my tree"}).then(function(myNode){
+                myNode.getRelationship("users").loadfromhttp({action:"delete my children"}, function(){
                   var newusersmother=new NodeFemale();
                   newusersmother.load(JSON.parse(thisElement.form.impdata.value));
                   newusersmother.partnerNode.properties.id=usertypemother.children[0].properties.id;
@@ -354,8 +354,8 @@
             var categoriesrootmother=new NodeFemale();
             categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
             categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
-            categoriesrootmother.loadfromhttp({action:"load root"}, function(){
-              impData(this.getChild());
+            categoriesrootmother.loadfromhttp({action:"load root"}).then(function(myNode){
+              impData(myNode.getChild());
             });
           }
           else {
@@ -373,7 +373,7 @@
             requestResultActions.push({"action":"add my tree" , language: languages.children[0].properties.id});
             var loadelement=new Node();
 
-            loadelement.loadfromhttp({"parameters":requestResultActions, "nodes":requestResultData}, function(){
+            loadelement.loadfromhttp({"parameters":requestResultActions, "nodes":requestResultData}).then(function(){
               if (datalang.children.length<2) {
                 myimpalert.hidealert();
                 return;
@@ -401,7 +401,7 @@
                 requestActions.push({"action":"add my tree", language: languages.children[i].properties.id, justlangcontent:true});
               }
               var nodeRequest=new Node();
-              nodeRequest.loadfromhttp({"parameters":requestActions, "nodes":requestData}, function(){
+              nodeRequest.loadfromhttp({"parameters":requestActions, "nodes":requestData}).then(function(){
                 myimpalert.hidealert();
               });
             }); 

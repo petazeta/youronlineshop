@@ -62,8 +62,8 @@
 	  }
 	}
       }
-      admnlauncher.refreshView(thisElement, "templates/admnbuts.php", function(){
-	this.dispatchEvent("addAdmnButs");
+      admnlauncher.refreshView(thisElement, "templates/admnbuts.php").then(function(myNode){
+	myNode.dispatchEvent("addAdmnButs");
       });
     }
     

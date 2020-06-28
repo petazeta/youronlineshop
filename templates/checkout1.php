@@ -37,23 +37,27 @@
 	thisElement.onclick=function(){
 	  var insertuser=webuser.cloneNode();
 	  //Now we start to load rels so webuser clon: insertuser will be empty of any data
-	  insertuser.loadfromhttp({action: "load my relationships", user_id: webuser.properties.id}, function(){
-	    insertuser.properties.id=webuser.properties.id;
-	    insertuser.getRelationship({name:"orders"}).addChild(new NodeMale());
-	    var myorder=insertuser.getRelationship({name:"orders"}).children[0];
-	    myorder.loadfromhttp({action: "load my relationships", user_id: webuser.properties.id}, function(){
+	  insertuser.loadfromhttp({action: "load my relationships", user_id: webuser.properties.id}).then(function(myNode){
+            return new Promise((resolve, reject) => {
+              myNode.properties.id=webuser.properties.id;
+              myNode.getRelationship({name:"orders"}).addChild(new NodeMale());
+              resolve(myNode.getRelationship({name:"orders"}).getChild());
+            });
+          })
+          .then(function(myNode){
+	    myNode.loadfromhttp({action: "load my relationships", user_id: webuser.properties.id}).then(function(myNode){
 	      var myordercartitems=ordercart.getRelationship({name:"cartbox"}).children[0].getRelationship({name:"cartboxitem"}).children;
 	      for (var i=0; i<myordercartitems.length; i++) {
 		var myorderitemdata=myordercartitems[i].cloneNode(0);
 		delete myorderitemdata.properties.id; //orderitem id is not from orderitem but from item
-		myorder.getRelationship({name:"orderitems"}).addChild(myorderitemdata);
+		myNode.getRelationship({name:"orderitems"}).addChild(myorderitemdata);
 	      }
 	      //lets try to insert the order
 	      //This request adds descendents
-	      myorder.loadfromhttp({action: "add my tree", user_id: webuser.properties.id}, function(){
+	      myNode.loadfromhttp({action: "add my tree", user_id: webuser.properties.id}).then(function(myNode){
 		//We add the order to the user so it will be accesible later on
 		webuser.getRelationship({"name":"orders"}).children=[];
-		webuser.getRelationship({"name":"orders"}).addChild(this);
+		webuser.getRelationship({"name":"orders"}).addChild(myNode);
 		//Lets got to the next step
 		(new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout2.php");
 		//We remove the items from the cart
@@ -108,7 +112,7 @@
   <div style="text-align:center"></div>
   <script>
     var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
-    checkout.refreshView(thisElement,thisElement.previousElementSibling, function(){
+    checkout.refreshView(thisElement,thisElement.previousElementSibling).then(function(){
       var url='?checkout=1';
       if (history.state && history.state.url==url) {
 	return;
