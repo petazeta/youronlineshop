@@ -59,21 +59,21 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
       (new Node()).loadfromhttp({action:"check php version"}, function(){
         if (this.extra && this.extra.error) {
           myalert.properties.alertmsg='PHP version is lower than required, plese update PHP';
-          myalert.showalert(null, null, (function(){throw 'PHP version error';}));
+          myalert.showalert().then(function(){throw 'PHP version error';});
         }
       });
       //First of all we check that the database connection is ok
       domelementsrootmother.loadfromhttp({action:"check db link"}, function(){
         if (this.extra && this.extra.error) {
           myalert.properties.alertmsg='<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.</p>';
-          myalert.showalert(null, null, (function(){throw 'Database Connection Failed';}));
+          myalert.showalert().then(function(){throw 'Database Connection Failed';});
         }
         else {
           var mytables=new NodeFemale();
           mytables.loadfromhttp({action:"load tables"<?php if ($tablePrefix) echo ', prefix:"' . $tablePrefix . '"'; ?>}, function(){
             if (mytables.children.length==0) {
               myalert.properties.alertmsg='No Database Tables.';
-              myalert.showalert(null, null, (function(){throw 'No Database Tables';}));
+              myalert.showalert().then(function(){throw 'No Database Tables';});
             }
           });
         }
@@ -83,7 +83,7 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
           //if no root means that table domelements doesn't exist or has no elements
           if (this.children.length==0) {
             myalert.properties.alertmsg='<p><b>Database Content Error</b></p><p>Please import includes/database.sql file.</p>';
-            myalert.showalert(null, null, (function(){throw 'Database Content Failed';}));
+            myalert.showalert().then(function(){throw 'Database Content Failed';});
           }
           domelementsroot=this.children[0];
           domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 2}, function(){

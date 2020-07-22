@@ -163,18 +163,20 @@ function Alert() {
 Alert.prototype=Object.create(NodeMale.prototype);
 Alert.prototype.constructor=Alert;
 
-Alert.prototype.showalert=function(text, tp, listener, effect) {
-  if (tp == null) tp="templates/alert.php";
-  if (text) this.properties.alertmsg=text;
-  var alertcontainer=document.createElement("div");
-  document.body.appendChild(alertcontainer);
-  this.refreshView(alertcontainer, tp, function(){
-    if (this.properties.timeout) {
-      alertcontainer.firstElementChild.style.opacity=0;
-      alertcontainer.firstElementChild.style.transition="opacity 0.5s";
-      window.setTimeout(function(){alertcontainer.firstElementChild.style.opacity=1;},1);
-    }
-    if (listener) listener();
+Alert.prototype.showalert=function(text, tp) {
+  return new Promise((resolve, reject) => {
+    if (tp == null) tp="templates/alert.php";
+    if (text) this.properties.alertmsg=text;
+    var alertcontainer=document.createElement("div");
+    document.body.appendChild(alertcontainer);
+    this.refreshView(alertcontainer, tp).then(function(myNode){
+      if (myNode.properties.timeout) {
+        alertcontainer.firstElementChild.style.opacity=0;
+        alertcontainer.firstElementChild.style.transition="opacity 0.5s";
+        window.setTimeout(function(){alertcontainer.firstElementChild.style.opacity=1;},1);
+      }
+      resolve(myNode);
+    });
   });
 };
 Alert.prototype.hidealert=function() {

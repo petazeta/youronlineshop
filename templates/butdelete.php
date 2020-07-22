@@ -4,8 +4,34 @@
       <table class="mytable">
 	<tr>
 	  <td>
-	    <h1 style="font-size:1.5em">DELETE</h1>
-	    <div>ATENTION: This element and its descedants will be removed.</div>
+            <span data-note="relative position container for admn buttons">
+              <h1 style="font-size:1.5em">DELETE</h1>
+              <script>
+                if (typeof domelementsroot != "undefined") {
+                  var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"titalert"}).getRelationship({name: "domelementsdata"}).getChild();
+                  myContent.writeProperty(thisElement);
+                  //adding the edition pencil
+                  var launcher = new Node();
+                  launcher.thisNode = myContent;
+                  launcher.editElement = thisElement;
+                  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+                }
+              </script>
+            </span>
+            <span data-note="relative position container for admn buttons">
+              <div>ATENTION: This element and its descedants will be removed.</div>
+              <script>
+                if (typeof domelementsroot != "undefined") {
+                  var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"textalert"}).getRelationship({name: "domelementsdata"}).getChild();
+                  myContent.writeProperty(thisElement);
+                  //adding the edition pencil
+                  var launcher = new Node();
+                  launcher.thisNode = myContent;
+                  launcher.editElement = thisElement;
+                  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+                }
+              </script>
+            </span>
 	  </td>
 	</tr>
 	<tr>

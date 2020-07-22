@@ -1,11 +1,11 @@
--- YOS database version: 1.1.0 25/06/2020
+-- YOS database version: 1.1.1 22/07/2020
 
 -- phpMyAdmin SQL Dump
 -- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 25, 2020 at 08:12 AM
+-- Generation Time: Jul 22, 2020 at 05:32 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -92,7 +92,7 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (105, 'surname', 103, 3),
 (106, 'email', 103, 2),
 (107, 'phonenumber', 103, 1),
-(108, 'langboxtt', 60, 1),
+(108, 'langbox', 60, 1),
 (109, 'checkout', 60, 4),
 (110, 'chkt1next', 109, 4),
 (111, 'chkt1add', 109, 5),
@@ -179,7 +179,12 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (453, 'errornolangs', 444, 9),
 (454, 'errornolangssel', 444, 11),
 (455, 'errornodata', 444, 10),
-(456, 'waitimp', 444, 12);
+(456, 'waitimp', 444, 12),
+(457, 'deletealert', 60, 11),
+(458, 'titalert', 457, 1),
+(459, 'textalert', 457, 2),
+(460, 'langboxtt', 108, 1),
+(461, 'newlangwait', 108, 2);
 
 -- --------------------------------------------------------
 
@@ -232,7 +237,6 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (105, 'Surname', 105, 2),
 (106, 'email', 106, 2),
 (107, 'phone number', 107, 2),
-(108, 'Language', 108, 2),
 (109, 'Continue ', 110, 2),
 (110, 'Check if your order is ok and then click on Continue to get to the next step.', 111, 2),
 (180, 'User Name', 183, 2),
@@ -319,7 +323,11 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1091, 'No languages loaded', 453, 2),
 (1092, 'Error: Please select some language', 454, 2),
 (1093, 'Error: No data to be loaded, please paste.', 455, 2),
-(1094, 'Please wait... Importing...', 456, 2);
+(1094, 'Please wait... Importing...', 456, 2),
+(1095, 'DELETE', 458, 2),
+(1096, 'ATENTION: This element and its descedants will be removed.', 459, 2),
+(1097, 'Language', 460, 2),
+(1098, 'Performing language data copy... Please wait...', 461, 2);
 
 -- --------------------------------------------------------
 
@@ -853,12 +861,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=462;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1095;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1099;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
