@@ -1,11 +1,11 @@
--- YOS database version: 1.1.1 22/07/2020
+-- YOS database version: 1.1.2 25/07/2020
 
 -- phpMyAdmin SQL Dump
 -- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 22, 2020 at 05:32 PM
+-- Generation Time: Jul 25, 2020 at 08:53 AM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -327,7 +327,9 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1095, 'DELETE', 458, 2),
 (1096, 'ATENTION: This element and its descedants will be removed.', 459, 2),
 (1097, 'Language', 460, 2),
-(1098, 'Performing language data copy... Please wait...', 461, 2);
+(1098, 'Performing language data copy... Please wait...', 461, 2),
+(1099, '', 108, 2),
+(1100, '', 457, 2);
 
 -- --------------------------------------------------------
 
@@ -526,7 +528,8 @@ CREATE TABLE `ordershippingtypes` (
 CREATE TABLE `paymenttypes` (
   `id` int(11) NOT NULL,
   `image` varchar(60) NOT NULL,
-  `vars` text NOT NULL,
+  `vars` text,
+  `template` varchar(60) DEFAULT NULL,
   `_paymenttypes` int(11) DEFAULT NULL,
   `_paymenttypes_position` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -535,9 +538,9 @@ CREATE TABLE `paymenttypes` (
 -- Dumping data for table `paymenttypes`
 --
 
-INSERT INTO `paymenttypes` (`id`, `image`, `vars`, `_paymenttypes`, `_paymenttypes_position`) VALUES
-(1, '', '', NULL, 0),
-(2, '', '{\"total\":\"amount\",\"total_name\":\"item_name\",\"action\":\"https://www.paypal.com/cgi-bin/webscr\",\"business\":\"youremail\",\"cmd\":\"_xclick\",\"currency_code\":\"USD\"}', 1, 1);
+INSERT INTO `paymenttypes` (`id`, `image`, `vars`, `template`, `_paymenttypes`, `_paymenttypes_position`) VALUES
+(1, '', '', NULL, NULL, 0),
+(2, '', '{\"total\":\"amount\",\"total_name\":\"item_name\",\"action\":\"https://www.paypal.com/cgi-bin/webscr\",\"business\":\"youremail\",\"cmd\":\"_xclick\",\"currency_code\":\"USD\"}', 'templates/paymentbuttons/paypalbasic.php', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -639,7 +642,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1593020201, 7),
+(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1595601230, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1588506282, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
@@ -856,7 +859,7 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
@@ -866,7 +869,7 @@ ALTER TABLE `domelements`
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1099;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1101;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
@@ -901,22 +904,22 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `orderpaymenttypes`
 --
 ALTER TABLE `orderpaymenttypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `ordershippingtypes`
 --
 ALTER TABLE `ordershippingtypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `paymenttypes`
 --
@@ -926,7 +929,7 @@ ALTER TABLE `paymenttypes`
 -- AUTO_INCREMENT for table `paymenttypesdata`
 --
 ALTER TABLE `paymenttypesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `sessions`
 --
@@ -941,17 +944,17 @@ ALTER TABLE `shippingtypes`
 -- AUTO_INCREMENT for table `shippingtypesdata`
 --
 ALTER TABLE `shippingtypesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --

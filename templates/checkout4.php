@@ -31,7 +31,7 @@
         
         thisElement.onclick=function(){
           //we save the selected payment type main characterisitics at orderpaymenttypes table. add myself or add my tree
-          var orderpaymenttype=webuser.getRelationship({name:"orders"}).getChild().getRelationship({name:"orderpaymenttypes"}).gitChild();
+          var orderpaymenttype=webuser.getRelationship({name:"orders"}).getChild().getRelationship({name:"orderpaymenttypes"}).getChild();
           orderpaymenttype.loadfromhttp({action: "add myself", user_id: webuser.properties.id}).then(function(){
           //We have added the orderpaymenttype to the order
             (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout5.php");

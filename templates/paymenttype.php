@@ -28,37 +28,8 @@
           launcher.thisNode = thisNodeData;
           launcher.editElement = thisElement;
           launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          if (webuser.isWebAdmin()) {
-            //We add a table cell for description to be editable
-            var myRow=DomMethods.closesttagname(thisElement, "TR");
-            var myCell = myRow.insertCell(2);
-            var myDiv = document.createElement('div');
-            myDiv.style.marginRight="2.2em";
-            var mySpan=document.createElement('span');
-            myDiv.appendChild(mySpan);
-            myCell.appendChild(myDiv);
-            thisNodeData.writeProperty(mySpan, "description");
-            var description_launcher = new Node();
-            description_launcher.thisNode = thisNodeData;
-            description_launcher.thisProperty = "description";
-            description_launcher.editElement = mySpan;
-            description_launcher.appendThis(myDiv, "templates/addbutedit.php");
-            
-            //We add a table cell for vars to be editable
-            var myRow=DomMethods.closesttagname(thisElement, "TR");
-            var myCell = myRow.insertCell(2);
-            var myDiv = document.createElement('div');
-            myDiv.style.marginRight="2.2em";
-            var mySpan=document.createElement('span');
-            myDiv.appendChild(mySpan);
-            myCell.appendChild(myDiv);
-            thisNode.writeProperty(mySpan, "vars");
-            var description_launcher = new Node();
-            description_launcher.thisNode = thisNode;
-            description_launcher.thisProperty = "vars";
-            description_launcher.editElement = mySpan;
-            description_launcher.appendThis(myDiv, "templates/addbutedit.php");
-          }
+          
+
           
           thisElement.addEventListener("click", function(event) {
             event.preventDefault();
@@ -70,6 +41,48 @@
     </td>
   </tr>
   <script>
+    if (webuser.isWebAdmin()) {
+      //We add a table cell for description to be editable
+      var myRow=thisElement;
+      var myCell = myRow.insertCell(2);
+      var myDiv = document.createElement('div');
+      myDiv.style.marginRight="2.2em";
+      var mySpan=document.createElement('span');
+      myDiv.appendChild(mySpan);
+      myCell.appendChild(myDiv);
+      thisNodeData.writeProperty(mySpan, "description");
+      var description_launcher = new Node();
+      description_launcher.thisNode = thisNodeData;
+      description_launcher.thisProperty = "description";
+      description_launcher.editElement = mySpan;
+      description_launcher.appendThis(myDiv, "templates/addbutedit.php");
+      //We add a table cell for from vars to be editable
+      var myCell = myRow.insertCell(3);
+      var myDiv = document.createElement('div');
+      myDiv.style.marginRight="2.2em";
+      var mySpan=document.createElement('span');
+      myDiv.appendChild(mySpan);
+      myCell.appendChild(myDiv);
+      thisNode.writeProperty(mySpan, "vars");
+      var description_launcher = new Node();
+      description_launcher.thisNode = thisNode;
+      description_launcher.thisProperty = "vars";
+      description_launcher.editElement = mySpan;
+      description_launcher.appendThis(myDiv, "templates/addbutedit.php");
+      //We add a table cell for template file to be editable
+      var myCell = myRow.insertCell(4);
+      var myDiv = document.createElement('div');
+      myDiv.style.marginRight="2.2em";
+      var mySpan=document.createElement('span');
+      myDiv.appendChild(mySpan);
+      myCell.appendChild(myDiv);
+      thisNode.writeProperty(mySpan, "template");
+      var description_launcher = new Node();
+      description_launcher.thisNode = thisNode;
+      description_launcher.thisProperty = "template";
+      description_launcher.editElement = mySpan;
+      description_launcher.appendThis(myDiv, "templates/addbutedit.php");
+    }
     var admnlauncher=new Node();
     admnlauncher.thisNode=thisNode;
     admnlauncher.editElement = thisElement;
