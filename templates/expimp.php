@@ -9,7 +9,7 @@
                 <input type="radio" value="tit" name="dataoption">
                 <span></span>
                 <script>
-                  if (!webuser.isWebAdmin()) {
+                  if (!webuser.isWebAdmin() && !webuser.isSystemAdmin()) {
                     thisElement.parentElement.parentElement.style.display="none"
                   }
                   var title=thisNode.getNextChild({"name":"exptit"}).getRelationship({name:"domelementsdata"}).getChild();
@@ -27,7 +27,7 @@
                 <input type="radio" value="menus" name="dataoption">
                 <span></span>
                 <script>
-                  if (!webuser.isWebAdmin()) {
+                  if (!webuser.isWebAdmin() && !webuser.isSystemAdmin()) {
                     thisElement.parentElement.parentElement.style.display="none"
                   }
                   var title=thisNode.getNextChild({"name":"expmenus"}).getRelationship({name:"domelementsdata"}).getChild();
@@ -45,7 +45,7 @@
                 <input type="radio" value="catalog" name="dataoption">
                 <span></span>
                 <script>
-                  if (!webuser.isWebAdmin() && !webuser.isProductAdmin()) {
+                  if (!webuser.isWebAdmin() && !webuser.isProductAdmin()  && !webuser.isSystemAdmin()) {
                     thisElement.parentElement.parentElement.style.display="none"
                   }
                   var title=thisNode.getNextChild({"name":"expcatg"}).getRelationship({name:"domelementsdata"}).getChild();
@@ -63,7 +63,7 @@
                 <input type="radio" value="users" name="dataoption">
                 <span></span>
                 <script>
-                  if (!webuser.isUserAdmin()) {
+                  if (!webuser.isUserAdmin() && !webuser.isSystemAdmin()) {
                     thisElement.parentElement.parentElement.style.display="none"
                   }
                   var title=thisNode.getNextChild({"name":"expusers"}).getRelationship({name:"domelementsdata"}).getChild();
@@ -124,7 +124,7 @@
             var usertypemother=new NodeFemale();
             usertypemother.properties.childtablename="TABLE_USERSTYPES";
             usertypemother.loadfromhttp({action:"load all", filter: "type='customer'"}).then(function(myNode){
-              myNode.children[0].loadfromhttp({action:"load my tree"}, function(){
+              myNode.getChild().loadfromhttp({action:"load my tree"}).then(function(myNode){
                 var myparams=[];
                 var mydatanodes=[];
                 var usersrootmother=myNode.getRelationship("users");

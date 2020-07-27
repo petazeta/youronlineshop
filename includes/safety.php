@@ -23,7 +23,7 @@ function is_actionpermited($parameters, $myelement){
     if (isset($user->parentNode) && isset($user->parentNode->partnerNode)) $usertype=$user->parentNode->partnerNode->properties->type;
   }
   //Avoid HTML Tags for normal user insertions
-  if ($action=="write" && $usertype!="web administrator" && $usertype!="product administrator") {
+  if ($action=="write" && $usertype!="web administrator" && $usertype!="product administrator" && $usertype!="system administrator") {
     $elementClone=unserialize(serialize($myelement));
     $elementClone->avoidrecursion();
     $elementJson=json_encode($elementClone);
@@ -36,7 +36,7 @@ function is_actionpermited($parameters, $myelement){
   if (array_search($tablename, $privatetables)===false) {
     //Table doesn't contain private data
     if ($action=="write") {
-      if ($usertype=="web administrator" || $usertype=="orders administrator") return true;
+      if ($usertype=="web administrator" || $usertype=="orders administrator" || $usertype=="system administrator") return true;
       if ($usertype=="product administrator") {
         if ($tablename=="TABLE_ITEMS" || $tablename=="TABLE_ITEMSDATA") {
           return true;
@@ -57,7 +57,7 @@ function is_actionpermited($parameters, $myelement){
   else {
     //user can read its data from table users but not write
     if ($tablename=="TABLE_USERS") {
-      if ($usertype=="orders administrator" || $usertype=="user administrator") {
+      if ($usertype=="orders administrator" || $usertype=="user administrator" || $usertype=="system administrator") {
         return true;
       }
       else if ($action=="read") {
@@ -69,7 +69,7 @@ function is_actionpermited($parameters, $myelement){
       }
     }
     if ($tablename=="TABLE_ADDRESSES" || $tablename=="TABLE_USERSDATA" || $tablename=="TABLE_ORDERS" || $tablename=="TABLE_ORDERITEMS" || $tablename=="TABLE_ORDERSHIPPINGTYPES" || $tablename=="TABLE_ORDERPAYMENTTYPES") {
-      if ($usertype=="orders administrator" || $usertype=="user administrator") {
+      if ($usertype=="orders administrator" || $usertype=="user administrator" || $usertype=="system administrator") {
         return true;
       }
       //we must check the user owner of the table

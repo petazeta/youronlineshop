@@ -54,6 +54,8 @@ User "ordersadmin" is order administrator and can watch and edit all the orders.
 
 User "webadmin" is web administrator user and can edit the web page content, the catalog (categories and items) and the checkout process options.
 
+There are also some other admin users: productsadmin, usersadmin, productseller and systemadmin.
+
 Once editing some content press Intro or click outside of the editable area to save changes.
 
 To reach checkout process edition you should log in with the webadmin user and make an order as you were logged in as a normal user. Once you get to some checkout steps you should be able to edit the checkout step options. Some extra edition elements that can not be reached as a web user can be accessed by cicking the Extra Elements button that will appear at the left bar just after log in as webadmin.

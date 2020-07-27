@@ -48,18 +48,18 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
   var expTemplate=document.querySelector("#expimp").previousElementSibling;
   var langExpTemplate=expTemplate.previousElementSibling;
   var containerExp=document.querySelector("#expimp");
-  if (webuser.isWebAdmin() || webuser.isUserAdmin() || webuser.isProductAdmin()) {
+  if (webuser.isWebAdmin() || webuser.isSystemAdmin() || webuser.isUserAdmin() || webuser.isProductAdmin()) {
     containerExp.innerHTML="";
     if (Config.importExportOn) {
       containerExpNode.appendThis(document.querySelector("#expimp"), expTemplate);
     }
-    if (Config.expimplang_On) {
+    if ((webuser.isWebAdmin() || webuser.isSystemAdmin()) && Config.expimplang_On) {
       langContainerExpNode.appendThis(document.querySelector("#expimp"), langExpTemplate);
     }
   }
   webuser.addEventListener("log",
     function() {
-      if (!this.isWebAdmin() && !webuser.isUserAdmin() && !webuser.isProductAdmin()) {
+      if (!this.isWebAdmin() && !webuser.isUserAdmin() && !webuser.isProductAdmin() && !webuser.isSystemAdmin()) {
         //to remove the openbutton when logs after webadmin
         containerExp.innerHTML="";
       }

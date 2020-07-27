@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 27, 2020 at 09:22 PM
+-- Generation Time: Jul 27, 2020 at 10:41 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -37,7 +37,8 @@ INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 (23, '5555555555', 'asdfasdf', 'asdfasdf', '9222', 2),
 (24, 'asdfasdf', 'jjjj', 'oooo', '444436', 1),
 (25, '', '', '', '', 4),
-(26, '', '', '', '', 6);
+(26, '', '', '', '', 6),
+(27, '', '', '', '', 7);
 
 -- --------------------------------------------------------
 
@@ -665,7 +666,8 @@ INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`)
 (1, 'webadmin', '$2y$10$NKXLi/BalpfosYj2btEkjO7KZxvIX/bBJx1uPVieALynD/LUEP3pe', 0, 1595877656, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1595753912, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
-(6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
+(6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11),
+(7, 'systemadmin', '$2y$10$ImHVY1dgkuB4RMWE8PYd0u7Y3S9TO1mwkJUl6rjeMhwuSpRBbjJue', 0, 1595881693, 13);
 
 -- --------------------------------------------------------
 
@@ -690,7 +692,8 @@ INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_user
 (1, 'nana', 'kkupep', 'admn@dmin.com', 666, 1),
 (2, 'order', 'llll', 'oadmn@dd.com', 220, 2),
 (3, '', '', '', 0, 4),
-(4, '', '', '', 0, 6);
+(4, '', '', '', 0, 6),
+(5, '', '', '', 0, 7);
 
 -- --------------------------------------------------------
 
@@ -713,7 +716,8 @@ INSERT INTO `userstypes` (`id`, `type`) VALUES
 (9, 'product administrator'),
 (10, 'product seller'),
 (11, 'user administrator'),
-(12, 'customer');
+(12, 'customer'),
+(13, 'system administrator');
 
 --
 -- Indexes for dumped tables
@@ -879,7 +883,7 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
@@ -969,17 +973,17 @@ ALTER TABLE `shippingtypesdata`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- Constraints for dumped tables
 --

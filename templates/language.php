@@ -9,6 +9,7 @@
         launcher.thisNode = thisNode;
         launcher.editElement = thisElement;
         launcher.btposition="btmiddleleft";
+        if (webuser.isSystemAdmin()) launcher.editable=true;
         launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
         var admnlauncher=new Node();
         admnlauncher.thisNode=thisNode;
@@ -18,7 +19,8 @@
         admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
         admnlauncher.newNode.loadasc(thisNode, 2, "id"); //the parent is not the same
         admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
-        if (thisNode.parentNode.children.length==1) admnlauncher.excludeButtons=["templates/butdelete.php"]
+        if (thisNode.parentNode.children.length==1) admnlauncher.excludeButtons=["templates/butdelete.php"];
+        if (webuser.isSystemAdmin()) admnlauncher.editable=true;
         
         if (Config.languagesOn==true) {
           admnlauncher.appendThis(thisElement.parentElement, "templates/addadmnbuts.php");
