@@ -1026,21 +1026,9 @@ class NodeMale extends Node{
     $sql .=' WHERE id=' . $this->properties->id;
 
     $stmt = $this->getdblink()->prepare($sql);
-    if ( version_compare(phpversion(),'5.6')<0) {
-      //patch for php 5.4 alternative to splat operator
-      $bind_param_args=[];
-      array_push($bind_param_args, $stmt, $param_types);
-      $param_values_by_reference=[];
-      for ($i=0; $i<count($param_values); $i++) {
-	$param_values_by_reference[$i]=&$param_values[$i];
-      }
-      $bind_param_args=array_merge($bind_param_args, $param_values_by_reference);
-      call_user_func_array("mysqli_stmt_bind_param", $bind_param_args);
-      //patch for php 5.4 alternative to splat operator
-    }
-    else {
-      eval('$stmt->bind_param($param_types, ...$param_values);'); // ... = "splat" operator
-    }
+
+    eval('$stmt->bind_param($param_types, ...$param_values);'); // ... = "splat" operator
+
     return $stmt->execute();
   }
   

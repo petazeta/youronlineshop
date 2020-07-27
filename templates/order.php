@@ -62,5 +62,26 @@
         </div>
       </td>
     </tr>
+    <tr>
+      <td>
+      <div style="margin:1em auto; display:none;"></div>
+      <script>
+        //Show Order payment button when payment not succeed valid also for cart view: checkout1.php and userordersline.php
+        let myorderpay=thisNode.getRelationship({name:"orderpaymenttypes"}).getChild();
+        if (myorderpay && !myorderpay.properties.succeed) {
+          thisElement.style.display="table";
+          if (myorderpay.properties.details && !myorderpay.properties.template) {
+            //we must load payment type details when order has not succeed, if it is checkout proccess details in Null
+            let orderpaydata=JSON.parse(myorderpay.properties.details);
+            myorderpay.properties.template=orderpaydata.template;
+            myorderpay.properties.vars=JSON.stringify(orderpaydata.vars);
+          }
+          if (myorderpay.properties.template) {
+            myorderpay.refreshView(thisElement, myorderpay.properties.template);
+          }
+        }
+      </script>
+      </td>
+    </tr>
   </table>
 </template>

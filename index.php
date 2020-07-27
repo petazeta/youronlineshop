@@ -8,14 +8,14 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <script src="javascript/default.js?lastmod=<?php echo filemtime('javascript/default.js') ?>"></script>
-    <script src="javascript/config.js?lastmod=<?php echo filemtime('javascript/config.js') ?>"></script>
-    <script src="javascript/iesp.js?lastmod=<?php echo filemtime('javascript/iesp.js') ?>"></script>
-    <script src="javascript/nodes.js?lastmod=<?php echo filemtime('javascript/nodes.js') ?>"></script>
-    <script src="javascript/nodesconfig.js?lastmod=<?php echo filemtime('javascript/nodesconfig.js') ?>"></script>
-    <script src="javascript/dommethods.js?lastmod=<?php echo filemtime('javascript/dommethods.js') ?>"></script>
-    <script src="javascript/cart.js?lastmod=<?php echo filemtime('javascript/cart.js') ?>"></script>
-    <script src="javascript/user.js?lastmod=<?php echo filemtime('javascript/user.js') ?>"></script>
+    <script src="javascript/default.js"></script>
+    <script src="javascript/config.js"></script>
+    <script src="javascript/iesp.js"></script>
+    <script src="javascript/nodes.js"></script>
+    <script src="javascript/nodesconfig.js"></script>
+    <script src="javascript/dommethods.js"></script>
+    <script src="javascript/cart.js"></script>
+    <script src="javascript/user.js"></script>
     <script async src="javascript/stats.js.php"></script>
     <link rel="stylesheet" type="text/css" href="css/main.css">
 <?php if (defined('THEME')) { ?>

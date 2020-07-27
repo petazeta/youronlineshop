@@ -21,6 +21,7 @@
             <span data-note="relative position container for admn buttons">
               <div>ATENTION: This element and its descedants will be removed.</div>
               <script>
+               //adapted for non domelements table apps
                 if (typeof domelementsroot != "undefined") {
                   var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"textalert"}).getRelationship({name: "domelementsdata"}).getChild();
                   myContent.writeProperty(thisElement);

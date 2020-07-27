@@ -1,11 +1,9 @@
--- YOS database version: 1.1.2 25/07/2020
-
 -- phpMyAdmin SQL Dump
 -- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 25, 2020 at 08:53 AM
+-- Generation Time: Jul 27, 2020 at 09:22 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -139,7 +137,6 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (361, 'online', 62, 1),
 (362, 'chkt5add', 109, 7),
 (363, 'chkt4next', 109, 2),
-(364, 'chkt5pay', 109, 8),
 (389, 'nav2', 66, 2),
 (391, '', 389, 1),
 (392, 'expimp', 60, 6),
@@ -149,7 +146,7 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (396, 'titimp', 392, 3),
 (397, '', 389, 2),
 (419, 'nav1', 66, 1),
-(424, 'btLogOut', 279, 1),
+(424, 'btLogOut', 279, 2),
 (425, '', 419, 1),
 (426, 'hours', 60, 9),
 (427, 'save', 73, 1),
@@ -184,7 +181,18 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (458, 'titalert', 457, 1),
 (459, 'textalert', 457, 2),
 (460, 'langboxtt', 108, 1),
-(461, 'newlangwait', 108, 2);
+(461, 'newlangwait', 108, 2),
+(462, 'paysucceed', 339, 3),
+(463, 'dashboardtit', 279, 3),
+(464, 'btChangePwd', 279, 1),
+(465, 'changepwd', 279, 4),
+(466, 'titmsg', 465, 1),
+(467, 'newpwd', 465, 2),
+(468, 'repeatpwd', 465, 3),
+(469, 'btsmt', 465, 4),
+(470, 'pwdDoubleError', 465, 5),
+(471, 'pwdChangeOk', 465, 6),
+(472, 'pwdChangeError', 465, 7);
 
 -- --------------------------------------------------------
 
@@ -256,7 +264,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (194, 'Check if your address is ok, change it or fill it.<br>Use street field to write also street number and so on.<br>pc is postal code.', 197, 2),
 (195, 'Continue ', 198, 2),
 (270, 'Error loading image', 275, 2),
-(272, 'Back to login', 277, 2),
+(272, 'Back to Dashboard', 277, 2),
 (273, 'Address', 278, 2),
 (274, 'Show archived orders', 280, 2),
 (275, 'Show new orders', 281, 2),
@@ -271,14 +279,13 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (703, 'Please select your preferred shipping type', 338, 2),
 (704, 'Total', 340, 2),
 (705, '<div>Please select your preferred payment type</div>', 341, 2),
-(706, 'Go to my user area', 342, 2),
+(706, 'Go to Dashboard', 342, 2),
 (707, 'SubTotal', 343, 2),
 (708, 'Go back', 344, 2),
 (807, 'Extra Elements', 357, 2),
 (811, 'Users online', 361, 2),
 (812, 'The order has been successfully created', 362, 2),
 (813, 'Continue ', 363, 2),
-(814, 'Make payment', 364, 2),
 (922, 'Contact', 389, 2),
 (924, 'Contact information:', 391, 2),
 (925, 'Export Area', 393, 2),
@@ -329,7 +336,18 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1097, 'Language', 460, 2),
 (1098, 'Performing language data copy... Please wait...', 461, 2),
 (1099, '', 108, 2),
-(1100, '', 457, 2);
+(1100, '', 457, 2),
+(1101, 'Payment transaction completed', 462, 2),
+(1102, 'Dashboard from user:', 463, 2),
+(1103, 'Change Password', 464, 2),
+(1104, 'Change Password', 466, 2),
+(1105, 'Repeat Password', 468, 2),
+(1106, 'New Password', 467, 2),
+(1107, 'Change', 469, 2),
+(1108, 'The passwords written doesn\'t match', 470, 2),
+(1109, 'Password successful changed', 471, 2),
+(1110, 'Password Change Error', 472, 2),
+(1111, '', 465, 2);
 
 -- --------------------------------------------------------
 
@@ -488,6 +506,7 @@ CREATE TABLE `orderpaymenttypes` (
   `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL,
   `details` text NOT NULL,
+  `succeed` tinyint(1) NOT NULL DEFAULT '0',
   `_orders` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -530,6 +549,7 @@ CREATE TABLE `paymenttypes` (
   `image` varchar(60) NOT NULL,
   `vars` text,
   `template` varchar(60) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
   `_paymenttypes` int(11) DEFAULT NULL,
   `_paymenttypes_position` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -538,9 +558,9 @@ CREATE TABLE `paymenttypes` (
 -- Dumping data for table `paymenttypes`
 --
 
-INSERT INTO `paymenttypes` (`id`, `image`, `vars`, `template`, `_paymenttypes`, `_paymenttypes_position`) VALUES
-(1, '', '', NULL, NULL, 0),
-(2, '', '{\"total\":\"amount\",\"total_name\":\"item_name\",\"action\":\"https://www.paypal.com/cgi-bin/webscr\",\"business\":\"youremail\",\"cmd\":\"_xclick\",\"currency_code\":\"USD\"}', 'templates/paymentbuttons/paypalbasic.php', 1, 1);
+INSERT INTO `paymenttypes` (`id`, `image`, `vars`, `template`, `active`, `_paymenttypes`, `_paymenttypes_position`) VALUES
+(1, '', '', NULL, 0, NULL, 0),
+(2, '', '{\"merchantId\":\"Your client id\", \"currencyCode\":\"USD\"}', 'templates/paymentbuttons/paypal.php', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -642,8 +662,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$u79thpxBIp5qH5IoZqSjXe9CqKSPVYKlZrzRalQLze3FXAIgfSO3u', 0, 1595601230, 7),
-(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1588506282, 3),
+(1, 'webadmin', '$2y$10$NKXLi/BalpfosYj2btEkjO7KZxvIX/bBJx1uPVieALynD/LUEP3pe', 0, 1595877656, 7),
+(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1595753912, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11);
 
@@ -859,17 +879,17 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=462;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=473;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1101;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1112;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
@@ -904,22 +924,22 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `orderpaymenttypes`
 --
 ALTER TABLE `orderpaymenttypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `ordershippingtypes`
 --
 ALTER TABLE `ordershippingtypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `paymenttypes`
 --
@@ -929,7 +949,7 @@ ALTER TABLE `paymenttypes`
 -- AUTO_INCREMENT for table `paymenttypesdata`
 --
 ALTER TABLE `paymenttypesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `sessions`
 --
@@ -944,17 +964,17 @@ ALTER TABLE `shippingtypes`
 -- AUTO_INCREMENT for table `shippingtypesdata`
 --
 ALTER TABLE `shippingtypesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `userstypes`
 --

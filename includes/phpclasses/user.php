@@ -74,14 +74,7 @@ class user extends NodeMale {
       $result->extra->errorName="userExistsError";
       return $result;
     }
-    if (version_compare(phpversion(),'5.6')<0) {
-      //patch for php 5.4 password_hash
-      $user->properties->pwd=crypt($pwd);
-      //patch for php 5.4 password_hash
-    }
-    else {
-      $user->properties->pwd=password_hash($pwd, PASSWORD_DEFAULT);
-    }
+    $user->properties->pwd=password_hash($pwd, PASSWORD_DEFAULT);
     $user->properties->access=time();
     if ($user->db_insertmyself()==true) {
       $result->properties->id=$user->properties->id;
@@ -104,6 +97,18 @@ class user extends NodeMale {
 	return $result;
       }
     }
+    return $result;
+  }
+  function updatePwd($pwd) {
+    $result=new NodeMale();
+    if (!isset($result->extra)) $result->extra=new stdClass();
+    $pwdcrypt=password_hash($pwd, PASSWORD_DEFAULT);
+    if ($this->db_updatemyproperties(['pwd' => $pwdcrypt])==false) {
+      $result->extra->error=true;
+      $result->extra->errordetails=['pwd' => $pwdcrypt];
+      return $result;
+    }
+    $this->properties->pwd=$pwdcrypt;
     return $result;
   }
   function checklength($value, $min, $max){

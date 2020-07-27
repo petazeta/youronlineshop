@@ -51,11 +51,24 @@
       myDiv.appendChild(mySpan);
       myCell.appendChild(myDiv);
       thisNodeData.writeProperty(mySpan, "description");
-      var description_launcher = new Node();
-      description_launcher.thisNode = thisNodeData;
-      description_launcher.thisProperty = "description";
-      description_launcher.editElement = mySpan;
-      description_launcher.appendThis(myDiv, "templates/addbutedit.php");
+      var mylauncher = new Node();
+      mylauncher.thisNode = thisNodeData;
+      mylauncher.thisProperty = "description";
+      mylauncher.editElement = mySpan;
+      mylauncher.appendThis(myDiv, "templates/addbutedit.php");
+      //We add a table cell for active
+      var myCell = myRow.insertCell(2);
+      var myDiv = document.createElement('div');
+      myDiv.style.marginRight="2.2em";
+      var mySpan=document.createElement('span');
+      myDiv.appendChild(mySpan);
+      myCell.appendChild(myDiv);
+      thisNode.writeProperty(mySpan, "active");
+      var mylauncher = new Node();
+      mylauncher.thisNode = thisNode;
+      mylauncher.thisProperty = "active";
+      mylauncher.editElement = mySpan;
+      mylauncher.appendThis(myDiv, "templates/addbutedit.php");
       //We add a table cell for from vars to be editable
       var myCell = myRow.insertCell(3);
       var myDiv = document.createElement('div');
@@ -64,11 +77,11 @@
       myDiv.appendChild(mySpan);
       myCell.appendChild(myDiv);
       thisNode.writeProperty(mySpan, "vars");
-      var description_launcher = new Node();
-      description_launcher.thisNode = thisNode;
-      description_launcher.thisProperty = "vars";
-      description_launcher.editElement = mySpan;
-      description_launcher.appendThis(myDiv, "templates/addbutedit.php");
+      var mylauncher = new Node();
+      mylauncher.thisNode = thisNode;
+      mylauncher.thisProperty = "vars";
+      mylauncher.editElement = mySpan;
+      mylauncher.appendThis(myDiv, "templates/addbutedit.php");
       //We add a table cell for template file to be editable
       var myCell = myRow.insertCell(4);
       var myDiv = document.createElement('div');
@@ -77,11 +90,17 @@
       myDiv.appendChild(mySpan);
       myCell.appendChild(myDiv);
       thisNode.writeProperty(mySpan, "template");
-      var description_launcher = new Node();
-      description_launcher.thisNode = thisNode;
-      description_launcher.thisProperty = "template";
-      description_launcher.editElement = mySpan;
-      description_launcher.appendThis(myDiv, "templates/addbutedit.php");
+      var mylauncher = new Node();
+      mylauncher.thisNode = thisNode;
+      mylauncher.thisProperty = "template";
+      mylauncher.editElement = mySpan;
+      mylauncher.appendThis(myDiv, "templates/addbutedit.php");
+    }
+    else {
+      //remove if it is not active
+      if (!thisNode.properties.active) {
+        thisElement.style.display="none";
+      }
     }
     var admnlauncher=new Node();
     admnlauncher.thisNode=thisNode;

@@ -18,14 +18,6 @@
       //We show the order
       webuser.getRelationship({name:"orders"}).getChild().refreshView(thisElement, "templates/order.php");
     </script>
-    <div style="margin:1em auto; display:table;"></div>
-    <script>
-      var order=webuser.getRelationship({name:"orders"}).getChild();
-      var orderpaymenttype=order.getRelationship({name:"orderpaymenttypes"}).getChild();
-      if (orderpaymenttype && orderpaymenttype.properties.template) {
-        orderpaymenttype.refreshView(thisElement,orderpaymenttype.properties.template);
-      }
-    </script>
     <div style="margin:1em auto; display:table;">
       <button class="btn"></button>
       <script>

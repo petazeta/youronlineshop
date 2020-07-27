@@ -30,8 +30,12 @@ user.prototype.loginproto=function(action, name, password, email, reqlistener){
     if (this.extra && this.extra.language) var language=this.extra.language;
     var FD  = new FormData();
     FD.append("parameters", JSON.stringify({action: action}));
-    FD.append("user_name", name);
-    FD.append("user_password", password);
+    if (name) {
+      FD.append("user_name", name);
+    }
+    if (password) {
+      FD.append("user_password", password);
+    }
     if (email) {
       FD.append("user_email", email);
     }
@@ -53,6 +57,11 @@ user.prototype.login=function(name, password, reqlistener){
 user.prototype.create=function(name, password, email, reqlistener){
   return this.loginproto("create", name, password, email, reqlistener);
 }
+
+user.prototype.updatePwd=function(password, reqlistener){
+  return this.loginproto("pwdupdate", null, password, null, reqlistener);
+}
+
 
 user.prototype.isUserType=function(utype){
   if (this.getUserType()==utype) {

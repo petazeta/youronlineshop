@@ -21,22 +21,29 @@ else $parameters=new stdClass();
 if (!isset($parameters->action)) $parameters->action="login";
 $loginresult=new NodeMale();
 $loginresult->extra=new stdClass();
+$uname=$_POST["user_name"];
+$upwd=$_POST["user_password"];
 if ($parameters->action=="logout") {
   $_SESSION["user"]=null;
   exit(json_encode($loginresult));
 }
+else if ($parameters->action=="pwdupdate") {
+  if (isset($_SESSION["user"])) {
+    $user=unserialize($_SESSION["user"]);
+    $loginresult=$user->updatePwd($upwd);
+  }
+  exit(json_encode($loginresult));
+}
+
 if (!isset($_POST["user_name"]) || !isset($_POST["user_password"])) {
   $loginresult->extra->error=true;
   exit(json_encode($loginresult));
 }
 $user=new user();
-$uname=$_POST["user_name"];
-$upwd=$_POST["user_password"];
 $email=null;
 if (isset($_POST["user_email"])) $email=$_POST["user_email"];
 $user->properties->username=$uname;
 $user->properties->password=$upwd;
-
 
 if ($parameters->action=="create") {
   $loginresult=$user->create($uname, $upwd, $email);

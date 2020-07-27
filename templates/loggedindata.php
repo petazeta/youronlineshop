@@ -1,10 +1,22 @@
 <template>
   <template>
     <div style="padding-bottom: 1em; text-align:center">
-      <div class="msgbox"></div>
-      <script>
-	webuser.writeProperty(thisElement, "username");
-      </script>
+      <div class="msgbox">
+        <span></span>
+	<script>
+	  var title=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"dashboardtit"}).getRelationship("domelementsdata").getChild();
+	  title.writeProperty(thisElement);
+	  //adding the edition pencil
+	  var launcher = new Node();
+	  launcher.thisNode = title;
+	  launcher.editElement = thisElement;
+	  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+	</script>
+        <span></span>
+        <script>
+          webuser.writeProperty(thisElement, "username");
+        </script>
+      </div>
     </div>
     <div style="display:grid; grid-template-columns: auto auto; width:40em;" class="formtable"></div>
     <script>
@@ -54,6 +66,23 @@
 	launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
 	thisElement.onclick=function(){
 	  (new Node()).refreshView(document.getElementById("centralcontent"), "templates/showaddress.php");
+	}
+      </script>
+    </div>
+    <div style="margin:auto; display:table; margin-bottom: 1em;">
+      <button class="btn"></button>
+      <script>
+	var btChangePwd=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btChangePwd"});
+	btChangePwd.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+	//adding the edition pencil
+	var launcher = new Node();
+	launcher.thisNode = btChangePwd.getRelationship("domelementsdata").getChild();
+	launcher.editElement = thisElement;
+	launcher.createInput=true;
+	launcher.visibility="visible";
+	launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+	thisElement.onclick=function(){
+	  (new Node()).refreshView(document.getElementById("centralcontent"), "templates/changepwd.php");
 	}
       </script>
     </div>
