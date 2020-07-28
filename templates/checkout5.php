@@ -35,6 +35,70 @@
         };
       </script>
     </div>
+    <form>
+      <div style="display:table;">
+        <input type="hidden" name="customsubject">
+        <script>
+          var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"newordercustomer"}).getNextChild({name:"subject"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement, null, "value");
+          var launcher = new Node();
+          launcher.thisNode = myNode;
+          launcher.editElement = thisElement;
+          launcher.thisAttribute = "value";
+          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.type="input";
+        </script>
+      </div>
+      <div style="display:table;">
+        <textarea name="custommessage" style="visibility:hidden;"></textarea>
+        <script>
+          var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"newordercustomer"}).getNextChild({name:"message"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement, null, "value");
+          var launcher = new Node();
+          launcher.thisNode = myNode;
+          launcher.editElement = thisElement;
+          launcher.thisAttribute = "value";
+          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.style.visibility="visible";
+        </script>
+      </div>
+      <div style="display:table;">
+        <input type="hidden" name="adminsubject">
+        <script>
+          var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"neworderadmin"}).getNextChild({name:"subject"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement, null, "value");
+          var launcher = new Node();
+          launcher.thisNode = myNode;
+          launcher.editElement = thisElement;
+          launcher.thisAttribute = "value";
+          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.type="input";
+        </script>
+      </div>
+      <div style="display:table;">
+        <textarea name="adminmessage" style="visibility:hidden;"></textarea>
+        <script>
+          var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"neworderadmin"}).getNextChild({name:"message"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement, null, "value");
+          var launcher = new Node();
+          launcher.thisNode = myNode;
+          launcher.editElement = thisElement;
+          launcher.thisAttribute = "value";
+          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.style.visibility="visible";
+        </script>
+      </div>
+    </form>
+    <script>
+      //We send notifications:
+      if (Config.newordermailcustomer_On) {
+        webuser.sendmail(webuser.properties.username, thisElement.elements.customsubject, thisElement.elements.custommessage);
+      }
+      //We send notifications:
+      if (Config.newordermailadmin_On) {
+        webuser.sendmail('USER_ORDERSADMIN', thisElement.elements.customsubject, thisElement.elements.custommessage);
+      }
+    </script>
   </template>
   <div style="text-align:center"></div>
   <script>

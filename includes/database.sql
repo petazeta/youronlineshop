@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 27, 2020 at 10:41 PM
+-- Generation Time: Jul 29, 2020 at 12:15 AM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -93,8 +93,8 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (107, 'phonenumber', 103, 1),
 (108, 'langbox', 60, 1),
 (109, 'checkout', 60, 4),
-(110, 'chkt1next', 109, 4),
-(111, 'chkt1add', 109, 5),
+(110, 'chkt1next', 109, 5),
+(111, 'chkt1add', 109, 6),
 (182, 'logform', 60, 0),
 (183, 'userName', 182, 0),
 (184, 'password', 182, 0),
@@ -126,18 +126,18 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (287, 'price', 284, 0),
 (316, 'currency', 60, 0),
 (317, 'signuptt', 182, 0),
-(337, 'chkt3next', 109, 1),
-(338, 'chkt3add', 109, 3),
-(339, 'order', 109, 12),
+(337, 'chkt3next', 109, 2),
+(338, 'chkt3add', 109, 4),
+(339, 'order', 109, 13),
 (340, 'total', 339, 1),
-(341, 'chkt4add', 109, 6),
-(342, 'chkt4userarea', 109, 9),
+(341, 'chkt4add', 109, 7),
+(342, 'chkt4userarea', 109, 10),
 (343, 'subtotal', 339, 2),
-(344, 'chktback', 109, 11),
+(344, 'chktback', 109, 12),
 (357, 'extraEdition', 60, 5),
 (361, 'online', 62, 1),
-(362, 'chkt5add', 109, 7),
-(363, 'chkt4next', 109, 2),
+(362, 'chkt5add', 109, 8),
+(363, 'chkt4next', 109, 3),
 (389, 'nav2', 66, 2),
 (391, '', 389, 1),
 (392, 'expimp', 60, 6),
@@ -193,7 +193,14 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (469, 'btsmt', 465, 4),
 (470, 'pwdDoubleError', 465, 5),
 (471, 'pwdChangeOk', 465, 6),
-(472, 'pwdChangeError', 465, 7);
+(472, 'pwdChangeError', 465, 7),
+(473, 'mails', 109, 1),
+(474, 'newordercustomer', 473, 1),
+(475, 'neworderadmin', 473, 2),
+(476, 'subject', 474, 1),
+(477, 'message', 474, 2),
+(478, 'subject', 475, 1),
+(479, 'message', 475, 2);
 
 -- --------------------------------------------------------
 
@@ -348,7 +355,14 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1108, 'The passwords written doesn\'t match', 470, 2),
 (1109, 'Password successful changed', 471, 2),
 (1110, 'Password Change Error', 472, 2),
-(1111, '', 465, 2);
+(1111, '', 465, 2),
+(1112, '', 473, 2),
+(1113, '', 474, 2),
+(1114, '', 475, 2),
+(1115, 'About your new order', 476, 2),
+(1116, 'A new order has been registered. Thank you.', 477, 2),
+(1117, 'New order registered', 478, 2),
+(1118, 'A new order has been registered.', 479, 2);
 
 -- --------------------------------------------------------
 
@@ -888,12 +902,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=473;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=480;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1112;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1119;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --

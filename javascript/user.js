@@ -27,7 +27,7 @@ user.prototype.logoff=function(){
 user.prototype.loginproto=function(action, name, password, email, reqlistener){
   return new Promise((resolve, reject) => {
     if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
-    if (this.extra && this.extra.language) var language=this.extra.language;
+    if (this.extra && this.extra.language) var language=this.extra.language; //keep the language from user after login
     var FD  = new FormData();
     FD.append("parameters", JSON.stringify({action: action}));
     if (name) {
@@ -98,6 +98,32 @@ user.prototype.isSystemAdmin=function(){
 user.prototype.getUserType=function(){
   if (this.parentNode && this.parentNode.partnerNode) return this.parentNode.partnerNode.properties.type;
 }
+
+user.prototype.sendmail=function(to, subject, message, header){
+  return new Promise((resolve, reject) => {
+    if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
+    var FD  = new FormData();
+    if (to) {
+      FD.append("mail_to", to);
+    }
+    if (subject) {
+      FD.append("mail_subject", subject);
+    }
+    if (message) {
+      FD.append("mail_message", message);
+    }
+    if (header) {
+      FD.append("mail_header", header);
+    }
+    FD.action="mailer.php";
+    this.loadfromhttp(FD).then((myNode) => {
+      if (!myNode.extra) myNode.extra={};
+      myNode.dispatchEvent("mail");
+      resolve(myNode);
+    });
+  });
+};
+
 function get_liveusers(){
   var FD  = new FormData();
   FD.action="liveusers.php";

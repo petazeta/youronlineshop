@@ -32,18 +32,20 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
         var link=document.querySelector("a[href='" + event.state.url + "']");
         if (link) link.click();
       };
-      function loadTemplates(callback) {
+      function loadTemplates() {
         //We load all the templates at once
-        var tpLoader=new Node();
-        tpLoader.appendThis(document.body, "templates.php", function(){
-          if (callback) callback();
+        return new Promise((resolve, reject) => {
+          var tpLoader=new Node();
+          tpLoader.appendThis(document.body, "templates.php").then(resolve);
         });
       }
-      function loadLabels(callback) {
-        var myLanguage=webuser.extra.language.properties.id;
-        domelementsrootmother.children[0].getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: myLanguage}, function(){
-          if (!Config.onEmptyValueText) Config.onEmptyValueText=this.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).children[0].properties.value;
-          if (callback) callback();
+      function loadLabels() {
+        return new Promise((resolve, reject) => {
+          var myLanguage=webuser.extra.language.properties.id;
+          domelementsrootmother.getChild().getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: myLanguage}).then(function(myNode){
+            if (!Config.onEmptyValueText) Config.onEmptyValueText=myNode.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+            resolve();
+          });
         });
       }
       var webuser=new user();
@@ -56,21 +58,21 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
       var languages=null;
       domelementsrootmother=new NodeFemale();
       //We show a message if the php version is not compatible
-      (new Node()).loadfromhttp({action:"check php version"}, function(){
-        if (this.extra && this.extra.error) {
+      (new Node()).loadfromhttp({action:"check php version"}).then(function(myNode){
+        if (myNode.extra && myNode.extra.error) {
           myalert.properties.alertmsg='PHP version is lower than required, plese update PHP';
           myalert.showalert().then(function(){throw 'PHP version error';});
         }
       });
       //First of all we check that the database connection is ok
-      domelementsrootmother.loadfromhttp({action:"check db link"}, function(){
-        if (this.extra && this.extra.error) {
+      domelementsrootmother.loadfromhttp({action:"check db link"}).then(function(myNode){
+        if (myNode.extra && myNode.extra.error) {
           myalert.properties.alertmsg='<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.</p>';
           myalert.showalert().then(function(){throw 'Database Connection Failed';});
         }
         else {
           var mytables=new NodeFemale();
-          mytables.loadfromhttp({action:"load tables"<?php if ($tablePrefix) echo ', prefix:"' . $tablePrefix . '"'; ?>}, function(){
+          mytables.loadfromhttp({action:"load tables"<?php if ($tablePrefix) echo ', prefix:"' . $tablePrefix . '"'; ?>}).then(function(myNode){
             if (mytables.children.length==0) {
               myalert.properties.alertmsg='No Database Tables.';
               myalert.showalert().then(function(){throw 'No Database Tables';});
@@ -79,32 +81,32 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
         }
         domelementsrootmother.properties.childtablename="TABLE_DOMELEMENTS";
         domelementsrootmother.properties.parenttablename="TABLE_DOMELEMENTS";
-        domelementsrootmother.loadfromhttp({action:"load root"}, function(){
+        domelementsrootmother.loadfromhttp({action:"load root"}).then(function(myNode){
           //if no root means that table domelements doesn't exist or has no elements
-          if (this.children.length==0) {
+          if (myNode.children.length==0) {
             myalert.properties.alertmsg='<p><b>Database Content Error</b></p><p>Please import includes/database.sql file.</p>';
             myalert.showalert().then(function(){throw 'Database Content Failed';});
           }
-          domelementsroot=this.children[0];
-          domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 2}, function(){
-            webuser.loadfromhttp({action: "load session", sesname: "user"}, function(){
+          domelementsroot=myNode.getChild();
+          domelementsroot.loadfromhttp({action:"load my tree", deepLevel: 2}).then(function(myNode){
+            webuser.loadfromhttp({action: "load session", sesname: "user"}).then(function(){
               if (!webuser.extra) webuser.extra={};
               if (!webuser.extra.language) {
                 var languagesmother=new NodeFemale();
                 languagesmother.properties.childtablename="TABLE_LANGUAGES";
                 languagesmother.properties.parenttablename="TABLE_LANGUAGES";
-                languagesmother.loadfromhttp({action:"load root"}, function(){
-                  var langsroot=this.children[0];
-                  langsroot.loadfromhttp({action:"load my relationships"}, function(){
+                languagesmother.loadfromhttp({action:"load root"}).then(function(myNode){
+                  var langsroot=myNode.getChild();
+                  langsroot.loadfromhttp({action:"load my relationships"}).then(function(myNode){
                     var langrelkey=0;
                     for (var i=0; i<langsroot.relationships.length; i++) {
-                      if (this.relationships[i].properties.childtablename=="TABLE_LANGUAGES") {
+                      if (myNode.relationships[i].properties.childtablename=="TABLE_LANGUAGES") {
                           langrelkey=i;
                           break;
                       }
                     }
                     languages=langsroot.relationships[langrelkey];
-                    languages.loadfromhttp({action:"load my children"}, function(){
+                    languages.loadfromhttp({action:"load my children"}).then(function(myNode){
                       var webLanguages=[];
                       languages.children.forEach(function (child){
                         webLanguages.push(child.properties.code);
@@ -112,14 +114,14 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
                       for (var i=0; i<window.navigator.languages.length; i++) {
                         window.navigator.languages[i]=window.navigator.languages[i].replace(/-.+/, "");
                         if (webLanguages.indexOf(window.navigator.languages[i]) >= 0) {
-                          webuser.extra.language=this.getChild({code: window.navigator.languages[i]});
+                          webuser.extra.language=myNode.getChild({code: window.navigator.languages[i]});
                           break;
                         }
                       }
-                      if (!webuser.extra.language) webuser.extra.language=this.getChild();
-                      loadLabels(function(){
+                      if (!webuser.extra.language) webuser.extra.language=myNode.getChild();
+                      loadLabels().then(function(){
                         if (Config.loadTemplatesAtOnce!==false) {
-                          loadTemplates(function(){
+                          loadTemplates().then(function(){
                             domelementsrootmother.dispatchEvent("loadLabels");
                           });
                         }
@@ -132,9 +134,9 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
                 });
               }
               else {
-                loadLabels(function(){
+                loadLabels().then(function(){
                   if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
-                    loadTemplates(function(){
+                    loadTemplates().then(function(){
                       domelementsrootmother.dispatchEvent("loadLabels");
                     });
                   }

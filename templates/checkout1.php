@@ -46,7 +46,7 @@
           })
           .then(function(myNode){
 	    myNode.loadfromhttp({action: "load my relationships", user_id: webuser.properties.id}).then(function(myNode){
-	      var myordercartitems=ordercart.getRelationship({name:"cartbox"}).children[0].getRelationship({name:"cartboxitem"}).children;
+	      var myordercartitems=ordercart.getRelationship({name:"cartbox"}).getChild().getRelationship({name:"cartboxitem"}).children;
 	      for (var i=0; i<myordercartitems.length; i++) {
 		var myorderitemdata=myordercartitems[i].cloneNode(0);
 		delete myorderitemdata.properties.id; //orderitem id is not from orderitem but from item

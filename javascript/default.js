@@ -18,6 +18,8 @@ var Config={
   chkt4_On: true, //if false skip payment type selection
   defaultmenu_On: true, //if true click first menu on load
   defaultcat_On: false, //if true click first category on load
-  expimplang_On: false //if true click first category on load
+  expimplang_On: false, //if true click first category on load
+  newordermailadmin_On: true, //if true click first category on load
+  newordermailcustomer_On: true //if true click first category on load
 }
 
