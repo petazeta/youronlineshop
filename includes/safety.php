@@ -38,7 +38,7 @@ function is_actionpermited($parameters, $myelement){
     if ($action=="write") {
       if ($usertype=="web administrator" || $usertype=="orders administrator" || $usertype=="system administrator") return true;
       if ($usertype=="product administrator") {
-        if ($tablename=="TABLE_ITEMS" || $tablename=="TABLE_ITEMSDATA") {
+        if ($tablename=="TABLE_ITEMS" || $tablename=="TABLE_ITEMSDATA" || $tablename=="TABLE_ITEMCATEGORIES" || $tablename=="TABLE_ITEMCATEGORIESDATA") {
           return true;
         }
       }
