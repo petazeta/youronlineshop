@@ -402,7 +402,8 @@
               }
               var nodeRequest=new Node();
               nodeRequest.loadfromhttp({"parameters":requestActions, "nodes":requestData}).then(function(){
-                myimpalert.hidealert();
+                //myimpalert.hidealert();
+                location.reload();
               });
             }); 
           }

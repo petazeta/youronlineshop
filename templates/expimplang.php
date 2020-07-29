@@ -412,6 +412,7 @@
             Promise.all(iterationAddLangs).then(function(){
               waitalert.hidealert();
               location.reload();
+              //domelementsrootmother.dispatchEvent("loadLabels");
             });
           });
           return false;
