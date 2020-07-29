@@ -287,6 +287,7 @@
                   newusersmother.partnerNode.properties.id=usertypemother.children[0].properties.id;
                   newusersmother.loadfromhttp({action:"add my children"}, function(){
                     myimpalert.hidealert();
+                    location.reload();
                   });
                 });
               });
@@ -376,6 +377,7 @@
             loadelement.loadfromhttp({"parameters":requestResultActions, "nodes":requestResultData}).then(function(){
               if (datalang.children.length<2) {
                 myimpalert.hidealert();
+                location.reload();
                 return;
               }
               var myNode=new NodeMale();
@@ -402,7 +404,7 @@
               }
               var nodeRequest=new Node();
               nodeRequest.loadfromhttp({"parameters":requestActions, "nodes":requestData}).then(function(){
-                //myimpalert.hidealert();
+                myimpalert.hidealert();
                 location.reload();
               });
             }); 
