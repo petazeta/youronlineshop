@@ -179,6 +179,16 @@
               });
             });
           }
+          else {
+            //we show the alert message No selection
+            var mynoselalert=new Alert();
+            mynoselalert.properties.alertclass="alertmsg";
+            mynoselalert.properties.timeout=2000;
+            mynoselalert.properties.alertmsg=thisElement.form.elements.noselection.value;
+            console.log(thisElement.form.elements);
+            mynoselalert.showalert();
+            return false;
+          }
           function exportData(rootelement){
             //data from the language
             var langdata=languages.toRequestData({action: "add my tree"});
@@ -226,9 +236,22 @@
         </script>
       </div>
       <div style="display:table;">
-        <input type="hidden" name="impnoselection">
+        <input type="hidden" name="noselection">
         <script>
-          var myNode=thisNode.getNextChild({"name":"impnoselection"}).getRelationship({name:"domelementsdata"}).getChild();
+          var myNode=thisNode.getNextChild({"name":"noselection"}).getRelationship({name:"domelementsdata"}).getChild();
+          myNode.writeProperty(thisElement, null, "value");
+          var launcher = new Node();
+          launcher.thisNode = myNode;
+          launcher.editElement = thisElement;
+          launcher.thisAttribute = "value";
+          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          if (webuser.isWebAdmin()) thisElement.type="input";
+        </script>
+      </div>
+      <div style="display:table;">
+        <input type="hidden" name="impnocontent">
+        <script>
+          var myNode=thisNode.getNextChild({"name":"impnocontent"}).getRelationship({name:"domelementsdata"}).getChild();
           myNode.writeProperty(thisElement, null, "value");
           var launcher = new Node();
           launcher.thisNode = myNode;
@@ -263,14 +286,24 @@
         launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
         
         thisElement.onclick=function(){
-          var mynoselalert=new Alert();
-          mynoselalert.properties.alertclass="alertmsg";
-          mynoselalert.properties.timeout=2000;
-          mynoselalert.properties.alertmsg=thisElement.form.elements.impnoselection.value;
           if (!thisElement.form.impdata.value) {
-            mynoselalert.showalert();
+            var nocontentalert=new Alert();
+            nocontentalert.properties.alertclass="alertmsg";
+            nocontentalert.properties.timeout=2000;
+            nocontentalert.properties.alertmsg=thisElement.form.elements.impnocontent.value;
+            nocontentalert.showalert();
+            return false;
           }
-            
+          if (!thisElement.form.dataoption.value){
+            //we show the alert message No selection
+            var mynoselalert=new Alert();
+            mynoselalert.properties.alertclass="alertmsg";
+            mynoselalert.properties.timeout=2000;
+            mynoselalert.properties.alertmsg=thisElement.form.elements.noselection.value;
+            mynoselalert.showalert();
+            return false;
+          }
+          
           if  (thisElement.form.dataoption.value=="users") {
             var myimpalert=new Alert();
             myimpalert.properties.alertclass="alertmsg";

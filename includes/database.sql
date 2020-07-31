@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 29, 2020 at 12:15 AM
+-- Generation Time: Jul 31, 2020 at 08:03 AM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -158,13 +158,13 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (432, 'textEdit', 60, 8),
 (433, 'advice', 432, 1),
 (434, 'imploadingmsg', 392, 6),
-(435, 'expmenus', 392, 8),
-(436, 'expcatg', 392, 9),
-(437, 'impnoselection', 392, 7),
-(438, 'exptit', 392, 11),
-(441, 'expusers', 392, 12),
+(435, 'expmenus', 392, 9),
+(436, 'expcatg', 392, 10),
+(437, 'noselection', 392, 7),
+(438, 'exptit', 392, 12),
+(441, 'expusers', 392, 13),
 (442, 'newuserbt', 182, 1),
-(443, 'implangerror', 392, 13),
+(443, 'implangerror', 392, 14),
 (444, 'expimplang', 60, 7),
 (445, 'tit', 444, 1),
 (446, 'butexp', 444, 2),
@@ -200,7 +200,8 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (476, 'subject', 474, 1),
 (477, 'message', 474, 2),
 (478, 'subject', 475, 1),
-(479, 'message', 475, 2);
+(479, 'message', 475, 2),
+(480, 'impnocontent', 392, 8);
 
 -- --------------------------------------------------------
 
@@ -315,7 +316,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1067, 'Performing some operations please wait...', 434, 2),
 (1068, 'Menus / Pages', 435, 2),
 (1069, 'Catalog', 436, 2),
-(1070, 'Please select any option', 437, 2),
+(1070, 'Please select an option', 437, 2),
 (1071, 'Site title', 438, 2),
 (1073, '', 284, 2),
 (1074, '', 279, 2),
@@ -362,7 +363,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1115, 'About your new order', 476, 2),
 (1116, 'A new order has been registered. Thank you.', 477, 2),
 (1117, 'New order registered', 478, 2),
-(1118, 'A new order has been registered.', 479, 2);
+(1118, 'A new order has been registered.', 479, 2),
+(1119, 'There is no content to import', 480, 2);
 
 -- --------------------------------------------------------
 
@@ -902,12 +904,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=480;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=481;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1119;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1120;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
