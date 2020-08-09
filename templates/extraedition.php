@@ -28,6 +28,16 @@
     <div style="margin:auto; display:table; margin-bottom: 1em;">
       <div class="msgbox"></div>
       <script>
+        var langnewalert=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langbox"}).getNextChild({"name":"newlangwait"});
+        langnewalert.appendThis(thisElement,document.querySelector("#logedittp"));
+
+        var langchangealert=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langbox"}).getNextChild({"name":"changelangwait"});
+        langchangealert.appendThis(thisElement,document.querySelector("#logedittp"));
+      </script>
+    </div>
+    <div style="margin:auto; display:table; margin-bottom: 1em;">
+      <div class="msgbox"></div>
+      <script>
         var logboxNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "logbox"});
         
         var logboxin=logboxNode.getNextChild({name:"logboxin"});

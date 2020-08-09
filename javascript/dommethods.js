@@ -181,7 +181,9 @@ Alert.prototype.showalert=function(text, tp) {
 };
 Alert.prototype.hidealert=function() {
   var remove=function(element){
-    element.parentElement.removeChild(element);
+    if (element && element.parentElement) {
+      element.parentElement.removeChild(element);
+    }
   };
   var myContainer=this.myContainer;
   if (this.properties.timeout>0) {

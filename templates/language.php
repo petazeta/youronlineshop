@@ -28,8 +28,12 @@
             event.preventDefault();
             DomMethods.setActive(thisNode);
             webuser.extra.language=thisNode;
-            loadLabels(function(){ 
+            myalert.properties.alertmsg=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langbox"}).getNextChild({"name":"changelangwait"}).getRelationship("domelementsdata").getChild().properties.value;
+            myalert.showalert();
+            loadLabels().then(function(){ 
               domelementsrootmother.dispatchEvent("changeLanguage");
+              myalert.properties.timeout=3000;
+              myalert.hidealert();
             });
             return false;
           });
