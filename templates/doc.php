@@ -7,7 +7,7 @@
     thisNode.getRelationship("domelements").loadfromhttp({action: "load my tree", language: webuser.extra.language.properties.id}).then(function(myNode) {
       myNode.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
       myNode.newNode.parentNode=new NodeFemale();
-      myNode.newNode.parentNode.load(this, 1, "id");
+      myNode.newNode.parentNode.load(myNode, 1, "id");
       myNode.appendThis(thisElement, "templates/admnlisteners.php");
       myNode.refreshChildrenView(thisElement, "templates/paragraph.php");
     });
