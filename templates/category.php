@@ -46,7 +46,7 @@
               //deepLevel=2 => It load relationship (level is also for female)
               myNode.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
               myNode.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
-              myNode.newNode.parentNode.load(this, 1, 0, null, "id");
+              myNode.newNode.parentNode.load(myNode, 1, 0, null, "id");
               myNode.appendThis(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "templates/admnlisteners.php");
               //we show subcategories
               myNode.refreshChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"),"templates/subcategory.php").then((myNode) => {
