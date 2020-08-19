@@ -1,4 +1,4 @@
-<div style="text-align:right;">
+<div style="text-align:right;" class="pwby">
   <p></p>
 </div>
 <img id="statsLink" style="display:none">

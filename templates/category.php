@@ -34,54 +34,68 @@
               thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="block";
             }, "subcat");
           });
-        
-          thisElement.addEventListener("click", function(event) {
+          //This function is to auto-click some subcategory in same special situations
+          function makeclick(myNode) {
+            //Now would click at the subcategory if there is a path in url
+            if (myNode.children.length > 0) {
+              if (window.location.search) {
+                var regex = new RegExp('category=' + thisNode.properties.id + '&subcategory=(\\d+)');
+                if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
+                if (id) {
+                  var link=document.querySelector("a[href='?category=" + thisNode.properties.id + "&subcategory=" + id + "']");
+                  if (link) {
+                    link.click();
+                    return; //Finish here
+                  }
+                }
+              }
+              //If not we would click at first subcategory
+              if (!id) {
+                var button=null;
+                myNode.getChild().getMyDomNodes().every(function(domNode){
+                  button=domNode.querySelector("[data-button]");
+                  if (button) return false;
+                });
+                if (button) button.click();
+              }
+            }
+            else {
+              // If there is no subcategories we can set up the category state
+              if (!(history.state && history.state.url==url)) { //to not repeat state
+                history.pushState({url:url}, null, url);
+              }
+            }
+          };
+          function showsubcategories(listener) {
             //view loader
             thisElement.parentElement.parentElement.querySelector(".loader").style.visibility="visible";
-            event.preventDefault();
-            this.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="none";
-            document.getElementById("centralcontent").innerHTML="";//We remove central content (To avoid keep content that could be confusing)
-            DomMethods.setActive(thisNode);
+            thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="none";
             thisNode.getRelationship().loadfromhttp({action:"load my tree", deepLevel: 2}).then((myNode) => {
               //deepLevel=2 => It load relationship (level is also for female)
               myNode.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
               myNode.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
               myNode.newNode.parentNode.load(myNode, 1, 0, null, "id");
               myNode.appendThis(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "templates/admnlisteners.php");
-              //we show subcategories
-              myNode.refreshChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"),"templates/subcategory.php").then((myNode) => {
-                //Now would click at the subcategory if there is a path in url
-                if (myNode.children.length > 0) {
-                  if (window.location.search) {
-                    var regex = new RegExp('category=' + thisNode.properties.id + '&subcategory=(\d+)');
-                    if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
-                    if (id) {
-                      var link=document.querySelector("a[href='?category=" + thisNode.properties.id + "&subcategory=" + id + "']");
-                      if (link) {
-                        link.click();
-                        return; //Finish here
-                      }
-                    }
-                  }
-                  //If not we would click at first subcategory
-                  if (!id) {
-                    var button=null;
-                    myNode.getChild().getMyDomNodes().every(function(domNode){
-                      button=domNode.querySelector("[data-button]");
-                      if (button) return false;
-                    });
-                    if (button) button.click();
-                  }
-                }
-                else {
-                  // If there is no subcategories we can set up the category state
-                  if (!(history.state && history.state.url==url)) { //to not repeat state
-                    history.pushState({url:url}, null, url);
-                  }
-                }
-              });
+              //we show subcategories (and click some subcategory)
+              myNode.refreshChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"),"templates/subcategory.php").then(listener);
             });
+          };
+        
+          thisElement.addEventListener("click", function(event){
+            event.preventDefault();
+            DomMethods.setActive(thisNode);
+            document.getElementById("centralcontent").innerHTML="";//We remove central content (To avoid keep content that could be confusing)
+            if (!Config.showsubcategory_On) {
+              showsubcategories(makeclick);
+            }
+            else {
+              makeclick(thisNode.getRelationship());
+            }
           });
+          
+          if (Config.showsubcategory_On) {
+            showsubcategories();
+          }
         </script>
       </span>
     </div>
