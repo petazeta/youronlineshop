@@ -48,7 +48,7 @@ class user extends NodeMale {
     }
     return $result;
   }
-  function create($username, $pwd, $email=null) {
+  function create($username, $pwd, $email=null, $usertype=null) {
     $result=new NodeMale();
     if (!isset($result->extra)) $result->extra=new stdClass();
     
@@ -68,7 +68,7 @@ class user extends NodeMale {
       return $result;
     }
 
-    $user=new user();
+    $user=new user($usertype);
     $user->properties->username=$username;
     $candidates=$user->db_search();
     if (count($candidates) != 0) { //candidates=1
