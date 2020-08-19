@@ -7,7 +7,9 @@ class user extends NodeMale {
     $this->parentNode->properties->parenttablename="TABLE_USERSTYPES";
     $this->parentNode->properties->childtablename="TABLE_USERS";
     $this->parentNode->db_loadchildtablekeys();
-    
+    $this->setUserType($user_type);
+  }
+  function setUserType($user_type){
     //First we get the usertype (parent)
     $parentPartner=new NodeMale();
     $parentPartner->parentNode=new NodeFemale();
@@ -17,9 +19,9 @@ class user extends NodeMale {
     $return=$parentPartner->db_search();
     $row=$return[0];
     $parentPartner->properties->cloneFromArray($row);
-
     $this->parentNode->partnerNode=$parentPartner;
   }
+  
   function usercheck($username, $pwd) {
     $result=new NodeMale();
     $result->extra=new stdClass();
