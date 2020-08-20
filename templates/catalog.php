@@ -11,7 +11,7 @@
     if (webuser.isProductSeller()) {
       thisNode.editable=true;
       var thisNodeData= [thisNode.toRequestData({action: "load my children"}), webuser.getRelationship("items").toRequestData({action: "load my children"})];
-      parameters={action:"load children", language: webuser.extra.language.properties.id, reqnodes: thisNodeData};      
+      parameters={action:"load children", language: webuser.extra.language.properties.id, reqnodes: thisNodeData}; 
     }
     thisNode.loadfromhttp(parameters).then(function(){
       var newNode=new NodeMale(); //new Item
@@ -26,6 +26,7 @@
         newNode.getRelationship("itemsdata").addChild(new NodeMale());
         thisNode.newNode=newNode;
         thisNode.appendThis(thisElement, "templates/admnlisteners.php");
+        //in case is seller we still need to load the entire tree
         if (webuser.isProductSeller()) {
           var myChildNodes=[];
           var myActions=[];
