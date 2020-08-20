@@ -743,8 +743,6 @@ NodeFemale.prototype.loaddesc=function(source, level, thisProperties) {
   if (level===0) return false;
   if (level) level--;
   if (!source.children) return false;
-  //we remove previous children
-  this.children=[];
   for (var i=0;i<source.children.length;i++) {
     this.children[i]=new NodeMale;
     this.children[i].parentNode=this;

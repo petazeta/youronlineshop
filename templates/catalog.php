@@ -13,6 +13,7 @@
       var thisNodeData= [thisNode.toRequestData({action: "load my children"}), webuser.getRelationship("items").toRequestData({action: "load my children"})];
       parameters={action:"load children", language: webuser.extra.language.properties.id, reqnodes: thisNodeData}; 
     }
+    thisNode.children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
     thisNode.loadfromhttp(parameters).then(function(){
       var newNode=new NodeMale(); //new Item
       newNode.parentNode=new NodeFemale();

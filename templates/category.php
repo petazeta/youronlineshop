@@ -70,6 +70,7 @@
             //view loader
             thisElement.parentElement.parentElement.querySelector(".loader").style.visibility="visible";
             thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="none";
+            thisNode.getRelationship().children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
             thisNode.getRelationship().loadfromhttp({action:"load my tree", deepLevel: 2}).then((myNode) => {
               //deepLevel=2 => It load relationship (level is also for female)
               myNode.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
