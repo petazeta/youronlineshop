@@ -1,6 +1,6 @@
 <?php
 class user extends NodeMale {
-  public function __construct($user_type="customer") {
+  public function __construct($user_type) {
     parent::__construct();
     
     $this->parentNode=new NodeFemale();
@@ -48,7 +48,7 @@ class user extends NodeMale {
     }
     return $result;
   }
-  function create($username, $pwd, $email=null, $usertype=null) {
+  function create($username, $pwd, $email=null, $usertype="customer") {
     $result=new NodeMale();
     if (!isset($result->extra)) $result->extra=new stdClass();
     
