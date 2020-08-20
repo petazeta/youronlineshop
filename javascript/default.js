@@ -19,8 +19,8 @@ var Config={
   defaultmenu_On: true, //if true click first menu on load
   defaultcat_On: false, //if true click first category on load
   expimplang_On: false, //if true click first category on load
-  newordermailadmin_On: true, //if true click first category on load
-  newordermailcustomer_On: true, //if true click first category on load
+  newordermailadmin_On: false, //if true click first category on load
+  newordermailcustomer_On: false, //if true click first category on load
   showsubcategory_On: false //if true expand to subcategories
 }
 
