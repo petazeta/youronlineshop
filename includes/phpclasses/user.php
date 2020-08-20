@@ -1,6 +1,6 @@
 <?php
 class user extends NodeMale {
-  public function __construct($user_type) {
+  public function __construct($user_type=null) {
     parent::__construct();
     
     $this->parentNode=new NodeFemale();
