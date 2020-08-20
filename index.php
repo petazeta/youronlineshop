@@ -43,7 +43,7 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
         return new Promise((resolve, reject) => {
           var myLanguage=webuser.extra.language.properties.id;
           domelementsrootmother.getChild().getNextChild({name: "labels"}).loadfromhttp({action:"load my tree", language: myLanguage}).then(function(myNode){
-            if (!Config.onEmptyValueText) Config.onEmptyValueText=myNode.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+            if (Config.onEmptyValueText===null) Config.onEmptyValueText=myNode.getNextChild({name: "not located"}).getNextChild({name: "emptyvallabel"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
             resolve();
           });
         });

@@ -450,13 +450,13 @@ Node.prototype.writeProperty=function(container, property, attribute, onEmptyVal
   if (!property) {
     property=this.getFirstPropertyKey();
   }
-  //In case there is no property we assume a default value
-  if (!this.properties[property] && this.properties[property]!==0) {
+  //In case there is no property and it is not a field we assume a default value
+  if (!this.properties[property] && this.properties[property]!==0 && myAttribute!='value') {
     if (this.parentNode && this.parentNode.childtablekeys && this.parentNode.childtablekeysinfo) {
       var pos = this.parentNode.childtablekeys.indexOf(property);
       if (pos!=-1 && this.parentNode.childtablekeysinfo[pos]['Type'].indexOf("int")!=-1) {
 	//Is a integer
-	container[myAttribute]="0";
+	if (!onEmptyValueText) container[myAttribute]="0";
       }
       else {
 	container[myAttribute]=onEmptyValueText;
