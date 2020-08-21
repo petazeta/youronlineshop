@@ -51,6 +51,7 @@ header div.pgtitle{
 div.menuscontainer {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   flex-wrap: wrap;
   min-height: 2em;
   margin-top: 10px;
