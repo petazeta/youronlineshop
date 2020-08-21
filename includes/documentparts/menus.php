@@ -1,4 +1,3 @@
-<div></div>
 <script type="text/javascript">
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   //We load menus and its relationships. We would like to load menus domelementsdata children but not domelements children
@@ -14,9 +13,9 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     newNode.addRelationship(menusMother.partnerNode.getRelationship({name: "domelementsdata"}).cloneNode(0, 0));
     newNode.getRelationship({name: "domelementsdata"}).addChild(new NodeMale());
     menusMother.newNode=newNode;
-    menusMother.appendThis(document.querySelector("header div.menuscontainer"), "templates/admnlisteners.php");
+    menusMother.appendThis(document.querySelector("div.menuscontainer"), "templates/admnlisteners.php");
 
-    menusMother.refreshChildrenView(document.querySelector("header div.menuscontainer"), "templates/menu.php").then(function(myNode){
+    menusMother.refreshChildrenView(document.querySelector("div.menuscontainer"), "templates/menu.php").then(function(myNode){
       document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged
       //Now we click the menu selected at the parameters send by the url
       if (window.location.search) {

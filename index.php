@@ -155,15 +155,22 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
         <img id="initloader" src="css/images/loader-1.gif" style="position: absolute; top: 30%; left: 50%; transform: translateX(-50%); z-index:100;">
         <div class="mainblock">
           <?php include('includes/documentparts/top.php'); ?>
-          <nav class="categories">
-            <?php include("includes/documentparts/left.php"); ?>
+          <nav>
+            <div class="menuscontainer">
+              <?php include("includes/documentparts/menus.php"); ?>
+            </div>
           </nav>
-          <main>
-            <?php include("includes/documentparts/center.php"); ?>
-          </main>
-          <footer>
-            <?php include("includes/documentparts/bottom.php"); ?>
-          </footer>
+          <div class="maincolumns">
+            <nav class="categories">
+              <?php include("includes/documentparts/left.php"); ?>
+            </nav>
+            <main>
+              <?php include("includes/documentparts/center.php"); ?>
+            </main>
+            <footer>
+              <?php include("includes/documentparts/bottom.php"); ?>
+            </footer>
+          </div>
         </div>
       </div>
     </div>

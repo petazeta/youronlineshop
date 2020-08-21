@@ -1,18 +1,15 @@
 <header>
-  <div class="pgtitle">
-    <?php include("includes/documentparts/toph1.php"); ?>
-    <?php include("includes/documentparts/toph2.php"); ?>
-  </div>
-  <nav class="menus">
+  <div class="headertop">
+    <div class="pgtitle">
+      <?php include("includes/documentparts/toph1.php"); ?>
+      <?php include("includes/documentparts/toph2.php"); ?>
+    </div>
     <div class="toolbar">
       <a class="toolbaricon" id="logcontainer" href=""></a>
       <a class="toolbaricon" id="cartcontainer" href=""></a>
       <?php include('includes/documentparts/cartbox.php'); ?>
     </div>
-    <div class="menuscontainer">
-      <?php include("includes/documentparts/menus.php"); ?>
-    </div>
-  </nav>
+  </div>
 </header>
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){

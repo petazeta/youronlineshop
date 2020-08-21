@@ -20,17 +20,20 @@ html, body {
   justify-content: center;
 }
 div.mainblock {
-  display: grid;
-  grid-template-rows: auto auto 100px;
-  grid-template-columns: 250px auto;
   max-width: 1200px;
 }
-header {
-  grid-column: 1 / 3;
+div.maincolumns {
   display: grid;
-  grid-template-columns: minmax(500px, 4fr) 9fr;
+  grid-template-rows: auto 100px;
+  grid-template-columns: 250px auto;
+}
+header {
   margin-left: 20px;
   margin-right: 20px;
+}
+header div.headertop{
+  display: grid;
+  grid-template-columns: minmax(500px, 4fr) 9fr;
 }
 header div.toolbar{
   display: flex;
@@ -45,16 +48,20 @@ header div.toolbar a.toolbaricon{
 }
 header div.pgtitle{
 }
-
-header div.menuscontainer {
+div.menuscontainer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding-bottom:1em;
   min-height: 2em;
   margin-top: 10px;
+  margin-bottom:1em;
+  margin-left: 20px;
+  margin-right: 20px;
+  border: 1px solid grey;
+  border-left: 0px;
+  border-right: 0px;
 }
-header div.menuscontainer a.menu{
+div.menuscontainer a.menu{
   font-size: 1.5em;
   color: rgb(80,80,80);
   margin: 0.6em 0.8em;
@@ -79,7 +86,7 @@ header h2 {
   font-weight: normal;
 }
 nav.categories {
-  grid-row: 2 / span 2;
+  grid-row: 1 / span 2;
 }
 main {
 }
@@ -565,10 +572,10 @@ div.quantityselect {
 }
 
 @media screen and (max-width: 481px){
-	header {
+	header div.headertop {
 	  display: block;
 	}
-	div.mainblock {
+	div.maincolumns {
 	  display: block;
 	  width: 100%;
 	}
@@ -582,7 +589,7 @@ div.quantityselect {
 	header h2 {
 		font-size: 1em;
 	}
-	header div.menuscontainer a.menu {
+	div.menuscontainer a.menu {
 		font-size: 1.2em;
 		margin: 0.2em;
 	}
