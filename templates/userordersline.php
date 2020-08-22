@@ -13,17 +13,14 @@
       if (webuser.getUserType()=="orders administrator") {
       //Complit user information
         thisUser=thisNode.parentNode.partnerNode;
-        thisUser.loadfromhttp({action: "load my relationships"}).then(function(myNode) {
-          return new Promise((resolve, reject) => {
-            resolve(myNode.getRelationship({name:"usersdata"}));
+        thisUser.loadfromhttp({action: "load my relationships"}).then(function(myNode) {          
+          myNode.getRelationship({name:"usersdata"}).loadfromhttp({action: "load my children"}).then(function(myNode) {
+            thisElement.textContent=myNode.getChild().properties.name + " " + myNode.getChild().properties.surname;
           });
-        })
-        .then((myNode) => {
-          thisElement.textContent=myNode.children[0].properties.name + " " + myNode.children[0].properties.surname;
         });
       }
       else {
-        thisElement.textContent=webuser.getRelationship({name:"usersdata"}).children[0].properties.name + " " + webuser.getRelationship({name:"usersdata"}).children[0].properties.surname;
+        thisElement.textContent=webuser.getRelationship({name:"usersdata"}).getChild().properties.name + " " + webuser.getRelationship({name:"usersdata"}).getChild().properties.surname;
       }
       thisUser.formMode=false; //We show the not form user data version
       thisUser.editable=false;
@@ -67,15 +64,17 @@
       });
       thisElement.onclick=function(){
         if (launcher.openview) return false;
-        thisNode.loadfromhttp({action: "load my tree", user_id: webuser.properties.id}, function() {
+        thisNode.loadfromhttp({action: "load my tree", user_id: webuser.properties.id}).then(function(myNode) {
           var thisRow=DomMethods.closesttagname(thisElement, "TR");
           var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
           myrow=thisTable.insertRow(thisRow.rowIndex+1);
           mycell=myrow.insertCell(0);
           mycell.colSpan=5;
-          launcher.myNode=this;
+          launcher.myNode=myNode;
           launcher.myNode.myTp="templates/order.php";
-          launcher.refreshView(mycell, "templates/rmbox.php", function(){this.openview=true});
+          launcher.refreshView(mycell, "templates/rmbox.php").then(function(myNode){
+            myNode.openview=true
+          });
         });
         return false;
       }
