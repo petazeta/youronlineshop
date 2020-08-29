@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 19, 2020 at 12:46 PM
+-- Generation Time: Aug 27, 2020 at 05:47 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -34,8 +34,8 @@ CREATE TABLE `addresses` (
 --
 
 INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
-(23, '5555555555', 'asdfasdf', 'asdfasdf', '9222', 2),
-(24, 'asdfasdf', 'jjjj', 'oooo', '444436', 1),
+(23, '', '', '', '', 2),
+(24, '', '', '', '', 1),
 (25, '', '', '', '', 4),
 (26, '', '', '', '', 6),
 (27, '', '', '', '', 7);

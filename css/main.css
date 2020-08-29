@@ -98,6 +98,10 @@ footer {
 html {
   scroll-behavior: smooth;
 }
+/* For edition elements inline display is not nice, better this */
+span, a {
+  display: inline-block;
+}
 
 /* Fonts */
 html, select, button{
