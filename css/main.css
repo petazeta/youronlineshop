@@ -67,7 +67,7 @@ div.menuscontainer a.menu{
   color: rgb(80,80,80);
 }
 div.menuscontainer span.menu{
-  padding: 0.6em 1em;
+  margin: 0.6em 0.8em;
 }
 div.menuscontainer a.menu:hover, div.menuscontainer .selected a.menu{
   color: rgb(20,20,20);
