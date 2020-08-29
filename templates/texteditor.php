@@ -21,14 +21,17 @@
  * For more information visit http://nicedit.com/
  * Do not remove this copyright message
  */
+ //This is to incorporate the arguments as properties of the object (first argument is the element)
 var bkExtend = function(){
 	var args = arguments;
 	if (args.length == 1) args = [this, args[0]];
 	for (var prop in args[1]) args[0][prop] = args[1][prop];
 	return args[0];
 };
+//This is the class (object)
 function bkClass() { }
 bkClass.prototype.construct = function() {};
+//It looks like this is an instrument to produce objects (instances) by sending some args including construct functions and methods: look line 46
 bkClass.extend = function(def) {
   var classDef = function() {
       if (arguments[0] !== bkClass) { return this.construct.apply(this, arguments); }
@@ -39,7 +42,7 @@ bkClass.extend = function(def) {
   classDef.extend = this.extend;      
   return classDef;
 };
-
+//This is a collection of methods that will will add to the domelements
 var bkElement = bkClass.extend({
 	construct : function(elm,d) {
 		if(typeof(elm) == "string") {
@@ -155,7 +158,7 @@ var bkElement = bkClass.extend({
 		return this;
 	}
 });
-
+//A library of tools (mthods)
 var bkLib = {
 	isMSIE : (navigator.appVersion.indexOf("MSIE") != -1),
 	
@@ -217,14 +220,14 @@ var bkLib = {
 	    window.onload = bkLib.domLoaded;
 	}
 };
-
+//add some methods (the ones in bkElement) to a domelement
 function $BK(elm) {
 	if(typeof(elm) == "string") {
 		elm = document.getElementById(elm);
 	}
 	return (elm && !elm.appendTo) ? bkExtend(elm,bkElement.prototype) : elm;
 }
-
+//object for managing events
 var bkEvent = {
 	addEvent : function(evType, evFunc) {
 		if(evFunc) {
