@@ -1,11 +1,4 @@
 <template>
-<div>
-  <span>NEW EDITOR</span>
-  <div></div>
-  <script>
-  </script>
-</div>
-
 <div>  
     <div class="msgbox">
       <span></span>
