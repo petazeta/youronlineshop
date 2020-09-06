@@ -1,4 +1,11 @@
 <template>
+<div>
+  <span>NEW EDITOR</span>
+  <div></div>
+  <script>
+  </script>
+</div>
+
 <div>  
     <div class="msgbox">
       <span></span>
@@ -32,6 +39,7 @@ var bkExtend = function(){
 function bkClass() { }
 bkClass.prototype.construct = function() {};
 //It looks like this is an instrument to produce objects (instances) by sending some args including construct functions and methods: look line 46
+//This is useful to add methods to existing objects, like dom objects
 bkClass.extend = function(def) {
   var classDef = function() {
       if (arguments[0] !== bkClass) { return this.construct.apply(this, arguments); }

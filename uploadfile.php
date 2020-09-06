@@ -26,7 +26,8 @@ $result=new stdclass();
 $result->extra=new stdClass();
 
 $base_dir = "catalog/images/";
-$target_dir=$base_dir . "small" . "/";
+$target_dir_small=$base_dir . "small" . "/";
+$target_dir_big=$base_dir . "big" . "/";
 
 if (count($_FILES)!=1) {
   $result->extra->error=true;
@@ -34,6 +35,8 @@ if (count($_FILES)!=1) {
 }
 else {
   foreach ($_FILES as $key => $value) {
+    $target_dir=$target_dir_small;
+    if  ($_POST['fileSize']=='big') $target_dir=$target_dir_big;
     uploadfile($_FILES[$key], $target_dir, $result);
   }
 }

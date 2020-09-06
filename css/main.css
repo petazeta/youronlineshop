@@ -67,7 +67,7 @@ div.menuscontainer a.menu{
   color: rgb(80,80,80);
 }
 div.menuscontainer span.menu{
-  margin: 0.6em 0.8em;
+  margin: 0.6em 1em;
 }
 div.menuscontainer a.menu:hover, div.menuscontainer .selected a.menu{
   color: rgb(20,20,20);
@@ -524,6 +524,18 @@ div.productgrid {
   grid-gap: 10px;
   height: 100%; /* All the elements in a row have the same long*/
 }
+div.productimg {
+  position: relative;
+  display: flex;
+}
+div.productimg img.productimg {
+	align-self: center;
+	margin: auto;
+}
+div.productlargecontainer {
+	width:100%;
+	padding-top: 2em; 
+}
 div.productprice {
   display: flex;
   align-items: center;
@@ -536,11 +548,18 @@ div.productgrid p{
 div.productgrid a.selected{
   color: #4bab20;
 }
-div.productgrid h3{
+.textpoduct h3{
   margin: 0px 0px 0.5rem;
   padding: 0px;
 }
+div.textproduct a.tit{
+  color: rgb(80,80,80);
+}
+div.textproduct a.tit:hover{
+  color: rgb(20,20,20);
+}
 div.addtocart {
+  display: inline-block;
   grid-column-start: 1;
   grid-column-end: span 2;
   border: 1px solid #AAA;
@@ -575,7 +594,7 @@ div.quantityselect {
   margin-left: 8px;
 }
 
-@media screen and (max-width: 481px){
+@media screen and (max-width: 400px){
 	header div.headertop {
 	  display: block;
 	}
@@ -603,8 +622,16 @@ div.quantityselect {
 	header div.toolbar {
 		justify-content: space-between;
 	}
-	div.productlistgrid {
-		grid-template-columns: 1fr;
+	div.productgrid {
+		grid-template-columns: auto;
+	}
+	div.productimg img.productimg {
+		max-width: 210px;
+	}
+	div.addtocart {
+		display: inline-block;
+		grid-column-start: unset;
+		grid-column-end: unset;
 	}
 	nav.categories div.boxtitle {
 		display: none;

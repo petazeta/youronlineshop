@@ -27,10 +27,10 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
   <body>
     <script>
       var textEditorSaved=''; //This var saves the textEditor data to not be deteleted each time
-      //history facility
+      //history facility to work forward and backward
       window.onpopstate = function(event) {
         if (!event.state) return;
-        var link=document.querySelector("a[href='" + event.state.url + "']");
+        let link=document.querySelector("a[href='" + event.state.url + "']");
         if (link) link.click();
       };
       function loadTemplates() {

@@ -59,7 +59,7 @@
                 if (button) button.click();
               }
             }
-            else {
+            else if ((history.state && history.state.url && history.state.url.indexOf('item')==-1) || event.isTrusted) {
               // If there is no subcategories we can set up the category state
               if (!(history.state && history.state.url==url)) { //to not repeat state
                 history.pushState({url:url}, null, url);

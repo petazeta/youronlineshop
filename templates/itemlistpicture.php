@@ -1,75 +1,106 @@
-<template id="producttp">
+<template>
   <div style="padding-top:10px; color:rgb(40,40,40);">
     <div class="productgrid">
       <div class="productimg">
         <img class="productimg">
-          <script>
-            thisNode.writeProperty(thisElement, "image", "src", Config.defaultImg)
-            thisElement.src="catalog/images/small/" + thisElement.getAttribute("src");
-            //adding the edition pencil
-            thisNode.addEventListener("changeProperty", function(property){
-              if (property=="image") {
-                thisElement.src="catalog/images/small/" + this.properties.image;
-                thisElement.src += "?" + new Date().getTime(); //we force the browser tu update picture
+        <script>
+          var myImage=thisNode.properties.image || Config.defaultImg;
+          thisElement.src="catalog/images/small/" + myImage;
+          //adding the edition pencil
+          thisNode.addEventListener("changeProperty", function(property){
+            if (property=="image") {
+              if (history.state.url.indexOf('item')!=-1) thisElement.src="catalog/images/big/" + this.properties.image; //For differencing from big and small
+              else thisElement.src="catalog/images/small/" + this.properties.image;
+              thisElement.src += "?" + new Date().getTime(); //we force the browser tu update picture
+            }
+          }, "img");
+          var launcher = new Node();
+          launcher.editable=thisNode.parentNode.editable;
+          launcher.btposition="bttopinsideleftinside";
+          launcher.thisNode = thisNode;
+          launcher.editElement = thisElement;
+          launcher.thisProperty="image";
+          launcher.thisAttribute="src";
+          var autoeditFunc=function(){
+            var autolauncher=new Node();
+            autolauncher.labelNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "loadImg"});
+            autolauncher.fileName="file_" + thisNode.properties.id;
+            autolauncher.appendThis(thisElement.parentElement, "templates/loadimg.php");
+            autolauncher.addEventListener("loadImage",function(){
+              if (this.extra && this.extra.error==true) {
+                var loadError=this.labelNode.getNextChild({name:"loadError"});
+                var loadErrorMsg=loadError.getRelationship("domelementsdata").getChild().properties.value;
+                alert(loadErrorMsg);
               }
-            }, "img");
-            var launcher = new Node();
-            launcher.editable=thisNode.parentNode.editable;
-            launcher.btposition="bttopinsideleftinside";
-            launcher.thisNode = thisNode;
-            launcher.editElement = thisElement;
-            launcher.thisProperty="image";
-            launcher.thisAttribute="src";
-            var autoeditFunc=function(){
-              var autolauncher=new Node();
-              autolauncher.fileName="file_" + thisNode.properties.id;
-              autolauncher.appendThis(thisElement.parentElement, "templates/loadimg.php");
-              autolauncher.addEventListener("loadImage",function(){
-                if (this.extra && this.extra.error==true) {
-                  var loadError=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loadImgError"});
-                  var loadErrorMsg=loadError.getRelationship("domelementsdata").getChild().properties.value;
-                  alert(loadErrorMsg);
-                }
-                else {
-                  thisElement[launcher.thisAttribute]=this.fileName + ".png";
-                  thisNode.dispatchEvent("finishAutoEdit");
-                }
-              });
-            };
-            launcher.autoeditFunc=autoeditFunc;
-            launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          </script>
+              else {
+                thisElement['src']=this.fileName + ".png";
+                thisNode.dispatchEvent("finishAutoEdit");
+              }
+            });
+          };
+          launcher.autoeditFunc=autoeditFunc;
+          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          //We add the zoom extend buton.
+          var launcher = new Node(); //New  for not change thisNode container
+          launcher.options={"thisNode": thisNode};
+          launcher.appendThis(thisElement.parentElement, "templates/butextend.php");
+        </script>
       </div>
       <div class="textproduct">
-        <div data-note="relative position container for admn buttons">
-          <h3></h3>
-          <script>
-            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "name");
-            //adding the edition pencil
-            var launcher = new Node();
-            launcher.editable=thisNode.parentNode.editable;
-            if (webuser.isProductSeller()) {
-              //we check if the product belongs to the user
-              launcher.editable=true;
-            }
-            launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
-            launcher.thisProperty = "name";
-            launcher.editElement = thisElement;
-            launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          </script>
+        <div>
+          <div data-note="relative position container for admn buttons" style="display: inline-block">
+            <h3>
+              <a data-button="true" href="" class="tit"></a>
+              <script>
+                thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "name");
+                //adding the edition pencil
+                var launcher = new Node();
+                launcher.editable=thisNode.parentNode.editable;
+                launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
+                launcher.thisProperty = "name";
+                launcher.editElement = thisElement;
+                launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+                // some tasks regarding to history state
+                let prevUrl='?category=' + thisNode.parentNode.partnerNode.parentNode.partnerNode.properties.id;
+                prevUrl += '&subcategory=' + thisNode.parentNode.partnerNode.properties.id;
+                const url= prevUrl + '&item=' + thisNode.properties.id;
+                thisElement.setAttribute('href',url);
+                thisElement.addEventListener("click",function(event){
+                  event.preventDefault();
+                  thisNode.refreshView(document.getElementById("centralcontent"),"templates/itempicturelarge.php");
+                  //it doesn't record state when: go back (dont state twice the same url)
+                  if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+                });
+                //We click if the url is for this product
+                if (window.location.search) {
+                  var regex = new RegExp('item=(\\d+)');
+                  if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
+                  if (id==thisNode.properties.id) {
+                    var link=thisElement;
+                    if (link) {
+                      link.click();
+                      return; //Finish here
+                    }
+                  }
+                }
+              </script>
+            </h3>
+          </div>
         </div>
-        <div data-note="relative position container for admn buttons">
-          <div style="margin-bottom:1em;"></div>
-          <script>
-            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionshort");
-            //adding the edition pencil
-            var launcher = new Node();
-            launcher.editable=thisNode.parentNode.editable;
-            launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
-            launcher.thisProperty = "descriptionshort";
-            launcher.editElement = thisElement;
-            launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          </script>
+        <div>
+          <div data-note="relative position container for admn buttons" style="display: inline-block">
+            <div style="margin-bottom:1em;"></div>
+            <script>
+              thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionshort");
+              //adding the edition pencil
+              var launcher = new Node();
+              launcher.editable=thisNode.parentNode.editable;
+              launcher.thisNode = thisNode.getRelationship("itemsdata").getChild();
+              launcher.thisProperty = "descriptionshort";
+              launcher.editElement = thisElement;
+              launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+            </script>
+          </div>
         </div>
       </div>
       <div class="addtocart">
@@ -129,11 +160,12 @@
         </form>
       </div>
     </div>
+    <div></div>
     <script>
       var admnlauncher=new Node();
       admnlauncher.thisNode=thisNode;
-      admnlauncher.editElement = thisElement;
-      admnlauncher.btposition="btrel";
+      admnlauncher.editElement = thisElement.previousElementSibling;
+      admnlauncher.btposition="bttopinsideleftinside";
       admnlauncher.elementsListPos="vertical";
       //We create a schematic node to add also a domelementsdata child node to the database
       admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
@@ -145,7 +177,7 @@
       if (webuser.isProductSeller()) {
         admnlauncher.editable=true;
       }
-      admnlauncher.appendThis(thisElement.parentElement, "templates/addadmnbuts.php");
+      admnlauncher.appendThis(thisElement, "templates/addadmnbuts.php");
     </script>
   </div>
 </template>

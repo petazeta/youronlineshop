@@ -16,48 +16,6 @@ DomMethods={
     else if (myreturn.parentElement && (myreturn.parentElement.tagName.toLowerCase()==tagname.toLowerCase())) return myreturn.parentElement;
     else return false;
   },
-  intoColumns_old: function(tableElement, elements, cellsNumber) {
-    if (!cellsNumber) cellsNumber=0;
-    // columns distribution applied to a row
-    // tableElement a table template, elements a document fragment o dom element containing elements
-    var myRow=tableElement.rows[0].cloneNode();
-    var myCell=tableElement.rows[0].cells[0].cloneNode();
-    tableElement.innerHTML='';
-    while (elements.firstElementChild) {
-      if (!elements.firstElementChild.tagName) continue;
-      var newRow=myRow.cloneNode();
-      tableElement.appendChild(newRow);
-      if (cellsNumber == 0) {
-	while (elements.firstElementChild) {
-	  var newCell=myCell.cloneNode();
-	  newCell.style.width=cellsWidth;
-	  newCell.appendChild(elements.firstElementChild);
-	  newRow.appendChild(newCell);
-	}
-	return tableElement;
-      }
-      var i=cellsNumber;
-      while(i--) {
-	var cellsWidth=Math.round(100/cellsNumber) + "%";
-	if (elements.firstElementChild) {
-	  var newCell=myCell.cloneNode();
-	  newCell.style.width=cellsWidth;
-	  newCell.appendChild(elements.firstElementChild);
-	  //don't forget the element script
-	  if (elements.firstElementChild && elements.firstElementChild.tagName=="SCRIPT") {
-	    newCell.appendChild(elements.firstElementChild);
-	  }
-	  newRow.appendChild(newCell);
-	}
-	else {
-	  var newCell=myCell.cloneNode();
-	  newCell.style.width=cellsWidth;
-	  newRow.appendChild(newCell);
-	}
-      }
-    }
-    return tableElement;
-  },
   validateEmail: function(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -154,6 +112,31 @@ DomMethods={
         DomMethods.setActiveChild(myPointer);
       }
     }
+  },
+  getDomElementFromChild(myNode) {
+    //We have a child ant the container is at the parent
+    for (var i=0; i<myNode.parentNode.children.length; i++) {
+      if (myNode.parentNode.children[i]==myNode) {
+        return myNode.parentNode.childContainer.children[i];
+      }
+    }
+  },
+  visibleOnMouseOver: function(arg){
+    var parentElement=arg.parent;
+    var myElement=arg.element;
+    myElement.style.opacity=0;
+    myElement.addEventListener("mouseover", function(ev){
+      myElement.style.opacity=1;
+    });
+    myElement.addEventListener("mouseout", function(ev){
+     myElement.style.opacity=0;
+    });
+    parentElement.addEventListener("mouseover", function(ev){
+      myElement.style.opacity=1;
+    });
+    parentElement.addEventListener("mouseout", function(ev){
+      myElement.style.opacity=0;
+    });
   }
 }
 

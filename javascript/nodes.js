@@ -703,7 +703,7 @@ function NodeFemale() {
   this.childTp=null;
   this.childContainer=null;
 }
-NodeFemale.prototype=Object.create(Node.prototype);
+NodeFemale.prototype=Object.create(Node.prototype); //The prototype of NodeFemale is an instance of Node.prototype
 NodeFemale.prototype.constructor=NodeFemale;
 
 NodeFemale.prototype.load=function(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {

@@ -2,6 +2,9 @@
 /catalog/images/small/*
 /catalog/images/small/!noimg.png
 !/catalog/images/small/noimg.png
+/catalog/images/big/*
+/catalog/images/big/!noimg.png
+!/caralog/images/big/noimg.png
 /prueba.php
 /css/themes/
 /css/themes/*

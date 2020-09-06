@@ -20,19 +20,7 @@
       if (thisElement.originalParentElement && !thisElement.parentElement) editElement.parentElement.appendChild(thisElement); //after the log out thisElement is removed from parent
       thisElement.parentElement.style.position="relative";
       if (!visibility) {
-	thisElement.style.opacity=0;
-	thisElement.addEventListener("mouseover", function(ev){
-	  thisElement.style.opacity=1;
-	});
-	thisElement.addEventListener("mouseout", function(ev){
-	  thisElement.style.opacity=0;
-	});
-	editElement.addEventListener("mouseover", function(ev){
-	  thisElement.style.opacity=1;
-	});
-	editElement.addEventListener("mouseout", function(ev){
-	  thisElement.style.opacity=0;
-	});
+        DomMethods.visibleOnMouseOver({element: thisElement, parent: editElement});
       }
       else {
 	thisElement.style.visibility=visibility;

@@ -40,8 +40,11 @@
           event.preventDefault();
           DomMethods.setActive(thisNode);
           thisNode.getRelationship("items").refreshView(document.getElementById("centralcontent"),"templates/catalog.php");
-          //it doesn't record state when: go back (dont state twice the same url)
-          if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+          //If there is item we dont set the state while recovering state but if mouse click
+          if ((history.state && history.state.url && history.state.url.indexOf('item')==-1) || event.isTrusted) {
+            //it doesn't record state when: go back (dont state twice the same url)
+            if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+          }
         });
       </script>
     </span>

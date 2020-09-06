@@ -71,7 +71,7 @@
       </table>
     </div>
   </template>
-  <button title="Remove" href="" style="" class="butdel">
+  <button title="Remove" style="" class="butdel">
     <img src="css/images/trash.png"/>
   </button>
   <script>

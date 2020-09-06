@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 27, 2020 at 05:47 PM
+-- Generation Time: Sep 06, 2020 at 07:27 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -81,18 +81,18 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (71, 'labels', 58, 2),
 (72, 'texts', 58, 1),
 (73, 'not located', 71, 0),
-(97, 'TABLE_ADDRESSES', 60, 3),
+(97, 'TABLE_ADDRESSES', 60, 4),
 (98, 'street', 97, 3),
 (99, 'city', 97, 4),
 (100, 'state', 97, 2),
 (102, 'pc', 97, 1),
-(103, 'TABLE_USERSDATA', 60, 2),
+(103, 'TABLE_USERSDATA', 60, 3),
 (104, 'name', 103, 4),
 (105, 'surname', 103, 3),
 (106, 'email', 103, 2),
 (107, 'phonenumber', 103, 1),
-(108, 'langbox', 60, 1),
-(109, 'checkout', 60, 4),
+(108, 'langbox', 60, 2),
+(109, 'checkout', 60, 5),
 (110, 'chkt1next', 109, 5),
 (111, 'chkt1add', 109, 6),
 (182, 'logform', 60, 0),
@@ -112,7 +112,6 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (196, 'emptyCart', 65, 0),
 (197, 'chkt2add', 109, 0),
 (198, 'chkt2next', 109, 0),
-(275, 'loadImgError', 60, 0),
 (277, 'backToLoginLb', 279, 0),
 (278, 'addresstt', 279, 0),
 (279, 'loggedin', 60, 0),
@@ -134,13 +133,13 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (342, 'chkt4userarea', 109, 10),
 (343, 'subtotal', 339, 2),
 (344, 'chktback', 109, 12),
-(357, 'extraEdition', 60, 5),
+(357, 'extraEdition', 60, 6),
 (361, 'online', 62, 1),
 (362, 'chkt5add', 109, 8),
 (363, 'chkt4next', 109, 3),
 (389, 'nav2', 66, 2),
 (391, '', 389, 1),
-(392, 'expimp', 60, 6),
+(392, 'expimp', 60, 7),
 (393, 'titexp', 392, 1),
 (394, 'butexp', 392, 4),
 (395, 'butimp', 392, 5),
@@ -149,13 +148,13 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (419, 'nav1', 66, 1),
 (424, 'btLogOut', 279, 2),
 (425, '', 419, 1),
-(426, 'hours', 60, 9),
+(426, 'hours', 60, 10),
 (427, 'save', 73, 1),
 (428, 'saved', 73, 2),
-(429, 'userdataform', 60, 10),
+(429, 'userdataform', 60, 11),
 (430, 'fieldCharError', 429, 1),
 (431, 'emailCharError', 429, 2),
-(432, 'textEdit', 60, 8),
+(432, 'textEdit', 60, 9),
 (433, 'advice', 432, 1),
 (434, 'imploadingmsg', 392, 6),
 (435, 'expmenus', 392, 9),
@@ -165,7 +164,7 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (441, 'expusers', 392, 13),
 (442, 'newuserbt', 182, 1),
 (443, 'implangerror', 392, 14),
-(444, 'expimplang', 60, 7),
+(444, 'expimplang', 60, 8),
 (445, 'tit', 444, 1),
 (446, 'butexp', 444, 2),
 (447, 'titexp', 444, 3),
@@ -178,7 +177,7 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (454, 'errornolangssel', 444, 11),
 (455, 'errornodata', 444, 10),
 (456, 'waitimp', 444, 12),
-(457, 'deletealert', 60, 11),
+(457, 'deletealert', 60, 12),
 (458, 'titalert', 457, 1),
 (459, 'textalert', 457, 2),
 (460, 'langboxtt', 108, 1),
@@ -202,7 +201,11 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (478, 'subject', 475, 1),
 (479, 'message', 475, 2),
 (480, 'impnocontent', 392, 8),
-(481, 'changelangwait', 108, 3);
+(481, 'changelangwait', 108, 3),
+(482, 'loadImg', 60, 1),
+(483, 'headNote', 482, 1),
+(484, 'file', 482, 2),
+(485, 'loadError', 482, 3);
 
 -- --------------------------------------------------------
 
@@ -273,7 +276,6 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (193, 'Cart is Empty', 196, 2),
 (194, 'Check if your address is ok, change it or fill it.<br>Use street field to write also street number and so on.<br>pc is postal code.', 197, 2),
 (195, 'Continue ', 198, 2),
-(270, 'Error loading image', 275, 2),
 (272, 'Back to Dashboard', 277, 2),
 (273, 'Address', 278, 2),
 (274, 'Show archived orders', 280, 2),
@@ -366,7 +368,10 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1117, 'New order registered', 478, 2),
 (1118, 'A new order has been registered.', 479, 2),
 (1119, 'There is no content to import', 480, 2),
-(1120, 'Changing language data ...', 481, 2);
+(1120, 'Changing language data ...', 481, 2),
+(1121, 'Error loading image', 485, 2),
+(1122, 'Image file:', 484, 2),
+(1123, 'Image File Selection', 483, 2);
 
 -- --------------------------------------------------------
 
@@ -681,7 +686,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$NKXLi/BalpfosYj2btEkjO7KZxvIX/bBJx1uPVieALynD/LUEP3pe', 0, 1597832936, 7),
+(1, 'webadmin', '$2y$10$NKXLi/BalpfosYj2btEkjO7KZxvIX/bBJx1uPVieALynD/LUEP3pe', 0, 1599412223, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1595753912, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11),
@@ -906,12 +911,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=482;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=486;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1121;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1124;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --

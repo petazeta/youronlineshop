@@ -21,6 +21,7 @@ var Config={
   expimplang_On: false, //if true click first category on load
   newordermailadmin_On: false, //if true click first category on load
   newordermailcustomer_On: false, //if true click first category on load
-  showsubcategory_On: false //if true expand to subcategories
+  showsubcategory_On: false, //if true expand to subcategories
+  itemExtend_On: true //if true expand item extend is available
 }
 

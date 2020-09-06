@@ -2,7 +2,7 @@
 *YOS Version:
 ***************
 
-1.11.8 29/08/2020
+1.12.0 06/09/2020
 
 
 ***************
@@ -36,7 +36,7 @@ If you prefer we offer YOUR ONLINE SHOP installation and hosting service for 10 
 2 - Unpack it to the destination folder (You may have to create it first).
 3 - Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.
 4 - Edit database settings at: includes/config.php.
-5 - Give write permisions to the folder catalog/images/small (To allow upload product images).
+5 - Give write permisions to catalog/images/ subfolders: /small and /big (To allow upload product images).
 6 - For further database control install the complement DbManager: https://sourceforge.net/projects/freshhh-dbmanager/ .
 7 - Also you can change some system settings at file: javascript/config.js.
 8 - *** Installation Video Tutorial: https://youtu.be/eDbpvEcX95Y ***
