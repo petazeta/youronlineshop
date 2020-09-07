@@ -622,6 +622,9 @@ div.quantityselect {
 	header div.toolbar {
 		justify-content: space-between;
 	}
+	div.productlistgrid {
+		grid-template-columns: auto;
+	}
 	div.productgrid {
 		grid-template-columns: auto;
 	}
