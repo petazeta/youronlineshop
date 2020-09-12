@@ -49,8 +49,12 @@
                   }
                 }
               }
-              //If not we would click at first subcategory
-              if (!id) {
+              //If not we would click at first subcategory except when we got a specific url for the category
+              if (!id && !(history.state && history.state.url && history.state.url.indexOf('category=')!=-1)) {
+                // If there is no subcategories we can set up the category state
+                if (!(history.state && history.state.url==url)) { //to not repeat state
+                  history.pushState({url:url}, null, url);
+                }
                 var button=null;
                 myNode.getChild().getMyDomNodes().every(function(domNode){
                   button=domNode.querySelector("[data-button]");
@@ -59,8 +63,8 @@
                 if (button) button.click();
               }
             }
-            else if ((history.state && history.state.url && history.state.url.indexOf('item')==-1) || event.isTrusted) {
-              // If there is no subcategories we can set up the category state
+            else {
+              // If there is no subcategories we can set up the category state except if we gat a specific url with a subcategory and item
               if (!(history.state && history.state.url==url)) { //to not repeat state
                 history.pushState({url:url}, null, url);
               }
