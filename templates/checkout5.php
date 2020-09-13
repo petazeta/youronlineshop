@@ -98,7 +98,7 @@
       //We send notifications:
       if (Config.newordermailadmin_On) {
         var mailuser = new user();
-        mailuser.sendmail('USER_ORDERSADMIN', thisElement.elements.customsubject.value, thisElement.elements.custommessage.value, webuser.properties.username);
+        mailuser.sendmail('USER_ORDERSADMIN', thisElement.elements.adminsubject.value, thisElement.elements.adminmessage.value, webuser.properties.username);
       }
     </script>
   </template>
