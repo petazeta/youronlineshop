@@ -119,7 +119,6 @@ user.prototype.sendmail=function(to, subject, message, from){
     this.loadfromhttp(FD).then((myNode) => {
       if (!myNode.extra) myNode.extra={};
       myNode.dispatchEvent("mail");
-      console.log(myNode);
       resolve(myNode);
     });
   });
