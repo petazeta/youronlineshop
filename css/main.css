@@ -20,7 +20,7 @@ html, body {
   justify-content: center;
 }
 div.mainblock {
-  max-width: 1200px;
+  width: 1200px;
 }
 div.maincolumns {
   display: grid;
@@ -595,6 +595,9 @@ div.quantityselect {
 }
 
 @media screen and (max-width: 400px){
+	div.mainblock {
+		width: unset;
+	}
 	header div.headertop {
 	  display: block;
 	}
