@@ -24,33 +24,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
       newNode.getRelationship("itemcategoriesdata").addChild(new NodeMale());
       categoriesMother.newNode=newNode;
       categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "templates/admnlisteners.php").then(function(myNode) {
-        myNode.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php").then(function(myNode){
-          if (window.location.search) {
-            regex = /category=(\d+)/;
-            if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
-            if (id) {
-              var link=document.querySelector("a[href='?category=" + id + "']");
-              if (link) {
-                link.click();
-              }
-            }
-          }
-          //Now we click first cat at page start (if no url)
-          if (myNode.children.length > 0 && !webuser.isWebAdmin() && Config.defaultcat_On) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
-            regex = /(\d+)/; //No number then no url state
-            if (!(window.location.search && window.location.search.match(regex))) {
-              var button=null;
-              var myDomNodes=myNode.children[0].getMyDomNodes();
-              for (var i=0; i<myDomNodes.length; i++) {
-                button=myDomNodes[i].querySelector("[data-button]");
-                if (button) {
-                  button.click()
-                  break;
-                }
-              }
-            }
-          }
-        });
+        myNode.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php");
       });
     });
   });

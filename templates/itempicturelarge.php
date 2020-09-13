@@ -3,13 +3,19 @@
     <div class="bttopinsiderightinside">
       <button class="minibtn transp" style="font-size:2em; font-weight: bold">&times;</button>
       <script>
-        //normalize
-        var launcher=thisNode;
-        thisElement.onclick=function(){
+        thisElement.addEventListener("click", function(event){
+          //event.preventDefault();
           //Go to subcategory
-          //we set the history to the subcategory
-          history.back();
-        }
+          var url='?category=' + thisNode.parentNode.partnerNode.parentNode.partnerNode.properties.id + '&subcategory=' + thisNode.parentNode.partnerNode.properties.id;
+          var link=document.querySelector("a[href='" + url + "']");
+          if (link) {
+            if (event.isTrusted) {
+              //it doesn't record state when: go back (dont state twice the same url)
+              if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+            }
+            link.click();
+          }
+        });
       </script>
     </div>
     <div class="productgrid">
@@ -18,40 +24,16 @@
         <script>
           var myImage=thisNode.properties.image || Config.defaultImg;
           thisElement.src="catalog/images/big/" + myImage;
-          //adding the edition pencil
+          
           thisNode.addEventListener("changeProperty", function(property){
             if (property=="image") {
-              if (history.state.url.indexOf('item')!=-1) thisElement.src="catalog/images/big/" + this.properties.image; //For differencing from big and small
-              else thisElement.src="catalog/images/small/" + this.properties.image;
-              thisElement.src += "?" + new Date().getTime(); //we force the browser tu update picture
+              thisElement.src="catalog/images/big/" + this.properties.image;
             }
           }, "img");
-          var launcher = new Node();
-          launcher.editable=thisNode.parentNode.editable;
-          launcher.btposition="btmiddlecenter";
-          launcher.thisNode = thisNode;
-          launcher.editElement = thisElement;
-          launcher.thisProperty="image";
-          launcher.thisAttribute="src";
-          var autoeditFunc=function(){
-            var autolauncher=new Node();
-            autolauncher.labelNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "loadImg"});
-            autolauncher.fileName="file_" + thisNode.properties.id;
-            autolauncher.appendThis(thisElement.parentElement, "templates/loadimg.php");
-            autolauncher.addEventListener("loadImage",function(){
-              if (this.extra && this.extra.error==true) {
-                var loadError=this.labelNode.getNextChild({name:"loadError"});
-                var loadErrorMsg=loadError.getRelationship("domelementsdata").getChild().properties.value;
-                alert(loadErrorMsg);
-              }
-              else {
-                thisElement['src']=this.fileName + ".png";
-                thisNode.dispatchEvent("finishAutoEdit");
-              }
-            });
-          };
-          launcher.autoeditFunc=autoeditFunc;
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          
+          var launcherImageEdit=new Node();
+          launcherImageEdit.args={itemNode: thisNode, imageElement: thisElement, btposition: "btmiddlecenter"};
+          launcherImageEdit.appendThis(thisElement.parentElement, "templates/addimageedit.php");
         </script>
       </div>
       <div>

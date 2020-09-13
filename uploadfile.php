@@ -46,6 +46,7 @@ function uploadfile($myfile, $target_dir, $result){
   $target_file = $target_dir . basename($myfile["name"]);
   $uploadOk = 1;
   $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+  
   // Check if image file is a actual image or fake image
   $check = getimagesize($myfile["tmp_name"]);
   if($check !== false) {
@@ -56,19 +57,12 @@ function uploadfile($myfile, $target_dir, $result){
   }
 
   // Check file size
-  if ($myfile["size"] > 500000) {
+  if ($myfile["size"] > 2000000) {
       $result->extra->error=true;
       $result->extra->errormsg="Sorry, your file is too large. " . $myfile["size"];
       return;
   }
-  // Allow certain file formats
-  if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-  && $imageFileType != "gif" ) {
-      $result->extra->error=true;
-      $result->extra->errormsg= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-      return;
-  }
-  //chmod($target_dir,0777);
+
   if (move_uploaded_file($myfile["tmp_name"], $target_file)) {
       $result->extra->filename=basename( $myfile["name"]);
   } else {

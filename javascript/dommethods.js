@@ -29,16 +29,13 @@ DomMethods={
   },
   unsetActiveChild: function(myNode) {
     myNode.selected=false;
-    var doms=myNode.getMyDomNodes();
+    var mydom=this.getDomElementFromChild(myNode);
     var hbutton=null;
-    if (doms) {
-      for (var j=0; j<doms.length; j++) {
-        if (doms[j].getAttribute("data-hbutton")) hbutton=doms[j];
-        else hbutton=doms[j].querySelector("[data-hbutton]");
-        if (hbutton) {
-          DomMethods.setUnselected(hbutton);
-          break;
-        }
+    if (mydom) {
+      if (mydom.getAttribute("data-hbutton")) hbutton=mydom;
+      else hbutton=mydom.querySelector("[data-hbutton]");
+      if (hbutton) {
+        DomMethods.setUnselected(hbutton);
       }
     }
   },
@@ -72,16 +69,13 @@ DomMethods={
     }
     //selection of the node
     myNode.selected=true;
-    var doms=myNode.getMyDomNodes();
+    var mydom=this.getDomElementFromChild(myNode);
     var hbutton=null;
-    if (doms) {
-      for (var i=0; i<doms.length; i++) {
-        if (doms[i].getAttribute("data-hbutton")) hbutton=doms[i];
-        else hbutton=doms[i].querySelector("[data-hbutton]");
-        if (hbutton) {
-          DomMethods.setSelected(hbutton);
-          break;
-        }
+    if (mydom) {
+      if (mydom.getAttribute("data-hbutton")) hbutton=mydom;
+      else hbutton=mydom.querySelector("[data-hbutton]");
+      if (hbutton) {
+        DomMethods.setSelected(hbutton);
       }
     }
   },
@@ -114,10 +108,14 @@ DomMethods={
     }
   },
   getDomElementFromChild(myNode) {
-    //We have a child ant the container is at the parent
-    for (var i=0; i<myNode.parentNode.children.length; i++) {
-      if (myNode.parentNode.children[i]==myNode) {
-        return myNode.parentNode.childContainer.children[i];
+    //We have a child and the container is at the parent
+    if (myNode.parentNode) {
+      for (var i=0; i<myNode.parentNode.children.length; i++) {
+        if (myNode.parentNode.children[i]==myNode) {
+          if (myNode.parentNode.childContainer) {
+            return myNode.parentNode.childContainer.children[i];
+          }
+        }
       }
     }
   },

@@ -11,6 +11,7 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
     <title></title>
     <script src="javascript/default.js"></script>
     <script src="javascript/config.js"></script>
+    <script src="javascript/seturl.js"></script>
     <script src="javascript/iesp.js"></script>
     <script src="javascript/nodes.js"></script>
     <script src="javascript/nodesconfig.js"></script>
@@ -30,7 +31,7 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
       //history facility to work forward and backward
       window.onpopstate = function(event) {
         if (!event.state) return;
-        let link=document.querySelector("a[href='" + event.state.url + "']");
+        var link=document.querySelector("a[href='" + event.state.url + "']");
         if (link) link.click();
       };
       function loadTemplates() {

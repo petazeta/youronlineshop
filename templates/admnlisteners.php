@@ -41,11 +41,7 @@
     //When admin add a new node it will be selected (what if there is not a menu thing?)
     thisNode.addEventListener("addNewNode", function(newnodeadded) {
       //we must add relationship domelements
-      var button=null;
-      newnodeadded.getMyDomNodes().every(function(domNode){
-        button=domNode.querySelector("[data-button]");
-        if (button) return false;
-      });
+      var button=DomMethods.getDomElementFromChild(newnodeadded).querySelector("[data-button]");
       if (button) button.click();
     }, "clicknewnode");
     //When admin delete a node si estaba seleccionado seleccionamos otro y si era el último borramos lo de la parte central
@@ -55,10 +51,7 @@
           var button=null;
           var position=1;
           if (nodeDeleted.sort_order && nodeDeleted.sort_order > 1) position=nodeDeleted.sort_order-1;
-          this.children[position-1].getMyDomNodes().every(function(domNode){
-            button=domNode.querySelector("[data-button]");
-            if (button) return false;
-          });
+          var button=DomMethods.getDomElementFromChild(this.children[position-1]).querySelector("[data-button]");
           if (button) button.click();
         }
       }

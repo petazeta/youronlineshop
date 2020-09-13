@@ -2,7 +2,7 @@
 *YOS Version:
 ***************
 
-1.12.1 07/09/2020
+1.12.3 13/09/2020
 
 
 ***************
@@ -36,10 +36,10 @@ If you prefer we offer YOUR ONLINE SHOP installation and hosting service for 10 
 2 - Unpack it to the destination folder (You may have to create it first).
 3 - Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.
 4 - Edit database settings at: includes/config.php.
-5 - Give write permisions to catalog/images/ subfolders: /small and /big (To allow upload product images).
-6 - For further database control install the complement DbManager: https://sourceforge.net/projects/freshhh-dbmanager/ .
-7 - Also you can change some system settings at file: javascript/config.js.
-8 - *** Installation Video Tutorial: https://youtu.be/eDbpvEcX95Y ***
+5 - Give write permisions to folders catalog/images/small and catalog/images/big (To allow upload product images).
+6 - Also you can change some system settings at file: javascript/config.js.
+7 - *** Installation Video Tutorial: https://youtu.be/eDbpvEcX95Y ***
+8 - For further database control install the complement DbManager: https://sourceforge.net/projects/freshhh-dbmanager/
 
 
 *****************
@@ -67,15 +67,11 @@ For system configuration edit file javascript/config.js
 *Frequently Asked Questions*
 ****************************
 
-How can I change admin password?
-
-Admin password edition must be done manually. You must get into the database record where the passord is saved and change it. As password is encrypted I suggest you to sign up as a new user and write your password there so you will be able to copy and paste the encryption result.
-
 ------
 
 How can I enable the paypal account for the payment process?
 
-You must add your email in the required parameter. That parameter can be accessed by getting to the checkout payment step logged in as webadmin.
+You must add your merchantId in the required parameter. That parameter can be accessed by getting to the checkout payment step logged in as admin.
 
 
 *****************

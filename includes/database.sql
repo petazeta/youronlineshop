@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 06, 2020 at 07:27 PM
+-- Generation Time: Sep 11, 2020 at 08:22 PM
 -- Server version: 5.7.21-1ubuntu1
 -- PHP Version: 7.2.3-1ubuntu1
 
@@ -205,7 +205,9 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (482, 'loadImg', 60, 1),
 (483, 'headNote', 482, 1),
 (484, 'file', 482, 2),
-(485, 'loadError', 482, 3);
+(485, 'loadError', 482, 3),
+(486, 'dontdelbutton', 457, 3),
+(487, 'delbutton', 457, 4);
 
 -- --------------------------------------------------------
 
@@ -230,7 +232,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (15, 'Log in', 15, 2),
 (25, 'Shopping Cart', 25, 2),
 (27, 'Check out', 27, 2),
-(33, 'Powered by <a href=\"http://youronlineshop.net/\">YourOnlineShop</a>', 33, 2),
+(33, 'Powered by <a href=\"https://www.youronlineshop.net/\">YourOnlineShop</a>', 33, 2),
 (36, '+ 1 to the cart', 36, 2),
 (38, 'Insert you account details or create a new account.', 38, 2),
 (41, 'Shop example name', 41, 2),
@@ -371,7 +373,9 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1120, 'Changing language data ...', 481, 2),
 (1121, 'Error loading image', 485, 2),
 (1122, 'Image file:', 484, 2),
-(1123, 'Image File Selection', 483, 2);
+(1123, 'Image File Selection', 483, 2),
+(1124, 'Don\'t Remove', 486, 2),
+(1125, 'Remove', 487, 2);
 
 -- --------------------------------------------------------
 
@@ -686,7 +690,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
-(1, 'webadmin', '$2y$10$NKXLi/BalpfosYj2btEkjO7KZxvIX/bBJx1uPVieALynD/LUEP3pe', 0, 1599412223, 7),
+(1, 'webadmin', '$2y$10$NKXLi/BalpfosYj2btEkjO7KZxvIX/bBJx1uPVieALynD/LUEP3pe', 0, 1599758910, 7),
 (2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1595753912, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11),
@@ -712,8 +716,8 @@ CREATE TABLE `usersdata` (
 --
 
 INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_users`) VALUES
-(1, 'nana', 'kkupep', 'admn@dmin.com', 666, 1),
-(2, 'order', 'llll', 'oadmn@dd.com', 220, 2),
+(1, '', '', '', 0, 1),
+(2, '', '', '', 0, 2),
 (3, '', '', '', 0, 4),
 (4, '', '', '', 0, 6),
 (5, '', '', '', 0, 7);
@@ -911,12 +915,12 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=486;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=488;
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1124;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1126;
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --

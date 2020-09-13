@@ -53,8 +53,11 @@
         event.preventDefault();
         DomMethods.setActive(thisNode);
         thisNode.refreshView(document.getElementById("centralcontent"), "templates/doc.php");
-        if (history.state && history.state.url==url || thisNode.sort_order==1 && history.state==null) return; //we dont grab if it is selected by default after category clicking
-        history.pushState({url:url}, null, url);
+        if (event.isTrusted) {
+          if (!(history.state && history.state.url==url)) { //to not repeat state
+            history.pushState({url:url}, null, url);
+          }
+        }
       });
       //we add the edit
       if (webuser.isWebAdmin()) {
@@ -80,6 +83,26 @@
       thisNode.addEventListener("deleteNode", function() {
         webuser.removeEventListener("log", "openButton", thisNode);
       }, "deleteOpenButton");
+      
+      //Now we click the menu selected at the parameters send by the url
+      if (window.location.search) {
+        var regex = /menu=(\d+)/;
+        var menuIdMatch=window.location.search.match(regex);
+        if (menuIdMatch) {
+          if (menuIdMatch[1]==thisNode.properties.id) {
+            thisElement.click();
+          }
+        }
+      }
+      else {
+        //Now we click some menu at page start (if no url)
+        if (Config.startMenuNum) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+          var startMenu=thisNode.parentNode.children[Config.startMenuNum-1];
+          if (startMenu==thisNode) {
+            thisElement.click();
+          }
+        }
+      }
     </script>
     <div class="btmiddleright" data-id="containeropen"></div>
   </span>

@@ -16,20 +16,22 @@ if ($mysession->session_none()) {
 }
 
 header("Content-type: application/json");
-if (isset($_POST["parameters"])) {
-  $parameters=json_decode($_POST["parameters"]);
-}
-else $parameters=new stdClass();
-if (!isset($parameters->action)) $parameters->action="new order";
+
 $mailresult=new NodeMale();
 $mailresult->extra=new stdClass();
 $to=$_POST["mail_to"]; //username
 $subject=$_POST["mail_subject"];
 $message=$_POST["mail_message"];
-$headers=$_POST["mail_headers"];
+$from=$_POST["mail_from"];
 
 if (isset($_SESSION["user"])) {
   $user=unserialize($_SESSION["user"]);
+}
+
+if (!isset($_POST["mail_from"])) {
+  $mailresult->extra->error=true;
+  $mailresult->extra->errorName='replay from required';
+  exit(json_encode($mailresult));
 }
 
 if (!isset($_POST["mail_to"]) || !isset($_POST["mail_message"])) {
@@ -38,52 +40,6 @@ if (!isset($_POST["mail_to"]) || !isset($_POST["mail_message"])) {
   exit(json_encode($mailresult));
 }
 
-//Get user data from user name
-if ($user->properties->username==$to) {
-  $myuser=$user;
-  $myuser->getRelationship("usersdata")->db_loadmychildren();
-  $myuser->db_loadmytreeup();
-}
-else if ('USER_ORDERSADMIN'==$to) {
-  //We get the orders admin user
-  $userstypesmother=new NodeFemale();
-  $userstypesmother->properties->childtablename='TABLE_USERSTYPES';
-  $userstypesmother->properties->parenttablename='TABLE_USERSTYPES';
-  $userstypesmother->db_loadchildtablekeys();
-  $userstypesmother->db_loadall("type='orders administrator'");
-  if ($userstypesmother->children[0]) {
-    $userstypesmother->children[0]->db_loadmytree();
-    if ($userstypesmother->children[0]->getRelationship('users')->children[0]) {
-      $myuser=$userstypesmother->children[0]->getRelationship('users')->children[0];
-    }
-  }
-}
-else if ('USER_SYSTEMADMIN'==$to) {
-  //We get the orders admin user
-  $userstypesmother=new NodeFemale();
-  $userstypesmother->properties->childtablename='TABLE_USERSTYPES';
-  $userstypesmother->properties->parenttablename='TABLE_USERSTYPES';
-  $userstypesmother->db_loadchildtablekeys();
-  $userstypesmother->db_loadall("type='system administrator'");
-  if ($userstypesmother->children[0]) {
-    $userstypesmother->children[0]->db_loadmytree();
-    if ($userstypesmother->children[0]->getRelationship('users')->children[0]) {
-      $myuser=$userstypesmother->children[0]->getRelationship('users')->children[0];
-    }
-  }
-}
-else {
-  $node_search=new user();
-  $node_search->properties->username=$to;
-  $candidates=$node_search->db_search();
-  if (count($candidates) == 1) {
-    $myuser=new user();
-    $myuser->properties->id=$candidates[0]["id"];
-    $myuser->db_loadmyrelationships();
-    $myuser->getRelationship("usersdata")->db_loadmychildren();
-    $myuser->db_loadmytreeup();
-  }
-}
 //Exit if not commit rules
 if (!isset($user) && !$user->properties->username) {
   $mailresult->extra->error=true;
@@ -91,33 +47,76 @@ if (!isset($user) && !$user->properties->username) {
   exit(json_encode($mailresult));
 }
 
-//Only send email from user account to himself ... or to admin and from admin to users
-if (!($myuser->properties->id==$user->properties->id) && !($myuser->parentNode->partnerNode->properties->type=="system administrator" || $myuser->parentNode->partnerNode->properties->type=="orders administrator")
-  && !($myuser->parentNode->partnerNode->properties->type=="system administrator" || $myuser->parentNode->partnerNode->properties->type=="orders administrator")
-  && !($user->parentNode->partnerNode->properties->type=="system administrator" || $user->parentNode->partnerNode->properties->type=="orders administrator")
-) {
-  $mailresult->extra->error=true;
-  $mailresult->extra->errorName='operation not allowed';
-  exit(json_encode($mailresult));
+//Get user data from user name
+function get_emailaddress($recipient) {
+  global $user;
+  if ($user->properties->username==$recipient) {
+    $myuser=$user;
+    $myuser->getRelationship("usersdata")->db_loadmychildren();
+  }
+  else if ('USER_ORDERSADMIN'==$recipient || 'USER_SYSTEMADMIN'==$recipient) {
+    //We get the admin user
+    if ('USER_ORDERSADMIN'==$recipient) {
+      $user_type='orders administrator';
+    }
+    else $user_type='system administrator';
+    $userstypesmother=new NodeFemale();
+    $userstypesmother->properties->childtablename='TABLE_USERSTYPES';
+    $userstypesmother->properties->parenttablename='TABLE_USERSTYPES';
+    $userstypesmother->db_loadchildtablekeys();
+    $userstypesmother->db_loadall('type=\'' . $user_type . '\'');
+    if ($userstypesmother->children[0]) {
+      $userstypesmother->children[0]->db_loadmytree();
+      if ($userstypesmother->children[0]->getRelationship('users')->children[0]) {
+        $myuser=$userstypesmother->children[0]->getRelationship('users')->children[0];
+      }
+    }
+  }
+  else {
+    $node_search=new user();
+    $node_search->properties->username=$to;
+    $candidates=$node_search->db_search();
+    if (count($candidates) == 1) {
+      $myuser=new user();
+      $myuser->properties->id=$candidates[0]["id"];
+      $myuser->db_loadmyrelationships();
+      $myuser->getRelationship("usersdata")->db_loadmychildren();
+      $myuser->db_loadmytreeup();
+    }
+  }
+  if (!$myuser) return false;
+  //Only send email from user account to himself ... or to admin and from admin to users
+  if (!($myuser->properties->id==$user->properties->id) && !($myuser->parentNode->partnerNode->properties->type=="system administrator" || $myuser->parentNode->partnerNode->properties->type=="orders administrator")
+    && !($myuser->parentNode->partnerNode->properties->type=="system administrator" || $myuser->parentNode->partnerNode->properties->type=="orders administrator")
+    && !($user->parentNode->partnerNode->properties->type=="system administrator" || $user->parentNode->partnerNode->properties->type=="orders administrator")
+  ) {
+    return false;
+  }
+  //Get mail address from user name
+  $mailaddress=$myuser->getRelationship("usersdata")->children[0]->properties->email;
+  return $mailaddress;
 }
 
-//Get mail address from user name
-$to_mailaddress=$myuser->getRelationship("usersdata")->children[0]->properties->email;
+$to_mailaddress = get_emailaddress($to);
 if (!$to_mailaddress || !filter_var($to_mailaddress, FILTER_VALIDATE_EMAIL)) {
   $mailresult->extra->error=true;
   $mailresult->extra->errorName="email Format Error";
   exit(json_encode($mailresult));
 }
+$from_mailaddress = get_emailaddress($from);
+$headers = 'From: ' . $from_mailaddress . "\r\n" .
+    'Reply-To: ' . $from_mailaddress . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+
 
 if (mail($to_mailaddress,$subject,$message,$headers)==false) {
   $mailresult->extra->error=true;
-  $mailresult->extra->errorName="send email Error";
+  $mailresult->extra->errorName="send email Error: " . $to_mailaddress . $headers;
   exit(json_encode($mailresult));
 }
 
-if (!isset($mailresult->extra->error)) {
-  $mailresult->avoidrecursion();
-}
+$mailresult->avoidrecursion();
+
 $serelement=json_encode($mailresult);
 echo $serelement;
 ?>

@@ -638,7 +638,7 @@ Node.prototype.dispatchEvent=function (eventName, args) {
   }
 }
 
-Node.prototype.getMyDomNodes=function () {
+Node.prototype.getMyDomNodesDeprecated=function () {
   if (this.parentNode && this.parentNode.childContainer) {
     //Get index
     var index=this.parentNode.children.indexOf(this);
@@ -652,18 +652,6 @@ Node.prototype.getMyDomNodes=function () {
     var elements=Array.from(this.parentNode.childContainer.children);
     for (var i=0; i<elements.length; i++) {
       if (elements[i].tagName=="SCRIPT") elements.splice(i,1);
-    }
-    if (elements.length==1 && this.parentNode.children.length>1) {
-      //in this case we are wrapped the elements in a table
-      if (elements[0].tagName=="TABLE") {
-	var myTable=elements[0];
-	elements=[];
-	for (var i=0; i<myTable.rows.length; i++) {
-	  for (var j=0; j<myTable.rows[i].cells.length; j++) {
-	    elements.push(myTable.rows[i].cells[j]);
-	  }
-	}
-      }
     }
     var startindex=index*length;
     var endindex=startindex + length;

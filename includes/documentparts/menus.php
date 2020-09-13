@@ -16,33 +16,7 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
     menusMother.appendThis(document.querySelector("div.menuscontainer"), "templates/admnlisteners.php");
 
     menusMother.refreshChildrenView(document.querySelector("div.menuscontainer"), "templates/menu.php").then(function(myNode){
-      document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged
-      //Now we click the menu selected at the parameters send by the url
-      if (window.location.search) {
-        regex = /menu=(\d+)/;
-        if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
-        if (id) {
-          var link=document.querySelector("a[href='?menu=" + id + "']");
-          if (link) {
-            link.click();
-          }
-        }
-      }
-      //Now we click first menu at page start (if no url)
-      if (myNode.children.length > 0 && !webuser.isWebAdmin() && Config.defaultmenu_On) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
-        regex = /(\d+)/; //No number then no url state
-        if (!(window.location.search && window.location.search.match(regex))) {
-          var button=null;
-          var myDomNodes=myNode.children[0].getMyDomNodes();
-          for (var i=0; i<myDomNodes.length; i++) {
-            button=myDomNodes[i].querySelector("[data-button]");
-            if (button) {
-              button.click()
-              break;
-            }
-          }
-        }
-      }
+      //document.getElementById("centralcontent").innerHTML=""; //We remove any data at the paragraph section for when webadmin is logged
       //the header is hidden till the data is loaded
       //document.querySelector("header > table").style.visibility="visible";
       //remove the init loader image

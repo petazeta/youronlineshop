@@ -40,12 +40,32 @@
           event.preventDefault();
           DomMethods.setActive(thisNode);
           thisNode.getRelationship("items").refreshView(document.getElementById("centralcontent"),"templates/catalog.php");
-          //If there is item we dont set the state while recovering state but if mouse click
-          if ((history.state && history.state.url && history.state.url.indexOf('item')==-1) || event.isTrusted) {
+          //We grab state on mouse click
+          if (event.isTrusted) {
             //it doesn't record state when: go back (dont state twice the same url)
             if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
           }
         });
+        
+        //Now we click the subcategory selected at the parameters send by the url
+        if (window.location.search) {
+          var regex = /subcategory=(\d+)/;
+          var catIdMatch=window.location.search.match(regex);
+          if (catIdMatch) {
+            if (catIdMatch[1]==thisNode.properties.id) {
+              thisElement.click();
+            }
+          }
+        }
+        else {
+          //Now we click some menu at page start (if no url)
+          if (Config.startSubcatNum) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+            var startCat=thisNode.parentNode.children[Config.startSubcatNum-1];
+            if (startCat==thisNode) {
+              thisElement.click();
+            }
+          }
+        }
       </script>
     </span>
   </div>

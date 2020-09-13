@@ -92,13 +92,13 @@
     <script>
       //We send notifications:
       if (Config.newordermailcustomer_On) {
-        let mailuser = new user();
-        mailuser.sendmail(webuser.properties.username, thisElement.elements.customsubject, thisElement.elements.custommessage);
+        var mailuser = new user();
+        mailuser.sendmail(webuser.properties.username, thisElement.elements.customsubject, thisElement.elements.custommessage, 'USER_ORDERSADMIN');
       }
       //We send notifications:
       if (Config.newordermailadmin_On) {
-        let mailuser = new user();
-        mailuser.sendmail('USER_ORDERSADMIN', thisElement.elements.customsubject, thisElement.elements.custommessage);
+        var mailuser = new user();
+        mailuser.sendmail('USER_ORDERSADMIN', thisElement.elements.customsubject, thisElement.elements.custommessage, webuser.properties.username);
       }
     </script>
   </template>

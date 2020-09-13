@@ -34,51 +34,21 @@
               thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="block";
             }, "subcat");
           });
-          //This function is to auto-click some subcategory in same special situations
-          function makeclick(myNode) {
-            //Now would click at the subcategory if there is a path in url
-            if (myNode.children.length > 0) {
-              if (window.location.search) {
-                var regex = new RegExp('category=' + thisNode.properties.id + '&subcategory=(\\d+)');
-                if (window.location.search.match(regex)) var id = window.location.search.match(regex)[1];
-                if (id) {
-                  var link=document.querySelector("a[href='?category=" + thisNode.properties.id + "&subcategory=" + id + "']");
-                  if (link) {
-                    link.click();
-                    return; //Finish here
-                  }
-                }
-              }
-              //If not we would click at first subcategory
-              if (!id) {
-                var button=null;
-                myNode.getChild().getMyDomNodes().every(function(domNode){
-                  button=domNode.querySelector("[data-button]");
-                  if (button) return false;
-                });
-                if (button) button.click();
-              }
-            }
-            else if ((history.state && history.state.url && history.state.url.indexOf('item')==-1) || event.isTrusted) {
-              // If there is no subcategories we can set up the category state
-              if (!(history.state && history.state.url==url)) { //to not repeat state
-                history.pushState({url:url}, null, url);
-              }
-            }
-          };
-          function showsubcategories(listener) {
-            //view loader
-            thisElement.parentElement.parentElement.querySelector(".loader").style.visibility="visible";
-            thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="none";
-            thisNode.getRelationship().children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
-            thisNode.getRelationship().loadfromhttp({action:"load my tree", deepLevel: 2}).then((myNode) => {
-              //deepLevel=2 => It load relationship (level is also for female)
-              myNode.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
-              myNode.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
-              myNode.newNode.parentNode.load(myNode, 1, 0, null, "id");
-              myNode.appendThis(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "templates/admnlisteners.php");
-              //we show subcategories (and click some subcategory)
-              myNode.refreshChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"),"templates/subcategory.php").then(listener);
+          function showsubcategories() {
+            return new Promise((resolve, reject) => {
+              //view loader
+              thisElement.parentElement.parentElement.querySelector(".loader").style.visibility="visible";
+              thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer").style.display="none";
+              thisNode.getRelationship().children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
+              thisNode.getRelationship().loadfromhttp({action:"load my tree", deepLevel: 2}).then((myNode) => {
+                //deepLevel=2 => It load relationship (level is also for female)
+                myNode.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
+                myNode.newNode.parentNode=new NodeFemale(); //the parentNode is not the same
+                myNode.newNode.parentNode.load(myNode, 1, 0, null, "id");
+                myNode.appendThis(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "templates/admnlisteners.php");
+                //we show subcategories (and click some subcategory)
+                myNode.refreshChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"),"templates/subcategory.php").then(resolve());
+              });
             });
           };
         
@@ -86,16 +56,35 @@
             event.preventDefault();
             DomMethods.setActive(thisNode);
             document.getElementById("centralcontent").innerHTML="";//We remove central content (To avoid keep content that could be confusing)
-            if (!Config.showsubcategory_On) {
-              showsubcategories(makeclick);
-            }
-            else {
-              makeclick(thisNode.getRelationship());
+            var url='?category=' + thisNode.properties.id;
+            showsubcategories();
+            //We just grab history when efective clicking
+            if (event.isTrusted) {
+              //it doesn't record state when: go back (dont state twice the same url)
+              if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
             }
           });
-          
           if (Config.showsubcategory_On) {
             showsubcategories();
+          }
+          //Now we click the category selected at the parameters send by the url
+          if (window.location.search) {
+            var regex = /category=(\d+)/;
+            var catIdMatch=window.location.search.match(regex);
+            if (catIdMatch) {
+              if (catIdMatch[1]==thisNode.properties.id) {
+                thisElement.click();
+              }
+            }
+          }
+          else {
+            //Now we click some menu at page start (if no url)
+            if (Config.startCatNum) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+              var startCat=thisNode.parentNode.children[Config.startCatNum-1];
+              if (startCat==thisNode) {
+                thisElement.click();
+              }
+            }
           }
         </script>
       </span>

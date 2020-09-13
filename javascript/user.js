@@ -99,7 +99,7 @@ user.prototype.getUserType=function(){
   if (this.parentNode && this.parentNode.partnerNode) return this.parentNode.partnerNode.properties.type;
 }
 
-user.prototype.sendmail=function(to, subject, message, header){
+user.prototype.sendmail=function(to, subject, message, from){
   return new Promise((resolve, reject) => {
     if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
     var FD  = new FormData();
@@ -112,13 +112,14 @@ user.prototype.sendmail=function(to, subject, message, header){
     if (message) {
       FD.append("mail_message", message);
     }
-    if (header) {
-      FD.append("mail_header", header);
+    if (from) {
+      FD.append("mail_from", from);
     }
     FD.action="mailer.php";
     this.loadfromhttp(FD).then((myNode) => {
       if (!myNode.extra) myNode.extra={};
       myNode.dispatchEvent("mail");
+      console.log(myNode);
       resolve(myNode);
     });
   });

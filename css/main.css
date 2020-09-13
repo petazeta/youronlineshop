@@ -33,7 +33,7 @@ header {
 }
 header div.headertop{
   display: grid;
-  grid-template-columns: minmax(500px, 4fr) 9fr;
+  grid-template-columns: minmax(800px, 4fr) 1fr;
 }
 header div.toolbar{
   display: flex;
@@ -630,6 +630,9 @@ div.quantityselect {
 	}
 	div.productimg img.productimg {
 		max-width: 210px;
+	}
+	div.productlargecontainer {
+		padding-top: 2.5em; 
 	}
 	div.addtocart {
 		display: inline-block;

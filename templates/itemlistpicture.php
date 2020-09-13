@@ -6,44 +6,18 @@
         <script>
           var myImage=thisNode.properties.image || Config.defaultImg;
           thisElement.src="catalog/images/small/" + myImage;
-          //adding the edition pencil
           thisNode.addEventListener("changeProperty", function(property){
             if (property=="image") {
-              if (history.state.url.indexOf('item')!=-1) thisElement.src="catalog/images/big/" + this.properties.image; //For differencing from big and small
-              else thisElement.src="catalog/images/small/" + this.properties.image;
-              thisElement.src += "?" + new Date().getTime(); //we force the browser tu update picture
+              thisElement.src="catalog/images/small/" + this.properties.image;
             }
           }, "img");
-          var launcher = new Node();
-          launcher.editable=thisNode.parentNode.editable;
-          launcher.btposition="bttopinsideleftinside";
-          launcher.thisNode = thisNode;
-          launcher.editElement = thisElement;
-          launcher.thisProperty="image";
-          launcher.thisAttribute="src";
-          var autoeditFunc=function(){
-            var autolauncher=new Node();
-            autolauncher.labelNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "loadImg"});
-            autolauncher.fileName="file_" + thisNode.properties.id;
-            autolauncher.appendThis(thisElement.parentElement, "templates/loadimg.php");
-            autolauncher.addEventListener("loadImage",function(){
-              if (this.extra && this.extra.error==true) {
-                var loadError=this.labelNode.getNextChild({name:"loadError"});
-                var loadErrorMsg=loadError.getRelationship("domelementsdata").getChild().properties.value;
-                alert(loadErrorMsg);
-              }
-              else {
-                thisElement['src']=this.fileName + ".png";
-                thisNode.dispatchEvent("finishAutoEdit");
-              }
-            });
-          };
-          launcher.autoeditFunc=autoeditFunc;
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          
+          var launcherImageEdit=new Node();
+          launcherImageEdit.args={itemNode: thisNode, imageElement: thisElement, btposition: "bttopinsideleftinside"};
+          launcherImageEdit.appendThis(thisElement.parentElement, "templates/addimageedit.php");
+          
           //We add the zoom extend buton.
-          var launcher = new Node(); //New  for not change thisNode container
-          launcher.options={"thisNode": thisNode};
-          launcher.appendThis(thisElement.parentElement, "templates/butextend.php");
+          thisNode.appendThis(thisElement.parentElement, "templates/butextend.php");
         </script>
       </div>
       <div class="textproduct">
@@ -68,8 +42,10 @@
                 thisElement.addEventListener("click",function(event){
                   event.preventDefault();
                   thisNode.refreshView(document.getElementById("centralcontent"),"templates/itempicturelarge.php");
-                  //it doesn't record state when: go back (dont state twice the same url)
-                  if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+                  if (event.isTrusted) {
+                    //it doesn't record state when: go back (dont state twice the same url)
+                    if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+                  }
                 });
                 //We click if the url is for this product
                 if (window.location.search) {
@@ -80,6 +56,26 @@
                     if (link) {
                       link.click();
                       return; //Finish here
+                    }
+                  }
+                }
+                
+                //Now we click the item selected at the parameters send by the url
+                if (window.location.search) {
+                  var regex = /item=(\d+)/;
+                  var itemIdMatch=window.location.search.match(regex);
+                  if (itemIdMatch) {
+                    if (itemIdMatch[1]==thisNode.properties.id) {
+                      thisElement.click();
+                    }
+                  }
+                }
+                else {
+                  //Now we click some menu at page start (if no url)
+                  if (Config.startItemNum) { //When webadmin is logged we dont click because we have to wait for the login to be effect I think
+                    var startItem=thisNode.parentNode.children[Config.startItemNum-1];
+                    if (startItem==thisNode) {
+                      thisElement.click();
                     }
                   }
                 }
