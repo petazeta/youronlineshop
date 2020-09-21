@@ -35,7 +35,7 @@
         };
       </script>
     </div>
-    <form>
+    <div>
       <div style="display:table;">
         <input type="hidden" name="customsubject">
         <script>
@@ -88,17 +88,17 @@
           if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.style.visibility="visible";
         </script>
       </div>
-    </form>
+    </div>
     <script>
       //We send notifications:
       if (Config.newordermailcustomer_On) {
         var mailuser = new user();
-        mailuser.sendmail(webuser.properties.username, thisElement.elements.customsubject.value, thisElement.elements.custommessage.value, 'USER_ORDERSADMIN');
+        mailuser.sendmail(webuser.properties.username, thisElement.querySelector("[name=customsubject]").value, thisElement.querySelector("[name=custommessage]").value, 'USER_ORDERSADMIN');
       }
       //We send notifications:
       if (Config.newordermailadmin_On) {
         var mailuser = new user();
-        mailuser.sendmail('USER_ORDERSADMIN', thisElement.elements.adminsubject.value, thisElement.elements.adminmessage.value, webuser.properties.username);
+        mailuser.sendmail('USER_ORDERSADMIN', thisElement.querySelector("[name=adminsubject]").value, thisElement.querySelector("[name=adminmessage]").value, webuser.properties.username);
       }
     </script>
   </template>
