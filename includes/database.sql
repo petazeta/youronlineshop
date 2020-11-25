@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 24, 2020 at 10:48 AM
+-- Generation Time: Nov 25, 2020 at 11:54 PM
 -- Server version: 8.0.22-0ubuntu0.20.04.2
 -- PHP Version: 7.4.3
 
@@ -542,7 +542,7 @@ CREATE TABLE `miscelaneous` (
 CREATE TABLE `orderitems` (
   `id` int NOT NULL,
   `quantity` int NOT NULL,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `_orders` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -555,11 +555,11 @@ CREATE TABLE `orderitems` (
 
 CREATE TABLE `orderpaymenttypes` (
   `id` int NOT NULL,
-  `name` varchar(60) NOT NULL,
-  `details` text NOT NULL,
+  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `details` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `succeed` tinyint(1) NOT NULL DEFAULT '0',
   `_orders` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -597,13 +597,13 @@ CREATE TABLE `ordershippingtypes` (
 
 CREATE TABLE `paymenttypes` (
   `id` int NOT NULL,
-  `image` varchar(60) NOT NULL,
-  `vars` text,
-  `template` varchar(60) DEFAULT NULL,
+  `image` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vars` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `template` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `_paymenttypes` int DEFAULT NULL,
   `_paymenttypes_position` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `paymenttypes`
@@ -621,11 +621,11 @@ INSERT INTO `paymenttypes` (`id`, `image`, `vars`, `template`, `active`, `_payme
 
 CREATE TABLE `paymenttypesdata` (
   `id` int NOT NULL,
-  `name` varchar(60) NOT NULL,
-  `description` varchar(200) NOT NULL,
+  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `_paymenttypes` int DEFAULT NULL,
   `_languages` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `paymenttypesdata`
