@@ -7,6 +7,5 @@ if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8');
 if (!defined('DB_REMOVE_PREFIX')) define('DB_REMOVE_PREFIX', false);
 if (!defined('DB_PREFIX')) define('DB_PREFIX', null);
 
-// For when we want to manage sessions so the sessions information is available at the database
-if (!defined('DB_SESSIONS')) define('DB_SESSIONS', false);
+if (!defined('LOAD_TP_AT_ONCE')) define('LOAD_TP_AT_ONCE', true);
 ?>

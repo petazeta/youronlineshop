@@ -1,107 +1,104 @@
-<template>
-  <tr>
-    <td style=" padding-right:1em;">
-      <input type="radio" name="shipping">
+<div class="flexbox" style="position:relative;">
+  <div>
+    <input type="radio" name="shipping">
+    <script>
+      thisElement.addEventListener("change", function(event) {
+        var shippingtypesRel=webuser.getRelationship({name:"orders"}).getChild().getRelationship({name:"ordershippingtypes"});
+        shippingtypesRel.children=[]; //In case we already selected
+        var orderShippingType=shippingtypesRel.addChild(new NodeMale());
+        orderShippingType.properties.cloneFromArray(thisNode.getRelationship({name:"shippingtypesdata"}).getChild().properties);
+        orderShippingType.properties.cloneFromArray(thisNode.properties);
+        DomMethods.setActive(thisNode);
+      });
+      //selecting first option
+      if (thisNode.parentNode.getChild()==thisNode) {
+        thisElement.click();
+      }
+    </script>
+  </div>
+  <div style="margin-right:2.2em;">
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleleft"></div>
+      <div data-id="buteditdescription" class="btmiddleright"></div>
+      <a href="" data-hbutton="true" title=""></a>
       <script>
-        thisElement.addEventListener("change", function(event) {
-          var shippingtypesRel=webuser.getRelationship({name:"orders"}).getChild().getRelationship({name:"ordershippingtypes"});
-          shippingtypesRel.children=[]; //In case we already selected
-          var orderShippingType=shippingtypesRel.addChild(new NodeMale());
-          orderShippingType.properties.cloneFromArray(thisNode.getRelationship({name:"shippingtypesdata"}).getChild().properties);
-          orderShippingType.properties.cloneFromArray(thisNode.properties);
-          DomMethods.setActive(thisNode);
+        var thisNodeData=thisNode.getRelationship({name: "shippingtypesdata"}).getChild();
+        thisNodeData.writeProperty(thisElement, "name");
+        thisNodeData.writeProperty(thisElement, "description", "title");
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisNodeData.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "name"});
+        }
+        thisElement.addEventListener("click", function(event) {
+          event.preventDefault();
+          myalert.properties.alertmsg=thisNodeData.properties.description;
+          myalert.showalert();
         });
-        //selecting first option
-        if (thisNode.parentNode.getChild()==thisNode) {
-          thisElement.click();
+      </script>
+      <input type="hidden" disabled="true">
+      <script>
+        var myNode=thisNode.getRelationship({name: "shippingtypesdata"}).getChild();
+        myNode.writeProperty(thisElement, "description");
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          thisElement.type="text";
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=buteditdescription]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=buteditdescription]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "description"});
         }
       </script>
-    </td>
-    <td style="text-align:left; padding-right:2em;">
-      <span>
-        <a href="" data-hbutton="true" title=""></a>
-        <script>
-          thisNodeData=thisNode.getRelationship({name: "shippingtypesdata"}).getChild();
-          thisNodeData.writeProperty(thisElement, "name");
-          thisNodeData.writeProperty(thisElement, "description", "title");
-          var launcher = new Node();
-          launcher.thisNode = thisNodeData;
-          launcher.editElement = thisElement;
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          if (webuser.isWebAdmin()) {
-            //We add a table cell for description to be editable
-            var myRow=DomMethods.closesttagname(thisElement, "TR");
-            var myCell = myRow.insertCell(2);
-            var myDiv = document.createElement('div');
-            myDiv.style.marginRight="2.2em";
-            var mySpan=document.createElement('span');
-            myDiv.appendChild(mySpan);
-            myCell.appendChild(myDiv);
-            thisNodeData.writeProperty(mySpan, "description");
-            var description_launcher = new Node();
-            description_launcher.thisNode = thisNodeData;
-            description_launcher.thisProperty = "description";
-            description_launcher.editElement = mySpan;
-            description_launcher.appendThis(myDiv, "templates/addbutedit.php");
-          }
-
-          thisElement.addEventListener("click", function(event) {
-            event.preventDefault();
-            myalert.properties.alertmsg=thisNodeData.properties.description;
-            myalert.showalert();
-          });
-        </script>
-      <span>
-    </td>
-    <td style="text-align:right; padding-right:2em;">
-      <span>
-        <span></span>
-        <script>
-          thisNode.writeProperty(thisElement, "delay_hours");
-          var launcher = new Node();
-          launcher.thisNode = thisNode;
-          launcher.editElement = thisElement;
-          launcher.thisProperty="delay_hours";
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-        </script>
-      </span>
+    <span>
+  </div>
+  <div style="margin-right:2em">
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
       <span></span>
       <script>
-        var myhours=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"hours"}).getRelationship({name: "domelementsdata"}).getChild();
-        myhours.writeProperty(thisElement);
+        thisNode.writeProperty(thisElement, "delay_hours");
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "delay_hours"});
+        }
       </script>
-    </td>
-    <td style="text-align:right;">
-      <span>
-        <span></span>
-        <script>
-          thisNode.writeProperty(thisElement, "price");
-          var launcher = new Node();
-          launcher.thisNode = thisNode;
-          launcher.editElement = thisElement;
-          launcher.thisProperty="price";
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-        </script>
-      </span>
+    </span>
+    <span></span>
+    <script>
+      var myhours=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"hours"}).getRelationship({name: "domelementsdata"}).getChild();
+      myhours.writeProperty(thisElement);
+    </script>
+  </div>
+  <div style="margin-right:2em">
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
       <span></span>
       <script>
-        var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
-        currency.writeProperty(thisElement);
+        thisNode.writeProperty(thisElement, "price");
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "price"});
+        }
       </script>
-    </td>
-  </tr>
-  <script>
-      var admnlauncher=new Node();
-      admnlauncher.thisNode=thisNode;
-      admnlauncher.editElement = thisElement;
-      admnlauncher.btposition="btmiddleright";
-      admnlauncher.elementsListPos="vertical";
-      admnlauncher.newNode=thisNode.parentNode.newNode.cloneNode(0, null); // we duplicate it so newNode can be reused
-      admnlauncher.newNode.loadasc(thisNode, 2, "id"); //the parent is not the same
-      admnlauncher.newNode.sort_order=thisNode.sort_order + 1;
-      admnlauncher.appendThis(thisElement.lastElementChild, "templates/addadmnbuts.php");
-      thisElement.addEventListener("click", function(event) {
-        thisElement.querySelector("input").click();
-      });
-  </script>
-</template>
+    </span>
+    <span></span>
+    <script>
+      var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
+      currency.writeProperty(thisElement);
+    </script>
+  </div>
+  <div data-id="admnbuts" class="btmiddleright">
+    <div class="admnbtsgrid"></div>
+  </div>
+</div>
+<script>
+  if (webuser.isWebAdmin()) {
+    DomMethods.visibleOnMouseOver({element: thisElement.querySelector('[data-id=admnbuts]'), parent: thisElement});
+    thisNode.appendThis(thisElement.querySelector('.admnbtsgrid'), "templates/butchpos.php", {position: 'vertical'});
+    thisNode.appendThis(thisElement.querySelector('.admnbtsgrid'), "templates/butdelete.php");
+    thisNode.parentNode.getNewNode().then((newNode) => {
+      newNode.sort_order=thisNode.sort_order + 1;
+      thisNode.parentNode.appendThis(thisElement.querySelector('.admnbtsgrid'), "templates/butaddnewnode.php", {newNode: newNode});
+    });
+  }
+  thisElement.addEventListener("click", function(event) {
+    thisElement.querySelector("input").click();
+  });
+</script>

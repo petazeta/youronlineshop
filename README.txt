@@ -2,14 +2,14 @@
 *YOS Version:
 ***************
 
-1.12.3 13/09/2020
+2.0.0 24/11/2020
 
 
 ***************
 *Support:
 ***************
 
-Please write: melchorherrera@gmail.com
+Please write: info@youronlineshop.net
 
 
 ***************
@@ -23,7 +23,7 @@ This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmai
 *About*
 ***************
 
-It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As well as HTML, CSS and JavaScript). It uses MariaDB/Mysql (InnoDB) for a database.
+It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As well as HTML, CSS and JavaScript). It uses MariaDB/Mysql for a database.
 
 
 **************
@@ -34,7 +34,7 @@ If you prefer we offer YOUR ONLINE SHOP installation and hosting service for 10 
 
 1 - Upload the compressed file to your web server.
 2 - Unpack it to the destination folder (You may have to create it first).
-3 - Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.
+3 - Create a database (and import file includes/database.sql or let the program do it later). You can use PhpMyAdmin for this purpose.
 4 - Edit database settings at: includes/config.php.
 5 - Give write permisions to folders catalog/images/small and catalog/images/big (To allow upload product images).
 6 - Also you can change some system settings at file: javascript/config.js.

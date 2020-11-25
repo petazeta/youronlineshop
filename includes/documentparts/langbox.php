@@ -10,13 +10,9 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
 });
 domelementsrootmother.addEventListener("loadLabels", function(){
    languages.loadfromhttp({"action":"load my childtablekeys"}).then(function(myNode){
-      var newNode=new NodeMale();
-      newNode.parentNode=new NodeFemale();
-      newNode.parentNode=languages;
-      myNode.newNode=newNode;
-      myNode.appendThis(document.querySelector("#langbox .boxbody"), "templates/admnlisteners.php").then(function(myNode) {
-        myNode.refreshChildrenView(document.querySelector("#langbox .boxbody"), "templates/language.php");
-      });
+      DomMethods.adminListeners({thisParent: myNode, refreshOnLog: true});
+      myNode.refreshChildrenView(document.querySelector("#langbox .boxbody"), "templates/language.php");
+      
       function languageIncreaseCloneFirstLang(newAddedLangNode, listener){
         return new Promise((resolve, reject) => {
           var newNode=languages.getChild().cloneNode();
@@ -49,7 +45,7 @@ domelementsrootmother.addEventListener("loadLabels", function(){
                   }  
                 }
                 myNode.nodelist[i].properties=datavalue[i];
-                var myparameters={"action":"add myself", language: newAddedLangNode.properties.id, user_id: webuser.properties.id};
+                var myparameters={"action":"add myself", language: newAddedLangNode.properties.id};
                 var myInsertRequestData=myNode.nodelist[i].toRequestData(myparameters);
                 insertRequest.push(myInsertRequestData);
                 insertActions.push(myparameters);

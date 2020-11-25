@@ -1,22 +1,23 @@
-<template>
-  <a href="javascript:" class="minibtn" data-id="openclose">
-    <img src="css/images/dots.png"/>
-  </a>
+<button type="button" class="butdots" data-id="openclose">
+  <div class="dotsimage"></div>
   <script>
-    //normalize
-    var launcher=thisNode;
-    thisElement.onclick=function(){
-      function changeVisibility(admnbuts){
-	for (var i=0; i<admnbuts.length; i++) {
-	  if (admnbuts[i].style.visibility=="hidden") admnbuts[i].style.visibility="visible";
-	  else admnbuts[i].style.visibility="hidden";
-	}
-      }
-      var editbuts=thisElement.parentElement.parentElement.querySelectorAll("[data-id=butedit]");
-      changeVisibility(editbuts);
-      var admnbuts=thisElement.parentElement.parentElement.querySelectorAll("[data-id=admnbuts]");
-      changeVisibility(admnbuts);
-      return false;
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      DomMethods.setSizeFromStyle(thisElement);
     }
   </script>
-</template>
+</button>
+<script>
+  thisElement.onclick=function(){
+    function changeVisibility(admnbuts){
+      for (var i=0; i<admnbuts.length; i++) {
+        if (admnbuts[i].style.visibility=="hidden") admnbuts[i].style.visibility="visible";
+        else admnbuts[i].style.visibility="hidden";
+      }
+    }
+    var editbuts=thisElement.parentElement.parentElement.querySelectorAll("[data-id=butedit]");
+    changeVisibility(editbuts);
+    var admnbuts=thisElement.parentElement.parentElement.querySelectorAll("[data-id=admnbuts]");
+    changeVisibility(admnbuts);
+    return false;
+  }
+</script>

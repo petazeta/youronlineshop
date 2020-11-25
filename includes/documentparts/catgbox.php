@@ -13,19 +13,8 @@ domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], functio
   categoriesrootmother.loadfromhttp({action:"load root"}).then(function(myNode){
     var categoriesroot=myNode.getChild();
     categoriesroot.loadfromhttp({action: "load my tree", deepLevel: 3, language: webuser.extra.language.properties.id}).then(function(myNode) {
-      var categoriesMother=myNode.getRelationship();
-      var newNode=new NodeMale();
-      newNode.parentNode=new NodeFemale();
-      newNode.parentNode.load(categoriesMother, 1, 0, "id");
-      //new node comes with datarelationship attached
-      newNode.addRelationship(categoriesMother.partnerNode.getRelationship("itemcategories").cloneNode(0, 0));
-      newNode.addRelationship(categoriesMother.partnerNode.getRelationship("itemcategoriesdata").cloneNode(0, 0));
-      newNode.addRelationship(categoriesMother.partnerNode.getRelationship("items").cloneNode(0, 0));
-      newNode.getRelationship("itemcategoriesdata").addChild(new NodeMale());
-      categoriesMother.newNode=newNode;
-      categoriesMother.appendThis(document.querySelector("#catalogbox .boxbody"), "templates/admnlisteners.php").then(function(myNode) {
-        myNode.refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php");
-      });
+      DomMethods.adminListeners({thisParent: myNode.getRelationship(), refreshOnLog: true});
+      myNode.getRelationship().refreshChildrenView(document.querySelector("#catalogbox .boxbody"),  "templates/category.php");
     });
   });
 });

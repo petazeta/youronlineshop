@@ -1,199 +1,198 @@
-<template>
+<form>
   <template>
-    <div style="text-align:center">
-      <div class="msgbox">
-	<span></span>
-	<script>
-	  var title=thisNode.getNextChild({"name":"signuptt"}).getRelationship({name:"domelementsdata"}).getChild();
-	  title.writeProperty(thisElement);
-	  //adding the edition pencil
-	  var launcher = new Node();
-	  launcher.thisNode = title;
-	  launcher.editElement = thisElement;
-	  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	</script>
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        var title=thisNode.getNextChild({"name":"signuptt"}).getRelationship({name:"domelementsdata"}).getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+        }
+      </script>
+    </div>
+    <div class="boxframe loginform">
+      <div class="form-group" style="position:relative;">
+        <div data-id="buteditlabel" class="btmiddleleft"></div>
+        <div data-id="butedit" class="btmiddleright"></div>
+        <label class="form-label" for="user_name"></label>
+        <script>
+          var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=buteditlabel]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=buteditlabel]'), "templates/butedit.php", {editElement: thisElement});
+          }
+        </script>
+        <input class="form-control" placeholder="" name="user_name">
+        <script>
+          var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement, null, "placeholder");
+        </script>
+      </div>
+      <div class="form-group" style="position:relative;">
+        <div data-id="buteditlabel" class="btmiddleleft"></div>
+        <div data-id="butedit" class="btmiddleright"></div>
+        <label class="form-label" for="user_password"></label>
+        <script>
+          var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=buteditlabel]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=buteditlabel]'), "templates/butedit.php", {editElement: thisElement});
+          }
+        </script>
+        <input type="password" class="form-control" placeholder="" name="user_password">
+        <script>
+          var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement, null, "placeholder");
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="submit" class="btn" data-id="but"></button>
+        <script>
+          var myNode=thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          }
+        </script>
       </div>
     </div>
-    <div>
-      <form>
-	<table class="formtable" style="box-shadow: 0px 3px 6px rgb(136, 136, 136);">
-	  <tr>
-	    <td style="padding-top:1em;">
-	      <div class="form-group">
-		<div style="display:table;">
-		  <span class="form-label"></span>
-		  <script>
-		    var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
-		    myNode.writeProperty(thisElement);
-		    var launcher = new Node();
-		    launcher.thisNode = myNode;
-		    launcher.editElement = thisElement;
-		    launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-		  </script>
-		</div>
-		<input class="form-control" placeholder="" name="user_name">
-		<script>
-		  var myNode=thisNode.getNextChild({name:"userName"}).getRelationship("domelementsdata").getChild();
-		  myNode.writeProperty(thisElement, null, "placeholder");
-		  var launcher = new Node();
-		  launcher.thisNode = myNode;
-		  launcher.editElement = thisElement;
-		  launcher.thisAttribute = "placeholder";
-		  launcher.createInput=true;
-		  launcher.visibility="visible";
-		  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-		</script>
-	      </div>
-	    </td>
-	  </tr>
-	  <tr>
-	    <td>
-	      <div class="form-group">
-		<div style="display:table;">
-		  <span class="form-label"></span>
-		  <script>
-		    var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
-		    myNode.writeProperty(thisElement);
-		    var launcher = new Node();
-		    launcher.thisNode = myNode;
-		    launcher.editElement = thisElement;
-		    launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-		  </script>
-		</div>
-		<input type="password" class="form-control" placeholder="" name="user_password">
-		<script>
-		  var myNode=thisNode.getNextChild({name:"password"}).getRelationship("domelementsdata").getChild();
-		  myNode.writeProperty(thisElement, null, "placeholder");
-		  var launcher = new Node();
-		  launcher.thisNode = myNode;
-		  launcher.editElement = thisElement;
-		  launcher.thisAttribute = "placeholder";
-		  launcher.createInput=true;
-		  launcher.visibility="visible";
-		  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-		</script>
-	      </div>
-	    </td>
-	  </tr>
-	  <tr>
-	    <td style="text-align:center">
-	      <div style="padding-bottom: 1rem; display:table; margin: auto;">
-		<input type="submit" class="btn" value="" style="font-size:medium;">
-		<script>
-		  var myNode=thisNode.getNextChild({name:"signIn"}).getRelationship("domelementsdata").getChild();
-		  myNode.writeProperty(thisElement, null, "value");
-		  var launcher = new Node();
-		  launcher.thisNode = myNode;
-		  launcher.editElement = thisElement;
-		  launcher.thisAttribute = "value";
-		  launcher.createInput=true;
-		  launcher.visibility="visible";
-		  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-		</script>
-	      </div>
-	    </td>
-	  </tr>
-	</table>
-	<div style="display:table;">
-	  <input type="hidden" name="userCharError">
-	  <script>
-	    var myNode=thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild();
-	    myNode.writeProperty(thisElement, null, "value");
-	    var launcher = new Node();
-	    launcher.thisNode = myNode;
-	    launcher.editElement = thisElement;
-	    launcher.thisAttribute = "value";
-	    launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	    if (webuser.isWebAdmin()) thisElement.type="input";
-	  </script>
-	</div>
-	<div style="display:table;">
-	  <input type="hidden" name="pwdCharError">
-	  <script>
-	    var myNode=thisNode.getNextChild({name:"pwdCharError"}).getRelationship("domelementsdata").getChild();
-	    myNode.writeProperty(thisElement, null, "value");
-	    var launcher = new Node();
-	    launcher.thisNode = myNode;
-	    launcher.editElement = thisElement;
-	    launcher.thisAttribute = "value";
-	    launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	    if (webuser.isWebAdmin()) thisElement.type="input";
-	  </script>
-	</div>
-	<div style="display:table;">
-	  <input type="hidden" name="signedIn">
-	  <script>
-	    var myNode=thisNode.getNextChild({name:"signedIn"}).getRelationship("domelementsdata").getChild();
-	    myNode.writeProperty(thisElement, null, "value");
-	    var launcher = new Node();
-	    launcher.thisNode = myNode;
-	    launcher.editElement = thisElement;
-	    launcher.thisAttribute = "value";
-	    launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	    if (webuser.isWebAdmin()) thisElement.type="input";
-	  </script>
-	</div>
-	<div style="display:table;">
-	  <input type="hidden" name="userExistsError">
-	  <script>
-	    var myNode=thisNode.getNextChild({name:"userExistsError"}).getRelationship("domelementsdata").getChild();
-	    myNode.writeProperty(thisElement, null, "value");
-	    var launcher = new Node();
-	    launcher.thisNode = myNode;
-	    launcher.editElement = thisElement;
-	    launcher.thisAttribute = "value";
-	    launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	    if (webuser.isWebAdmin()) thisElement.type="input";
-	  </script>
-	</div>
-      </form>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="userCharError" disabled>
       <script>
-	thisElement.addEventListener("submit", function(e) {
-	  e.preventDefault();
-	  var min=4, max=15;
-	  if (!DomMethods.checklength(thisElement.elements.user_name.value, min, max)) {
-	    alert(eval(this.elements.userCharError.value));
-	    return false;
-	  }
-	  if (!DomMethods.checklength(thisElement.elements.user_password.value, min, max)) {
-	    alert(eval(this.elements.pwdCharError.value));
-	    return false;
-	  }
-	  webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value).then(function(myNode){
-	    if (myNode.extra && myNode.extra.error) {
-	      myalert.properties.alertmsg=thisElement.elements[myNode.extra.errorName].value;
-	      myalert.properties.timeout=3000;
-	      myalert.showalert();
-	      return false;
-	    }
-	    myalert.properties.alertmsg=thisElement.elements.signedIn.value;
-	    myalert.properties.timeout=3000;
-	    myalert.showalert();
-	  });
-	  return false;
-	});
+        var myNode=thisNode.getNextChild({name:"userCharError"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisAttribute: "value"});
+          thisElement.type="text";
+        }
       </script>
-      <div style="margin:auto;  display:table;">
-	<button class="btn"></button>
-	<script>
-	  var myNode=thisNode.getNextChild({name:"loginBack"}).getRelationship("domelementsdata").getChild();
-	  myNode.writeProperty(thisElement);
-	  thisElement.onclick=function(){
-	    (new NodeMale()).refreshView(document.getElementById("centralcontent"), "templates/loginform.php");
-	  }
-	  var launcher = new Node();
-	  launcher.thisNode = myNode;
-	  launcher.createInput=true;
-	  launcher.visibility="visible";
-	  launcher.editElement = thisElement;
-	  launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-	</script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdCharError" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({name:"pwdCharError"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="signedIn" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({name:"signedIn"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="userExistsError" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({name:"userExistsError"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var myNode=thisNode.getNextChild({name:"loginBack"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onclick=function(){
+            (new NodeMale()).refreshView(document.getElementById("centralcontent"), "templates/loginform.php");
+          }
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=thisNode.getNextChild({name:"loginBack"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          }
+        </script>
       </div>
     </div>
   </template>
-  <div></div>
+  <div id="logform"></div>
   <script>
     var logform=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"logform"});
     logform.refreshView(thisElement,thisElement.previousElementSibling);
   </script>
-</template>
+</form>
+<script>
+  thisElement.addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    var userdata=new NodeMale();
+    userdata.properties.user_name=this.elements.user_name.value;
+    userdata.properties.user_password=this.elements.user_password.value;
+
+    if (!DomMethods.checkValidData(userdata)) {
+      //Errors in characters
+      if (userdata.extra.errorKey=="user_name") myalert.properties.alertmsg=this.elements.userCharError.value;
+      else if (userdata.extra.errorKey=="user_password") myalert.properties.alertmsg=this.elements.pwdCharError.value;
+      if (this.elements[userdata.extra.errorKey]) this.elements[userdata.extra.errorKey].focus();
+      myalert.properties.timeout=3000;
+      myalert.showalert();
+      return false;
+    }
+    webuser.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value).then(function(myNode){
+      if (myNode.extra && myNode.extra.error) {
+        myalert.properties.alertmsg=thisElement.elements[myNode.extra.errorName].value;
+        myalert.properties.timeout=3000;
+        myalert.showalert();
+        return false;
+      }
+      myalert.properties.alertmsg=thisElement.elements.signedIn.value;
+      myalert.properties.timeout=3000;
+      myalert.showalert();
+    });
+    return false;
+  });
+</script>

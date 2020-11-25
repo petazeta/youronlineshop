@@ -108,34 +108,200 @@ DomMethods={
     }
   },
   getDomElementFromChild(myNode) {
-    //We have a child and the container is at the parent
-    if (myNode.parentNode) {
-      for (var i=0; i<myNode.parentNode.children.length; i++) {
-        if (myNode.parentNode.children[i]==myNode) {
-          if (myNode.parentNode.childContainer) {
-            return myNode.parentNode.childContainer.children[i];
-          }
-        }
+    if (!myNode.parentNode || !myNode.parentNode.childContainer) return false;
+    //This method only works in wrapped templates
+    //We have a child and the container is at the parent.
+    for (var i=0; i<myNode.parentNode.children.length; i++) {
+      
+      if (myNode.parentNode.children[i]==myNode) {
+        return myNode.parentNode.childContainer.children[i];
       }
     }
   },
   visibleOnMouseOver: function(arg){
+    var valueOn=1;
+    var valueOff=0;
+    if (arg.method=='visibility') {
+      valueOn='visible';
+      valueOff='hidden';
+    }
+    else arg.method='opacity';
     var parentElement=arg.parent;
     var myElement=arg.element;
-    myElement.style.opacity=0;
+    myElement.style[arg.method]=valueOff;
     myElement.addEventListener("mouseover", function(ev){
-      myElement.style.opacity=1;
+      myElement.style[arg.method]=valueOn;
     });
     myElement.addEventListener("mouseout", function(ev){
-     myElement.style.opacity=0;
+     myElement.style[arg.method]=valueOff;
     });
     parentElement.addEventListener("mouseover", function(ev){
-      myElement.style.opacity=1;
+      myElement.style[arg.method]=valueOn;
     });
     parentElement.addEventListener("mouseout", function(ev){
-      myElement.style.opacity=0;
+      myElement.style[arg.method]=valueOff;
     });
-  }
+  },
+  setSizeFromStyle(myElement) {
+    var imageSrc=window.getComputedStyle(myElement).backgroundImage.replace(/url\((['"])?(.*?)\1\)/gi, '$2').split(',')[0];
+    var image = new Image();
+    image.onload = function(){
+      var width =image.width;
+      var height = image.height;
+      if (width && height) {
+        myElement.style.width=width + 'px';
+        myElement.style.height=height + 'px';
+        return true;
+      }
+    };
+    image.src = imageSrc;
+  },
+  switchVisibility(velement) {
+    if (velement.style.visibility=="hidden") {
+      velement.style.visibility="visible";
+    }
+    else {
+      velement.style.visibility="hidden";
+    }
+  },
+  formToData: function(relationship, myform) {
+    var data=new NodeMale();
+    relationship.childtablekeys.forEach((key)=>{
+      if (key!="id" && myform.elements[key]) {
+        data.properties[key]=myform.elements[key].value;
+      }
+    });
+    return data;
+  },
+  checkDataChange: function(relationship, data) {
+    return relationship.childtablekeys.some((key)=>{
+      return (key!='id' && data.properties[key]!=relationship.getChild().properties[key]);
+    });
+  },
+  checkValidData: function(data) {
+    var minchar=3;
+    var maxchar=120;
+    for (var key in data.properties) {
+      var value=data.properties[key];
+      if(!data.properties.hasOwnProperty(key)) continue;
+      if (key=="id") continue;
+      if (!value ||
+      !DomMethods.checklength(value, minchar, maxchar)) {
+        data.extra.errorKey=key;
+        return false;
+      }
+    }
+    return true;
+  },
+  //showIf, thisParent, refreshOnLog
+  adminListeners: function(params) {
+    if (!params.showIf) {
+      params.showIf = () => webuser.isWebAdmin();
+    }
+    //Lets add the log event
+    if (params.refreshOnLog) {
+      //to refresh the nochildren element when log
+      webuser.addEventListener("log", function(){
+        params.thisParent.refreshChildrenView();
+      }, "childrenrefresh", params.thisParent);
+    }
+    //adding the only-addbutton when is no records
+    params.thisParent.addEventListener("refreshChildrenView", function() {
+      //add the add button to the page when no paragraphs
+      if (this.children.length==0){
+        if (params.showIf()) {
+          //The node and a data node is inserted
+          this.getNewNode().then((newNode) => {
+            //newNode.loadasc(this, 2, "id");
+            this.refreshView(this.childContainer, "templates/butaddnewnode.php", {newNode: newNode});
+          });
+        }
+        //remove the add buton when log after webadmin
+        else {
+          this.childContainer.innerHTML="";
+        }
+      }
+    }, "butaddnewnode");  
+    //When admin add a new node it will be selected (what if there is not a menu thing?)
+    params.thisParent.addEventListener("addNewNode", function(newnodeadded) {
+      var button=DomMethods.getDomElementFromChild(newnodeadded).querySelector("[data-button]");
+      if (button) button.click();
+    }, "clicknewnode");
+    //When admin delete a node si estaba seleccionado seleccionamos otro y si era el ultimo borramos lo de la parte central
+    params.thisParent.addEventListener("deleteNode", function(nodeDeleted) {
+      if (nodeDeleted.selected) {
+        if (this.children.length>0) {
+          var button=null;
+          var position=1;
+          if (nodeDeleted.sort_order && nodeDeleted.sort_order > 1) position=nodeDeleted.sort_order-1;
+          var button=DomMethods.getDomElementFromChild(this.children[position-1]).querySelector("[data-button]");
+          if (button) button.click();
+        }
+      }
+      if (this.children.length==0) {
+        //remove the subcontents (only when are displayed)
+        if (nodeDeleted.getRelationship() && nodeDeleted.getRelationship().childContainer) nodeDeleted.getRelationship().childContainer.innerHTML="";
+        //to show no children when webadmin
+        //this.refreshChildrenView();
+      }
+    }, "clickanynode");
+    params.thisParent.getNewNode=function() {
+      return new Promise ((resolve, reject) => {
+        var newNode=new NodeMale();
+        newNode.parentNode=new NodeFemale;
+        newNode.parentNode.load(this, 1, 0, "id");
+        //new node comes with relationship attached
+        //newNode.addRelationship(thisNode.cloneNode(0, 0));
+        newNode.loadfromhttp({action:"load my relationships"}).then((myNode) => {
+          //We search for a relationship about language so we have to add then language node
+          var datarel = newNode.relationships.find(rel => rel.syschildtablekeysinfo.some( syskey => syskey.type=='foreignkey' && syskey.parenttablename=='TABLE_LANGUAGES' ) );
+          if (datarel)  datarel.addChild(new NodeMale());
+          resolve(newNode);
+        });
+      });
+    }
+  },
+  //thisNode
+  editListeners: function(params) {
+    //Lets add the log event
+    if (params.refreshOnLog) {
+      //to refresh the nochildren element when log
+      webuser.addEventListener("log", function(){
+        params.thisNode.refreshView();
+      }, "refresh", params.thisNode);
+      //removing the listener when node is deleted
+      params.thisNode.addEventListener("deleteNode", function() {
+        webuser.removeEventListener("log", "refresh", this);
+      }, "deleteEditButton");
+    }
+  },
+  imageEditFunc: function(myParams){
+    //We have to produce a new fileName for when file edition
+    var fileName= this.properties.image;
+    if (fileName && fileName.search('_')!=-1) {
+      //Adding next _number for the image
+      var previousNum=0;
+      if (fileVerMatch=fileName.match(/_\d/g).length==2) {
+        previousNum=fileName.match(/\d+\./)[0];
+      }
+      previousNum++
+      fileName="file_" + this.properties.id + '_' + previousNum;
+    }
+    else fileName="file_" + this.properties.id;
+    var loadImageAlert=new Alert();
+    loadImageAlert.showalert(null, "templates/loadimg.php", {thisNode: myParams.thisNode, labelNode: myParams.labelNode, fileName: myParams.fileName});
+    this.addEventListener("loadImage",function(){
+      if (this.extra && this.extra.error==true) {
+        var loadError=myParams.labelNode.getNextChild({name:"loadError"});
+        var loadErrorMsg=loadError.getRelationship("domelementsdata").getChild().properties.value;
+        alert(loadErrorMsg);
+      }
+      else {
+        myParams.imageElement.setAttribute('data-src', myParams.fileName + '.png');
+        this.dispatchEvent("finishAutoEdit");
+      }
+    });
+  },
 }
 
 function Alert() {
@@ -144,13 +310,13 @@ function Alert() {
 Alert.prototype=Object.create(NodeMale.prototype);
 Alert.prototype.constructor=Alert;
 
-Alert.prototype.showalert=function(text, tp) {
+Alert.prototype.showalert=function(text, tp, params) {
   return new Promise((resolve, reject) => {
     if (tp == null) tp="templates/alert.php";
     if (text) this.properties.alertmsg=text;
     var alertcontainer=document.createElement("div");
     document.body.appendChild(alertcontainer);
-    this.refreshView(alertcontainer, tp).then(function(myNode){
+    this.refreshView(alertcontainer, tp, params).then(function(myNode){
       if (myNode.properties.timeout) {
         alertcontainer.firstElementChild.style.opacity=0;
         alertcontainer.firstElementChild.style.transition="opacity 0.5s";

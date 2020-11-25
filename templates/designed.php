@@ -1,4 +1,2 @@
-<template>
-  <span></span>
-  <script>thisElement.innerHTML=thisNode.properties.value</script>
-</template>
+<span></span>
+<script>thisNode.writeProperty(thisElement);</script>

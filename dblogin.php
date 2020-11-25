@@ -3,15 +3,9 @@ require('includes/config.php');
 require('includes/default.php');
 require('includes/phpclasses/nodes.php');
 require('includes/database_tables.php');
-require('includes/phpclasses/sessions.php');
 require('includes/phpclasses/user.php');
-$mysession = new session();
-if ($mysession->session_none()) {
-  if (defined('DB_SESSIONS') && DB_SESSIONS==true) {
-    $mysession->set_session_to_db();
-  }
-  session_start();
-}
+
+session_start();
 
 header("Content-type: application/json");
 if (isset($_POST["parameters"])) {
@@ -24,7 +18,19 @@ $loginresult->extra=new stdClass();
 $uname=$_POST["user_name"];
 $upwd=$_POST["user_password"];
 if ($parameters->action=="logout") {
-  $_SESSION["user"]=null;
+  // remove all session variables
+  session_unset();
+  // destroy the session
+  session_destroy();
+  exit(json_encode($loginresult));
+}
+if ($parameters->action=="checksesactive") {
+  if (isset($_SESSION["user"])) {
+    $loginresult->extra->sesactive=true;
+  }
+  else {
+    $loginresult->extra->sesactive=false;
+  }
   exit(json_encode($loginresult));
 }
 else if ($parameters->action=="pwdupdate") {

@@ -1,17 +1,17 @@
-<template>
 <div>  
-    <div class="msgbox">
-      <span></span>
-      <script>
-	var title=thisNode.getNextChild({"name":"advice"}).getRelationship({name:"domelementsdata"}).getChild();
-	title.writeProperty(thisElement);
-	//adding the edition pencil
-	var launcher = new Node();
-	launcher.thisNode = title;
-	launcher.editElement = thisElement;
-	launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-      </script>
-    </div>
+  <div class="msgbox" style="position:relative;">
+    <div data-id="butedit" class="btmiddleright"></div>
+    <span></span>
+    <script>
+      var title=thisNode.getNextChild({"name":"advice"}).getRelationship({name:"domelementsdata"}).getChild();
+      title.writeProperty(thisElement);
+      //adding the edition pencil
+      if (webuser.isWebAdmin()) {
+        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        title.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, refreshOnLog: true});
+      }
+    </script>
+  </div>
 <textarea id="areaedition" style="width: 100%;min-height: 12em;"></textarea>
 <script>
 /* NicEdit - Micro Inline WYSIWYG
@@ -1371,4 +1371,3 @@ nicEditors.registerPlugin(nicPlugin,nicSaveOptions);
   textEditor.eventList.blur.push(saveData);
 </script>
 </div>
-</template>

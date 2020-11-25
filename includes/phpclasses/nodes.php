@@ -72,11 +72,6 @@ class Node {
     }
     if (isset($source->extra)) $this->extra=$source->extra;
   }
-  function cloneNode($levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
-    $myClon=new get_class($this);
-    $myClon->load($this, $levelup, $leveldown, $thisProperties, $thisPropertiesUp, $thisPropertiesDown);
-    return $myClon;
-  }
   function loadasc($source, $level=null, $thisProperties=null){
     if (gettype($source)=='string') $source=json_decode($source);
     return $source;
@@ -465,6 +460,21 @@ class NodeFemale extends Node{
       unset($this->children[$key]->properties->$myKey);
     }
   }
+  function db_initdb($prefix=null) {
+    if ($this->db_loadtables($prefix)===false) return false;
+    if (count($this->children)>0) {
+      return false;
+    }
+    $sql = file_get_contents('includes/database.sql');
+    if (!$sql) return false;
+    /* execute multi query */
+    if (($result = $this->getdblink()->multi_query($sql))===false) return false;
+    $results=1;
+    while ($this->getdblink()->next_result()) {
+      $results++;
+    }
+    $this->properties->numresults=$results;
+  }
   function db_loadmychildrennot() {
     foreach ($this->syschildtablekeysinfo as $syskey) {
       if ($syskey->parenttablename==$this->properties->parenttablename) {
@@ -574,6 +584,16 @@ class NodeFemale extends Node{
     for ($i=0; $i<count($this->children); $i++) {
       $this->children[$i]->db_insertmyself($extra, $keepid);
     }
+  }
+  //Get root male node
+  function getrootnode() {
+    if (!$this->partnerNode) return false;
+    else return $this->partnerNode->getrootnode();
+  }
+  function cloneNode($levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
+    $myClon=new NodeFemale();
+    $myClon->load($this, $levelup, $leveldown, $thisProperties, $thisPropertiesUp, $thisPropertiesDown);
+    return $myClon;
   }
 }
 
@@ -1247,6 +1267,19 @@ class NodeMale extends Node{
     for ($i=0; $i<count($this->relationships); $i++)  {
       $this->relationships[$i]->avoidrecursiondown();
     }
+  }
+  //Get root male node
+  function getrootnode() {
+    if (!$this->parentNode) return $this;
+    else if ($this->parentNode->partnerNode) {
+      return $this->parentNode->partnerNode->getrootnode();
+    }
+    else return $this;
+  }
+  function cloneNode($levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
+    $myClon=new NodeMale();
+    $myClon->load($this, $levelup, $leveldown, $thisProperties, $thisPropertiesUp, $thisPropertiesDown);
+    return $myClon;
   }
 }
 

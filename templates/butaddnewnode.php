@@ -1,36 +1,34 @@
-<template>
-  <a href="" class="butadd">
-    <img src="css/images/plus.png"/>
-  </a>
+<!--
+  thisNode: it is the parent
+-->
+<button type="button" class="butadd">
+  <div class="plusimage"></div>
   <script>
-    //normalize
-    var launcher=thisNode;
-    thisElement.addEventListener("click", function(event) {
-      event.preventDefault();
-      var newNode=launcher.newNode.cloneNode();
-      newNode.loadfromhttp({action:"add my tree", language:webuser.extra.language.properties.id, user_id: webuser.properties.id}).then(function(){
-        launcher.thisParent.addChild(newNode);
-        launcher.thisParent.refreshChildrenView();
-        launcher.thisParent.dispatchEvent("addNewNode", [newNode]);
-        //We copy the data row to any language
-        if (languages && languages.children.length>1) {
-          var restLanguages=languages.children.slice(0); //copy languages
-          var pos;
-          for (pos=0; pos<restLanguages.length; pos++) {
-            if (restLanguages[pos].properties.id==webuser.extra.language.properties.id) break;
-          }
-          restLanguages.splice(pos,1); //remove the active language from the list
-          var newNodes=newNode.arrayFromTree();
-          for (var j=0; j<restLanguages.length; j++) {
-            for (var i=0;i<newNodes.length;i++) {
-              if (newNodes[i].constructor==NodeFemale && newNodes[i].properties.language) {
-                newNodes[i].loadfromhttp({action:"add my children", language:restLanguages[j].properties.id, user_id: webuser.properties.id});
-              }
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      DomMethods.setSizeFromStyle(thisElement);
+    }
+  </script>
+</button>
+<script>
+  thisElement.addEventListener("click", function(event) {
+    event.preventDefault();
+    var newNode=thisParams.newNode;
+    newNode.loadfromhttp({action:"add my tree", language:webuser.extra.language.properties.id}).then((myNode)=>{
+      thisNode.addChild(newNode);
+      thisNode.refreshChildrenView().then(()=>thisNode.dispatchEvent("addNewNode", [newNode]));
+      //We copy the data row to any language
+      if (languages && languages.children.length>1) {
+        var restLanguages=languages.children.filter(lang => lang.properties.id!=webuser.extra.language.properties.id);
+        var newNodes=newNode.arrayFromTree();
+        for (var j=0; j<restLanguages.length; j++) {
+          for (var i=0;i<newNodes.length;i++) {
+            if (newNodes[i].constructor==NodeFemale && newNodes[i].properties.language) {
+              newNodes[i].loadfromhttp({action:"add my children", language:restLanguages[j].properties.id});
             }
           }
         }
-      });
-      return false;
+      }
     });
-  </script>
-</template>
+    return false;
+  });
+</script>

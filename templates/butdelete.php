@@ -1,23 +1,27 @@
-<template>
+<!--
+-->
+<button type="button" class="butdel" type="button">
   <template>
     <div class="alert alertmsg mytable">
       <div>
-        <span data-note="relative position container for admn buttons">
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
           <h1 style="font-size:1.5em" style="display:block;">DELETE</h1>
           <script>
             if (typeof domelementsroot != "undefined") {
               var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"titalert"}).getRelationship({name: "domelementsdata"}).getChild();
               myContent.writeProperty(thisElement);
               //adding the edition pencil
-              var launcher = new Node();
-              launcher.thisNode = myContent;
-              launcher.editElement = thisElement;
-              launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+              if (webuser && webuser.isWebAdmin()) {
+                DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                myContent.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+              }
             }
           </script>
         </span>
       </div>
-      <span data-note="relative position container for admn buttons">
+      <span style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
         <div style="margin:1em;">ATENTION: This element and its descedants will be removed.</div>
         <script>
          //adapted for non domelements table apps
@@ -25,81 +29,93 @@
             var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"textalert"}).getRelationship({name: "domelementsdata"}).getChild();
             myContent.writeProperty(thisElement);
             //adding the edition pencil
-            var launcher = new Node();
-            launcher.thisNode = myContent;
-            launcher.editElement = thisElement;
-            launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+            if (webuser && webuser.isWebAdmin()) {
+              DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myContent.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+            }
           }
         </script>
       </span>
-      <div>
-        <span data-note="relative position container for admn buttons">
-          <button class="btn">Don't remove</button>
+      <div style="margin:1em;">
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleleft"></div>
+          <button type="button" class="btn"data-id="but" >Don't remove</button>
           <script>
             if (typeof domelementsroot != "undefined") {
               var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"dontdelbutton"}).getRelationship({name: "domelementsdata"}).getChild();
               myContent.writeProperty(thisElement);
-              //adding the edition pencil
-              var launcher = new Node();
-              launcher.thisNode = myContent;
-              launcher.editElement = thisElement;
-              launcher.btposition="btmiddleleft";
-              launcher.createInput=true;
-              launcher.visibility="visible";
-              launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
             }
-            //normalize
-            var launcher=thisNode;
             thisElement.onclick=function(){
-              launcher.hidealert();
+              thisNode.hidealert();
+            }
+          </script>
+          <input type="hidden" disabled>
+          <script>
+            if (typeof domelementsroot != "undefined") {
+              var myNode=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"dontdelbutton"}).getRelationship({name: "domelementsdata"}).getChild();
+              myNode.writeProperty(thisElement);
+              thisElement.onblur=function(){
+                thisElement.type="hidden";
+                thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+              }
+              //adding the edition pencil
+              if (webuser && webuser.isWebAdmin()) {
+                DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+              }
             }
           </script>
         </span>
-        <span data-note="relative position container for admn buttons">
-          <button class="btn">Remove</button>
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <button type="button" class="btn" data-id="but">Remove</button>
           <script>
             if (typeof domelementsroot != "undefined") {
               var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"delbutton"}).getRelationship({name: "domelementsdata"}).getChild();
               myContent.writeProperty(thisElement);
-              //adding the edition pencil
-              var launcher = new Node();
-              launcher.thisNode = myContent;
-              launcher.editElement = thisElement;
-              launcher.createInput=true;
-              launcher.visibility="visible";
-              launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
             }
-            //normalize
-            var launcher=thisNode;
-            var thisNode=launcher.thisNode;
             thisElement.addEventListener("click", function(ev) {
               ev.preventDefault();
-              thisNode.loadfromhttp({action:"delete my tree", user_id: webuser.properties.id}).then(function(myNode){
+              thisParams.dataNode.loadfromhttp({action:"delete my tree"}).then(function(myNode){
                 myNode.parentNode.removeChild(myNode);
                 //for no children add a eventlistener to refreshChildrenView event
                 if (myNode.parentNode.childContainer) myNode.parentNode.refreshChildrenView();
                 myNode.parentNode.dispatchEvent("deleteNode", [myNode]);
                 myNode.dispatchEvent("deleteNode");
               });
-              launcher.hidealert();
+              thisNode.hidealert();
             });
+          </script>
+          <input type="hidden" disabled>
+          <script>
+            if (typeof domelementsroot != "undefined") {
+              var myNode=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"deletealert"}).getNextChild({"name":"delbutton"}).getRelationship({name: "domelementsdata"}).getChild();
+              myNode.writeProperty(thisElement);
+              thisElement.onblur=function(){
+                thisElement.type="hidden";
+                thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+              }
+              //adding the edition pencil
+              if (webuser && webuser.isWebAdmin()) {
+                DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+              }
+            }
           </script>
         </span>
       </div>
     </div>
   </template>
-  <button title="Remove" style="" class="butdel">
-    <img src="css/images/trash.png"/>
-  </button>
+  <div class="delimage"></div>
   <script>
-    //normalize
-    var launcher=thisNode;
-    var thisNode=launcher.thisNode;
-    thisElement.onclick=function() {
-      var launcher=new Alert();
-      //normailize ples
-      launcher.thisNode=thisNode;
-      launcher.showalert(null, thisElement.parentElement.querySelector("template"));
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      DomMethods.setSizeFromStyle(thisElement);
     }
   </script>
-</template>
+</button>
+<script>
+  thisElement.onclick=function() {
+    var thisAlert=new Alert();
+    thisAlert.showalert(null, thisElement.querySelector("template"), {dataNode: thisNode});
+  }
+</script>

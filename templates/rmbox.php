@@ -1,23 +1,20 @@
-<template>
-  <div class="rmbox">
-    <div class="bttopinsiderightinside">
-      <button class="minibtn transp" style="font-size:1.4em; font-weight: bold">&times;</button>
-      <script>
-	//normalize
-	var launcher=thisNode;
-	var thisNode=launcher.myNode;
-	thisElement.onclick=function(){
-	  launcher.myContainer.innerHTML="";
-	  launcher.dispatchEvent("closewindow");
-	}
-      </script>
-    </div>
-    <div></div>
+<!--
+It recieves thisNode, myTp and myContainer. and make a frame that removes myContainer content when clicking close button.
+After closing it fires the event closewindow.
+-->
+<div class="rmbox">
+  <div class="bttopinsiderightinside">
+    <button type="button" class="closeimage minibtn transp" style="width: 15px; height: 15px;"></button>
     <script>
-      //normalize
-      var launcher=thisNode;
-      var thisNode=launcher.myNode;
-      thisNode.refreshView(thisElement, thisNode.myTp);
+      var myContainer=thisParams.myContainer;
+      thisElement.onclick=function(){
+        myContainer.innerHTML="";
+        thisNode.dispatchEvent("closewindow");
+      }
     </script>
   </div>
-</template>
+  <div></div>
+  <script>
+    thisNode.refreshView(thisElement, thisParams.myTp, thisParams.myParams);
+  </script>
+</div>

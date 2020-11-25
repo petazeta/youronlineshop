@@ -1,80 +1,50 @@
-<template>
-  <div style="margin:auto; display:table">
-    <div class="msgbox"></div>
+<!-- 
+This template shows the dashboard user data and user address and allows to save the changes when fieldtyp input.
+It uses webuser
+-->
+<div id="dashboard">
+  <div class="msgbox" style="position:relative;">
+    <div data-id="butedit" class="btmiddleright"></div>
+    <span></span>
     <script>
       var addresstt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"addresstt"});
       addresstt.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
       //adding the edition pencil
-      var launcher = new Node();
-      launcher.thisNode = addresstt.getRelationship("domelementsdata").getChild();
-      launcher.editElement = thisElement;
-      launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+      if (webuser.isWebAdmin()) {
+        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        addresstt.getRelationship("domelementsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+      }
     </script>
   </div>
-  <form>
-    <div style="text-align:center;"></div>
-    <script>
-      webuser.formMode=true;
-      webuser.refreshView(thisElement,"templates/useraddress.php");
-    </script>
-    <div style="padding-bottom: 1rem; display:table; margin: auto;">
-      <input type="submit" class="btn" value="" style="font-size:medium;">
+  <div></div>
+  <script>
+    webuser.refreshView(thisElement, "templates/useraddressview.php", {fieldtype: 'input', showAddress: true});
+  </script>
+  <div class="dashbuttons">
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <button type="button" class="btn" data-id="but"></button>
       <script>
-        var savelabel=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"not located"}).getNextChild({name:"save"});
-        savelabel.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+        var bckloginlabel=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"});
+        bckloginlabel.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+        thisElement.onclick=function(){
+          (new Node()).refreshView(document.getElementById("centralcontent"), "templates/loggedindata.php");
+        }
+      </script>
+      <input type="hidden" disabled>
+      <script>
+        var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        thisElement.onblur=function(){
+          thisElement.type="hidden";
+          thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+        }
         //adding the edition pencil
-        var launcher = new Node();
-        launcher.thisNode =savelabel.getRelationship("domelementsdata").getChild();
-        launcher.editElement = thisElement;
-        launcher.createInput=true;
-        launcher.visibility="visible";
-        launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+        }
       </script>
     </div>
-  </form>
-  <script>
-    thisElement.onsubmit=function() {
-      if (!webuser.checkValidData(thisElement)) {
-        return false;
-      }
-      //Now we save the data: save tree
-      webuser.getRelationship("usersdata").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.userdata.properties}, function(){
-        for (var i=0; i<webuser.getRelationship("usersdata").childtablekeys.length; i++) {
-          var propname=webuser.getRelationship("usersdata").childtablekeys[i];
-          if (propname=="id") continue;
-          webuser.getRelationship("usersdata").getChild().properties[propname]=webuser.userdata.properties[propname];
-        }
-        webuser.getRelationship("addresses").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.addressdata.properties}, function(){
-          for (var i=0; i<webuser.getRelationship("addresses").childtablekeys.length; i++) {
-            var propname=webuser.getRelationship("addresses").childtablekeys[i];
-            if (propname=="id") continue;
-            webuser.getRelationship("addresses").getChild().properties[propname]=webuser.addressdata.properties[propname];
-          }
-          var savedlabel=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"not located"}).getNextChild({name:"saved"});
-          myalert.properties.alertmsg=savedlabel.getRelationship("domelementsdata").getChild().properties.value;
-          myalert.properties.timeout=3000;
-          myalert.showalert();
-        });
-      });
-      return false;
-    };
-  </script>
-  
-  <div style="margin:auto; display:table;">
-    <button class="btn"></button>
-    <script>
-      var bckloginlabel=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"});
-      bckloginlabel.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
-      //adding the edition pencil
-      var launcher = new Node();
-      launcher.thisNode = bckloginlabel.getRelationship("domelementsdata").getChild();
-      launcher.editElement = thisElement;
-      launcher.createInput=true;
-      launcher.visibility="visible";
-      launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-      thisElement.onclick=function(){
-	(new Node()).refreshView(document.getElementById("centralcontent"), "templates/loggedindata.php");
-      }
-    </script>
   </div>
-</template>
+</div>

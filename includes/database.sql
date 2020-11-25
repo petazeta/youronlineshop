@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb5
+-- version 4.9.5deb2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 11, 2020 at 08:22 PM
--- Server version: 5.7.21-1ubuntu1
--- PHP Version: 7.2.3-1ubuntu1
+-- Generation Time: Nov 24, 2020 at 10:48 AM
+-- Server version: 8.0.22-0ubuntu0.20.04.2
+-- PHP Version: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
@@ -21,12 +23,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `addresses` (
-  `id` int(11) NOT NULL,
-  `street` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `city` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `state` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pc` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `_users` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `street` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pc` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_users` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -47,10 +49,10 @@ INSERT INTO `addresses` (`id`, `street`, `city`, `state`, `pc`, `_users`) VALUES
 --
 
 CREATE TABLE `domelements` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `_domelements` int(11) DEFAULT NULL,
-  `_domelements_position` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `_domelements` int DEFAULT NULL,
+  `_domelements_position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -115,8 +117,6 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (277, 'backToLoginLb', 279, 0),
 (278, 'addresstt', 279, 0),
 (279, 'loggedin', 60, 0),
-(280, 'archived', 279, 0),
-(281, 'new', 279, 0),
 (282, 'btShowOrd', 279, 0),
 (283, 'btShowAdd', 279, 0),
 (284, 'TABLE_ORDERITEMS', 60, 0),
@@ -127,15 +127,15 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (317, 'signuptt', 182, 0),
 (337, 'chkt3next', 109, 2),
 (338, 'chkt3add', 109, 4),
-(339, 'order', 109, 13),
+(339, 'order', 109, 14),
 (340, 'total', 339, 1),
-(341, 'chkt4add', 109, 7),
-(342, 'chkt4userarea', 109, 10),
+(341, 'chkt4add', 109, 8),
+(342, 'chkt4userarea', 109, 11),
 (343, 'subtotal', 339, 2),
-(344, 'chktback', 109, 12),
+(344, 'chktback', 109, 13),
 (357, 'extraEdition', 60, 6),
 (361, 'online', 62, 1),
-(362, 'chkt5add', 109, 8),
+(362, 'chkt5add', 109, 9),
 (363, 'chkt4next', 109, 3),
 (389, 'nav2', 66, 2),
 (391, '', 389, 1),
@@ -207,7 +207,19 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 (484, 'file', 482, 2),
 (485, 'loadError', 482, 3),
 (486, 'dontdelbutton', 457, 3),
-(487, 'delbutton', 457, 4);
+(487, 'delbutton', 457, 4),
+(488, 'discardtt', 65, 1),
+(490, 'chktDiscard', 109, 7),
+(491, 'showOrd', 279, 5),
+(492, 'new', 491, 1),
+(493, 'archived', 491, 2),
+(496, 'date', 491, 3),
+(497, 'name', 491, 4),
+(498, 'order', 491, 5),
+(499, 'actions', 491, 6),
+(500, 'cancel', 482, 4),
+(501, 'send', 482, 5),
+(502, 'pagTit', 73, 3);
 
 -- --------------------------------------------------------
 
@@ -216,10 +228,10 @@ INSERT INTO `domelements` (`id`, `name`, `_domelements`, `_domelements_position`
 --
 
 CREATE TABLE `domelementsdata` (
-  `id` int(11) NOT NULL,
-  `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `_domelements` int(11) DEFAULT NULL,
-  `_languages` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_domelements` int DEFAULT NULL,
+  `_languages` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -265,8 +277,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (180, 'User Name', 183, 2),
 (181, 'Password', 184, 2),
 (182, 'Log in', 185, 2),
-(183, '\"Password between \" + min + \" and \" + max + \" characters!\"', 186, 2),
-(184, '\"User name between \" + min + \" and \" + max + \" characters!\"', 187, 2),
+(183, 'Password is not long enough', 186, 2),
+(184, 'User name is not long enough', 187, 2),
 (185, 'User Name Incorrect', 188, 2),
 (186, 'Password Incorrect', 189, 2),
 (187, 'Login Ok', 190, 2),
@@ -280,8 +292,6 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (195, 'Continue ', 198, 2),
 (272, 'Back to Dashboard', 277, 2),
 (273, 'Address', 278, 2),
-(274, 'Show archived orders', 280, 2),
-(275, 'Show new orders', 281, 2),
 (276, 'Show Orders', 282, 2),
 (277, 'Show Address', 283, 2),
 (278, 'Quantity', 285, 2),
@@ -314,8 +324,8 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1060, 'h', 426, 2),
 (1061, 'Save', 427, 2),
 (1062, 'Record saved', 428, 2),
-(1063, '\"Error: Not enought characters at \" + errorkey + \".\" + \" Enter at least \" + minchar + \" characters.\"', 430, 2),
-(1064, 'Error: Email not correct', 431, 2),
+(1063, 'Error: Not enough characters.', 430, 2),
+(1064, 'Error: Email not correct.', 431, 2),
 (1065, 'Text Edition Tool', 432, 2),
 (1066, 'You can use the text box below to create html formated text. Once you have created the content you can copy / paste into the text content of the actual elements you need to edit.', 433, 2),
 (1067, 'Performing some operations please wait...', 434, 2),
@@ -330,7 +340,7 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1077, '', 429, 2),
 (1078, '', 339, 2),
 (1079, 'Users', 441, 2),
-(1080, 'Create new account', 442, 2),
+(1080, 'Or create a new account', 442, 2),
 (1081, 'Languages don\'t match', 443, 2),
 (1082, 'Export and Import System Languages', 445, 2),
 (1083, 'System Languages Export/Import', 444, 2),
@@ -375,7 +385,20 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 (1122, 'Image file:', 484, 2),
 (1123, 'Image File Selection', 483, 2),
 (1124, 'Don\'t Remove', 486, 2),
-(1125, 'Remove', 487, 2);
+(1125, 'Remove', 487, 2),
+(1126, '<b>&times;</b> Discard', 488, 2),
+(1128, 'Discard Order', 490, 2),
+(1129, 'new', 492, 2),
+(1130, 'archived', 493, 2),
+(1131, 'Date', 496, 2),
+(1132, 'Name', 497, 2),
+(1133, 'Order', 498, 2),
+(1134, 'Actions', 499, 2),
+(1135, 'Cancel', 500, 2),
+(1136, 'Send', 501, 2),
+(1137, '', 502, 2),
+(1138, '', 482, 2),
+(1139, '', 491, 2);
 
 -- --------------------------------------------------------
 
@@ -384,9 +407,9 @@ INSERT INTO `domelementsdata` (`id`, `value`, `_domelements`, `_languages`) VALU
 --
 
 CREATE TABLE `itemcategories` (
-  `id` int(11) NOT NULL,
-  `_itemcategories` int(11) DEFAULT NULL,
-  `_itemcategories_position` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `_itemcategories` int DEFAULT NULL,
+  `_itemcategories_position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -405,10 +428,10 @@ INSERT INTO `itemcategories` (`id`, `_itemcategories`, `_itemcategories_position
 --
 
 CREATE TABLE `itemcategoriesdata` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `_itemcategories` int(11) DEFAULT NULL,
-  `_languages` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_itemcategories` int DEFAULT NULL,
+  `_languages` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -427,11 +450,11 @@ INSERT INTO `itemcategoriesdata` (`id`, `name`, `_itemcategories`, `_languages`)
 --
 
 CREATE TABLE `items` (
-  `id` int(11) NOT NULL,
-  `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `_itemcategories` int(11) DEFAULT NULL,
-  `_itemusers` int(11) DEFAULT NULL,
-  `_itemcategories_position` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `image` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_itemcategories` int DEFAULT NULL,
+  `_itemusers` int DEFAULT NULL,
+  `_itemcategories_position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -448,13 +471,13 @@ INSERT INTO `items` (`id`, `image`, `_itemcategories`, `_itemusers`, `_itemcateg
 --
 
 CREATE TABLE `itemsdata` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descriptionlarge` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descriptionshort` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descriptionlarge` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descriptionshort` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `_items` int(11) DEFAULT NULL,
-  `_languages` int(11) DEFAULT NULL
+  `_items` int DEFAULT NULL,
+  `_languages` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -471,10 +494,10 @@ INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `
 --
 
 CREATE TABLE `languages` (
-  `id` int(11) NOT NULL,
-  `code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `_languages` int(11) DEFAULT NULL,
-  `_languages_position` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_languages` int DEFAULT NULL,
+  `_languages_position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -492,11 +515,11 @@ INSERT INTO `languages` (`id`, `code`, `_languages`, `_languages_position`) VALU
 --
 
 CREATE TABLE `logs` (
-  `id` int(11) NOT NULL,
-  `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int NOT NULL,
+  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `session_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `_users` int(11) DEFAULT NULL
+  `session_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_users` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -506,8 +529,8 @@ CREATE TABLE `logs` (
 --
 
 CREATE TABLE `miscelaneous` (
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -517,11 +540,11 @@ CREATE TABLE `miscelaneous` (
 --
 
 CREATE TABLE `orderitems` (
-  `id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int NOT NULL,
+  `quantity` int NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `_orders` int(11) DEFAULT NULL
+  `_orders` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -531,12 +554,12 @@ CREATE TABLE `orderitems` (
 --
 
 CREATE TABLE `orderpaymenttypes` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(60) NOT NULL,
   `details` text NOT NULL,
   `succeed` tinyint(1) NOT NULL DEFAULT '0',
-  `_orders` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `_orders` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -545,11 +568,11 @@ CREATE TABLE `orderpaymenttypes` (
 --
 
 CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modificationdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `status` int(11) NOT NULL DEFAULT '0',
-  `_users` int(11) DEFAULT NULL
+  `status` int NOT NULL DEFAULT '0',
+  `_users` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -559,11 +582,11 @@ CREATE TABLE `orders` (
 --
 
 CREATE TABLE `ordershippingtypes` (
-  `id` int(11) NOT NULL,
-  `name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `delay_hours` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `delay_hours` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `_orders` int(11) DEFAULT NULL
+  `_orders` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -573,14 +596,14 @@ CREATE TABLE `ordershippingtypes` (
 --
 
 CREATE TABLE `paymenttypes` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `image` varchar(60) NOT NULL,
   `vars` text,
   `template` varchar(60) DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
-  `_paymenttypes` int(11) DEFAULT NULL,
-  `_paymenttypes_position` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `_paymenttypes` int DEFAULT NULL,
+  `_paymenttypes_position` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `paymenttypes`
@@ -597,12 +620,12 @@ INSERT INTO `paymenttypes` (`id`, `image`, `vars`, `template`, `active`, `_payme
 --
 
 CREATE TABLE `paymenttypesdata` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(60) NOT NULL,
   `description` varchar(200) NOT NULL,
-  `_paymenttypes` int(11) DEFAULT NULL,
-  `_languages` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `_paymenttypes` int DEFAULT NULL,
+  `_languages` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `paymenttypesdata`
@@ -614,29 +637,16 @@ INSERT INTO `paymenttypesdata` (`id`, `name`, `description`, `_paymenttypes`, `_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sessions`
---
-
-CREATE TABLE `sessions` (
-  `id` int(11) NOT NULL,
-  `sesid` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `access` int(10) DEFAULT NULL,
-  `data` mediumtext COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `shippingtypes`
 --
 
 CREATE TABLE `shippingtypes` (
-  `id` int(11) NOT NULL,
-  `image` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `delay_hours` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `image` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `delay_hours` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `_shippingtypes` int(11) DEFAULT NULL,
-  `_shippingtypes_position` int(11) DEFAULT NULL
+  `_shippingtypes` int DEFAULT NULL,
+  `_shippingtypes_position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -655,11 +665,11 @@ INSERT INTO `shippingtypes` (`id`, `image`, `delay_hours`, `price`, `_shippingty
 --
 
 CREATE TABLE `shippingtypesdata` (
-  `id` int(11) NOT NULL,
-  `name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `_shippingtypes` int(11) DEFAULT NULL,
-  `_languages` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `_shippingtypes` int DEFAULT NULL,
+  `_languages` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -677,12 +687,12 @@ INSERT INTO `shippingtypesdata` (`id`, `name`, `description`, `_shippingtypes`, 
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pwd` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` int(11) NOT NULL,
-  `access` int(11) NOT NULL,
-  `_userstypes` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pwd` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int NOT NULL,
+  `access` int NOT NULL,
+  `_userstypes` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -691,7 +701,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`) VALUES
 (1, 'webadmin', '$2y$10$NKXLi/BalpfosYj2btEkjO7KZxvIX/bBJx1uPVieALynD/LUEP3pe', 0, 1599758910, 7),
-(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1595753912, 3),
+(2, 'ordersadmin', '$2y$10$PlqpvA9Oafxu9UA6tbF67OL86oqDjFgY9IPUuSHoPXl3LQ12J8wHu', 0, 1603212168, 3),
 (4, 'productsadmin', '$2y$10$gaaoUP8s7iE5QF0HgLTBOut3AL8HhHT4UXhcQ.3mnc42JzM3O/opq', 0, 1587837411, 9),
 (6, 'usersadmin', '$2y$10$W4KkiELlafJWyHHamXko/.lzcc0cvRvYSCpqBNt9sbQXB9NVVq3kq', 0, 1590327417, 11),
 (7, 'systemadmin', '$2y$10$ImHVY1dgkuB4RMWE8PYd0u7Y3S9TO1mwkJUl6rjeMhwuSpRBbjJue', 0, 1595881693, 13);
@@ -703,12 +713,12 @@ INSERT INTO `users` (`id`, `username`, `pwd`, `status`, `access`, `_userstypes`)
 --
 
 CREATE TABLE `usersdata` (
-  `id` int(11) NOT NULL,
-  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `surname` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phonenumber` int(11) NOT NULL,
-  `_users` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `surname` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phonenumber` int NOT NULL,
+  `_users` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -729,8 +739,8 @@ INSERT INTO `usersdata` (`id`, `name`, `surname`, `email`, `phonenumber`, `_user
 --
 
 CREATE TABLE `userstypes` (
-  `id` int(11) NOT NULL,
-  `type` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL
+  `id` int NOT NULL,
+  `type` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -862,12 +872,6 @@ ALTER TABLE `paymenttypesdata`
   ADD KEY `_languages` (`_languages`);
 
 --
--- Indexes for table `sessions`
---
-ALTER TABLE `sessions`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `shippingtypes`
 --
 ALTER TABLE `shippingtypes`
@@ -910,107 +914,122 @@ ALTER TABLE `userstypes`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
 --
 -- AUTO_INCREMENT for table `domelements`
 --
 ALTER TABLE `domelements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=488;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=503;
+
 --
 -- AUTO_INCREMENT for table `domelementsdata`
 --
 ALTER TABLE `domelementsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1126;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1140;
+
 --
 -- AUTO_INCREMENT for table `itemcategories`
 --
 ALTER TABLE `itemcategories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+
 --
 -- AUTO_INCREMENT for table `itemcategoriesdata`
 --
 ALTER TABLE `itemcategoriesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
 --
 -- AUTO_INCREMENT for table `itemsdata`
 --
 ALTER TABLE `itemsdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
 --
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `orderpaymenttypes`
 --
 ALTER TABLE `orderpaymenttypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `ordershippingtypes`
 --
 ALTER TABLE `ordershippingtypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `paymenttypes`
 --
 ALTER TABLE `paymenttypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `paymenttypesdata`
 --
 ALTER TABLE `paymenttypesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `sessions`
---
-ALTER TABLE `sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `shippingtypes`
 --
 ALTER TABLE `shippingtypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `shippingtypesdata`
 --
 ALTER TABLE `shippingtypesdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
 -- AUTO_INCREMENT for table `usersdata`
 --
 ALTER TABLE `usersdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
 --
 -- Constraints for dumped tables
 --
@@ -1134,4 +1153,5 @@ ALTER TABLE `users`
 --
 ALTER TABLE `usersdata`
   ADD CONSTRAINT `usersdata_users` FOREIGN KEY (`_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 

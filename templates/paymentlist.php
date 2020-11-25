@@ -1,29 +1,17 @@
-<template>
-  <table style="margin: 1em auto;" class="formtable"></table>
-  <script>
-  var paymenttypesrootmother=new NodeFemale();
-  paymenttypesrootmother.properties.childtablename="TABLE_PAYMENTTYPES";
-  paymenttypesrootmother.properties.parenttablename="TABLE_PAYMENTTYPES";
-  paymenttypesrootmother.loadfromhttp({action:"load root"}).then(function(myNode){
-    return new Promise((resolve, reject) => {
-      resolve(myNode.getChild());
-    });
-  })
-  .then(function(myNode){
-    myNode.loadfromhttp({action: "load my tree", language: webuser.extra.language.properties.id}).then(function(myNode) {
-      var paymenttypesMother=myNode.getRelationship();
-      var newNode=new NodeMale();
-      newNode.parentNode=new NodeFemale();
-      newNode.parentNode.load(paymenttypesMother, 1, 0, "id");
-      //new node comes with datarelationship attached
-      newNode.addRelationship(paymenttypesMother.partnerNode.getRelationship("paymenttypes").cloneNode(0, 0));
-      newNode.addRelationship(paymenttypesMother.partnerNode.getRelationship("paymenttypesdata").cloneNode(0, 0));
-      newNode.getRelationship("paymenttypesdata").addChild(new NodeMale());
-      paymenttypesMother.newNode=newNode;
-      paymenttypesMother.appendThis(thisElement, "templates/admnlisteners.php").then(function(myNode) {
-        myNode.refreshChildrenView(thisElement,  "templates/paymenttype.php");
-      });
-    });
+<div id="paymentcontainer" class="boxframe"></div>
+<script>
+var paymenttypesrootmother=new NodeFemale();
+paymenttypesrootmother.properties.childtablename="TABLE_PAYMENTTYPES";
+paymenttypesrootmother.properties.parenttablename="TABLE_PAYMENTTYPES";
+paymenttypesrootmother.loadfromhttp({action:"load root"}).then(function(myNode){
+  myNode.getChild().loadfromhttp({action: "load my tree", language: webuser.extra.language.properties.id}).then(function(myNode) {
+    if (myNode.getRelationship().children.length==1 && webuser.isCustomer()) {
+      //We skip is there is no choice
+      (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout5.php");
+      return;
+    }
+    DomMethods.adminListeners({thisParent: myNode.getRelationship()});
+    myNode.getRelationship().refreshChildrenView(thisElement,  "templates/paymenttype.php");
   });
-  </script>
-</template>
+});
+</script>

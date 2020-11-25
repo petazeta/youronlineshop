@@ -24,10 +24,9 @@ user.prototype.logoff=function(){
     myNode.dispatchEvent("log");
   });
 };
-user.prototype.loginproto=function(action, name, password, email, reqlistener){
+user.prototype.loginproto=function(action, name, password, email){
   return new Promise((resolve, reject) => {
     if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
-    if (this.extra && this.extra.language) var language=this.extra.language; //keep the language from user after login
     var FD  = new FormData();
     FD.append("parameters", JSON.stringify({action: action}));
     if (name) {
@@ -41,10 +40,7 @@ user.prototype.loginproto=function(action, name, password, email, reqlistener){
     }
     FD.action="dblogin.php";
     this.loadfromhttp(FD).then((myNode) => {
-      if (!myNode.extra) myNode.extra={};
-      myNode.extra.language=language;
       myNode.dispatchEvent("log");
-      if (typeof reqlistener=="function") reqlistener.call(myNode);
       resolve(myNode);
     });
   });
@@ -62,6 +58,29 @@ user.prototype.updatePwd=function(password, reqlistener){
   return this.loginproto("pwdupdate", null, password, null, reqlistener);
 }
 
+user.prototype.checkSessionActive=function(){
+  return new Promise((resolve, reject) => {
+    var requester=new Node();
+    if (this.extra && this.extra.error) delete(this.extra.error); //remove previous error
+
+    var FD  = new FormData();
+    FD.append("parameters", JSON.stringify({action: "checksesactive"}));
+    FD.action="dblogin.php";
+    requester.loadfromhttp(FD).then((myNode) => {
+      if (myNode.extra && myNode.extra.error) {
+        alert("log out error");
+      }
+      else {
+        if (myNode.extra && myNode.extra.sesactive==true) {
+          resolve(true);
+        }
+        else {
+          resolve(false);
+        }
+      }
+    });
+  });
+}
 
 user.prototype.isUserType=function(utype){
   if (this.getUserType()==utype) {
@@ -71,12 +90,19 @@ user.prototype.isUserType=function(utype){
 };
 
 user.prototype.isAdmin=function(myNode){
-  //web admin is superuser, it is just an idea so to centralize admin whenever is posible for a dterminated node
+  // Admin of anytype
+  if (this.isWebAdmin() || this.isUserAdmin()  || this.isProductAdmin() || this.isSystemAdmin() || this.isOrdersAdmin()) {
+    return true;
+  }
   return false;
 }
 
 user.prototype.isWebAdmin=function(){
   return (this.isUserType("web administrator"));
+}
+
+user.prototype.isOrdersAdmin=function(){
+  return (this.isUserType("orders administrator"));
 }
 
 user.prototype.isProductAdmin=function(){
@@ -93,6 +119,10 @@ user.prototype.isUserAdmin=function(){
 
 user.prototype.isSystemAdmin=function(){
   return (this.isUserType("system administrator"));
+}
+
+user.prototype.isCustomer=function(){
+  return (this.isUserType("customer"));
 }
 
 user.prototype.getUserType=function(){
@@ -124,13 +154,8 @@ user.prototype.sendmail=function(to, subject, message, from){
   });
 };
 
-function get_liveusers(){
-  var FD  = new FormData();
-  FD.action="liveusers.php";
-  var loadNode=new NodeMale();
-  loadNode.loadfromhttp(FD, function(){
-    if (!webuser.extra) webuser.extra={};
-    webuser.extra.liveusersnum=this.properties.num;
-    webuser.dispatchEvent("getliveusers");
-  });
+//Avoid recursion: language is cyclic
+user.prototype.avoidrecursion=function(){
+  Node.prototype.avoidrecursion.call(this);
+  if (this.extra.language) this.extra.language=null; // Or it could exect language.avoidrecursion();
 }

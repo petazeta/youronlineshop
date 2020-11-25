@@ -1,40 +1,19 @@
 <template>
   <div class="space"></div>
   <span data-note="relative position container for admn buttons">
+    <div data-id="butedit" class="btmiddleright"></div>
     <a href="javascript:" class="minibtn"></a>
     <script>
       var expTxt=thisNode.getRelationship("domelementsdata").getChild();
       expTxt.writeProperty(thisElement);
       //adding the edition pencil
-      var launcher = new Node();
-      launcher.thisNode = expTxt;
-      launcher.editElement = thisElement;
-      launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-
-      thisElement.onclick=function(){
-        document.getElementById("centralcontent").innerHTML="";
-        thisNode.appendThis(document.getElementById("centralcontent"),"templates/expimplang.php");
-        return false;
+      if (webuser.isWebAdmin()) {
+        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        expTxt.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, refreshOnLog: true});
       }
-    </script>
-  </span>
-</template>
-<template>
-  <div class="space"></div>
-  <span data-note="relative position container for admn buttons">
-    <a href="javascript:" class="minibtn"></a>
-    <script>
-      var expTxt=thisNode.getRelationship("domelementsdata").getChild();
-      expTxt.writeProperty(thisElement);
-      //adding the edition pencil
-      var launcher = new Node();
-      launcher.thisNode = expTxt;
-      launcher.editElement = thisElement;
-      launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-
       thisElement.onclick=function(){
         document.getElementById("centralcontent").innerHTML="";
-        thisNode.appendThis(document.getElementById("centralcontent"),"templates/expimp.php");
+        thisNode.appendThis(document.getElementById("centralcontent"), thisParams.template);
         return false;
       }
     </script>
@@ -45,31 +24,24 @@
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
   var containerExpNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "expimp"});
   var langContainerExpNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "expimplang"});
-  var expTemplate=document.querySelector("#expimp").previousElementSibling;
-  var langExpTemplate=expTemplate.previousElementSibling;
-  var containerExp=document.querySelector("#expimp");
   if (webuser.isWebAdmin() || webuser.isSystemAdmin() || webuser.isUserAdmin() || webuser.isProductAdmin()) {
-    containerExp.innerHTML="";
+    document.querySelector("#expimp").innerHTML="";
     if (Config.importExportOn) {
-      containerExpNode.appendThis(document.querySelector("#expimp"), expTemplate);
+      containerExpNode.appendThis(document.querySelector("#expimp"), document.querySelector("#expimp").previousElementSibling, {template: "templates/expimp.php"});
     }
     if ((webuser.isWebAdmin() || webuser.isSystemAdmin()) && Config.expimplang_On) {
-      langContainerExpNode.appendThis(document.querySelector("#expimp"), langExpTemplate);
+      langContainerExpNode.appendThis(document.querySelector("#expimp"), document.querySelector("#expimp").previousElementSibling, {template: "templates/expimplang.php"});
     }
   }
   webuser.addEventListener("log",
     function() {
-      if (!this.isWebAdmin() && !webuser.isUserAdmin() && !webuser.isProductAdmin() && !webuser.isSystemAdmin()) {
-        //to remove the openbutton when logs after webadmin
-        containerExp.innerHTML="";
-      }
-      else {
-        containerExp.innerHTML="";
+      document.querySelector("#expimp").innerHTML=""; //to remove the openbutton when logs after webadmin
+      if (this.isAdmin()) {
         if (Config.importExportOn) {
-          containerExpNode.appendThis(document.querySelector("#expimp"), expTemplate);
+          containerExpNode.appendThis(document.querySelector("#expimp"), document.querySelector("#expimp").previousElementSibling, {template: "templates/expimp.php"});
         }
         if (Config.expimplang_On) {
-          langContainerExpNode.appendThis(document.querySelector("#expimp"), langExpTemplate);
+          langContainerExpNode.appendThis(document.querySelector("#expimp"), document.querySelector("#expimp").previousElementSibling, {template: "templates/expimplang.php"});
         }
       }
     },

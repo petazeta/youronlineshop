@@ -1,72 +1,63 @@
-<template>
+<!--
+-->
+<div class="centerelements">
   <template>
-    <div class="msgbox">
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
       <span></span>
       <script>
-	var title=thisNode.getNextChild({"name":"chkt2add"}).getRelationship({name:"domelementsdata"}).getChild();
-	title.writeProperty(thisElement);
-	//adding the edition pencil
-	var launcher = new Node();
-	launcher.thisNode = title;
-	launcher.editElement = thisElement;
-	launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+        var title=thisNode.getNextChild({"name":"chkt2add"}).getRelationship({name:"domelementsdata"}).getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+        }
       </script>
     </div>
-    <form>
-      <div></div>
-      <script>
-        webuser.formMode=true;
-        webuser.refreshView(thisElement,"templates/useraddress.php");
-      </script>
-      <div style="margin:auto; display:table;">
-        <input type="submit" class="btn" value="" style="font-size:medium;">
+    <div id="useraddress"></div>
+    <script>
+      var myParams={fieldtype: 'input'};
+      if (Config.chktaddressOn) myParams.showAddress=true;
+      //webuser.refreshView(thisElement,"templates/userdata.php", params);
+      webuser.refreshView(thisElement, "templates/useraddressview.php", myParams).then(()=> thisElement.querySelector('[data-id=save]').style.display='none');
+    </script>
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
         <script>
           var buttonLabel=thisNode.getNextChild({"name":"chkt2next"}).getRelationship({name:"domelementsdata"}).getChild();
           buttonLabel.writeProperty(thisElement);
-          var launcher = new Node();
-          launcher.thisNode = buttonLabel;
-          launcher.editElement = thisElement;
-          launcher.createInput=true;
-          launcher.visibility="visible";
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+          thisElement.addEventListener("click", function() {
+            document.getElementById('useraddress').querySelector('button[type=submit]').click();
+            if (webuser.saveError==false) (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
+          });
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=thisNode.getNextChild({"name":"chkt2next"}).getRelationship({name:"domelementsdata"}).getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          }
         </script>
       </div>
-    </form>
-    <script>
-      thisElement.onsubmit=function() {
-        if (!webuser.checkValidData(thisElement)) {
-          return false;
-        }
-        //Now we save the data: save tree
-        webuser.getRelationship("usersdata").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.userdata.properties}).then(function(){
-          for (var i=0; i<webuser.getRelationship("usersdata").childtablekeys.length; i++) {
-            var propname=webuser.getRelationship("usersdata").childtablekeys[i];
-            if (propname=="id") continue;
-            webuser.getRelationship("usersdata").getChild().properties[propname]=webuser.userdata.properties[propname];
-          }
-          if (Config.chktaddressOn) {
-            webuser.getRelationship("addresses").getChild().loadfromhttp({action:"edit my properties", user_id: webuser.properties.id, properties: webuser.addressdata.properties}).then(function(){
-              for (var i=0; i<webuser.getRelationship("addresses").childtablekeys.length; i++) {
-                var propname=webuser.getRelationship("addresses").childtablekeys[i];
-                if (propname=="id") continue;
-                webuser.getRelationship("addresses").getChild().properties[propname]=webuser.addressdata.properties[propname];
-              }
-            });
-          }
-        });
-        (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
-        return false;
-      };
-    </script>
+    </div>
   </template>
-  <div style="text-align:center"></div>
-  <script>
-    var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
-    if (Config.chkt2_On==false) {
-      (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
-    }
-    else {
-      checkout.refreshView(thisElement,thisElement.previousElementSibling);
-    }
-  </script>
-</template>
+</div>
+<script>
+  var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
+  if (Config.chkt2_On==false) {
+    (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
+  }
+  else {
+    checkout.refreshView(thisElement,thisElement.firstElementChild);
+  }
+</script>

@@ -1,16 +1,16 @@
 <template>
   <div class="space"></div>
-  <span data-note="relative position container for admn buttons">
+  <span style="position:relative;">
+    <div data-id="butedit" class="btmiddleleft"></div>
     <a href="javascript:" class="minibtn"></a>
     <script>
       var extraTxt=thisNode.getRelationship("domelementsdata").getChild();
       extraTxt.writeProperty(thisElement);
       //adding the edition pencil
-      var launcher = new Node();
-      launcher.thisNode = extraTxt;
-      launcher.editElement = thisElement;
-      launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-        
+      if (webuser.isWebAdmin()) {
+        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        extraTxt.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+      }
       thisElement.onclick=function(){
         document.getElementById("centralcontent").innerHTML="";
         (new Node()).appendThis(document.getElementById("centralcontent"), "templates/extraedition.php");

@@ -1,16 +1,17 @@
-<template>
-  <!-- we show order made and give the option to go to the user area-->
+<!-- we show order made and give the option to go to the user area-->
+<div class="centerelements">
   <template>
-    <div class="msgbox">
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
       <span></span>
       <script>
         var title=thisNode.getNextChild({"name":"chkt5add"}).getRelationship({name:"domelementsdata"}).getChild();
         title.writeProperty(thisElement);
         //adding the edition pencil
-        var launcher = new Node();
-        launcher.thisNode = title;
-        launcher.editElement = thisElement;
-        launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+        }
       </script>
     </div>
     <div></div>
@@ -18,74 +19,88 @@
       //We show the order
       webuser.getRelationship({name:"orders"}).getChild().refreshView(thisElement, "templates/order.php");
     </script>
-    <div style="margin:1em auto; display:table;">
-      <button class="btn"></button>
-      <script>
-        var bckloginlabel=thisNode.getNextChild({"name":"chkt4userarea"}).getRelationship({name:"domelementsdata"}).getChild();
-        bckloginlabel.writeProperty(thisElement);
-        //adding the edition pencil
-        var launcher = new Node();
-        launcher.thisNode = bckloginlabel;
-        launcher.editElement = thisElement;
-        launcher.createInput = true;
-        launcher.visibility="visible";
-        launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-        thisElement.onclick=function(){
-          webuser.refreshView(document.getElementById("centralcontent"), "templates/loggedindata.php");
-        };
-      </script>
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var bckloginlabel=thisNode.getNextChild({"name":"chkt4userarea"}).getRelationship({name:"domelementsdata"}).getChild();
+          bckloginlabel.writeProperty(thisElement);
+          thisElement.onclick=function(){
+            webuser.refreshView(document.getElementById("centralcontent"), "templates/loggedindata.php");
+          };
+        </script>
+        <input type="hidden" disabled="true">
+        <script>
+          var myNode=thisNode.getNextChild({"name":"chkt4userarea"}).getRelationship({name:"domelementsdata"}).getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          }
+        </script>
+      </div>
     </div>
     <div>
-      <div style="display:table;">
-        <input type="hidden" name="customsubject">
+      <div style="display:table; position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="customsubject" disabled="true">
         <script>
           var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"newordercustomer"}).getNextChild({name:"subject"}).getRelationship("domelementsdata").getChild();
-          myNode.writeProperty(thisElement, null, "value");
-          var launcher = new Node();
-          launcher.thisNode = myNode;
-          launcher.editElement = thisElement;
-          launcher.thisAttribute = "value";
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.type="input";
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+            thisElement.type="text";
+          }
         </script>
       </div>
-      <div style="display:table;">
-        <textarea name="custommessage" style="visibility:hidden;"></textarea>
+      <div style="display:table; position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <textarea name="custommessage" style="visibility:hidden;" disabled="true"></textarea>
         <script>
           var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"newordercustomer"}).getNextChild({name:"message"}).getRelationship("domelementsdata").getChild();
-          myNode.writeProperty(thisElement, null, "value");
-          var launcher = new Node();
-          launcher.thisNode = myNode;
-          launcher.editElement = thisElement;
-          launcher.thisAttribute = "value";
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.style.visibility="visible";
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+            thisElement.style.visibility="visible"
+          }
         </script>
       </div>
-      <div style="display:table;">
-        <input type="hidden" name="adminsubject">
+      <div style="display:table; position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="adminsubject" disabled="true">
         <script>
           var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"neworderadmin"}).getNextChild({name:"subject"}).getRelationship("domelementsdata").getChild();
-          myNode.writeProperty(thisElement, null, "value");
-          var launcher = new Node();
-          launcher.thisNode = myNode;
-          launcher.editElement = thisElement;
-          launcher.thisAttribute = "value";
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.type="input";
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+            thisElement.type="text";
+          }
         </script>
       </div>
-      <div style="display:table;">
-        <textarea name="adminmessage" style="visibility:hidden;"></textarea>
+      <div style="display:table; position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <textarea name="adminmessage" style="visibility:hidden;" disabled="true"></textarea>
         <script>
           var myNode=thisNode.getNextChild({name:"mails"}).getNextChild({name:"neworderadmin"}).getNextChild({name:"message"}).getRelationship("domelementsdata").getChild();
-          myNode.writeProperty(thisElement, null, "value");
-          var launcher = new Node();
-          launcher.thisNode = myNode;
-          launcher.editElement = thisElement;
-          launcher.thisAttribute = "value";
-          launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) thisElement.style.visibility="visible";
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin()) {
+            DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+            thisElement.style.visibility="visible"
+          }
         </script>
       </div>
     </div>
@@ -102,9 +117,8 @@
       }
     </script>
   </template>
-  <div style="text-align:center"></div>
-  <script>
-    var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
-    checkout.refreshView(thisElement,thisElement.previousElementSibling);
-  </script>
-</template>
+</div>
+<script>
+  var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
+  checkout.refreshView(thisElement,thisElement.firstElementChild);
+</script>

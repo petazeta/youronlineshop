@@ -1,46 +1,33 @@
-var templatesCache=[];
-
+// Properties is The var (object) that contains node db data
 function Properties() {
 }
-Properties.prototype.cloneFromArray = function(obj, clone) {
-  if (clone) {
-    Object.keys(this).forEach.call(this, function(key){
-      if (this.isProperty(this, key)) delete(this[key]);
-    });
-  }
-  var myThis=this;
-  Object.keys(obj).forEach(function(key){
-    if (!myThis.isProperty(obj, key)) return false;
-    myThis[key] = obj[key];
-    if (typeof myThis[key]=="string" &&  myThis[key].length > 0 && !isNaN(myThis[key])) 
-      myThis[key]=Number(myThis[key]); //numbers in strings becomes just numbers
+// This function adds the object properties to itself and replace when they have the same key
+Properties.prototype.cloneFromArray = function(obj) {
+  Object.keys(obj).forEach((key) => {
+    if (!obj.hasOwnProperty(key) || typeof obj[key] == 'object' || typeof obj[key] == 'function') return false;
+    this[key] = obj[key];
+    if (typeof this[key]=="string" &&  this[key].length > 0 && !isNaN(this[key])) 
+      this[key]=Number(this[key]); // numbers in strings becomes just numbers
   });
-};
-Properties.prototype.isProperty = function(obj, key) {
-  if (!obj.hasOwnProperty(key)) return false;
-  if (typeof obj[key] == 'object') return false; //We copy just values but not objects unless it is an array of objetcts
-  if (typeof obj[key] == 'function') return false; //We copy just values not methods
-  return true;
 };
 
 function Node() {
   this.properties = new Properties();
-  this.myContainer=null;
-  this.xmlTp=null;
-  this.myTp=null;
-  //optional variable this.extra
-  //optional variable this.nodelist
+  this.params={}; // Standard way to send parameters to templates
+  this.extra={}; // Standard way to save some results
+  this.nodelist=[]; // Standard way to save multiple re results
 }
-Node.prototype.config={onAppend: null};
-// nodeType 1 the properties are not in properties var
-Node.prototype.load=function(source, thisProperties, nodeType) {
+
+// It loads the node. if the container object has some properites it doesn't remove them but replace if there is coincidence.
+// thisProperties argument defines which object properties we wish to load
+Node.prototype.load=function(source, thisProperties) {
   if (typeof source=="string") source=JSON.parse(source);
   if (source.properties) {
     if (thisProperties) {
       if (typeof thisProperties=="string") thisProperties=[thisProperties];
       var myProperties={};
       for (var i=0; i<thisProperties.length; i++) {
-	if (Object.keys(source.properties).indexOf(thisProperties[i])!=-1) {
+	if (Object.keys(source.properties).includes(thisProperties[i])) {
 	  myProperties[thisProperties[i]]=source.properties[thisProperties[i]];
 	}
       }
@@ -48,104 +35,85 @@ Node.prototype.load=function(source, thisProperties, nodeType) {
     }
     else this.properties.cloneFromArray(source.properties);
   }
-  if (nodeType==1) {
-    this.properties=source;
-  }
   if (source.nodelist && Array.isArray(source.nodelist)) {
-    this.nodelist=[];
-    for (var i=0; i<source.nodelist.length; i++) {
-      var listNode=new Node();
-      if (typeof source.nodelist[i].parentNode != "undefined") {
-        listNode=new NodeMale();
+    this.nodelist=source.nodelist.map((sourcenode) => {
+      var myConstructor;
+      if (sourcenode.constructor.name!='Object') {
+        myConstructor=sourcenode.constructor;
       }
-      else if (typeof source.nodelist[i].partnerNode != "undefined") {
-        listNode=new NodeFemale();
+      else if (typeof sourcenode.parentNode != "undefined") {
+        myConstructor=NodeMale;
       }
-      listNode.load(source.nodelist[i]);
-      this.nodelist[i]=listNode;
-    }
+      else if (typeof sourcenode.partnerNode != "undefined") {
+        myConstructor=NodeFemale;
+      }
+      else myConstructor=Node;
+      var myNode=new myConstructor;
+      myNode.load(sourcenode, thisProperties);
+      return myNode;
+    });
   }
-  if (source.extra) this.extra=source.extra;
+  if (source.extra) {
+    Object.keys(source.extra).forEach((key) => {
+      this.extra[key]=source.extra[key];
+    });
+  }
 }
+// The same as load but create a new node
 Node.prototype.cloneNode=function(levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
   var myClon=new this.constructor();
   myClon.load(this, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown);
   return myClon;
 }
-
+// For descendent nodes
 Node.prototype.loaddesc=function(source) {
   if (typeof source=="string") source=JSON.parse(source);
   return source;
 }
+// For ascendent nodes
 Node.prototype.loadasc=function(source) {
   if (typeof source=="string") source=JSON.parse(source);
   return source;
 }
-Node.prototype.getTp=function (tpHref, reqlistener) {
-  if (supportsTemplate() && Config.loadTemplatesAtOnce!==false) {
-    var tpid="tp" + tpHref.match(/(\w+)\..+/, '$1')[1];
-    if (document.getElementById(tpid)) {
-      var newElement=document.getElementById(tpid).cloneNode(true);
-      newElement.id=null;
-      this.xmlTp=getTpContent(newElement);
-      if (reqlistener) {
-	reqlistener.call(this);
-      }
-      this.dispatchEvent("getTp");
-      return;
-    }
-  }
-  function getTpCache(tpHref) {
-    var cached=false;
-    for (var i=0; i<templatesCache.length; i++) {
-      if (templatesCache[i].href==tpHref) {
-	cached=templatesCache[i].value;
-	break;
+// This function get a template from file.
+// Templates cache can be filled completely at the first load by php config LOAD_TEMPLATES_AT_ONCE
+// It contains a promise : so we must call method then();
+Node.prototype.getTp=function (tpHref) {
+  return new Promise((resolve, reject) => {
+    if (Config && Config.templatesCacheOn!==false) {
+      var tpid="tp" + tpHref.match(/(\w+)\..+/, '$1')[1];
+      if (document.getElementById(tpid)) {
+        var newElement=document.getElementById(tpid).cloneNode(true);
+        newElement.id=null;
+        resolve(newElement.content);
+        this.dispatchEvent("getTp");
+        return;
       }
     }
-    return cached;
-  }
-  var cached=false;
-  if (Config.templatesCacheOn!==false) {
-    cached=getTpCache(tpHref);
-  }
-  if (cached) {
-    this.xmlTp=cached.cloneNode(true);
-  }
-  else {
     var thisNode=this;
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-      // code for IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp = new XMLHttpRequest();
-    }
-    else {
-      // code for IE6, IE5
-      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onload=function() {
-      var container=document.createElement("template");
-      container.innerHTML=this.responseText;
-      //When the tp content is just a template we get that tp content
-      if (getTpContent(container).querySelectorAll("template").length==1) thisNode.xmlTp=getTpContent(getTpContent(container).querySelector("template"));
-      else thisNode.xmlTp=getTpContent(container);
-      var newTp={};
-      newTp[tpHref]=thisNode.xmlTp.cloneNode(true);
-      if (Config.templatesCacheOn!==false) {
-	templatesCache.push(newTp);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.addEventListener('load', function() {
+      var myTp=document.createElement("template");
+      myTp.innerHTML=this.responseText;
+      // We save the template at the document head
+      if (Config && Config.templatesCacheOn!==false) {
+        myTp.id="tp" + tpHref.match(/(\w+)\..+/, '$1')[1];
+        document.head.appendChild(myTp);
       }
-      if (reqlistener) {
-	reqlistener.call(thisNode);
-      }
+      resolve(myTp.content.cloneNode(true));
       thisNode.dispatchEvent("getTp");
-    }
+    });
+    xmlhttp.onerror=function() {
+      reject('loding template error');
+    };
     xmlhttp.open("GET", tpHref, true);
     xmlhttp.send();
-  }
+  });
 };
 Node.prototype.avoidrecursion=function(){
-  if (this.extra) this.extra=null;
+  // Nothing but for future
 }
+// This function regarding to de action it will take the node data needed to send it to the request function
 Node.prototype.toRequestData=function(parameters) {
   switch (parameters.action) {
     case "load unlinked":
@@ -156,6 +124,7 @@ Node.prototype.toRequestData=function(parameters) {
     case "load all":
     case "remove all":
     case "load tables":
+    case "init database":
     case "load children":
       var node=this.cloneNode(0, 0);
       break;
@@ -170,13 +139,16 @@ Node.prototype.toRequestData=function(parameters) {
     case "edit my sort_order":
     case "delete my link":
     case "add my link":
-      var node=this.cloneNode(2, 0, "id", "id"); //we need the parent->partner
+      var node=this.cloneNode(3, 0, "id", "id"); // we need the parent->partner (and parent->partner->parent for safety check)
       break;
     case "add myself":
-      var node=this.cloneNode(2, 0, null, "id"); //we need the parent->partner
+      var node=this.cloneNode(3, 0, null, "id"); // we need the parent->partner (and parent->partner->parent for safety check)
+      break;
+    case "add my children":
+      var node=this.cloneNode(2, 1, "id", "id"); // we need the partner (and partner->parent for safety check)
       break;
     case "delete my children":
-      var node=this.cloneNode(1, 1, "id", "id"); //we need the partner
+      var node=this.cloneNode(2, 1, "id", "id"); // we need the partner (and partner->parent for safety check)
       break;
     case "edit my properties":
       var node=this.cloneNode(1, 0, null, "id");
@@ -186,7 +158,7 @@ Node.prototype.toRequestData=function(parameters) {
       var node=this.cloneNode(1, 1, "id");
       break;
     case "add my tree":
-      var node=this.cloneNode(2, null, null, "id"); //we need the parent->partner
+      var node=this.cloneNode(3, null, null, "id"); // we need the parent->partner (and parent->partner->parent for safety check)
       break;
     default:
       var node=this.cloneNode();
@@ -218,57 +190,31 @@ Node.prototype.toRequestFormData=function(parameters) {
 }
 
 
-//This function serves to render html template or a dom element:
+//This function serves to add scope and prepare an html template or a dom element.
+//In case is a dom element it will actually render scripts but if it is a template is prerender untill it is actually inserted as a dom
 //node.render(domelement), node.render(scriptelement)
-Node.prototype.render = function (tp) {
+Node.prototype.prerender = function (tp, params) {
+  if (!params) params={};
   if (!tp) tp=this.myTp;
-  if (tp.nodeType==3 && tp.tagName=="TEMPLATE" && supportsTemplate()) {
+  if (tp.nodeType==1 && tp.tagName=="TEMPLATE") {
     tp=tp.content; //templates are not valid just its content
   }
+  //for the templates we let original unmodified
+  if (tp.nodeType==11) tp=tp.cloneNode(true);
   var elementsToBeModified=[];
   var myElements=[];
   //myElements.push(tp); //To get the outerHTML in case there is not template DEPRECATED
   if (tp.tagName=="SCRIPT") myElements.push(tp); //For when there is no descendents
   else myElements=Array.from(tp.querySelectorAll("SCRIPT")); //inner elements
-  //document.thisScript=[];
-  //get inside Tps
-  if (!supportsTemplate()) {
-    //We still dont execute scripts inside of cascading templates (IE)
-    var inTps=tp.querySelectorAll("TEMPLATE");
-    if (inTps.length) {
-      console.log(inTps.length, inTps);
-      for (var i=1; i<inTps.length; i++) { //we exclude the master tp cause somehow querySelectorAll(template) get it also
-	var inTpElements=Array.from(inTps[i].querySelectorAll("SCRIPT"));
-	for (var k=0; k<inTpElements.length; k++) {
-	  var pos=myElements.indexOf(inTpElements[k]);
-	  if (pos!=-1) {
-	    console.log("encontrado", myElements[pos], myElements.length);
-	    myElements.splice(pos, 1);
-	  }
-	}
-      }
-    }
-  }
   for (var i=0; i<myElements.length; i++) {  
     //To avoid script execution limitation for XMLHttpRequest we make a copy of the script to a "brand new" script node
     //Also to execute script <script> for an already loaded element when we use render
     var myScript=document.createElement("SCRIPT");
-    if (document.currentScript===undefined) { //IE
-      var currTime= new Date().getTime();
-      function getRandomInt(max) {
-	return Math.floor(Math.random() * Math.floor(max));
-      }
-      var uniqueId=currTime + getRandomInt(99999);
-      uniqueId=uniqueId.toString(32);
-      myScript.id=uniqueId;
-      var scriptTop="var thisScript=document.getElementById('" + uniqueId + "');"; 
-    }
-    else {
-      var scriptTop="var thisScript=document.currentScript;";
-    }
-    scriptTop +="var thisElement=thisScript.previousElementSibling; var thisNode=thisScript.thisNode;"
+    var scriptTop="var thisScript=document.currentScript;";
+    scriptTop +="var thisElement=thisScript.previousElementSibling; var thisNode=thisScript.thisNode; var thisParams=thisScript.thisParams;"
     myScript.textContent="(function(){" + scriptTop + myElements[i].textContent + "})();"; //adding scope (encapsulation) so this variables are local and can't be modified from another scripts.
     myScript.thisNode=this;
+    myScript.thisParams=params;
     //document.thisScript.push(myScript);
     var container=myElements[i].parentNode;  //!!Document Fragment is not an Element => *parentNode*
     container.insertBefore(myScript, myElements[i])
@@ -276,73 +222,100 @@ Node.prototype.render = function (tp) {
   }
   return tp;
 };
+//When it is not a template we are actually executing scripts
+Node.prototype.render = function (myElement) {
+  return this.prerender(myElement);
+};
 
-Node.prototype.refreshView=function (container, tp, myReqlistener) {
+Node.prototype.refreshView=function (container, tp, params) {
   return new Promise((resolve, reject) => {
-    if (container) this.myContainer=container;
-    this.myContainer.classList.add("refreshviewloader");
-    this.myContainer.innerHTML='';
-    this.appendThis(container, tp).then(()=>{
-      if (myReqlistener) myReqlistener.call(this);
-      resolve(this);
-      this.dispatchEvent("refreshView");
-      this.myContainer.classList.remove("refreshviewloader");
+    if (!container) container=this.myContainer; //Default value for container
+    else this.myContainer=container;
+    if (!tp) tp=this.myTp; //Default value for
+    else this.myTp=tp;
+    
+    if (!container) reject('No container');
+    if (container.nodeType==1) container.classList.add("refreshviewloader");
+    var removecontent=function(){
+      this.myContainer.innerHTML='';
+    }
+    removecontent.oneTime=true;
+    this.addEventListener('beforeAppendThis', removecontent);
+    this.appendThis(container, tp, params).then((myNode)=>{
+      resolve(myNode);
+      myNode.dispatchEvent("refreshView");
+      if (container.nodeType==1) container.classList.remove("refreshviewloader");
     });
   });
 };
-
-Node.prototype.appendThis=function (container, tp, reqlistener) {
+Node.prototype.appendThis=function (container, tp, params) {
   return new Promise((resolve, reject) => {
-    var refresh=() => {
-      var clone=this.myTp.cloneNode(true);
-      this.render(clone);
-      if (container) {
-        this.myContainer=container;
-      }
-      this.myContainer.appendChild(clone);
-      if (typeof this.config.onAppend == 'function') {
-        this.config.onAppend.call(this);
-      }
-      if (reqlistener) {
-        reqlistener.call(this);
+    ((tp)=>{
+      return new Promise((resolve, reject) => {
+        if (typeof tp=="string") {
+          this.getTp(tp).then((myTp) => {
+            resolve(myTp);
+          }).catch((err)=>{console.log(err)});
+        }
+        else {
+          if (tp) {
+            if (tp.tagName && tp.tagName=="TEMPLATE") {
+              tp=tp.content;
+            }
+          }
+          resolve(tp);
+        }
+      });
+    })(tp).then((myTp) => {
+      var clone=this.prerender(myTp, params);
+      this.dispatchEvent("beforeAppendThis");
+      container.appendChild(clone);
+      if (Config && typeof Config.nodeOnAppend == 'function') {
+        Config.nodeOnAppend.call(this);
       }
       resolve(this);
       this.dispatchEvent("appendThis");
-    };
-    if (typeof tp=="string") {
-      this.getTp(tp, function() {
-        this.myTp=this.xmlTp.cloneNode(true);
-        refresh();
-      });
-    }
-    else {
-      if (tp) {
-        if (tp.tagName && tp.tagName=="TEMPLATE") {
-          tp=getTpContent(tp);
-        }
-        this.myTp=tp;
-      }
-      refresh();
-    }
+    });
   });
 };
-Node.prototype.refreshPropertiesView=function (container, tp, myReqlistener) {
+//This function write a template record (refreshing) for each property
+Node.prototype.refreshPropertiesView=function (container, tp, params) {
   return new Promise((resolve, reject) => {
-    if (container) this.propertiesContainer=container;
-    this.propertiesContainer.innerHTML='';
-
-    this.appendProperties(container, tp).then(() => {
-      if (myReqlistener) myReqlistener.call(this);
+    var myPropContainer=container;
+    if (!myPropContainer) myPropContainer=this.propertiesContainer;
+    var removecontent=function(){
+      this.propertiesContainer.innerHTML='';
+    }
+    removecontent.oneTime=true;
+    this.addEventListener('beforeAppendProperties', removecontent);
+    this.appendProperties(container, tp, params).then(() => {
       resolve(this);
       this.dispatchEvent("refreshPropertiesView");
     });
   });
 };
 //This function write a template record for each property
-Node.prototype.appendProperties = function (container, tp, reqlistener) {
+Node.prototype.appendProperties = function (container, tp, params) {
   return new Promise((resolve, reject) => {
-    if (container) this.propertiesContainer=container;
-    var refresh=() => {
+    ((tp) => {
+      return new Promise((resolve, reject) => {
+        if (typeof tp=="string") {
+          this.getTp(tp).then((myTp) => {
+            if (myTp) this.propertyTp=myTp.cloneNode(true);
+            resolve(this.propertyTp);
+          }).catch((err)=>{console.log(err)});
+        }
+        else {
+          if (tp) {
+            if (tp.tagName && tp.tagName=="TEMPLATE") {
+              tp=tp.content;
+            }
+            this.propertyTp=tp;
+          }
+          resolve(this.propertyTp);
+        }
+      });
+    })(tp).then((myTp) => {
       if (this.parentNode && this.parentNode.childtablekeys) {
         var myKeys=this.parentNode.childtablekeys;
       }
@@ -355,100 +328,92 @@ Node.prototype.appendProperties = function (container, tp, reqlistener) {
       }
       myKeys.forEach((key) => {
         if (key=="id") return false;
-        this.editpropertyname=key; //for knowing the key and for the edition facility
-        var thiscol=this.propertyTp.cloneNode(true);
+        var thiscol=myTp.cloneNode(true);
         thiscol.firstElementChild.setAttribute("data-property", key);
-        this.render(thiscol); //we must refresh the filling of the data also cloneNode does not copy extra function and data
-        container.appendChild(thiscol);
+        var myParams={...params, editpropertyname: key};
+        thiscol=this.prerender(thiscol, myParams); // we must refresh the filling of the data also cloneNode does not copy extra function and data
+        if (container) {
+          this.propertiesContainer=container;
+        }
+        this.dispatchEvent("beforeAppendProperties");
+        this.propertiesContainer.appendChild(thiscol);
       });
-      if (reqlistener) {
-        reqlistener.call(this);
-      }
-      resolve(this);
+      resolve();
       this.dispatchEvent("appendProperties");
-    };
-    if (typeof tp=="string") {
-      this.getTp(tp, function() {
-        this.propertyTp=this.xmlTp;
-        refresh();
-      });
-    }
-    else {
-      if (tp) {
-        if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
-        this.propertyTp=tp;
-      }
-      refresh();
-    }
+    });
   });
 }
 
-// Set children results from the given arguments and refresh the view. It uses this.childTp and this.childContainer
-Node.prototype.renderChildren=function (tp) {
-  if (!tp) tp=this.childTp;
-  var children="children";
-  if (this.constructor.name=="NodeMale") children="relationships";
-  if (this[children]["length"]==0) return false;
-  this[children]=this[children].sort(function(a,b){return a.sort_order-b.sort_order});
-  var myreturn=document.createDocumentFragment();
-  for (var i=0; i<this[children].length; i++) {
-    myreturn.appendChild(this[children][i].render(tp.cloneNode(true)));
-  }
-  return myreturn;
-};
-
-Node.prototype.refreshChildrenView=function (container, tp, myReqlistener) {
+Node.prototype.refreshChildrenView=function (container, tp, params) {
   return new Promise((resolve, reject) => {
-    if (container) this.childContainer=container;
-    this.childContainer.classList.add("refreshchildrenloader");
-    this.childContainer.innerHTML='';
-    this.appendChildren(container, tp).then(()=>{
-      if (myReqlistener) myReqlistener.call(this);
+    if (!container) container=this.childContainer;
+    else this.childContainer=container;
+    if (!tp) tp=this.myChildTp; //Default value for
+    else this.myChildTp=tp;
+    if (container.nodeType==1) container.classList.add("refreshchildrenloader");
+    var removecontent=function(){
+      this.childContainer.innerHTML='';
+    }
+    removecontent.oneTime=true;
+    this.addEventListener('beforeAppendChildren', removecontent);
+    this.appendChildren(container, tp, params).then(()=>{
       resolve(this);
       this.dispatchEvent("refreshChildrenView");
-      this.childContainer.classList.remove("refreshchildrenloader");
+      if (container.nodeType==1) container.classList.remove("refreshchildrenloader");
     });
   });
 };
 
-Node.prototype.appendChildren=function (container, tp, reqlistener) {
- return new Promise((resolve, reject) => {
-    if (container) this.childContainer=container;
-    var refresh=() => {
-      var renderedChildren=this.renderChildren();
-      if (renderedChildren) this.childContainer.appendChild(renderedChildren);
-      //Lets give some time for the scripts appended to be executed
-      window.setTimeout(() => {
-        if (reqlistener) {
-          reqlistener.call(this);
+Node.prototype.appendChildren=function (container, tp, params) {
+  return new Promise((resolve, reject) => {
+    ((tp) => {
+      return new Promise((resolve, reject) => {
+        if (typeof tp=="string") {
+          this.getTp(tp).then((myTp) => {
+            resolve(myTp);
+          }).catch((err)=>{console.log(err)});
         }
-        resolve(this);
-        this.dispatchEvent("appendChildren");
-      }, 1000);
-    };
-    if (typeof tp=="string") {
-      this.getTp(tp, function() {
-        this.childTp=this.xmlTp;
-        refresh();
+        else {
+          if (tp) {
+            if (tp.tagName && tp.tagName=="TEMPLATE") {
+              tp=tp.content;
+            }
+          }
+          resolve(tp);
+        }
       });
-    }
-    else {
-      if (tp) {
-        if (tp.tagName && tp.tagName=="TEMPLATE") tp=getTpContent(tp);
-        this.childTp=tp;
+    })(tp).then((myTp) => {
+      if (this.children.length>0) {
+        this.children=this.children.sort(function(a,b){return a.sort_order-b.sort_order});
+        var renderedChildren=document.createDocumentFragment();
+        for (var i=0; i<this.children.length; i++) {
+          renderedChildren.appendChild(this.children[i].prerender(myTp, params));
+        }
       }
-      refresh();
-    }
+      this.dispatchEvent("beforeAppendChildren");
+      if (renderedChildren) {
+        container.appendChild(renderedChildren);
+      }
+      if (Config && typeof Config.nodeOnAppend == 'function') {
+        Config.nodeOnAppend.call(this);
+      }
+      resolve();
+      this.dispatchEvent("appendChildren");
+    });
   });
 };
 
 Node.prototype.writeProperty=function(container, property, attribute, onEmptyValueText) {
   if (!onEmptyValueText) onEmptyValueText=Config.onEmptyValueText;
   var myAttribute="innerHTML"; //by default
-  if (container.tagName=="INPUT") myAttribute="value";
   if (attribute) myAttribute=attribute;
+  else if (container.tagName=="INPUT") myAttribute="value";
   if (!property) {
-    property=this.getFirstPropertyKey();
+    var keys=Object.keys(this.properties);
+    if (this.parentNode && this.parentNode.childtablekeys && this.parentNode.childtablekeys.length>0) {
+      keys=this.parentNode.childtablekeys;
+    }
+    property = keys.find(key => key!='id');
   }
   //In case there is no property and it is not a field we assume a default value
   if (!this.properties[property] && this.properties[property]!==0 && myAttribute!='value') {
@@ -471,33 +436,11 @@ Node.prototype.writeProperty=function(container, property, attribute, onEmptyVal
   }
 }
 
-Node.prototype.getFirstPropertyKey=function(){
-  var keys;
-  if (this.parentNode && this.parentNode.childtablekeys && this.parentNode.childtablekeys.length>0) {
-    keys=this.parentNode.childtablekeys;
-  }
-  else {
-    keys=Object.keys(this.properties);
-  }
-  for (var i=0; i<keys.length; i++) {
-    if (keys[i]!="id") {
-      return keys[i];
-    }
-  }
-}
-
-//It loads a node tree from a php script that privides it in json format. nodeType==1 then json is not node
-Node.prototype.loadfromhttp=function (requestData, reqlistener, nodeType) {
+//It loads a node tree from a php script that privides it in json format.
+Node.prototype.loadfromhttp=function (requestData, reqlistener) {
   return new Promise((resolve, reject) => {
     var xmlhttp;
-    if (window.XMLHttpRequest) {
-      // code for IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp = new XMLHttpRequest();
-    }
-    else {
-      // code for IE6, IE5
-      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
+    xmlhttp = new XMLHttpRequest();
     var thisNode=this;
     var request=null, requesterFile=null, requestAction=null;
     xmlhttp.addEventListener('load', function() {
@@ -511,7 +454,7 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener, nodeType) {
         console.log(JSON.parse(parcialRes));
         throw err;
       }
-      thisNode.load(responseobj, null, nodeType);
+      thisNode.load(responseobj);
       if (Config.logRequests==true) {
         var childtablename= responseobj.properties && responseobj.properties.childtablename ? responseobj.properties.childtablename :
         (responseobj.parentNode && responseobj.parentNode.properties && responseobj.parentNode.childtablename) ?
@@ -531,6 +474,16 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener, nodeType) {
       if (responseobj.extra && responseobj.extra.error==true) {
         console.log("Error response", requesterFile, requestAction);
         console.log(responseobj, this.responseText);
+        //we check if user session expired and that is the cause of error
+        if (responseobj.extra.errorinfo && responseobj.extra.errorinfo.type=='database safety' && 
+        webuser.properties.id) {
+          webuser.checkSessionActive().then(function(myresponse){
+            if (myresponse===false){
+              alert('USER SESSION EXPIRED, PAGE WILL RELOAD');
+              window.location.reload();
+            }
+          });
+        }
         reject(thisNode);
       }
     });
@@ -628,42 +581,21 @@ Node.prototype.eventExists=function (eventName, id, targetNode) {
   }
   return false;
 }
+// If function oneTime==true, this event execs just once and noother event is fired
 Node.prototype.dispatchEvent=function (eventName, args) {
   if (this.events && this.events[eventName]) {
     var i=this.events[eventName].length;
     while(i--) {
       if (typeof this.events[eventName][i]!="function") console.log("no funcion " + this.events[eventName][i]);
       this.events[eventName][i].apply(this, args);
+      if (this.events[eventName][i].oneTime==true) {
+        this.events[eventName].splice(i,1);
+        break;
+      }
     }
   }
 }
 
-Node.prototype.getMyDomNodesDeprecated=function () {
-  if (this.parentNode && this.parentNode.childContainer) {
-    //Get index
-    var index=this.parentNode.children.indexOf(this);
-    var length=1;
-    if (this.parentNode.childTp.nodeType==11) { //document fragment
-      length=this.parentNode.childTp.childNodes.length; //there is a fragment. IE doesn't support children property
-      for (var i=0; i<this.parentNode.childTp.childNodes.length; i++) {
-	if (this.parentNode.childTp.childNodes[i].nodeType!=1) length--;
-      }
-    }
-    var elements=Array.from(this.parentNode.childContainer.children);
-    for (var i=0; i<elements.length; i++) {
-      if (elements[i].tagName=="SCRIPT") elements.splice(i,1);
-    }
-    var startindex=index*length;
-    var endindex=startindex + length;
-    return elements.slice(startindex, endindex);
-  }
-  else if (this.myContainer) {
-      return Array.from(this.myContainer.children);
-  }
-  else if (this.childContainer) {
-      return Array.from(this.childContainer.children);
-  }
-}
 Node.prototype.arrayFromTree=function () {
   var container=[];
   container.push(this);
@@ -688,14 +620,13 @@ function NodeFemale() {
   this.childtablekeysinfo=[];
   this.syschildtablekeys=[];
   this.syschildtablekeysinfo=[];
-  this.childTp=null;
-  this.childContainer=null;
 }
 NodeFemale.prototype=Object.create(Node.prototype); //The prototype of NodeFemale is an instance of Node.prototype
 NodeFemale.prototype.constructor=NodeFemale;
 
 NodeFemale.prototype.load=function(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
-  Node.prototype.load.call(this, source); //No thisProperties filter for females
+  if (this.constructor.name!='NodeFemale' && this.constructor.prototype.hasOwnProperty('load')) this.constructor.prototype.load.call(this, source);
+  else Node.prototype.load.call(this, source); //No thisProperties filter for females
   if (source.childtablekeys) {
     for (var i=0;i<source.childtablekeys.length;i++) {
       this.childtablekeys[i]=source.childtablekeys[i];
@@ -727,12 +658,16 @@ NodeFemale.prototype.load=function(source, levelup, leveldown, thisProperties, t
 }
 
 NodeFemale.prototype.loaddesc=function(source, level, thisProperties) {
-  source=Node.prototype.loaddesc.call(this, source);
+  if (this.constructor.name!='NodeFemale' && this.constructor.prototype.hasOwnProperty('loaddesc')) source=this.constructor.prototype.loaddesc.call(this, source);
+  else source=Node.prototype.loaddesc.call(this, source);
+  
   if (level===0) return false;
   if (level) level--;
   if (!source.children) return false;
   for (var i=0;i<source.children.length;i++) {
-    this.children[i]=new NodeMale;
+    var myConstructor=NodeMale;
+    if (source.children[i].constructor.name!='Object') myConstructor=source.children[i].constructor;
+    this.children[i]=new myConstructor;
     this.children[i].parentNode=this;
     this.children[i].load(source.children[i], 0, 0, thisProperties);
     this.children[i].loaddesc(source.children[i], level, thisProperties);
@@ -740,27 +675,33 @@ NodeFemale.prototype.loaddesc=function(source, level, thisProperties) {
 }
 
 NodeFemale.prototype.loadasc=function(source, level, thisProperties) {
-  source=Node.prototype.loadasc.call(this, source);
+  if (this.constructor.name!='NodeFemale' && this.constructor.prototype.hasOwnProperty('loadasc')) source=this.constructor.prototype.loadasc.call(this, source);
+  else source=Node.prototype.loadasc.call(this, source);
   if (!source.partnerNode) return false;
   if (level===0) return false;
   if (level) level--;
   if (Array.isArray(source.partnerNode)) {
     if (!Array.isArray(this.partnerNode)) this.partnerNode=[this.partnerNode];
     for (var i=0; i < source.partnerNode.length; i++) {
-      this.partnerNode[i]=new NodeMale();
+      var myConstructor=NodeMale;
+      if (source.partnerNode[i].constructor.name!='Object') myConstructor=source.partnerNode[i].constructor;
+      this.partnerNode[i]=new myConstructor;
       this.partnerNode[i].load(source.partnerNode[i], 0, 0, thisProperties);
       this.partnerNode[i].loadasc(source.partnerNode[i], level, thisProperties);
     }
   }
   else {
-    if (!this.partnerNode) this.partnerNode=new NodeMale();
+    var myConstructor=NodeMale;
+    if (source.partnerNode.constructor.name!='Object') myConstructor=source.partnerNode.constructor;
+    if (!this.partnerNode) this.partnerNode=new myConstructor;
     this.partnerNode.load(source.partnerNode, 0, 0, thisProperties);
     this.partnerNode.loadasc(source.partnerNode, level, thisProperties);
   }
 }
 
 NodeFemale.prototype.avoidrecursion=function(){
-  Node.prototype.avoidrecursion.call(this);
+  if (this.constructor.name!='NodeFemale' && this.constructor.prototype.hasOwnProperty('avoidrecursion')) this.constructor.prototype.avoidrecursion.call(this);
+  else Node.prototype.avoidrecursion.call(this);
   if (this.partnerNode) {
     if (Array.isArray(this.partnerNode)) {
       this.partnerNode.forEach(function (pNode) {
@@ -776,14 +717,16 @@ NodeFemale.prototype.avoidrecursion=function(){
   });
 }
 NodeFemale.prototype.avoidrecursiondown=function(){
-  Node.prototype.avoidrecursion.call(this);
+  if (this.constructor.name!='NodeFemale' && this.constructor.prototype.hasOwnProperty('avoidrecursion')) this.constructor.prototype.avoidrecursion.call(this);
+  else Node.prototype.avoidrecursion.call(this);
   this.partnerNode=null;
   this.children.forEach(function(child) {
     child.avoidrecursiondown();
   });
 }
 NodeFemale.prototype.avoidrecursionup=function(){
-  Node.prototype.avoidrecursion.call(this);
+  if (this.constructor.name!='NodeFemale' && this.constructor.prototype.hasOwnProperty('avoidrecursion')) this.constructor.prototype.avoidrecursion.call(this);
+  else Node.prototype.avoidrecursion.call(this);
   this.children=[];
   if (this.partnerNode) {
     if (Array.isArray(this.partnerNode)) {
@@ -803,7 +746,6 @@ NodeFemale.prototype.execfuncdown=function(myfunc){
 }
 NodeFemale.prototype.getrootnode=function() {
   if (!this.partnerNode) return this;
-  else if (this.partnerNode==this) return this;
   else return this.partnerNode.getrootnode();
 }
 
@@ -827,7 +769,9 @@ NodeFemale.prototype.updateChild=function(obj) {
   }
   if (!myelement) return false;
   myelement.properties.cloneFromArray(obj.properties);
-  myelement.extra=obj.extra;
+  Object.keys(obj.extra).forEach((key) => {
+    myelement.extra[key]=obj.extra[key];
+  });
   if (obj.sort_order && obj.sort_order!=myelement.sort_order) {
     var i= this.children.length;
     while(i--) {
@@ -894,7 +838,10 @@ NodeMale.prototype.constructor=NodeMale;
 
   //It loads data from a json string or an object
 NodeMale.prototype.load=function(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
-  Node.prototype.load.call(this, source, thisProperties);
+  if (this.constructor.name!='NodeMale' && this.constructor.prototype.load!=NodeMale.prototype.load) {
+    this.constructor.prototype.load.call(this, source, thisProperties);
+  }
+  else Node.prototype.load.call(this, source, thisProperties);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (levelup !== 0 && !(levelup < 0)) { //level null and undefined like infinite
     this.loadasc(source, levelup, thisPropertiesUp);
@@ -904,13 +851,16 @@ NodeMale.prototype.load=function(source, levelup, leveldown, thisProperties, thi
   }
 }
 NodeMale.prototype.loaddesc=function(source, level, thisProperties) {
-  source=Node.prototype.loaddesc.call(this, source);
+  if (this.constructor.name!='NodeMale' && this.constructor.prototype.hasOwnProperty('loaddesc')) source=this.constructor.prototype.loaddesc.call(this, source);
+  else source=Node.prototype.loaddesc.call(this, source);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (level===0) return false;
   if (level) level--;
   if (!source.relationships) return false;
   for (var i=0;i<source.relationships.length; i++) {
-    this.relationships[i]=new NodeFemale();
+    var myConstructor=NodeFemale;
+    if (source.relationships[i].constructor.name!='Object') myConstructor=source.relationships[i].constructor;
+    this.relationships[i]=new myConstructor;
     this.relationships[i].partnerNode=this;
     this.relationships[i].load(source.relationships[i], 0, 0, thisProperties);
     this.relationships[i].loaddesc(source.relationships[i], level, thisProperties);
@@ -925,7 +875,8 @@ NodeMale.prototype.appendNextChildren=function(container, tp, reqlistener, appen
 }
 
 NodeMale.prototype.loadasc=function(source, level, thisProperties) {
-  source=Node.prototype.loadasc.call(this, source);
+  if (this.constructor.name!='NodeMale' && this.constructor.prototype.hasOwnProperty('loadasc')) source=this.constructor.prototype.loadasc.call(this, source);
+  else source=Node.prototype.loadasc.call(this, source);
   if (source.sort_order) this.sort_order=Number(source.sort_order);
   if (!source.parentNode) return false;
   if (level===0) return false;
@@ -933,20 +884,25 @@ NodeMale.prototype.loadasc=function(source, level, thisProperties) {
   if (Array.isArray(source.parentNode)) {
     if (!Array.isArray(this.parentNode)) this.parentNode=[this.parentNode];
     for (var i=0; i < source.parentNode.length; i++) {
-      this.parentNode[i]=new NodeFemale();
+      var myConstructor=NodeFemale;
+      if (source.parentNode[i].constructor.name!='Object') myConstructor=source.parentNode[i].constructor;
+      this.parentNode[i]=new myConstructor;
       this.parentNode[i].load(source.parentNode[i], 0, 0, thisProperties);
       this.parentNode[i].loadasc(source.parentNode[i], level, thisProperties);
     }
   }
   else {
-    if (!this.parentNode) this.parentNode=new NodeFemale();
+    var myConstructor=NodeFemale;
+    if (source.parentNode.constructor.name!='Object') myConstructor=source.parentNode.constructor;
+    if (!this.parentNode) this.parentNode=new myConstructor;
     this.parentNode.load(source.parentNode,0,0,thisProperties);
     this.parentNode.loadasc(source.parentNode, level, thisProperties);
   }
 }
 
 NodeMale.prototype.avoidrecursion=function() {
-  Node.prototype.avoidrecursion.call(this);
+  if (this.constructor.name!='NodeMale' && this.constructor.prototype.hasOwnProperty('avoidrecursion'))  this.constructor.prototype.avoidrecursion.call(this);
+  else Node.prototype.avoidrecursion.call(this);
   if (this.parentNode) {
     if (Array.isArray(this.parentNode)) {
       this.parentNode.forEach(function(pNode){
@@ -960,7 +916,8 @@ NodeMale.prototype.avoidrecursion=function() {
   });
 }
 NodeMale.prototype.avoidrecursionup=function(){
-  Node.prototype.avoidrecursion.call(this);
+  if (this.constructor.name!='NodeMale' && this.constructor.prototype.hasOwnProperty('avoidrecursion')) this.constructor.prototype.avoidrecursion.call(this);
+  else Node.prototype.avoidrecursion.call(this);
   this.relationships=[];
   if (this.parentNode) {
     if (Array.isArray(this.parentNode)) {
@@ -972,7 +929,8 @@ NodeMale.prototype.avoidrecursionup=function(){
   }
 }
 NodeMale.prototype.avoidrecursiondown=function(){
-  Node.prototype.avoidrecursion.call(this);
+  if (this.constructor.name!='NodeMale'  && this.constructor.prototype.hasOwnProperty('avoidrecursion')) this.constructor.prototype.avoidrecursion.call(this);
+  else Node.prototype.avoidrecursion.call(this);
   this.parentNode=null;
   this.relationships.forEach(function(rel){
     rel.avoidrecursiondown();

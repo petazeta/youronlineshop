@@ -1,62 +1,82 @@
-<template>
-  <div style="display:table; margin: 1em auto;">
-    <form>
-      <select name="ordersStatus" class="btn">
-	<option value="new"></option>
-	<script>
-	  var unarchivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"new"});
-	  unarchivedtt.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
-	</script>
-	<option value="archived"></option>
-	<script>
-	  var archivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"archived"});
-	  archivedtt.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
-	</script>
-      </select>
+<div style="display:table; margin: 1em auto;">
+  <form>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="new" disabled>
       <script>
-	thisElement.onchange=function(){
-	  var container=document.getElementById("ordersContainer");
-	  var launcher=new Node();
-	  launcher.filterorders=thisElement.options[thisElement.selectedIndex].value;
-	  launcher.refreshView(container,"templates/userorders.php");
-	  //This for the admin part, to swap the edit buton
-	  (new Node()).render(thisElement.form.parentElement.lastElementChild);
-	}
+        var myNode=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"new"}).getRelationship({name: "domelementsdata"}).getChild();
+        myNode.writeProperty(thisElement);
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          thisElement.type="text";
+        }
+        thisElement.onblur=function(){
+          thisElement.form.elements.ordersStatus[0].innerHTML=thisElement.value;
+        }
       </script>
-    </form>
-    <div></div>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="archived" disabled>
+      <script>
+        var myNode=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"archived"}).getRelationship({name: "domelementsdata"}).getChild();
+        myNode.writeProperty(thisElement);
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+          thisElement.type="text";
+        }
+        thisElement.onblur=function(){
+          thisElement.form.elements.ordersStatus[1].innerHTML=thisElement.value;
+        }
+      </script>
+    </div>
+    <select name="ordersStatus" class="btn">
+      <option value="new"></option>
+      <script>
+        var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"new"}).getRelationship({name: "domelementsdata"}).getChild();
+        myContent.writeProperty(thisElement);
+      </script>
+      <option value="archived"></option>
+      <script>
+        var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"archived"}).getRelationship({name: "domelementsdata"}).getChild();
+        myContent.writeProperty(thisElement);
+      </script>
+    </select>
     <script>
-      //adding the edition pencil
-      var launcher = new Node();
-      launcher.editElement=thisElement.previousElementSibling.elements.ordersStatus.options[thisElement.previousElementSibling.elements.ordersStatus.selectedIndex];
-      var unarchivedtt=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:launcher.editElement.value});
-      launcher.thisNode = unarchivedtt.getRelationship("domelementsdata").getChild();
-      launcher.createInput=true;
-      launcher.visibility="visible";
-      launcher.refreshView(thisElement, "templates/addbutedit.php");
+      thisElement.onchange=function(){
+        (new Node()).refreshView(document.getElementById("ordersContainer"),"templates/userorders.php", {filterorders: thisElement.options[thisElement.selectedIndex].value});
+      }
     </script>
-  </div>
-  <div style="margin-bottom:1em" id="ordersContainer"></div>
-  <script>
-    var launcher=new Node();
-    launcher.filterorders="new";
-    launcher.refreshView(thisElement,"templates/userorders.php");
-  </script>
-  <div style="margin:auto; display:table;">
-  <button class="btn"></button>
+  </form>
+</div>
+<div style="margin-bottom:1em" id="ordersContainer"></div>
+<script>
+  (new Node()).refreshView(thisElement,"templates/userorders.php");
+</script>
+<div style="margin:auto; display:table; position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <button type="button" class="btn" data-id="but"></button>
   <script>
     var bckloginlabel=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"});
     bckloginlabel.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
-    //adding the edition pencil
-    var launcher = new Node();
-    launcher.thisNode = bckloginlabel.getRelationship("domelementsdata").getChild();
-    launcher.editElement = thisElement;
-    launcher.createInput = true;
-    launcher.visibility="visible";
-    launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
     thisElement.onclick=function(){
       webuser.refreshView(document.getElementById("centralcontent"), "templates/loggedindata.php");
     };
   </script>
-  </div>
-</template>
+  <input type="hidden" disabled>
+  <script>
+    var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"}).getRelationship("domelementsdata").getChild();
+    myNode.writeProperty(thisElement);
+    thisElement.onblur=function(){
+      thisElement.type="hidden";
+      thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+    }
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+    }
+  </script>
+</div>

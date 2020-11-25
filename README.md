@@ -1,5 +1,5 @@
 
-# Your Online Shop System V 1.12.3
+# Your Online Shop System V 2.0.0
 
 <table>
   <tr>
@@ -31,16 +31,16 @@ This program has been developed by: Alberto Melchor Herrera, melchorherrera@gmai
 
 ## About
 
-It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As well as HTML, CSS and JavaScript). It uses MariaDB/Mysql (InnoDB) for a database.
+It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As well as HTML, CSS and JavaScript). It uses Mysql for a database.
 
 
 ## Installation
 
 1. Upload the files to your web server.
 2. Unpack it to the destination folder (you may have to create it first).
-3. Create a database and import file includes/database.sql. You can use PhpMyAdmin for this purpose.
+3. Create a database (and import file includes/database.sql or let the program do it later). You can use PhpMyAdmin for this purpose.
 4. Edit database settings at: includes/config.php.
-5. Give write permisions to the folder catalog/images/small and catalog/images/big (To allow upload product images).
+5. Give write permisions to the folders catalog/images/small and catalog/images/big (To allow upload product images).
 6. Also you can change some system settings at file: javascript/config.js.
 7. *** [Installation Video Tutorial](https://youtu.be/eDbpvEcX95Y) ***
 8. For further database control install the complement [DbManager](https://sourceforge.net/projects/freshhh-dbmanager/).
@@ -77,4 +77,4 @@ Some project documentation: [project wiki](https://github.com/petazeta/youronlin
 
 ## Support
 
-melchorherrera@gmail.com
+info@youronlineshop.net

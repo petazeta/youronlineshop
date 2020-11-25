@@ -1,37 +1,24 @@
-<template>
+<!--
+  It displays the label from a properties of a node
+  It receives:
+    labelName if it is not a label node
+    editpropertyname . It fits to the domelement name
+-->
+<div style="display:table; position: relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
   <label for="" class="form-label"></label>
   <script>
-    var propertyName=null;
-    if (thisNode.editpropertylabel) { //just a label for information
-      propertyName=new Node();
-      propertyName.properties.value=thisNode.editpropertylabel;
-      propertyName.noeditable=true;
+    if (thisParams.labelName) {
+      thisElement.innerHTML=thisParams.labelName;
     }
-    else if (thisNode.editpropertynode) { //the label is editable
-      propertyName=thisNode.editpropertynode;
-    }
-    else if (thisNode.editpropertyname) { //the editproperty means there is an actual property
-      if (typeof domelementsrootmother != "undefined") {
-        var tableProperties=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: thisNode.parentNode.properties.childtablename});
-      }
-      if (tableProperties) {
-        propertyName=tableProperties.getNextChild({name: thisNode.editpropertyname}).getRelationship("domelementsdata").getChild();
-      }
-      else {
-        propertyName=new Node();
-        propertyName.properties.value=thisNode.editpropertyname;
-        propertyName.noeditable=true;
-      }
-      thisElement.attributes.for.value=thisNode.editpropertyname;
-    }
-    if (propertyName) {
-      propertyName.writeProperty(thisElement);
-      if (!propertyName.noeditable) {
-        var launcher = new Node();
-        launcher.thisNode = propertyName;
-        launcher.editElement = thisElement;
-        launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
+    else {
+      //It displays the label from some element
+      var propertyLabelNode=thisNode.getNextChild({name: thisParams.editpropertyname}).getRelationship("domelementsdata").getChild();
+      propertyLabelNode.writeProperty(thisElement);
+      if (!thisParams.noEditLabel && webuser.isWebAdmin()) {
+        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        propertyLabelNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
       }
     }
   </script>
-</template>
+</div>

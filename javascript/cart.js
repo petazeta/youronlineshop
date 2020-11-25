@@ -34,13 +34,12 @@ function cart() {
   cartboxrel.addChild(cartboxchild);
   var cartboxchildrel=new NodeFemale();
   cartboxchildrel.properties.name="cartboxitem";
-  cartboxchildrel.parenttable="TABLE_ORDERS";
-  cartboxchildrel.childtable="TABLE_ORDERITEMS";
-  cartboxchildrel.childtablekeys=["id", "quantity", "name", "price"];
-  cartboxchildrel.childtablekeysinfo=[{"Type":"int"}, {"Type":"int"}, {"Type":"varchar"}, {"Type":"decimal"}];
+  cartboxchildrel.properties.parenttablename="TABLE_ORDERS";
+  cartboxchildrel.properties.childtablename="TABLE_ORDERITEMS";
+  cartboxchildrel.loadfromhttp({action: "load my childtablekeys"});
+  //cartboxchildrel.childtablekeys=["id", "quantity", "name", "price"];
+  //cartboxchildrel.childtablekeysinfo=[{"Type":"int"}, {"Type":"int"}, {"Type":"varchar"}, {"Type":"decimal"}];
   cartboxchild.addRelationship(cartboxchildrel);
-  
-  this.properties.subTotal=0;
 
   this.checkout=function(){
     // If cart is empty checkout do nothing else make the call to next step
@@ -92,7 +91,7 @@ cart.prototype.refreshcartbox=function() {
     mycartboxitem.parentNode=cartboxitems;
   }
   var cartboxelement=document.getElementById("cartbox");
-  cartboxelement.style.visibility="visible"
+  cartboxelement.style.visibility="visible";
   cartboxitems.refreshChildrenView();
 }
 cart.prototype.tocheckout=function() {

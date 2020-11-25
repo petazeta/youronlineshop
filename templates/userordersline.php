@@ -1,12 +1,13 @@
-<template>
-<tr style="display:table-row">
+<!--
+-->
+<tr>
   <td>
     <span></span>
     <script>
       thisNode.writeProperty(thisElement, "creationdate");
     </script>
   </td>
-  <td >
+  <td>
     <a href=""></a>
     <script>
       var thisUser=webuser; //When it is not orders administrator
@@ -22,85 +23,79 @@
       else {
         thisElement.textContent=webuser.getRelationship({name:"usersdata"}).getChild().properties.name + " " + webuser.getRelationship({name:"usersdata"}).getChild().properties.surname;
       }
-      thisUser.formMode=false; //We show the not form user data version
-      thisUser.editable=false;
-       if (webuser.getUserType()=="orders administrator") {
-        thisUser.editable=true;
-       }
-      //Show the address
-      var launcher=new NodeMale();
-      launcher.addEventListener("closewindow", function(){
-        var orderContainerRow=DomMethods.closesttagname(this.myContainer, "TR");
-        DomMethods.closesttagname(orderContainerRow, "TABLE").deleteRow(orderContainerRow.rowIndex);
-        this.openview=false;
-      });
-      thisElement.onclick=function(){
-      	if (launcher.openview) return false;
+      if (webuser.getUserType()=="orders administrator") {
+       var fieldtype='input';
+      }
+      else {
+        var fieldtype='textnode';
+      }
+      var showAddress=false;
+      if (Config.chktaddressOn) showAddress=true;
+      thisElement.addEventListener('click', function(event){
+        event.preventDefault();
+        if (thisUser.openview) return false;
         var thisRow=DomMethods.closesttagname(thisElement, "TR");
         var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
         myrow=thisTable.insertRow(thisRow.rowIndex+1);
         mycell=myrow.insertCell(0);
-        mycell.colSpan=5;
-        launcher.myNode=thisUser;
-        launcher.myNode.myTp="templates/useraddress.php";
-        launcher.refreshView(mycell, "templates/rmbox.php").then(function(myNode){
-          myNode.openview=true;
+        mycell.colSpan=thisTable.tHead.rows[0].cells.length;
+        thisUser.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/useraddressview.php", myContainer: mycell, myParams: {fieldtype: fieldtype, showAddress: showAddress}}).then(function(){
+          thisUser.openview=true;
         });
-        return false;
-      }
+        thisUser.addEventListener("closewindow", function(){
+          thisTable.deleteRow(myrow.rowIndex);
+          thisUser.openview=false;
+        }, "closeuseraddress");
+      });
     </script>
   </td>
-  <td style="text-align:center;">
-    <a href="">
-      <img src="css/images/view.png"/>
-    </a>
+  <td class="containerbuttons">
+    <button type="button" class="iconbuttons">
+      <div class="viewinimage"></div>
+      <script>
+        if (window.getComputedStyle(thisElement).backgroundImage) {
+          DomMethods.setSizeFromStyle(thisElement);
+        }
+      </script>
+    </button>
     <script>
-      var launcher=new NodeMale();
-      //To remove not only de order but the order row container
-      launcher.addEventListener("closewindow", function(){
-        var orderContainerRow=DomMethods.closesttagname(this.myContainer, "TR");
-        DomMethods.closesttagname(orderContainerRow, "TABLE").deleteRow(orderContainerRow.rowIndex);
-        this.openview=false;
-      });
-      thisElement.onclick=function(){
-        if (launcher.openview) return false;
-        thisNode.loadfromhttp({action: "load my tree", user_id: webuser.properties.id}).then(function(myNode) {
+      thisElement.addEventListener('click', function(event){
+        event.preventDefault();
+        if (thisNode.openview) return false;
+        thisNode.loadfromhttp({action: "load my tree"}).then(function(myNode) {
           var thisRow=DomMethods.closesttagname(thisElement, "TR");
           var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
           myrow=thisTable.insertRow(thisRow.rowIndex+1);
           mycell=myrow.insertCell(0);
-          mycell.colSpan=5;
-          launcher.myNode=myNode;
-          launcher.myNode.myTp="templates/order.php";
-          launcher.refreshView(mycell, "templates/rmbox.php").then(function(myNode){
+          mycell.colSpan=thisTable.tHead.rows[0].cells.length;
+          thisNode.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/order.php", myContainer: mycell}).then(function(myNode){
             myNode.openview=true
           });
+          //To remove not only de order but the order row container
+          thisNode.addEventListener("closewindow", function(){
+            thisTable.deleteRow(myrow.rowIndex);
+            thisNode.openview=false;
+          }, "closeuserorder");
         });
-        return false;
-      }
+      });
     </script>
   </td>
   <template>
-    <td>
-      <div></div>
+    <td class="containerbuttons" style="position:relative;">
+      <div class="admnbtsgrid"></div>
       <script>
-        if (webuser.getUserType()=="orders administrator") {
-          var admnlauncher=new NodeMale();
+        if (webuser.isOrdersAdmin()) {
           var myNewStatus=1;
           if (thisNode.properties.status==1) myNewStatus=0;
-          admnlauncher.buttons=[
-            {template: "templates/butsuccessorder.php", args:{thisNode: thisNode, newStatus: myNewStatus}},
-            {template: "templates/butdelete.php", args:{thisNode: thisNode}}
-          ];
-          admnlauncher.refreshView(thisElement, "templates/admnbuts.php");
+          thisNode.appendThis(thisElement, "templates/butsuccessorder.php", {newStatus: myNewStatus});
+          thisNode.appendThis(thisElement, "templates/butdelete.php");
         }
       </script>
     </td>
   </template>
 </tr>
 <script>
-  if (webuser.getUserType()=="orders administrator") {
-    thisNode.appendThis(thisElement, thisElement.querySelector("template"), null, true)
+  if (webuser.isOrdersAdmin()) {
+    thisNode.appendThis(thisElement, thisElement.querySelector('template'))
   }
 </script>
-</template>

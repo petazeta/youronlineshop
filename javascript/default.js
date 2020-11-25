@@ -9,7 +9,6 @@ var Config={
   onEmptyValueText: null, //null, It will be setled later
   templatesCacheOn: true, //true, better sometimes false for production
   loadTemplatesAtOnce: true, //true, better sometimes false for production
-  dbSessionsOn: false, //true or false if deactivated
   languagesOn: true, //true or false if deactivated
   importExportOn: false, //true or false if deactivated
   chkt2_On: true, //if false skip user data insertion
@@ -23,5 +22,13 @@ var Config={
   showsubcategory_On: false, //if true expand to subcategories
   itemExtend_On: true, //if true expand item extend is available
   firstSubcategoryAuto_On: false, //if true expand to first subcategory content
+  pageTitle_On: true, //if true show page title
+  pageSubTitle_On: true, //if true show page subtitle
+  pagTitAsText: false, //if true show web page title as page title
+  nodeOnAppend: function(){
+    if (window.screen.width<700 && this.myContainer && this.myContainer.id=='centralcontent') {
+      this.myContainer.scrollIntoView();
+    }
+  }, //scroll to content in phone screens
 }
 

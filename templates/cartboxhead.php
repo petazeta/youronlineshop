@@ -1,17 +1,19 @@
-<template>
-  <span>
-    <a href="javascript:"></a>
-    <script>
-      thisNode.writeProperty(thisElement);
-      //adding the edition pencil
-      var launcher = new Node();
-      launcher.thisNode = thisNode;
-      launcher.editElement = thisElement;
-      launcher.appendThis(thisElement.parentElement, "templates/addbutedit.php");
-      thisElement.addEventListener("click", function(ev){
-        ev.preventDefault();
-        document.getElementById("cartbox").style.visibility="hidden";
-      });
-    </script>
-  </span>
-</template>
+<!--
+-->
+<span style="position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <a href="javascript:"></a>
+  <script>
+    thisNode.writeProperty(thisElement);
+    //adding the edition pencil
+    DomMethods.editListeners({thisNode: thisNode, refreshOnLog: true}); //to refresh when is loged in and out
+    if (webuser.isWebAdmin()) {
+      DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      thisNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+    }
+    thisElement.addEventListener("click", function(ev){
+      ev.preventDefault();
+      document.getElementById("cartbox").style.visibility="hidden";
+    });
+  </script>
+</span>
