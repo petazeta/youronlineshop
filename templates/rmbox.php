@@ -1,16 +1,21 @@
 <!--
-It recieves thisNode, myTp and myContainer. and make a frame that removes myContainer content when clicking close button.
+It recieves thisNode, myTp, removeContainer and make a frame that removes myContainer content when clicking close button.
 After closing it fires the event closewindow.
 -->
 <div class="rmbox">
   <div class="bttopinsiderightinside">
     <button type="button" class="closeimage minibtn transp" style="width: 15px; height: 15px;"></button>
     <script>
-      var myContainer=thisParams.myContainer;
-      thisElement.onclick=function(){
-        myContainer.innerHTML="";
+      var rmBox=thisElement.parentElement.parentElement;
+      thisElement.addEventListener('click', ()=>{
+        if (thisParams.removeContainer) {
+          thisParams.removeContainer.parentElement.removeChild(thisParams.removeContainer);
+        }
+        else {
+          rmBox.parentElement.removeChild(rmBox);
+        }
         thisNode.dispatchEvent("closewindow");
-      }
+      });
     </script>
   </div>
   <div></div>

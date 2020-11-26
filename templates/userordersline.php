@@ -33,19 +33,12 @@
       if (Config.chktaddressOn) showAddress=true;
       thisElement.addEventListener('click', function(event){
         event.preventDefault();
-        if (thisUser.openview) return false;
         var thisRow=DomMethods.closesttagname(thisElement, "TR");
         var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
         myrow=thisTable.insertRow(thisRow.rowIndex+1);
         mycell=myrow.insertCell(0);
         mycell.colSpan=thisTable.tHead.rows[0].cells.length;
-        thisUser.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/useraddressview.php", myContainer: mycell, myParams: {fieldtype: fieldtype, showAddress: showAddress}}).then(function(){
-          thisUser.openview=true;
-        });
-        thisUser.addEventListener("closewindow", function(){
-          thisTable.deleteRow(myrow.rowIndex);
-          thisUser.openview=false;
-        }, "closeuseraddress");
+        thisUser.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/useraddressview.php", removeContainer: myrow, myParams: {fieldtype: fieldtype, showAddress: showAddress}});
       });
     </script>
   </td>
@@ -61,21 +54,13 @@
     <script>
       thisElement.addEventListener('click', function(event){
         event.preventDefault();
-        if (thisNode.openview) return false;
         thisNode.loadfromhttp({action: "load my tree"}).then(function(myNode) {
           var thisRow=DomMethods.closesttagname(thisElement, "TR");
           var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
           myrow=thisTable.insertRow(thisRow.rowIndex+1);
           mycell=myrow.insertCell(0);
           mycell.colSpan=thisTable.tHead.rows[0].cells.length;
-          thisNode.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/order.php", myContainer: mycell}).then(function(myNode){
-            myNode.openview=true
-          });
-          //To remove not only de order but the order row container
-          thisNode.addEventListener("closewindow", function(){
-            thisTable.deleteRow(myrow.rowIndex);
-            thisNode.openview=false;
-          }, "closeuserorder");
+          thisNode.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/order.php", removeContainer: myrow});
         });
       });
     </script>

@@ -60,7 +60,7 @@
           </script>
           <input type="hidden" disabled>
           <script>
-            var myNode=thisNode.getNextChild({"name":"btsmt"}).getRelationship({"domelementsdata"}).getChild();
+            var myNode=thisNode.getNextChild({"name":"btsmt"}).getRelationship("domelementsdata").getChild();
             myNode.writeProperty(thisElement);
             thisElement.onblur=function(){
               thisElement.type="hidden";
@@ -96,7 +96,7 @@
           myNode.writeProperty(thisElement);
           //adding the edition pencil
           if (webuser.isWebAdmin()) {
-            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElemen});
+            myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
             DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
             thisElement.type="text";
           }
@@ -121,7 +121,7 @@
         <input type="hidden" name="pwdDoubleError" disabled>
         <script>
           var myNode=thisNode.getNextChild({name:"pwdDoubleError"}).getRelationship("domelementsdata").getChild();
-          myNode.writeProperty("value");
+          myNode.writeProperty(thisElement);
           //adding the edition pencil
           if (webuser.isWebAdmin()) {
             myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});

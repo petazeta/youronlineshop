@@ -15,7 +15,6 @@
           var titNode=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({name: "not located"}).getNextChild({name: "pagTit"});
           titNode.getRelationship("domelementsdata").getChild().refreshView(thisElement,"templates/singlefield.php", {labelName: titNode.properties.name, typeInput: true}).then(()=>{
             var titInput=thisElement.getElementsByTagName('input')[0];
-            console.log(thisElement, titInput);
             if (!Config.pagTitAsText) {
               titInput.addEventListener('blur', function(){
                 document.title=titInput.value;
