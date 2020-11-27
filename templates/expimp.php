@@ -280,7 +280,7 @@
     </div>
     <div style="display:table; position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
-      <input type="hidden" name="implangerror">
+      <input type="hidden" name="implangerror" disabled>
       <script>
         var myNode=thisNode.getNextChild({"name":"implangerror"}).getRelationship({name:"domelementsdata"}).getChild();
         myNode.writeProperty(thisElement, null, "value");
@@ -458,7 +458,7 @@
       </script>
       <input type="hidden" disabled>
       <script>
-        var myNode=thisNode.getNextChild({"name":"butimp"}).getRelationship({"domelementsdata"}).getChild();
+        var myNode=thisNode.getNextChild({"name":"butimp"}).getRelationship("domelementsdata").getChild();
         myNode.writeProperty(thisElement);
         thisElement.onblur=function(){
           thisElement.type="hidden";
