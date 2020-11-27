@@ -12,11 +12,12 @@
       thisNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
     }
     //header title
-    if (Config.pagTitAsText && thisNode.properties.value) thisNode.writeProperty(document, null, "title");
-    if (Config.pagTitAsText) {
-      thisElement.addEventListener('blur', ()=>{
+    var titFixed=domelementsroot.getNextChild({name: "labels"}).getNextChild({name:"not located"}).getNextChild({name: "pagTit"}).getRelationship("domelementsdata").getChild();
+    if (!titFixed.properties.value) thisNode.writeProperty(document, null, "title");
+    thisElement.addEventListener('blur', ()=>{
+      if (!titFixed.properties.value) {
         document.title=thisElement.innerHTML;
-      });
-    }
+      }
+    });
   </script>
 </div>

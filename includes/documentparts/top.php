@@ -11,10 +11,9 @@
 <div class="pgsubtitle"></div>
 <script>
 domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-  if (!Config.pagTitAsText) { //sets page title
-    var pagTit=this.getChild().getNextChild({name: "labels"}).getNextChild({name:"not located"}).getNextChild({name: "pagTit"}).getRelationship("domelementsdata").getChild();
-    pagTit.writeProperty(document, null, "title");
-  }
+  var pagTit=this.getChild().getNextChild({name: "labels"}).getNextChild({name:"not located"}).getNextChild({name: "pagTit"}).getRelationship("domelementsdata").getChild();
+  if (pagTit.properties.value) pagTit.writeProperty(document, null, "title");
+
   var logboxparent=this.getChild().getNextChild({name: "labels"}).getNextChild({name:"middle"}).getNextChild({name:"logbox"}).getRelationship({name:"domelements"});
   logboxparent.refreshView(document.getElementById("logcontainer"), "templates/logicon.php");
   var cartboxtt=this.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"}).getNextChild({name: "crtbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
