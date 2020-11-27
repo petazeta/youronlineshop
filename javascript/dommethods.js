@@ -298,7 +298,6 @@ DomMethods={
       }
       else {
         myParams.imageElement.setAttribute('data-src', fileName + '.png');
-        console.log('loaded', myParams);
         this.dispatchEvent("finishAutoEdit");
       }
     });

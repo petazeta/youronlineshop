@@ -47,9 +47,9 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
                   throw '<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.</p>';
                 }
                 myalert.hidealert();
-                myalert.properties.alertmsg='<p><b>Page will be reloaded in 3 seconds...</b></p>'; 
+                myalert.properties.alertmsg='<p><b>Page will be reloaded in 2 seconds...</b></p>'; 
                 myalert.showalert();
-                window.setTimeout(function(){window.location.reload();}, 3000);
+                window.setTimeout(function(){window.location.reload();}, 2000);
               });
               thisNode.hidealert();
             });

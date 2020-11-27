@@ -3,6 +3,12 @@ myNode, labelNode:, fileName:
 -->
 <div class="alert alertmsg">
   <form action="uploadfile.php" enctype="multipart/form-data" id="form-file">
+    <div class="loader" style="visibility:hidden">
+      <div class="elementloader"></div>
+      <script>
+        DomMethods.setSizeFromStyle(thisElement);
+      </script>
+    </div>
     <div style="display:flex; flex-flow: column; gap: 1em;">
       <div>
         <span style="position:relative;">
@@ -94,6 +100,7 @@ myNode, labelNode:, fileName:
     });
     thisElement.addEventListener("submit", function(ev) {
       ev.preventDefault();
+      if (!thisElement.elements.fileData.value) return false;
       var myFormDataSmall=new FormData();
       var myFormDataBig=new FormData();
       myFormDataSmall.append(thisParams.fileName, newImageSmall[0], thisParams.fileName + ".png");
@@ -102,8 +109,10 @@ myNode, labelNode:, fileName:
       myFormDataBig.append(thisParams.fileName, newImageBig[0], thisParams.fileName + ".png");
       myFormDataBig.append('fileSize', 'big');
       myFormDataBig.action=this.action;
+      thisElement.querySelector('div[class=loader]').style.visibility='visible';
       thisParams.myNode.loadfromhttp(myFormDataSmall).then(function(myNode){
         myNode.loadfromhttp(myFormDataBig).then(function(myNode){
+          thisElement.querySelector('div[class=loader]').style.visibility='hidden';
           thisNode.hidealert();
           myNode.dispatchEvent("loadImage");
         });
