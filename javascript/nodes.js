@@ -516,6 +516,7 @@ Node.prototype.loadfromhttp=function (requestData) {
     }
   });
 };
+// If function.oneTime==true, this event execs just once and noother event is fired
 Node.prototype.addEventListener=function (eventsNames, listenerFunction, id, targetNode) {
   if (!this.events) this.events={};
   if (!Array.isArray(eventsNames)) eventsNames=[eventsNames];
@@ -555,8 +556,7 @@ Node.prototype.eventExists=function (eventName, id, targetNode) {
     var i=this.events[eventName].length;
     while(i--) {
       if (id && this.events[eventName][i].id==id || !id) {
-	if (targetNode)
-	{
+	if (targetNode) {
 	  //When loading nodes the object can be different so we check by properties.id combined with the table name
 	  if (targetNode.constructor.name=="NodeFemale") {
 	    if (targetNode.properties.name==this.events[eventName][i].targetNode.properties.name
@@ -578,7 +578,6 @@ Node.prototype.eventExists=function (eventName, id, targetNode) {
   }
   return false;
 }
-// If function oneTime==true, this event execs just once and noother event is fired
 Node.prototype.dispatchEvent=function (eventName, args) {
   if (this.events && this.events[eventName]) {
     var i=this.events[eventName].length;

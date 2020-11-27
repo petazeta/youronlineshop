@@ -29,9 +29,11 @@
         <script>
           var buttonLabel=thisNode.getNextChild({"name":"chkt2next"}).getRelationship({name:"domelementsdata"}).getChild();
           buttonLabel.writeProperty(thisElement);
+          var nextFunction=()=>(new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
+          nextFunction.oneTime=true;
+          webuser.addEventListener('saveuserdata', nextFunction, 'checkout2');
           thisElement.addEventListener("click", function() {
             document.getElementById('useraddress').querySelector('button[type=submit]').click();
-            if (webuser.saveError==false) (new Node()).refreshView(document.getElementById("centralcontent"),"templates/checkout3.php");
           });
         </script>
         <input type="hidden" disabled>

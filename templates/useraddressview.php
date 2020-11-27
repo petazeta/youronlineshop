@@ -29,14 +29,12 @@ Param fieldtype: input / textnode
             if (thisParams.showAddress) {
               var addressdata=DomMethods.formToData(thisNode.getRelationship("addresses"), this.form);
             }
-            var fieldError=false; //Error flag
             if (!DomMethods.checkValidData(userdata)) {
               //Errors in characters
               myalert.properties.alertmsg=this.form.elements.fieldCharError.value;
               if (this.form.elements[userdata.extra.errorKey]) this.form.elements[userdata.extra.errorKey].focus();
               myalert.properties.timeout=5000;
               myalert.showalert();
-              fieldError=true;
             }
             else if (addressdata && !DomMethods.checkValidData(addressdata)) {
               //Errors in characters
@@ -44,7 +42,6 @@ Param fieldtype: input / textnode
               if (this.form.elements[addressdata.extra.errorKey]) this.form.elements[addressdata.extra.errorKey].focus();
               myalert.properties.timeout=5000;
               myalert.showalert();
-              fieldError=true;
             }
             else if (!DomMethods.validateEmail(userdata.properties.email)) {
               //emal format error
@@ -52,7 +49,6 @@ Param fieldtype: input / textnode
               this.form.elements.email.focus();
               myalert.properties.timeout=5000;
               myalert.showalert();
-              fieldError=true;
             }
             else {
               myUpdateProp(thisNode.getRelationship("usersdata"), userdata).then(function(){
@@ -62,6 +58,7 @@ Param fieldtype: input / textnode
                     myalert.properties.alertmsg=savedlabel.getRelationship("domelementsdata").getChild().properties.value;
                     myalert.properties.timeout=3000;
                     if (event.isTrusted) myalert.showalert();
+                    thisNode.dispatchEvent('saveuserdata');
                   });
                 }
                 else {
@@ -69,15 +66,15 @@ Param fieldtype: input / textnode
                   myalert.properties.alertmsg=savedlabel.getRelationship("domelementsdata").getChild().properties.value;
                   myalert.properties.timeout=3000;
                   if (event.isTrusted) myalert.showalert();
+                  thisNode.dispatchEvent('saveuserdata');
                 }
               });
             }
-            thisNode.saveError=fieldError;
             function myUpdateProp(myrel, mydata) {
               return new Promise((resolve, reject)=>{
                 if (DomMethods.checkDataChange(myrel, mydata)) {
                   //Now we save the data: save tree
-                  myrel.getChild().loadfromhttp({action:"edit my properties", properties: mydata.properties}, function(){
+                  myrel.getChild().loadfromhttp({action:"edit my properties", properties: mydata.properties}).then(function(){
                     for (var i=0; i<myrel.childtablekeys.length; i++) {
                       var propname=myrel.childtablekeys[i];
                       if (propname=="id") continue;
