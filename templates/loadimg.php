@@ -44,11 +44,6 @@ myNode, labelNode:, fileName:
               thisNode.hidealert();
             };
             thisParams.labelNode.getNextChild({"name":"cancel"}).getRelationship({name:"domelementsdata"}).getChild().writeProperty(thisElement);
-            //adding the edition pencil
-            if (webuser.isWebAdmin()) {
-              DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-              thisParams.labelNode.getNextChild({"name":"cancel"}).getRelationship({name:"domelementsdata"}).getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
-            }
           </script>
           <input type="hidden" disabled>
           <script>

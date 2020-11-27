@@ -23,7 +23,11 @@ cartboxitem.prototype.loadcartitem=function(cartitem) {
 
 function cart() {
   NodeMale.call(this);
-  //this.load({relationships:[{properties: {name:"cartitem"}}, {properties:{name:"cartbox"}, children: [{relationships:[{properties: {name:"cartboxitem"}}]}]}]});
+}
+cart.prototype=Object.create(NodeMale.prototype);
+cart.prototype.constructor=cart;
+
+cart.prototype.initCart=function() {
   var cartitemrel=new NodeFemale();
   cartitemrel.properties.name="cartitem";
   this.addRelationship(cartitemrel);
@@ -45,8 +49,6 @@ function cart() {
     // If cart is empty checkout do nothing else make the call to next step
   }
 }
-cart.prototype=Object.create(NodeMale.prototype);
-cart.prototype.constructor=cart;
 
 cart.prototype.additem=function(item, quantity) {
   if (quantity==null) quantity=1;

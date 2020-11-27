@@ -289,7 +289,7 @@ DomMethods={
     }
     else fileName="file_" + this.properties.id;
     var loadImageAlert=new Alert();
-    loadImageAlert.showalert(null, "templates/loadimg.php", {thisNode: myParams.thisNode, labelNode: myParams.labelNode, fileName: myParams.fileName});
+    loadImageAlert.showalert(null, "templates/loadimg.php", {myNode: myParams.myNode, labelNode: myParams.labelNode, fileName: myParams.fileName});
     this.addEventListener("loadImage",function(){
       if (this.extra && this.extra.error==true) {
         var loadError=myParams.labelNode.getNextChild({name:"loadError"});

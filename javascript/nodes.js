@@ -437,7 +437,7 @@ Node.prototype.writeProperty=function(container, property, attribute, onEmptyVal
 }
 
 //It loads a node tree from a php script that privides it in json format.
-Node.prototype.loadfromhttp=function (requestData, reqlistener) {
+Node.prototype.loadfromhttp=function (requestData) {
   return new Promise((resolve, reject) => {
     var xmlhttp;
     xmlhttp = new XMLHttpRequest();
@@ -465,9 +465,6 @@ Node.prototype.loadfromhttp=function (requestData, reqlistener) {
         if (requestAction) console.log(requestAction);
         console.log(responseobj);
         console.log(thisNode);
-      }
-      if (reqlistener) {
-        reqlistener.call(thisNode);
       }
       resolve(thisNode);
       thisNode.dispatchEvent("loadfromhttp");

@@ -8,4 +8,7 @@ if (!defined('DB_REMOVE_PREFIX')) define('DB_REMOVE_PREFIX', false);
 if (!defined('DB_PREFIX')) define('DB_PREFIX', null);
 
 if (!defined('LOAD_TP_AT_ONCE')) define('LOAD_TP_AT_ONCE', true);
+
+//Theme Layout
+if (!defined('THEME')) define('THEME', 'retro');
 ?>

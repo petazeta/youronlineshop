@@ -1,11 +1,15 @@
-<div style="display:table;">
+<div style="display:table;position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
   <input type="hidden" name="succeedNotice">
   <script>
     var myNode=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"}).getNextChild({"name":"order"}).getNextChild({"name":"paysucceed"}).getRelationship({name: "domelementsdata"}).getChild();
     myNode.writeProperty(thisElement, null, "value");
     //adding the edition pencil
-    myNode.appendThis(thisElement.parentElement, "templates/addbutedit.php", {editElement : thisElement, thisAttribute: "value"});
-    if (webuser.isWebAdmin()) thisElement.type="input";
+    if (webuser.isWebAdmin()) {
+      DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+      thisElement.type="text";
+    }
   </script>
 </div>
 <button id="basic-photo-button" style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em" type="button">Pay</button>

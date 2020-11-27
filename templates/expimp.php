@@ -230,8 +230,11 @@
         var title=thisNode.getNextChild({"name":"titimp"}).getRelationship({name:"domelementsdata"}).getChild();
         title.writeProperty(thisElement);
         //adding the edition pencil
-        title.appendThis(thisElement.parentElement, "templates/addbutedit.php", {editElement: thisElement});
-      </script>
+        if (webuser.isWebAdmin()) {
+          DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+        }
+       </script>
     </div>
     <div style="padding-top: 10px">
       <textarea name="impdata" rows="10" cols="50"></textarea>

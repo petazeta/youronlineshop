@@ -10,9 +10,9 @@
   </div>
 </div>
 <script>
-  var mycart;
+  var mycart= new cart();
   domelementsrootmother.addEventListener(["loadLabels", "changeLanguage"], function(){
-    mycart = new cart();
+    mycart.initCart();
     document.getElementById("cartbox").getElementsByTagName("button")[0].addEventListener("click",  function(){
       document.getElementById("cartbox").style.visibility="hidden";
     });

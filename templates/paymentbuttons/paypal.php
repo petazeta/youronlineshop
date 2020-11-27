@@ -1,11 +1,15 @@
-<div style="display:table;">
-  <input type="hidden" name="succeedNotice">
+<div style="display:table;position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <input type="hidden" name="succeedNotice" disabled>
   <script>
-    var myNode=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"}).getNextChild({"name":"order"}).getNextChild({"name":"paysucceed"}).getRelationship({name: "domelementsdata"}).getChild();
-    myNode.writeProperty(thisElement, null, "value");
+    var myNode=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"}).getNextChild({"name":"order"}).getNextChild({"name":"paysucceed"}).getRelationship("domelementsdata").getChild();
+    myNode.writeProperty(thisElement);
     //adding the edition pencil
-    myNode.appendThis(thisElement.parentElement, "templates/addbutedit.php", {editElement : thisElement, thisAttribute: "value"});
-    if (webuser.isWebAdmin()) thisElement.type="input";
+    if (webuser.isWebAdmin()) {
+      DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
+      thisElement.type="text";
+    }
   </script>
 </div>
 <div id="paypal-button-container"></div>

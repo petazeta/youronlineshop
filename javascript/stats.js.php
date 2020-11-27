@@ -81,16 +81,21 @@ echo 'php' . phpversion();
     initData.push({databasellink: "It seems Not reading data"});
   }
   var myLocation=new Node();
+  myLocation.load=function(source) {
+    if (typeof source=="string") source=JSON.parse(source);
+    this.data=source;
+  }
   var myEvents=[
     {write: "exitPage", eventListener: window, eventName: "beforeunload"},
     {write: "clickW", eventListener: window, eventName: "click"},
-    {write: "javascript:ev.write=myLocation.properties.ip.country", eventListener: myLocation, eventName: "loadfromhttp"},
     {write: "javascript:ev.write='log '+ (webuser.getUserType() || webuser.properties.name || 'out')", eventListener: webuser, eventName: "log"},
     {write: "cartItem", eventListener: mycart, eventName: "cartItem"}
   ];
-  myLocation.loadfromhttp("https://ip.nf/me.json", null, 1);
-  this.makeRecord(initData);  
-  window.setTimeout(function(){statsRecorder.keepStats()}, 180000);
+  myLocation.loadfromhttp("https://ip.nf/me.json", null, 1).then(()=>{
+    if (myLocation.data && myLocation.data.ip && myLocation.data.ip.country) statsRecorder.makeRecord([{loadfromhttp: myLocation.data.ip.country}]);
+  });
+  statsRecorder.makeRecord(initData);
+  window.setTimeout(()=>statsRecorder.keepStats(), 180000);
 
   myEvents.forEach(function(ev){
     ev.eventListener.addEventListener(ev.eventName, function(myArg){ //the argument sent at dispatchEvent
