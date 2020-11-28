@@ -90,6 +90,10 @@ div.menuscontainer a.menu:hover, div.menuscontainer .selected a.menu{
   text-shadow: 4px 2px 2px #d5d5d5;
   font-weight: normal;
 }
+nav {
+	position: relative;
+	z-index: 2; /* to overlap main*/
+}
 nav.categories {
   grid-row: 1 / span 2;
 }
@@ -375,6 +379,7 @@ div.admnbtsgrid {
   border: 1px solid rgba(27,31,35,0.2);
   border-radius: 0.25em;
   cursor: pointer;
+  justify-self: left;
 }
 
 table.mytable {
