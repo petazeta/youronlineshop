@@ -187,7 +187,7 @@
       </form>
     </div>
   </div>
-  <div>
+  <div style="position:relative;z-index:6;">
     <div data-id="admnbuts">
       <div class="admnbtsgrid"></div>
     </div>

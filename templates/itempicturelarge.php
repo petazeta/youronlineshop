@@ -124,13 +124,11 @@
       </div>
     </div>
   </div>
-  <div style="display: inline-block; position:relative;">
-    
+  <div style="display: inline-block; position:relative; z-index:6;">
     <div class="btmiddleright" style="display:flex;">
       <div data-id="butedit" data-but-name="norm"></div>
       <div data-id="butedit" data-but-name="code"></div>
     </div>
-    
     <div data-id='descriptionlarge' style="padding-top: 1em"></div>
     <script>
       thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionlarge");

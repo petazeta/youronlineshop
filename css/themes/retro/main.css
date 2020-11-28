@@ -196,6 +196,8 @@ div.centercolumn {
 }
 
 .paragraph {
+	position: relative;
+	z-index: 4; /* not to be overlaped by nav categories admin buttons*/
   padding: 0.2em 0 1.2em 0;
 }
 
