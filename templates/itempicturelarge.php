@@ -125,14 +125,42 @@
     </div>
   </div>
   <div style="display: inline-block; position:relative;">
-    <div data-id="butedit" class="btmiddleright"></div>
-    <div style="padding-top: 1em"></div>
+    
+    <div class="btmiddleright" style="display:flex;">
+      <div data-id="butedit" data-but-name="norm"></div>
+      <div data-id="butedit" data-but-name="code"></div>
+    </div>
+    
+    <div data-id='descriptionlarge' style="padding-top: 1em"></div>
     <script>
       thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionlarge");
       //adding the edition pencil
       if (webuser.isWebAdmin()) {
-        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-        thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "descriptionlarge", inlineEdition: false});
+        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), parent: thisElement.parentElement});
+        thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "descriptionlarge", inlineEdition: false, thisAttribute: 'innerHTML'});
+        DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), parent: thisElement.parentElement});
+        thisElement.onblur=function(){
+          thisElement.parentElement.querySelector('textarea').value=thisElement.innerHTML;
+        }
+      }
+    </script>
+    <textarea style="display:none;" rows="6" cols="80" disabled></textarea>
+    <script>
+      var myNode=thisNode.getRelationship("itemsdata").getChild();
+      myNode.writeProperty(thisElement, "descriptionlarge");
+      thisElement.onblur=function(){
+        thisElement.parentElement.querySelector('div[data-id=descriptionlarge]').innerHTML=thisElement.value;
+        thisElement.style.display="none";
+      }
+      //adding the edition pencil
+      if (webuser.isWebAdmin()) {
+        myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "descriptionlarge", image: 'code', inlineEdition: false})
+        .then(()=>{
+          thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]').querySelector('button[data-id=codebut]').addEventListener('click', ()=>{
+            thisElement.style.display="unset";
+            thisElement.focus();
+          });
+        });
       }
     </script>
   </div>

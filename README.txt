@@ -34,7 +34,7 @@ If you prefer we offer YOUR ONLINE SHOP installation and hosting service for 10 
 
 1 - Upload the compressed file to your web server.
 2 - Unpack it to the destination folder (You may have to create it first).
-3 - Create a database (and import file includes/database.sql or let the program do it later). You can use PhpMyAdmin for this purpose.
+3 - Create a database. You can use PhpMyAdmin for this pourpose.
 4 - Edit database settings at: includes/config.php.
 5 - Give write permisions to folders catalog/images/small and catalog/images/big (To allow upload product images).
 6 - Also you can change some system settings at file: javascript/config.js.
@@ -46,7 +46,7 @@ If you prefer we offer YOUR ONLINE SHOP installation and hosting service for 10 
 *Getting started*
 *****************
 
-Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear.
+Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear. You must click "initialize database" button at first time.
 
 There are some already created users: like "webadmin" and "ordersadmin". These are the users names, and users passwords are the same as users names.
 

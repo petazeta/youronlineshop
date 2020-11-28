@@ -49,8 +49,8 @@
     thisProperty = keys.find(key => key!='id');
   }
   if (!thisAttribute) {
-    if (editElement.tagName=='INPUT') thisAttribute="value";
-    else thisAttribute="innerHTML";
+    if (editElement.tagName=='INPUT' || editElement.tagName=='TEXTAREA') thisAttribute="value";
+    else thisAttribute="textContent";
   }
   if (typeof thisParams.autoeditFunc=="function") buttonElement.onclick=function() {
     thisNode.addEventListener("finishAutoEdit", changeProperty, "autoedit");

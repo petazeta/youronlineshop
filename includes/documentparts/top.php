@@ -4,6 +4,13 @@
     <div class="toolbar">
       <a class="toolbaricon" id="logcontainer" href=""></a>
       <a class="toolbaricon" id="cartcontainer" href=""></a>
+      <script>
+        document.getElementById("cartcontainer").addEventListener("click", function(ev){
+          ev.preventDefault();
+          var cartbox=document.getElementById("cartbox");
+          DomMethods.switchVisibility(cartbox);
+        });
+      </script>
       <?php include('includes/documentparts/cartbox.php'); ?>
     </div>
   </div>

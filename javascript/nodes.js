@@ -236,8 +236,8 @@ Node.prototype.refreshView=function (container, tp, params) {
     
     if (!container) reject('No container');
     if (container.nodeType==1) container.classList.add("refreshviewloader");
-    var removecontent=function(){
-      this.myContainer.innerHTML='';
+    var removecontent=function(myContainer){
+      myContainer.innerHTML='';
     }
     removecontent.oneTime=true;
     this.addEventListener('beforeAppendThis', removecontent);
@@ -268,7 +268,7 @@ Node.prototype.appendThis=function (container, tp, params) {
       });
     })(tp).then((myTp) => {
       var clone=this.prerender(myTp, params);
-      this.dispatchEvent("beforeAppendThis");
+      this.dispatchEvent("beforeAppendThis", [container]);
       container.appendChild(clone);
       if (Config && typeof Config.nodeOnAppend == 'function') {
         Config.nodeOnAppend.call(this);
@@ -351,8 +351,8 @@ Node.prototype.refreshChildrenView=function (container, tp, params) {
     if (!tp) tp=this.myChildTp; //Default value for
     else this.myChildTp=tp;
     if (container.nodeType==1) container.classList.add("refreshchildrenloader");
-    var removecontent=function(){
-      this.childContainer.innerHTML='';
+    var removecontent=function(myContainer){
+      myContainer.innerHTML='';
     }
     removecontent.oneTime=true;
     this.addEventListener('beforeAppendChildren', removecontent);
@@ -390,7 +390,7 @@ Node.prototype.appendChildren=function (container, tp, params) {
           renderedChildren.appendChild(this.children[i].prerender(myTp, params));
         }
       }
-      this.dispatchEvent("beforeAppendChildren");
+      this.dispatchEvent("beforeAppendChildren", [container]);
       if (renderedChildren) {
         container.appendChild(renderedChildren);
       }
