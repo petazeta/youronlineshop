@@ -498,7 +498,7 @@ table.order tr.total {
 #cartbox {
 	position: absolute;
 	top: 65px;
-	z-index: 1;
+	z-index: 15;
 }
 #cartbox .product a, #cartbox tr.product span{
   font-size: 9pt !important;
