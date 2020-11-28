@@ -1,10 +1,10 @@
 /temp/*
+/temp/*/
 /catalog/images/small/*
-/catalog/images/small/!noimg.png
 !/catalog/images/small/noimg.png
 /catalog/images/big/*
-/catalog/images/big/!noimg.png
 !/caralog/images/big/noimg.png
 /css/themes/*
-!/css/themes/retro
+/css/themes/*/
+!/css/themes/retro/
 /prueba.php
