@@ -60,6 +60,7 @@
             thisElement.addEventListener("click",function(event){
               event.preventDefault();
               if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+              document.getElementById("centralcontent").innerHTML=''; //This is a patch for a problem at reload page, it still keeps the itemproducts short
               thisNode.refreshView(document.getElementById("centralcontent"),"templates/itempicturelarge.php");
               if (event.isTrusted) {
                 //it doesn't record state when: go back (dont state twice the same url)
