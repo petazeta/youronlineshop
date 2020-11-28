@@ -5,4 +5,5 @@
 /catalog/images/big/*
 /catalog/images/big/!noimg.png
 !/caralog/images/big/noimg.png
+/css/themes/*
 /prueba.php
