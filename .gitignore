@@ -5,6 +5,7 @@
 /catalog/images/big/*
 !/caralog/images/big/noimg.png
 /css/themes/*
+!/css/themes/default.css
 /css/themes/*/
 !/css/themes/retro/
 /prueba.php
