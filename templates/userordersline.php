@@ -31,14 +31,21 @@
       }
       var showAddress=false;
       if (Config.chktaddressOn) showAddress=true;
+      thisElement.clickOn=false;
       thisElement.addEventListener('click', function(event){
         event.preventDefault();
-        var thisRow=DomMethods.closesttagname(thisElement, "TR");
-        var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
-        myrow=thisTable.insertRow(thisRow.rowIndex+1);
-        mycell=myrow.insertCell(0);
-        mycell.colSpan=thisTable.tHead.rows[0].cells.length;
-        thisUser.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/useraddressview.php", removeContainer: myrow, myParams: {fieldtype: fieldtype, showAddress: showAddress}});
+        if (!thisElement.clickOn) {
+          var thisRow=DomMethods.closesttagname(thisElement, "TR");
+          var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
+          myrow=thisTable.insertRow(thisRow.rowIndex+1);
+          mycell=myrow.insertCell(0);
+          mycell.colSpan=thisTable.tHead.rows[0].cells.length;
+          thisUser.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/useraddressview.php", removeContainer: myrow, myParams: {fieldtype: fieldtype, showAddress: showAddress}});
+          thisElement.clickOn=true;
+          var myCloseFunc= ()=> {if (thisElement.clickOn) thisElement.clickOn=false};
+          myCloseFunc.oneTime=true;
+          thisUser.addEventListener('closewindow', myCloseFunc);
+        }
       });
     </script>
   </td>
@@ -52,16 +59,24 @@
       </script>
     </button>
     <script>
+      thisElement.clickOn=false;
       thisElement.addEventListener('click', function(event){
         event.preventDefault();
-        thisNode.loadfromhttp({action: "load my tree"}).then(function(myNode) {
-          var thisRow=DomMethods.closesttagname(thisElement, "TR");
-          var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
-          myrow=thisTable.insertRow(thisRow.rowIndex+1);
-          mycell=myrow.insertCell(0);
-          mycell.colSpan=thisTable.tHead.rows[0].cells.length;
-          thisNode.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/order.php", removeContainer: myrow});
-        });
+        if (!thisElement.clickOn) {
+          thisNode.loadfromhttp({action: "load my tree"}).then(function(myNode) {
+            var thisRow=DomMethods.closesttagname(thisElement, "TR");
+            var thisTable=DomMethods.closesttagname(thisElement, "TABLE");
+            myrow=thisTable.insertRow(thisRow.rowIndex+1);
+            mycell=myrow.insertCell(0);
+            mycell.colSpan=thisTable.tHead.rows[0].cells.length;
+            thisNode.refreshView(mycell, "templates/rmbox.php", {myTp: "templates/order.php", removeContainer: myrow});
+            thisElement.clickOn=true;
+            var myCloseFunc= ()=> {if (thisElement.clickOn) thisElement.clickOn=false};
+            myCloseFunc.oneTime=true;
+            thisNode.addEventListener('closewindow', myCloseFunc);
+          });
+        }
+        else thisElement.clickOn=false;
       });
     </script>
   </td>

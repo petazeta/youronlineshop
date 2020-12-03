@@ -19,7 +19,7 @@
         thisElement.href=url;
         thisNode.getRelationship({name: "itemcategoriesdata"}).loadfromhttp({action: "load my children", language: webuser.extra.language.properties.id}).then((myNode) => {
           myNode.getChild().writeProperty(thisElement);
-          if (webuser.isWebAdmin()) {
+          if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
             DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
             myNode.getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement});
             DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});

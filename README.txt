@@ -2,7 +2,7 @@
 *YOS Version:
 ***************
 
-2.0.0 24/11/2020
+2.0.1 03/12/2020
 
 
 ***************
@@ -46,7 +46,7 @@ If you prefer we offer YOUR ONLINE SHOP installation and hosting service for 10 
 *Getting started*
 *****************
 
-Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear. You must click "initialize database" button at first time.
+Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear. You must click "Initialize database" button at the very first time to fulfill the database.
 
 There are some already created users: like "webadmin" and "ordersadmin". These are the users names, and users passwords are the same as users names.
 
@@ -60,7 +60,9 @@ Once editing some content press Intro or click outside of the editable area to s
 
 To reach the checkout process edition you should log in with the webadmin user and make an order as you were logged in as a normal user. Once you get to some checkout steps you should be able to edit the checkout step options. Some extra edition elements that can not be reached as a web user can be accessed by cicking the Extra Elements button that will appear at the left bar just after log in as webadmin.
 
-For system configuration edit file javascript/config.js
+For system configuration edit file javascript/config.js (check out javascript/default.js).
+
+More information at our youtube chanel.
 
 
 ****************************

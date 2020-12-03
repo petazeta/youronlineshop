@@ -1,5 +1,5 @@
 
-# Your Online Shop System V 2.0.0
+# Your Online Shop System V 2.0.1
 
 <table>
   <tr>
@@ -47,7 +47,7 @@ It implements an e-commerce system (Ajax and WYSIWYG). It is written in PHP (As 
 
 ## Getting started
 
-Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear. You must click "initialize database" button at first time.
+Open the browser (chrome or firefox) at the main folder URL. The ecommerce system will appear. You must click "initialize database" button at the first very time to fulfill the database.
 
 There are some already created users: "webadmin" and "ordersadmin". These are the users names, and users passwords are the same as users names.
 
@@ -61,7 +61,9 @@ Once editing some content press Intro or click outside of the editable area to s
 
 To reach checkout process edition you should log in with the webadmin user and make an order as you were logged in as a normal user. Once you get to some checkout steps you should be able to edit the checkout step options. Some extra edition elements that can not be reached as a web user can be accessed by cicking the Extra Elements button that will appear at the left bar just after log in as webadmin.
 
-For system configuration edit file javascript/config.js
+For system configuration edit file javascript/config.js (check out also javascript/default.js)
+
+More info at our youtube chanel.
 
 ## Frequently Asked Questions*
 

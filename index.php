@@ -20,7 +20,7 @@ if (defined('DB_PREFIX')) { $tablePrefix=DB_PREFIX;}
     <script async src="javascript/stats.js.php"></script>
     <link rel="stylesheet" type="text/css" href="css/default.css">
 <?php if (defined('THEME')) { ?>
-    <link rel="stylesheet" type="text/css" href="css/themes/<?php echo THEME; ?>/main.css">
+    <link rel="stylesheet" type="text/css" href="css/themes/<?php echo THEME; ?>">
 <?PHP } ?>    
     <link rel="icon" href="favicon.ico">
     <?php if (defined('LOAD_TP_AT_ONCE') && LOAD_TP_AT_ONCE==true) { include('includes/templates.php'); } ?>

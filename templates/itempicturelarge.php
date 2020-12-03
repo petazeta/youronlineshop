@@ -30,7 +30,7 @@
             thisElement.src="catalog/images/big/" + this.properties.image;
           }
         }, "img");
-        if (webuser.isWebAdmin()) {
+        if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
           DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
           thisNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "image", thisAttribute: "data-src", autoeditFunc: DomMethods.imageEditFunc, imageElement: thisElement, myNode:thisNode, labelNode: domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "loadImg"})});
         }
@@ -45,7 +45,7 @@
             <script>
               thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "name");
               //adding the edition pencil
-              if (webuser.isWebAdmin()) {
+              if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
                 DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
                 thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "name"});
               }
@@ -59,7 +59,7 @@
             <script>
               thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionshort");
               //adding the edition pencil
-              if (webuser.isWebAdmin()) {
+              if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
                 DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
                 thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "descriptionshort"});
               }
@@ -78,7 +78,7 @@
                   <script>
                     thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "price");
                     //adding the edition pencil
-                    if (webuser.isWebAdmin()) {
+                    if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
                       DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
                       thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "price"});
                     }
@@ -133,7 +133,7 @@
     <script>
       thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionlarge");
       //adding the edition pencil
-      if (webuser.isWebAdmin()) {
+      if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
         DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), parent: thisElement.parentElement});
         thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "descriptionlarge", inlineEdition: false, thisAttribute: 'innerHTML'});
         DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), parent: thisElement.parentElement});
@@ -151,7 +151,7 @@
         thisElement.style.display="none";
       }
       //adding the edition pencil
-      if (webuser.isWebAdmin()) {
+      if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
         myNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "descriptionlarge", image: 'code', inlineEdition: false})
         .then(()=>{
           thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]').querySelector('button[data-id=codebut]').addEventListener('click', ()=>{

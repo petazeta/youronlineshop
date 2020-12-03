@@ -2,9 +2,7 @@
 
 Css Rules by default
 
-You can import a theme with this code, for example:
-
-@import "themes/retro/main.css"
+Use this css to set rules by default that will be combined-overwritten by the theme defined at includes/config.php - default.php
 
 */
 

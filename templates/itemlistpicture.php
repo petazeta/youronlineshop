@@ -33,7 +33,7 @@
             thisElement.src="catalog/images/small/" + this.properties.image;
           }
         }, "img");
-        if (webuser.isWebAdmin()) {
+        if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
           //For some unknown reason the usual opacity onmouseover makes some not good view effect, we use visibility in this case
           DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement, method: 'visibility'});
           thisNode.appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "image", thisAttribute: "data-src", autoeditFunc: DomMethods.imageEditFunc, imageElement: thisElement, myNode:thisNode, labelNode: domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "loadImg"})});
@@ -48,7 +48,7 @@
           <script>
             thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "name");
             //adding the edition pencil
-            if (webuser.isWebAdmin()) {
+            if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
               DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
               thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "name"});
             }
@@ -110,7 +110,7 @@
           <script>
             thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionshort");
             //adding the edition pencil
-            if (webuser.isWebAdmin()) {
+            if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
               DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
               thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "descriptionshort"});
             }
@@ -128,7 +128,7 @@
               <script>
                 thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "price");
                 //adding the edition pencil
-                if (webuser.isWebAdmin()) {
+                if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
                   DomMethods.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
                   thisNode.getRelationship("itemsdata").getChild().appendThis(thisElement.parentElement.querySelector('[data-id=butedit]'), "templates/butedit.php", {editElement: thisElement, thisProperty: "price"});
                 }
@@ -193,7 +193,7 @@
     </div>
   </div>
   <script>
-    if (webuser.isWebAdmin()) {
+    if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
       DomMethods.visibleOnMouseOver({element: thisElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
       thisNode.appendThis(thisElement.querySelector('.admnbtsgrid'), "templates/butchpos.php", {position: 'vertical'});
       thisNode.appendThis(thisElement.querySelector('.admnbtsgrid'), "templates/butdelete.php");
