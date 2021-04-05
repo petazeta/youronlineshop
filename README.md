@@ -34,11 +34,11 @@ This is a web app (Single Page Application) for e-commerce. Backend is written i
 
 If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: ask at our email.
 
-1 - Upload the compressed file to your web server.
-2 - Unpack it to the destination folder (You may have to create the folder first).
-3 - Create a new mysql database.
-4 - Edit database settings at: backend/includes/config.php.
-5 - Run the app at the web browser and continue with the installation process.
+1. Upload the compressed file to your web server.
+2. Unpack it to the destination folder (You may have to create the folder first).
+3. Create a new mysql database.
+4. Edit database settings at: backend/includes/config.php.
+5. Run the app at the web browser and continue with the installation process.
 
 
 ## Support
