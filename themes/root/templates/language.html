@@ -1,0 +1,48 @@
+<div class="boxlist" style="text-align:center;">
+  <span style="z-index:1; position:relative;">
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <div data-id="butedit" class="btmiddleleft"></div>
+    <a href="" data-hbutton="true"></a>
+    <script>
+      if (thisNode.selected) Node.dom.setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
+      thisNode.writeProperty(thisElement, "code");
+      if (webuser.isSystemAdmin()) {
+        Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, refreshOnLog: true});
+      }
+      if (Config.languagesOn==true) {
+        if (webuser.isSystemAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+          if (thisNode.parentNode.children.length>1) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+          thisNode.parentNode.createInstanceChild()
+          .then(newNode => {
+            newNode.sort_order=thisNode.sort_order + 1;
+            thisNode.parentNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {newNode: newNode});
+          });
+        }
+        thisElement.addEventListener("click", function(event) {
+          event.preventDefault();
+          Node.dom.setActive(thisNode);
+          webuser.language=thisNode;
+          myalert.properties.alertmsg=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langbox"}).getNextChild({"name":"changelangwait"}).getRelationship("domelementsdata").getChild().properties.value;
+          myalert.showalert();
+          domelementsroot.loadRequest("load my tree", {language: webuser.language.properties.id})
+          .then(()=>{ 
+            domelementsrootmother.dispatchEvent("changeLanguage");
+            myalert.properties.timeout=3000;
+            myalert.hidealert();
+          });
+          return false;
+        });
+      }
+      else {
+        thisElement.addEventListener("click", function(event) {
+          event.preventDefault();
+        });
+      }
+    </script>
+  </span>
+</div>

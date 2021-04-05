@@ -1,0 +1,16 @@
+<template></template>
+<script>
+  thisNode.addEventListener("changeProperty", (myNode, propertyname) => {
+    if (propertyname=="quantity" || propertyname=="price") {
+      thisNode.parentNode.partnerNode.setView();
+    }
+  }, "reCaluculate");
+  var myVirtualContainer=thisElement.content;
+  var currentItemOrder=thisElement.parentElement.querySelectorAll("[data-property=price] span").length;
+  thisNode.appendPropertiesView(myVirtualContainer, "singlefield")
+  .then(()=>{
+    var currency=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild().properties.value;
+    myVirtualContainer.querySelectorAll("[data-property=price] span")[currentItemOrder].parentElement.appendChild(document.createTextNode(currency));
+    thisElement.parentElement.appendChild(myVirtualContainer);
+  });
+</script>

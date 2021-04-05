@@ -1,0 +1,21 @@
+/*
+specific design
+*/
+div.productshortcontainer {
+	border-radius: 3px;
+    border: solid 1px rgb(238, 237, 233);
+    padding-bottom: 0.3em;
+}
+.sidebox .boxlist{
+  margin-bottom: -1px;
+  border-bottom: 1px solid rgb(238, 237, 233);
+  border-top: 1px solid rgb(238, 237, 233);
+}
+div.menuscontainer {
+  border: 1px solid grey;
+  border-left: 0px;
+  border-right: 0px;
+}
+.sidebox {
+  background-color: white;
+}

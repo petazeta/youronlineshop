@@ -1,0 +1,121 @@
+<table class="list">
+  <thead>
+    <tr>
+      <th style="position:relative;">
+        <div data-id="butedit" class="bttopcenter"></div>
+        <div></div>
+        <script>
+          var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"date"}).getRelationship({name: "domelementsdata"}).getChild();
+          myContent.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </th>
+      <th style="position:relative;">
+        <div data-id="butedit" class="bttopcenter"></div>
+        <div></div>
+        <script>
+          var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"name"}).getRelationship({name: "domelementsdata"}).getChild();
+          myContent.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </th>
+      <th style="position:relative;">
+        <div data-id="butedit" class="bttopcenter"></div>
+        <div></div>
+        <script>
+          var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"order"}).getRelationship({name: "domelementsdata"}).getChild();
+          myContent.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </th>
+      <template>
+        <th style="position:relative;">
+          <div data-id="butedit" class="bttopcenter"></div>
+          <div></div>
+          <script>
+            var myContent=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"loggedin"}).getNextChild({"name":"showOrd"}).getNextChild({"name":"actions"}).getRelationship({name: "domelementsdata"}).getChild();
+            myContent.writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+        </th>
+      </template>
+    </tr>
+    <script>
+      if (webuser.isOrdersAdmin() || webuser.isWebAdmin()) {
+        Node.appendViewNew(thisElement, thisElement.querySelector('template')); //We add actions to the header first
+      }
+    </script>
+  </thead>
+  <tbody></tbody>
+  <script>
+    //first we load orders from database
+    var myaction="load my children";
+    if (webuser.isOrdersAdmin()) {
+      //create virtual ordersmother
+      var ordersRel=new NodeFemale();
+      ordersRel.properties.childtablename="TABLE_ORDERS";
+      myaction="load all";
+    }
+    else {
+      var ordersRel=webuser.getRelationship({"name":"orders"});
+      ordersRel.children=[];
+    }
+    var myFilter="t.status = 0";
+    if (thisParams.filterorders=="archived") myFilter="t.status = 1";
+    ordersRel.loadRequest(myaction, {filter: myFilter})
+    .then(myNode=>{
+      if (myNode.children.length == 0) {
+        thisElement.innerHTML="";
+        return;
+      }
+      if (webuser.isOrdersAdmin) {
+        for (var i=0; i<myNode.children.length; i++) {
+          myNode.children[i].addEventListener("deleteNode", myNode => {
+            ordersRel.removeChild(myNode);
+            ordersRel.setChildrenView();
+          });
+          myNode.children[i].addEventListener("change order status", myNode => {
+            ordersRel.removeChild(myNode);
+            ordersRel.setChildrenView();
+          });
+        }
+        var myparams=[];
+        var mydatanodes=[];
+        for (var i=0; i<myNode.children.length; i++) {
+          myNode.children[i].parentNode=new NodeFemale();
+          
+          myNode.children[i].parentNode.copyProperties(ordersRel);
+        }
+        //console.log({"parameters":myparams, "nodes":mydatanodes});
+        Node.makeRequest("load my tree up", myNode.children, null, true)
+        .then(myNodes => {
+          for (var i=0; i<myNodes.length; i++) {
+            ordersRel.children[i].parentNode.load(myNodes[i].parentNode);
+            ordersRel.children[i].parentNode.partnerNode.parentNode=new NodeFemale();
+            ordersRel.children[i].parentNode.partnerNode.parentNode.properties.childtablename=ordersRel.children[i].parentNode.properties.parenttablename;
+          }
+          ordersRel.setChildrenView(thisElement, "userordersline");
+        });
+      }
+      else {
+        ordersRel.setChildrenView(thisElement, "userordersline");
+      }
+    });
+  </script>
+</table>

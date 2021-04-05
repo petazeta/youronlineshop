@@ -1,0 +1,34 @@
+<div class="alert alertmsg">
+  <div>
+    <h1 style="font-size:1.5em" style="display:block;">
+      <p>No Database Tables!</p>
+      <p>Select some option:</p>
+    </h1>
+  </div>
+  <div>
+    <button class="btn" type="button">Populate Database with includes/database.sql</button>
+    <script>
+      thisElement.addEventListener("click", function() {
+        thisNode.hidealert();
+        myalert.properties.alertmsg='<p><b>Populating database ... It could take some time, please be patient.</b></p><div class="circleloader"></div>';
+        myalert.showalert();
+        Node.makeRequest("init database")
+        .then(myNode => {
+          myalert.hidealert();
+          myalert.properties.alertmsg='<p><b>Page will be reloaded ...</b></p>'; 
+          myalert.showalert();
+          window.setTimeout(()=>theme.siteLoad(), 1000);
+        })
+        .catch(myNode=>{
+          myRecorder.logEvent("Error: DB Populating");
+          myalert.properties.alertmsg=new Error('<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.');
+          myalert.showalert();
+        });
+      });
+    </script>
+    <button class="btn" type="button">Skip automatic population and reload</button>
+    <script>
+      thisElement.onclick=()=>theme.siteLoad();
+    </script>
+  </div>
+</div>

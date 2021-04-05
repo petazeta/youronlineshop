@@ -1,0 +1,167 @@
+<form>
+  <div id="logform">
+    <div class="msgbox">
+      <p>Database Installation</p>
+      
+    </div>
+    <div>
+
+    </div>
+    <div class="boxframe loginform">
+      <div class="form-group" style="position:relative;">
+        <p>Set Admin Password</p>
+        <label class="form-label" for="new_password">Password:</label>
+        <input type="password" class="form-control" placeholder="Password" name="new_password">
+      </div>
+      <div class="form-group" style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <label class="form-label" for="repeat_password">Repeat password</label>
+        <input type="password" class="form-control" placeholder="Repeat password" name="repeat_password">
+      </div>
+      <div style="position:relative;">
+      
+          <button class="btn" type="button">Initialize Database</button>
+          <script>
+            thisElement.addEventListener("click", function(ev) {
+              thisNode.hidealert();
+              ev.preventDefault();
+              myalert.properties.alertmsg='<p><b>Importing database content ... It will take some time, please be patient.</b></p><div class="circleloader"></div>';
+              myalert.showalert();
+              Node.makeRequest("init database").then(myNode => {
+                console.log(myNode.properties);
+                myalert.hidealert();
+                myalert.properties.alertmsg='<p><b>Page will be reloaded ...</b></p>'; 
+                myalert.showalert();
+                window.setTimeout(()=>theme.siteLoad(), 1000);
+              })
+              .catch(error => {
+                myalert.properties.alertmsg='<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.</p>'; 
+                myalert.showalert();
+              });
+            });
+          </script>
+          <button class="btn" type="button">Skip</button>
+          <script>
+            thisElement.onclick=function(){
+              thisNode.hidealert();
+            }
+          </script>
+        
+      </div>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdCharError" disabled>
+      <script>
+        var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"logform"}).getNextChild({name:"pwdCharError"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdOk" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({name:"pwdChangeOk"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdNotOk" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({name:"pwdChangeError"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdDoubleError" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({name:"pwdDoubleError"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var bckloginlabel=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"});
+          bckloginlabel.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+          thisElement.onclick=function(){
+            Node.setViewNew(document.getElementById("centralcontent"), "loggedindata");
+          }
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"backToLoginLb"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+    </div>
+  </div>
+</form>
+<script>
+  thisElement.onsubmit=function(event) {
+    event.preventDefault();
+
+    var myReturn=Node.dom.checkValidData({properties: {user_name: this.elements.user_name.value, user_password: this.elements.user_password.value}});
+    if (myReturn.error) {
+      //Errors in characters
+      myalert.properties.alertmsg=this.elements.pwdCharError.value;
+      if (this.elements[myReturn.errorKey]) this.elements[myReturn.errorKey].focus();
+      myalert.properties.timeout=3000;
+      myalert.showalert();
+    }
+    if (this.elements.new_password.value!=this.elements.repeat_password.value) {
+      //Errors in characters
+      myalert.properties.alertmsg=this.elements.pwdDoubleError.value;
+      this.elements.repeat_password.focus();
+      myalert.properties.timeout=3000;
+      myalert.showalert();
+    }
+    webuser.updatePwd(thisElement.elements.new_password.value).then(myNode=>{
+      myalert.properties.alertmsg=thisElement.elements.pwdOk.value;
+      myalert.properties.timeout=3000;
+      myalert.showalert();
+    })
+    .catch({
+      myalert.properties.alertmsg=thisElement.elements.pwdNotOk.value;
+      myalert.properties.timeout=3000;
+      myalert.showalert();
+    });
+  }
+</script>

@@ -1,0 +1,31 @@
+<!-- -->
+<div class="bttopinsideleftinside">
+  <button type="button" class="closeimage minibtn transp" style="margin-left:5px; margin-top: 5px; width: 15px; height: 15px;"></button>
+  <script>
+    thisElement.addEventListener("click",  ()=>{
+      document.getElementById("cartbox").style.visibility="hidden";
+    });
+  </script>
+</div>
+<div class="boxtitle"></div>
+<script>
+  var cartboxtt=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"}).getNextChild({name: "crtbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
+  cartboxtt.setView(document.querySelector("#cartbox .boxtitle"), "cartboxhead");
+</script>
+<div class="boxbody">
+  <div data-id="itemlistcontainer"></div>
+  <script>
+    if (mycart.relationships.length==0) {
+      mycart.initCart().then(cartItems => {
+        //Preparing cart items containers
+        cartItems.setChildrenView(thisElement,  "itemlist");
+      });
+    }
+    else mycart.getRelationship("cartbox").getChild().getRelationship("cartboxitem").setChildrenView(thisElement,  "itemlist");
+  </script>
+  <div data-id="checkoutcontainer" class="checkoutcontainer"></div>
+  <script>
+    var cartboxckout=domelementsrootmother.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"});
+    cartboxckout.setView(thisElement, "cartboxckout");
+  </script>
+</div>

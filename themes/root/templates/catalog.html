@@ -1,0 +1,50 @@
+<!--
+-->
+<div class="loader">
+  <div class="elementloader"></div>
+  <script>
+    Node.dom.setSizeFromStyle(thisElement);
+  </script>
+</div>
+<div class="productlistgrid"></div>
+<script>
+  var myaction="load my tree";
+  var myparams={language: webuser.language.properties.id};
+  if (webuser.isProductSeller()) {
+    myparams.reqnodes=[thisNode.parentNode.cloneNode(0, 0), webuser.getRelationship("items").cloneNode(0, 0)]; //parents
+    myparams.forEach(node => node.avoidrecursion());
+    myaction="load children";
+  }
+  thisNode.getRelationship("items").children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
+  thisNode.getRelationship("items").loadRequest(myaction, myparams)
+  .then(myNode => {
+    myNode.addEventListener("setChildrenView", myNode => {
+      if (webuser.isProductAdmin()) Node.dom.addNewNodeButton(myNode);
+    }, "addNewNodeButton");
+    //in case is seller we still need to load the entire tree
+    if (webuser.isProductSeller()) {
+      Node.makeRequest("load my tree", myNode.children, {language: webuser.language.properties.id}, true)
+      .then(myNodes=>{
+        for (var i=0; i<thisNode.children.length; i++) {
+          thisNode.children[i].load(myNodes[i]);
+        }
+        thisNode.setChildrenView(thisElement, "itemlistpicture");
+      });
+    }
+    else{
+      myNode.setChildrenView(thisElement, "itemlistpicture");
+    }
+    //if adding the item we have to set the item seller
+    /*
+    thisNode.addEventListener("addNewNode", function(newItemNode) {
+      if (webuser.getRelationship("items")) {
+        //we make a clone of the node to let the actual rel without changes
+        var newItemClone=newItemNode.cloneNode();
+        newItemClone.sort_order=null;
+        webuser.getRelationship("items").addChild(newItemClone);
+        newItemClone.loadfromhttp({action:"add my link"});
+      }
+    }, "setseller");  
+    */
+  });
+</script>

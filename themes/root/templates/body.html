@@ -1,0 +1,219 @@
+<div class="backgroundimage">
+  <div class="backgroundspace">
+    <div id="initloader"></div>
+    <script>
+      Node.dom.setSizeFromStyle(thisElement);
+      //scroll to content in phone screens
+      theme.nodeOnAppend= myNode => {
+        if (window.screen.width<700 && myNode.myContainer && myNode.myContainer.id=='centralcontent') {
+          myNode.myContainer.scrollIntoView();
+        }
+      };
+    </script>
+    <div class="mainblock">
+      <header>
+        <div class="headertop">
+          <div class="pgtitle"></div>
+          <script>
+            var pagTit=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({name:"not located"}).getNextChild({name: "pagTit"}).getRelationship("domelementsdata").getChild();
+            if (pagTit.properties.value) pagTit.writeProperty(document, null, "title");
+            
+            var headtt=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headtitle"});
+            headtt.getRelationship({name: "domelementsdata"}).getChild().setView(thisElement, "toph1");
+          </script>
+          <div class="toolbar">
+            <a class="toolbaricon" href=""></a>
+            <script>
+              var logboxparent=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({name:"middle"}).getNextChild({name:"logbox"}).getRelationship({name:"domelements"});
+              logboxparent.setView(thisElement, "logicon");
+            </script>
+            <a class="toolbaricon"href=""></a>
+            <script>
+              var cartboxtt=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"cartbox"}).getNextChild({name: "crtbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
+              cartboxtt.setView(thisElement, "carticon");
+              thisElement.addEventListener("click", function(ev){
+                ev.preventDefault();
+                var cartbox=document.getElementById("cartbox");
+                Node.dom.switchVisibility(cartbox);
+              });
+            </script>
+            <div class="sidebox" id="cartbox" style="visibility:hidden;"></div>
+            <script>
+            Node.setViewNew(thisElement, "cartbox");
+            </script>
+          </div>
+        </div>
+      </header>
+      <div class="pgsubtitle"></div>
+      <script>
+        var headsubtt=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({"name":"top"}).getNextChild({"name":"headsubtitle"});
+        headsubtt.getRelationship({name: "domelementsdata"}).getChild().setView(thisElement, "toph2");
+      </script>
+      <nav>
+        <div class="menuscontainer"></div>
+        <script type="text/javascript">
+          //We load menus and its relationships. We would like to load menus domelementsdata children but not domelements children
+          thisNode.getChild().getNextChild({name: "texts"}).loadRequest("load my tree", {deepLevel: 5})
+          .then(myNode=>{
+            var menusMother=myNode.getNextChild({name: "nav"}).getRelationship();
+            //When no children and admin we create the plus add button and click on int
+            menusMother.addEventListener("setChildrenView", myNode => {
+              if (webuser.isWebAdmin()) Node.dom.addNewNodeButton(myNode);
+            }, "addNewNodeButton");
+            menusMother.addEventListener("deleteChildNode", (myNode, nodedeleted) => {
+              //Remove the menus -> central container content
+              if (myNode.children.length==0 && nodedeleted==theme.lastNodeActive) {
+                document.getElementById("centralcontent").innerHTML="";
+              }
+            });
+            //After showing menus we remove the central content init loader image
+            menusMother.setChildrenView(document.querySelector("div.menuscontainer"), "menu")
+            .then(()=>document.querySelector("#initloader").style.display="none");
+          });
+        </script>
+      </nav>
+      <div class="maincolumns">
+        <nav class="categories">
+          <div class="sidebox leftsidebox" id="catalogbox">
+            <div class="boxtitle"></div>
+            <script>
+            var catgboxtt=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"ctgbxtt"}).getRelationship({name: "domelementsdata"}).getChild();
+            catgboxtt.setView(thisElement, "boxhead");
+            </script>
+            <div class="boxbody"></div>
+            <script>
+              var categoriesrootmother=new NodeFemale();
+              categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
+              categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
+              categoriesrootmother.loadRequest("load root")
+              .then(myNode => {
+                myNode.getChild().loadRequest("load my tree", {deepLevel: 3, language: webuser.language.properties.id})
+                .then(myNode => {
+                  myNode.getRelationship().addEventListener("setChildrenView", myNode => {
+                    if (webuser.isProductAdmin()) Node.dom.addNewNodeButton(myNode);
+                  }, "addNewNodeButton");
+                  myNode.getRelationship().addEventListener("deleteChildNode", (myNode, nodedeleted) => {
+                    //Remove the productscontainer content
+                    if (myNode.children.length==0) {
+                      document.getElementById("centralcontent").innerHTML="";
+                    }
+                  });
+                  myNode.getRelationship().setChildrenView(thisElement,  "category");
+                });
+              });
+            </script>
+          </div>
+          <div id="extraedition" style="text-align:center;"></div>
+          <script>
+            if (webuser.isWebAdmin() || webuser.isSystemAdmin()) {
+              var containerExtraNode=thisNode.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "extraEdition"});
+              containerExtraNode.setView(thisElement, "extramenubutton", {template: "extraedition"});
+            }
+          </script>
+          <div style="text-align:center;"></div>
+          <script>
+            if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
+              var containerEditNode=thisNode.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "textEdit"});
+              containerEditNode.setView(thisElement, "extramenubutton", {template: "texteditor"});
+            }
+          </script>
+          <div style="text-align:center;"></div>
+          <script>
+              if (Config.importExportOn && (webuser.isAdmin() || webuser.isSystemAdmin())) {
+                var containerExpNode=thisNode.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: "expimp"});
+                containerExpNode.setView(thisElement, "extramenubutton", {template: "expimp"});
+              }
+          </script>
+          <div class="space"></div>
+          <div class="sidebox leftsidebox" id="langbox">
+            <div class="boxtitle"></div>
+            <script>
+              var langboxtt=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langbox"}).getNextChild({"name":"langboxtt"}).getRelationship("domelementsdata").getChild();
+              langboxtt.setView(thisElement, "boxhead");
+            </script>
+            <div class="boxbody"></div>
+            <script> 
+            languages.loadRequest("load my childtablekeys")
+            .then(myNode => {
+              myNode.addEventListener("setChildrenView", myNode => {
+                if (webuser.isSystemAdmin()) Node.dom.addNewNodeButton(myNode);
+              }, "addNewNodeButton");
+              myNode.setChildrenView(thisElement, "language");
+              
+              function languageIncreaseCloneFirstLang(newAddedLangNode){
+                return new Promise((resolve, reject) => {
+                  var newNode=languages.getChild().cloneNode();
+                  newNode.loadRequest("load my tree")
+                  .then(myNode=>{
+                    myNode.properties.id=newAddedLangNode.properties.id;
+                    var myDatas=[];
+                    var datavalue=[];
+                    for (var i=0; i<myNode.relationships.length; i++) {
+                      for (var j=0; j<myNode.relationships[i].children.length; j++) {
+                        myDatas.push(myNode.relationships[i].children[j]);
+                        datavalue.push(myNode.relationships[i].children[j].properties);
+                      }
+                    }
+                    //Now we have to send the load request and get the result.
+                    Node.makeRequest("load my tree up", myDatas, null, true)
+                    .then(nodeList => {
+                      var insertDatas=[];
+                      for (var i=0; i<nodeList.length; i++) {
+                        if (Array.isArray(nodeList[i].parentNode)) {
+                          for (var j=0;j<nodeList[i].parentNode.length;j++) {
+                            if (nodeList[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
+                              nodeList[i].parentNode=nodeList[i].parentNode[j];
+                              break;
+                            }
+                          }  
+                        }
+                        nodeList[i].properties=datavalue[i];
+                        let loadNode=new NodeMale();
+                        loadNode.load(nodeList[i]);
+                        insertDatas.push(loadNode);
+                      }
+                      Node.makeRequest("add myself", insertDatas, {language: newAddedLangNode.properties.id}, true)
+                      .then(nodeList => {
+                        resolve(nodeList);
+                      });
+                    });
+                  });
+                });
+              };
+              myNode.addEventListener("addNewNode",
+              (myNode, newLangNode) => {
+                Node.dom.getDomElementFromChild(newLangNode).style.visibility="hidden"
+                //We show the msg for waiting
+                var myalert=new Alert();
+                myalert.properties.alertclass="alertmsg";
+                var wailtlangoperations=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"langbox"}).getNextChild({"name":"newlangwait"}).getRelationship("domelementsdata").getChild();
+                myalert.properties.alertmsg=wailtlangoperations.properties.value;
+                myalert.showalert();
+                languageIncreaseCloneFirstLang(newLangNode)
+                .then(myNode=>{
+                  myalert.hidealert();
+                  Node.dom.getDomElementFromChild(newLangNode).style.visibility="visible"
+                });
+              }, "addNewNode");
+            });
+            </script>
+          </div> 
+        </nav>
+        <main>
+          <div class="centercolumn">
+            <div id="centralcontent"></div>
+          </div>
+        </main>
+        <footer>
+          <div style="text-align:right;" class="pwby">
+            <p></p>
+            <script type="text/javascript">
+              var designed=thisNode.getChild().getNextChild({name: "labels"}).getNextChild({"name":"bottom"}).getNextChild({"name":"designed"}).getRelationship({name: "domelementsdata"}).getChild();
+              designed.setView(thisElement, "designed");
+            </script>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>

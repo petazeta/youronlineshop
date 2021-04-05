@@ -1,0 +1,142 @@
+<template>
+  <div id="dashboard">
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        var title=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"dashboardtit"}).getRelationship("domelementsdata").getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+      <span></span>
+      <script>
+        webuser.writeProperty(thisElement, "username");
+      </script>
+    </div>
+    <div></div>
+    <script>
+      webuser.setView(thisElement, "useraddressview", {showAddress: false, fieldtype: 'input'});
+    </script>
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var btShowOrd=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btShowOrd"});
+          btShowOrd.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+          thisElement.onclick=function(){
+            Node.setViewNew(document.getElementById("centralcontent"), "showorders");
+          }
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btShowOrd"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+            thisElement.type="hidden";
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var btShowAdd=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btShowAdd"});
+          btShowAdd.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+          thisElement.onclick=function(){
+            Node.setViewNew(document.getElementById("centralcontent"), "showaddress");
+          }
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btShowAdd"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+            thisElement.type="hidden";
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var btChangePwd=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btChangePwd"});
+          btChangePwd.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+          thisElement.onclick=function(){
+            Node.setViewNew(document.getElementById("centralcontent"), "changepwd");
+          }
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btChangePwd"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+            thisElement.type="hidden";
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var logOut=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btLogOut"});
+          logOut.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+          thisElement.onclick=function(){
+              webuser.logoff().then(()=>Node.setViewNew(document.getElementById("centralcontent"), "loginform"));
+          }
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name:"loggedin"}).getNextChild({name:"btLogOut"}).getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+            thisElement.type="hidden";
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  //if cart it is not empty -> redirect to checkout
+  if (mycart.getRelationship("cartitem").children.length>0) {
+    Node.setViewNew(document.getElementById("centralcontent"), 'checkout1');
+  }
+  else {
+    Node.setViewNew(document.getElementById("centralcontent"), thisElement).then(function(){
+      var url='?userarea=1';
+      if (history.state && history.state.url==url) {
+        return;
+      }
+      history.pushState({url:url}, null, url);
+    });
+  }
+</script>

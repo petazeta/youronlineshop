@@ -1,0 +1,32 @@
+<div class="userimage"></div>
+<script>
+  if (window.getComputedStyle(thisElement).backgroundImage) {
+    Node.dom.setSizeFromStyle(thisElement);
+  }
+</script>
+<div></div>
+<script>
+  var setlogstatus=function(){
+    var logbox=thisNode.getChild({name:"logboxout"});
+    if (webuser.properties.id) {
+      logbox=thisNode.getChild({name:"logboxin"});
+    }
+    var myNode=logbox.getNextChild({name:"title"}).getRelationship({name: "domelementsdata"}).getChild();
+    myNode.writeProperty(thisElement);
+  }
+  setlogstatus();
+  webuser.addEventListener("log", () => {
+    setlogstatus();
+  }, "setlogstatus");
+  thisElement.parentElement.addEventListener("click", function(event){
+    event.preventDefault();
+    if (webuser.properties.id) {
+      webuser.setView(document.getElementById("centralcontent"), "loggedindata")
+    }
+    else {
+      Node.setViewNew(document.getElementById("centralcontent"), "loginform");
+    }
+    return false;
+  });
+  //Continuar con lo que viene en logbox_old.php
+</script>

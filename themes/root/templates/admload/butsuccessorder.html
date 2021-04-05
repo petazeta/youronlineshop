@@ -1,0 +1,26 @@
+<!--
+  newStatus
+-->
+<button type="button" class="buttons">
+  <div class="checkimage"></div>
+  <script>
+    if (thisParams.newStatus==0) {
+      thisElement.className="undoimage";
+    }
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      Node.dom.setSizeFromStyle(thisElement);
+    }
+  </script>
+</button>
+<script type="text/javascript">
+  thisElement.onclick=function() {
+    thisNode.loadRequest("edit my properties", {properties:{status: thisParams.newStatus}}).then(myNode => {
+      myNode.parentNode.removeChild(myNode);
+      //for no children add a eventlistener to setChildrenView event
+      if (myNode.parentNode.childContainer) myNode.parentNode.setChildrenView();
+      myNode.parentNode.dispatchEvent("change order status", [myNode]);
+      myNode.dispatchEvent("change order status")
+    });
+    return false;
+  }
+</script>

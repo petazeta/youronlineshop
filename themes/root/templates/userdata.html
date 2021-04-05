@@ -1,0 +1,24 @@
+<!-- 
+This template shows the user data and user address.
+Param showAddress to show also address data
+Param fieldtype: input / textnode
+-->
+<div class="useraddressbox"></div>
+<script>
+var fieldtp= "singleinput";
+if (thisParams.fieldtype=="textnode") {
+  fieldtp= "singlefield";
+}
+thisNode.getRelationship("usersdata").loadRequest("load my children")
+.then(myNode => {
+  var tableLabels=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: myNode.properties.childtablename});
+  myNode.getChild().setPropertiesView(thisElement, fieldtp, {labelNode: tableLabels});
+  if (thisParams.showAddress) {
+    thisNode.getRelationship("addresses").loadRequest("load my children")
+    .then(myNode => {
+      var tableLabels=domelementsrootmother.getChild().getNextChild({name:"labels"}).getNextChild({name:"middle"}).getNextChild({name: myNode.properties.childtablename});
+      myNode.getChild().appendPropertiesView(thisElement, fieldtp, {labelNode: tableLabels});
+    });
+  }
+});
+</script>

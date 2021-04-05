@@ -1,0 +1,826 @@
+<!--
+-->
+<div style="text-align:center">
+  <div>
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        var title=thisNode.getNextChild({"name":"titexp"}).getRelationship({name:"domelementsdata"}).getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </div>
+  </div>
+  <form>
+    <div style="display:table; position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="noselection" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({"name":"noselection"}).getRelationship({name:"domelementsdata"}).getChild();
+        myNode.writeProperty(thisElement);
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div>
+      <div class="msgbox">
+        <table style="margin:auto; text-align:left; margin-bottom:1em;">
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="general" name="dataoption">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chkgeneral"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="catalog" name="dataoption">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chkcatg"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="lang" name="dataoption">
+              <script>
+                thisElement.form.dataoption.forEach(radio=>{
+                  radio.addEventListener("change", (ev)=>{
+                    if (thisElement.checked) thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="block";
+                    else thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="none";
+                  });
+                });
+              </script>
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chklang"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+              <template>
+                <div style="margin:auto; text-align:left; margin-bottom:0.2em">
+                  <input type="checkbox" value="" name="">
+                  <script>
+                    thisNode.writeProperty(thisElement, "id", "value");
+                    thisNode.writeProperty(thisElement, "code", "name");
+                  </script>
+                  <span></span>
+                  <script>
+                    thisNode.writeProperty(thisElement, "code");
+                  </script>
+                </div>
+              </template>
+              <div class="msgbox" style="display:none"></div>
+              <script>
+                languages.setChildrenView(thisElement, thisElement.previousElementSibling);
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="users" name="dataoption">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chkusers"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <button type="button" class="btn" data-id="but"></button>
+      <script>
+      var title=thisNode.getNextChild({"name":"butexp"}).getRelationship({name:"domelementsdata"}).getChild();
+      title.writeProperty(thisElement);
+      
+      if (!webuser.isSystemAdmin) thisElement.disabled=true; //Only sysadmin
+      
+      //This facility is for export/import the customized data of a shop so we could update the shop software and keep the data
+      thisElement.onclick=function(){
+        if (thisElement.form.dataoption.value=="general") {
+          //data from the language
+          var langdata=Node.makeRequest("reduce", languages, "add my tree");
+          //data from the structure
+          var topClone=domelementsroot.getNextChild({name:"labels"}).getNextChild({name:"top"}).cloneNode(null, 0);
+          var textClone=domelementsroot.getNextChild({name:"texts"}).cloneNode(null, 0);
+          topClone.loadRequest("load my tree")
+          .then(topNode=> {
+            textClone.loadRequest("load my tree")
+            .then(textNode=> {
+            var datatoinsert={"languages": langdata, "tree": [Node.makeRequest("reduce", topNode, "add my tree"), Node.makeRequest("reduce", textNode, "add my tree")]};
+            thisElement.form.result.value=JSON.stringify(datatoinsert);
+            });
+          });
+        }
+        else if (thisElement.form.dataoption.value=="catalog") {
+          var categoriesrootmother=new NodeFemale();
+          categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
+          categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
+          categoriesrootmother.loadRequest("load root")
+          .then(myNode => {
+            //data from the language
+            var langdata=Node.makeRequest("reduce", languages, "add my tree");
+            //data from the structure
+            myNode.getChild().loadRequest("load my tree")
+            .then(myNode=> {
+              var datatoinsert={"languages": langdata, "tree": Node.makeRequest("reduce", myNode, "add my tree")};
+              thisElement.form.result.value=JSON.stringify(datatoinsert);
+            });
+          });
+        }
+        else if (thisElement.form.dataoption.value=="lang") {
+          let getSelectedLangData=function(langdata, selector){
+            var selectedLangs=[];
+            selector.forEach(myLang=>{
+              if (myLang.checked) selectedLangs.push(Number(myLang.value));
+            });
+            //Now we filter the languages selected from the datalang
+            var i=langdata.children.length;
+            while (i--) {
+              if (!selectedLangs.includes(langdata.children[i].properties.id)) {
+                langdata.removeChild(langdata.children[i]);
+              }
+            }
+            return langdata;
+          };
+          var langdata=languages.cloneNode();
+          var myLangs=thisElement.form.querySelectorAll('input[type="checkbox"]');
+          langdata=getSelectedLangData(langdata, myLangs);
+          if (langdata.children.length==0) {
+            //we show the alert message No selection
+            var mynoselalert=new Alert();
+            mynoselalert.properties.alertclass="alertmsg";
+            mynoselalert.properties.timeout=2000;
+            mynoselalert.properties.alertmsg=thisElement.form.elements.noselection.value;
+            mynoselalert.showalert();
+            return;
+          }
+          langdata=Node.makeRequest("reduce", langdata, "add my tree");
+          let trees=[];
+          let getdomelstree=(langdata)=>{
+            return new Promise((resolve, reject)=>{
+              //data from the structure
+              Node.makeRequest("load my tree", Array(langdata.children.length).fill(domelementsroot.cloneNode(null, 0)), langdata.children.map(result => {return {language: result.properties.id};}), true)
+              .then(myNodes => {
+                var nodesInsert=[];
+                for (var i=0; i<myNodes.length; i++) {
+                  let loadNode=new NodeMale();
+                  loadNode.copyProperties(domelementsroot); //load my tree doesn't get data node itself
+                  loadNode.load(myNodes[i]);
+                  //Now we remove labels menus and tit
+                  loadNode.getRelationship("domelements").getChild({name:"texts"}).getRelationship("domelements").children=[];
+                  loadNode.getRelationship("domelements").getChild({name:"labels"}).getRelationship("domelements").getChild({name:"top"}).getRelationship("domelements").children=[];
+                  nodesInsert.push(Node.makeRequest("reduce", loadNode, "add my tree"));
+                }
+                resolve(nodesInsert);
+              });
+            });
+          };
+          getdomelstree(langdata)
+          .then(domelsInsert=>{
+            var datatoinsert={"languages": langdata, "trees": domelsInsert};
+            thisElement.form.result.value=JSON.stringify(datatoinsert);
+          });
+        }
+        else if (thisElement.form.dataoption.value=="users") {
+          var usertypemother=new NodeFemale();
+          usertypemother.properties.childtablename="TABLE_USERSTYPES";
+          usertypemother.loadRequest("load all", {filter: "type='customer'"}).then(myNode => {
+            myNode.getChild().loadRequest("load my tree").then(myNode => {
+              var usersrootmother=myNode.getRelationship("users");
+              Node.makeRequest("load my relationships", usersrootmother.children, null, true).then(function(myResult){
+                var mydatanodes=[];
+                for (var i=0; i<myResult.length; i++) {
+                  usersrootmother.children[i].load(myResult[i]);
+                  mydatanodes.push(usersrootmother.children[i].getRelationship("usersdata"));
+                  mydatanodes.push(usersrootmother.children[i].getRelationship("addresses"));
+                }
+                Node.makeRequest("load my children", mydatanodes, null, true).then(function(myResult){
+                  var arrayusersdata=[];
+                  var arrayaddresses=[];
+                  for (var i=0; i<myResult.length; i++) {
+                    if (myResult[i].properties.name=="usersdata") {
+                      arrayusersdata.push(myResult[i]);
+                    }
+                    else if (myResult[i].properties.name=="addresses") {
+                       arrayaddresses.push(myResult[i]);
+                    }
+                  }
+                  for (var i=0; i<usersrootmother.children.length; i++) {
+                    usersrootmother.children[i].getRelationship("usersdata").load(arrayusersdata[i]);
+                    usersrootmother.children[i].getRelationship("addresses").load(arrayaddresses[i]);
+                  }
+                  //Now we charge the userstypes relationship
+                  Node.makeRequest("load my tree up", usersrootmother.children, null, true)
+                  .then(myResult=>{
+                    for (var i=0; i<myResult.length; i++) {
+                      usersrootmother.children[i].parentNode=myResult[i].parentNode;
+                    }
+                  });
+                  usersrootmother.avoidrecursion();
+                  thisElement.form.result.value=JSON.stringify(usersrootmother);
+                });
+              });
+            });
+          });
+        }
+        else {
+          //we show the alert message No selection
+          var mynoselalert=new Alert();
+          mynoselalert.properties.alertclass="alertmsg";
+          mynoselalert.properties.timeout=2000;
+          mynoselalert.properties.alertmsg=thisElement.form.elements.noselection.value;
+          mynoselalert.showalert();
+        }
+        return false;
+      };
+      </script>
+      <input type="hidden" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({"name":"butexp"}).getRelationship({name:"domelementsdata"}).getChild();
+        myNode.writeProperty(thisElement);
+        thisElement.onblur=function(){
+          thisElement.type="hidden";
+          thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+        }
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </span>
+    <div style="padding-top: 10px">
+      <textarea name="result" rows="10" cols="50"></textarea>
+    </div>
+  </form>
+  <form>
+    <div class="space"></div>
+    <div class="msgbox">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        var title=thisNode.getNextChild({"name":"titimp"}).getRelationship({name:"domelementsdata"}).getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+       </script>
+    </div>
+    <div style="padding-top: 10px">
+      <textarea name="impdata" rows="10" cols="50"></textarea>
+    </div>
+    <div>
+      <div class="msgbox">
+        <table style="margin:auto; text-align:left; margin-bottom:1em;">
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="general" name="dataoption">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chkgeneral"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="catalog" name="dataoption">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chkcatg"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="lang" name="dataoption">
+              <script>
+                thisElement.form.dataoption.forEach(radio=>{
+                  radio.addEventListener("change", (ev)=>{
+                  if (thisElement.checked) {
+                    if (!thisElement.form.impdata.value) {
+                      var nocontentalert=new Alert();
+                      nocontentalert.properties.alertclass="alertmsg";
+                      nocontentalert.properties.timeout=2000;
+                      nocontentalert.properties.alertmsg=thisElement.form.elements.nocontent.value;
+                      nocontentalert.showalert();
+                      thisElement.checked=false;
+                      return false;
+                    }
+                    let data=JSON.parse(thisElement.form.impdata.value);
+                    let datalang=new NodeFemale();
+                    datalang.load(data.languages);
+                    datalang.setChildrenView(thisElement.parentElement.querySelector("template").nextElementSibling, thisElement.parentElement.querySelector("template"));
+                    thisElement.parentElement.querySelector("template").nextElementSibling.style.display="block";
+                  }
+                  else thisElement.parentElement.querySelector("template").nextElementSibling.style.display="none";
+                  });
+                });
+              </script>
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chklang"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+              <template>
+                <div style="margin:auto; text-align:left; margin-bottom:0.2em">
+                  <input type="checkbox" value="" name="">
+                  <script>
+                    thisNode.writeProperty(thisElement, "id", "value");
+                    thisNode.writeProperty(thisElement, "code", "name");
+                  </script>
+                  <span></span>
+                  <script>
+                    thisNode.writeProperty(thisElement, "code");
+                  </script>
+                </div>
+              </template>
+              <div class="msgbox" style="display:none"></div>
+            </td>
+          </tr>
+          <tr>
+            <td style="position:relative;">
+              <input type="radio" value="users" name="dataoption">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <span></span>
+              <script>
+                var title=thisNode.getNextChild({"name":"chkusers"}).getRelationship({name:"domelementsdata"}).getChild();
+                title.writeProperty(thisElement);
+                //adding the edition pencil
+                if (webuser.isWebAdmin()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                }
+              </script>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div style="display:table; position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="impalertmsg" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({"name":"imploadingmsg"}).getRelationship({name:"domelementsdata"}).getChild();
+        myNode.writeProperty(thisElement);
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="display:table; position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="nocontent" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({"name":"impnocontent"}).getRelationship({name:"domelementsdata"}).getChild();
+        myNode.writeProperty(thisElement);
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+          thisElement.type="text";
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        }
+      </script>
+    </div>
+    <div style="display:table; position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="implangerror" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({"name":"implangerror"}).getRelationship({name:"domelementsdata"}).getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        if (webuser.isWebAdmin()) {
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+          thisElement.type="text";
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        }
+      </script>
+    </div>
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <button type="button" data-id="but" class="btn"></button>
+      <script>
+      var title=thisNode.getNextChild({"name":"butimp"}).getRelationship({name:"domelementsdata"}).getChild();
+      title.writeProperty(thisElement);
+      
+      if (!webuser.isSystemAdmin) thisElement.disabled=true; //Only sysadmin
+      
+      thisElement.onclick=function(){
+        if (!thisElement.form.impdata.value) {
+          var nocontentalert=new Alert();
+          nocontentalert.properties.alertclass="alertmsg";
+          nocontentalert.properties.timeout=2000;
+          nocontentalert.properties.alertmsg=thisElement.form.elements.nocontent.value;
+          nocontentalert.showalert();
+          return false;
+        }
+        if (!thisElement.form.dataoption.value){
+          //we show the alert message No selection
+          var mynoselalert=new Alert();
+          mynoselalert.properties.alertclass="alertmsg";
+          mynoselalert.properties.timeout=2000;
+          mynoselalert.properties.alertmsg=thisElement.form.previousElementSibling.elements.noselection.value;
+          mynoselalert.showalert();
+          return false;
+        }
+        var myimpalert=new Alert();
+        myimpalert.properties.alertclass="alertmsg";
+        myimpalert.properties.alertmsg=thisElement.form.elements.impalertmsg.value;
+          
+        if (thisElement.form.dataoption.value=="users") {
+          myimpalert.showalert();
+           //First we add the remove tree request
+          var usertypemother=new NodeFemale();
+          usertypemother.properties.childtablename="TABLE_USERSTYPES";
+          usertypemother.loadRequest("load all", {filter: "type='customer'"})
+          .then(myNode=>{
+            myNode.children[0].loadRequest("load my tree")
+            .then(myNode=>{
+              myNode.getRelationship("users").loadRequest("delete my children")
+              .then(()=>{
+                var newusersmother=new NodeFemale();
+                newusersmother.load(JSON.parse(thisElement.form.impdata.value));
+                newusersmother.partnerNode.properties.id=usertypemother.children[0].properties.id;
+                newusersmother.loadRequest("add my children")
+                .then(()=>{
+                  myimpalert.hidealert();
+                });
+              });
+            });
+          });
+        }
+        else if (thisElement.form.dataoption.value=="lang") {
+          let data=JSON.parse(thisElement.form.impdata.value);
+          let datalang=new NodeFemale();
+          datalang.load(data.languages);
+          
+          if (datalang.children.length==0) {
+            //we show the alert message No selection
+            var mynoselalert=new Alert();
+            mynoselalert.properties.alertclass="alertmsg";
+            mynoselalert.properties.timeout=2000;
+            mynoselalert.properties.alertmsg=thisElement.form.elements.nocontent.value;
+            mynoselalert.showalert();
+            return;
+          }
+
+          //get selected data
+          var myLangs=thisElement.form.querySelectorAll('input[type="checkbox"]');
+          var selectedLangs=[];
+          for (var i=0; i<myLangs.length; i++) {
+            if (myLangs[i].checked) selectedLangs.push(Number(myLangs[i].value));
+          }
+          if (selectedLangs.length==0) {
+            //we show the alert message No selection
+            var mynoselalert=new Alert();
+            mynoselalert.properties.alertclass="alertmsg";
+            mynoselalert.properties.timeout=2000;
+            mynoselalert.properties.alertmsg=thisElement.form.previousElementSibling.elements.noselection.value;
+            mynoselalert.showalert();
+            return;
+          }
+          myimpalert.showalert();
+          //Now we filter the languages selected from the datalang
+          var datatrees=[];
+          for (var i=0; i<data.trees.length; i++) {
+            datatrees[i]= new NodeMale();
+            datatrees[i].load(data.trees[i]);
+          }
+          var filterdatatrees=[];
+          var filterlangs=[];
+          for (var i=0; i<selectedLangs.length; i++) {
+            for (var j=0; j<datalang.children.length; j++) {
+              if (selectedLangs[i]==datalang.children[j].properties.id) {
+                //position is j
+                //we need to add the mother
+                datatrees[j].parentNode=new NodeFemale();
+                datatrees[j].parentNode.addChild(datatrees[j]);
+                filterdatatrees.push(datatrees[j]);
+                filterlangs.push(datalang.children[j]);
+                break;
+              }
+            }
+          }
+          var replaceMyTreeLangData=(originalLangNode, candidatesMother)=>{
+            var equivNode=candidatesMother.getChild({"name": originalLangNode.properties.name});
+            if (equivNode) {
+              originalLangNode.getRelationship("domelementsdata").getChild().properties.value=equivNode.getRelationship("domelementsdata").getChild().properties.value;
+              for (var i=0;i<originalLangNode.getRelationship("domelements").children.length; i++) {
+                replaceMyTreeLangData(originalLangNode.getRelationship("domelements").children[i], equivNode.getRelationship("domelements"));
+              }
+            }
+          };
+          //Replace lang data at current site content node
+          var langsToInsert=[];
+          //We load domelements textNode data for current language
+          var myTextNode=domelementsroot.getNextChild({"name":"texts"}).cloneNode();
+          myTextNode.loadRequest("load my tree", {language: languages.getChild().properties.id}) //Labels is loaded at start but texts not
+          .then(myNode=>{
+            for (var i=0; i<filterdatatrees.length; i++) {
+              var myLabelNode=domelementsroot.getNextChild({"name":"labels"}).cloneNode();
+              //We replace the label lang content with the loaded lang content
+              replaceMyTreeLangData(myLabelNode, filterdatatrees[i].parentNode);
+              var rootNode=domelementsroot.cloneNode(1,1);
+              rootNode.getRelationship("domelementsdata").addChild(domelementsroot.getRelationship("domelementsdata").getChild().cloneNode()); //restoring
+              rootNode.getRelationship("domelements").addChild(myLabelNode);
+              //We add the label text contents (menus pages)
+              rootNode.getRelationship("domelements").addChild(myTextNode);
+              langsToInsert.push({"lang":filterlangs[i], "domdata": rootNode});
+            }
+            function createdomnodesarray(myroot) {
+              var treearray=myroot.arrayFromTree();
+              var domdataarray=[];
+              for (var i=0; i<treearray.length;i++) {
+                if (treearray[i].constructor.name=="NodeMale") {
+                  if (treearray[i].parentNode.properties.name=="domelementsdata") {
+                    domdataarray.push(treearray[i]);
+                  }
+                }
+              }
+              return domdataarray;
+            }
+            var languageAddCloneFirstLang=(newLangNode, domdatachildren) => {
+              return new Promise((resolve, reject) => {
+                var newAddedLangNode=newLangNode.cloneNode();
+                //we add a new lang
+                newAddedLangNode.loadRequest("add myself")
+                .then(()=>{
+                  //We fill the lang with first lang data
+                  var newNode=languages.getChild().cloneNode();
+                  newNode.loadRequest("load my tree")
+                  .then(myNode=>{
+                    myNode.properties.id=newAddedLangNode.properties.id;
+                    var loadRequest=[];
+                    var datavalue=[];
+                    for (var i=0; i<myNode.relationships.length; i++) {
+                      if (myNode.relationships[i].properties.name!="domelementsdata") {
+                        for (var j=0; j<myNode.relationships[i].children.length; j++) {
+                          loadRequest.push(myNode.relationships[i].children[j]);
+                          //datavalue.push(myNode.relationships[i].children[j].properties);
+                        }
+                      }
+                    }
+                    //we load the parent that belongs to data tree
+                    //And create the add myself list
+                    Node.makeRequest("load my tree up", loadRequest, null, true)
+                    .then(myNodes=>{
+                      var insertRequest=[];
+                      var insertActions=[];
+                      for (var i=0; i<myNodes.length; i++) {
+                        if (Array.isArray(myNodes[i].parentNode)) {
+                          for (var j=0;j<myNodes[i].parentNode.length;j++) {
+                            if (myNodes[i].parentNode[j].properties.parenttablename!="TABLE_LANGUAGES") {
+                              myNodes[i].parentNode=myNodes[i].parentNode[j];
+                              break;
+                            }
+                          }  
+                        }
+                        myNodes[i].properties=loadRequest[i].properties;
+                        let loadNode=new NodeMale();
+                        loadNode.load(myNodes[i]);
+                        insertRequest.push(loadNode);
+                      }
+                      //Now we add the domelementsdata
+                      for (var i=0; i<domdatachildren.length; i++) {
+                        insertRequest.push(domdatachildren[i]);
+                      }
+                      Node.makeRequest("add myself", insertRequest, {language: newAddedLangNode.properties.id}, true)
+                      .then(myNode=>{
+                        resolve(myNode);
+                      });
+                    });
+                  });
+                });
+              });
+            };
+            //Now we have to create the new languageAddCloneFirstLang(newLangNode, domdatachildren, listener)langs
+            iterationAddLangs=[];
+            for (let i=0; i<langsToInsert.length; i++) {
+              //Now we have to make the tree to a serial data
+              var domdataInsert=createdomnodesarray(langsToInsert[i].domdata);
+              myimpalert.showalert();
+              //document.getElementById("butimp").disabled=true;
+              iterationAddLangs.push(languageAddCloneFirstLang(langsToInsert[i].lang, domdataInsert));
+            }
+            Promise.all(iterationAddLangs)
+            .then(()=>{
+              myimpalert.hidealert();
+              theme.siteLoad();
+            });
+          });
+        }
+        else if (thisElement.form.dataoption.value=="general" || thisElement.form.dataoption.value=="catalog") {
+          myimpalert.showalert();
+          var data=JSON.parse(thisElement.form.impdata.value);
+
+          //insert the tree for one lang
+          if (thisElement.form.dataoption.value=="general") {
+            var datatree1=new NodeMale();
+            datatree1.load(data.tree[0]);
+            var datatree2=new NodeMale();
+            datatree2.load(data.tree[1]);
+            impData(domelementsroot.getNextChild({name:"labels"}).getNextChild({name:"top"}), datatree1)
+            .then(impData(domelementsroot.getNextChild({name:"texts"}), datatree2))
+            .then(()=>{
+              myimpalert.hidealert();
+              theme.siteLoad();
+            });
+          }
+          else if  (thisElement.form.dataoption.value=="catalog") {
+            var categoriesrootmother=new NodeFemale();
+            categoriesrootmother.properties.childtablename="TABLE_ITEMCATEGORIES";
+            categoriesrootmother.properties.parenttablename="TABLE_ITEMCATEGORIES";
+            categoriesrootmother.loadRequest("load root")
+            .then(myNode=>{
+              var datatree=new NodeMale();
+              datatree.load(data.tree);
+              impData(myNode.getChild(), datatree)
+              .then(()=>{
+                myimpalert.hidealert();
+                theme.siteLoad();
+              });
+            });
+          }
+          
+          function impData(rootelement, datatree){
+          
+            var requestResultData=[]; //Complet final request container
+            var requestResultActions=[]; //Vars for result 
+            var requestResultParams=[]; //Vars for result 
+            
+            //We split the languages in one array of langdata for each language
+
+            var datalang=data.languages;
+            
+            //Now we check that the languages meet the site languages
+            var languagesmatch=false;
+            if (datalang.children.length==languages.children.length) {
+              languagesmatch=true;
+              for (var i=0; i<datalang.children.length; i++) {
+                if (datalang.children[i].properties.id!=languages.children[i].properties.id) {
+                  languagesmatch=false;
+                  break;
+                }
+              }
+            }
+            if (!languagesmatch) {
+              var mylangerror=new Alert();
+              mylangerror.properties.alertclass="alertmsg";
+              mylangerror.properties.timeout=2000;
+              mylangerror.properties.alertmsg=thisElement.form.elements.implangerror.value;
+              mylangerror.showalert();
+              return false;
+            }
+            var treearray=datatree.arrayFromTree();
+            var langnodes=[];
+            for (var i=0; i<datalang.children.length; i++) {
+              langnodes[i]=new NodeMale();
+              langnodes[i].load(datatree);
+              var langarray=langnodes[i].arrayFromTree();
+              for (var j=0; j<treearray.length; j++) {
+                if (treearray[j].constructor==NodeFemale && treearray[j].properties.language) {
+                  //The children are the lang conent
+                  langarray[j].children=[treearray[j].children[i]];
+                }
+              }
+            }
+            
+            if (!langarray || langarray.length==0) return false;
+            //then we insert the tree with just first lang content and for the others
+             //First we add the remove tree request
+            requestResultData.push(rootelement);
+            requestResultActions.push("delete my tree");
+            requestResultParams.push(null);
+            requestResultData.push(langnodes[0]);
+            requestResultActions.push("add my tree");
+            requestResultParams.push({language: languages.children[0].properties.id});
+            
+            return new Promise((resolve, reject)=>{
+              Node.makeRequest(requestResultActions, requestResultData, requestResultParams, true)
+              .then(myResult=>{
+                if (datalang.children.length<2) {
+                  myimpalert.hidealert();
+                  theme.siteLoad();
+                  return;
+                }
+                var myNode=new NodeMale();
+                myNode.load(myResult[1]);
+                //The resulting tree then we will swap the lang content for each language, then insert again but just the lang content
+                //We get to the list of nodes
+                var newtreearray=myNode.arrayFromTree();
+                //console.log(newtreearray, treearray);
+                //For each language we swap content
+                //Now we add the new language content but now just lang content
+                var requestData=[];
+                var requestActions=[];
+                for (var i=1; i<datalang.children.length; i++) {
+                  for (var j=0; j<newtreearray.length; j++) {
+                    var langarray=langnodes[i].arrayFromTree();
+                    if (newtreearray[j].constructor==NodeFemale && newtreearray[j].properties.language) {
+                      //console.log(newtreearray[j], langarray[j]);
+                      //Swap the other langs content
+                      newtreearray[j].children[0].properties=langarray[j].children[0].properties;
+                    }
+                  }
+                  requestData.push(myNode);
+                  requestParams.push({language: languages.children[i].properties.id, justlangcontent:true});
+                }
+                Node.makeRequest("add my tree", requestData, requestParams, true)
+                .then(()=>{
+                  resolve();
+                });
+              }); 
+            });
+          }
+        }
+        else {
+          //we show the alert message No selection
+          var mynoselalert=new Alert();
+          mynoselalert.properties.alertclass="alertmsg";
+          mynoselalert.properties.timeout=2000;
+          mynoselalert.properties.alertmsg=thisElement.form.perviousElementSibling.elements.noselection.value;
+          mynoselalert.showalert();
+        }
+        return false;
+      };
+      </script>
+      <input type="hidden" disabled>
+      <script>
+        var myNode=thisNode.getNextChild({"name":"butimp"}).getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        thisElement.onblur=function(){
+          thisElement.type="hidden";
+          thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+        }
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </span>
+  </form>
+</div>

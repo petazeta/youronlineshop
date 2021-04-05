@@ -1,0 +1,18 @@
+<!--
+-->
+<div class="loader">
+  <div class="elementloader"></div>
+  <script>
+    Node.dom.setSizeFromStyle(thisElement);
+  </script>
+</div>
+<div style="padding-top:1em;"></div>
+<script>
+  thisNode.getRelationship("domelements").loadRequest("load my tree", {language: webuser.language.properties.id})
+  .then(myNode =>{
+    myNode.addEventListener("setChildrenView", myNode => {
+      if (webuser.isAdmin()) Node.dom.addNewNodeButton(myNode);
+    }, "addNewNodeButton");
+    myNode.setChildrenView(thisElement, "paragraph");
+  });
+</script>

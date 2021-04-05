@@ -1,0 +1,91 @@
+<span class="menu" data-hbutton="true" style="position:relative;">
+  <div data-id="butedit" class="btbottomcenter" style="visibility:hidden;"></div>
+  <div data-id="admnbuts" class="bttopcenter" style="visibility:hidden;">
+    <div class="admnbtsgrid">
+      <div></div><div></div><div></div>
+    </div>
+  </div>
+  <a data-button="true" class="menu" href="javascript:"></a>
+  <script>
+    var url='?menu=' + thisNode.properties.id;
+    thisElement.href=url;
+    //function to show the openclosebutton
+    function showOpenButton() {
+      Node.appendViewNew(thisElement.parentElement.querySelector("[data-id=containeropen]"), "butopen")
+      .then(() => Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector("[data-id=containeropen]").querySelector("[data-id=openclose]"), parent: thisElement}));
+    }
+    if (thisNode.selected) Node.dom.setActive(thisNode); //if selected in advance
+    thisNode.getRelationship("domelementsdata").loadRequest("load my children", {language: webuser.language.properties.id}).then(function(myNode){
+      myNode.getChild().writeProperty(thisElement);
+      //adding the edition pencil
+      if (webuser.isWebAdmin()) {
+        myNode.getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        thisNode.setView(thisElement.parentElement.querySelector('.admnbtsgrid').children[0], "butchpos");
+        thisNode.setView(thisElement.parentElement.querySelector('.admnbtsgrid').children[1], "butdelete");
+        thisNode.parentNode.createInstanceChild().then((newNode) => {
+          newNode.sort_order=thisNode.sort_order + 1;
+          thisNode.parentNode.setView(thisElement.parentElement.querySelector('.admnbtsgrid').children[2], "butaddnewnode", {newNode: newNode});
+        });
+        //newNode.getRelationship({name: "domelementsdata"}).addChild(new NodeMale());
+      }
+    });
+    thisNode.getRelationship("domelements").addEventListener("setChildrenView", myNode => {
+      if (myNode.childContainer.parentElement) var myLoader=myNode.childContainer.parentElement.querySelector('.loader');
+      if (myLoader) myLoader.style.display="none";
+      //products container set to visible
+      //thisNode.getRelationship("domelements").getMyDomNodes()[0].parentElement.style.visibility="visible";
+    }, "removeLoader");
+    thisElement.addEventListener('click', function(event){
+      event.preventDefault();
+      if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+      Node.dom.setActive(thisNode);
+      thisNode.setView(document.getElementById("centralcontent"), "doc");
+      if (event.isTrusted) {
+        if (!(history.state && history.state.url==url)) { //to not repeat state
+          history.pushState({url:url}, null, url);
+        }
+      }
+    });
+    //we add the edit
+    if (webuser.isWebAdmin()) {
+      showOpenButton();
+    }
+    //Lets add the log event
+    webuser.addEventListener("log", (myNode) => {
+        if (!myNode.isWebAdmin()) {
+          //to remove the openbutton when logs after webadmin
+          var containerOpen=thisElement.parentElement.querySelector("[data-id=containeropen]");
+          if (containerOpen) {
+            containerOpen.innerHTML="";
+          }
+        }
+        else {
+          showOpenButton();
+        }
+      },
+      "openButton", thisNode
+    );
+    //removing the listener when node is deleted
+    thisNode.addEventListener("deleteNode", myNode => {
+      webuser.removeEventListener("log", "openButton", thisNode);
+    }, "deleteOpenButton");
+    
+    //Now we click the menu selected at the parameters send by the url
+    if (window.location.search) {
+      var regex = /menu=(\d+)/;
+      var menuIdMatch=window.location.search.match(regex);
+      if (menuIdMatch) {
+        if (menuIdMatch[1]==thisNode.properties.id) {
+          thisElement.click();
+        }
+      }
+    }
+    else {
+      //Now we click some menu at page start (if no url)
+      if (thisNode.parentNode.getChild()==thisNode) {
+        thisElement.click();
+      }
+    }
+  </script>
+  <div class="btmiddleright" data-id="containeropen"></div>
+</span>

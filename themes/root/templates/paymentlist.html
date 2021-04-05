@@ -1,0 +1,20 @@
+<div id="paymentcontainer" class="boxframe"></div>
+<script>
+var paymenttypesrootmother=new NodeFemale();
+paymenttypesrootmother.properties.childtablename="TABLE_PAYMENTTYPES";
+paymenttypesrootmother.properties.parenttablename="TABLE_PAYMENTTYPES";
+paymenttypesrootmother.loadRequest("load root").then(function(myNode){
+  myNode.getChild().loadRequest("load my tree", {language: webuser.language.properties.id})
+  .then(myNode => {
+    if (myNode.getRelationship().children.length==1 && !webuser.isWebAdmin() && !webuser.isSystemAdmin() && !webuser.isOrdersAdmin()) {
+      //We skip is there is no choice
+      Node.setViewNew(document.getElementById("centralcontent"), "checkout5");
+      return;
+    }
+    myNode.getRelationship().addEventListener("setChildrenView", myNode => {
+      if (webuser.isAdmin()) Node.dom.addNewNodeButton(myNode);
+    }, "addNewNodeButton");
+    myNode.getRelationship().setChildrenView(thisElement,  "paymenttype");
+  });
+});
+</script>

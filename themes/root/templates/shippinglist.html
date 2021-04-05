@@ -1,0 +1,15 @@
+<div id="shippingcontainer" class="boxframe"></div>
+<script>
+var shippingtypesrootmother=new NodeFemale();
+shippingtypesrootmother.properties.childtablename="TABLE_SHIPPINGTYPES";
+shippingtypesrootmother.properties.parenttablename="TABLE_SHIPPINGTYPES";
+shippingtypesrootmother.loadRequest("load root").then(function(myNode){
+  myNode.getChild().loadRequest("load my tree", {language: webuser.language.properties.id})
+  .then(myNode => {
+    myNode.getRelationship().addEventListener("setChildrenView", myNode => {
+      if (webuser.isAdmin()) Node.dom.addNewNodeButton(myNode);
+    }, "addNewNodeButton");
+    myNode.getRelationship().setChildrenView(thisElement,  "shippingtype");
+  });
+});
+</script>

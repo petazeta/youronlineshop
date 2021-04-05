@@ -1,0 +1,65 @@
+<!--
+-->
+<div class="centerelements">
+  <template>
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        var title=thisNode.getNextChild({"name":"chkt2add"}).getRelationship({name:"domelementsdata"}).getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </div>
+    <div id="useraddress"></div>
+    <script>
+      var myParams={fieldtype: 'input'};
+      if (Config.chktaddressOn) myParams.showAddress=true;
+      webuser.setView(thisElement,"useraddressview", myParams)
+      .then(()=> thisElement.querySelector('[data-id=save]').style.display='none');
+    </script>
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          var buttonLabel=thisNode.getNextChild({"name":"chkt2next"}).getRelationship({name:"domelementsdata"}).getChild();
+          buttonLabel.writeProperty(thisElement);
+          var nextFunction=()=>Node.setViewNew(document.getElementById("centralcontent"), "checkout3");
+          webuser.addEventListener('saveuserdata', nextFunction, 'checkout2', null, true);
+          thisElement.addEventListener("click", (ev) =>{
+            ev.preventDefault();
+            document.getElementById('useraddress').querySelector('button[type=submit]').click();
+          });
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          var myNode=thisNode.getNextChild({"name":"chkt2next"}).getRelationship({name:"domelementsdata"}).getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+    </div>
+  </template>
+</div>
+<script>
+  var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
+  if (Config.chkt2_On==false) {
+    Node.setViewNew(document.getElementById("centralcontent"), "checkout3");
+  }
+  else {
+    checkout.setView(thisElement,thisElement.firstElementChild);
+  }
+</script>
