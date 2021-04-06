@@ -2,7 +2,7 @@
 * YOS Version *
 ***************
 
-3.0.0 04/03/2021
+3.0.1 06/03/2021
 
 
 ***********
@@ -40,7 +40,7 @@ If you have achieved to install your online shop you will see the shop main page
 
 Once editing some content press Intro or click outside of the editable area to save changes.
 
-To reach the checkout process edition you should log in with systemadmin user and make an order as if you were a customer. Once you get to some checkout steps you should be able to edit some checkout step options.
+To reach the checkout process edition you should log in with systemadmin user and make an order as if you were a customer. Once you get to some checkout steps you should be able to edit some of the checkout options.
 
 For more advanced system configuration you can edit file javascript/config.js.
 

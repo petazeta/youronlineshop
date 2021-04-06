@@ -6,13 +6,8 @@
 
 $tablePrefix=DB_PREFIX;
 
-$tablesRequester=new NodeFemale();
-$tablesRequester->db_loadtables($tablePrefix);
+$databaseTableNames=Node::db_loadtables($tablePrefix);
 
-$databaseTableNames=[];
-foreach($tablesRequester->children as $myTable) {
-  $databaseTableNames[] = $myTable->properties->name;
-}
 if (DB_REMOVE_PREFIX) $standardTables=preg_replace('/.*__(.+)$/', '$1', $databaseTableNames);
 else $standardTables=$databaseTableNames;
 

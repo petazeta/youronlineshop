@@ -13,15 +13,15 @@
         myalert.properties.alertmsg='<p><b>Populating database ... It could take some time, please be patient.</b></p><div class="circleloader"></div>';
         myalert.showalert();
         Node.makeRequest("init database")
-        .then(myNode => {
+        .then(numRes => {
           myalert.hidealert();
           myalert.properties.alertmsg='<p><b>Page will be reloaded ...</b></p>'; 
           myalert.showalert();
           window.setTimeout(()=>theme.siteLoad(), 1000);
         })
-        .catch(myNode=>{
-          myRecorder.logEvent("Error: DB Populating");
-          myalert.properties.alertmsg=new Error('<p><b>Database Connection Failed</b></p><p>Please check includes/config.php file.');
+        .catch(myError=>{
+          myRecorder.logEvent("Error: DB Populating" + myError.errorMessage);
+          myalert.properties.alertmsg=new Error('<p><b>Database Populating Failed</b></p>' + myError.errorMessage + '<p></p>');
           myalert.showalert();
         });
       });

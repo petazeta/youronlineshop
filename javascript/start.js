@@ -35,7 +35,7 @@ Node.makeRequest("check php version")
       theme.siteLoad=()=>{
         Node.makeRequest("load tables")
         .then(myNode => {
-          if (myNode.children.length==0) {
+          if (myNode.length==0) {
             //Ask for the option of importing database
             var dbImporter=new Alert();
             dbImporter.showalert(null, "dbalert");

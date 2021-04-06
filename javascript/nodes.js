@@ -274,9 +274,10 @@ class NodeFemale extends Node {
       child.execfuncdown(myfunc);
     });
   }
-  getrootnode=function() {
+  //skipping female
+  getrootnode(tableName) {
     if (!this.partnerNode) return this;
-    else return this.partnerNode.getrootnode();
+    else return this.partnerNode.getrootnode(tableName);
   }
 
   replaceChild(oldchild,newchild) {
@@ -514,11 +515,14 @@ class NodeMale extends Node {
     rel.partnerNode=this;
     return rel;
   }
-
-  getrootnode() {
-    if (!this.parentNode) return this;
-    else if (this.parentNode==this) return this;
-    else return this.parentNode.getrootnode();
+  //gets root (root is a male node)
+  //if tableName, get first belonging tablename
+  getrootnode(tableName) {
+    if (this.parentNode && this.parentNode.partnerNode &&
+      (!tableName || this.parentNode.properties.childtablename!=tableName)) {
+      return this.parentNode.partnerNode.getrootnode(tableName);
+    }
+    else if (!tableName || this.parentNode && this.parentNode.properties.childtablename==tableName) return this;
   }
 
   getRelationship(obj) {

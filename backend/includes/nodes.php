@@ -12,50 +12,6 @@ class Node {
     Node::copyCleanValues($origin, $this->properties, $someKeys);
   }
   
-  function getdblink(){
-    global $dblink;
-    if (!$dblink) {
-      try {
-        $dblink=new mysqli(DB_HOST, DB_USERNAME, DB_USERPWD, DB_DATABASENAME);
-      }
-      catch(Exception $e) {
-        return false;
-      }
-    }
-    //$dblink->set_charset("utf8mb4");
-    return $dblink;
-  }
-  static function checkdblink($resultError=null){
-  /* //For later recomend to study PDO
-    try {
-      $conn = new PDO("mysql:host=" . DB_HOST . ";dbname=" .DB_DATABASENAME, DB_USERNAME, DB_USERPWD);
-      // set the PDO error mode to exception
-      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      echo "Connected successfully";
-    } catch(PDOException $e) {
-      echo "Connection failed: " . $e->getMessage();
-    }
-  */
-    try {
-      $dblink=new mysqli(DB_HOST, DB_USERNAME, DB_USERPWD, DB_DATABASENAME);
-    }
-    catch(Exception $e) {
-      return false;
-    }
-    if ($dblink->connect_errno) {
-      if ($resultError) $resultError->errorMessage= $dblink->connect_error;
-      return false;
-    }
-    return true;
-  }
-  static function checkphpversion($resultError){
-    $verCode=phpversion();
-    if (version_compare($verCode,'5.6')<0) {
-      $resultError->errorMessage="Required version: 5.6. Your version is: " . $verCode;
-      return false;
-    }
-    else return true;
-  }
   function load($source, $levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null){
     if (gettype($source)=='string') $source=json_decode($source);
     if (gettype($thisProperties)=='string') $thisProperties=[$thisProperties];
@@ -87,6 +43,78 @@ class Node {
       else $targetObj->{$key}=$value;
     }
     return $targetObj;
+  }
+  function getdblink($new=false){
+    global $dblink;
+    if (!$dblink || $new) {
+      try {
+        $dblink=new mysqli(DB_HOST, DB_USERNAME, DB_USERPWD, DB_DATABASENAME);
+      }
+      catch(Exception $e) {
+        return false;
+      }
+    }
+    return $dblink;
+  }
+  static function checkdblink($eventError=null){
+    $dblink=Node::getdblink(true);
+    if ($dblink && $dblink->connect_errno) {
+      if ($eventError) $eventError->errorMessage= $dblink->connect_error;
+      return false;
+    }
+    if ($dblink) return true;
+  }
+  static function checkphpversion($eventError){
+    $verCode=phpversion();
+    if (version_compare($verCode,'5.6')<0) {
+      $eventError->errorMessage="Required version: 5.6. Your version is: " . $verCode;
+      return false;
+    }
+    else return true;
+  }
+  static function db_loadtables($prefix=null) {
+    if (!$prefix && defined('DB_PREFIX')) {
+      $prefix=DB_PREFIX;
+    }
+    if ($prefix) {
+      $colname="Tables_in_" . DB_DATABASENAME;
+      $sql="SHOW TABLES" .
+      " WHERE " . $colname .
+      " LIKE " . "'" . $prefix . "\_\_%'";
+    }
+    else {
+      $sql="SHOW TABLES";
+    }
+    if (($result = Node::getdblink()->query($sql))===false) return false;
+    $tables=[];
+    //clean system vars
+    for ($i=0; $i<$result->num_rows; $i++) {
+      $row=$result->fetch_array();
+      array_push($tables, $row[0]);
+    }
+    return $tables;
+  }
+  static function db_initdb($prefix=null, $eventError=null) {
+    if (($myTables=Node::db_loadtables($prefix))===false) {
+      $eventError->errorMessage="Error database query";
+      return false;
+    }
+    if (count($myTables)>0) {
+      $eventError->errorMessage="Database tables already present. Import file manually";
+      return false;
+    }
+    $sql = file_get_contents('includes/database.sql');
+    if (!$sql) {
+      $eventError->errorMessage="Imposible to read file sql";
+      return false;
+    }
+    /* execute multi query */
+    if (($result = Node::getdblink()->multi_query($sql))===false) return false;
+    $results=1;
+    while (Node::getdblink()->next_result()) {
+      $results++;
+    }
+    return $results;
   }
 }
 
@@ -180,18 +208,18 @@ class NodeFemale extends Node{
     $child->parentNode=$this;
     return $child;
   }
-  function cloneChildrenFromQuery($result){
+  function queryToChildren($result){
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_assoc();
       //clean system vars
       foreach ($row as $key => $value) {
 	if (in_array($key, $this->syschildtablekeys)) unset($row[$key]);
       }
-      $this->children[$i] = new NodeMale();
-      if (isset($row['sort_order'])) $this->children[$i]->sort_order=$row['sort_order'];
+      $child=new NodeMale();
+      if (isset($row['sort_order'])) $child->sort_order=$row['sort_order'];
       unset($row['sort_order']);
-      $this->children[$i]->copyPropertiesFromArray($row);
-      $this->children[$i]->parentNode=$this;
+      $child->copyPropertiesFromArray($row);
+      $this->addChild($child);
     }
   }
   function db_loadchildtablekeys() {
@@ -206,7 +234,7 @@ class NodeFemale extends Node{
     . ' TABLE_SCHEMA= SCHEMA()'
     . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'"
     . " AND r.REFERENCED_TABLE_NAME IS NOT NULL";
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_assoc();
       $syskey=new stdClass();
@@ -219,7 +247,7 @@ class NodeFemale extends Node{
       $this->syschildtablekeys[]=$syskey->name;
     }
     $sql='show columns from ' . constant($this->properties->childtablename);
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
 
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_assoc();
@@ -314,8 +342,8 @@ class NodeFemale extends Node{
       if ($limit) $sql .= ' LIMIT ' . $limit;
     }
 
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
+    if (($result = Node::getdblink()->query($sql))===false) return false;
+    $this->queryToChildren($result);
   }
   
   function db_loadmypartner($child_id) {
@@ -332,7 +360,7 @@ class NodeFemale extends Node{
     . ' on t.id=c.' . $foreigncolumnname
     . ' WHERE c.id=?';
     
-    $stmt = $this->getdblink()->prepare($sql);
+    $stmt = Node::getdblink()->prepare($sql);
     $stmt->bind_param('i', $child_id);
     $stmt->execute();
     if (($result = $stmt->get_result()) === false) return false;
@@ -399,8 +427,8 @@ class NodeFemale extends Node{
       . constant($this->properties->childtablename) . ' t'
       . ' WHERE t.' . $foreigncolumnname . ' IS NULL'
       . ' LIMIT 1';
-    if (($result = $this->getdblink()->query($sql))===false || $result->num_rows==0) return false;
-    $this->cloneChildrenFromQuery($result);
+    if (($result = Node::getdblink()->query($sql))===false || $result->num_rows==0) return false;
+    $this->queryToChildren($result);
     return true;
   }
   
@@ -414,8 +442,8 @@ class NodeFemale extends Node{
     $sql = "SELECT t.* FROM "
     . constant($this->properties->childtablename) . ' t'
     . ' WHERE t.' . $foreigncolumnname . ' IS NULL';
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
+    if (($result = Node::getdblink()->query($sql))===false) return false;
+    $this->queryToChildren($result);
     return true;
   }
   function db_loadlinked() {
@@ -428,47 +456,9 @@ class NodeFemale extends Node{
     $sql = "SELECT t.* FROM "
     . constant($this->properties->childtablename) . ' t'
     . ' WHERE t.' . $foreigncolumnname . ' IS NOT NULL';
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
+    if (($result = Node::getdblink()->query($sql))===false) return false;
+    $this->queryToChildren($result);
     return true;
-  }
-  function db_loadtables($prefix=null) {
-    if (!$prefix && defined('DB_PREFIX')) {
-      $prefix=DB_PREFIX;
-    }
-    if ($prefix) {
-      $colname="Tables_in_" . DB_DATABASENAME;
-      $sql="SHOW TABLES" .
-      " WHERE " . $colname .
-      " LIKE " . "'" . $prefix . "\_\_%'";
-    }
-    else {
-      $sql="SHOW TABLES";
-    }
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
-    //table key label is something like Tables_in_dbname and we make it in a key like name
-    foreach($this->children as $key => $value) {
-      $myKey=array_keys((array)$value->properties)[0];
-      $this->children[$key]->properties->name = $value->properties->$myKey;
-      unset($this->children[$key]->properties->$myKey);
-    }
-    $result->free_result();
-  }
-  function db_initdb() {
-    if ($this->db_loadtables()===false) return false;
-    if (count($this->children)>0) {
-      return false;
-    }
-    $sql = file_get_contents('includes/database.sql');
-    if (!$sql) return false;
-    /* execute multi query */
-    if (($result = $this->getdblink()->multi_query($sql))===false) return false;
-    $results=1;
-    while ($this->getdblink()->next_result()) {
-      $results++;
-    }
-    $this->properties->numresults=$results;
   }
   function db_loadmychildrennot() {
     foreach ($this->syschildtablekeysinfo as $syskey) {
@@ -480,8 +470,8 @@ class NodeFemale extends Node{
     $sql = "SELECT t.* FROM "
     . constant($this->properties->childtablename) . ' t'
     . ' WHERE t.' . $foreigncolumnname . ' != ' . $this->partnerNode->properties->id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
+    if (($result = Node::getdblink()->query($sql))===false) return false;
+    $this->queryToChildren($result);
     return true;
   }
   function db_loadall($filter=null, $order=null, $limit=null) {
@@ -503,8 +493,8 @@ class NodeFemale extends Node{
     if ($order) $sql .= ' ORDER BY ' . $order;
     if ($limit) $sql .= ' LIMIT ' . $limit;
     
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
+    if (($result = Node::getdblink()->query($sql))===false) return false;
+    $this->queryToChildren($result);
     return true;
   }
   function db_removeall($filter=null, $limit=null) {
@@ -525,8 +515,8 @@ class NodeFemale extends Node{
     }
     if ($limit) $sql .= ' LIMIT ' . $limit;
     
-    if (($result = $this->getdblink()->query($sql))===false) return false;
-    $this->cloneChildrenFromQuery($result);
+    if (($result = Node::getdblink()->query($sql))===false) return false;
+    $this->queryToChildren($result);
     return true;
   }
   function db_loadthisrel()  {
@@ -537,7 +527,7 @@ class NodeFemale extends Node{
       . ' TABLE_SCHEMA= SCHEMA()'
       . " AND r.REFERENCED_TABLE_NAME='" . constant($this->properties->parenttablename) . "'"
       . " AND r.TABLE_NAME='" . constant($this->properties->childtablename) . "'";
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     else if ($result->num_rows==1) {
       $row=$result->fetch_assoc();
       $this->copyPropertiesFromArray($row);
@@ -605,10 +595,10 @@ class NodeFemale extends Node{
       $this->children[$i]->db_insertmyself($extra, $keepid);
     }
   }
-  //Get root male node
-  function getrootnode() {
+  //Get root male node (skipping the female)
+  function getrootnode($tableName=null) {
     if (!$this->partnerNode) return false;
-    else return $this->partnerNode->getrootnode();
+    else return $this->partnerNode->getrootnode($tableName);
   }
   function cloneNode($levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
     $myClon=new NodeFemale();
@@ -688,7 +678,7 @@ class NodeMale extends Node{
       . " WHERE"
       . ' TABLE_SCHEMA= SCHEMA()'  
       . ' AND r.REFERENCED_TABLE_NAME=\'' . constant($this->parentNode->properties->childtablename) . '\'';
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     for ($i=0; $i<$result->num_rows; $i++) {
       $row=$result->fetch_assoc();
       $this->relationships[$i] = new NodeFemale();
@@ -736,7 +726,7 @@ class NodeMale extends Node{
       . ' TABLE_SCHEMA= SCHEMA()'
       . ' AND r.TABLE_NAME=\'' . constant($mytablename) . '\''
       . ' AND r.REFERENCED_TABLE_NAME IS NOT NULL';
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     if ($result->num_rows > 1) {
       $this->parentNode=[];
       for ($i=0; $i<$result->num_rows; $i++) {
@@ -817,7 +807,7 @@ class NodeMale extends Node{
     $sql .= ' FROM ' . constant($this->parentNode->properties->childtablename) . ' t';
     $sql .=' WHERE ' . 't.id = ' . $this->properties->id;
     
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     if ($result->num_rows==0) return false;
     $row=$result->fetch_assoc();
     if (isset($row['sort_order'])) {
@@ -874,8 +864,8 @@ class NodeMale extends Node{
       $cleankeys=[];
       $cleanvalues=[];
       foreach ($myproperties as $key => $value) {
-        $value=$this->getdblink()->real_escape_string($value);
-        $key=$this->getdblink()->real_escape_string($key);
+        $value=Node::getdblink()->real_escape_string($value);
+        $key=Node::getdblink()->real_escape_string($key);
         array_push($cleankeys, "`$key`");
         array_push($cleanvalues, "'$value'");
       }
@@ -887,8 +877,8 @@ class NodeMale extends Node{
         . ' (' . implode(', ', array_values($cleanvalues)) . ')';
     }
 
-    if (($result=$this->getdblink()->query($sql))===false) return false;
-    $this->properties->id = $this->getdblink()->insert_id;
+    if (($result=Node::getdblink()->query($sql))===false) return false;
+    $this->properties->id = Node::getdblink()->insert_id;
 
     if (isset($this->parentNode->partnerNode->properties->id)) {
       //We add the info of the ids added
@@ -919,7 +909,7 @@ class NodeMale extends Node{
     . ' AND t.id !=' . $this->properties->id
     . ' AND t.' . $positioncolumnname . ' >= ' . $this->sort_order;
     
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     return true;
   }
   
@@ -959,7 +949,7 @@ class NodeMale extends Node{
       $sql .= ', ' . $positioncolumnname . '=' . $this->sort_order;
     }
     $sql .=' WHERE ' . 't.id =' . $this->properties->id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     return true;
   }
   
@@ -970,7 +960,7 @@ class NodeMale extends Node{
     . constant($this->parentNode->properties->childtablename)
     . ' WHERE id=' . $this->properties->id . ' LIMIT 1';
 
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     if (isset($this->parentNode->properties->id) && isset($this->parentNode->partnerNode->properties->id)) {
       $this->db_deletemylink();
     }
@@ -993,7 +983,7 @@ class NodeMale extends Node{
     . ' WHERE'
     . ' t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
     . ' AND t.' . $positioncolumnname . ' > ' . $this->sort_order;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
   }
   
   function db_deletemytree(){
@@ -1029,7 +1019,7 @@ class NodeMale extends Node{
     $sql='UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET ' . $foreigncolumnname . '=NULL'
     . ' WHERE t.id=' . $this->properties->id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
   }
   
   function db_updatemyproperties($proparray){
@@ -1040,8 +1030,8 @@ class NodeMale extends Node{
     
     $cleansentence=[];
     foreach ($proparray as $key => $value) {
-      $value=$this->getdblink()->real_escape_string($value);
-      $key=$this->getdblink()->real_escape_string($key);
+      $value=Node::getdblink()->real_escape_string($value);
+      $key=Node::getdblink()->real_escape_string($key);
       array_push($cleansentence, "`$key`" . '=' . "'$value'");
     }
     
@@ -1051,7 +1041,7 @@ class NodeMale extends Node{
     $sql .= implode(",", $cleansentence);
     $sql .=' WHERE id=' . $this->properties->id;
 
-    return $this->getdblink()->query($sql);
+    return Node::getdblink()->query($sql);
   }
   
   function db_updatemysort_order($new_sort_order){
@@ -1065,7 +1055,7 @@ class NodeMale extends Node{
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . $positioncolumnname . '=' . $new_sort_order
     . ' WHERE ' . 't.id =' . $this->properties->id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
 
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . $positioncolumnname . '=' . $this->sort_order
@@ -1073,7 +1063,7 @@ class NodeMale extends Node{
     . ' t.id !=' . $this->properties->id
     . ' AND t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
     . ' AND t.' . $positioncolumnname . '=' . $new_sort_order;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     return true;
   }
 
@@ -1090,17 +1080,17 @@ class NodeMale extends Node{
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . $foreigncolumnname . '=' . 'NULL'
     . ' WHERE ' . 't.id =' . $this->properties->id;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . $foreigncolumnname . '=' . $this->parentNode->partnerNode->properties->id
     . ' WHERE ' . 't.id =' . $newchildid;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
     //update sort_order
     if (!isset($this->sort_order) || !$this->sort_order) return;
     $sql = 'UPDATE ' . constant($this->parentNode->properties->childtablename) . ' t'
     . ' SET t.' . $positioncolumnname . '=' . $this->sort_order
     . ' WHERE ' . 't.id =' . $newchildid;
-    if (($result = $this->getdblink()->query($sql))===false) return false;
+    if (($result = Node::getdblink()->query($sql))===false) return false;
   }
   
   function session($sesname=null, $action="load") {
@@ -1130,7 +1120,7 @@ class NodeMale extends Node{
     $return=[];
     if (count(get_object_vars($proparray))==0) {
       $sql = 'SELECT * FROM ' . constant($tablename);
-      $result=$this->getdblink()->query($sql);
+      $result=Node::getdblink()->query($sql);
       while ($row = $result->fetch_assoc()) {
           array_push($return, $row);
       }
@@ -1141,15 +1131,15 @@ class NodeMale extends Node{
     $params=[];
     
     foreach ($proparray as $key => $value) {
-      $value=$this->getdblink()->real_escape_string($value);
-      $key=$this->getdblink()->real_escape_string($key);
+      $value=Node::getdblink()->real_escape_string($value);
+      $key=Node::getdblink()->real_escape_string($key);
       array_push($searcharray, "$key = '$value'");
       array_push($params, $key);
       array_push($params, $value);
     }
     
     $sql = 'SELECT * FROM ' . constant($tablename) . ' where ' . implode(' and ', $searcharray);
-    $result=$this->getdblink()->query($sql);
+    $result=Node::getdblink()->query($sql);
     while ($row = $result->fetch_assoc()) {
         array_push($return, $row);
     }
@@ -1186,13 +1176,14 @@ class NodeMale extends Node{
       $this->relationships[$i]->avoidrecursiondown();
     }
   }
-  //Get root male node
-  function getrootnode() {
-    if (!$this->parentNode) return $this;
-    else if ($this->parentNode->partnerNode) {
-      return $this->parentNode->partnerNode->getrootnode();
+  //gets root (root is a male node)
+  //if tableName, get first belonging tablename
+  function getrootnode($tableName=null) {
+    if ($this->parentNode && $this->parentNode->partnerNode &&
+      (!$tableName || $this->parentNode->properties->childtablename!=$tableName)) {
+      return $this->parentNode->partnerNode->getrootnode($tableName);
     }
-    else return $this;
+    else if (!$tableName || $this->parentNode && $this->parentNode->properties->childtablename==$tableName) return $this;
   }
   function cloneNode($levelup=null, $leveldown=null, $thisProperties=null, $thisPropertiesUp=null, $thisPropertiesDown=null) {
     $myClon=new NodeMale();
