@@ -1,0 +1,103 @@
+<!--
+  thisParams.pageNum (start 1)
+-->
+<div class="productlistgrid"></div>
+<script>
+  const extraParents=[webuser.language.getRelationship("domelementsdata")];
+  if (webuser.isProductSeller()) {
+    extraParents.push(webuser.getRelationship("items").cloneNode(0, 0)); //parents
+  }
+  thisNode.getRelationship("items").children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
+  const pageSize=Config.catPageSize;
+  let pageNum=1;
+  if (thisParams.pageNum) pageNum=thisParams.pageNum;
+  thisNode.getRelationship("items").children=[]; //reset children
+  const itemsRel= await thisNode.getRelationship("items").loadRequest("get my tree", {extraParents: extraParents, limit: [(pageNum - 1)*pageSize, pageSize]});
+  
+  //When url init is with product we show product
+  if (window.location.search) {
+    const regex = new RegExp('item=(\\d+)');
+    if (window.location.search.match(regex)) {
+      for (const child of itemsRel.children) {
+        if (child.props.id==window.location.search.match(regex)[1]) {
+          Node.dom.setActive(child);
+          child.setView(document.getElementById("centralcontent"), "itempicturelarge");
+          return; //Ends the entire script
+        }
+      }
+      //we don't find it in pageSize, get it from database
+      const myItem=new NodeMale();
+      myItem.props.id=window.location.search.match(regex)[1];
+      itemsRel.addChild(myItem);
+      await myItem.loadRequest("get my tree", {extraParents: extraParents, myself: true});
+      myItem.setView(document.getElementById("centralcontent"), "itempicturelarge");
+      return; //Ends the entire script
+    }
+  }
+  //To show add product when none products in the category
+  itemsRel.addEventListener("setChildrenView", async function() {
+    if (webuser.isProductAdmin() && this.children.length==0) {
+      const newNode = await this.createInstanceChild();
+      const itemView=function(itemNode) {
+        Node.dom.setActive(itemNode);
+        itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+      }
+      newNode.setView(thisElement, "butaddnewnode", {onAdded: itemView});
+    }
+  }, "addNewNodeButton");
+  //in case is seller we still need to load the entire tree
+  if (webuser.isProductSeller()) {
+    const myNodes=await Node.requestMulty("get my tree", itemsRel.children, {extraParents: webuser.language.getRelationship("domelementsdata")});
+    for (const i in itemsRel.children) {
+      itemsRel.children[i].load(myNodes[i]);
+    }
+  }
+  
+  //Pagination indexes
+  const pages=Math.ceil(itemsRel.props.total / pageSize);
+  const pageNodeContainer=new NodeFemale();
+  const onClickScript= (number)=>{
+    return thisNode.setView(thisElement.parentElement, "catalog", {pageNum: number});
+  }
+  pageNodeContainer.createPageIndex=async function(pages){
+    pageNodeContainer.children=[]; //reset children
+    const prevPrevUrl='?category=' + thisNode.parentNode.partnerNode.props.id;
+    const prevUrl=prevPrevUrl + '&subcategory=' + thisNode.props.id;
+    for (let i=1; i<=pages; i++) {
+      const pageNode=new NodeMale();
+      pageNode.props.number=i;
+      pageNode.props.href=prevUrl + '&page=' + i;
+      if (i==pageNum) {
+        pageNode.selected=true;
+      }
+      pageNodeContainer.addChild(pageNode);
+    }
+    if (pages>1) {
+      await pageNodeContainer.setChildrenView(document.getElementById('centralcontent').querySelector('[class=page-indexes]'), 'paginationindex', {onClickScript: onClickScript});
+    }
+  }
+  pageNodeContainer.refreshPage=function(pageNum){
+    itemsRel.partnerNode.setView(document.getElementById("centralcontent"), "pagination", {tmpt: "catalog", pageNum: pageNum});
+  }
+  itemsRel.paginationIndex=pageNodeContainer; //We will reuse it for adding node and delete node
+  
+  await pageNodeContainer.createPageIndex(pages); // So we wait cause it could make a request and skip next actions that could produce error if not
+  
+  await itemsRel.setChildrenView(thisElement, "itemlistpicture");
+  
+  if (thisElement.parentElement) thisElement.parentElement.style.minHeight="unset"; //Remove minheight to fit page to content
+  
+  
+  //if adding the item we have to set the item seller
+  /*
+  thisNode.addEventListener("addNewNode", function(newItemNode) {
+    if (webuser.getRelationship("items")) {
+      //we make a clone of the node to let the actual rel without changes
+      var newItemClone=newItemNode.cloneNode();
+      newItemClone.sort_order=null;
+      webuser.getRelationship("items").addChild(newItemClone);
+      newItemClone.request({action:"add my link"});
+    }
+  }, "setseller");  
+  */
+</script>

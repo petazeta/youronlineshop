@@ -1,0 +1,19 @@
+<!--
+-->
+<div class="shoppingcartimage"></div>
+<script>
+  if (window.getComputedStyle(thisElement).backgroundImage) {
+    Node.dom.setSizeFromStyle(thisElement);
+  }
+</script>
+<div></div>
+<script>
+  thisNode.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+  thisElement.parentElement.addEventListener("click", function(ev){
+    ev.preventDefault();
+    Node.dom.switchVisibility(document.getElementById("cartbox"));
+    if (document.getElementById("cartbox").style.visibility=="visible")
+      document.getElementById("cartbox").style.transform="scale(1.2)";
+    else document.getElementById("cartbox").style.transform="scale(1)";
+  });
+</script>

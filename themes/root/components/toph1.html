@@ -1,0 +1,22 @@
+<!--
+-->
+<div class="adminbuttonscontainer" style="position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <h1></h1>
+  <script>
+    thisNode.writeProperty(thisElement);
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+    }
+    //header title
+    var titFixed=domelementsroot.getNextChild({name: "labels"}).getNextChild({name:"not located"}).getNextChild({name: "pagTit"}).getRelationship("domelementsdata").getChild();
+    if (!titFixed.props.value) document.title=thisNode.props.value;
+    thisElement.addEventListener('blur', ()=>{
+      if (!titFixed.props.value) {
+        document.title=thisElement.innerHTML;
+      }
+    });
+  </script>
+</div>

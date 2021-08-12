@@ -1,0 +1,75 @@
+<div class="dashboard">
+  <template id="logedittp">
+    <div style="display:table;">
+      <div></div>
+      <script>
+        const textEditNode=thisNode;
+        textEditNode.getRelationship("domelementsdata").getChild().setView(thisElement, "singlefield", {labelName: textEditNode.props.name, typeInput: true});
+      </script>
+    </div>
+  </template>
+  <div>
+    <div style="margin:auto; display:table; margin-bottom: 1em;">
+      <div class="msgbox">
+        <div style="display:table;">
+          <div></div>
+          <script>
+            const titNode=domelementsroot.getNextChild("labels").getNextChild("not located").getNextChild("pagTit");
+            await titNode.getRelationship("domelementsdata").getChild().setView(thisElement, "singlefield", {labelName: titNode.props.name, typeInput: true});
+            const titInput=thisElement.getElementsByTagName('input')[0];
+            titInput.addEventListener('blur', function(){
+              if (Config.onEmptyValueTextOn && titInput.value && titInput.value!=Node.onEmptyValueText) document.title=titInput.value;
+            });
+          </script>
+        </div>
+      </div>
+    </div>
+    <div style="margin:auto; display:table; margin-bottom: 1em;">
+      <div class="msgbox"></div>
+      <script>
+        domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("currency").appendView(thisElement, document.querySelector("#logedittp"));
+      </script>
+    </div>
+    <div style="margin:auto; display:table; margin-bottom: 1em;">
+      <div class="msgbox"></div>
+      <script>
+        domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("hours").appendView(thisElement, document.querySelector("#logedittp"));
+      </script>
+    </div>
+    <div style="margin:auto; display:table; margin-bottom: 1em;">
+      <div class="msgbox"></div>
+      <script>
+        const langbox=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("langbox");
+        langbox.getNextChild("langboxtt").appendView(thisElement, document.querySelector("#logedittp"));
+        langbox.getNextChild("newlangwait").appendView(thisElement, document.querySelector("#logedittp"));
+        langbox.getNextChild("changelangwait").appendView(thisElement, document.querySelector("#logedittp"));
+      </script>
+    </div>
+    <div style="margin:auto; display:table; margin-bottom: 1em;">
+      <div class="msgbox"></div>
+      <script>
+        const logboxNode=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("logbox");
+        const logboxin=logboxNode.getNextChild("logboxin");
+        const logboxout=logboxNode.getNextChild("logboxout");
+        for (const logNode of logboxin.getRelationship("domelements").children) {
+          logNode.appendView(thisElement, document.querySelector("#logedittp"));
+        }
+        for (const logNode of logboxout.getRelationship("domelements").children) {
+          logNode.appendView(thisElement, document.querySelector("#logedittp"));
+        }
+      </script>
+    </div>
+    <div data-id="containerlogin"></div>
+    <script>
+      (new NodeMale()).appendView(thisElement, "loginform");
+    </script>
+    <div data-id="containernew"></div>
+    <script>
+      (new NodeMale()).appendView(thisElement, "newform");
+    </script>
+    <div data-id="containerexpimp"></div>
+    <script>
+      domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("dashboard").getNextChild("expimp").appendView(thisElement, "expimp");
+    </script>
+  </div>
+</div>

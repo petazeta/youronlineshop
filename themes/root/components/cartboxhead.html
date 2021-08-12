@@ -1,0 +1,18 @@
+<!--
+-->
+<span style="position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <a href="javascript:"></a>
+  <script>
+    thisNode.writeProperty(thisElement);
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+    }
+    thisElement.addEventListener("click", ev=>{
+      ev.preventDefault();
+      document.getElementById("cartbox").style.visibility="hidden";
+    });
+  </script>
+</span>

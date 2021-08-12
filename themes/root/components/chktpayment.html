@@ -1,0 +1,22 @@
+<!--
+-->
+<div style="text-align: center;">
+  <div style="position:relative;">
+    <div data-id="butedit" class="btmiddleright"></div>
+    <h3></h3>
+    <script>
+      const title=thisNode.getNextChild("paymentTit").getRelationship("domelementsdata").getChild();
+      //title.writeProperty(thisElement);
+      //adding the edition pencil
+      if (webuser.isWebAdmin()) {
+        Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+      }
+    </script>
+  </div>
+  <div></div>
+  <script>
+    //We show the payment types available
+    (new NodeMale()).setView(thisElement, "paymentlist");
+  </script>
+</div>

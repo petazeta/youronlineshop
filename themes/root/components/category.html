@@ -1,0 +1,103 @@
+<!--
+-->
+<div class="boxlist">
+  <div>
+    <span style="position:relative; z-index:1">
+      <div data-id="admnbuts" class="btmiddleright">
+        <div class="admnbtsgrid"></div>
+      </div>
+      <div data-id="butedit" class="btmiddleleft"></div>
+      <a href="javascript:" class="category" data-button="true" data-hbutton="true"></a>
+      <script>
+        thisElement.href='?category=' + thisNode.props.id;
+        if (thisNode.selected) Node.dom.setActive(thisNode); //If selected in advance
+        async function showsubcategories() {
+          thisNode.getRelationship().addEventListener("deleteChildNode", function(nodedeleted) {
+            //Remove the productscontainer content
+            if (this.children.length==0 && nodedeleted==theme.lastNodeActive) {
+              document.getElementById("centralcontent").innerHTML="";
+            }
+          });
+          const subcContainer=thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer");
+          subcContainer.style.display="none";
+          thisNode.getRelationship().children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
+          const subcategoriesMother=await thisNode.getRelationship().loadRequest("get my tree", {deepLevel: 2, extraParents: webuser.language.getRelationship("domelementsdata")});
+          //When there is no subcategories we show a add subcategory button
+          subcategoriesMother.addEventListener("setChildrenView", async function() {
+            if (webuser.isProductAdmin() && this.children.length==0) {
+              const newNode=await this.createInstanceChild();
+              newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+            }
+          }, "addNewNodeButton");
+          const catalogView=function(childNode, pageNum) {
+            Node.dom.setActive(childNode);
+            const params={tmpt: "catalog"};
+            if (pageNum) params.pageNum=pageNum;
+            childNode.setView(document.getElementById("centralcontent"), "pagination", params);
+          }
+          //when a new subcategory is created we select it
+          subcategoriesMother.addEventListener("addNewNode", function(newNode) {
+            catalogView(newNode);
+          }, "addANewNode");
+          //If node was selected then we select the following one
+          subcategoriesMother.addEventListener("deleteChildNode", function(delNode) {
+            if (delNode.selected 
+            && this.getMySysKey("sort_order")
+            && this.children.length>0) {
+              let position=1;
+              if (delNode.props[this.getMySysKey("sort_order")] > 1) position=delNode.props[this.getMySysKey("sort_order")]-1;
+              catalogView(this.children[position-1]);
+            }
+          }, "delANewNode");
+          //we show subcategories (and click some subcategory)
+          await subcategoriesMother.setChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "subcategory");
+          //subcategories container set to visible ?
+          subcContainer.style.display="block";
+        };
+        thisElement.addEventListener("click", function(event){
+          event.preventDefault();
+          if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+          if (Config.showsubcategory_On) return false;
+          Node.dom.setActive(thisNode);
+          document.getElementById("centralcontent").innerHTML="";//We remove central content (To avoid keep content that could be confusing)
+          showsubcategories();
+          //We just grab history when efective clicking
+          const url='?category=' + thisNode.props.id;
+          if (event.isTrusted) {
+            //it doesn't record state when: go back (dont state twice the same url)
+            if (!(history.state && history.state.url==url)) {
+              history.pushState({url:url}, null, url);
+            }
+            //Update the state bar
+            //thisNode.setView(document.getElementById("statecontainer"), "statebar");
+          }
+        });
+        if (Config.showsubcategory_On) {
+          showsubcategories();
+        }
+        //Now we click the category selected at the parameters send by the url
+        if (window.location.search) {
+          var regex = /category=(\d+)/;
+          var catIdMatch=window.location.search.match(regex);
+          if (catIdMatch) {
+            if (catIdMatch[1]==thisNode.props.id) {
+              thisElement.click();
+            }
+          }
+        }
+        const dataRel= await thisNode.getRelationship("itemcategoriesdata").loadRequest("get my children", {extraParents: webuser.language.getRelationship("itemcategoriesdata")});
+        dataRel.getChild().writeProperty(thisElement);
+        if (webuser.isProductAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          dataRel.getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+          const newNode=await thisNode.parentNode.createInstanceChild(thisNode);
+          newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode});
+        }
+      </script>
+    </span>
+  </div>
+  <div class="subcategorycontainer" style="display:none;"></div>
+</div>

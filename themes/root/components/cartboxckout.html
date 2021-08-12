@@ -1,0 +1,59 @@
+<div style="position:relative">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <button type="button" class="btn" data-id="but" data-href="?chktmain"></button>
+  <script>
+    const myNode=thisNode.getNextChild("ckouttt").getRelationship("domelementsdata").getChild();
+    myNode.writeProperty(thisElement);
+    thisElement.onclick=function(){  
+      mycart.tocheckout();
+    }
+    //Now we click the subcategory selected at the parameters send by the url
+    if (window.location.search) {
+      let regex = /chktmain=(\d+)/;
+      const urlMatch=window.location.search.match(regex);
+      if (urlMatch) {
+        mycart.tocheckout();
+      }
+    }
+  </script>
+  <input type="hidden" disabled>
+  <script>
+    var myNode=thisNode.getNextChild("ckouttt").getRelationship("domelementsdata").getChild();
+    myNode.writeProperty(thisElement);
+    thisElement.onblur=function(){
+      thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+      thisElement.type="hidden";
+    }
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+    }
+  </script>
+</div>
+<div style="position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <button type="button" class="btn" data-id="but"></button>
+  <script>
+    var myNode=thisNode.getNextChild("discardtt").getRelationship("domelementsdata").getChild();
+    myNode.writeProperty(thisElement);
+    thisElement.onclick=function(){  
+      mycart.getRelationship("cartitem").children=[];
+      mycart.refreshcartbox();
+    }
+  </script>
+  <input type="hidden" disabled>
+  <script>
+    var myNode=thisNode.getNextChild("discardtt").getRelationship("domelementsdata").getChild();
+    myNode.writeProperty(thisElement);
+    thisElement.onblur=function(){
+      thisElement.type="hidden";
+      thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+    }
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+    }
+  </script>
+</div>

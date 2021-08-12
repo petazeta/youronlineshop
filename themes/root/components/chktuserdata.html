@@ -1,0 +1,24 @@
+<!--
+-->
+<div class="centerelements">
+  <div style="position:relative;">
+    <div data-id="butedit" class="btmiddleright"></div>
+    <h3></h3>
+    <script>
+      const title=thisNode.getNextChild("addressTit").getRelationship("domelementsdata").getChild();
+      //title.writeProperty(thisElement);
+      //adding the edition pencil
+      if (webuser.isWebAdmin()) {
+        Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+      }
+    </script>
+  </div>
+  <div id="useraddress"></div>
+  <script>
+    const myParams={fieldtype: 'input'};
+    if (Config.chktaddress_On) myParams.showAddress=true;
+    webuser.setView(thisElement, "useraddressview", myParams)
+    .then(()=> thisElement.querySelector('[data-id=save]').style.display='none'); //Save button disabled
+  </script>
+</div>

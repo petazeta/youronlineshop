@@ -1,0 +1,62 @@
+<div class="userimage"></div>
+<script>
+  if (window.getComputedStyle(thisElement).backgroundImage) {
+    Node.dom.setSizeFromStyle(thisElement);
+  }
+</script>
+<div></div>
+<script>
+  const setlogstatus=function(){
+    let logbox=thisNode.getNextChild("logboxout");
+    if (webuser.props.id) {
+      logbox=thisNode.getNextChild("logboxin");
+    }
+    logbox.getNextChild("title").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+  }
+  setlogstatus();
+  webuser.addEventListener("log", () => {
+    setlogstatus();
+  }, "setlogstatus");
+  const url='?login=' + '1';
+  const butAction=(event)=>{
+    if (webuser.props.id) {
+      if (document.getElementById("dashmenu").style.visibility=="visible" && event && event.isTrusted) {
+        document.getElementById("dashmenu").style.transform="translateY(-15px)";
+        document.getElementById("dashmenu").style.visibility="hidden";
+      }
+      else {
+        //Show user menu
+        const basicPath=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("dashboard");
+        basicPath.setView(document.getElementById("dashmenu"), "usermenu");
+        document.getElementById("dashmenu").style.visibility="visible";
+        document.getElementById("dashmenu").style.transform="translateY(15px)";
+      }
+    }
+    else {
+      (new NodeMale()).setView(document.getElementById("centralcontent"), "loginform");
+    }
+  }
+  thisElement.parentElement.addEventListener("click", function(event){
+    event.preventDefault();
+    butAction(event);
+    //We grab state on mouse click when try to login
+    if (event.isTrusted) {
+      if (!webuser.props.id && window.location.search) {
+        webuser.referrer=window.location.search;
+      }
+      //it doesn't record state when: go back (dont state twice the same url)
+      if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+    }
+  });
+  
+  Theme.setPopState(url, butAction); //history navigation facility
+  
+  //Now we click the subcategory selected at the parameters send by the url
+  if (window.location.search) {
+    let regex = /login=(\d+)/;
+    const loginMatch=window.location.search.match(regex);
+    if (loginMatch) {
+      butAction();
+    }
+  }
+</script>

@@ -1,0 +1,108 @@
+<!--
+  thisNode: the new node
+  thisParams:
+    onDeleted:
+-->
+<button type="button" class="butdel">
+  <template>
+  <!--
+    thisParams:
+      dataNode: thisNode
+      onDeleted:
+  -->
+    <div class="alert alertmsg redalert">
+      <div>
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <h1 style="font-size:1.5em" style="display:block;">DELETE</h1>
+          <script>
+            if (typeof domelementsroot != "undefined") {
+              const myContent=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("deletealert").getNextChild("titalert").getRelationship("domelementsdata").getChild();
+              myContent.writeProperty(thisElement);
+              //adding the edition pencil
+              if (webuser && webuser.isWebAdmin()) {
+                Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+              }
+            }
+          </script>
+        </span>
+      </div>
+      <span style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <div style="margin:1em;">ATENTION: This element and its descedants will be removed.</div>
+        <script>
+         //adapted for non domelements table apps
+          if (typeof domelementsroot != "undefined") {
+            const myContent=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("deletealert").getNextChild("textalert").getRelationship("domelementsdata").getChild();
+            myContent.writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser && webuser.isWebAdmin()) {
+              Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          }
+        </script>
+      </span>
+      <div style="margin:1em;">
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleleft"></div>
+          <button type="button" class="btn"data-id="but" >Don't remove</button>
+          <script>
+            if (typeof domelementsroot != "undefined") {
+              const myContent=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("deletealert").getNextChild("dontdelbutton").getRelationship("domelementsdata").getChild();
+              myContent.writeProperty(thisElement);
+              //adding the edition pencil
+              if (webuser && webuser.isWebAdmin()) {
+                Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+              }
+            }
+            thisElement.onclick=function(){
+              thisNode.hideAlert();
+            }
+          </script>
+        </span>
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <button type="button" class="btn" data-id="but">Remove</button>
+          <script>
+            if (typeof domelementsroot != "undefined") {
+              const myContent=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("deletealert").getNextChild("delbutton").getRelationship("domelementsdata").getChild();
+              myContent.writeProperty(thisElement);
+              //adding the edition pencil
+              if (webuser && webuser.isWebAdmin()) {
+                Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+              }
+            }
+            thisElement.addEventListener("click", async function(ev) {
+              ev.preventDefault();
+              const result=await thisParams.dataNode.request("delete my tree");
+              thisParams.dataNode.parentNode.removeChild(thisParams.dataNode);
+              //for no children add a eventlistener to setChildrenView event
+              if (thisParams.onDeleted) thisParams.onDeleted(thisParams.dataNode);
+              else if (thisParams.dataNode.parentNode.childContainer)  await thisParams.dataNode.parentNode.setChildrenView();
+              
+              thisParams.dataNode.parentNode.dispatchEvent("deleteChildNode", thisParams.dataNode);
+              thisParams.dataNode.dispatchEvent("deleteNode");
+
+              thisNode.hideAlert();
+            });
+          </script>
+        </span>
+      </div>
+    </div>
+  </template>
+  <div class="delimage"></div>
+  <script>
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      Node.dom.setSizeFromStyle(thisElement);
+    }
+  </script>
+</button>
+<script>
+  thisElement.onclick=function() {
+    (new Alert()).showAlert(null, thisElement.querySelector("template"), {dataNode: thisNode, onDeleted: thisParams.onDeleted});
+  }
+</script>

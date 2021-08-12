@@ -1,0 +1,57 @@
+<div class="dashboard">
+  <div style="display:table; margin: 1em auto;">
+    <form>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="new" disabled>
+        <script>
+          const myNode=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("dashboard").getNextChild("showOrd").getNextChild("new").getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            thisElement.type="text";
+          }
+          thisElement.onblur=function(){
+            thisElement.form.elements.ordersStatus[0].innerHTML=thisElement.value;
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="archived" disabled>
+        <script>
+          const myNode=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("dashboard").getNextChild("showOrd").getNextChild("archived").getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          if (webuser.isWebAdmin()) {
+            Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            thisElement.type="text";
+          }
+          thisElement.onblur=function(){
+            thisElement.form.elements.ordersStatus[1].innerHTML=thisElement.value;
+          }
+        </script>
+      </div>
+      <select name="ordersStatus" class="">
+        <option value="new"></option>
+        <script>
+          domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("dashboard").getNextChild("showOrd").getNextChild("new").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+        </script>
+        <option value="archived"></option>
+        <script>
+          domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("dashboard").getNextChild("showOrd").getNextChild("archived").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+        </script>
+      </select>
+      <script>
+        thisElement.onchange=function(){
+          (new NodeMale()).setView(document.getElementById("ordersContainer"), "userorders", {filterorders: thisElement.options[thisElement.selectedIndex].value});
+        }
+      </script>
+    </form>
+  </div>
+  <div style="margin-bottom:1em" id="ordersContainer"></div>
+  <script>
+    (new NodeMale()).setView(thisElement, "userorders");
+  </script>
+</div>

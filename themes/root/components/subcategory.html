@@ -1,0 +1,63 @@
+<div>
+  <span data-note="relative position container for admn buttons" style="z-index:1; position: relative;">
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <div data-id="butedit" class="btmiddleleft"></div>
+    <a data-button="true" data-hbutton="true" class="subcategory"></a>
+    <script>      
+      if (thisNode.selected) Node.dom.setActive(thisNode); //if selected in advance
+      
+      const catalogView=function(pageNum) {
+        Node.dom.setActive(thisNode);
+        const params={tmpt: "catalog"};
+        if (pageNum) params.pageNum=pageNum;
+        thisNode.setView(document.getElementById("centralcontent"), "pagination", params);
+      }
+      
+      const prevUrl='?category=' + thisNode.parentNode.partnerNode.props.id;
+      const url= prevUrl + '&subcategory=' + thisNode.props.id;
+
+      thisElement.addEventListener("click", function(event) {
+        event.preventDefault();
+        if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+        catalogView();
+        //We grab state on mouse click
+        if (event.isTrusted || true) {
+          //it doesn't record state when: go back (dont state twice the same url)
+          if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+        }
+      });
+      
+      Theme.setPopState(url, catalogView); //history navigation facility
+      
+      //Now we click the subcategory selected at the parameters send by the url
+      if (window.location.search) {
+        let regex = /subcategory=(\d+)/;
+        const catIdMatch=window.location.search.match(regex);
+        if (catIdMatch && catIdMatch[1]==thisNode.props.id) {
+          regex = /pageNum=(\d+)/;
+          const pageMatch=window.location.search.match(regex);
+          if (pageMatch) {
+            catalogView(pageMatch[1]);
+          }
+          else {
+            catalogView();
+          }
+        }
+      }
+      const cData=await thisNode.getRelationship("itemcategoriesdata").loadRequest("get my children", {extraParents: webuser.language.getRelationship("itemcategoriesdata")})
+      cData.getChild().writeProperty(thisElement);
+      if (webuser.isProductAdmin()) {
+        Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        cData.getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+        const newNode= await thisNode.parentNode.createInstanceChild(thisNode);
+        newNode.parentNode=thisNode.parentNode;
+        newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode});
+      }
+    </script>
+  </span>
+</div>

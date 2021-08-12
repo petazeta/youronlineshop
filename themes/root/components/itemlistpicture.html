@@ -1,0 +1,192 @@
+<!--
+
+-->
+<div class="productshortcontainer">
+  <div class="productgrid">
+    <div class="productimg" style="position:relative;">
+      <div data-id="butedit" class="bttopinsiderightinside" style="z-index:1"></div>
+      <button type="button" class="btmiddlecenter" style="opacity: 0; z-index:1">
+        <div class="zoomimage"></div>
+        <script>
+          if (window.getComputedStyle(thisElement).backgroundImage) {
+            Node.dom.setSizeFromStyle(thisElement);
+          }
+        </script>
+      </button>
+      <script>
+        let prevUrl='?category=' + thisNode.parentNode.partnerNode.parentNode.partnerNode.props.id;
+        prevUrl += '&subcategory=' + thisNode.parentNode.partnerNode.props.id;
+        const url= prevUrl + '&item=' + thisNode.props.id;
+        if (Config.itemExtend_On || webuser.isProductAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement, parent: thisElement.parentElement})
+        }
+        thisElement.addEventListener("click",function(event){
+          event.preventDefault();
+          thisNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+          //it doesn't record state when: go back (dont state twice the same url)
+          if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+        });
+      </script>
+      <img class="productimg">
+      <script>
+        const myImage=thisNode.props.image || Config.defaultImg;
+        thisElement.src=Config.catalogPath + "images/small/" + myImage;
+        thisNode.addEventListener("changeProperty", (property)=>{
+          if (property=="image") {
+            thisElement.src=Config.catalogPath + "images/small/" + thisNode.props.image;
+          }
+        }, "img");
+        if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+          //For some unknown reason the usual opacity onmouseover makes some not good view effect, we use visibility in this case
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement, method: 'visibility'});
+          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "image", thisAttribute: "data-src", autoeditFunc: Node.dom.imageEditFunc, autoeditParams: {imageElement: thisElement, myNode: thisNode, labelNode: domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("loadImg")}});
+        }
+      </script>
+    </div>
+   <div class="textproduct">
+      <div class="itemname">
+        <h3 style="position:relative; display:inline-block;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <a data-button="true" href="" class="tit">{name}</a>
+          <script>
+            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+              Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "name"});
+            }
+            // some tasks regarding to history state
+            let prevUrl='?category=' + thisNode.parentNode.partnerNode.parentNode.partnerNode.props.id;
+            prevUrl += '&subcategory=' + thisNode.parentNode.partnerNode.props.id;
+            const url= prevUrl + '&item=' + thisNode.props.id;
+            
+            const itemView=function() {
+              Node.dom.setActive(thisNode);
+              thisNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+            }
+            
+            thisElement.addEventListener("click",function(event){
+              event.preventDefault();
+              if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+              //document.getElementById("centralcontent").innerHTML=''; //This is a patch for a problem at reload page, it still keeps the itemproducts short
+              itemView();
+              if (event.isTrusted) {
+                //it doesn't record state when: go back (dont state twice the same url)
+                if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+              }
+            });
+            
+            Theme.setPopState(url, itemView); //history navigation facility
+            
+            //We click if the url is for this product
+            if (window.location.search) {
+              const regex = new RegExp('item=(\\d+)');
+              if (window.location.search.match(regex) && window.location.search.match(regex)[1]==thisNode.props.id) {
+                itemView();
+              }
+            }
+          </script>
+        </h3>
+      </div>
+      <div class="itemdescription">
+        <div style="display: inline-block; position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <div style="margin-bottom:1em;">{descriptionshort}</div>
+          <script>
+            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+              Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "descriptionshort"});
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+    <div class="addtocart">
+      <form>
+        <div class="addtocartgrid">
+          <div class="productprice">
+            <span style="position:relative;">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <div style="padding-right: 0.2em">{price}</div>
+              <script>
+                thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement);
+                //adding the edition pencil
+                if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                  Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                  thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "price"});
+                }
+              </script>
+            </span>
+            <div></div>
+            <script>
+              domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("currency").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+            </script>
+          </div>
+          <div class="quantityselect"></div>
+          <script>
+            const myselect=Node.dom.createQuantitySelect();
+            myselect.style.color="#666";
+            myselect.name="pquantity";
+            thisElement.appendChild(myselect);
+          </script>
+          <div style="position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <button type="button" class="btn" data-id="but">
+              <div class="cartplusimage"></div>
+              <script>
+                if (window.getComputedStyle(thisElement).backgroundImage) {
+                  Node.dom.setSizeFromStyle(thisElement);
+                }
+              </script>
+            </button>
+            <script>
+              const myTitle=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("addcarttt").getRelationship("domelementsdata").getChild();
+              myTitle.writeProperty(thisElement,null,"title");
+              thisElement.addEventListener("click",(event)=>{
+                event.preventDefault();
+                let quantity=1;
+                if (thisElement.form.elements["pquantity"]) quantity=thisElement.form.elements["pquantity"].value;
+                mycart.additem(thisNode.getRelationship("itemsdata").getChild(), quantity);
+              });
+            </script>
+            <input type="hidden" disabled>
+            <script>
+              const myNode=domelementsroot.getNextChild("labels").getNextChild("middle").getNextChild("addcarttt").getRelationship("domelementsdata").getChild();
+              myNode.writeProperty(thisElement);
+              thisElement.onblur=function(){
+                thisElement.type="hidden";
+                thisElement.parentElement.querySelector('button[data-id=but]').title=thisElement.value;
+              }
+              //adding the edition pencil
+              if (webuser.isWebAdmin()) {
+                Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+              }
+            </script>            
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div style="position:relative;z-index:6;">
+    <div data-id="admnbuts">
+      <div class="admnbtsgrid"></div>
+    </div>
+  </div>
+  <script>
+    if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+      Node.dom.visibleOnMouseOver({element: thisElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+      thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical', onChgOrder: Node.dom.paginationOnChgOrder});
+      thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butdelete", {onDeleted: Node.dom.paginationOnDeleted});
+      const newNode = await thisNode.parentNode.createInstanceChild(thisNode);
+      //If is the last of the page then we will add the item at in next page
+      const itemView=function(itemNode) {
+        Node.dom.setActive(itemNode);
+        itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+      }
+      newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {onAdded: itemView});
+    }
+  </script>
+</div>

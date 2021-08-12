@@ -1,0 +1,47 @@
+<div class="alert dialogbox">
+  <div>
+    <h1 style="font-size:1.5em" style="display:block;">
+      <p>No Database Tables!</p>
+      <p>Select some option:</p>
+    </h1>
+  </div>
+  <div style="padding:1em;">
+    <div style="padding:1em;">
+      <template>
+        <div class="alert">
+          <p><b>Populating database ... It could take some time, please be patient.</b></p>
+          <div style="text-align:center"><div class="circleloader"></div></div>
+        </div>
+      </template>
+      <button class="btn" type="button" style="padding:1em;">Populate Database with includes/database.sql</button>
+      <script>
+        thisElement.addEventListener("click", async ()=>{
+          (new NodeMale()).setView(document.body, thisElement.previousElementSibling);
+          const res= await Node.makeRequest("init database");
+          if (res>0) {
+            //Log as sysadmin
+            await webuser.login("systemadmin", "systemadmin");
+            //<--load Text content
+            const domelmtsmum=await (new NodeFemale("TABLE_DOMELEMENTS", "TABLE_DOMELEMENTS")).loadRequest("get my root");
+            domelementsroot=domelmtsmum.getChild();
+            await domelementsroot.loadRequest("get my tree", {deepLevel: 2});
+            const languagesmother=await (new NodeFemale("TABLE_LANGUAGES", "TABLE_LANGUAGES")).loadRequest("get my root");
+            const langroot=await languagesmother.getChild().loadRequest("get my relationships");
+            const mylanguages = await langroot.getRelationship("languages").loadRequest("get my tree", {deepLevel: 2});
+            const weblanguage=Node.dom.selectLanguage(mylanguages);
+            await domelementsroot.parentNode.getChild().getNextChild("labels").loadRequest("get my tree", {extraParents: weblanguage.getRelationship("domelementsdata")});
+            //<--load Text content
+            await (new NodeMale()).setView(document.body, "chgadmnpwd");
+            (new AlertMessage("<BR/>Database Populated saccesfully.<BR/><BR/><B>Please Change Administration Passwords.</B><BR/><BR/>", 6000)).showAlert();
+          }
+        });
+      </script>
+    </div>
+    <div style="padding:1em;">
+      <button class="btn" type="button" style="padding:1em;">Skip automatic population and reload</button>
+      <script>
+        thisElement.onclick=()=>location.reload();
+      </script>
+    </div>
+  </div>
+</div>

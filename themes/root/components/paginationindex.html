@@ -1,0 +1,34 @@
+<!--
+thisNode -> props.number, props.href
+
+thisParams.onClickScript
+-->
+<a></a>
+<script>
+  thisNode.writeProperty(thisElement, "href", "href");
+
+  thisNode.writeProperty(thisElement, "number");
+  if (thisNode.selected==true) {
+    thisElement.classList.add("selected");
+  }
+  
+  thisElement.addEventListener("click", async (event)=>{
+    event.preventDefault();
+    //keep height positioning
+    const paginationContainer=thisElement.parentElement.parentElement.firstElementChild;
+    paginationContainer.style.minHeight=paginationContainer.clientHeight + 'px';
+    
+    if (typeof thisParams.onClickScript=="function") {
+      await thisParams.onClickScript(thisNode.props.number);
+    }
+  });
+  
+  //Now we click the page selected at the parameters send by the url
+  if (window.location.search) {
+    const regex = /page=(\d+)/;
+    const pageIdMatch=window.location.search.match(regex);
+    if (pageIdMatch && pageIdMatch[1]==thisNode.props.number && !thisNode.selected) {
+      thisElement.click();
+    }
+  }
+</script>

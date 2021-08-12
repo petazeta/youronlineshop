@@ -1,0 +1,13 @@
+<table id="shippingcontainer"></table>
+<script>
+const shippings= await (new NodeFemale("TABLE_SHIPPINGTYPES", "TABLE_SHIPPINGTYPES")).loadRequest("get my root");
+const shipping= await shippings.getChild().loadRequest("get my tree", {extraParents: webuser.language.getRelationship("domelementsdata")});
+
+shipping.getRelationship().addEventListener("setChildrenView", async function() {
+  if (this.children.length==0 && (webuser.isSystemAdmin() || webuser.isOrdersAdmin())) {
+    const newNode= await this.createInstanceChild();
+    newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+  }
+}, "addNewNodeButton");
+shipping.getRelationship().setChildrenView(thisElement,  "shippingtype");
+</script>

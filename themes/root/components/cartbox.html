@@ -1,0 +1,31 @@
+<!-- -->
+<div class="bttopinsideleftinside">
+  <button type="button" class="closeimage minibtn transp" style="margin-left: 0.3em; margin-top: 0.3em;"></button>
+  <script>
+    thisElement.addEventListener("click",  ()=>{
+      document.getElementById("cartbox").style.visibility="hidden";
+      document.getElementById("cartbox").style.transform="scale(1)";
+    });
+  </script>
+</div>
+<div class="boxtitle"></div>
+<script>
+  const cartboxtt=thisNode.getNextChild("crtbxtt").getRelationship("domelementsdata").getChild();
+  cartboxtt.setView(document.querySelector("#cartbox .boxtitle"), "cartboxhead");
+</script>
+<div class="boxbody">
+  <div data-id="itemlistcontainer"></div>
+  <script>
+    if (mycart.relationships.length==0) {
+      mycart.initCart().then(cartItems => {
+        //Preparing cart items containers
+        cartItems.setChildrenView(thisElement,  "itemlist");
+      });
+    }
+    else mycart.getRelationship("cartbox").getChild().getRelationship("cartboxitem").setChildrenView(thisElement,  "itemlist");
+  </script>
+  <div data-id="checkoutcontainer" class="checkoutcontainer"></div>
+  <script>
+    thisNode.setView(thisElement, "cartboxckout");
+  </script>
+</div>

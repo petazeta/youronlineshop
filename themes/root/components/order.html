@@ -1,0 +1,73 @@
+<div class="boxframe orderframe order">
+  <div class="orderitems"></div>
+  <script>
+    var myorderitems=thisNode.getRelationship({name:"orderitems"});
+    myorderitems.setChildrenView(thisElement, "orderitem");
+  </script>
+  <div class="shippingitem form-group"></div>
+  <script>
+    var myordership=thisNode.getRelationship({name:"ordershippingtypes"});
+    myordership.setChildrenView(thisElement, "ordershipping");
+  </script>
+  <div class="form-group ordertotals">
+    <span class="form-label"></span>
+    <script>
+      //valid also for cart view: checkout1.php and userordersline.php
+      var myorderpay=thisNode.getRelationship({name:"orderpaymenttypes"}).getChild();
+      if (myorderpay) thisElement.textContent='(' +  myorderpay.props.name + ')';
+    </script>
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span class="form-label" style="margin-right:0.5em"></span>
+      <script>
+        var checkout=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"checkout"});
+        var total=checkout.getNextChild({"name":"order"}).getNextChild({"name":"total"}).getRelationship({name:"domelementsdata"}).getChild();
+        total.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          Node.dom.visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          total.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </span>
+    <span></span>
+    <script>
+      //valid also for cart view: checkout1.php and userordersline.php
+      var myorderitems=thisNode.getRelationship({name:"orderitems"});
+      var myordership=thisNode.getRelationship({name:"ordershippingtypes"});
+      var sumTotal=function(node) {
+        var total=0;
+        var i=node.children.length;
+        while (i--) {
+          var quantity=node.children[i].props.quantity;
+          if (!quantity) quantity=1;
+          total=total+quantity * node.children[i].props.price;
+        }
+        return total;
+      }
+      var total=sumTotal(myorderitems) + sumTotal(myordership);
+      thisElement.textContent=total;
+    </script>
+    <span></span>
+    <script>
+      var currency=domelementsroot.getNextChild({name: "labels"}).getNextChild({"name":"middle"}).getNextChild({"name":"currency"}).getRelationship({name: "domelementsdata"}).getChild();
+      currency.writeProperty(thisElement);
+    </script>
+  </div>
+  <div class="paybutton"></div>
+  <script>
+    //Show Order payment button when payment not succeed valid also for cart view: checkout1.php and userordersline.php
+    var myorderpay=thisNode.getRelationship({name:"orderpaymenttypes"}).getChild();
+    if (myorderpay && !myorderpay.props.succeed) {
+      if (myorderpay.props.details && !myorderpay.props.template) {
+        //we must load payment type details when order has not succeed, if it is checkout proccess details in Null
+        let orderpaydata=JSON.parse(myorderpay.props.details);
+        myorderpay.props.template=orderpaydata.template;
+        myorderpay.props.vars=JSON.stringify(orderpaydata.vars);
+      }
+      if (myorderpay.props.template) {
+        myorderpay.setView(thisElement, myorderpay.props.template);
+      }
+    }
+  </script>
+</div>
