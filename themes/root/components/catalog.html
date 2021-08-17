@@ -40,7 +40,12 @@
       const newNode = await this.createInstanceChild();
       const itemView=function(itemNode) {
         Node.dom.setActive(itemNode);
+        /*
         itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+        */
+        //bug 3.3.1 patch
+        const thisPageNum=Node.dom.paginationCalculatePageNum(newNode);
+        newNode.parentNode.partnerNode.setView(document.getElementById("centralcontent"), "pagination", {tmpt: "catalog", pageNum: thisPageNum});
       }
       newNode.setView(thisElement, "butaddnewnode", {onAdded: itemView});
     }

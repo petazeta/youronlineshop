@@ -11,7 +11,7 @@ class StatsRecorder extends Node{
     this.props.uniqueId=this.props.startTime.toString(32).substring(3);
     this.linkElement=statsImage;
     
-    var softversion="3.3.1";
+    var softversion="3.3.2";
     
     var url=window.location.href;
     if (url.indexOf("sourceforge.")!=-1) {

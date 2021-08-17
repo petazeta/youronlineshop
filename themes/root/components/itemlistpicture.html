@@ -182,11 +182,20 @@
       thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butdelete", {onDeleted: Node.dom.paginationOnDeleted});
       const newNode = await thisNode.parentNode.createInstanceChild(thisNode);
       //If is the last of the page then we will add the item at in next page
+      /*
       const itemView=function(itemNode) {
         Node.dom.setActive(itemNode);
         itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
       }
       newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {onAdded: itemView});
+      */
+      //bug 3.3.1 patch
+
+      const listView=function(itemNode) {
+        const thisPageNum=Node.dom.paginationCalculatePageNum(itemNode);
+        itemNode.parentNode.partnerNode.setView(document.getElementById("centralcontent"), "pagination", {tmpt: "catalog", pageNum: thisPageNum});
+      }
+      newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {onAdded: listView});
     }
   </script>
 </div>
