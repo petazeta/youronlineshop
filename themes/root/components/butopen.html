@@ -1,0 +1,24 @@
+<button type="button" class="butdots" data-id="openclose">
+  <div class="dotsimage"></div>
+  <script>
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      const {setSizeFromStyle}= await import('./javascript/modules/frontutils.js');
+      setSizeFromStyle(thisElement);
+    }
+  </script>
+</button>
+<script>
+  thisElement.onclick=function(){
+    function changeVisibility(admnbuts){
+      for (var i=0; i<admnbuts.length; i++) {
+        if (admnbuts[i].style.visibility=="hidden") admnbuts[i].style.visibility="visible";
+        else admnbuts[i].style.visibility="hidden";
+      }
+    }
+    var editbuts=thisElement.parentElement.parentElement.querySelectorAll("[data-id=butedit]");
+    changeVisibility(editbuts);
+    var admnbuts=thisElement.parentElement.parentElement.querySelectorAll("[data-id=admnbuts]");
+    changeVisibility(admnbuts);
+    return false;
+  }
+</script>

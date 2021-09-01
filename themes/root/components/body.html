@@ -1,0 +1,197 @@
+<div class="backgroundimage">
+  <div class="backgroundspace">
+    <script>
+      //scroll to content in phone screens
+      import('./javascript/modules/onappendlistener.js')
+      .then(({setOnAppend})=>{
+        setOnAppend( myNode => {
+          if (window.screen.width<700 && myNode.myContainer && myNode.myContainer.id=='centralcontent') {
+            myNode.myContainer.scrollIntoView();
+          }
+        });
+      });
+    </script>
+    <div class="mainblock">
+      <header>
+        <div class="headertop">
+          <div class="pgtitle"></div>
+          <script>
+            const headTopText=thisNode.getNextChild("labels").getNextChild("top").getNextChild("headtitle").getRelationship("domelementsdata").getChild();
+            headTopText.setView(thisElement, "toph1");
+            //web site title
+            import('./javascript/modules/websitetitle.js')
+            .then(({setTitle})=>{
+              setTitle(thisNode.getNextChild("labels"), headTopText);
+            });
+          </script>
+          <div class="toolbar">
+            <div class="nav-toggle">
+              <span></span>
+            </div>
+            <script>
+              //showing up the menus on pc screens
+              thisElement.addEventListener("click", (event)=>{
+                event.preventDefault();
+                if (document.querySelector("nav.menus").style.transform=="scale(1, 1)") {
+                  //document.querySelector("nav.menus").style.display="none";
+                  document.querySelector("nav.menus").style.transform="scale(1, 0)";
+                }
+                else {
+                  //document.querySelector("nav.menus").style.display="block";
+                  document.querySelector("nav.menus").style.transform="scale(1, 1)";
+                }
+              });
+              //??? body.html can be reloaded on log event so this can be executed several times, I dont know if this affect the behaviour
+              function menusViewSwitch(mediaQuery) {
+                if (mediaQuery.matches) {
+                  //0document.querySelector("nav.menus").style.display="block";
+                  document.querySelector("nav.menus").style.transform="scale(1, 1)";
+                }
+                else {
+                  //document.querySelector("nav.menus").style.display="none";
+                  document.querySelector("nav.menus").style.transform="scale(1, 0)";
+                }
+              }
+              const mediaQuery=window.matchMedia("(min-width: 400px)");
+              mediaQuery.addListener(menusViewSwitch);
+            </script>
+            <template>
+              <option></option>
+              <script>
+                thisNode.writeProperty(thisElement);
+              </script>
+            </template>
+            <div class="langsdropdown">
+              <select></select>
+              <script>
+                const {languages, setCurrentLanguage, currentLanguage} = await import('./javascript/modules/languages.js');
+                languages.setChildrenView(thisElement, thisElement.parentElement.previousElementSibling)
+                .then(()=>{
+                  const getLangIndex=()=>{
+                    for (const i in languages.children) {
+                        if (languages.children[i]==currentLanguage) return i;
+                    }
+                  };
+                  thisElement.selectedIndex=getLangIndex();
+                });
+                const {AlertMessage}=await import('./javascript/modules/alert.js');
+                thisElement.onchange=async function(){
+                  let myCurrentLanguage=setCurrentLanguage(thisElement.selectedIndex);
+                  const myalert=new AlertMessage(thisNode.getNextChild("labels").getNextChild("middle").getNextChild("langbox").getNextChild("changelangwait").getRelationship("domelementsdata").getChild().props.value);
+                  myalert.showAlert();
+                  await thisNode.getNextChild("labels").parentNode.partnerNode.loadRequest("get my tree", {extraParents: myCurrentLanguage.getRelationship("domelementsdata")})
+                  thisNode.getNextChild("labels").parentNode.partnerNode.dispatchEvent("changeLanguage");
+                  myalert.props.timeout=3000; //retard the close
+                  myalert.hideAlert();
+                };
+
+              </script>
+            </div>
+            <a class="toolbaricon" href=""></a>
+            <script>
+              thisNode.getNextChild("labels").getNextChild("middle").getNextChild("logbox").setView(thisElement, "logicon");
+            </script>
+            <div class="sidebox" id="dashmenu"></div>
+            <a class="toolbaricon"href=""></a>
+            <script>
+              thisNode.getNextChild("labels").getNextChild("middle").getNextChild("cartbox").getNextChild("crtbxtt").setView(thisElement, "carticon");
+            </script>
+            <div class="sidebox" id="cartbox" style="visibility:hidden;"></div>
+            <script>
+              thisNode.getNextChild("labels").getNextChild("middle").getNextChild("cartbox").setView(thisElement, "cartbox");
+            </script>
+          </div>
+        </div>
+      </header>
+      <div class="pgsubtitle"></div>
+      <script>
+        thisNode.getNextChild("labels").getNextChild("top").getNextChild("headsubtitle").getRelationship("domelementsdata").getChild().setView(thisElement, "toph2");
+      </script>
+      <nav class="menus">
+        <ul class="menuscontainer"></ul>
+        <script type="text/javascript">
+          //We load menus and its relationships. We want to load menus domelementsdata children but not domelements children
+          const texts=await thisNode.getNextChild("texts").loadRequest("get my tree", {deepLevel: 5});
+          const menusMother=texts.getNextChild("nav").getRelationship();
+          //When no children and admin we create the plus add button and click on int
+          menusMother.addEventListener("setChildrenView", async function() {
+            if (webuser.isWebAdmin() && this.children.length==0) {
+              const newNode = await this.createInstanceChild();
+              newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+            }
+          }, "addNewNodeButton");
+          //when a new menu is created we select it
+          menusMother.addEventListener("addNewNode", function(newNode) {
+            import('./javascript/modules/activenode.js')
+            .then(({setActive})=>setActive(newNode));
+            newNode.setView(document.getElementById("centralcontent"), "doc");
+          }, "addANewNode");
+          menusMother.addEventListener("deleteChildNode", function(delNode) {
+            //Remove the menus -> central container content
+            import('./javascript/modules/watchlastactive.js')
+            .then(({lastActive})=>{
+              if (this.children.length==0 && delNode==lastActive) {
+                document.getElementById("centralcontent").innerHTML="";
+              }
+            });
+            //when a del menu was selected we click the previous
+            if (delNode.selected 
+            && this.getMySysKey("sort_order")
+            && this.children.length>0) {
+              let position=1;
+              if (delNode.props[this.getMySysKey("sort_order")] > 1) position=delNode.props[this.getMySysKey("sort_order")]-1;
+              import('./javascript/modules/activenode.js')
+              .then(({setActive})=>setActive(this.children[position-1]));
+              this.children[position-1].setView(document.getElementById("centralcontent"), "doc");
+            }
+          }, "delANewNode");
+          await menusMother.setChildrenView(thisElement, "menu");
+        </script>
+      </nav>
+      <div class="maincolumns">
+        <nav class="categories">
+          <div class="sidebox leftsidebox" id="catalogbox">
+            <div class="boxtitle"></div>
+            <script>
+              thisNode.getNextChild("labels").getNextChild("middle").getNextChild("ctgbxtt").getRelationship("domelementsdata").getChild().setView(thisElement, "boxhead");
+            </script>
+            <div class="boxbody"></div>
+            <script>
+              const {currentLanguage} = await import("./javascript/modules/languages.js");
+              const {NodeFemale}= await import("./javascript/modules/nodesfront.js");
+              const categoriesrootmother=await (new NodeFemale("TABLE_ITEMCATEGORIES", "TABLE_ITEMCATEGORIES")).loadRequest("get my root");
+              const categoriesroot=await categoriesrootmother.getChild().loadRequest("get my tree", {deepLevel: 3, extraParents: currentLanguage.getRelationship("domelementsdata")});
+              categoriesroot.getRelationship().addEventListener("setChildrenView", async function() {
+                if (webuser.isProductAdmin() && this.children.length==0) {
+                  const newNode = await this.createInstanceChild()
+                  newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+                }
+              }, "addNewNodeButton");
+              categoriesroot.getRelationship().addEventListener("deleteChildNode", function(nodedeleted) {
+                //Remove the productscontainer content
+                if (this.children.length==0) {
+                  document.getElementById("centralcontent").innerHTML="";
+                }
+              });
+              categoriesroot.getRelationship().setChildrenView(thisElement,  "category");
+            </script>
+          </div>
+          <div class="space"></div>
+        </nav>
+        <main>
+          <div class="centercolumn">
+            <div id="centralcontent"></div>
+          </div>
+        </main>
+      </div>
+      <footer>
+        <div style="text-align:right;" class="pwby">
+          <p></p>
+          <script type="text/javascript">
+            thisNode.getNextChild("labels").getNextChild("bottom").getNextChild("designed").getRelationship("domelementsdata").getChild().setView(thisElement, "designed");
+          </script>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>

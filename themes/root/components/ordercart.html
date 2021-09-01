@@ -1,0 +1,39 @@
+<div class="boxframe ordercartframe ordercart">
+  <div class="ordercartitems"></div>
+  <script>
+    thisNode.getRelationship("cartboxitem").setChildrenView(thisElement, "orderitem");
+  </script>
+  <div class="form-group ordercarttotals" style="position:relative;">
+    <div data-id="butedit" class="btmiddleright"></div>
+    <span class="form-label"></span>
+    <script>
+      const {textContentRoot} = await import('./javascript/modules/textcontent.js');
+      const checkout=textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("checkout");
+      checkout.getNextChild("order").getNextChild("subtotal").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+      //adding the edition pencil
+      if (webuser.isWebAdmin()) {
+        const {visibleOnMouseOver}= await import('./javascript/modules/frontutils.js');
+        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        total.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+      }
+    </script>
+    <span></span>
+    <script>
+      const myorderitems=thisNode.getRelationship("cartboxitem");
+      myorderitems.sumTotal=function() {
+        let total=0;
+        let i=this.children.length;
+        while (i--) {
+          total=total+this.children[i].props.quantity * this.children[i].props.price;
+        }
+        return total;
+      }
+      thisElement.textContent=myorderitems.sumTotal();
+    </script>
+    <span></span>
+    <script>
+      const {textContentRoot} = await import('./javascript/modules/textcontent.js');
+      textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("currency").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+    </script>
+  </div>
+</div>

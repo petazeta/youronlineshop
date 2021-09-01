@@ -1,0 +1,64 @@
+<div class="dashboard">
+  <div class="sidebox leftsidebox" id="langbox">
+    <div class="boxtitle"></div>
+    <script>
+      thisNode.getNextChild("langboxtt").getRelationship("domelementsdata").getChild().setView(thisElement, "boxhead");
+    </script>
+    <div class="boxbody"></div>
+    <script> 
+    /* we dont really need it cause lang is never empty
+      languages.addEventListener("setChildrenView", async function() {
+        if (webuser.isSystemAdmin() && this.children.length==0) {
+          const newNode = await this.createInstanceChild();
+          newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+        }
+      }, "addNewNodeButton");
+      */
+      const {languages}= await import("./javascript/modules/languages.js");
+      const {AlertMessage}=await import('./javascript/modules/alert.js');
+      const {Node, NodeFemale, NodeMale}=await import('./javascript/modules/nodesfront.js');
+      
+      languages.setChildrenView(thisElement, "language");
+      //Copy original lang data after adding a new lang
+      languages.addEventListener("addNewNode",
+      async function(newLangNode) {
+        const {getDomElementFromChild}=await import('./javascript/modules/frontutils.js');
+        getDomElementFromChild(newLangNode).style.visibility="hidden"
+        //We show the msg for waiting
+        const myalert=new AlertMessage(thisNode.getNextChild("newlangwait").getRelationship("domelementsdata").getChild().props.value);
+        myalert.showAlert();
+        //languageIncreaseCloneFirstLang
+        const lang=await (languages.getChild().cloneNode()).loadRequest("get my tree");
+        lang.props.id=newLangNode.props.id;
+        const myDatas=[];
+        for (const rel of lang.relationships) {
+          for (const child of rel.children) {
+            myDatas.push(child);
+          }
+        }
+        //Now we have to send the load request and get the result.
+        const parentList= await Node.requestMulty("get my tree up", myDatas);
+        //console.log(parentList);
+        const insertDatas=[];
+        const parameters=[];
+        for (const i in parentList) {
+          insertDatas[i]=new NodeMale();
+          insertDatas[i].parentNode=parentList[i];
+          for (const pNode of parentList[i]) {
+            if (pNode.props.parenttablename!="TABLE_LANGUAGES") {
+              insertDatas[i].parentNode=(new languages.constructor()).load(pNode);
+              parameters[i]={extraParents: newLangNode.getRelationship(insertDatas[i].parentNode.props.name)};
+              break;
+            }
+          }
+          insertDatas[i].props=myDatas[i].props;
+        }
+        //console.log(insertDatas, parameters);
+        await Node.requestMulty("add myself", insertDatas, parameters);
+        myalert.hideAlert();
+        getDomElementFromChild(newLangNode).style.visibility="visible";
+        languages.setChildrenView(document.querySelector('header .toolbar .langsdropdown select'), document.querySelector('header .toolbar template'));//Refresh de lang info
+      }, "addNewNode");
+    </script>
+  </div>
+</div>

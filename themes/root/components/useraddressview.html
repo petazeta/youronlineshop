@@ -1,0 +1,135 @@
+<!-- 
+This template shows the user data and user address and allows to save the changes when fieldtyp input.
+Param showAddress (if false shows just some data)
+Param fieldtype: input / textnode
+-->
+<form style="display:flex; flex-flow:column;">
+  <div class="boxframe" style="align-items: center; display: flex; flex-flow: column; margin: 1em;">
+    <div></div>
+    <script>
+      thisNode.setView(thisElement, "userdata", thisParams);
+      if (thisParams.fieldtype=='input') {
+        thisElement.parentElement.querySelector('[data-id=save]').style.display='block';
+      }
+    </script>
+    <div data-id="save" style="display: none;">
+      <div style="margin-top:1em;position:relative">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="submit" class="btn" data-id="but"></button>
+        <script>
+          //Cancelation of submit is important because there could be enter keyboard pressing in fields
+          thisElement.form.addEventListener("submit", (event)=>{
+            event.preventDefault();
+          });
+          const {textContentRoot} = await import('./javascript/modules/textcontent.js');
+          const myNode=textContentRoot.getNextChild("labels").getNextChild("not located").getNextChild("save").getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+          const {AlertMessage}=await import('./javascript/modules/alert.js');
+          thisElement.addEventListener("click", async function(event) {
+            event.preventDefault();
+            const {formToData, checkValidData, validateEmail, checkDataChange}=await import('./javascript/modules/datainput.js');
+            const userdata=formToData(thisNode.getRelationship("usersdata"), this.form);
+            let addressdata;
+            if (thisParams.showAddress) {
+              addressdata=formToData(thisNode.getRelationship("addresses"), this.form);
+            }
+            let myReturn=checkValidData(userdata)
+            if (myReturn!==true) {
+              //Errors in characters
+              if (this.form.elements[myReturn.errorKey]) this.form.elements[myReturn.errorKey].focus();
+              (new AlertMessage(this.form.elements.fieldCharError.value, 5000)).showAlert();
+              return;
+            }
+            else if (addressdata) {
+              let myReturn=checkValidData(addressdata);
+              if (myReturn!==true) {
+                //Errors in characters
+                if (this.form.elements[myReturn.errorKey]) this.form.elements[myReturn.errorKey].focus();
+                (new AlertMessage(this.form.elements.fieldCharError.value, 5000)).showAlert();
+                return;
+              }
+            }
+            else if (!validateEmail(userdata.props.emailaddress)) {
+              console.log(userdata, this.form.elements);
+              //emal format error
+              (new AlertMessage(this.form.elements.emailCharError.value, 5000)).showAlert();
+              this.form.elements.emailaddress.focus();
+              return;
+            }
+            await myUpdateProp(thisNode.getRelationship("usersdata"), userdata);
+            const savedlabel=textContentRoot.getNextChild("labels").getNextChild("not located").getNextChild("saved");
+            if (addressdata) {
+              await myUpdateProp(thisNode.getRelationship("addresses"), addressdata);
+              if (event.isTrusted) {
+                (new AlertMessage(savedlabel.getRelationship("domelementsdata").getChild().props.value, 3000)).showAlert();
+              }
+              thisNode.dispatchEvent('saveuserdata');
+            }
+            else {
+              if (event.isTrusted) {
+                (new AlertMessage(savedlabel.getRelationship("domelementsdata").getChild().props.value, 3000)).showAlert();
+              }
+              thisNode.dispatchEvent('saveuserdata');
+            }
+            async function myUpdateProp(myrel, mydata) {
+              if (checkDataChange(myrel, mydata)) {
+                //Now we save the data: save tree
+                const res=await myrel.getChild().request("edit my props", {props: mydata.props})
+                if (res==1) {
+                  for (const propname of myrel.childtablekeys) {
+                    if (propname=="id") continue;
+                    myrel.getChild().props[propname]=userdata.props[propname];
+                  }
+                }
+              }
+            }
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="position:relative; display: inline-block;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="fieldCharError" disabled>
+      <script>
+        //This script will show the template
+        const {textContentRoot} = await import('./javascript/modules/textcontent.js');
+        const myNode=textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("userdataform").getNextChild("fieldCharError").getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+  </div>
+  <div>
+    <div style="position:relative; display: inline-block;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="emailCharError" disabled>
+      <script>
+        //This script will show the template
+        const {textContentRoot} = await import('./javascript/modules/textcontent.js');
+        const myNode=textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("userdataform").getNextChild("emailCharError").getRelationship("domelementsdata").getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+  </div>
+</form>

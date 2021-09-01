@@ -1,0 +1,55 @@
+<!--
+-->
+<div class="boxlist" style="text-align:center;">
+  <span style="z-index:1; position:relative;">
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <div data-id="butedit" class="btmiddleleft"></div>
+    <a href="" data-hbutton="true"></a>
+    <script>
+      const {setActive} = await import('./javascript/modules/activenode.js');
+      if (thisNode.selected) setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
+      thisNode.writeProperty(thisElement, "code");
+      if (webuser.isSystemAdmin()) {
+        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, refreshOnLog: true});
+      }
+      const {default: config} = await import('./javascript/modules/config.js');
+      if (config.languagesOn==true) {
+        const {languages,  setCurrentLanguage}=await import("./javascript/modules/languages.js");
+        const {AlertMessage}=await import('./javascript/modules/alert.js');
+        if (webuser.isSystemAdmin()) {
+          const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+          if (thisNode.parentNode.children.length>1) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+          const newNode = await thisNode.parentNode.createInstanceChild(thisNode, true)
+          newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode, noLang: true});
+        }
+        const {textContentRoot} = await import('./javascript/modules/textcontent.js');
+        thisElement.addEventListener("click", async function(event) {
+          event.preventDefault();
+          setActive(thisNode);
+          setCurrentLanguage(thisNode);
+          const myalert=new AlertMessage(textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("langbox").getNextChild("changelangwait").getRelationship("domelementsdata").getChild().props.value);
+          myalert.showAlert();
+          await textContentRoot.loadRequest("get my tree", {extraParents: thisNode.getRelationship("domelementsdata")})
+          textContentRoot.dispatchEvent("changeLanguage");
+          myalert.props.timeout=3000;
+          myalert.hideAlert();
+          return false;
+        });
+        thisNode.addEventListener("changeProperty",
+        ()=>{languages.setChildrenView(document.querySelector('header .toolbar .langsdropdown select'), document.querySelector('header .toolbar template'));}
+        ,"changLang");
+      }
+      else {
+        thisElement.addEventListener("click", function(event) {
+          event.preventDefault();
+        });
+      }
+    </script>
+  </span>
+</div>

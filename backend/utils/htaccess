@@ -1,0 +1,1 @@
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

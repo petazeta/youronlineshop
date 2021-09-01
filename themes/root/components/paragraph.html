@@ -1,0 +1,46 @@
+<div class="paragraph" style="position:relative;">
+  <div data-id="butedit" class="bttopleftinside"></div>
+  <div data-id="butedit" class="bttopleft"></div>
+  <div data-id="admnbuts" class="bttopleftinsideafteredit">
+    <div class="admnbtsgrid"></div>
+  </div>
+  <div data-id='paragraph'></div>
+  <script>
+    thisNode.getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+    if (webuser.isWebAdmin()) {
+      const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+      visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][class=bttopleftinside]'), parent: thisElement.parentElement});
+      thisNode.getRelationship("domelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit][class=bttopleftinside]'), "butedit", {editElement: thisElement, thisAttribute: 'innerHTML', inlineEdition: false});
+      visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+      thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+      thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+      const newNode= await thisNode.parentNode.createInstanceChild();
+      let skey=thisNode.parentNode.getMySysKey('sort_order');
+      newNode.props[skey]=thisNode.props[skey] + 1;
+      newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode});
+      visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][class=bttopleft]'), parent: thisElement.parentElement});
+      thisElement.onblur=function(){
+        thisElement.parentElement.querySelector('textarea').value=thisElement.innerHTML;
+      }
+    }
+  </script>  
+  <textarea style="display:none; width:100%" rows="6" disabled></textarea>
+  <script>
+    var myNode=thisNode.getRelationship("domelementsdata").getChild();
+    myNode.writeProperty(thisElement);
+    thisElement.onblur=function(){
+      thisElement.parentElement.querySelector('div[data-id=paragraph]').innerHTML=thisElement.value;
+      thisElement.style.display="none";
+    }
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit][class=bttopleft]'), "butedit", {editElement: thisElement, image: 'code', inlineEdition: false})
+      .then(()=>{
+        thisElement.parentElement.querySelector('[data-id=butedit][class=bttopleft]').querySelector('button[data-id=codebut]').addEventListener('click', ()=>{
+          thisElement.style.display="unset";
+          thisElement.focus();
+        });
+      });
+    }
+  </script>
+</div>

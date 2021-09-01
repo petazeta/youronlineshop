@@ -1,0 +1,59 @@
+<!--
+  thisNode: dashboard
+-->
+<div class="dashbuttons">
+  <div class="bttopinsideleftinside" style="z-index:100;">
+    <button type="button" class="closeimage minibtn transp" style="margin-left: 0.2em; margin-top: 0.2em;">
+      <div class="closeimage"></div>
+    </button>
+    <script>
+      thisElement.addEventListener('click', ()=>{
+        document.getElementById("dashmenu").style.transform="translateY(-15px)";
+        document.getElementById("dashmenu").style.visibility="hidden";
+      });
+    </script>
+  </div>
+</div>
+<script>
+  const buttonsTarget=document.getElementById("centralcontent");
+  const basicPath=thisNode;
+  basicPath.getNextChild("btShowInfo").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "showuserinfo",  launcher: basicPath});
+  basicPath.getNextChild("btShowOrd").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "showorders", launcher: basicPath.getNextChild("showOrd")});
+  basicPath.getNextChild("btShowAdd").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "showaddress", launcher: basicPath});
+  basicPath.getNextChild("btChangePwd").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "changepwd", launcher: basicPath.getNextChild("changepwd")});
+  if (webuser.isWebAdmin()) {
+    basicPath.getNextChild("extraEdition").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "extraedition"});
+  }
+  if (webuser.isWebAdmin() || webuser.isProductAdmin()) {
+    basicPath.getNextChild("textEdit").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "texteditor", launcher: basicPath.getNextChild("textEdit")});
+  }
+  if (webuser.isSystemAdmin()) {
+    basicPath.getNextChild("expimp").getNextChild("butexp").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "export",  launcher: basicPath.getNextChild("expimp")});
+    basicPath.getNextChild("expimp").getNextChild("butimp").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "import",  launcher: basicPath.getNextChild("expimp")});
+    const langPath=thisNode.parentNode.getChild("langbox");
+    langPath.getNextChild("langboxtt").appendView(thisElement, 'stdbutton', {container:  buttonsTarget, component: "languages", launcher: langPath});
+  }
+</script>
+<div class="dashbuttons">
+  <div style="position:relative;" class="btn-container">
+    <div data-id="butedit" class="btmiddleright"></div>
+    <button type="button" class="btn" data-id="but"></button>
+    <script>
+      const myTxtNode=thisNode.getNextChild("btLogOut").getRelationship("domelementsdata").getChild();
+      myTxtNode.writeProperty(thisElement);
+      thisElement.onclick=function(){
+        document.getElementById("dashmenu").style.transform="translateY(-15px)";
+        webuser.logout().then(()=>{
+          thisNode.parentNode.getChild("logform").setView(document.getElementById("centralcontent"), "loginform");
+          if (localStorage.getItem("user_name")) localStorage.removeItem("user_name"); //stay logged => not anymore
+          });
+      }
+      //adding the edition pencil
+      if (webuser.isWebAdmin()) {
+        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        myTxtNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+      }
+    </script>
+  </div>
+</div>

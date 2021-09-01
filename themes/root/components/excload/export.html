@@ -1,0 +1,385 @@
+  <!--
+    launcher: dashboard -> expimp
+  -->
+<div class="dashboard">
+  <div style="text-align:center" class="export-import">
+    <div>
+      <div class="msgbox" style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <span></span>
+        <script>
+          const title=thisNode.getNextChild("titexp").getRelationship("domelementsdata").getChild();
+          title.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+    </div>
+    <form style="display:flex; flex-flow:column; align-items:center;">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="noselection" disabled>
+        <script>
+          const myNode=thisNode.getNextChild("noselection").getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          if (webuser.isWebAdmin()) {
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+            const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisElement.type="text";
+          }
+        </script>
+      </div>
+      <div>
+        <div class="msgbox">
+          <table style="margin:auto; text-align:left; margin-bottom:1em;" class="exp-select">
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="general" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkgeneral").getRelationship("domelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkgeneral").getNextChild("details").getRelationship("domelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="catalog" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkcatg").getRelationship("domelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkcatg").getNextChild("details").getRelationship("domelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="checkout" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkcheckout").getRelationship("domelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkcheckout").getNextChild("details").getRelationship("domelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="lang" name="dataoption">
+                <script>
+                  thisElement.form.dataoption.forEach(radio=>{
+                    radio.addEventListener("change", (ev)=>{
+                      if (thisElement.checked) thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="block";
+                      else thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="none";
+                    });
+                  });
+                </script>
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chklang").getRelationship("domelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chklang").getNextChild("details").getRelationship("domelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+                <template>
+                  <div style="margin:auto; text-align:left; margin-bottom:0.2em">
+                    <input type="checkbox" value="" name="">
+                    <script>
+                      thisNode.writeProperty(thisElement, "id", "value");
+                      thisNode.writeProperty(thisElement, "code", "name");
+                    </script>
+                    <span></span>
+                    <script>
+                      thisNode.writeProperty(thisElement, "code");
+                    </script>
+                  </div>
+                </template>
+                <div class="msgbox" style="display:none"></div>
+                <script>
+                  const {languages}=await import('./javascript/modules/languages.js');
+                  languages.setChildrenView(thisElement, thisElement.previousElementSibling);
+                </script>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="users" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkusers").getRelationship("domelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkusers").getNextChild("details").getRelationship("domelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <span style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+        thisNode.getNextChild("butexp").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+        
+        if (!webuser.isSystemAdmin) thisElement.disabled=true; //Only sysadmin, not webadmin allowed
+        
+        const {languages}=await import('./javascript/modules/languages.js');
+        const {AlertMessage}=await import('./javascript/modules/alert.js');
+        const {Node, NodeMale, NodeFemale}=await import('./javascript/modules/nodesfront.js');
+        const textContentRoot=thisNode.getrootnode();
+        
+        //This facility is for export the customized data of a shop so we could update the shop software and keep the data
+        thisElement.onclick=async function(){
+        /*
+          To export data with lang content we first export the tree with the current lang and the langs tree separately
+        */
+          
+          if (thisElement.form.dataoption.value=="general") {
+            //get data from the structure
+            const topClone=textContentRoot.getNextChild("labels").getNextChild("top").cloneNode(null, 0);
+            const textClone=textContentRoot.getNextChild("texts").cloneNode(null, 0);
+            await topClone.loadRequest("get my tree");
+            await textClone.loadRequest("get my tree");
+            const datatoinsert={"languages": await Node.requestMulty("add my tree", languages.children, null, true), "tree": [await topClone.request("add my tree", null, true), await textClone.request("add my tree", null, true)]};
+            thisElement.form.result.value=JSON.stringify(datatoinsert);
+          }
+          else if (thisElement.form.dataoption.value=="catalog") {
+            const categoriesrootmother=await (new NodeFemale("TABLE_ITEMCATEGORIES", "TABLE_ITEMCATEGORIES")).loadRequest("get my root");
+            //data from the structure
+            const categories= await categoriesrootmother.getChild().loadRequest("get my tree");
+            const datatoinsert={"languages": await Node.requestMulty("add my tree", languages.children, null, true), "tree": await categories.request("add my tree", null, true)};
+            thisElement.form.result.value=JSON.stringify(datatoinsert);
+          }
+          else if (thisElement.form.dataoption.value=="checkout") {
+            const shippingtypesrootmother=await (new NodeFemale("TABLE_SHIPPINGTYPES", "TABLE_SHIPPINGTYPES")).loadRequest("get my root");
+            const paymenttypesrootmother=await (new NodeFemale("TABLE_PAYMENTTYPES", "TABLE_PAYMENTTYPES")).loadRequest("get my root");
+            //data from the structure
+            const shippingtypes= await shippingtypesrootmother.getChild().loadRequest("get my tree");
+            const paymenttypes= await paymenttypesrootmother.getChild().loadRequest("get my tree");
+            const datatoinsert={"languages": await Node.requestMulty("add my tree", languages.children, null, true), "tree": [await shippingtypes.request("add my tree", null, true), paymenttypes.request("add my tree", null, true)]};
+            thisElement.form.result.value=JSON.stringify(datatoinsert);
+          }
+          else if (thisElement.form.dataoption.value=="lang") {
+            const getSelectedLangData=function(langdata, selector){
+              const selectedLangs=[];
+              for (myLang of selector) {
+                if (myLang.checked) selectedLangs.push(Number(myLang.value));
+              }
+              //Now we filter the languages selected from the datalang
+              let i=langdata.children.length;
+              while (i--) {
+                if (!selectedLangs.includes(langdata.children[i].props.id)) {
+                  langdata.removeChild(langdata.children[i]);
+                }
+              }
+              return langdata;
+            };
+            let langdata=languages.cloneNode();
+            const myLangs=thisElement.form.querySelectorAll('input[type="checkbox"]');
+            langdata=getSelectedLangData(langdata, myLangs);
+            if (langdata.children.length==0) {
+              //we show the alert message No selection
+              (new AlertMessage(thisElement.form.elements.noselection.value, 2000)).showAlert();
+              return;
+            }
+            langdata=await Node.requestMulty("add my tree", langdata.children, null, true)
+
+            //data from the structure
+            const myNodes=await Node.requestMulty("get my tree", Array(langdata.length).fill(textContentRoot.cloneNode(null, 0)), langdata.map(result => {return {language: result.props.id};}))
+            const nodesInsert=[];
+            for (const myNode of myNodes) {
+              let loadNode=new NodeMale();
+              loadNode.copyProperties(textContentRoot); //load my tree doesn't get data node itself
+              loadNode.load(myNode);
+              //Now we remove custom menus and tit
+              loadNode.getRelationship("domelements").getChild("texts").getRelationship("domelements").children=[];
+              loadNode.getRelationship("domelements").getChild("labels").getRelationship("domelements").getChild("top").getRelationship("domelements").children=[];
+              nodesInsert.push(await loadNode.request("add my tree", null, true));
+            }
+            const datatoinsert={"languages": langdata, "trees": nodesInsert};
+            thisElement.form.result.value=JSON.stringify(datatoinsert);
+          }
+          else if (thisElement.form.dataoption.value=="users") {
+            const usertypemother=await (new NodeFemale("TABLE_USERSTYPES")).loadRequest("get all my children", {filterProps: {type: "customer"}});
+            const usertype=await usertypemother.getChild().loadRequest("get my tree");
+            const usersrootmother= usertype.getRelationship("users");
+            const users=await Node.requestMulty("get my relationships", usersrootmother.children);
+            const mydatanodes=[];
+            for (const i in users) {
+              usersrootmother.children[i].load(users[i]);
+              mydatanodes.push(usersrootmother.children[i].getRelationship("usersdata"));
+              mydatanodes.push(usersrootmother.children[i].getRelationship("addresses"));
+            }
+            const resultData=await Node.requestMulty("get my children", mydatanodes);
+            const arrayusersdata=[];
+            const arrayaddresses=[];
+            for (const result of resultData) {
+              if (result.props.name=="usersdata") {
+                arrayusersdata.push(result);
+              }
+              else if (result.props.name=="addresses") {
+                 arrayaddresses.push(result);
+              }
+            }
+            for (const i in usersrootmother.children) {
+              usersrootmother.children[i].getRelationship("usersdata").load(arrayusersdata[i]);
+              usersrootmother.children[i].getRelationship("addresses").load(arrayaddresses[i]);
+            }
+            //Now we load the userstypes relationship
+            const utypesResult= await Node.requestMulty("get my tree up", usersrootmother.children);
+            for (const i in utypesResult) {
+              usersrootmother.children[i].parentNode=utypesResult[i].parentNode;
+            }
+            usersrootmother.avoidrecursion();
+            thisElement.form.result.value=JSON.stringify(usersrootmother);
+          }
+          else {
+            //we show the alert message No selection
+            (new AlertMessage(thisElement.form.elements.noselection.value, 2000)).showAlert();
+          }
+          return false;
+        };
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          const myNode=thisNode.getNextChild("butexp").getRelationship("domelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}=await import('./javascript/modules/frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </span>
+      <div style="padding-top: 10px">
+        <textarea name="result" rows="10" cols="50"></textarea>
+      </div>
+    </form>
+  </div>
+</div>
