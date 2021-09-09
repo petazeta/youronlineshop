@@ -112,7 +112,7 @@ thisParams ==> myNode, labelNode, fileName
         .then(res => res.json())
         .then(result => {
           if (result.error==true) {
-            throw (new Error(action + '. Message: ' + result.message));
+            throw (new Error('edit my image' + '. Message: ' + result.message));
           }
           return result;
         })

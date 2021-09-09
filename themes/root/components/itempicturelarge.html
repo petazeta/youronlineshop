@@ -39,7 +39,7 @@
           const {textContentRoot} = await import('./javascript/modules/textcontent.js');
           const {visibleOnMouseOver}= await import('./javascript/modules/frontutils.js');
           visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-          const imageEditFunc= await import('./javascript/modules/imageedit.js');
+          const {default: imageEditFunc} = await import('./javascript/modules/imageedit.js');
           thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "image", thisAttribute: "data-src", autoeditFunc: imageEditFunc, autoeditParams: {imageElement: thisElement, myNode: thisNode, labelNode: textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("loadImg")}});
         }
       </script>

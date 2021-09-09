@@ -16,7 +16,7 @@ export default async function imageEditFunc(myParams){
   (new Alert()).showAlert("loadimg", {myNode: myParams.myNode, labelNode: myParams.labelNode, fileName: fileName});
   this.addEventListener("loadImage", function() {
     if (this.error==true) {
-      const loadErrorMsg=myParams.labelNode.getNextChild({name:"loadError"}).getRelationship("domelementsdata").getChild().props.value;
+      const loadErrorMsg=myParams.labelNode.getNextChild("loadError").getRelationship("domelementsdata").getChild().props.value;
       (new AlertMessage(loadErrorMsg, 3000)).showAlert();
     }
     else {
