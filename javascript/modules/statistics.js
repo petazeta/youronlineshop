@@ -5,7 +5,7 @@ import {myCart} from './cart.js';
 class StatsRecorder extends Node{
   constructor(){
     super();
-    var statsImage=document.createElement("img");
+    const statsImage=document.createElement("img");
     statsImage.style.display="none";
     statsImage.id="statsLink";
     document.head.appendChild(statsImage);
@@ -15,9 +15,9 @@ class StatsRecorder extends Node{
     this.props.uniqueId=this.props.startTime.toString(32).substring(3);
     this.linkElement=statsImage;
     
-    var softversion="3.4.0";
+    const softversion="3.4.1";
     
-    var url=window.location.href;
+    let url=window.location.href;
     if (url.indexOf("sourceforge.")!=-1) {
       url=url.replace(/.+sourceforge\.\w+\//,""); //removing sfg url
     }
