@@ -119,7 +119,7 @@ thisParams ==> myNode, labelNode, fileName
         .catch(error => {console.error(error); throw error;});
       };
       //indicating uploading image
-      thisParams.labelNode.getNextChild("uploadingWait").getRelationship("domelementsdata").getChild().writeProperty(thisElement.elements.submitbutton);
+      //thisParams.labelNode.getNextChild("uploadingWait").getRelationship("domelementsdata").getChild().writeProperty(thisElement.elements.submitbutton);
       thisElement.elements.submitbutton.disabled=true;
       const myFormDataSmall=new FormData();
       myFormDataSmall.append(thisParams.fileName, newImageSmall, thisParams.fileName + ".png");
