@@ -2,7 +2,7 @@
 * YOS Version *
 ***************
 
-3.4.1 09-09-2021 (month-day-year)
+3.4.0 09-01-2021 (month-day-year)
 
 
 ***********
@@ -18,12 +18,14 @@ Please write: info@youronlineshop.net
 
 This is a dynamic web app (Single Page Application) for e-commerce. Backend is written in PHP. It uses Mysql database system.
 
+https://youronlineshop.net
+
 
 ****************
 * Installation *
 ****************
 
-If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: ask at our email.
+If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: more info by email.
 
 1 - Upload the compressed file to your web server.
 2 - Unpack it to the desired folder (All files are inside "yos" folder).
@@ -67,7 +69,7 @@ If it doesn't allow admin to make changes you can try to copy backend/utils/htac
 * Themes *
 **********
 
-Y.O.S. system has a themes feature. You can select themes and styles at the config.js file. Themes files are inside folder themes/[theme path]/components.
+Y.O.S. system has a themes feature. You can select themes and styles at the config.js file. Themes files are inside folder themes/[theme path]/views.
 
 
 ********

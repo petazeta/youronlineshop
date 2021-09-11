@@ -3,9 +3,11 @@
 
 ----------------------------------------------------------------------
 
-# Your Online Shop System V 3.4.1
+# Your Online Shop System V 3.4.0
 
 ## Live Demo
+
+Video: https://youtu.be/PD_olszbGWA
 
 Shop with sample products -> [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
 
@@ -16,10 +18,12 @@ Admin -> (usr/password) webadmin/webadmin, productsadmin/productsadmin
 
 This is a dynamic web app (Single Page Application) for e-commerce. Backend is written in PHP. It uses Mysql database system.
 
+https://youronlineshop.net
+
 
 ## Installation
 
-If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: ask at our email.
+If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: more info by email.
 
 1. Upload the compressed file to your web server.
 2. Unpack it to the desired folder (All files are inside "yos" folder).
@@ -57,4 +61,4 @@ If it doesn't allow admin to make changes you can try to copy backend/utils/htac
 ## Themes
 
 
-Y.O.S. system has a themes feature. You can select themes and styles at the **config.js** file. Themes files are inside folder themes/[theme path]/components.
+Y.O.S. system has a themes feature. You can select themes and styles at the **config.js** file. Themes files are inside folder themes/[theme path]/views.
