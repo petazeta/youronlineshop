@@ -3,7 +3,7 @@
 
 ----------------------------------------------------------------------
 
-# Your Online Shop System V 3.4.0
+# Your Online Shop System V 3.4.1
 
 ## Live Demo
 
