@@ -63,7 +63,7 @@ If the database connection is not working you may need to check settings at serv
 
 If the products images can not be uploaded you may need to allow write permisions at folders catalog/images/big and catalog/images/small.
 
-If it doesn't allow admin to make changes you can try to copy server/utils/htaccess file to the folder backend and rename it to ".htaccess".
+If it doesn't allow admin to make changes you can try to copy server/utils/htaccess file to the folder server/php and rename it to ".htaccess".
 
 
 **********
