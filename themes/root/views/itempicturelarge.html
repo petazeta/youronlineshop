@@ -1,0 +1,179 @@
+<!--
+
+-->
+<div class="productlargecontainer rmbox" style="color:rgb(40,40,40);">
+  <div class="bttopinsiderightinside">
+    <button type="button" class="closeimage minibtn transp">
+      <div class="closeimage"></div>
+    </button>
+    <script>
+      const {paginationCalculatePageNum} = await import('./' + CLIENT_MODULES_PATH + 'pagination.js');
+      thisElement.addEventListener("click", function(event){
+        event.preventDefault();
+        //Go to subcategory
+        let url='?category=' + thisNode.parentNode.partnerNode.parentNode.partnerNode.props.id + '&subcategory=' + thisNode.parentNode.partnerNode.props.id;
+        if (event.isTrusted) {
+          //it doesn't record state when: go back (dont state twice the same url)
+          if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+        }
+        const thisPageNum=paginationCalculatePageNum(thisNode);
+        thisNode.parentNode.partnerNode.setView(document.getElementById("centralcontent"), "pagination", {tmpt: "catalog", pageNum: thisPageNum});
+      });
+    </script>
+  </div>
+  <div class="productgrid">
+    <div class="productimg" style="position:relative;">
+      <div data-id="butedit" class="btmiddlecenter"  style="z-index:1"></div>
+      <img class="productimg">
+      <script>
+        const {default: config} = await import('./' + CLIENT_MODULES_PATH + 'config.js');
+        const myImage=thisNode.props.image || config.defaultImg;
+        thisElement.src=config.catalogPath + "images/big/" + myImage;
+        
+        thisNode.addEventListener("changeProperty", (property) => {
+          if (property=="image") {
+            thisElement.src=config.catalogPath + "images/big/" + thisNode.props.image;
+          }
+        }, "img");
+        if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+          const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          const {default: imageEditFunc} = await import('./' + CLIENT_MODULES_PATH + 'imageedit.js');
+          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "image", thisAttribute: "data-src", autoeditFunc: imageEditFunc, autoeditParams: {imageElement: thisElement, myNode: thisNode, labelNode: textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("loadImg")}});
+        }
+      </script>
+    </div>
+    <div>
+     <div class="textproduct">
+        <div class="itemname">
+          <div style="display: inline-block; position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <h3></h3>
+            <script>
+              thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "name");
+              //adding the edition pencil
+              if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "name"});
+              }
+            </script>
+          </div>
+        </div>
+        <div class="itemdescription">
+          <div style="display: inline-block; position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <div></div>
+            <script>
+              thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionshort");
+              //adding the edition pencil
+              if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "descriptionshort"});
+              }
+            </script>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;">
+        <div class="addtocart" style="margin:auto;">
+          <form>
+            <div class="addtocartgrid">
+              <div class="productprice">
+                <span style="position: relative;">
+                  <div data-id="butedit" class="btmiddleright"></div>
+                  <div style="padding-right: 0.2em"></div>
+                  <script>
+                    thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "price");
+                    //adding the edition pencil
+                    if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                      const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                      visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                      thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "price"});
+                    }
+                  </script>
+                </span>
+                <div></div>
+                <script>
+                  const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
+                  textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("currency").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+                </script>
+              </div>
+              <div class="quantityselect"></div>
+              <script>
+                const {createQuantitySelect}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                const myselect=createQuantitySelect();
+                myselect.style.color="#666";
+                myselect.name="pquantity";
+                thisElement.appendChild(myselect);
+              </script>
+              <div style="position:relative;">
+                <button type="button" class="btn">
+                  <div class="cartplusimage"></div>
+                  <script>
+                    if (window.getComputedStyle(thisElement).backgroundImage) {
+                      const {setSizeFromStyle}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                      setSizeFromStyle(thisElement);
+                    }
+                  </script>
+                </button>
+                <script>
+                  const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
+                  textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("addcarttt").getRelationship("domelementsdata").getChild().writeProperty(thisElement,null,"title");
+                  thisElement.addEventListener("click", (event)=>{
+                    event.preventDefault();
+                    let quantity=1;
+                    if (thisElement.form.elements["pquantity"]) quantity=thisElement.form.elements["pquantity"].value;
+                    import('./' + CLIENT_MODULES_PATH + 'cart.js')
+                    .then(({myCart})=>myCart.additem(thisNode.getRelationship("itemsdata").getChild(), quantity));
+                  });
+                </script>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display: inline-block; position:relative; z-index:6;">
+    <div class="btmiddleright" style="display:flex;">
+      <div data-id="butedit" data-but-name="norm"></div>
+      <div data-id="butedit" data-but-name="code"></div>
+    </div>
+    <div data-id='descriptionlarge' style="padding-top: 1em"></div>
+    <script>
+      thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionlarge");
+      //adding the edition pencil
+      if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), parent: thisElement.parentElement});
+        thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), "butedit", {editElement: thisElement, thisProperty: "descriptionlarge", inlineEdition: false, thisAttribute: 'innerHTML'});
+        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), parent: thisElement.parentElement});
+        thisElement.onblur=function(){
+          thisElement.parentElement.querySelector('textarea').value=thisElement.innerHTML;
+        }
+      }
+    </script>
+    <textarea style="display:none; width:100%" rows="6" disabled></textarea>
+    <script>
+      const myNode=thisNode.getRelationship("itemsdata").getChild();
+      myNode.writeProperty(thisElement, "descriptionlarge");
+      thisElement.onblur=function(){
+        thisElement.parentElement.querySelector('div[data-id=descriptionlarge]').innerHTML=thisElement.value;
+        thisElement.style.display="none";
+      }
+      //adding the edition pencil
+      if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+        myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), "butedit", {editElement: thisElement, thisProperty: "descriptionlarge", image: 'code', inlineEdition: false})
+        .then(()=>{
+          thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]').querySelector('button[data-id=codebut]').addEventListener('click', ()=>{
+            thisElement.style.display="unset";
+            thisElement.focus();
+          });
+        });
+      }
+    </script>
+  </div>
+</div>

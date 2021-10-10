@@ -1,0 +1,15 @@
+<div id="paymentcontainer" class="boxframe"></div>
+<script>
+const {currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+const {NodeFemale}= await import('./' + CLIENT_MODULES_PATH + 'nodesfront.js');
+const payments= await (new NodeFemale("TABLE_PAYMENTTYPES", "TABLE_PAYMENTTYPES")).loadRequest("get my root");
+const payment= await payments.getChild().loadRequest("get my tree", {extraParents: currentLanguage.getRelationship("domelementsdata")});
+
+payment.getRelationship().addEventListener("setChildrenView", async function() {
+  if (webuser.isSystemAdmin() && this.children.length==0) {
+    const newNode = await this.createInstanceChild()
+    newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+  }
+}, "addNewNodeButton");
+payment.getRelationship().setChildrenView(thisElement,  "paymenttype");
+</script>

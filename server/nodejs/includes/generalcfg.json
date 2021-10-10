@@ -1,0 +1,5 @@
+{
+  "frontEndPath": "../yos",
+  "phpBackendPath": "./../../php",
+  "themesPath": "./../../themes"
+}

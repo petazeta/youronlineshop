@@ -1,0 +1,15 @@
+<!--
+-->
+<span style="position:relative">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <span></span>
+  <script>
+    thisNode.writeProperty(thisElement);
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+      visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+      thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+    }
+  </script>
+</span>

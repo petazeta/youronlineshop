@@ -1,0 +1,21 @@
+<!--
+-->
+<div class="ordershipping">
+  <div>
+    <span style="margin-right:0.5em"></span>
+    <script>
+      thisNode.writeProperty(thisElement, "name");
+    </script>
+  </div>
+  <div>
+    <span></span>
+    <script>
+      thisNode.writeProperty(thisElement, "price");
+    </script>
+    <span></span>
+    <script>
+      const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
+      textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("currency").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+    </script>
+  </div>
+</div>

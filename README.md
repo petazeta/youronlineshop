@@ -3,7 +3,7 @@
 
 ----------------------------------------------------------------------
 
-# Your Online Shop System V 3.4.1
+# Your Online Shop System V 3.5.0
 
 ## Live Demo
 
@@ -16,7 +16,7 @@ Admin -> (usr/password) webadmin/webadmin, productsadmin/productsadmin
 
 ## About
 
-This is a dynamic web app (Single Page Application) for e-commerce. Backend is written in PHP. It uses Mysql database system.
+This is a dynamic web app (Single Page Application) for e-commerce. Backend is written in both Php and Nodejs so you can choose your preferred one. It uses Mysql database system.
 
 https://youronlineshop.net
 
@@ -28,9 +28,9 @@ If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: m
 1. Upload the compressed file to your web server.
 2. Unpack it to the desired folder (All files are inside "yos" folder).
 3. Create a new mysql database.
-4. Edit database settings at: backend/includes/config.php.
-5. Run the app at the web browser and continue with the installation process.
-
+4. Edit database settings at: server/nodejs/includes/dbcfg.json (Node Js) or server/php/includes/config.php (Php).
+5. Nodejs: Open your terminal at server/nodejs/ folder and type: npm install and then node index.js. Once the server is running then you can open your web browser (port 8080) and continue with the installation process.
+Php: Open your web browser (yos folder) and continue with the installation process.
 
 ## Support
 
@@ -50,12 +50,11 @@ Some other configuration can be done by editing file javascript/config.js.
 
 ## Troubleshooting
 
-
-If the database connection is not working you may need to check settings at backend/includes/config.php. Also you may need to import the database content directly from the file backend/utils/database.php.
+If the database connection is not working you may need to check settings at server/php/includes/config.php or server/nodejs/includes/dbcfg.json. Also you may need to import the database content directly from the file server/utils/database.sql.
 
 If the products images can not be uploaded you may need to allow write permisions at folders catalog/images/big and catalog/images/small.
 
-If it doesn't allow admin to make changes you can try to copy backend/utils/htaccess file to the folder backend and rename it to ".htaccess".
+If it doesn't allow admin to make changes you can try to copy server/utils/htaccess file to the folder backend and rename it to ".htaccess".
 
 
 ## Themes

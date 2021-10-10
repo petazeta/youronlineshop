@@ -1,0 +1,20 @@
+<!-- 
+This template shows the user data and user address.
+Param showAddress to show also address data
+Param fieldtype: input / textnode
+-->
+<div class="useraddressbox"></div>
+<script>
+let fieldtp= "singleinput";
+if (thisParams.fieldtype=="textnode") {
+  fieldtp= "singlefield";
+}
+const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
+const tableLabels=textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild(thisNode.getRelationship("usersdata").props.childtablename);
+(await thisNode.getRelationship("usersdata").loadRequest("get my children")).getChild().setPropertiesView(thisElement, fieldtp, {labelNode: tableLabels});
+
+if (thisParams.showAddress) {
+  const tableLabels=textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild(thisNode.getRelationship("addresses").props.childtablename);
+  (await thisNode.getRelationship("addresses").loadRequest("get my children")).getChild().appendPropertiesView(thisElement, fieldtp, {labelNode: tableLabels});
+}
+</script>
