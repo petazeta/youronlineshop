@@ -28,7 +28,7 @@ https://youronlineshop.net
 If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: more info by email.
 
 1 - Upload the compressed file to your web server.
-2 - Unpack it to the desired folder (All files are inside "yos" folder).
+2 - Unpack it to the desired folder (files could be inside a folder or not).
 3 - Create a new mysql database.
 4 - Edit database settings at: server/nodejs/includes/dbcfg.json (Node js) or server/php/includes/config.php (Php).
 5 - Nodejs: Open your terminal at server/nodejs/ folder and type: npm install and then node index.js. Once the server is running then you can open your web browser (port 8080) and continue with the installation process.
