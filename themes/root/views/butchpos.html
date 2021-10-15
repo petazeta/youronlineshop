@@ -9,13 +9,18 @@
     <script>
       thisElement.addEventListener("click", async function(ev) {
         ev.preventDefault();
+        const {getDomElementFromChild}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+        const nodeElement=getDomElementFromChild(thisNode);
         const skey=thisNode.parentNode.getMySysKey('sort_order');
         const newSortOrder=thisNode.props[skey] -1;
         if (newSortOrder < 1) return false;
         const sortOrder=await thisNode.request("edit my sort_order", {newSortOrder: newSortOrder})
         thisNode.props[skey]=sortOrder;
-        thisNode.parentNode.constructor.updateSiblingsOrder(thisNode, sortOrder+1); //it will refresh children sort_orders
+        const swapChild=thisNode.parentNode.constructor.updateSiblingsOrder(thisNode, sortOrder+1); //it will refresh children sort_orders
         if (thisParams.onChgOrder) thisParams.onChgOrder(thisNode, -1);
+        else if (swapChild && nodeElement){
+          nodeElement.parentElement.insertBefore(nodeElement, nodeElement.previousElementSibling);
+        }
         else await thisNode.parentNode.setChildrenView();
       });
     </script>
@@ -38,13 +43,18 @@
       //normalize
       thisElement.addEventListener("click", async function(ev) {
         ev.preventDefault();
+        const {getDomElementFromChild}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+        const nodeElement=getDomElementFromChild(thisNode);
         let skey=thisNode.parentNode.getMySysKey('sort_order');
         const newSortOrder=thisNode.props[skey] + 1;
         if (newSortOrder > thisNode.parentNode.props.total) return false;
         const sortOrder=await thisNode.request("edit my sort_order", {newSortOrder: newSortOrder});
         thisNode.props[skey]=sortOrder;
-        thisNode.parentNode.constructor.updateSiblingsOrder(thisNode, sortOrder-1); //it will refresh children sort_orders
+        const swapChild=thisNode.parentNode.constructor.updateSiblingsOrder(thisNode, sortOrder-1); //it will refresh children sort_orders
         if (thisParams.onChgOrder) thisParams.onChgOrder(thisNode, +1);
+        else if (swapChild && nodeElement){
+          nodeElement.parentElement.insertBefore(nodeElement.nextElementSibling, nodeElement);
+        }
         else await thisNode.parentNode.setChildrenView();
       });
     </script>

@@ -5,7 +5,7 @@ export default async function imageEditFunc(myParams){
   if (fileName && fileName.includes('_')) {
     //Adding next _number for the image
     let previousNum=0;
-    if (fileName.match(/_\d/g).length==2) {
+    if (fileName.match(/_\d/g)) {
       previousNum=fileName.match(/\d+\./)[0];
     }
     previousNum++;

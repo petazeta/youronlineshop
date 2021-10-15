@@ -1,6 +1,6 @@
 import {startThemes} from './themesback.js';
 import {Node, NodeMale, NodeFemale, dataToNode} from './nodesback.js';
-import {dbGetTables, dbInitDb} from './dbgateway.js';
+import {dbGetTables, dbInitDb, dbGetDbLink} from './dbgateway.js';
 import {User, userLogin} from './user.js';
 import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from './safety.js';
 /*
@@ -11,6 +11,10 @@ var themesMod=require('./themes');
 var Theme=themesMod.Theme;
 require('./themesback');
 */
+
+function dbCheckDbLink(){
+  if (dbGetDbLink(true)) return true;
+}
 
 async function makeRequest(reqHeaders, action, parameters) {
 
@@ -40,7 +44,7 @@ async function makeRequest(reqHeaders, action, parameters) {
     case "check requirements":
       return true;
     case "check db link":
-      return Node.dbCheckDbLink();
+      return dbCheckDbLink();
     case "get themes tree":
       const themeActive=startThemes();
       return themeActive.avoidrecursion();
@@ -215,7 +219,7 @@ async function makeRequest(reqHeaders, action, parameters) {
     case "edit my sort_order":
       var req=new NodeMale();
       req.load(parameters.nodeData);
-      await req.dbLoadMyself();  //For loading the actual position
+      await req.dbLoadMySelf();  //For loading the actual position
       if (!await isAllowedToModify(user, parameters.nodeData)) {
         throw new Error(safetyErrorMessage);
       }

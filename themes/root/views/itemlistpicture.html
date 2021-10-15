@@ -201,14 +201,13 @@
       visibleOnMouseOver({element: thisElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
       thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical', onChgOrder: paginationOnChgOrder});
       thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butdelete", {onDeleted: paginationOnDeleted});
-      const newNode = await thisNode.parentNode.createInstanceChild(thisNode);
       //If is the last of the page then we will add the item at in next page
       const itemView=function(itemNode) {
         import('./' + CLIENT_MODULES_PATH + 'activenode.js')
         .then(({setActive})=>setActive(itemNode));
         itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
       }
-      newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {onAdded: itemView});
+      thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {onAdded: itemView});
     }
   </script>
 </div>

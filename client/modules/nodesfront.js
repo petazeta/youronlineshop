@@ -1,10 +1,14 @@
 import config from './config.js';
-import {Node as NodeBase, NodeFemale as NodeFemaleBase, NodeMale as NodeMaleBase} from './../../shared/modules/nodes.js';
+//import {Node as NodeBase, NodeFemale as NodeFemaleBase, NodeMale as NodeMaleBase} from './../../shared/modules/nodes.js';
 //import {Node, NodeFemale, NodeMale} from './nodes.js';
 import {authorizationToken} from "./authorizationfront.js";
 import {getNewId} from './idgenerator.js';
 import {onAppend} from './onappendlistener.js';
 //import extendNode from './extend.js';
+import NodeBase from './../../shared/modules/nodebasic.js';
+import EventListnerMixing from './eventlistenersmixing.js';
+import {NodeMaleMixing, NodeFemaleMixing} from './../../shared/modules/nodesmixing.js';
+import {getDomElementFromChild} from './frontutils.js';
 
 /* we are not importing at the begining this elements but dynamically because in future it could give problems
 import {theme, default as Theme} from './themesfront.js'; //
@@ -22,61 +26,32 @@ const NodeFrontMixing=Sup => class extends Sup {
 //class NodeFront {
   //Similar to setView but refering to node children
   async setChildrenView(container, tp, params) {
-    if (!container) container=this.childContainer; //Default value for container
-    else this.childContainer=container; //Update default
-    if (!tp) tp=this.myChildTp; //Default value
-    else this.myChildTp=tp; //Update default
-    if (!container || !tp) throw new Error('No data');
-    if (container.nodeType==1) container.classList.add("setchildrenloader");
-    
-    if (typeof tp=="string") {
-      tp = await this.constructor.getTp(tp);
-    }
-    if (this.children.length>0) {
-      const skey=this.getMySysKey('sort_order');
-      if (skey) this.children=this.children.sort((a,b)=>a.props[skey]-b.props[skey]);
-      var renderedChildren=document.createDocumentFragment();
-      for (const child of this.children) {
-        renderedChildren.appendChild(child.prerender(tp, params));
-      }
-    }
-    container.innerHTML='';
-    if (renderedChildren) {
-      container.appendChild(renderedChildren);
-    }
-    if (typeof onAppend == 'function') {
-      onAppend(this);
-    }
-    
-    this.dispatchEvent("setChildrenView");
-    if (container.nodeType==1) container.classList.remove("setchildrenloader");
-    const {setLastActive}=await import('./watchlastactive.js');
-    if (typeof setLastActive == 'function') {
-      setLastActive(this);//This way we save the last node that has a view
-    }
-
-    return this;
+    this.appendChildrenView(container, tp, params, true);
   }
-  //It is the atual loader of setChildrenView. It doesn't replace, it adds the content
-  async appendChildrenView(container, tp, params) {
+  //It doesn't replace, it adds the content
+  async appendChildrenView(container, tp, params, reset) {
     if (!container) container=this.childContainer; //Default value for container
     else this.childContainer=container; //Update default
     if (!tp) tp=this.myChildTp; //Default value
     else this.myChildTp=tp; //Update default
     if (!container || !tp) throw new Error('No data');
-    if (container.nodeType==1) container.classList.add("appendchildrenloader");
+    let loaderClassName="appendchildrenloader";
+    if (reset) loaderClassName="setchildrenloader";
+    if (container.nodeType==1) container.classList.add(loaderClassName);
     
     if (typeof tp=="string") {
       tp = await this.constructor.getTp(tp);
     }
+    let renderedChildren;
     if (this.children.length>0) {
       const skey=this.getMySysKey('sort_order');
       if (skey) this.children=this.children.sort((a,b)=>a.props[skey]-b.props[skey]);
-      var renderedChildren=document.createDocumentFragment();
+      renderedChildren=document.createDocumentFragment();
       for (const child of this.children) {
         renderedChildren.appendChild(child.prerender(tp, params));
       }
     }
+    if (reset) container.innerHTML='';
     if (renderedChildren) {
       container.appendChild(renderedChildren);
     }
@@ -84,12 +59,47 @@ const NodeFrontMixing=Sup => class extends Sup {
       onAppend(this);
     }
     const {setLastActive}=await import('./watchlastactive.js');
-    this.dispatchEvent("appendChildrenView");
+    let dispachEventName="appendChildrenView";
+    if (reset) dispachEventName="setChildrenView";
+    this.dispatchEvent(dispachEventName);
+    if (container.nodeType==1) container.classList.remove(loaderClassName);
     if (typeof setLastActive == 'function') {
       setLastActive(this);//This way we save the last node that has a view
     }
     return this;
   }
+  //It doesn't replace, it adds the content
+  async appendChildView(child, container, tp, params) {
+    if (!container) container=this.childContainer; //Default value for container
+    else this.childContainer=container; //Update default
+    if (!tp) tp=this.myChildTp; //Default value
+    else this.myChildTp=tp; //Update default
+    if (!container || !tp) throw new Error('No data');
+    let loaderClassName="appendchildloader";
+    if (container.nodeType==1) container.classList.add(loaderClassName);
+    
+    if (typeof tp=="string") {
+      tp = await this.constructor.getTp(tp);
+    }
+    const skey=this.getMySysKey('sort_order');
+    if (skey && this.children.length>0 && child.props[skey]<this.children.length) {
+      let nextSiblingElement=getDomElementFromChild(this.children[child.props[skey]-1]);
+      if (!nextSiblingElement) nextSiblingElement=container.lastElementChild;
+      container.insertBefore(child.prerender(tp, params), nextSiblingElement);
+    }
+    else container.appendChild(child.prerender(tp, params));
+    if (typeof onAppend == 'function') {
+      onAppend(this);
+    }
+    const {setLastActive}=await import('./watchlastactive.js');
+    this.dispatchEvent("appendChildView");
+    if (container.nodeType==1) container.classList.remove(loaderClassName);
+    if (typeof setLastActive == 'function') {
+      setLastActive(this);//This way we save the last node that has a view
+    }
+    return this;
+  }
+  
 
   // This is the function that actually gets a template from file.
   // Templates cache can be filled completely at the first load by onfig loadalltemplatesatonce
@@ -99,8 +109,9 @@ const NodeFrontMixing=Sup => class extends Sup {
     const tpPath=getTpPath(themeActive, tpName);
     //Loading from cache
     if (config.viewsCacheOn!==false) {
-      if (tpPath) var tpid="tp" + tpPath.match(/(\w+)\.\w+/, '$1')[1];
-      else var tpid="tp" + tpName;
+      let tpid;
+      if (tpPath) tpid="tp" + tpPath.match(/(\w+)\.\w+/)[1];
+      else tpid="tp" + tpName;
       if (tpList.has(tpid)) {
         const tpElement=tpList.get(tpid);
         const newElement=tpElement.cloneNode(true)
@@ -125,7 +136,7 @@ const NodeFrontMixing=Sup => class extends Sup {
     });
     //Saving to cache
     if (config.viewsCacheOn!==false) {
-      var tpid="tp" + tpPath.match(/(\w+)\.\w+/, '$1')[1];
+      const tpid="tp" + tpPath.match(/(\w+)\.\w+/)[1];
       tpList.set(tpid, myTp);
       tpList.get(tpid).id=tpid;
     }
@@ -415,89 +426,74 @@ const NodeFrontMixing=Sup => class extends Sup {
   }
   async loadRequest(action, parameters, url) {
     const result= await this.request(action, parameters, false, url);
+    if (result===null || result===undefined) throw new Error("Action: " + action + ". Error: No server response");
     switch (action) {
       case "get my root":
       this.children=[];
-      if (typeof result=="object") {
-        this.addChild((new NodeMale()).load(result));
-      }
+      this.addChild((new NodeMale()).load(result));
       break;
       case "get my children":
       case "get all my children":
       this.children=[];
-      if (typeof result=="object") {
-        result.data.forEach(child=>this.addChild((new NodeMale()).load(child)));
-        this.props.total=result.total;
-      }
+      result.data.forEach(child=>this.addChild((new NodeMale()).load(child)));
+      this.props.total=result.total;
       break;
       case "get my tree":
-      if (typeof result=="object") {
-        if (this.detectMyGender()=="female") {
-          this.children=[];
-          for (const element of result.data) {
-            this.addChild((new NodeMale()).load(element));
-          }
-          this.props.total=result.total;
+      if (this.detectMyGender()=="female") {
+        this.children=[];
+        for (const element of result.data) {
+          this.addChild((new NodeMale()).load(element));
         }
-        else {
-          if (parameters && parameters.myself) {
-            this.load(result);
-            break;
-          }
-          this.relationships=[];
-          for (const element of result) {
-            this.addRelationship((new NodeFemale()).load(element));
-          }
+        this.props.total=result.total;
+      }
+      else {
+        if (parameters && parameters.myself) {
+          this.load(result);
+          break;
+        }
+        this.relationships=[];
+        for (const element of result) {
+          this.addRelationship((new NodeFemale()).load(element));
         }
       }
       break;
       case "get my relationships":
       this.relationships=[];
-      if (typeof result=="object") {
-        result.forEach(rel=>this.addRelationship((new NodeFemale()).load(rel)));
-      }
+      result.forEach(rel=>this.addRelationship((new NodeFemale()).load(rel)));
       break;
       case "get my tree up":
-      if (typeof result=="object") {
-        if (this.detectMyGender()=="female") {
-          this.partnerNode=(new NodeMale()).load(result);
-          this.partnerNode.addRelationship(this);
+      if (this.detectMyGender()=="female") {
+        this.partnerNode=(new NodeMale()).load(result);
+        this.partnerNode.addRelationship(this);
+      }
+      else {
+        if (Array.isArray(result)) {
+          this.parentNode=[];
+          for (const i in result) {
+            this.parentNode[i]=(new NodeFemale()).load(result[i]);
+            this.parentNode[i].addChild(this);
+          }
         }
         else {
-          if (Array.isArray(result)) {
-            this.parentNode=[];
-            for (const i in result) {
-              this.parentNode[i]=(new NodeFemale()).load(result[i]);
-              this.parentNode[i].addChild(this);
-            }
-          }
-          else {
-            this.parentNode=(new NodeFemale()).load(result);
-            this.parentNode.addChild(this);
-          }
+          this.parentNode=(new NodeFemale()).load(result);
+          this.parentNode.addChild(this);
         }
       }
       break;
       case "add myself":
-      if (typeof result=="number") {
-        this.props.id=result;
-      }
+      this.props.id=result;
       break;
       case "add my tree":
-      if (typeof result=="object") {
-        if (result.props.id)  this.props.id=result.props.id; //female has no id
-        this.loaddesc(result);
-      }
+      if (result.props.id)  this.props.id=result.props.id; //female has no id
+      this.loaddesc(result);
       break;
       case "add my children":
-      if (typeof result=="object") {
-        for (const i in result) {
-          this.children[i].props.id=result[i];
-        }
+      for (const i in result) {
+        this.children[i].props.id=result[i];
       }
       break;
       default:
-        this.load(result);
+      this.load(result);
     }
     return this;
   }
@@ -505,7 +501,7 @@ const NodeFrontMixing=Sup => class extends Sup {
 
 //We add methods
 //extendNode(NodeFront, Node);
-const Node = NodeFrontMixing(NodeBase);
+const Node = NodeFrontMixing(EventListnerMixing(NodeBase));
 
 const NodeFemaleFrontMixing=Sup => class extends Sup {
 //class NodeFemaleFront {
@@ -513,23 +509,17 @@ const NodeFemaleFrontMixing=Sup => class extends Sup {
   //It serves for creating a template of new node
   //By default it creates a empty lang data children if it is related to a lang element parent
   
-  load(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
-    return super.load(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown, NodeMale);
+  loaddesc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loaddesc(source, level, thisProperties, NodeMale);
+    return super.loaddesc(source, level, thisProperties, myConstructor);
   }
   
-  cloneNode(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
-    return super.cloneNode(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown, NodeMale);
-  }
-  
-  loaddesc(source, level, thisProperties) {
-    super.loaddesc(source, level, thisProperties, NodeMale);
-  }
-  
-  loadasc(source, level, thisProperties) {
-    super.loadasc(source, level, thisProperties, NodeMale);
+  loadasc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loadasc(source, level, thisProperties, NodeMale);
+    return super.loadasc(source, level, thisProperties, myConstructor);
   }
 
-  async createInstanceChild(previousSibling, noLang=false) {
+  async createInstanceChild(position=1, noLang=false) {
     const newNode=new NodeMale();
     /*
     newNode.parentNode=new NodeFemale;
@@ -538,8 +528,7 @@ const NodeFemaleFrontMixing=Sup => class extends Sup {
     newNode.parentNode=this;
     const skey=newNode.parentNode.getMySysKey('sort_order');
     if (skey) {
-      if (previousSibling && previousSibling.props[skey]) newNode.props[skey]=previousSibling.props[skey] + 1;
-      else newNode.props[skey]=1;
+      newNode.props[skey]=position;
     }
     await newNode.loadRequest("get my relationships");
     //We search for a relationship about language so we have to add then a data language node child
@@ -551,40 +540,35 @@ const NodeFemaleFrontMixing=Sup => class extends Sup {
   static updateSiblingsOrder(element, oldOrder) {
     let skey=element.parentNode.getMySysKey('sort_order');
     if (skey && element.props[skey]) {
-      let swapElement, childElement;
+      let swapChild;
       for (const child of element.parentNode.children) {
         if (child.props[skey] == element.props[skey] && element.props.id!=child.props.id) {
-          swapElement=child;
+          swapChild=child;
           break;
         }
       }
-      if (swapElement) swapElement.props[skey]=oldOrder; //It could not find it when exceeds pagination
+      if (swapChild) swapChild.props[skey]=oldOrder; //It could not find it when exceeds pagination
+      return swapChild;
     }
   }
 }
 
 //We add methods
 //extendNode(NodeFemaleFront, NodeFemale);
-const NodeFemale = NodeFemaleFrontMixing(NodeFrontMixing(NodeFemaleBase));
+const NodeFemale = NodeFemaleFrontMixing(NodeFrontMixing(NodeFemaleMixing(Node)));
 
 const NodeMaleFrontMixing=Sup => class extends Sup {
 //class NodeMaleFront {
   //It loads (ajax) a template replacing container content and executing the scripts. If config.CacheOn=true, it could take the template from the present document
   
-  cloneNode(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
-    return super.cloneNode(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown, NodeFemale);
+  loaddesc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loaddesc(source, level, thisProperties, NodeFemale);
+    return  super.loaddesc(source, level, thisProperties, myConstructor);
   }
   
-  load(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown) {
-    return super.load(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown, NodeFemale);
-  }
-  
-  loaddesc(source, level, thisProperties) {
-    super.loaddesc(source, level, thisProperties, NodeFemale);
-  }
-  
-  loadasc(source, level, thisProperties) {
-    super.loadasc(source, level, thisProperties, NodeFemale);
+  loadasc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loadasc(source, level, thisProperties, NodeFemale);
+    return super.loadasc(source, level, thisProperties, myConstructor);
   }
   
   async setView(container, tp, params, append=false) {
@@ -621,6 +605,6 @@ const NodeMaleFrontMixing=Sup => class extends Sup {
 
 //We add methods
 //extendNode(NodeMaleFront, NodeMale);
-const NodeMale = NodeMaleFrontMixing(NodeFrontMixing(NodeMaleBase));
+const NodeMale = NodeMaleFrontMixing(NodeFrontMixing(NodeMaleMixing(Node)));
 
 export {Node, NodeFemale, NodeMale}

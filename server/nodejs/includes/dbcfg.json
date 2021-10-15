@@ -1,6 +1,6 @@
 {
   "host": "localhost",
-  "user": "dbuser",
-  "password": "dbpwd",
+  "user": "uname",
+  "password": "pwd",
   "database": "dbname"
 }

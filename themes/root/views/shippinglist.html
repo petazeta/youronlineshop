@@ -8,7 +8,7 @@ const shipping= await shippings.getChild().loadRequest("get my tree", {extraPare
 shipping.getRelationship().addEventListener("setChildrenView", function() {
   if (this.children.length==0 && (webuser.isSystemAdmin() || webuser.isOrdersAdmin())) {
     this.createInstanceChild()
-    .then(newNode=>newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this}));
+    .then(newNode=>newNode.setView(this.childContainer, "butaddnewnode"));
   }
 }, "addNewNodeButton");
 shipping.getRelationship().setChildrenView(thisElement,  "shippingtype");

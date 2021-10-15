@@ -5,13 +5,11 @@ export function onPopState(event) {
   if (!link) link=document.querySelector("*[data-href='" + event.state.url + "']");
   if (link) link.click();
   */
-  const regex = /&page=\d+/;
-  const unpaginatedUrl=event.state.url.replace(regex, '');
+  const unpaginatedUrl=event.state.url.replace(/&page=\d+/, '');
   const action=getPopStateAction(unpaginatedUrl);
 
   if (typeof action=="function")  {
-    const regex = /&page=(\d+)/;
-    const pageMatch=window.location.search.match(regex);
+    const pageMatch=window.location.search.match(/&page=(\d+)/);
     if (pageMatch) {
       action(pageMatch[1]);
     }

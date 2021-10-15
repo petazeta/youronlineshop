@@ -9,7 +9,6 @@
   if (webuser.isProductSeller()) {
     extraParents.push(webuser.getRelationship("items").cloneNode(0, 0)); //parents
   }
-  thisNode.getRelationship("items").children=[]; //first we remove the previous children (because load insert the new data but doesn't remove previous)
   const {default: config} = await import('./' + CLIENT_MODULES_PATH + 'config.js');
   const pageSize=config.catPageSize;
   let pageNum=1;
@@ -21,10 +20,7 @@
   import('./' + CLIENT_MODULES_PATH + 'initurl.js')
   .then(({initUrl})=>{
     if (!initUrl) return;
-    const regex = 'item=(\\d+)';
-    const itemIdMatch=initUrl.match(new RegExp(regex));
-    if (itemIdMatch) {
-      //if (!initUrl.match(new RegExp(regex + '&'))) initUrl=""; //reset initUrl
+    if (itemIdMatch=initUrl.match(/item=(\d+)/)) {
       for (const child of itemsRel.children) {
         if (child.props.id==itemIdMatch[1]) {
           return; //If the product is to be displayed then it will produce the action itself
@@ -42,7 +38,7 @@
       return; //Ends the entire script
     }
   });
-  //To show add product when none products in the category
+  //To show add product when no products in the category
   itemsRel.addEventListener("setChildrenView", function() {
     if (webuser.isProductAdmin() && itemsRel.children.length==0) {
       const itemView=function(itemNode) {
@@ -83,7 +79,7 @@
       pageParent.addChild(pageNode);
     }
     if (pages>1) {
-      await pageParent.setChildrenView(document.getElementById('centralcontent').querySelector('[class=page-indexes]'), 'paginationindex', {onClickScript: onClickScript});
+      await pageParent.setChildrenView(document.getElementById('centralcontent').querySelector('.page-indexes'), 'paginationindex', {onClickScript: onClickScript});
     }
   }
   pageParent.refreshPage=function(pageNum){

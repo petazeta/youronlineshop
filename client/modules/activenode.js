@@ -30,6 +30,7 @@ export function unsetActive(myNode) {
 }
 
 export function setActiveChild(myNode) {
+  
   const setSelected = function(element) {
     element.classList.add("selected");
   }
@@ -46,6 +47,7 @@ export function setActiveChild(myNode) {
     }
     myNode.parentNode.activeChildren=myNode;
   }
+  
   //selection of the node
   myNode.selected=true;
   const mydom=getDomElementFromChild(myNode);

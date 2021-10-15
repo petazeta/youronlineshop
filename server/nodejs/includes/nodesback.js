@@ -1,5 +1,6 @@
 //
-import {Node as NodeBase, NodeFemale as NodeFemaleBase, NodeMale as NodeMaleBase} from './../../../shared/modules/nodes.js';
+import NodeBase from './../../../shared/modules/nodebasic.js';
+import {NodeMaleMixing, NodeFemaleMixing} from './../../../shared/modules/nodesmixing.js';
 import {dbQuery, dbGetDbLink, dbGetTables, dbEscape} from './dbgateway.js';
 
 import tableList from './tablelist.js';
@@ -18,13 +19,7 @@ export function dataToNode(data) {
 }
 
 const NodeBackMixing=Sup => class extends Sup {
-  
-  static dbCheckDbLink(){
-    if (dbGetDbLink(true)) return true;
-  }
-  
 }
-
 const Node = NodeBackMixing(NodeBase);
 
 const NodeFemaleBackMixing=Sup => class extends Sup {
@@ -146,11 +141,12 @@ const NodeFemaleBackMixing=Sup => class extends Sup {
     sql=`show columns from ${tableList.get(data.props.childtablename)}`;
     result = await dbQuery(db, sql);
     for (const keyObj of result) {
-      if (keyObj.Field.match(/.+_position/)) {
+      let match=keyObj.Field.match(/(.+)_position/);
+      if (match) {
         let sysKey={};
         sysKey.type='sort_order';
         sysKey.name=keyObj.Field;
-        const refkey=keyObj.Field.replace(/(.+)_position/, "1");
+        const refkey=match[1];
         for (const keyinfo of element.syschildtablekeysinfo) {
           if (keyinfo.name==refkey) {
             sysKey.parenttablename=keyinfo.parenttablename;
@@ -221,7 +217,7 @@ const NodeFemaleBackMixing=Sup => class extends Sup {
         sql += ` ORDER BY ${positioncolumnname}`;
       }
       if (limit.length == 2) {
-        countSql=sql.replace('*' , 'COUNT(*)');
+        countSql=sql.replace('*' , 'COUNT(*) AS total');
         sql += ` LIMIT ${dbEscape(limit[0])} , ${dbEscape(limit[1])}`;
       }
     }
@@ -229,8 +225,8 @@ const NodeFemaleBackMixing=Sup => class extends Sup {
     const children = NodeFemale.readQuery(result);
     const myReturn={};
     if (countSql) {
-      const result = await dbQuery(db, sql)
-      myReturn.total = NodeFemale.readQuery(result)[0];
+      const result = await dbQuery(db, countSql);
+      myReturn.total = result[0]['total'];
     }
     else {
       myReturn.total=result.length;
@@ -281,7 +277,7 @@ const NodeFemaleBackMixing=Sup => class extends Sup {
     if (level) level--;
     await this.dbLoadMyChildren(extraParents, filterProp, limit);
     for (const child of this.children) {
-      await child.dbLoadMyTree(extraParents, level, filterProp, limit);
+      await child.dbLoadMyTree(extraParents, level);
     }
     return {data: this.children, total: this.props.total};
   }
@@ -458,7 +454,7 @@ const NodeFemaleBackMixing=Sup => class extends Sup {
   }
 }
 
-const NodeFemale = NodeFemaleBackMixing(NodeFemaleBase);
+const NodeFemale = NodeFemaleBackMixing(NodeFemaleMixing(Node));
 
 const NodeMaleBackMixing=Sup => class extends Sup {
   
@@ -598,7 +594,7 @@ const NodeMaleBackMixing=Sup => class extends Sup {
   
   async dbLoadMySelf(){
     const db = await dbGetDbLink();
-    const sql="SELECT * FROM " + tableList.get(this.parentNode.props.childtablename);
+    const sql=`SELECT * FROM ${tableList.get(this.parentNode.props.childtablename)} WHERE id=${dbEscape(this.props.id)}`;
     const result= await dbQuery(db, sql);
     if (result.length==1) {
       this.loadProperties(result[0]);
@@ -716,6 +712,6 @@ const NodeMaleBackMixing=Sup => class extends Sup {
   }
 }
 
-const NodeMale = NodeMaleBackMixing(NodeMaleBase);
+const NodeMale = NodeMaleBackMixing(NodeMaleMixing(Node));
   
 export {Node, NodeFemale, NodeMale}

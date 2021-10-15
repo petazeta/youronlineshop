@@ -32,10 +32,14 @@
           subcategoriesMother.addEventListener("setChildrenView", async function() {
             if (webuser.isProductAdmin() && this.children.length==0) {
               const newNode=await this.createInstanceChild();
-              newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+              newNode.setView(this.childContainer, "butaddnewnode");
             }
           }, "addNewNodeButton");
           const catalogView=function(childNode, pageNum) {
+            const prevUrl='?category=' + childNode.parentNode.partnerNode.props.id;
+            const url= prevUrl + '&subcategory=' + childNode.props.id;
+            //it doesn't record state when: go back (dont state twice the same url)
+            if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
             setActive(childNode);
             const params={tmpt: "catalog"};
             if (pageNum) params.pageNum=pageNum;
@@ -71,10 +75,7 @@
             visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
             thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
             thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
-            thisNode.parentNode.createInstanceChild(thisNode)
-            .then(newNode=>{
-              newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode});
-            });
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
           }
         });
         

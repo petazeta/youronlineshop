@@ -6,15 +6,15 @@
     <div data-id="butedit" class="btmiddleleft"></div>
     <a data-button="true" data-hbutton="true" class="subcategory"></a>
     <script>
+      const {setActive} = await import('./' + CLIENT_MODULES_PATH + 'activenode.js');
+    
       //if selected in advance
       if (thisNode.selected) {
-        import('./' + CLIENT_MODULES_PATH + 'activenode.js')
-        .then(({setActive})=>setActive(thisNode));
+        //setActive(thisNode); //?????
       }
       
       const catalogView=function(pageNum) {
-        import('./' + CLIENT_MODULES_PATH + 'activenode.js')
-        .then(({setActive})=>setActive(thisNode));
+        setActive(thisNode);
         const params={tmpt: "catalog"};
         if (pageNum) params.pageNum=pageNum;
         thisNode.setView(document.getElementById("centralcontent"), "pagination", params);
@@ -59,11 +59,7 @@
           cData.getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
           thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
           thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
-          thisNode.parentNode.createInstanceChild(thisNode)
-          .then(newNode=> {
-            newNode.parentNode=thisNode.parentNode;
-            newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode});
-          });
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
         }
       });
     </script>

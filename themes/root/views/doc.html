@@ -7,7 +7,7 @@
   myNode.addEventListener("setChildrenView", async function() {
     if (webuser.isWebAdmin() && this.children.length==0) {
       const newNode = await this.createInstanceChild();
-      newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+      newNode.setView(this.childContainer, "butaddnewnode");
     }
   }, "addNewNodeButton");
   myNode.setChildrenView(thisElement, "paragraph");

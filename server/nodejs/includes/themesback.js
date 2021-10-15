@@ -1,8 +1,36 @@
 //var config=require('./generalcfg.json');
-import {Node, NodeMale, NodeFemale} from './../../../shared/modules/nodes.js'
-import {findTheme} from './../../../shared/modules/themes.js'
+import {NodeFemaleMixing, NodeMaleMixing} from './../../../shared/modules/nodesmixing.js';
+import Node from './../../../shared/modules/nodebasic.js'
+import {findTheme} from './../../../shared/modules/themes.js';
 import fs from 'fs';
 import { createRequire } from "module";
+
+const NodeFemaleBasic=NodeFemaleMixing(Node);
+const NodeMaleBasic=NodeMaleMixing(Node);
+
+class NodeFemale extends NodeFemaleBasic{
+  loaddesc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loaddesc(source, level, thisProperties, NodeMale);
+    return super.loaddesc(source, level, thisProperties, myConstructor);
+  }
+  
+  loadasc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loadasc(source, level, thisProperties, NodeMale);
+    return super.loadasc(source, level, thisProperties, myConstructor);
+  }
+}
+
+class NodeMale extends NodeMaleBasic{
+  loaddesc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loaddesc(source, level, thisProperties, NodeFemale);
+    return  super.loaddesc(source, level, thisProperties, myConstructor);
+  }
+  
+  loadasc(source, level, thisProperties, myConstructor) {
+    if (!myConstructor) return super.loadasc(source, level, thisProperties, NodeFemale);
+    return super.loadasc(source, level, thisProperties, myConstructor);
+  }
+}
 
 const require = createRequire(import.meta.url);
 const config=require('./generalcfg.json');

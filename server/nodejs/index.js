@@ -89,6 +89,7 @@ http.createServer((request, response) => {
           response.end();
           return console.log(err);
         }
+        fs.chmodSync(fileName, '777');
         response.write("true");
         response.end();
       });

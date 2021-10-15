@@ -51,7 +51,7 @@
             thisElement.parentElement.querySelector('.admnbtsgrid').innerHTML="";
             thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos");
             thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
-            thisNode.parentNode.createInstanceChild(thisNode).then(newNode=>newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode}));
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
             
             //remove onmouseover efect
             thisElement.parentElement.querySelector("[data-id=butedit]").style.opacity=1;
@@ -80,7 +80,7 @@
             thisElement.parentElement.querySelector('.admnbtsgrid').innerHTML="";
             thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
             thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
-            thisNode.parentNode.createInstanceChild(thisNode).then(newNode=>newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode}));
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
             thisElement.parentElement.querySelector("[data-id=containeropen]").innerHTML="";
             thisElement.parentElement.querySelector("[data-id=butedit]").style.visibility="visible";
             thisElement.parentElement.querySelector("[data-id=admnbuts]").style.visibility="visible";

@@ -87,10 +87,17 @@
             thisElement.addEventListener("click", async function(ev) {
               ev.preventDefault();
               const result=await thisParams.dataNode.request("delete my tree");
+              const {getDomElementFromChild} = await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              const element=getDomElementFromChild(thisParams.dataNode);
               thisParams.dataNode.parentNode.removeChild(thisParams.dataNode);
               //for no children add a eventlistener to setChildrenView event
               if (thisParams.onDeleted) thisParams.onDeleted(thisParams.dataNode);
-              else if (thisParams.dataNode.parentNode.childContainer)  await thisParams.dataNode.parentNode.setChildrenView();
+              else if (thisParams.dataNode.parentNode.childContainer)  {
+                if (element && thisParams.dataNode.parentNode.children.length>0) {
+                  element.parentElement.removeChild(element);
+                }
+                else await thisParams.dataNode.parentNode.setChildrenView();
+              }
               
               thisParams.dataNode.parentNode.dispatchEvent("deleteChildNode", thisParams.dataNode);
               thisParams.dataNode.dispatchEvent("deleteNode");

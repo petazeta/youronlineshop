@@ -14,8 +14,11 @@ export function getDomElementFromChild(myNode) {
   if (!myNode.parentNode || !myNode.parentNode.childContainer) return false;
   //This method only works in wrapped templates
   //We have a child and the container is at the parent.
-  for (const i in myNode.parentNode.children) {
-    if (myNode.parentNode.children[i]==myNode) {
+  const skey=myNode.parentNode.getMySysKey('sort_order');
+  if (!skey) return false;
+  const children=myNode.parentNode.children.sort((a,b)=>a.props[skey]-b.props[skey]);
+  for (const i in children) {
+    if (children[i]==myNode) {
       return myNode.parentNode.childContainer.children[i];
     }
   }

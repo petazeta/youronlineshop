@@ -5,22 +5,21 @@ export function setInitUrl(url) {
 export function urlClickAction(partialUrl, clickAction) {
   if (!initUrl) return;
   partialUrl=encodeURIComponent(partialUrl); //Encoding make it easier for regular expresion matches
-  let regex = `(.+)${encodeURIComponent('=')}(\\d+)`;
-  const componentMatch=partialUrl.match(new RegExp(regex));
+  const componentMatch=partialUrl.match(new RegExp(`(.+)${encodeURIComponent('=')}(\\d+)`));
   if (!componentMatch) return;
   const nodeId=componentMatch[2] ;
-  regex=`${componentMatch[1]}${encodeURIComponent('=')}(\\d+)`;
+  const paramMatchRE=`${componentMatch[1]}${encodeURIComponent('=')}(\\d+)`;
   const codedInitUrl=encodeURIComponent(initUrl)
-  const nodeIdMatch=codedInitUrl.match(new RegExp(regex));
+  const nodeIdMatch=codedInitUrl.match(new RegExp(paramMatchRE));
   if (nodeIdMatch && nodeIdMatch[1]==nodeId) {
-    if (!codedInitUrl.match(new RegExp(regex + encodeURIComponent('&')))) {
+    if (!codedInitUrl.match(new RegExp(paramMatchRE + encodeURIComponent('&')))) {
       initUrl=""; //reset initUrl
     }
     else {
-      regex = `pageNum${encodeURIComponent('=')}(\\d+)`; //pagination facility
-      const pageMatch=codedInitUrl.match(new RegExp(regex));
+      const pageMarchRE = `pageNum${encodeURIComponent('=')}(\\d+)`; //pagination facility
+      const pageMatch=codedInitUrl.match(new RegExp(pageMarchRE));
       if (pageMatch) {
-        if (!codedInitUrl.match(new RegExp(regex +  encodeURIComponent('&')))) initUrl=""; //reset initUrl
+        if (!codedInitUrl.match(new RegExp(pageMarchRE +  encodeURIComponent('&')))) initUrl=""; //reset initUrl
         clickAction(pageMatch[1]);
         return true;
       }

@@ -10,7 +10,7 @@ export default async function login(headers) {
   const authIndex=lowerHeaderKeys.indexOf('authorization');
   if (authIndex!=-1){
     const auth=headers[headerKeys[authIndex]];
-    const token=auth.match(/Basic (.*)/, '$1')[1];
+    const token=auth.match(/Basic (.*)/)[1];
     [username, password]=Buffer.from(token, 'base64').toString().split(':');
     //[username, password]=atob(token).split(':');
   }

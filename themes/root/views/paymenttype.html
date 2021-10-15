@@ -81,10 +81,7 @@
     visibleOnMouseOver({element: thisElement.querySelector('[data-id=admnbuts]'), parent: thisElement});
     thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
     thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butdelete");
-    const newNode= await thisNode.parentNode.createInstanceChild();
-    let skey=thisNode.parentNode.getMySysKey('sort_order');
-    newNode.props[skey]=thisNode.props[skey] + 1;
-    newNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode});
+    thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butaddnewnode");
   }
   else {
     //remove if it is not active

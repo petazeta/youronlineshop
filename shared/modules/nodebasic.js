@@ -3,12 +3,6 @@ import {parseNumber} from './datainput.js';
 export default class NodeBasic{
   constructor(){
     this.props = {};
-    this.params={}; // Standard way to send parameters to templates
-    this.extra={}; // Standard way to save some extra data
-    this.nodelist=[]; // Standard way to save multiple re results ****DEPRECATED****
-    //this.events=[]; // Event handler storing
-    //this.initEventListener=initEventListener;
-    //this.initEventListener();
   }
   static detectGender(element){
     if (element.parentNode!==undefined) return "male";

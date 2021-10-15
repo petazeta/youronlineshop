@@ -8,7 +8,7 @@ const payment= await payments.getChild().loadRequest("get my tree", {extraParent
 payment.getRelationship().addEventListener("setChildrenView", async function() {
   if (webuser.isSystemAdmin() && this.children.length==0) {
     const newNode = await this.createInstanceChild()
-    newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+    newNode.setView(this.childContainer, "butaddnewnode");
   }
 }, "addNewNodeButton");
 payment.getRelationship().setChildrenView(thisElement,  "paymenttype");

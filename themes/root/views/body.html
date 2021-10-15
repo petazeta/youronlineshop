@@ -117,11 +117,15 @@
           menusMother.addEventListener("setChildrenView", async function() {
             if (webuser.isWebAdmin() && this.children.length==0) {
               const newNode = await this.createInstanceChild();
-              newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+              newNode.setView(this.childContainer, "butaddnewnode");
             }
           }, "addNewNodeButton");
           //when a new menu is created we select it
           menusMother.addEventListener("addNewNode", function(newNode) {
+            const url='?menu=' + newNode.props.id;
+            if (!(history.state && history.state.url==url)) { //to not repeat state
+              history.pushState({url:url}, null, url);
+            }
             import('./' + CLIENT_MODULES_PATH + 'activenode.js')
             .then(({setActive})=>setActive(newNode));
             newNode.setView(document.getElementById("centralcontent"), "doc");
@@ -140,6 +144,10 @@
             && this.children.length>0) {
               let position=1;
               if (delNode.props[this.getMySysKey("sort_order")] > 1) position=delNode.props[this.getMySysKey("sort_order")]-1;
+              const url='?menu=' + this.children[position-1].props.id;
+              if (!(history.state && history.state.url==url)) { //to not repeat state
+                history.pushState({url:url}, null, url);
+              }
               import('./' + CLIENT_MODULES_PATH + 'activenode.js')
               .then(({setActive})=>setActive(this.children[position-1]));
               this.children[position-1].setView(document.getElementById("centralcontent"), "doc");
@@ -164,7 +172,7 @@
               categoriesroot.getRelationship().addEventListener("setChildrenView", async function() {
                 if (webuser.isProductAdmin() && this.children.length==0) {
                   const newNode = await this.createInstanceChild()
-                  newNode.setView(this.childContainer, "butaddnewnode", {parentNode: this});
+                  newNode.setView(this.childContainer, "butaddnewnode");
                 }
               }, "addNewNodeButton");
               categoriesroot.getRelationship().addEventListener("deleteChildNode", function(nodedeleted) {

@@ -25,8 +25,7 @@
           visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
           thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
           if (thisNode.parentNode.children.length>1) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
-          const newNode = await thisNode.parentNode.createInstanceChild(thisNode, true)
-          newNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {parentNode: thisNode.parentNode, noLang: true});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {noLang: true});
         }
         const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
         thisElement.addEventListener("click", async function(event) {
