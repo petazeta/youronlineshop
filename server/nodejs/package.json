@@ -1,5 +1,5 @@
 {
-  "name": "your online shop server",
+  "name": "your-online-shop-server",
   "version": "1.0.0",
   "description": "server api for your online shop",
   "main": "index.js",
