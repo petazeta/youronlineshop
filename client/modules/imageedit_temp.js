@@ -1,4 +1,4 @@
-export default async function imageEditFunc(myParams){
+export default async function imageEditFunc(myNode, labelNode, fileName){
   //myParams=>myNode, labelNode, imageElement
   //We have to produce a new fileName for when file edition
   let fileName= this.props.image;
@@ -13,8 +13,9 @@ export default async function imageEditFunc(myParams){
   }
   else fileName="file_" + this.props.id;
   const {Alert, AlertMessage}=await import('./alert.js');
-  (new Alert()).showAlert("loadimg", {myNode: myParams.myNode, labelNode: myParams.labelNode, fileName: fileName});
-  this.addEventListener("loadImage", function() {
+  (new Alert()).showAlert("loadimg", {myNode: myNode});
+  /*
+  myParams.myNode.addEventListener("loadImage", function() {
     if (this.error==true) {
       const loadErrorMsg=myParams.labelNode.getNextChild("loadError").getRelationship("domelementsdata").getChild().props.value;
       (new AlertMessage(loadErrorMsg, 3000)).showAlert();
@@ -24,4 +25,5 @@ export default async function imageEditFunc(myParams){
       this.dispatchEvent("finishAutoEdit");
     }
   });
+  */
 }

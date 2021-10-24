@@ -6,7 +6,7 @@
   const myNode=await thisNode.getRelationship("domelements").loadRequest("get my tree", {extraParents: currentLanguage.getRelationship("domelementsdata")});
   myNode.addEventListener("setChildrenView", async function() {
     if (webuser.isWebAdmin() && this.children.length==0) {
-      const newNode = await this.createInstanceChild();
+      const newNode = await this.createInstanceChildText();
       newNode.setView(this.childContainer, "butaddnewnode");
     }
   }, "addNewNodeButton");

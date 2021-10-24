@@ -17,8 +17,35 @@ function dbCheckDbLink(){
 }
 
 async function makeRequest(reqHeaders, action, parameters) {
-
   let user;
+  /* open close priciple used
+  actionName (key): {restriction, execution}
+  requestsMap: [{
+    actionName: "create user",
+    execution: async (parameters)=>{
+      var email=parameters.user_email ? parameters.user_email : null;
+      var result=await User.create(parameters.user_name, parameters.user_password, email);
+      if (typeof result=="object") return result.props.id;
+      else return result;
+    },
+    restriction: async () => {
+      const {default: login}= await import('./authorization.js');
+      user = await login(reqHeaders);
+      return await isAllowedToRead(user, parameters.nodeData)
+    }
+  },
+  ...]
+  
+    makeRequest(...) {
+      element=actionlistsmap.get(action) {
+        if (element.restriction) return
+        let params=get parameters ...
+        if (await restriction) throw new Error(safetyErrorMessage);
+        return execution(...params)
+      }
+    }
+  */
+  
   switch (action) {
     case "check requirements":
     case "check db link":
@@ -28,10 +55,8 @@ async function makeRequest(reqHeaders, action, parameters) {
     case "login":
     case "report":
     break;
-    case "edit my image":
-      await import('./filemanager.js'); //******
     default:
-    let {default: login}= await import('./authorization.js');
+    const {default: login}= await import('./authorization.js');
     user = await login(reqHeaders);
   }
   
@@ -39,7 +64,8 @@ async function makeRequest(reqHeaders, action, parameters) {
     if (!parameters.filter) parameters.filter={};
     parameters.filter['_langauges']=parameters.language;
   }
-  var safetyErrorMessage="Database safety";
+  const safetyErrorMessage="Database safety";
+  
   switch (action) {
     case "check requirements":
       return true;
@@ -148,7 +174,7 @@ async function makeRequest(reqHeaders, action, parameters) {
       var extraParents=parameters.extraParents ? parameters.extraParents : null;
       var req=new NodeMale();
       req.load(parameters.nodeData);
-      if (!await isAllowedToInsert(user, req)) {
+      if (!await isAllowedToInsert(user, parameters.nodeData)) {
         throw new Error(safetyErrorMessage);
       }
       return req.dbInsertMySelf(extraParents);
@@ -156,7 +182,7 @@ async function makeRequest(reqHeaders, action, parameters) {
       var extraParents=parameters.extraParents ? parameters.extraParents : null;
       var req=new NodeFemale();
       req.load(parameters.nodeData);
-      if (!await isAllowedToInsert(user, req)) {
+      if (!await isAllowedToInsert(user, parameters.nodeData)) {
         throw new Error(safetyErrorMessage);
       }
       return req.dbInsertMyChildren(extraParents);
@@ -233,14 +259,6 @@ async function makeRequest(reqHeaders, action, parameters) {
         throw new Error(safetyErrorMessage);
       }
       return req.dbUpdateMyProps(parameters.props);
-    case "edit my image":
-      var req=new NodeMale();
-      req.load(parameters.nodeData);
-      if (!await isAllowedToModify(user, parameters.nodeData)) {
-        throw new Error(safetyErrorMessage);
-      }
-      await import('./filemanager.js');
-      return true;
     default:
       throw new Error("no action recognised");
 

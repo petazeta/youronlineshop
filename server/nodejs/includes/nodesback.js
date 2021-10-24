@@ -339,7 +339,7 @@ const NodeFemaleBackMixing=Sup => class extends Sup {
         let value=this.childtablekeys[key];
         if (this.childtablekeysinfo[key]["Null"]=='NO' && !this.childtablekeysinfo[key]["Default"] && this.childtablekeysinfo[key].Extra!='auto_increment'){
           if (!Object.keys(thisChild.props).includes(value) || thisChild.props[value]===null) {
-            if (this.childtablekeysinfo[key].Type.includes('int') || sthis.childtablekeysinfo[key].Type.includes('decimal')) {
+            if (this.childtablekeysinfo[key].Type.includes('int') || this.childtablekeysinfo[key].Type.includes('decimal')) {
               thisChild.props[value]=0;
             }
             else {

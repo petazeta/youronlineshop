@@ -31,7 +31,7 @@
           //When there is no subcategories we show a add subcategory button
           subcategoriesMother.addEventListener("setChildrenView", async function() {
             if (webuser.isProductAdmin() && this.children.length==0) {
-              const newNode=await this.createInstanceChild();
+              const newNode=await this.createInstanceChildText();
               newNode.setView(this.childContainer, "butaddnewnode");
             }
           }, "addNewNodeButton");

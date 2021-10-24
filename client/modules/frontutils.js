@@ -1,7 +1,7 @@
 
-export function closesttagname (element, tagname, limitElement){ //tagname capitals
+export function closesttagname(element, tagname, limitElement){ //tagname capitals
   //if !myreturn.parentElement.tagName => document fragment
-  var myreturn=element;
+  let myreturn=element;
   while(myreturn && myreturn.parentElement && myreturn.parentElement.tagName && ( myreturn.parentElement.tagName.toLowerCase() != tagname.toLowerCase() )) {
     myreturn=myreturn.parentElement;
   }
@@ -17,9 +17,15 @@ export function getDomElementFromChild(myNode) {
   const skey=myNode.parentNode.getMySysKey('sort_order');
   if (!skey) return false;
   const children=myNode.parentNode.children.sort((a,b)=>a.props[skey]-b.props[skey]);
+  let elementChildren=[];
+  const invalidTags=['SCRIPT', 'TEMPLATE'];
+  for (const elementChild of myNode.parentNode.childContainer.children) {
+    if (invalidTags.includes(elementChild.tagName)) continue;
+    elementChildren.push(elementChild);
+  }
   for (const i in children) {
     if (children[i]==myNode) {
-      return myNode.parentNode.childContainer.children[i];
+      return elementChildren[i];
     }
   }
 }

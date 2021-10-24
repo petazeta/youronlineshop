@@ -46,7 +46,7 @@
         .then(({setActive})=>setActive(itemNode));
         itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
       }
-      this.createInstanceChild()
+      this.createInstanceChildText()
       .then(newNode=>newNode.setView(thisElement, "butaddnewnode", {onAdded: itemView}));
     }
   }, "addNewNodeButton");

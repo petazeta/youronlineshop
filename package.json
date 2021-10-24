@@ -1,16 +1,20 @@
 {
-  "name": "your online shop server",
+  "name": "@petazeta/your-online-shop-server",
   "version": "1.0.0",
   "description": "server api for your online shop",
-  "main": "index.js",
+  "main": "test.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node serverindex.js",
+    "test": "node serverindex.js"
   },
   "author": "alberto melchor herrera",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "mysql": "^2.18.1"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }

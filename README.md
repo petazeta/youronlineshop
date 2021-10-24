@@ -3,7 +3,7 @@
 
 ----------------------------------------------------------------------
 
-# Your Online Shop System V 3.5.1
+# Your Online Shop System V 3.6.0
 
 ## Live Demo
 
@@ -29,7 +29,7 @@ If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: m
 2. Unpack it to the desired folder (files could be inside a folder or not).
 3. Create a new mysql database.
 4. Edit database settings at: server/nodejs/includes/dbcfg.json (Node Js) or server/php/includes/config.php (Php).
-5. Nodejs: Open your terminal at server/nodejs/ folder and type: npm install and then node index.js. Once the server is running then you can open your web browser (port 8080) and continue with the installation process.
+5. Nodejs: Open your terminal at main folder and type: npm install and then npm start. Once the server is running then you can open your web browser (port 8080) and continue with the installation process.
 Php: Open your web browser (yos folder) and continue with the installation process.
 
 ## Support

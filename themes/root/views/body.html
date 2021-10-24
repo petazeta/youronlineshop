@@ -116,7 +116,7 @@
           //When no children and admin we create the plus add button and click on int
           menusMother.addEventListener("setChildrenView", async function() {
             if (webuser.isWebAdmin() && this.children.length==0) {
-              const newNode = await this.createInstanceChild();
+              const newNode = await this.createInstanceChildText();
               newNode.setView(this.childContainer, "butaddnewnode");
             }
           }, "addNewNodeButton");
@@ -171,7 +171,7 @@
               const categoriesroot=await categoriesrootmother.getChild().loadRequest("get my tree", {deepLevel: 3, extraParents: currentLanguage.getRelationship("domelementsdata")});
               categoriesroot.getRelationship().addEventListener("setChildrenView", async function() {
                 if (webuser.isProductAdmin() && this.children.length==0) {
-                  const newNode = await this.createInstanceChild()
+                  const newNode = await this.createInstanceChildText();
                   newNode.setView(this.childContainer, "butaddnewnode");
                 }
               }, "addNewNodeButton");

@@ -1,147 +1,109 @@
 <!--
-thisParams ==> myNode, labelNode, fileName 
+thisParams ==> No vale :-> myNode, labelNode, fileName 
+----
+
+myNode => itemNode
+
+Aparecen la lista y debaj el boton de selecionar archivo.
+Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se supera el limite de imágenes.
+
 -->
 <div class="alert dialogbox">
   <div class="bttopinsiderightinside">
     <button type="button" class="closeimage minibtn transp" style="margin-right:10px; margin-top: 6px;">
       <div class="closeimage"></div>
     </button>
-    
     <script>
       thisElement.addEventListener("click",  ()=>{
         thisNode.hideAlert();
+        import('./' + CLIENT_MODULES_PATH + 'availablestates.js')
+        .then(({execUrlAction})=>{
+          execUrlAction(window.location.search);
+        });
       });
     </script>
   </div>
-  <form enctype="multipart/form-data" id="form-file">
+  <form enctype="multipart/form-data" id="loadimg">
     <div style="display:flex; flex-flow: column; gap: 1em;">
       <div>
         <span style="position:relative;">
           <div data-id="butedit" class="btmiddleright"></div>
           <h3 style="margin: 0.2em"></h3>
           <script>
-            thisParams.labelNode.getNextChild("headNote").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+            const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
+            const labelNode=textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("loadImg");
+            labelNode.getNextChild("headNote").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
             //adding the edition pencil
             if (webuser.isWebAdmin()) {
               const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
               visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-              thisParams.labelNode.getNextChild("headNote").getRelationship("domelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+              labelNode.getNextChild("headNote").getRelationship("domelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
             }
           </script>
         </span>
       </div>
-      <div>
+      <table style="align-self: center;"></table>
+      <script>
+        thisParams.myNode.getRelationship("itemsimages").setChildrenView(thisElement, "loadimglist");
+      </script>
+      <div style="margin-bottom: 0.2em">
         <div class="form-group">
           <div style="position:relative;">
             <div data-id="butedit" class="btmiddleright"></div>
             <label for="fileData" style="align-self: left;"></label>
             <script>
-              thisParams.labelNode.getNextChild("file").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
+              const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
+              const labelNode=textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("loadImg");
+              labelNode.getNextChild("file").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
               //adding the edition pencil
               if (webuser.isWebAdmin()) {
                 const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
                 visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-                thisParams.labelNode.getNextChild("file").getRelationship("domelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                labelNode.getNextChild("file").getRelationship("domelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
               }
             </script>
           </div>
           <div>
-            <input name="fileData" type="file" style="border: 1px solid #ccc;font-size: 13pt;padding: 5px 10px; border-radius: 6px;">
+            <div class="circleloader minicircleloader" style="visibility: hidden;"></div>
+            <input name="fileData" type="file">
           </div>
-        </div>
-      </div>
-      <div style="display:flex; gap: 1em; align-self: center;">
-        <div style="position:relative;">
-          <div data-id="butedit" class="btmiddleright"></div>
-          <button type="button" class="btn" data-id="but"></button>
-          <script>
-            thisElement.onclick=function(){
-              thisNode.hideAlert();
-            };
-            thisParams.labelNode.getNextChild("cancel").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
-            //adding the edition pencil
-            if (webuser.isWebAdmin()) {
-              const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
-              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-              thisParams.labelNode.getNextChild("cancel").getRelationship("domelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-            }
-          </script>
-        </div>
-        <div style="position:relative;">
-          <div data-id="butedit" class="btmiddleright"></div>
-          <div class="circleloader minicircleloader" style="visibility: hidden;"></div>
-          <button type="submit" class="btn" data-id="but" name="submitbutton"></button>
-          <script>
-            thisParams.labelNode.getNextChild("send").getRelationship("domelementsdata").getChild().writeProperty(thisElement);
-            //adding the edition pencil
-            if (webuser.isWebAdmin()) {
-              const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
-              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-              thisParams.labelNode.getNextChild("send").getRelationship("domelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-            }
-          </script>
         </div>
       </div>
     </div>
   </form>
   <script>
+    const {Alert, AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
     const {default: resizeImage} = await import('./' + CLIENT_MODULES_PATH + 'resizeimage.js');
-    let newImageSmall, newImageBig;
+    let imageName, newImageSmall, newImageBig;
     thisElement.elements.fileData.addEventListener("change", async function() {
-      thisElement.elements.submitbutton.disabled=true; //Waiting
-      thisElement.elements.submitbutton.previousElementSibling.style.visibility="visible";
+      const parentNode=thisParams.myNode.getRelationship("itemsimages");
+      if (parentNode.children.length>=3) {
+        (new AlertMessage("too many children")).showAlert();
+        return;
+      }
+      thisElement.elements.fileData.disabled=true; //Waiting
+      thisElement.elements.fileData.previousElementSibling.style.visibility="visible";
+      imageName=this.files[0].name;
       newImageSmall=await resizeImage(this.files[0], 200);
       newImageBig=await resizeImage(this.files[0], 520);
-      thisElement.elements.submitbutton.disabled=false;
-      thisElement.elements.submitbutton.previousElementSibling.style.visibility="hidden";
-    });
-    thisElement.addEventListener("submit", async function(ev) {
-      ev.preventDefault();
-      if (!thisElement.elements.fileData.value) return false;
-      const {default: config} = await import('./' + CLIENT_MODULES_PATH + 'config.js');
-      async function loadFile(formData, fileSize) {
-        formData.append('action', 'edit my image');
-        const reducedData=await thisParams.myNode.request("edit my props", null, true);
-        formData.append('parameters', JSON.stringify({nodeData: reducedData.avoidrecursion(), fileSize: fileSize}));
-        let method='post';
-        let contentType; //contentType undefined in porpouse so client will set it with boundary
-        const fetchParams={
-          method: method,
-          headers: {},
-          body: formData,
-        };
-        if (webuser.getAuthorizationToken()) fetchParams.headers={...fetchParams.headers, ...webuser.getAuthorizationToken()};
-        return fetch(config.uploadFilePath, fetchParams)
-        .then(res => res.text())
-        .then(resultTxt => {
-          let result=null;
-          try {
-            result=JSON.parse(resultTxt);
-          }
-          catch(e){//To send errors from server in case the error catching methods at backend fail
-            throw new Error("Action: " + 'edit my image' + ". Error: Response error: "+ resultTxt);
-          }
-          if (result && typeof result=="object" && result.error==true) {
-            throw (new Error('edit my image' + '. Message: ' + result.message));
-          }
-          return result;
-        })
-        .catch(error => {console.error(error); throw error;});
-      };
-      //indicating uploading image
-      //thisParams.labelNode.getNextChild("uploadingWait").getRelationship("domelementsdata").getChild().writeProperty(thisElement.elements.submitbutton);
-      thisElement.elements.submitbutton.disabled=true;
-      thisElement.elements.submitbutton.previousElementSibling.style.visibility="visible";
-      const myFormDataSmall=new FormData();
-      myFormDataSmall.append(thisParams.fileName, newImageSmall, thisParams.fileName + ".png");
-      const myFormDataBig=new FormData();
-      myFormDataBig.append(thisParams.fileName, newImageBig, thisParams.fileName + ".png");
-      loadFile(myFormDataSmall, "small")
-      .then(result => loadFile(myFormDataBig, "big"))
-      .then(result => {
-        thisNode.hideAlert();
-        thisParams.myNode.dispatchEvent("loadImage");
-      });
+      
+      let currentNode;
+      if (parentNode.children.length==0) {
+        currentNode=parentNode.createInstanceChild();
+      }
+      else {
+        currentNode=parentNode.children[parentNode.children.length-1];
+      }
+      const {default: addition}=await import('./' + CLIENT_MODULES_PATH + 'addition.js');
+      const newNode=await addition(currentNode, {imgBlob: newImageSmall});
+      newNode.props.imagename=`image_id_${newNode.props.id}.png`;
+      await newNode.request("edit my props", {props:{imagename: newNode.props.imagename}});
+      const images=[newImageSmall, newImageBig];
+      const {default: loadImgBigSmall} = await import('./' + CLIENT_MODULES_PATH + 'loadimg.js');
+      await loadImgBigSmall(newNode, images[0], images[1]);
+      thisElement.elements.fileData.disabled=false; //Waiting
+      thisElement.elements.fileData.previousElementSibling.style.visibility="hidden";
+      thisElement.reset();
     });
   </script>
 </div>

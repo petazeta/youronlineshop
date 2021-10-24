@@ -69,7 +69,7 @@ const NodeFrontMixing=Sup => class extends Sup {
     return this;
   }
   //It doesn't replace, it adds the content
-  async appendChildView(child, container, tp, params) {
+  async appendChildView(child, params, container, tp) {
     if (!container) container=this.childContainer; //Default value for container
     else this.childContainer=container; //Update default
     if (!tp) tp=this.myChildTp; //Default value
@@ -519,38 +519,26 @@ const NodeFemaleFrontMixing=Sup => class extends Sup {
     return super.loadasc(source, level, thisProperties, myConstructor);
   }
 
-  async createInstanceChild(position=1, noLang=false) {
+  createInstanceChild(position=1) {
     const newNode=new NodeMale();
-    /*
-    newNode.parentNode=new NodeFemale;
-    newNode.parentNode.load(this, 1, 0, "id");
-    */
     newNode.parentNode=this;
     const skey=newNode.parentNode.getMySysKey('sort_order');
     if (skey) {
       newNode.props[skey]=position;
     }
-    await newNode.loadRequest("get my relationships");
-    //We search for a relationship about language so we have to add then a data language node child
-    const datarel = newNode.relationships.find(rel => rel.syschildtablekeysinfo.some( syskey => syskey.type=='foreignkey' && syskey.parenttablename=='TABLE_LANGUAGES' ) );
-    if (datarel && !noLang)  datarel.addChild(new NodeMale());
     return newNode;
   }
-  //get one element that has change its order and the old order and updates the siblings order
-  static updateSiblingsOrder(element, oldOrder) {
-    let skey=element.parentNode.getMySysKey('sort_order');
-    if (skey && element.props[skey]) {
-      let swapChild;
-      for (const child of element.parentNode.children) {
-        if (child.props[skey] == element.props[skey] && element.props.id!=child.props.id) {
-          swapChild=child;
-          break;
-        }
-      }
-      if (swapChild) swapChild.props[skey]=oldOrder; //It could not find it when exceeds pagination
-      return swapChild;
-    }
+  createInstanceChildText(position=1){
+    const newNode=this.createInstanceChild(position);
+    return newNode.loadRequest("get my relationships")
+    .then(newNode=>{
+      //We search for a relationship about language so we have to add then a data language node child
+      const datarel = newNode.relationships.find(rel => rel.syschildtablekeysinfo.some( syskey => syskey.type=='foreignkey' && syskey.parenttablename=='TABLE_LANGUAGES' ) );
+      if (datarel)  datarel.addChild(new NodeMale());
+      return newNode;
+    });
   }
+  
 }
 
 //We add methods

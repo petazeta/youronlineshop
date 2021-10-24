@@ -15,8 +15,11 @@ if (!window.location.search && config.initUrl && config.initUrl.includes('?')) {
 window.textEditorSaved=''; //This var saves the textEditor data to not be deteleted each time
 
 import('./modules/availablestates.js')
-.then(({onPopState})=>{
-  window.onpopstate=onPopState;
+.then(({execUrlAction})=>{
+  window.onpopstate= (event) => {
+    if (!event.state) return;
+    execUrlAction(event.state.url);
+  };
 });
 
 

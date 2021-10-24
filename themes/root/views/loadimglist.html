@@ -1,0 +1,33 @@
+<!--
+  thisParams.imgBlob;
+--> 
+<tr>
+  <td style="padding: 0.4em;">
+    <img style="padding-right: 1em;">
+    <script>
+      if (thisParams.imgBlob) {
+        const objectURL = URL.createObjectURL(thisParams.imgBlob);
+        thisElement.src = objectURL;
+      }
+      else {
+        const {default: config} = await import('./' + CLIENT_MODULES_PATH + 'config.js');
+        const myImage=thisNode.props.imagename || config.defaultImg;
+        thisElement.src=config.catalogPath + "images/small/" + myImage;
+      }
+    </script>
+  </td>
+  <template>
+    <td class="containerbuttons" style="position:relative; vertical-align: middle;">
+      <div class="admnbtsgrid"></div>
+      <script>
+          thisNode.appendView(thisElement, "butdelete");
+          thisNode.appendView(thisElement, "butchpos", {position: "vertical"});
+      </script>
+    </td>
+  </template>
+  <script>
+    if (webuser.isProductAdmin()) {
+      thisNode.appendView(thisElement.parentElement, thisElement);
+    }
+  </script>
+</tr>

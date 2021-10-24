@@ -1,5 +1,5 @@
 <!--
-
+  picture: picture id
 -->
 <div class="productlargecontainer rmbox" style="color:rgb(40,40,40);">
   <div class="bttopinsiderightinside">
@@ -27,7 +27,8 @@
       <img class="productimg">
       <script>
         const {default: config} = await import('./' + CLIENT_MODULES_PATH + 'config.js');
-        const myImage=thisNode.props.image || config.defaultImg;
+        const imageDataNode=thisNode.getRelationship("itemsimages").getChild();
+        const myImage=imageDataNode && imageDataNode.props.imagename || config.defaultImg;
         thisElement.src=config.catalogPath + "images/big/" + myImage;
         
         thisNode.addEventListener("changeProperty", (property) => {
@@ -39,8 +40,7 @@
           const {textContentRoot} = await import('./' + CLIENT_MODULES_PATH + 'textcontent.js');
           const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
           visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
-          const {default: imageEditFunc} = await import('./' + CLIENT_MODULES_PATH + 'imageedit.js');
-          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "image", thisAttribute: "data-src", autoeditFunc: imageEditFunc, autoeditParams: {imageElement: thisElement, myNode: thisNode, labelNode: textContentRoot.getNextChild("labels").getNextChild("middle").getNextChild("loadImg")}});
+          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "buteditimage");
         }
       </script>
     </div>
@@ -137,6 +137,10 @@
       </div>
     </div>
   </div>
+  <div class="thumbnails" style="display:flex; gap: 0.6em; margin-left: 0.5em; margin-bottom: 0.5em;"></div>
+  <script>
+    thisNode.getRelationship("itemsimages").setChildrenView(thisElement, "itemthumbnails");
+  </script>
   <div style="display: inline-block; position:relative; z-index:6;">
     <div class="btmiddleright" style="display:flex;">
       <div data-id="butedit" data-but-name="norm"></div>

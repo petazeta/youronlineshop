@@ -2,7 +2,7 @@
   thisNode: previousSibling
   thisParams:
     noLang: when we don't want to add also the language parent
-    onAdded(newNode):
+    onAdded(newNode)
 -->
 <button type="button" class="butadd">
   <div class="plusimage"></div>
@@ -14,44 +14,14 @@
   </script>
 </button>
 <script>
-  const {languages, currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
-  thisElement.addEventListener("click", async event=>{
-    event.preventDefault();
-    let parameters=null;
-    if (!thisParams.noLang) parameters={extraParents: currentLanguage.getRelationship("domelementsdata")};
-    const skey=thisNode.parentNode.getMySysKey('sort_order');
-    let position;
-    if (skey && thisNode.parentNode.children.length) {
-      position=thisNode.props[skey]+1;
-    }
-    const newNode=await thisNode.parentNode.createInstanceChild(position);
-    //console.log("newNode", newNode);
-    await newNode.loadRequest("add my tree", parameters);
-    //We copy the data row to any language
-    if (languages && languages.children.length>1 && !thisParams.noLang) {
-      const restLanguages=languages.children.filter(lang => lang.props.id!=currentLanguage.props.id);
-      const candidates=newNode.arrayFromTree();
-      for (const lang of restLanguages) {
-        for (const candidate of candidates) {
-          if (candidate.detectMyGender() == "female") {
-            for (const syskey of candidate.syschildtablekeysinfo) {
-              if (syskey.parenttablename==languages.props.parenttablename
-                && syskey.type=='foreignkey') {
-                  candidate.request("add my children", {extraParents: lang.getRelationship(candidate.props.name)});
-                  break;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    thisNode.parentNode.addChild(newNode);
-
-    if (thisParams.onAdded) await thisParams.onAdded(newNode);
-    else if (newNode.parentNode.children.length>1) await newNode.parentNode.appendChildView(newNode);
-    else await newNode.parentNode.setChildrenView();
-
-    thisNode.parentNode.dispatchEvent("addNewNode", newNode);
+  const {default: addition}=await import('./' + CLIENT_MODULES_PATH + 'addition.js');
+  let addFunc=()=>addition(thisNode, thisParams);
+  if (!thisParams.noLang) {
+    const {languages, currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+    addFunc=()=>addition(thisNode, thisParams, languages, currentLanguage);
+  }
+  thisElement.addEventListener("click", (ev)=>{
+    ev.preventDefault();
+    addFunc();
   });
 </script>

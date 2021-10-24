@@ -1,11 +1,10 @@
-export function onPopState(event) {
-  if (!event.state) return;
+export function execUrlAction(url) {
   /*
   let link=document.querySelector("a[href='" + event.state.url + "']");
   if (!link) link=document.querySelector("*[data-href='" + event.state.url + "']");
   if (link) link.click();
   */
-  const unpaginatedUrl=event.state.url.replace(/&page=\d+/, '');
+  const unpaginatedUrl=url.replace(/&page=\d+/, '');
   const action=getPopStateAction(unpaginatedUrl);
 
   if (typeof action=="function")  {
