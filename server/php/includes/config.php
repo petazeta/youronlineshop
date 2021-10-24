@@ -1,7 +1,7 @@
 <?php
 //DataBase
-define('DB_DATABASENAME', 'test');
-define('DB_USERNAME', 'uname');
-define('DB_USERPWD', 'pwd');
+define('DB_DATABASENAME', 'latest');
+define('DB_USERNAME', 'root');
+define('DB_USERPWD', 'prueba');
 define('DB_HOST', 'localhost');
 ?>
