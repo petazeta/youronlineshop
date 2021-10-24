@@ -478,10 +478,10 @@ INSERT INTO `itemsdata` (`id`, `name`, `descriptionlarge`, `descriptionshort`, `
 
 CREATE TABLE `itemsimages` (
   `id` int NOT NULL,
-  `imagename` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `imagename` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `_items` int DEFAULT NULL,
   `_items_position` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
