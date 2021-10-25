@@ -51,7 +51,7 @@
           <div data-id="butedit" class="btmiddleright"></div>
           <a data-button="true" href="" class="tit"></a>
           <script>
-            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement);
+            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "name");
             //adding the edition pencil
             if (webuser.isProductAdmin() || webuser.isProductSeller()) {
               const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
@@ -98,7 +98,7 @@
           <div data-id="butedit" class="btmiddleright"></div>
           <div></div>
           <script>
-            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement);
+            thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "descriptionshort");
             //adding the edition pencil
             if (webuser.isProductAdmin() || webuser.isProductSeller()) {
               const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
@@ -117,7 +117,7 @@
               <div data-id="butedit" class="btmiddleright"></div>
               <div style="padding-right: 0.2em"></div>
               <script>
-                thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement);
+                thisNode.getRelationship("itemsdata").getChild().writeProperty(thisElement, "price");
                 //adding the edition pencil
                 if (webuser.isProductAdmin() || webuser.isProductSeller()) {
                   const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
