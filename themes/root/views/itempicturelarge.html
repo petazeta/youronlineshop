@@ -139,7 +139,8 @@
   </div>
   <div class="thumbnails" style="display:flex; gap: 0.6em; margin-left: 0.5em; margin-bottom: 0.5em;"></div>
   <script>
-    thisNode.getRelationship("itemsimages").setChildrenView(thisElement, "itemthumbnails");
+    if (thisNode.getRelationship("itemsimages").children.length<2) thisElement.style.display="none";
+    else thisNode.getRelationship("itemsimages").setChildrenView(thisElement, "itemthumbnails");
   </script>
   <div style="display: inline-block; position:relative; z-index:6;">
     <div class="btmiddleright" style="display:flex;">

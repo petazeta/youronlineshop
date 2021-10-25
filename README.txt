@@ -2,7 +2,7 @@
 * YOS Version *
 ***************
 
-3.6.0 10-24-2021 (month-day-year)
+3.6.2 10-25-2021 (month-day-year)
 
 
 ***********
@@ -31,7 +31,7 @@ If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: m
 2 - Unpack it to the desired folder (files could be inside a folder or not).
 3 - Create a new mysql database.
 4 - Edit database settings at: server/nodejs/includes/dbcfg.json (Node js) or server/php/includes/config.php (Php).
-5 - Nodejs: Open your terminal at main folder and type: npm install and then npm start. Once the server is running then you can open your web browser (port 8080) and continue with the installation process.
+5 - Nodejs: Open your terminal at main folder and type: npm install and then npm test. Once the server is running then you can open your web browser (port 8080) and continue with the installation process.
 Php: Open your web browser (yos folder) and continue with the installation process.
 
 
