@@ -10,10 +10,10 @@ class Safety {
   }
   private function gettablename($myelement){
     if (gettype($myelement)=="string") return $myelement; //It is the table name
-    if (get_class($myelement)=="NodeFemale") {
+    if (Node::detectGender($myelement)=="NodeFemale") {
       return $myelement->props->childtablename;
     }
-    else if (get_class($myelement)=="NodeMale") {
+    else if (Node::detectGender($myelement)=="NodeMale") {
       return $myelement->parentNode->props->childtablename;
     }
     else {
@@ -41,7 +41,7 @@ class Safety {
   }
   private function is_owner($myelement, $user_id) {
     //user relationship case
-    if (get_class($myelement)=="NodeFemale") {
+    if (Node::detectGender($myelement)=="NodeFemale") {
       if ($myelement->props->parenttablename=="TABLE_USERS") {
         if ($myelement->partnerNode && $myelement->partnerNode->props->id == $user_id) return true;
       }
