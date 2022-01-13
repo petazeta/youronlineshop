@@ -72,5 +72,9 @@ Y.O.S. system has a themes feature. Tou can find theme files at client/themes fo
 * More *
 ********
 
-Find us at https://www.youronlineshop.net/ for more information.
+Multi-shop feature is now available. You can host several stores by adding their settings to the configuration files.
+
+The files server/cfg/dbcfg.js and server/cfg/config.js contains the stores configuration. Store folder inside catalog-image one can be replicated for each site. You must also enable multi-shop by stabishing isSiteUnique: false at server/cfg/default.js.
+
+Now you should be able to access each shop by adding the shop name (label at server/cfg/config.js and server/cfg/dbcfg.js) after the host name: localhost:8000/shopname.
 
