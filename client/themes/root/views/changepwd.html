@@ -1,0 +1,169 @@
+<!--
+thisNode -> ... dashboard - changepwd
+-->
+<div class="dashboard">
+  <form>
+    <div id="logform">
+      <div class="msgbox"  >
+        <div data-id="butedit" class="btmiddleright"></div>
+        <span></span>
+        <script>
+          const title=thisNode.getNextChild("titmsg").getRelationship("siteelementsdata").getChild();
+          title.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+      <div class="boxframe loginform">
+        <div class="form-group" style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <label class="form-label" for="new_password"></label>
+          <script>
+            const myNode=thisNode.getNextChild("newpwd").getRelationship("siteelementsdata").getChild();
+            myNode.writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+          <input type="password" class="form-control" placeholder="" name="new_password">
+          <script>
+            thisNode.getNextChild("newpwd").getRelationship("siteelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
+          </script>
+        </div>
+        <div class="form-group" style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <label class="form-label" for="repeat_password"></label>
+          <script>
+            const myNode=thisNode.getNextChild("repeatpwd").getRelationship("siteelementsdata").getChild();
+            myNode.writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+          <input type="password" class="form-control" placeholder="" name="repeat_password">
+          <script>
+            thisNode.getNextChild("repeatpwd").getRelationship("siteelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
+          </script>
+        </div>
+        <div style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <button type="submit" class="btn" data-id="but"></button>
+          <script>
+            thisNode.getNextChild("btsmt").getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
+          </script>
+          <input type="hidden" disabled>
+          <script>
+            const myNode=thisNode.getNextChild("btsmt").getRelationship("siteelementsdata").getChild();
+            myNode.writeProperty(thisElement);
+            thisElement.onblur=function(){
+              thisElement.type="hidden";
+              thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+            }
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="pwdCharError" disabled>
+        <script>
+          const logform=thisNode.getrootnode().getNextChild("logform");
+          const myNode=logform.getNextChild("pwdCharError").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement, null, "value");
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisElement.type="text";
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="pwdOk" disabled>
+        <script>
+          const myNode=thisNode.getNextChild("pwdChangeOk").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisElement.type="text";
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="pwdNotOk" disabled>
+        <script>
+          const myNode=thisNode.getNextChild("pwdChangeError").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisElement.type="text";
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="pwdDoubleError" disabled>
+        <script>
+          const myNode=thisNode.getNextChild("pwdDoubleError").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisElement.type="text";
+          }
+        </script>
+      </div>
+    </div>
+  </form>
+  <script>
+    const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+    thisElement.onsubmit=async function(event) {
+      event.preventDefault();
+      const {checkValidData}= await import('./' + SHARED_MODULES_PATH + 'datainput.js');
+      const myCheck=checkValidData({props: {new_password: this.elements.new_password.value}});
+      if (myCheck!==true) {
+        //Errors in characters
+        (new AlertMessage(this.elements.pwdCharError.value, 3000)).showAlert();
+        if (this.elements[myCheck.errorKey]) this.elements[myCheck.errorKey].focus();
+        return;
+      }
+      if (this.elements.new_password.value!=this.elements.repeat_password.value) {
+        (new AlertMessage(this.elements.pwdDoubleError.value, 3000)).showAlert();
+        this.elements.new_password.focus();
+        return;
+      }
+      webuser.updateMyPwd(thisElement.elements.new_password.value)
+      .then(res=>(new AlertMessage(this.elements.pwdOk.value, 3000)).showAlert())
+      .catch(error=>{
+        (new AlertMessage(this.elements.pwdNotOk.value, 3000)).showAlert();
+        console.error(error);
+      });
+    }
+  </script>
+</div>

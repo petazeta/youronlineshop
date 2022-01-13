@@ -1,0 +1,247 @@
+<!--
+thisNode -> text node "logform"
+-->
+<form>
+  <div id="logform">
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        const title=thisNode.getNextChild("lgintt").getRelationship("siteelementsdata").getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </div>
+    <div class="boxframe loginform">
+      <div class="form-group">
+        <div style="display: table; position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <label class="form-label" for="user_name"></label>
+          <script>
+            const myNode=thisNode.getNextChild("userName").getRelationship("siteelementsdata").getChild();
+            myNode.writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+        </div>
+        <input class="form-control" placeholder="" name="user_name">
+        <script>
+          thisNode.getNextChild("userName").getRelationship("siteelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
+        </script>
+      </div>
+      <div class="form-group">
+        <div style="display: table; position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <label class="form-label" for="user_password"></label>
+          <script>
+            const myNode=thisNode.getNextChild("password").getRelationship("siteelementsdata").getChild();
+            myNode.writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+        </div>
+        <input type="password" class="form-control" placeholder="" name="user_password">
+        <script>
+          thisNode.getNextChild("password").getRelationship("siteelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
+        </script>
+      </div>
+      <div class="rememberme" style="position:relative;">
+        <input type="checkbox" id="rememberme" name="rememberme">
+        <script>
+          if (localStorage.getItem("user_name")) thisElement.checked=true;
+        </script>
+        <div data-id="butedit" class="btmiddleright"></div>
+        <label for="rememberme"></label>
+        <script>
+          const myNode=thisNode.getNextChild("rememberme").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="submit" class="btn" data-id="but"></button>
+        <script>
+          const myTextNode=thisNode.getNextChild("login").getRelationship("siteelementsdata").getChild();
+          myTextNode.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myTextNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="userCharError" disabled>
+      <script>
+        const myNode=thisNode.getNextChild("userCharError").getRelationship("siteelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdCharError" disabled>
+      <script>
+        const myNode=thisNode.getNextChild("pwdCharError").getRelationship("siteelementsdata").getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="loginOk" disabled>
+      <script>
+        const myNode=thisNode.getNextChild("loginOk").getRelationship("siteelementsdata").getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="userError" disabled>
+      <script>
+        const myNode=thisNode.getNextChild("userError").getRelationship("siteelementsdata").getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdError" disabled>
+      <script>
+        const myNode=thisNode.getNextChild("pwdError").getRelationship("siteelementsdata").getChild();
+        myNode.writeProperty(thisElement, null, "value");
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          thisElement.type="text";
+        }
+      </script>
+    </div>
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          const myNode=thisNode.getNextChild("newuserbt").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onclick=function(){
+            thisNode.setView(document.getElementById("centralcontent"), "newform");
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>          
+      </div>
+    </div>
+  </div>
+</form>
+<script>
+  const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+  thisElement.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const {checkValidData} = await import('./' + SHARED_MODULES_PATH + 'datainput.js')
+    const checkData=checkValidData({props: {user_name: this.elements.user_name.value, user_password: this.elements.user_password.value}});
+    if (checkData!==true) {
+      //Errors in characters
+      let errorMessage;
+      if (checkData.errorKey=="user_name") errorMessage=this.elements.userCharError.value;
+      else if (checkData.errorKey=="user_password") errorMessage=this.elements.pwdCharError.value;
+      if (this.elements[checkData.errorKey]) this.elements[checkData.errorKey].focus();
+      (new AlertMessage(errorMessage, 3000)).showAlert();
+      return false;
+    }
+    const storeChecked=thisElement.elements.rememberme.checked;
+    const uname=thisElement.elements.user_name.value;
+    const upass=thisElement.elements.user_password.value;
+    webuser.login(uname, upass)
+    .then(async ()=> {
+      new AlertMessage(thisElement.elements.loginOk.value, 3000).showAlert();
+      if (storeChecked) {
+        localStorage.setItem("user_name", uname);
+        localStorage.setItem("user_password", upass);
+      }
+      else {
+        if (localStorage.getItem("user_name")) localStorage.removeItem("user_name");
+      }
+
+      //if cart it is not empty -> redirect to checkout
+      const {myCart} = await import('./' + CLIENT_MODULES_PATH + 'cart.js')
+      if (myCart.getRelationship("cartitem").children.length>0) {
+        thisNode.parentNode.getChild("checkout").setView(document.getElementById("centralcontent"), 'chktmain');
+      }
+      else {
+        //Come back to the previous page (before login)
+        const url=webuser.referrer;
+        const {getPopStateAction} = await import('./' + CLIENT_MODULES_PATH + 'availablestates.js');
+        const action=getPopStateAction(url);
+        if (action) {
+          webuser.referrer=null; //reset referrer
+          action();
+          if (!(history.state && history.state.url==url)) {
+            history.pushState({url:url}, null, url);
+          }
+        }
+        else {
+          const basicPath=thisNode.parentNode.getChild("dashboard");
+          basicPath.setView(document.getElementById("centralcontent"), "showuserinfo");
+        }
+      }
+    })
+    .catch(error => { //error is Error object
+      let errorMessage=error;
+      if (this.elements[error.message]) errorMessage=this.elements[error.message].value;
+      new AlertMessage(errorMessage, 3000).showAlert();
+    });
+  });
+</script>

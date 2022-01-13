@@ -1,0 +1,118 @@
+<!--
+-->
+<div class="boxlist">
+  <div class="category-container" style="display: none">
+    <span style="position:relative; z-index:1">
+      <div data-id="admnbuts" class="btmiddleright">
+        <div class="admnbtsgrid"></div>
+      </div>
+      <div data-id="butedit" class="btmiddleleft"></div>
+      <a class="category" data-button="true" data-hbutton="true"></a>
+      <script>
+        const {currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+        const {setActive} = await import('./' + CLIENT_MODULES_PATH + 'activenode.js');
+        const url='?category=' + thisNode.props.id;
+        thisElement.href=url;
+        if (thisNode.selected) setActive(thisNode); //If selected in advance
+        async function showsubcategories() {
+          thisNode.getRelationship().addEventListener("deleteChildNode", function(nodedeleted) {
+            //Remove the products container content
+            import('./' + CLIENT_MODULES_PATH + 'centrallastactive.js')
+            .then(({getLastActive})=>{
+              if (this.children.length==0 && nodedeleted==getLastActive()) {
+                document.getElementById("centralcontent").innerHTML="";
+              }
+            });
+          });
+          const subcContainer=thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer");
+          subcContainer.style.display="none";
+          const subcategoriesMother=thisNode.getRelationship();
+          //When there is no subcategories we show a add subcategory button
+          subcategoriesMother.addEventListener("setChildrenView", async function() {
+            if (webuser.isProductAdmin() && this.children.length==0) {
+              const newNode=await this.createInstanceChildText();
+              newNode.setView(this.childContainer, "butaddnewnode");
+            }
+          }, "addNewNodeButton");
+          const catalogView=function(childNode, pageNum) {
+            const prevUrl='?category=' + childNode.parentNode.partnerNode.props.id;
+            const url= prevUrl + '&subcategory=' + childNode.props.id;
+            //it doesn't record state when: go back (dont state twice the same url)
+            if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+            setActive(childNode);
+            const params={tmpt: "catalog"};
+            if (pageNum) params.pageNum=pageNum;
+            childNode.setView(document.getElementById("centralcontent"), "pagination", params);
+          }
+          //when a new subcategory is created we select it
+          subcategoriesMother.addEventListener("addNewNode", function(newNode) {
+            catalogView(newNode);
+          }, "addANewNode");
+          //If node was selected then we select the following one
+          subcategoriesMother.addEventListener("deleteChildNode", function(delNode) {
+            if (delNode.selected 
+            && this.getMySysKey("sort_order")
+            && this.children.length>0) {
+              let position=1;
+              if (delNode.props[this.getMySysKey("sort_order")] > 1) position=delNode.props[this.getMySysKey("sort_order")]-1;
+              catalogView(this.children[position-1]);
+            }
+          }, "delANewNode");
+          //we show subcategories (and click some subcategory)
+          await subcategoriesMother.setChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "subcategory");
+          //subcategories container set to visible ?
+          subcContainer.style.display="block";
+        };
+        
+        thisNode.getRelationship("itemcategoriesdata").getChild().writeProperty(thisElement);
+        if (webuser.isProductAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisNode.getRelationship("itemcategoriesdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+        }
+
+        const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+        thisElement.addEventListener("click", function(event){
+          event.preventDefault();
+          if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+          if (config.showsubcategory_On) return false;
+          setActive(thisNode);
+          document.getElementById("centralcontent").innerHTML=""; //We remove central content (To avoid keep content that could be confusing)
+          showsubcategories();
+          //We just grab history when efective clicking
+          if (event.isTrusted) {
+            //it doesn't record state when: go back (dont state twice the same url)
+            if (!(history.state && history.state.url==url)) {
+              history.pushState({url:url}, null, url);
+            }
+            //Update the state bar
+            //thisNode.setView(document.getElementById("statecontainer"), "statebar");
+          }
+        });
+        
+        if (config.showsubcategory_On) {
+          showsubcategories();
+        }
+        //Now we click the element selected at the parameters send by the url
+        import('./' + CLIENT_MODULES_PATH + 'initurl.js')
+        .then(({urlClickAction})=>{
+          urlClickAction(url, function(){
+            setActive(thisNode);
+            if (!config.showsubcategory_On) {
+              showsubcategories();
+            }
+          });
+        });
+      </script>
+    </span>
+  </div>
+  <script>
+    const {default: Config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+    if (Config.categoryLevels==2) thisElement.style.display="block";
+  </script>
+  <div class="subcategorycontainer" style="display:none;"></div>
+</div>

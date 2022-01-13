@@ -1,0 +1,109 @@
+<!--
+thisParams ==> No vale :-> myNode, labelNode, fileName 
+----
+
+myNode => itemNode
+
+Aparecen la lista y debaj el boton de selecionar archivo.
+Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se supera el limite de imágenes.
+
+-->
+<div class="alert dialogbox">
+  <div class="bttopinsiderightinside">
+    <button type="button" class="closeimage minibtn transp" style="margin-right:10px; margin-top: 6px;">
+      <div class="closeimage"></div>
+    </button>
+    <script>
+      thisElement.addEventListener("click",  ()=>{
+        thisNode.hideAlert();
+        import('./' + CLIENT_MODULES_PATH + 'availablestates.js')
+        .then(({execUrlAction})=>{
+          execUrlAction(window.location.search);
+        });
+      });
+    </script>
+  </div>
+  <form enctype="multipart/form-data" id="loadimg">
+    <div style="display:flex; flex-flow: column; gap: 1em;">
+      <div>
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <h3 style="margin: 0.2em"></h3>
+          <script>
+            const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+            const labelNode=getSiteText().getNextChild("loadImg");
+            labelNode.getNextChild("headNote").getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+              labelNode.getNextChild("headNote").getRelationship("siteelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+        </span>
+      </div>
+      <table style="align-self: center;"></table>
+      <script>
+        thisParams.myNode.getRelationship("itemsimages").setChildrenView(thisElement, "loadimglist");
+      </script>
+      <div style="margin-bottom: 0.2em">
+        <div class="form-group">
+          <div style="position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <label for="fileData" style="align-self: left;"></label>
+            <script>
+              const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+              const labelNode=getSiteText().getNextChild("loadImg");
+              labelNode.getNextChild("file").getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
+              //adding the edition pencil
+              if (webuser.isWebAdmin()) {
+                const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                labelNode.getNextChild("file").getRelationship("siteelementsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+              }
+            </script>
+          </div>
+          <div>
+            <div class="circleloader minicircleloader" style="visibility: hidden;"></div>
+            <input name="fileData" type="file">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <script>
+    const {Alert, AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+    const {default: resizeImage} = await import('./' + CLIENT_MODULES_PATH + 'resizeimage.js');
+    let imageName, newImageSmall, newImageBig;
+    thisElement.elements.fileData.addEventListener("change", async function() {
+      const parentNode=thisParams.myNode.getRelationship("itemsimages");
+      if (parentNode.children.length>=3) {
+        (new AlertMessage("too many children")).showAlert();
+        return;
+      }
+      thisElement.elements.fileData.disabled=true; //Waiting
+      thisElement.elements.fileData.previousElementSibling.style.visibility="visible";
+      imageName=this.files[0].name;
+      newImageSmall=await resizeImage(this.files[0], 200);
+      newImageBig=await resizeImage(this.files[0], 520);
+      
+      let currentNode;
+      if (parentNode.children.length==0) {
+        currentNode=parentNode.createInstanceChild();
+      }
+      else {
+        currentNode=parentNode.children[parentNode.children.length-1];
+      }
+      const {default: addition}=await import('./' + CLIENT_MODULES_PATH + 'addition.js');
+      const newNode=await addition(currentNode, {imgBlob: newImageSmall});
+      newNode.props.imagename=`image_id_${newNode.props.id}.png`;
+      await newNode.request("edit my props", {props:{imagename: newNode.props.imagename}});
+      const images=[newImageSmall, newImageBig];
+      const {default: loadImgBigSmall} = await import('./' + CLIENT_MODULES_PATH + 'loadimg.js');
+      await loadImgBigSmall(newNode, images[0], images[1]);
+      thisElement.elements.fileData.disabled=false; //Waiting
+      thisElement.elements.fileData.previousElementSibling.style.visibility="hidden";
+      thisElement.reset();
+    });
+  </script>
+</div>

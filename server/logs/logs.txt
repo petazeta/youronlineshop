@@ -1,0 +1,27 @@
+2022-01-12 18:49:57 trying to access forbiden content: default/
+2022-01-12 18:50:09 localhost:8080 http://localhost:8080/ get tables: 22
+2022-01-12 18:51:45 site required but not found
+2022-01-12 18:51:54 localhost:8080 http://localhost:8080/default/ get tables: 22
+2022-01-12 18:54:33 localhost:8080 http://localhost:8080/default/ get tables: 22
+2022-01-12 19:05:14 localhost:8080 http://localhost:8080/default/ get tables: 22
+2022-01-13 10:38:50 localhost:8080 http://localhost:8080/default/ get tables: 22
+2022-01-13 10:40:04 log in: productsadmin
+2022-01-13 10:40:39 file not found: ./yos/catalog-images/main/small/image_id_1.png
+2022-01-13 11:06:59 file not found: ./yos/catalog-images/main/small/image_id_1.png
+2022-01-13 11:08:41 file not found: ./yos/catalog-images/main/small/image_id_2.png
+2022-01-13 11:09:07 file not found: ./yos/catalog-images/main/small/image_id_2.png
+2022-01-13 11:13:40 file not found: ./yos/catalog-images/main/small/image_id_2.png
+2022-01-13 11:13:41 file not found: ./yos/catalog-images/main/small/image_id_2.png
+2022-01-13 11:13:41 file not found: ./yos/catalog-images/main/small/image_id_3.png
+2022-01-13 16:39:32 localhost:8080 http://localhost:8080/default/ get tables: 22
+2022-01-13 16:39:49 log in: webadmin
+2022-01-13 16:42:43 log out
+2022-01-13 16:43:07 log in: userError
+2022-01-13 20:42:28 localhost:8000 http://localhost:8000/ get tables: 22
+2022-01-13 20:42:37 log in: productsadmin
+2022-01-13 20:42:58 log out
+2022-01-13 20:43:06 trying to access forbiden content: default/
+2022-01-13 20:53:22 localhost:8000 http://localhost:8000/?category=2&subcategory=3 get tables: 0
+2022-01-13 20:53:24 log in: systemadmin
+2022-01-13 20:53:45 log out
+2022-01-13 20:53:45 localhost:8000 http://localhost:8000/?category=2&subcategory=3 get tables: 22

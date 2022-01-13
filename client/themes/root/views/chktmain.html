@@ -1,0 +1,148 @@
+<!--
+  Checkout.
+  It shows the order, address, shipping and payment, and options.
+  thisNode: middle -> checkout
+-->
+<div class="checkout">
+  <!-- Order data and options -->
+  <!-- params: container (containers for the following checkout steps: address, shipping, payment) -->
+  <div style="text-align:center;">
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        const title=thisNode.getNextChild("checkoutTit").getRelationship("siteelementsdata").getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <h3></h3>
+      <script>
+        const title=thisNode.getNextChild("orderTit").getRelationship("siteelementsdata").getChild();
+        title.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </div>
+    <div></div>
+    <script>
+      //First we create a clone of mycart to not include modifications made at mycart.
+      //We add the order to the user so it will be accesible later on
+      import('./' + CLIENT_MODULES_PATH + 'cart.js')
+      .then(({myCart})=>{
+        thisNode.setView(thisElement, "ordercart");
+        webuser.getRelationship("orders").children=[];
+        webuser.getRelationship("orders").addChild(new thisNode.constructor());
+        webuser.getRelationship("orders").getChild().loadRequest("get my relationships")
+        .then((myOrder)=>{
+          for (const cartItem of myCart.getRelationship("cartboxitem").children) {
+            const myorderitemdata=cartItem.cloneNode(0);
+            delete myorderitemdata.props.id; //orderitem id is not from orderitem but from item
+            myOrder.getRelationship("orderitems").addChild(myorderitemdata);
+          }
+          webuser.dispatchEvent("checkout", myOrder);
+        });
+      });
+      document.getElementById("cartbox").style.visibility="hidden";
+      //After loading myOrder now we go forward and set the container with the address, shipping and payment data
+      const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+      if (config.chktuserdata_On) thisNode.setView(thisElement.parentElement.nextElementSibling, "chktuserdata");
+      if (config.chktshipping_On) thisNode.appendView(thisElement.parentElement.nextElementSibling.nextElementSibling.children[0], "chktshipping");
+      if (config.chktpayment_On) thisNode.appendView(thisElement.parentElement.nextElementSibling.nextElementSibling.children[0], "chktpayment");
+    </script>
+  </div>
+  <div></div>
+  <div>
+    <div class="flexjoin"></div>
+  </div>
+</div>
+<div style="margin-top:1.5em;">
+  <!-- Checkout Buttons -->
+  <div class="dashbuttons">
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <button type="button" class="btn" data-id="but"></button>
+      <script>
+        const myNode=thisNode.getNextChild("confirmButLabel").getRelationship("siteelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+
+        thisElement.onclick=async function(event){
+          event.preventDefault();
+          async function checkoutFunction(){
+            const myOrder=webuser.getRelationship("orders").getChild();
+            myOrder.props.status=0; // status 0 is "new"
+            myOrder.props.creationdate=new Date(await myOrder.constructor.makeRequest("get time")).toISOString(); // Date-time is Universal Time
+            myOrder.props.modificationdate=myOrder.props.creationdate;
+            //const orderpaymenttype=myOrder.getRelationship({name:"orderpaymenttypes"}).getChild();
+            //orderpaymenttype is different from peymenttypes
+            //const detailsobj={template: orderpaymenttype.template, vars: JSON.parse(orderpaymenttype.vars)};
+            //orderpaymenttype.props.details=JSON.stringify(detailsobj);
+            await myOrder.loadRequest("add my tree");
+            await myOrder.loadRequest("get my tree"); //add my tree load the order with just ids on it ******we are about changing this thing
+            thisNode.setView(document.getElementById("centralcontent"), "chktend");
+            //We remove the items from the cart
+            import('./' + CLIENT_MODULES_PATH + 'cart.js')
+            .then(({myCart})=>{
+              myCart.resetCartBox();
+              document.getElementById("cartbox").style.visibility="hidden";
+            });
+          }
+          const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+          if (config.chktuserdata_On) {
+          webuser.addEventListener('saveuserdata', checkoutFunction, 'checkout', null, true);
+          document.getElementById('useraddress').querySelector('button[type=submit]').click();
+          }
+          else {
+            checkoutFunction();
+          }
+        };
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <button type="button" class="btn" data-id="but"></button>
+      <script>
+        const myNode=thisNode.getNextChild("discardButLabel").getRelationship("siteelementsdata").getChild();
+        myNode.writeProperty(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+        thisElement.onclick=function(){
+          import('./' + CLIENT_MODULES_PATH + 'cart.js')
+          .then(({myCart})=>{
+            myCart.resetCartBox();
+            document.getElementById("cartbox").style.visibility="hidden";
+          });
+          
+          thisNode.parentNode.getChild("dashboard").setView(document.getElementById("centralcontent"), "showuserinfo");
+        }
+      </script>
+    </div>
+  </div>
+</div>
+<script>
+  const url='?chktmain=1';
+  if (!(history.state && history.state.url==url)) {
+    history.pushState({url:url}, null, url);
+  }
+</script>

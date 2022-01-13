@@ -1,0 +1,85 @@
+<!--
+  thisNode: middle -> logbox
+-->
+<div class="userimage"></div>
+<script>
+  if (window.getComputedStyle(thisElement).backgroundImage) {
+    const {setSizeFromStyle}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+    setSizeFromStyle(thisElement);
+  }
+</script>
+<div></div>
+<script>
+  const setlogstatus=function(){
+    let logbox=thisNode.getNextChild("logboxout");
+    if (webuser.props.id) {
+      logbox=thisNode.getNextChild("logboxin");
+    }
+    logbox.getNextChild("title").getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
+  }
+  setlogstatus();
+  webuser.addEventListener("log", () => {
+    setlogstatus();
+  }, "setlogstatus");
+  const url='?login=' + '0';
+  const showUserMenu=()=>{
+    thisNode.parentNode.getChild("dashboard").setView(document.getElementById("dashmenu"), "usermenu");
+    document.getElementById("dashmenu").style.visibility="visible";
+    document.getElementById("dashmenu").style.transform="translateY(15px)";
+  }
+  const hideUserMenu=()=>{
+    document.getElementById("dashmenu").style.transform="translateY(-15px)";
+    document.getElementById("dashmenu").style.visibility="hidden";
+  }
+  const butAction=(event)=>{
+    if (webuser.props.id) {
+      if (document.getElementById("dashmenu").style.visibility=="visible" && event && event.isTrusted) {
+        hideUserMenu();
+      }
+      else {
+        showUserMenu();
+      }
+    }
+    else {
+      thisNode.parentNode.getChild("logform").setView(document.getElementById("centralcontent"), "loginform");
+    }
+  }
+  thisElement.parentElement.addEventListener("click", function(event){
+    event.preventDefault();
+    butAction(event);
+    //We grab state on mouse click when try to login
+    if (event.isTrusted) {
+      if (!webuser.props.id && window.location.search) {
+        webuser.referrer=window.location.search;
+      }
+      //it doesn't record state when: go back (dont state twice the same url)
+      if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+    }
+  });
+  
+  import('./' + CLIENT_MODULES_PATH + 'availablestates.js')
+  .then(({setPopState})=>{
+    setPopState(url, butAction); //history navigation facility
+  });
+  
+  //Now we click the element selected at the parameters send by the url
+  import('./' + CLIENT_MODULES_PATH + 'initurl.js')
+  .then(({urlClickAction})=>{
+    urlClickAction(url, butAction); //history navigation facility
+  });
+  
+  //If user is loged in we show user menu (after refresh when login)
+  if (webuser.props.id) showUserMenu();
+
+  // Event for refreshing when log
+  const {ObserverMixing} = await import('./' + CLIENT_MODULES_PATH + 'observermixing.js');
+  const {default: combineFromMixing} = await import('./' + CLIENT_MODULES_PATH + 'combinefrommixing.js');
+  
+  combineFromMixing(ObserverMixing, thisNode); // We add observers characteristics
+  webuser.attachObserver(thisNode, "log");
+  thisNode.noticeReactions.set("log", (params)=>{
+    console.log(`logicon node id=${thisNode.props.id} said "webuser log ${webuser.props.id}"`);
+    if (webuser.props.id) showUserMenu();
+    else hideUserMenu()
+  });
+</script>

@@ -1,0 +1,64 @@
+<div>
+  <span data-note="relative position container for admn buttons" style="z-index:1; position: relative;">
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <div data-id="butedit" class="btmiddleleft"></div>
+    <a data-button="true" data-hbutton="true" class="subcategory"></a>
+    <script>
+      const {setActive} = await import('./' + CLIENT_MODULES_PATH + 'activenode.js');
+      const {setLastActive} = await import('./' + CLIENT_MODULES_PATH + 'centrallastactive.js');
+      //if selected in advance
+      if (thisNode.selected) {
+        setActive(thisNode); //?????
+      }
+      
+      const catalogView=function(pageNum) {
+        setActive(thisNode);
+        const params={tmpt: "catalog"};
+        if (pageNum) params.pageNum=pageNum;
+        thisNode.setView(document.getElementById("centralcontent"), "pagination", params);
+        setLastActive(thisNode);
+      }
+      
+      const prevUrl='?category=' + thisNode.parentNode.partnerNode.props.id;
+      const url= prevUrl + '&subcategory=' + thisNode.props.id;
+
+      thisElement.addEventListener("click", function(event) {
+        event.preventDefault();
+        if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+        catalogView();
+        //We grab state on mouse click
+        if (event.isTrusted || true) {
+          //it doesn't record state when: go back (dont state twice the same url)
+          if (!(history.state && history.state.url==url)) history.pushState({url:url}, null, url);
+        }
+      });
+      
+      import('./' + CLIENT_MODULES_PATH + 'availablestates.js')
+      .then(({setPopState})=>{
+        setPopState(url, catalogView); //history navigation facility
+      })
+      
+      //Now we click the element selected at the parameters send by the url
+      import('./' + CLIENT_MODULES_PATH + 'initurl.js')
+      .then(({urlClickAction})=>{
+        urlClickAction(url, catalogView); //history navigation facility
+      })
+      
+      const {currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+      thisNode.getRelationship("itemcategoriesdata").getChild().writeProperty(thisElement);
+      if (webuser.isProductAdmin()) {
+        import('./' + CLIENT_MODULES_PATH + 'frontutils.js')
+        .then(({visibleOnMouseOver})=>{
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+        });
+        thisNode.getRelationship("itemcategoriesdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+      }
+    </script>
+  </span>
+</div>

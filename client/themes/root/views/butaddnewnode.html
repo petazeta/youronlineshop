@@ -1,0 +1,27 @@
+<!--
+  thisNode: previousSibling
+  thisParams:
+    noLang: when we don't want to add also the language parent
+    onAdded(newNode)
+-->
+<button type="button" class="butadd">
+  <div class="plusimage"></div>
+  <script>
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      const {setSizeFromStyle}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+      setSizeFromStyle(thisElement);
+    }
+  </script>
+</button>
+<script>
+  const {default: addition}=await import('./' + CLIENT_MODULES_PATH + 'addition.js');
+  let addFunc=()=>addition(thisNode, thisParams);
+  if (!thisParams.noLang) {
+    const {languages, currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+    addFunc=()=>addition(thisNode, thisParams, languages, currentLanguage);
+  }
+  thisElement.addEventListener("click", (ev)=>{
+    ev.preventDefault();
+    addFunc();
+  });
+</script>

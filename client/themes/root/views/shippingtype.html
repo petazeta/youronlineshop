@@ -1,0 +1,104 @@
+<tr style="position:relative;">
+  <td>
+    <input type="radio" name="shipping">
+    <script>
+      thisElement.addEventListener("change", function(event) {
+        const shippingtypesRel=webuser.getRelationship({name:"orders"}).getChild().getRelationship("ordershippingtypes");
+        shippingtypesRel.children=[]; //In case we already selected
+        const orderShippingType=shippingtypesRel.addChild(new thisNode.constructor());
+        orderShippingType.loadProperties(thisNode.getRelationship("shippingtypesdata").getChild(), ["name"]);
+        orderShippingType.loadProperties(thisNode, ["delay_hours", "price"]);
+        import('./' + CLIENT_MODULES_PATH + 'activenode.js')
+        .then(({setActive})=>setActive(thisNode));
+      });
+      //selecting first option
+      if (thisNode.parentNode.getChild()==thisNode) {
+        thisElement.click();
+      }
+    </script>
+  </td>
+  <td style="padding-left:1em; padding-right:2.2em;text-align:left;">
+    <details>
+      <summary style="position:relative; display: inline-block;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <span></span>
+        <script>
+          const thisNodeData=thisNode.getRelationship("shippingtypesdata").getChild();
+          thisNodeData.writeProperty(thisElement, "name");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "name"});
+          }
+        </script>
+      </summary>
+      <span style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <span class="explanation"></span>
+        <script>
+          const thisNodeData=thisNode.getRelationship("shippingtypesdata").getChild();
+          thisNodeData.writeProperty(thisElement, "description");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "description"});
+          }
+        </script>
+      </span>
+    </details>
+  </td>
+  <td style="padding-right:2em;text-align:right;">
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        thisNode.writeProperty(thisElement, "delay_hours");
+        if (webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "delay_hours"});
+        }
+      </script>
+    </span>
+    <span></span>
+    <script>
+      const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+      getSiteText().getNextChild("hours").getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
+    </script>
+  </td>
+  <td style="padding-right:2em;text-align: right;">
+    <span style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        const {intToMoney, moneyToInt} = await import('./' + CLIENT_MODULES_PATH + 'money.js');
+        thisElement.textContent=intToMoney(thisNode.props.price);
+        if (webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "price",  dataProcessor: moneyToInt});
+          thisElement.onblur=function(){
+            thisElement.textContent=intToMoney(moneyToInt(thisElement.textContent));
+          }
+        }
+      </script>
+    </span>
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <script>
+      if (webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+        const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+        visibleOnMouseOver({element: thisElement, parent: thisElement.parentElement});
+        thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+        thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butdelete");
+        thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+      }
+    </script>
+  </td>
+</tr>
+<script>
+  thisElement.addEventListener("click", function(event) {
+    thisElement.querySelector("input").click();
+  });
+</script>

@@ -1,0 +1,69 @@
+<!--
+-->
+<div class="boxlist" style="text-align:center;">
+  <span style="z-index:1; position:relative;">
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <div data-id="butedit" class="btmiddleleft"></div>
+    <a data-hbutton="true"></a>
+    <script>
+      const {setActive} = await import('./' + CLIENT_MODULES_PATH + 'activenode.js');
+      const {languages, loadLanguages, setCurrentLanguage, getCurrentLanguage}= await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+      const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+      const {Node, NodeFemale, NodeMale}=await import('./' + CLIENT_MODULES_PATH + 'nodesfront.js');
+      const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+      const {getSiteText, loadText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+      const {getDomElementFromChild}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+      const {populateLang}=await import('./' + CLIENT_MODULES_PATH + 'langcopy.js');
+
+
+      if (thisNode.selected) setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
+      thisNode.writeProperty(thisElement);
+      
+      if (webuser.isSystemAdmin()) {
+        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+        thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "code"});
+      }
+      
+      if (config.languagesOn==true) {
+        if (webuser.isSystemAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+          if (thisNode.parentNode.children.length>1) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {noLang: true, onAdded: async (newLangNode)=>{
+            //We show the msg for waiting
+            const myalert=new AlertMessage(getSiteText().getNextChild("langbox").getNextChild("newlangwait").getRelationship("siteelementsdata").getChild().props.value);
+            myalert.showAlert();
+            await populateLang(newLangNode);
+            myalert.hideAlert();
+            setCurrentLanguage(languages.getChild({id: newLangNode.props.id}));
+            languages.setChildrenView(document.querySelector('#langs-select'), document.querySelector('#langs-select-tp'));//Refresh de lang info
+            languages.setChildrenView(document.querySelector('#langbox .boxbody'), "language");
+          }});
+        }
+        thisElement.addEventListener("click", async function(event) {
+          event.preventDefault();
+          setActive(thisNode);
+          setCurrentLanguage(thisNode);
+          const myalert=new AlertMessage(getSiteText().getNextChild("langbox").getNextChild("changelangwait").getRelationship("siteelementsdata").getChild().props.value);
+          myalert.showAlert();
+          await loadText();
+          getSiteText().dispatchEvent("changeLanguage");
+          myalert.props.timeout=3000;
+          myalert.hideAlert();
+        });
+        thisNode.addEventListener("changeProperty",
+        ()=>{languages.setChildrenView(document.querySelector('#langs-select'), document.querySelector('#langs-select-tp'));}
+        ,"changLang");
+      }
+      else {
+        thisElement.addEventListener("click", function(event) {
+          event.preventDefault();
+        });
+      }
+    </script>
+  </span>
+</div>

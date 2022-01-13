@@ -1,0 +1,163 @@
+<li data-hbutton="true">
+  <span style="position:relative;">
+    <div data-id="butedit" class="btbottomcenter" style="visibility:hidden;"></div>
+    <div data-id="admnbuts" class="bttopcenter" style="visibility:hidden;">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <a data-button="true" class="menu"></a>
+    <script>
+      const {setActive} = await import('./' + CLIENT_MODULES_PATH + 'activenode.js');
+      const {setLastActive} = await import('./' + CLIENT_MODULES_PATH + 'centrallastactive.js');
+      if (thisNode.selected) setActive(thisNode); //if selected in advance
+      /*
+      const {currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+      const dataRel=await thisNode.getRelationship("pageelementsdata").loadRequest("get my children", {extraParents: currentLanguage.getRelationship("pageelementsdata")})
+      dataRel.getChild().writeProperty(thisElement);
+      */
+      const dataRel=thisNode.getRelationship("pageelementsdata");
+      dataRel.getChild().writeProperty(thisElement);
+
+      //function to show the openclosebutton
+      function showOpenButton() {
+        (new thisNode.constructor()).appendView(thisElement.parentElement.querySelector("[data-id=containeropen]"), "butopen")
+        .then(async () => {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver({element: thisElement.parentElement.querySelector("[data-id=containeropen]").querySelector("[data-id=openclose]"), parent: thisElement});
+        });
+      }
+      const setVisible=function(ev){
+        if (document.querySelector("nav.menus").style.display=="none") return; //active only when pushed the bars
+        if (this.tagName=="SPAN") {
+          this.querySelector("[data-id=butedit]").style.opacity=1;
+          this.querySelector("[data-id=admnbuts]").style.opacity=1;
+        }
+        else this.style.opacity=1;
+      }
+      const setHidden=function(ev){
+        if (document.querySelector("nav.menus").style.display=="none") return; //active only when pushed the bars
+        if (this.tagName=="SPAN") {
+          this.querySelector("[data-id=butedit]").style.opacity=0;
+          this.querySelector("[data-id=admnbuts]").style.opacity=0;
+        }
+        else this.style.opacity=0;
+      }
+      function menusViewSwitch(mediaQuery){
+        thisElement.parentElement.style.marginLeft="0";
+        if (mediaQuery.matches) {
+          //changing edition and admin bottons class position
+          thisElement.parentElement.querySelector("[data-id=butedit]").classList.add("btbottomcenter");
+          thisElement.parentElement.querySelector("[data-id=butedit]").classList.remove("btmiddleleft");
+          thisElement.parentElement.querySelector("[data-id=admnbuts]").classList.add("bttopcenter");
+          thisElement.parentElement.querySelector("[data-id=admnbuts]").classList.remove("btmiddleright");
+          //show open button
+          if (webuser.isWebAdmin()) {
+            thisElement.parentElement.style.marginLeft="0";
+            dataRel.getChild().setView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            thisElement.parentElement.querySelector('.admnbtsgrid').innerHTML="";
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos");
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+            
+            //remove onmouseover efect
+            thisElement.parentElement.querySelector("[data-id=butedit]").style.opacity=1;
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").style.opacity=1;
+            thisElement.parentElement.querySelector("[data-id=butedit]").style.visibility="hidden";
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").style.visibility="hidden";
+            thisElement.parentElement.removeEventListener("mouseout", setHidden);
+            thisElement.parentElement.removeEventListener("mouseover", setVisible);
+            thisElement.parentElement.querySelector("[data-id=butedit]").removeEventListener("mouseout", setHidden);
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").removeEventListener("mouseout", setHidden);
+            thisElement.parentElement.querySelector("[data-id=butedit]").removeEventListener("mouseover", setVisible);
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").removeEventListener("mouseover", setVisible);
+            showOpenButton();
+          }
+        }
+        else {
+          //changing edition and admin bottons class position
+          thisElement.parentElement.querySelector("[data-id=butedit]").classList.remove("btbottomcenter");
+          thisElement.parentElement.querySelector("[data-id=butedit]").classList.add("btmiddleleft");
+          thisElement.parentElement.querySelector("[data-id=admnbuts]").classList.remove("bttopcenter");
+          thisElement.parentElement.querySelector("[data-id=admnbuts]").classList.add("btmiddleright");
+          //hidding open button and showing admin buttons
+          if (webuser.isWebAdmin()) {
+            thisElement.parentElement.style.marginLeft="1.2em";
+            dataRel.getChild().setView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            thisElement.parentElement.querySelector('.admnbtsgrid').innerHTML="";
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+            thisElement.parentElement.querySelector("[data-id=containeropen]").innerHTML="";
+            thisElement.parentElement.querySelector("[data-id=butedit]").style.visibility="visible";
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").style.visibility="visible";
+            thisElement.parentElement.querySelector("[data-id=butedit]").style.opacity=0;
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").style.opacity=0;
+            thisElement.parentElement.addEventListener("mouseout", setHidden);
+            thisElement.parentElement.addEventListener("mouseover", setVisible);
+            thisElement.parentElement.querySelector("[data-id=butedit]").addEventListener("mouseout", setHidden);
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").addEventListener("mouseout", setHidden);
+            thisElement.parentElement.querySelector("[data-id=butedit]").addEventListener("mouseover", setVisible);
+            thisElement.parentElement.querySelector("[data-id=admnbuts]").addEventListener("mouseover", setVisible);
+          
+            //visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            //visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=admnbuts]'), parent: thisElement.parentElement});
+          }
+        }
+      }
+      const docView=function() {
+        setActive(thisNode);
+        thisNode.setView(document.getElementById("centralcontent"), "doc");
+        setLastActive(thisNode);
+      }
+      const url='?menu=' + thisNode.props.id;
+      const mediaQuery=window.matchMedia("(min-width:400px)");
+      menusViewSwitch(mediaQuery);
+      mediaQuery.addListener(menusViewSwitch);
+      thisElement.addEventListener('click', function(event){
+        event.preventDefault();
+        if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+        docView();
+        if (event.isTrusted) {
+          if (!(history.state && history.state.url==url)) { //to not repeat state
+            history.pushState({url:url}, null, url);
+          }
+        }
+      });
+      
+      import('./' + CLIENT_MODULES_PATH + 'availablestates.js')
+      .then(({setPopState})=>{
+        setPopState(url, docView); //history navigation facility
+      })
+      
+      //Lets add the log event
+      webuser.addEventListener("log", function() {
+          if (!this.isWebAdmin()) {
+            //to remove the openbutton when logs after webadmin
+            const containerOpen=thisElement.parentElement.querySelector("[data-id=containeropen]");
+            if (containerOpen) {
+              containerOpen.innerHTML="";
+            }
+          }
+          else {
+            menusViewSwitch(mediaQuery);
+          }
+        },
+        "openButton", thisNode
+      );
+      //removing the listener when node is deleted
+      thisNode.addEventListener("deleteNode", function() {
+        webuser.removeEventListener("log", "openButton", thisNode);
+      }, "deleteOpenButton");
+      
+      //Now we click the element selected at the parameters send by the url
+      import('./' + CLIENT_MODULES_PATH + 'initurl.js')
+      .then(({urlClickAction})=>{
+        let urlAction=urlClickAction(url, docView);
+        if (!urlAction && !history.state && thisNode.parentNode.getChild()==thisNode) {
+          //Now we click some menu at page start (if no url)
+          docView();
+        }
+      });
+    </script>
+    <div class="btmiddleright" data-id="containeropen"></div>
+  </span>
+</li>

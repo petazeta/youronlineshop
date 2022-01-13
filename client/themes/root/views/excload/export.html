@@ -1,0 +1,308 @@
+  <!--
+    launcher: dashboard -> expimp
+  -->
+<div class="dashboard">
+  <div style="text-align:center" class="export-import">
+    <div>
+      <div class="msgbox" style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <span></span>
+        <script>
+          const title=thisNode.getNextChild("titexp").getRelationship("siteelementsdata").getChild();
+          title.writeProperty(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+    </div>
+    <form style="display:flex; flex-flow:column; align-items:center;">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="noselection" disabled>
+        <script>
+          const myNode=thisNode.getNextChild("noselection").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          if (webuser.isWebAdmin()) {
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisAttribute: "value"});
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            thisElement.type="text";
+          }
+        </script>
+      </div>
+      <div>
+        <div class="msgbox">
+          <table style="margin:auto; text-align:left; margin-bottom:1em;" class="exp-select">
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="general" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkgeneral").getRelationship("siteelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkgeneral").getNextChild("details").getRelationship("siteelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="catalog" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkcatg").getRelationship("siteelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkcatg").getNextChild("details").getRelationship("siteelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="checkout" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkcheckout").getRelationship("siteelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkcheckout").getNextChild("details").getRelationship("siteelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="lang" name="dataoption">
+                <script>
+                  thisElement.form.dataoption.forEach(radio=>{
+                    radio.addEventListener("change", (ev)=>{
+                      if (thisElement.checked) thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="block";
+                      else thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="none";
+                    });
+                  });
+                </script>
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chklang").getRelationship("siteelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chklang").getNextChild("details").getRelationship("siteelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+                <template>
+                  <div style="margin:auto; text-align:left; margin-bottom:0.2em">
+                    <input type="checkbox" value="" name="">
+                    <script>
+                      thisNode.writeProperty(thisElement, "id", "value");
+                      thisNode.writeProperty(thisElement, "code", "name");
+                    </script>
+                    <span></span>
+                    <script>
+                      thisNode.writeProperty(thisElement, "code");
+                    </script>
+                  </div>
+                </template>
+                <div class="msgbox" style="display:none"></div>
+                <script>
+                  const {languages}=await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+                  languages.setChildrenView(thisElement, thisElement.previousElementSibling);
+                </script>
+              </td>
+            </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="users" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span></span>
+                    <script>
+                      const title=thisNode.getNextChild("chkusers").getRelationship("siteelementsdata").getChild();
+                      title.writeProperty(thisElement);
+                      //adding the edition pencil
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </summary>
+                  <span style="position:relative;">
+                    <div data-id="butedit" class="btmiddleright"></div>
+                    <span class="explanation"></span>
+                    <script>
+                      const thisNodeData=thisNode.getNextChild("chkusers").getNextChild("details").getRelationship("siteelementsdata").getChild();
+                      thisNodeData.writeProperty(thisElement);
+                      if (webuser.isWebAdmin()) {
+                        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                        visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+                        thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+                      }
+                    </script>
+                  </span>
+                </details>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <span style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          thisNode.getNextChild("butexp").getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
+          
+          if (!webuser.isSystemAdmin) thisElement.disabled=true; //Only sysadmin, not webadmin allowed
+          const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+          const {exportFunc}=await import('./' + CLIENT_MODULES_PATH + 'export.js');
+          
+          //This facility is for export the customized data of a shop so we could update the shop software and keep the data
+          thisElement.addEventListener("click", async function(event){
+            event.preventDefault();
+            const myFunc=exportFunc.get(thisElement.form.dataoption.value);
+            if (!myFunc) {
+              new AlertMessage(thisElement.form.elements.noselection.value, 2000).showAlert();
+              return;
+            }
+            if (thisElement.form.dataoption.value=="lang") {
+              const {languages}=await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+              const getSelectedLangData=function(langdata, selector) {
+                const selectedLangs=[];
+                for (myLang of selector) {
+                  if (myLang.checked) selectedLangs.push(Number(myLang.value));
+                }
+                //Now we filter the languages selected from the datalang
+                let i=langdata.children.length;
+                while (i--) {
+                  if (!selectedLangs.includes(langdata.children[i].props.id)) {
+                    langdata.removeChild(langdata.children[i]);
+                  }
+                }
+                return langdata;
+              };
+              let langdata=languages.cloneNode();
+              const myLangs=thisElement.form.querySelectorAll('input[type="checkbox"]');
+              langdata=getSelectedLangData(langdata, myLangs);
+              if (langdata.children.length==0) {
+                //we show the alert message No selection
+                (new AlertMessage(thisElement.form.elements.noselection.value, 2000)).showAlert();
+                return;
+              }
+              thisElement.form.result.value=JSON.stringify(await myFunc(langdata));
+              return;
+            }
+            thisElement.form.result.value=JSON.stringify(await myFunc());
+          });
+        </script>
+        <input type="hidden" disabled>
+        <script>
+          const myNode=thisNode.getNextChild("butexp").getRelationship("siteelementsdata").getChild();
+          myNode.writeProperty(thisElement);
+          thisElement.onblur=function(){
+            thisElement.type="hidden";
+            thisElement.parentElement.querySelector('button[data-id=but]').innerHTML=thisElement.value;
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver({element: thisElement.parentElement.querySelector('[data-id=butedit]'), parent: thisElement.parentElement});
+            myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </span>
+      <div style="padding-top: 10px">
+        <textarea name="result" rows="10" cols="50"></textarea>
+      </div>
+    </form>
+  </div>
+</div>

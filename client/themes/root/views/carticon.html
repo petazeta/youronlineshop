@@ -1,0 +1,21 @@
+<!--
+-->
+<div class="shoppingcartimage"></div>
+<script>
+  if (window.getComputedStyle(thisElement).backgroundImage) {
+    const {setSizeFromStyle}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+    setSizeFromStyle(thisElement);
+  }
+</script>
+<div></div>
+<script>
+  thisNode.getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
+  thisElement.parentElement.addEventListener("click", async function(ev){
+    ev.preventDefault();
+    const {switchVisibility}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+    switchVisibility(document.getElementById("cartbox"));
+    if (document.getElementById("cartbox").style.visibility=="visible")
+      document.getElementById("cartbox").style.transform="scale(1.2)";
+    else document.getElementById("cartbox").style.transform="scale(1)";
+  });
+</script>

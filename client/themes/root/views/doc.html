@@ -1,0 +1,14 @@
+<!--
+-->
+<div style="padding-top:1em;"></div>
+<script>
+  const {currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+  const myNode=await thisNode.getRelationship("pageelements").loadRequest("get my tree", {extraParents: currentLanguage.getRelationship("pageelementsdata")});
+  myNode.addEventListener("setChildrenView", async function() {
+    if (webuser.isWebAdmin() && this.children.length==0) {
+      const newNode = await this.createInstanceChildText();
+      newNode.setView(this.childContainer, "butaddnewnode");
+    }
+  }, "addNewNodeButton");
+  myNode.setChildrenView(thisElement, "paragraph");
+</script>
