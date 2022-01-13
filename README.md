@@ -1,5 +1,5 @@
 
-![Your Online Shop](images/logotype.svg "Your Online Shop")
+![Your Online Shop](docs/logotype.svg "Your Online Shop")
 
 ----------------------------------------------------------------------
 
