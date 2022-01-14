@@ -40,7 +40,7 @@ Please write: melchorherrera@gmail.com
 
 Once Your Online Shop is installed you can open your browser at the corresponding url address. Lets log-in with some of the admin users to make changes: user webadmin for web content and productsadmin for catalog content. Other operations can be done by user systemadmin, and to check customer orders log-in with ordersadmin.
 
-Once editing some content press Intro or click outside of the editable area to save changes.
+After editing some content press Intro or click outside of the editable area to save changes.
 
 To edit some features from the checkout process you should log in with systemadmin user and make an order as if you were a customer. Once you get to the checkout step you should be able to edit checkout options.
 
