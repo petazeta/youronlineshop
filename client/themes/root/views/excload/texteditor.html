@@ -3,7 +3,7 @@
     <div data-id="butedit" class="btmiddleright"></div>
     <span></span>
     <script>
-      const title=thisNode.getNextChild("advice").getRelationship("domelementsdata").getChild();
+      const title=thisNode.getRelationship("siteelementsdata").getChild();
       title.writeProperty(thisElement);
       //adding the edition pencil
       if (webuser.isWebAdmin()) {
