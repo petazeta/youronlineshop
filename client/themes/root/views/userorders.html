@@ -110,11 +110,12 @@ thisNode textContent -> "dashboard" - "showOrd"
         child.parentNode.loadProperties(ordersRel);
       }
       const orders=await Node.requestMulti("get my tree up", ordersRel.children);
-      for (const i in orders) {
-        ordersRel.children[i].parentNode.load(orders[i]);
+      const {unpacking}=await import('./' + SHARED_MODULES_PATH + 'utils.js');
+      orders.forEach((order, i)=>{
+        ordersRel.children[i].parentNode.load(unpacking(order));
         ordersRel.children[i].parentNode.partnerNode.parentNode=new NodeFemale();
         ordersRel.children[i].parentNode.partnerNode.parentNode.props.childtablename=ordersRel.children[i].parentNode.props.parenttablename;
-      }
+      });
     }
     ordersRel.setChildrenView(thisElement, "userordersline");
   </script>
