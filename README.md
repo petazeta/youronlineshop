@@ -25,8 +25,8 @@ https://youronlineshop.net
 
 - Easy edition
 - Quick purchase process
-- Site pages (About, Contact, ect...)
-- Very light code
+- Website pages (About, Contact, ect...)
+- Ultra light code
 - Themes (components / templates)
 - Multi-shop
 - Export / Import

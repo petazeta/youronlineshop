@@ -9,9 +9,9 @@ import makeReport, {setReports} from './modules/reports.js';
 
 
 // dev configuration
-import devConfig from './cfg/devconfig.js';
-const config=setConfig(devConfig);
-//const config=setConfig();
+//import devConfig from './cfg/devconfig.js';
+//const config=setConfig(devConfig);
+const config=setConfig();
 
 webuser=myWebuser;
 
