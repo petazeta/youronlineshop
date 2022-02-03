@@ -16,7 +16,7 @@ Please write: melchorherrera@gmail.com
 * About *
 *********
 
-This is a dynamic web app (Single Page Application) for e-commerce. It is build in Node.js and it is using Postgresql.
+This is a dynamic web app (Single Page Application) for e-commerce. It is build in Nodejs and Mongodb.
 
 https://youronlineshop.net
 
