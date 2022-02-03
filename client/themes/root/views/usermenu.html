@@ -3,7 +3,7 @@
 -->
 <div class="dashbuttons">
   <div class="bttopinsideleftinside" style="z-index:100;">
-    <button type="button" class="closeimage minibtn transp" style="margin-left: 0.2em; margin-top: 0.2em;">
+    <button type="button" class="closeimage minibtn transp">
       <div class="closeimage"></div>
     </button>
     <script>
@@ -44,9 +44,12 @@
       thisElement.onclick=function(){
         document.getElementById("dashmenu").style.transform="translateY(-15px)";
         webuser.logout().then(()=>{
-          thisNode.parentNode.getChild("logform").setView(document.getElementById("centralcontent"), "loginform");
+
           if (localStorage.getItem("user_name")) localStorage.removeItem("user_name"); //stay logged => not anymore
-          });
+          // we must return to some init point. Still not defined so lets blanck the central content to clear any user info and show loginform
+          document.getElementById("centralcontent").innerHTML='';
+          thisNode.parentNode.getChild("logform").appendView(document.body, "loginframe");
+        });
       }
       //adding the edition pencil
       if (webuser.isWebAdmin()) {

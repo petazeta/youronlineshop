@@ -6,7 +6,7 @@ const reduceExtraParents = (params)=>{
     if (!Array.isArray(params.extraParents)) params.extraParents=[params.extraParents];
     params.extraParents=params.extraParents.map(eParent=>{
       if (eParent instanceof NodeFemale) {
-        return packing(eParent.cloneNode(1, 0, "id", "id"));
+        return packing(eParent.cloneNode(1, 0, null, "id"));
       }
       return eParent;
     });
@@ -20,15 +20,15 @@ const reqLoaders = new Map();
 reqReduc.set("get my root", myNode=>packing(myNode.cloneNode(0, 0)));
 reqLoaders.set("get my root", (myNode, result)=>{
   myNode.children=[];
-  if (result!==false) myNode.addChild(new NodeMale().load(result));
+  if (result!=null) myNode.addChild(new NodeMale().load(result));
 });
 reqReduc.set("get my childtablekeys", reqReduc.get("get my root"));
-reqReduc.set("get my relationships", myNode=>packing(myNode.cloneNode(1, 0, "id", "id")));
+reqReduc.set("get my relationships", myNode=>packing(myNode.cloneNode(1, 0, "id")));
 reqLoaders.set("get my relationships", (myNode, result)=>{
   myNode.relationships=[];
   result.forEach(rel=>myNode.addRelationship(new NodeFemale().load(rel)));
 });
-reqReduc.set("get my children", [reqReduc.get("get my relationships"), reduceExtraParents]);
+reqReduc.set("get my children", [myNode=>packing(myNode.cloneNode(1, 0, "id")), reduceExtraParents]);
 reqLoaders.set("get my children", (myNode, result)=>{
   myNode.children=[];
   result.data.forEach(child=>myNode.addChild(new NodeMale().load(child)));
@@ -36,7 +36,7 @@ reqLoaders.set("get my children", (myNode, result)=>{
 });
 reqReduc.set("get all my children", reqReduc.get("get my root"));
 reqLoaders.set("get all my children", reqLoaders.get("get my children"));
-reqReduc.set("get my tree", [reqReduc.get("get my relationships"), reduceExtraParents]);
+reqReduc.set("get my tree", [myNode=>packing(myNode.cloneNode(1, 0, "id")), reduceExtraParents]);
 reqLoaders.set("get my tree", (myNode, result, params)=>{
   if (myNode.detectMyGender()=="female") {
     myNode.children=[];
@@ -60,12 +60,12 @@ reqLoaders.set("get my tree", (myNode, result, params)=>{
 });
 reqReduc.set("edit my sort_order", myNode=>packing(myNode.cloneNode(3, 0, "id", "id"))); // we need the parent->partner (and parent->partner->parent for safety check)
 reqReduc.set("delete my link", reqReduc.get("edit my sort_order"));
-reqReduc.set("add my link", [ myNode=>packing(myNode.cloneNode(3, 0, null, "id")), reduceExtraParents]); //we are keeping the props cause we need the sort_order positioning prop
-reqReduc.set("add myself", [myNode=>packing(myNode.cloneNode(3, 0, null, "id")), reduceExtraParents]);
+reqReduc.set("add my link", [ myNode=>packing(myNode.cloneNode(3, 0, null, 'id')), reduceExtraParents]); //we are keeping the props cause we need the sort_order positioning prop
+reqReduc.set("add myself", [myNode=>packing(myNode.cloneNode(3, 0, null, 'id')), reduceExtraParents]);
 reqLoaders.set("add myself", (myNode, result)=>{
   myNode.props.id=result;
 });
-reqReduc.set("add my children", [myNode=>packing(myNode.cloneNode(2, 1, "id", "id")), reduceExtraParents]); // we need the partner (and partner->parent for safety check)
+reqReduc.set("add my children", [myNode=>packing(myNode.cloneNode(2, 1, 'id', 'id')), reduceExtraParents]); // we need the partner (and partner->parent for safety check)
 reqLoaders.set("add my children", (myNode, result)=>{
   for (const i in result) {
     myNode.children[i].props.id=result[i];
@@ -73,10 +73,11 @@ reqLoaders.set("add my children", (myNode, result)=>{
 });
 reqReduc.set("delete my children", reqReduc.get("add my children"));
 reqReduc.set("delete my tree", myNode=>packing(myNode.cloneNode(2, 0, null, "id"))); // we need the partner for update siblings position
+reqReduc.set("delete my tree table content", reqReduc.get("delete my tree"));
 reqReduc.set("delete myself", reqReduc.get("delete my tree"));
 reqReduc.set("edit my props", reqReduc.get("delete my tree"));
-reqReduc.set("get my parent", myNode=>packing(myNode.cloneNode(1, 1, "id")));
-reqReduc.set("get my tree up", reqReduc.get("get my parent"));
+reqReduc.set("get my ascendent", myNode=>packing(myNode.cloneNode(1, 1, "id")));
+reqReduc.set("get my tree up", reqReduc.get("get my ascendent"));
 reqLoaders.set("get my tree up", (myNode, result)=>{
   if (!result) return result;
   if (myNode.detectMyGender()=="female") {
@@ -96,13 +97,15 @@ reqLoaders.set("get my tree up", (myNode, result)=>{
   myNode.parentNode.addChild(this);
 });
 reqReduc.set("add my tree", [myNode=>{
-  if (myNode.detectMyGender()=="female") return packing(myNode.cloneNode(2, null, null, "id"));
-  else return packing(myNode.cloneNode(3, null, null, "id"));
+  if (myNode.detectMyGender()=="female") return packing(myNode.cloneNode(2, null, null, 'id'));
+  else return packing(myNode.cloneNode(3, null, null, 'id'));
 },  reduceExtraParents]); // we need the parent->partner (and parent->partner->parent for safety check)
 reqLoaders.set("add my tree", (myNode, result)=>{
   if (!result) return;
   const resultNode=unpacking(result);
-  if (resultNode.props.id)  myNode.props.id=resultNode.props.id; //female has no id
+  if (myNode.detectMyGender()=="male") {
+    myNode.props.id=resultNode.props.id;
+  }
   myNode.loaddesc(resultNode);
 });
 reqReduc.set("add my tree table content", reqReduc.get("add my tree"));

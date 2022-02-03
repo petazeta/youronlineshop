@@ -22,7 +22,6 @@ async function addNewNode(currentNode, languages, currentLanguage) {
     }
     if (languages) currentNode=await parentNode.createInstanceChildText(position);
     else currentNode=parentNode.createInstanceChild(position);
-    
   }
 
   await currentNode.loadRequest("add my tree", parameters);

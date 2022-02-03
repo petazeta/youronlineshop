@@ -239,6 +239,7 @@ button.closeimage:hover{
 }
 button.closeimage{
 	padding: 5px;
+	margin: 3px;
 }
 .rmbox {
   position:relative;
@@ -994,6 +995,7 @@ div.quantityselect {
 	}
 	div.productimg img.productimg {
 		max-width: 210px;
+		display: flex; /* for cernter image*/
 	}
 	div.thumbnails div.productimage img{
 		max-width: 60px;
@@ -1085,12 +1087,35 @@ div.quantityselect {
 	flex-flow: column;
 	align-items: center;
 }
+.login-frame{
+    top: 40%;
+    left: 50%;
+    transform: translate(-40%, -50%);
+    position: fixed;
+    background-color: white;
+    z-index: 10;
+    border: 1px solid #AAA;
+    border-radius: 0.25rem;
+    box-shadow: 6px 6px 10px #ccc;
+}
 .loginform{
 	display:flex;
 	flex-flow:column;
 	align-items:center;
-	margin-bottom: 2em;
+	  padding-left: 1.5rem;
+	  padding-right: 1.5rem; 
 }
+.new-account-button, .loginform div.sign-up-button{
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+@media screen and (max-width: 400px){
+	.loginform{
+	  padding-left: .5rem;
+	  padding-right: .5rem; 
+	}
+}
+
 .loginform > div {
 	margin:0.5em;
 }
@@ -1098,6 +1123,7 @@ div.quantityselect {
 	display: flex;
 	flex-flow: column;
 	align-items: center;
+	  margin-bottom: 0.5rem;
 }
 .rememberme{
 	padding-right: 0.2em;

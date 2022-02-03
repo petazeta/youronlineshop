@@ -42,14 +42,6 @@
   }
   buttonElement.style.display='block';
 
-  if (!thisProperty) {
-    // git first property different from id
-    let keys=Object.keys(editNode.props);
-    if (editNode.parentNode && editNode.parentNode.childtablekeys && editNode.parentNode.childtablekeys.length>0) {
-      keys=editNode.parentNode.childtablekeys;
-    }
-    thisProperty = keys.find(key => key!='id');
-  }
   if (!thisAttribute) {
     if (editElement.tagName=='INPUT' || editElement.tagName=='TEXTAREA') thisAttribute="value";
     else thisAttribute="textContent";

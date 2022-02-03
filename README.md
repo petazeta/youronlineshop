@@ -3,13 +3,13 @@
 
 ----------------------------------------------------------------------
 
-# Your Online Shop System V 4.0.0
+# Your Online Shop System V 4.1.0
 
 ## Live Demo
 
 Video: https://youtu.be/PD_olszbGWA
 
-Shop with sample products -> [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
+Shop sample -> [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
 
 Admin -> (usr/password) webadmin/webadmin, productsadmin/productsadmin
 
@@ -19,6 +19,17 @@ Admin -> (usr/password) webadmin/webadmin, productsadmin/productsadmin
 This is a dynamic web app (Single Page Application) for e-commerce. It is build in Node.js and it is using Postgresql.
 
 https://youronlineshop.net
+
+
+## Main features:
+
+- Easy edition
+- Quick purchase process
+- Site pages (About, Contact, ect...)
+- Very light code
+- Themes (components / templates)
+- Multi-shop
+- Export / Import
 
 
 ## Installation
@@ -49,7 +60,7 @@ Some other configuration can be done by editing some files at cfg folder.
 
 ## Troubleshooting
 
-If the database connection is not working you may need to check settings at server/nodejs/cfg/dbcfg.js. Also you may need to import manually database content from file: server/utils/pgsqldb.sql.
+If the database connection is not working you may need to check settings at server/nodejs/cfg/dbcfg.js.
 
 If the products images can not be uploaded you may need to allow write permisions for catalog-images.
 
@@ -63,6 +74,6 @@ Y.O.S. system has a themes feature. Tou can find theme files at client/themes fo
 
 Multi-shop feature is now available. You can host several stores by adding their settings to the configuration files.
 
-The files server/cfg/dbcfg.js and server/cfg/config.js contains the stores configuration. Store folder inside catalog-image one can be replicated for each site. You must also enable multi-shop by stabishing isSiteUnique: false at server/cfg/default.js.
+Files server/cfg/dbcfg.js and server/cfg/config.js contains stores configuration. Store folder inside catalog-image one can be replicated for each site. You must also enable multi-shop by stablishing isSiteUnique: false at server/cfg/default.js.
 
-Now you should be able to access each shop by adding the shop name (label at server/cfg/config.js and server/cfg/dbcfg.js) after the host name: localhost:8000/shopname.
+Now you should be able to access each shop by adding the shop name (shop name is the label at server/cfg/config.js and server/cfg/dbcfg.js) after the host name: localhost:8000/shopname.

@@ -223,7 +223,7 @@ const NodeFrontMixing=Sup => class extends Sup {
         currentValue=container.hasAttribute(attribute) ? container.getAttribute(attribute) : container[attribute];
       }
       const keys= this.parentNode && this.parentNode.childtablekeys && this.parentNode.childtablekeys.length > 0 ? this.parentNode.childtablekeys : Object.keys(this.props);
-      property = keys.find(key => key!='id'); //Order minds!!
+      property = keys.find(key => key!="id"); //Order minds!!
     }
     let value=this.props[property];
     if (!value && value!==0) value=''; //Parse undefined
@@ -234,9 +234,10 @@ const NodeFrontMixing=Sup => class extends Sup {
         if (!onEmptyValueText) onEmptyValueText=empty;
         //If field type is int => value=0, other case value=onEmptyValueText when innerHTML
         const isNumberField=()=>{
-          let keyIndex=-1;
-          if (this.parentNode && this.parentNode.childtablekeys) keyIndex=this.parentNode.childtablekeys.indexOf(property);
-          if (keyIndex!==-1) return  this.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("int") || this.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("decimal");
+          if (!this.parentNode ||  !this.parentNode.childtablekeys) return;
+          const keyIndex=this.parentNode.childtablekeys.indexOf(property);
+          if (keyIndex==-1 || !this.parentNode.childtablekeysinfo || !this.parentNode.childtablekeysinfo[keyIndex]['Type']) return;
+          return this.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("int") || this.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("decimal");
         }
         if (isNumberField()) {
           container.setAttribute("data-placeholder", "0");
@@ -278,6 +279,7 @@ const NodeFrontMixing=Sup => class extends Sup {
           result=JSON.parse(resultTxt);
         }
         catch(e){//To send errors from server in case the error catching methods at backend fail
+          //******** que pasa con e?? no tiene datos?
           throw new Error("Action: " + action + ". Error: Response error: "+ resultTxt);
         }
       }
@@ -352,7 +354,8 @@ const NodeFrontMixing=Sup => class extends Sup {
   }
   async loadRequest(action, parameters, url) {
     const result= await this.request(action, parameters, false, url);
-    if (result===null || result===undefined) throw new Error("Action: " + action + ". Error: No server response");
+    // esto anula la posibilidad de recibir null or undefined, no me gusta
+    //if (result===null || result===undefined) throw new Error("Action: " + action + ". Error: No server response");
     
     const {reqLoaders} = await import('./request.js');
 
@@ -360,6 +363,11 @@ const NodeFrontMixing=Sup => class extends Sup {
     if (!loadFunc) loadFunc=(myNode, result)=>myNode.load(result);
     loadFunc(this, result, parameters);
     return this;
+  }
+  
+  static dataToNode(source){
+    const myClon= Node.detectGender(source)=="female" ? new NodeFemale() : new NodeMale();
+    return myClon.load(source);
   }
 }
 

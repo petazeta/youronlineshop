@@ -51,7 +51,7 @@
     }
   }, "addNewNodeButton");
   //in case is seller we still need to load the entire tree
-  if (webuser.isProductSeller()) {
+  if (webuser.isProductSeller()) { // ***** ERROR REUQESTMULTI REQUIRE UNPACKING
     const myNodes=await Node.requestMulti("get my tree", itemsRel.children, {extraParents: currentLanguage.getRelationship("siteelementsdata")});
     for (const i in itemsRel.children) {
       itemsRel.children[i].load(myNodes[i]);

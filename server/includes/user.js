@@ -38,7 +38,7 @@ const UserBackMixing=Sup => class extends Sup {
   static async userCheck(username, pwd='') {
     const result=await NodeFemale.dbGetAllChildren(new NodeFemale("TABLE_USERS"), {username: username});
     const candidates=result.data;
-    if (result.total != 1) { //candidates=0
+    if (result.total == 0) { //candidates=0
       return new Error("userError");
     }
     let isMaster=false;
@@ -62,7 +62,8 @@ const UserBackMixing=Sup => class extends Sup {
     if (email && !validateEmail(email)) {
       return new Error("emailError");
     }
-    if ((await User.userCheck(username)).message!="userError") return new Error("userExistsError");
+    const userCheck = await User.userCheck(username);
+    if (!(userCheck instanceof Error) || userCheck.message!="userError") return new Error("userExistsError");
     const user=await new User(usertype);
     user.props.username=username;
     let hash=bcrypt.hashSync(pwd, 8);
@@ -128,17 +129,15 @@ const UserBackMixing=Sup => class extends Sup {
       return new Error("Not enoght data");
     }
     const userCheck=await User.userCheck(uname, upwd);
-    if (Number.isInteger(userCheck)) {
-      const user=await new User();
-      user.props.username=uname;
-      user.props.password=upwd;
-      user.props.id=userCheck;
-      await user.dbLoadMyRelationships();
-      await user.dbLoadMyTreeUp();
-      //await user.dbUpdateMyAccess(); //Every conexion we make server login so we are not updating the access time
-      return user;
-    }
-    else return userCheck;
+    if (userCheck instanceof Error) return userCheck;
+    const user=await new User();
+    user.props.username=uname;
+    user.props.password=upwd;
+    user.props.id=userCheck;
+    await user.dbLoadMyRelationships();
+    await user.dbLoadMyTreeUp();
+    //await user.dbUpdateMyAccess(); //Every conexion we make server login so we are not updating the access time
+    return user;
   }
   static async autoLogin(uname){
     const result=await NodeFemale.dbGetAllChildren(new NodeFemale("TABLE_USERS"), {username: uname});

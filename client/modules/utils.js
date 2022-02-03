@@ -1,5 +1,7 @@
+import {detectGender, replaceLangData, splitLangTree} from './../../shared/modules/utils.js';
+import {Node, NodeMale, NodeFemale} from './nodesfront.js';
 // recursively inspect the tree to replace lang data
-const replaceData=(origin, target, relName, relDataName)=>{
+export function replaceData(origin, target, relName, relDataName) {
   const innerReplace=(origin, target)=>{
     if (!target.getRelationship(relDataName) || !origin.getRelationship(relDataName) || origin.getRelationship(relDataName).children==0) return;
     target.getRelationship(relDataName).children=[];
@@ -13,4 +15,27 @@ const replaceData=(origin, target, relName, relDataName)=>{
   }
   return target;
 }
-export {replaceData};
+
+// import tree that contains lang data
+export async function impData(newLangs, langrelname, datatree, currentLangs, rootelement) {
+  if (!currentLangs) currentLangs=newLangs;
+  
+  if (rootelement) await rootelement.request("delete my tree");
+  
+  const singleTrees=splitLangTree(datatree, newLangs.length);
+
+  const newTree=singleTrees[0];
+  await newTree.loadRequest("add my tree", {extraParents: currentLangs[0].getRelationship(langrelname)});  
+
+  //Now we add the new language content, just lang content
+  if (newLangs.length > 1) {
+    const requestData=[];
+    const requestParams=[];
+    for (let i=1; i<newLangs.length; i++) {
+      requestData.push(replaceLangData(newTree, singleTrees[i]).cloneNode());
+      requestParams.push({extraParents: currentLangs[i].getRelationship(langrelname), tableName: "TABLE_LANGUAGES"});
+    }
+    return await Node.requestMulti("add my tree table content", requestData, requestParams);
+  }
+}
+

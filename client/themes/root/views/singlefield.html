@@ -19,7 +19,7 @@
         thisParams.labelNode.setView(thisElement, "singlelabel", {editpropertyname: thisParams.editpropertyname, noEditLabel: thisParams.noEditLabel});
       }
       else if (thisParams.labelName) {
-        (new thisNode.constructor()).setView(thisElement, "singlelabel", {labelName: thisParams.labelName, editpropertyname: thisParams.editpropertyname});
+        new thisNode.constructor().setView(thisElement, "singlelabel", {labelName: thisParams.labelName, editpropertyname: thisParams.editpropertyname});
       }
     </script>
     <div style="display:table; position: relative;">

@@ -3,6 +3,7 @@ thisNode -> text node "logform"
 -->
 <form>
   <div id="logform">
+    <!--
     <div class="msgbox" style="position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
       <span></span>
@@ -17,7 +18,8 @@ thisNode -> text node "logform"
         }
       </script>
     </div>
-    <div class="boxframe loginform">
+    -->
+    <div class="loginform">
       <div class="form-group">
         <div style="display: table; position:relative;">
           <div data-id="butedit" class="btmiddleright"></div>
@@ -165,7 +167,7 @@ thisNode -> text node "logform"
         }
       </script>
     </div>
-    <div class="dashbuttons">
+    <div class="new-account-button">
       <div style="position:relative;">
         <div data-id="butedit" class="btmiddleright"></div>
         <button type="button" class="btn" data-id="but"></button>
@@ -173,7 +175,7 @@ thisNode -> text node "logform"
           const myNode=thisNode.getNextChild("newuserbt").getRelationship("siteelementsdata").getChild();
           myNode.writeProperty(thisElement);
           thisElement.onclick=function(){
-            thisNode.setView(document.getElementById("centralcontent"), "newform");
+            thisNode.setView(document.querySelector(".login-frame .rmbox .body"), "newform");
           }
           //adding the edition pencil
           if (webuser.isWebAdmin()) {
@@ -198,7 +200,7 @@ thisNode -> text node "logform"
       if (checkData.errorKey=="user_name") errorMessage=this.elements.userCharError.value;
       else if (checkData.errorKey=="user_password") errorMessage=this.elements.pwdCharError.value;
       if (this.elements[checkData.errorKey]) this.elements[checkData.errorKey].focus();
-      (new AlertMessage(errorMessage, 3000)).showAlert();
+      new AlertMessage(errorMessage, 3000).showAlert();
       return false;
     }
     const storeChecked=thisElement.elements.rememberme.checked;
@@ -214,17 +216,19 @@ thisNode -> text node "logform"
       else {
         if (localStorage.getItem("user_name")) localStorage.removeItem("user_name");
       }
-
+      // close login card
+      document.body.removeChild(document.getElementById("login-card"));
       //if cart it is not empty -> redirect to checkout
       const {myCart} = await import('./' + CLIENT_MODULES_PATH + 'cart.js')
       if (myCart.getRelationship("cartitem").children.length>0) {
         thisNode.parentNode.getChild("checkout").setView(document.getElementById("centralcontent"), 'chktmain');
       }
       else {
+        // esto sería mejor hacerlo mediante patron observer
         //Come back to the previous page (before login)
         const url=webuser.referrer;
         const {getPopStateAction} = await import('./' + CLIENT_MODULES_PATH + 'availablestates.js');
-        const action=getPopStateAction(url);
+        const action=url && !url.includes("login") && getPopStateAction(url);
         if (action) {
           webuser.referrer=null; //reset referrer
           action();

@@ -10,7 +10,7 @@ export default class NodeBasic{
     const isNumberField=(property)=>{
       let keyIndex=-1;
       if (target.parentNode && target.parentNode.childtablekeys && target.parentNode.childtablekeys.length>0) keyIndex=target.parentNode.childtablekeys.indexOf(property);
-      if (keyIndex!==-1) return  target.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("int") || target.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("decimal");
+      if (keyIndex!==-1) return target.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("int") || target.parentNode.childtablekeysinfo[keyIndex]['Type'].includes("decimal");
     }
     let sourceProps=source;
     if (source.props) sourceProps=source.props;
@@ -24,12 +24,15 @@ export default class NodeBasic{
       let targetProps=target;
       if (target.props) targetProps=target.props;
       if (typeof value=="string" || typeof value=="number") targetProps[key]=value;
-      if (typeof value=="object" && value instanceof Date) targetProps[key]=value.toLocaleString();
+      else if (typeof value=="object" && value instanceof Date) targetProps[key]=value.toLocaleString();
+      //else if (value && typeof value=="object" && value.toString) targetProps[key]=value.toString();
+      else targetProps[key]=value;
     }
+    return target;
   }
   
   loadProperties(source, someKeys=null) {
-    NodeBasic.copyProperties(this, source, someKeys);
+    return NodeBasic.copyProperties(this, source, someKeys);
   }
   
   // It loads the object to the node. if the container object has some properites it doesn't remove them but replace if there is coincidence.

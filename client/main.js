@@ -7,13 +7,12 @@ import {loadText, replaceDataObservers} from './modules/sitecontent.js';
 import {Alert, AlertMessage} from './modules/alert.js';
 import makeReport, {setReports} from './modules/reports.js';
 
-/*
+
 // dev configuration
 import devConfig from './cfg/devconfig.js';
 const config=setConfig(devConfig);
-*/
+//const config=setConfig();
 
-const config=setConfig();
 webuser=myWebuser;
 
 if (!window.location.search && config.initUrl && config.initUrl.includes('?')) { //For special starting window
@@ -47,15 +46,14 @@ Node.makeRequest("get tables")
   const themeActive=await startTheme(config.themeId);
   if (tables.length==0) {
     //Ask for the option of importing database
-    new NodeMale().setView(document.body, "dbsqlimport");
-    return;
+    throw new Error('No tables');
   }
 
   //Load languages and select my language
   const languages= await loadLanguages();
   //if no root means that table domelements doesn't exist or has no elements
   if (languages.children.length==0) {
-    throw new Error('Database Content Error');
+    throw new Error('No content');
   }
   selectMyLanguage(); //set currentLanguage
   
@@ -79,23 +77,25 @@ Node.makeRequest("get tables")
   return loadPage();
 })
 .catch(async (myError)=>{
-  //Check if db error
-  if (myError instanceof Error && myError.message.indexOf('get tables')==0) {
-    const checkRqmts=await Node.makeRequest("check requirements");
-    if (checkRqmts!==true) {
-      throw new Error(checkRqmts);
+  // Managing installing situations
+  if (myError instanceof Error && myError.message=='No tables') {
+    const checkRqmts=await Node.makeRequest("check system");
+    if (checkRqmts && checkRqmts.dbsys!="mongodb") {
+      new NodeMale().setView(document.body, "dbsqlimport");
     }
-    //First of all we check that the database connection is ok
-    const checkDb=await Node.makeRequest("check db link");
-    if (checkDb!==true) {
-      throw new Error('Database Connection Failed' + '\n' + checkDb + '\n' + 'Please check your database config file.');
-    }
+    else throw myError;
   }
-  throw myError;
+  else if (myError instanceof Error && myError.message=='No content') {
+    const checkRqmts=await Node.makeRequest("check system");
+    if (checkRqmts && checkRqmts.dbsys=="mongodb") {
+      new NodeMale().setView(document.body, "dbsqlimport");
+    }
+    else throw myError;
+  }
+  else throw myError;
 })
 .catch(myError=>{
   //Error Output Messange
-  if (!myError) return; //error already managed ???This I dont understand well ... maybe better supress it
   console.error(myError);
   if (myError.stack) myError=myError.stack; //js errors it shows error line
   new Alert(myError).showAlert(document.getElementById('syserror'));

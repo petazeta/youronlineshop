@@ -22,21 +22,17 @@ const UserFrontMixing=Sup => class extends Sup {
   }
   async login(name, password){
     const result= await Node.makeRequest("login", {"user_name": name, "user_password": password});
-    if (typeof result=="object") {
-      const lastUserType=this.getUserType(); // save last user state to detect change
-      this.load(unpacking(result));
-      setAuthorization(name , password);
-      this.dispatchEvent("log", lastUserType);
-      this.notifyObservers("log", {lastType: lastUserType, currentType: this.getUserType()});
-      return this;
-    }
-    else throw new Error(result); //not successful login message
+    if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful login message
+    const lastUserType=this.getUserType(); // save last user state to detect change
+    this.load(unpacking(result));
+    setAuthorization(name , password);
+    this.dispatchEvent("log", lastUserType);
+    this.notifyObservers("log", {lastType: lastUserType, currentType: this.getUserType()});
+    return this;
   }
   static async create(name, password, email){
     const result=await Node.makeRequest("create user", {"user_name": name, "user_password": password, "user_email": email});
-    if (typeof Number.parseInt(result)!="number") {
-      throw new Error(result);
-    }
+    if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful login message
     return result;
   }
   async updatePwd(username, password){

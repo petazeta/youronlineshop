@@ -5,25 +5,22 @@ import {languages} from './languages.js';
 
 const exportFunc = new Map();
 
-// To export data with lang content we first export the tree with the current lang and the langs tree separately
+// To export data with lang content we first export the lang tree for first 2 levels: root and its rels (languages key). Then the root element tree to be exported with all langs.
 
-exportFunc.set("general", async ()=>{
-  //get data from the structure
-  const {loadText} = await import('./pagescontent.js')
-  const pagesText=await loadText();
-  const titClone=getSiteText().getNextChild("page_head_title").cloneNode(null, 0);
-  titClone.loadRequest("get my tree");
-  const subtitClone=getSiteText().getNextChild("page_head_subtitle").cloneNode(null, 0);
-  subtitClone.loadRequest("get my tree");
+exportFunc.set("menus", async ()=>{  
+  const {getPageText} = await import('./pagescontent.js')
+  const pagesText=await getPageText();
   const textClone=pagesText.cloneNode(null, 0);
   await textClone.loadRequest("get my tree");
-  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": [await titClone.request("add my tree", null, true), await subtitClone.request("add my tree", null, true), await textClone.request("add my tree", null, true)]};
+  const myRel=textClone.getRelationship("pageelements");
+  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await myRel.request("add my tree", null, true)};
 });
 
 exportFunc.set("catalog", async ()=>{
-  const categoriesrootmother=await new NodeFemale("TABLE_ITEMCATEGORIES", "TABLE_ITEMCATEGORIES").loadRequest("get my tree");
+  const {getCategoriesRoot} = await import('./pagescontent.js');
+  const catRoot = await getCategoriesRoot().cloneNode(null, 0).loadRequest("get my tree");
   //data from the structure
-  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await categoriesrootmother.getChild().request("add my tree", null, true)};
+  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await catRoot.request("add my tree", null, true)};
 });
 
 exportFunc.set("checkout", async ()=>{
@@ -75,6 +72,21 @@ exportFunc.set("users", async ()=>{
     users[i].getRelationship("addresses").load(arrayaddresses[i]);
   }
   return packing(usertype.getRelationship("users"));
+});
+
+exportFunc.set("db", async ()=>{
+  const db=[];
+  db.push(await new NodeFemale("TABLE_USERSTYPES").loadRequest("get my tree"));
+  const {getPageText} = await import('./pagescontent.js')
+  db.push(await getPageText().cloneNode(null, 0).loadRequest("get my tree"));
+  const {getSiteText} = await import('./sitecontent.js')
+  db.push(await getSiteText().cloneNode(null, 0).loadRequest("get my tree"));
+  const {getCategoriesRoot} = await import('./categories.js');
+  db.push(await getCategoriesRoot().cloneNode(null, 0).loadRequest("get my tree"));
+  db.push(await new NodeFemale("TABLE_SHIPPINGTYPES").loadRequest("get my tree"));
+  db.push(await new NodeFemale("TABLE_PAYMENTTYPES").loadRequest("get my tree"));
+  
+  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await Node.requestMulti("add my tree", db, null, true)};
 });
 
 export {exportFunc};

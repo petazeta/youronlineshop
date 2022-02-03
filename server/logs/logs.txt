@@ -1,27 +1,249 @@
-2022-01-12 18:49:57 trying to access forbiden content: default/
-2022-01-12 18:50:09 localhost:8080 http://localhost:8080/ get tables: 22
-2022-01-12 18:51:45 site required but not found
-2022-01-12 18:51:54 localhost:8080 http://localhost:8080/default/ get tables: 22
-2022-01-12 18:54:33 localhost:8080 http://localhost:8080/default/ get tables: 22
-2022-01-12 19:05:14 localhost:8080 http://localhost:8080/default/ get tables: 22
-2022-01-13 10:38:50 localhost:8080 http://localhost:8080/default/ get tables: 22
-2022-01-13 10:40:04 log in: productsadmin
-2022-01-13 10:40:39 file not found: ./yos/catalog-images/main/small/image_id_1.png
-2022-01-13 11:06:59 file not found: ./yos/catalog-images/main/small/image_id_1.png
-2022-01-13 11:08:41 file not found: ./yos/catalog-images/main/small/image_id_2.png
-2022-01-13 11:09:07 file not found: ./yos/catalog-images/main/small/image_id_2.png
-2022-01-13 11:13:40 file not found: ./yos/catalog-images/main/small/image_id_2.png
-2022-01-13 11:13:41 file not found: ./yos/catalog-images/main/small/image_id_2.png
-2022-01-13 11:13:41 file not found: ./yos/catalog-images/main/small/image_id_3.png
-2022-01-13 16:39:32 localhost:8080 http://localhost:8080/default/ get tables: 22
-2022-01-13 16:39:49 log in: webadmin
-2022-01-13 16:42:43 log out
-2022-01-13 16:43:07 log in: userError
-2022-01-13 20:42:28 localhost:8000 http://localhost:8000/ get tables: 22
-2022-01-13 20:42:37 log in: productsadmin
-2022-01-13 20:42:58 log out
-2022-01-13 20:43:06 trying to access forbiden content: default/
-2022-01-13 20:53:22 localhost:8000 http://localhost:8000/?category=2&subcategory=3 get tables: 0
-2022-01-13 20:53:24 log in: systemadmin
-2022-01-13 20:53:45 log out
-2022-01-13 20:53:45 localhost:8000 http://localhost:8000/?category=2&subcategory=3 get tables: 22
+new file
+2022-02-01 19:55:13 rdm0vn : Error: Database Content Error
+    at http://localhost:8001/client/main.js:57:11
+2022-02-01 19:55:27 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-01 19:55:28 log in: systemadmin
+2022-02-01 19:57:20 log out
+2022-02-01 19:57:20 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 19:57:22 log in: systemadmin
+2022-02-01 20:06:43 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:06:44 reb2s5 : Error: Database Content Error
+    at http://localhost:8001/client/main.js:57:11
+2022-02-01 20:06:53 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-01 20:06:55 log in: systemadmin
+2022-02-01 20:07:10 log out
+2022-02-01 20:07:10 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:07:14 log in: systemadmin
+2022-02-01 20:17:35 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:18:00 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-01 20:18:01 log in: systemadmin
+2022-02-01 20:18:22 log out
+2022-02-01 20:18:22 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:18:29 log in: systemadmin
+2022-02-01 20:21:15 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:21:32 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-01 20:21:34 log in: systemadmin
+2022-02-01 20:22:01 log out
+2022-02-01 20:22:01 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:22:32 log in: systemadmin
+2022-02-01 20:27:50 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-01 20:27:51 log in: systemadmin
+2022-02-01 20:28:05 log out
+2022-02-01 20:28:05 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:28:08 log in: systemadmin
+2022-02-01 20:29:50 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:30:30 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-01 20:30:31 log in: systemadmin
+2022-02-01 20:30:46 log out
+2022-02-01 20:30:46 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:30:49 log in: systemadmin
+2022-02-01 20:36:45 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:38:04 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-01 20:38:06 log in: systemadmin
+2022-02-01 20:38:21 log out
+2022-02-01 20:38:21 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-01 20:38:23 log in: systemadmin
+2022-02-02 00:37:29 localhost:8001 http://localhost:8001/ get tables: 0
+2022-02-02 00:37:31 log in: systemadmin
+2022-02-02 00:37:44 log out
+2022-02-02 00:37:44 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 00:37:48 log in: systemadmin
+2022-02-02 00:39:49 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 00:39:52 log in: systemadmin
+2022-02-02 01:12:54 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 01:12:54 rvrmpk : Error: Database Content Error
+    at loadRoot (http://localhost:8001/client/modules/sitecontent.js:22:24)
+    at async loadText (http://localhost:8001/client/modules/sitecontent.js:29:5)
+    at async http://localhost:8001/client/main.js:62:19
+2022-02-02 01:13:06 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-02 01:13:08 log in: systemadmin
+2022-02-02 01:13:23 log out
+2022-02-02 01:13:23 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 01:13:26 log in: systemadmin
+2022-02-02 01:14:20 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 01:15:20 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 01:19:29 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-02 01:19:30 log in: systemadmin
+2022-02-02 01:19:47 log out
+2022-02-02 01:19:47 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 01:20:23 log in: systemadmin
+2022-02-02 01:23:27 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 01:33:45 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 01:33:47 log in: systemadmin
+2022-02-02 01:41:16 localhost:8001 http://localhost:8001/?login=0 get tables: 0
+2022-02-02 01:41:17 log in: systemadmin
+2022-02-02 01:41:32 log out
+2022-02-02 01:41:32 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 01:41:35 log in: systemadmin
+2022-02-02 09:48:40 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 09:48:40 stc2mr : ReferenceError: chkRqmts is not defined
+    at http://localhost:8001/client/main.js:90:5
+2022-02-02 09:49:16 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 09:49:16 std6h7 : ReferenceError: chkRqmts is not defined
+    at http://localhost:8001/client/main.js:90:5
+2022-02-02 09:52:53 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 09:54:36 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 09:54:46 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 09:56:53 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 10:19:29 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 10:19:42 log in: systemadmin
+2022-02-02 10:22:51 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 10:23:01 log in: systemadmin
+2022-02-02 10:24:35 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 10:48:24 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 10:48:28 log in: systemadmin
+2022-02-02 10:49:45 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 10:59:45 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:03:03 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:06:06 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:06:48 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:08:20 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:08:20 t1tuf1 : Error: Database Content Error
+    at loadRoot (http://localhost:8001/client/modules/sitecontent.js:22:24)
+    at async loadText (http://localhost:8001/client/modules/sitecontent.js:29:5)
+    at async http://localhost:8001/client/main.js:61:19
+2022-02-02 11:08:59 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:11:19 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:12:11 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:20:42 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:22:50 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:53:04 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 11:55:53 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 12:00:23 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 12:02:40 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 12:05:33 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 13:20:15 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 13:29:04 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 13:31:39 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 13:34:06 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 14:07:03 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 14:07:06 log in: systemadmin
+2022-02-02 14:07:20 log out
+2022-02-02 14:07:20 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 14:08:10 tc5ob5 : cart item operation
+2022-02-02 14:08:10 tc5ob5 : cart item operation
+2022-02-02 14:09:08 log in: pepe
+2022-02-02 14:09:08 tc5ob5 : checkout
+2022-02-02 14:11:08 localhost:8001 http://localhost:8001/?category=61fa900a1a54a3ffe6f7ce55&subcategory=61fa900a1a54a3ffe6f7ce57 get tables: 22
+2022-02-02 14:11:18 log in: pepe
+2022-02-02 14:11:28 tccmc5 : cart item operation
+2022-02-02 14:11:30 tccmc5 : checkout
+2022-02-02 14:23:30 localhost:8001 http://localhost:8001/?chktmain=1 get tables: 22
+2022-02-02 14:23:33 log in: systemadmin
+2022-02-02 14:23:38 log out
+2022-02-02 14:23:38 localhost:8001 http://localhost:8001/?chktmain=1 get tables: 22
+2022-02-02 14:23:50 td3j4l : cart item operation
+2022-02-02 14:24:22 log in: pepe
+2022-02-02 14:24:22 td3j4l : checkout
+2022-02-02 14:24:40 log out
+2022-02-02 15:42:47 log in: userError
+2022-02-02 15:51:18 log in: {"error":true,"message":"userError"}
+2022-02-02 15:51:37 log in: {"error":true,"message":"userError"}
+2022-02-02 15:51:42 log in: {"error":true,"message":"userError"}
+2022-02-02 15:58:55 localhost:8001 http://localhost:8001/?chktmain=1 get tables: 331
+2022-02-02 16:03:15 localhost:8001 http://localhost:8001/?chktmain=1 get tables: 22
+2022-02-02 16:12:25 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 16:12:29 log in: userError
+2022-02-02 16:12:36 log in: pwdError
+2022-02-02 16:15:40 log in: pwdError
+2022-02-02 16:15:47 log in: systemadmin
+2022-02-02 16:16:07 tjanl4 : cart item operation
+2022-02-02 16:16:10 tjanl4 : checkout
+2022-02-02 16:39:41 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 16:39:44 tksn1f : cart item operation
+2022-02-02 16:45:19 localhost:8001 http://localhost:8001/?category=61fa93e47f27300bccb2bfc7&subcategory=61fa93e47f27300bccb2bfc9 get tables: 22
+2022-02-02 16:45:24 tl709a : cart item operation
+2022-02-02 16:45:39 tl709a : cart item operation
+2022-02-02 16:45:49 log in: pepe
+2022-02-02 16:45:49 tl709a : checkout
+2022-02-02 16:55:37 log out
+2022-02-02 16:55:53 log in: pepe
+2022-02-02 16:56:10 log out
+2022-02-02 16:56:13 log in: systemadmin
+2022-02-02 16:56:20 log out
+2022-02-02 16:56:29 log in: pepe
+2022-02-02 16:56:36 log out
+2022-02-02 16:56:42 log in: systemadmin
+2022-02-02 16:57:03 log out
+2022-02-02 18:45:54 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 18:46:00 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 18:46:02 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 18:46:10 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 18:46:30 log in: systemadmin
+2022-02-02 18:47:33 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 18:47:42 log in: webadmin
+2022-02-02 18:48:12 log out
+2022-02-02 18:48:16 log in: productsadmin
+2022-02-02 18:49:30 log out
+2022-02-02 18:49:54 log in: systemadmin
+2022-02-02 19:35:30 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 19:35:32 log in: systemadmin
+2022-02-02 19:35:37 log out
+2022-02-02 19:35:38 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 19:35:40 log in: systemadmin
+2022-02-02 19:49:07 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 19:49:18 log in: systemadmin
+2022-02-02 19:59:52 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 19:59:55 log in: systemadmin
+2022-02-02 20:00:00 log out
+2022-02-02 20:00:01 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 20:00:04 log in: systemadmin
+2022-02-02 20:56:25 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 20:56:28 log in: systemadmin
+2022-02-02 20:56:51 log out
+2022-02-02 20:56:51 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 20:56:53 log in: systemadmin
+2022-02-02 21:02:56 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:02:58 log in: systemadmin
+2022-02-02 21:03:03 log out
+2022-02-02 21:03:03 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:03:05 log in: systemadmin
+2022-02-02 21:05:22 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:05:24 log in: systemadmin
+2022-02-02 21:05:29 log out
+2022-02-02 21:05:29 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:05:32 log in: systemadmin
+2022-02-02 21:19:27 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:19:29 log in: systemadmin
+2022-02-02 21:19:33 log out
+2022-02-02 21:19:33 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:19:36 log in: systemadmin
+2022-02-02 21:27:12 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:27:16 log in: systemadmin
+2022-02-02 21:27:21 log out
+2022-02-02 21:27:22 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:27:24 log in: systemadmin
+2022-02-02 21:34:33 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:34:35 log in: systemadmin
+2022-02-02 21:34:40 log out
+2022-02-02 21:34:40 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:34:42 log in: systemadmin
+2022-02-02 21:53:43 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:53:50 log in: systemadmin
+2022-02-02 21:54:00 log out
+2022-02-02 21:54:00 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 21:54:05 log in: systemadmin
+2022-02-02 22:05:04 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 22:05:15 log in: systemadmin
+2022-02-02 22:05:20 log out
+2022-02-02 22:05:20 localhost:8001 http://localhost:8001/ get tables: 22
+2022-02-02 22:05:29 log in: systemadmin
+2022-02-02 22:26:50 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 22:26:53 log in: systemadmin
+2022-02-02 22:27:00 log out
+2022-02-02 22:27:00 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 22:27:03 log in: systemadmin
+2022-02-02 22:29:36 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 22:29:40 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 22:29:45 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 22:29:57 localhost:8001 http://localhost:8001/?login=0 get tables: 22
+2022-02-02 23:33:21 localhost:8001 http://localhost:8001/?category=61fb058e963a3ef71c41b61a&subcategory=61fb058e963a3ef71c41b61e get tables: 22
+2022-02-02 23:33:44 log in: webadmin
+2022-02-02 23:33:47 log out
+2022-02-02 23:33:51 log in: productsadmin
+2022-02-02 23:38:37 localhost:8001 http://localhost:8001/?category=61fb058e963a3ef71c41b61a&subcategory=61fb058e963a3ef71c41b61e get tables: 22
+2022-02-02 23:43:08 localhost:8001 http://localhost:8001/?category=61fb058e963a3ef71c41b61a&subcategory=61fb058e963a3ef71c41b61e get tables: 22
+2022-02-02 23:44:37 localhost:8001 http://localhost:8001/?category=61fb058e963a3ef71c41b61a&subcategory=61fb058e963a3ef71c41b61e get tables: 22
+2022-02-02 23:45:14 ud6pgs : cart item operation
+2022-02-02 23:58:42 log in: productsadmin
+2022-02-02 23:58:42 ud6pgs : checkout

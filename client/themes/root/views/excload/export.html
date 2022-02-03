@@ -39,7 +39,7 @@
           <table style="margin:auto; text-align:left; margin-bottom:1em;" class="exp-select">
             <tr>
               <td style="position:relative;">
-                <input type="radio" value="general" name="dataoption">
+                <input type="radio" value="menus" name="dataoption">
                 <details>
                   <summary style="position:relative; display: inline-block;">
                     <div data-id="butedit" class="btmiddleright"></div>
@@ -233,6 +233,19 @@
                 </details>
               </td>
             </tr>
+            <tr>
+              <td style="position:relative;">
+                <input type="radio" value="db" name="dataoption">
+                <details>
+                  <summary style="position:relative; display: inline-block;">
+
+                    <span>Entire db</span>
+
+                  </summary>
+
+                </details>
+              </td>
+            </tr>
           </table>
         </div>
       </div>
@@ -275,7 +288,7 @@
               langdata=getSelectedLangData(langdata, myLangs);
               if (langdata.children.length==0) {
                 //we show the alert message No selection
-                (new AlertMessage(thisElement.form.elements.noselection.value, 2000)).showAlert();
+                new AlertMessage(thisElement.form.elements.noselection.value, 2000).showAlert();
                 return;
               }
               thisElement.form.result.value=JSON.stringify(await myFunc(langdata));

@@ -20,7 +20,7 @@ pageMother.noticeReactions.set("log", (params)=>{
 });
 
 async function loadRoot() {
-  await  pageMother.loadRequest("get my root");
+  await pageMother.loadRequest("get my root");
   //if no root means that table domelements doesn't exist or has no elements
   if (pageMother.children.length==0) {
     throw new Error('Database Content Error');

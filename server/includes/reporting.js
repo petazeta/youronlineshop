@@ -19,9 +19,9 @@ requestsRep.set('logout', (result)=>makeReport("log out"));
 
 requestsRep.set('login', (result)=>{
   let answer;
-  if (typeof result == "string") answer=result;
+  if (typeof result == "object" && result.logError) answer=result.code;
   else answer=unpacking(result).props.username;
-  return makeReport("log in: " + answer)
+  return makeReport("log in: " + answer);
 });
 
 requestsRep.set('update user pwd', (result)=>console.log(result));

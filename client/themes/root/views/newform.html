@@ -3,6 +3,7 @@
 -->
 <form>
   <div id="logform">
+  <!--
     <div class="msgbox" style="position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
       <span></span>
@@ -17,7 +18,8 @@
         }
       </script>
     </div>
-    <div class="boxframe loginform">
+    -->
+    <div class="loginform">
       <div class="form-group" style="position:relative;">
         <div data-id="buteditlabel" class="btmiddleleft"></div>
         <div data-id="butedit" class="btmiddleright"></div>
@@ -77,7 +79,7 @@
           pwdform.getNextChild("repeatpwd").getRelationship("siteelementsdata").getChild().writeProperty(thisElement, null, "placeholder");
         </script>
       </div>
-      <div style="position:relative;">
+      <div class="sign-up-button" style="position:relative;">
         <div data-id="butedit" class="btmiddleright"></div>
         <button type="submit" class="btn" data-id="but"></button>
         <script>
@@ -168,6 +170,7 @@
         }
       </script>
     </div>
+    <!--
     <div class="dashbuttons">
       <div style="position:relative;">
         <div data-id="butedit" class="btmiddleright"></div>
@@ -187,6 +190,7 @@
         </script>
       </div>
     </div>
+    -->
   </div>
 </form>
 <script>
@@ -206,51 +210,47 @@
       return;
     }
     if (this.elements.user_password.value!=this.elements.repeat_password.value) {
-      (new AlertMessage(this.elements.pwdDoubleError.value, 3000)).showAlert();
+      new AlertMessage(this.elements.pwdDoubleError.value, 3000).showAlert();
       this.elements.user_password.focus();
       return;
     }
     User.create(thisElement.elements.user_name.value, thisElement.elements.user_password.value)
-    .then(userId =>{
+    .then(result =>{
+      if (result !== true) throw new Error(result);
       webuser.login(thisElement.elements.user_name.value, thisElement.elements.user_password.value)
-      .then(()=>{
-        (new AlertMessage(thisElement.elements.signedIn.value, 3000)).showAlert();
-        //Show menu
-        const basicPath=thisNode.parentNode.getChild("dashboard");
-        basicPath.setView(document.getElementById("dashmenu"), "usermenu");
-        document.getElementById("dashmenu").style.visibility="visible";
-        document.getElementById("dashmenu").style.transform="translateY(15px)";
-        //Come back to the previous page (before login)
-        const url=webuser.referrer;
-        import('./' + CLIENT_MODULES_PATH + 'availablestates.js')
-        .then(({getPopStateAction})=>{
-          const action=getPopStateAction(url);
+      .then( async ()=>{
+        new AlertMessage(thisElement.elements.signedIn.value, 3000).showAlert();
+        // ******* este código se repite en loginform , mejor implementar patron observer o meterlo en un módulo
+        // close login card
+        document.body.removeChild(document.getElementById("login-card"));
+        // if cart it is not empty -> redirect to checkout
+        const {myCart} = await import('./' + CLIENT_MODULES_PATH + 'cart.js')
+        if (myCart.getRelationship("cartitem").children.length>0) {
+          thisNode.parentNode.getChild("checkout").setView(document.getElementById("centralcontent"), 'chktmain');
+        }
+        else {
+          // esto sería mejor hacerlo mediante patron observer
+          //Come back to the previous page (before login)
+          const url=webuser.referrer;
+          const {getPopStateAction} = await import('./' + CLIENT_MODULES_PATH + 'availablestates.js');
+          const action=url && !url.includes("login") && getPopStateAction(url);
           if (action) {
             webuser.referrer=null; //reset referrer
             action();
             if (!(history.state && history.state.url==url)) {
               history.pushState({url:url}, null, url);
-              return; //pushing state will produce the next page loading
             }
-          }
-        });
-        //if cart it is not empty -> redirect to checkout
-        import('./' + CLIENT_MODULES_PATH + 'cart.js')
-        .then(({myCart}) => {
-          if (myCart.getRelationship("cartitem").children.length>0) {
-            thisNode.parentNode.getChild("checkout").setView(document.getElementById("centralcontent"), 'chktmain');
           }
           else {
             const basicPath=thisNode.parentNode.getChild("dashboard");
             basicPath.setView(document.getElementById("centralcontent"), "showuserinfo");
           }
-        });
+        }        
       });
     })
     .catch(error=>{
-      let errorMessage=error;
-      if (thisElement.elements[error]) errorMessage=thisElement.elements[error].value;
-      (new AlertMessage(errorMessage, 3000)).showAlert();
+      const errorMessage=thisElement.elements[error.message] && thisElement.elements[error.message].value || error.message;
+      new AlertMessage(errorMessage, 3000).showAlert();
     });
   });
 </script>

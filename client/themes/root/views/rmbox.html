@@ -8,7 +8,7 @@ After closing it fires the event closewindow.
       <div class="closeimage"></div>
     </button>
     <script>
-      var rmBox=thisElement.parentElement.parentElement;
+      const rmBox=thisElement.parentElement.parentElement;
       thisElement.addEventListener('click', ()=>{
         if (thisParams.removeContainer) {
           thisParams.removeContainer.parentElement.removeChild(thisParams.removeContainer);
@@ -20,7 +20,7 @@ After closing it fires the event closewindow.
       });
     </script>
   </div>
-  <div></div>
+  <div class="body"></div>
   <script>
     thisNode.setView(thisElement, thisParams.myTp, thisParams.myParams);
   </script>

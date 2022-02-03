@@ -61,7 +61,8 @@ class Cart extends NodeMale {
       new AlertMessage(getSiteText().getNextChild("cartbox").getNextChild("emptyCart").getRelationship("siteelementsdata").getChild().props.value, 3000).showAlert();
     }
     else if (!webuser.props.id) {
-      getSiteText().getNextChild("logform").setView(document.getElementById("centralcontent"), "loginform");
+      if (document.getElementById("login-card")) getSiteText().getNextChild("logform").setView(document.querySelector(".login-frame .rmbox .body"), "loginform");
+      else getSiteText().getNextChild("logform").appendView(document.body, "loginframe");
     }
     else {
       getSiteText().getNextChild("checkout").setView(document.getElementById("centralcontent"), "chktmain");

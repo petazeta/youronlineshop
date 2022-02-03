@@ -12,6 +12,18 @@ export function detectGender(myNode){
   return myNode.hasOwnProperty('parentNode') ? "male" : "female";
 }
 
+// type: primary, foreignkey, positionkey. return unique value
+export function getSysKey(parentNode, type='foreignkey'){
+  if (type=="primary") {
+    const result = parentNode.syschildtablekeysinfo.find(value=>value.type=="primary");
+    if (result) return result.name;
+    return result;
+  }
+  const result = parentNode.syschildtablekeysinfo.find(value=>value.type==type && value.parenttablename && value.parenttablename==parentNode.props.parenttablename);
+  if (result) return result.name;
+  return result;
+}
+
 export function getRoot(myNode, tableName) {
   let index=myNode;
   // we go for the male
@@ -79,18 +91,18 @@ export function deconstruct(myNode){
     const myId=serials.size + 1; // this ensures unique ids
     if (myNode===indexNode) indexKey=myId;
     const newOne=serializeNode(myNode, gender);
-    newOne.props._id=myId;
+    newOne.props.__id=myId;
     let recursion, nextGender;
     if (gender=='female') {
-      if (myNode.partnerNode && myNode.partnerNode.props._id) {
-        newOne.partnerNode=myNode.partnerNode.props._id;
+      if (myNode.partnerNode && myNode.partnerNode.props.__id) {
+        newOne.partnerNode=myNode.partnerNode.props.__id;
       }
       recursion=myNode.children;
       nextGender='male';
     }
     else {
-      if (myNode.parentNode && myNode.parentNode.props._id) {
-        newOne.parentNode=myNode.parentNode.props._id;
+      if (myNode.parentNode && myNode.parentNode.props.__id) {
+        newOne.parentNode=myNode.parentNode.props.__id;
       }
       recursion=myNode.relationships;
       nextGender='female';
@@ -106,8 +118,8 @@ export function deconstruct(myNode){
   
   serials.forEach((value)=>{
     // si el valor es el del nodo guardado guardamos su id
-    //if (value && value.props && value.props.id && indexNode.props && indexNode.props.id && value.props.id===indexNode.props.id) indexKey=value.props._id;
-    if (value && value.props && value.props._id) delete value.props._id;
+    //if (value && value.props && value.props.id && indexNode.props && indexNode.props.id && value.props.id===indexNode.props.id) indexKey=value.props.__id;
+    if (value && value.props && value.props.__id) delete value.props.__id;
   })
   if (!indexKey) return;
   // ponemos un último valor en el map para establecer el valor inicial del bloque: index: id, 
@@ -128,7 +140,7 @@ SELECT * FROM MyTree;
 So tenemos este resultado de una tabla podemos utilizar los propios ids para que el mapa resultante de serialize tenga como claves los ids y de esta forma si queremos añadir al arbol elementos de otras tablas lo tendríamos más fácil:
 const myId = gender == "male" ? myNode.props.id : 'f' + (serials.size + 1);
 
-Quizá podría ponerse en cada nodo de la lista además de parent_id children[..._id] y así quizás se podría hacer de forma que no importara el orden
+Quizá podría ponerse en cada nodo de la lista además de parent__id children[..._id] y así quizás se podría hacer de forma que no importara el orden
 */
 
 export function construct(serials){
@@ -177,3 +189,40 @@ export const arrayPacking=datas=>{
   if (typeof datas == 'object') return datas.map(data => packing(data));
   return datas;
 };
+
+// Only when structure is identical
+export function replaceLangData(targetTree, sourceTree){
+  const targetTreeArray=targetTree.arrayFromTree();
+  const sourceArray=sourceTree.arrayFromTree();
+  for (let i=0; i<targetTreeArray.length; i++) {
+    if (detectGender(targetTreeArray[i])=="female") {
+      const isLangContent = targetTreeArray[i].syschildtablekeysinfo &&
+      targetTreeArray[i].syschildtablekeysinfo.some(syskey=>syskey.type=='foreignkey' && syskey.parenttablename=="TABLE_LANGUAGES");
+      if (!isLangContent) continue;
+      //Swap the other langs content
+      targetTreeArray[i].children[0].props=sourceArray[i].children[0].props;
+    }
+  }
+  return targetTree;
+}
+
+// split the languages data in one array of langdata for each language
+export function splitLangTree(origTree, totalLang){
+  if (totalLang<2) return [origTree];
+  const origSerial=origTree.arrayFromTree();
+  const singleTrees=[];
+  for (let lang_i=0; lang_i<totalLang; lang_i++) {
+    singleTrees[lang_i] = origTree.constructor.dataToNode(origTree);
+    const langSerial=singleTrees[lang_i].arrayFromTree();
+    for (let i=0; i<origSerial.length; i++) {
+      if (detectGender(origSerial[i])=="female") {
+        const isLangContent = origSerial[i].syschildtablekeysinfo &&
+        origSerial[i].syschildtablekeysinfo.some(syskey=>syskey.type=='foreignkey' && syskey.parenttablename=="TABLE_LANGUAGES");
+        if (!isLangContent) continue;
+        //The children are the lang conent
+        langSerial[i].children=[origSerial[i].children[lang_i]];
+      }
+    }
+  }
+  return singleTrees;
+}

@@ -5,7 +5,8 @@ const dbConfigList=new Map(Object.entries({
     user: "user_name",
     password: "mypassword",
     database: "mydb",
-    dbsys: "pgsql",
+    dbsys: "mongodb",
+    url: "mongodb://admin:password@localhost/testdb?authSource=admin"
   },
 }));
 export default dbConfigList;

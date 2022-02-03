@@ -1,102 +1,25 @@
 import {getSiteText} from './sitecontent.js';
 import {Node, NodeMale, NodeFemale} from './nodesfront.js';
-import {arrayUnpacking, unpacking, detectGender} from './../../shared/modules/utils.js';
-import {languages, getCurrentLanguage} from './languages.js';
+import {arrayUnpacking, unpacking, detectGender} from '../../shared/modules/utils.js';
+import {languages, getCurrentLanguage, loadLanguages} from './languages.js';
+import {impData} from './utils.js';
 
 const importFunc = new Map();
 
-async function impData(datalang, langrelname, rootelement, datatree) {
-  const requestResultData=[]; //Complet final request container
-  const requestResultActions=[];
-  const requestResultParams=[];
-  // checking lang consistency
-  if (datalang.length!=languages.children.length)  return false;
-  for (let i=0; i<datalang.length; i++) {
-    if (datalang[i].props.id!=languages.children[i].props.id) {
-      return false;
-    }
-  }
-
-  //We split the languages in one array of langdata for each language
-  const treearray=datatree.arrayFromTree();
-  const langnodes=[];
-  let langarray;
-  for (let i=0; i<datalang.length; i++) {
-    if (Node.detectGender(datatree)=="female") langnodes[i]=new NodeFemale();
-    else langnodes[i]=new NodeMale();
-    langnodes[i].load(datatree);
-    langarray=langnodes[i].arrayFromTree();
-    for (let j=0; j< treearray.length; j++) {
-      if (Node.detectGender(treearray[j])=="female" && treearray[j].props.language) {
-        //The children are the lang conent
-        langarray[j].children=[treearray[j].children[i]];
-      }
-    }
-  }
-  
-  if (!langarray || langarray.length==0) return false;
-  //then we insert the tree with just first lang content and for the others
-  //First we add the remove tree request
-  requestResultData.push(rootelement);
-  let delAction="delete myself";
-  if (Node.detectGender(rootelement)=="female") delAction="delete my tree";
-  requestResultActions.push(delAction);
-  requestResultParams.push(null);
-  requestResultData.push(langnodes[0]);
-  requestResultActions.push("add my tree");
-  requestResultParams.push({extraParents: languages.getChild().getRelationship(langrelname)});
-  const myResult=await Node.requestMulti(requestResultActions, requestResultData, requestResultParams);
-  if (datalang.length<2) {
-    return myResult;
-  }
-  
-  const myNode=new NodeMale();
-  myNode.load(unpacking(myResult[1]));
-  //The resulting tree then we will swap the lang content for each language, then insert again but just the lang content
-  //We get to the list of nodes
-  const newtreearray=myNode.arrayFromTree();
-  //console.log(newtreearray, treearray);
-  //For each language we swap content
-  //Now we add the new language content but now just lang content
-  const requestData=[];
-  const requestParams=[];
-  for (let i=1; i<datalang.length; i++) {
-    for (let j=0; j<newtreearray.length; j++) {
-      let langarray=langnodes[i].arrayFromTree();
-      if (Node.detectGender(newtreearray[j])=="female" && newtreearray[j].props.language) {
-        //console.log(newtreearray[j], langarray[j]);
-        //Swap the other langs content
-        newtreearray[j].children[0].props=langarray[j].children[0].props;
-      }
-    }
-    requestData.push(myNode);
-    requestParams.push({extraParents: languages.children[i].getRelationship(langrelname), tableName: "TABLE_LANGUAGES"});
-  }
-  return await Node.requestMulti("add my tree table content", requestData, requestParams);
-}
-
-importFunc.set("general", async (data)=>{
-  const myLangs=arrayUnpacking(data.languages);
-  await impData(myLangs, "siteelementsdata", getSiteText().getNextChild("page_head_title"),  new NodeMale().load(unpacking(data.tree[0])));
-  await impData(myLangs, "siteelementsdata", getSiteText().getNextChild("page_head_subtitle"),  new NodeMale().load(unpacking(data.tree[1])));
-  const {loadText} = await import('./pagescontent.js')
-  const pagesText=await loadText();
-  return await impData(myLangs, "pageelementsdata", pagesText,  new NodeMale().load(unpacking(data.tree[2])));
+importFunc.set("menus", async (data)=>{
+  const {getPageText} = await import('./pagescontent.js')
+  return await impData(arrayUnpacking(data.languages), "pageelementsdata",  new NodeFemale().load(unpacking(data.tree)), languages.children, getPageText().getRelationship("pageelements"));
 });
 
 importFunc.set("catalog", async (data)=>{
-  const categoriesrootmother=await new NodeFemale("TABLE_ITEMCATEGORIES", "TABLE_ITEMCATEGORIES").loadRequest("get my root");
-  const myLangs=arrayUnpacking(data.languages);
-  return await impData(myLangs, "itemcategoriesdata", categoriesrootmother.getChild(), new NodeMale().load(unpacking(data.tree)));
+  const {getCategoriesRoot} = await import('./categories.js')
+  return await impData(arrayUnpacking(data.languages), "itemcategoriesdata", new NodeMale().load(unpacking(data.tree)), languages.children, getCategoriesRoot());
   // falta algo aqui para actualizar (reload catalogs)*****************
 });
 
 importFunc.set("checkout", async (data)=>{
-  const shippingsrootmother=new NodeFemale("TABLE_SHIPPINGTYPES");
-  const paymentsrootmother=new NodeFemale("TABLE_PAYMENTTYPES");
-  const myLangs=arrayUnpacking(data.languages);
-  await impData(myLangs, "shippingtypesdata", shippingsrootmother, new NodeFemale().load(unpacking(data.tree[0])));
-  await impData(myLangs, "paymenttypesdata", paymentsrootmother, new NodeFemale().load(unpacking(data.tree[1])));
+  await impData(arrayUnpacking(data.languages), "shippingtypesdata", new NodeFemale().load(unpacking(data.tree[0])), languages.children, new NodeFemale("TABLE_SHIPPINGTYPES"));
+  await impData(arrayUnpacking(data.languages), "paymenttypesdata", new NodeFemale().load(unpacking(data.tree[1])), languages.children, new NodeFemale("TABLE_PAYMENTTYPES"));
 });
 
 importFunc.set("lang", async (importedDataTrees, importedDataLangs)=>{
@@ -185,6 +108,32 @@ importFunc.set("users", async (data)=>{
   const newusersmother=new NodeFemale().load(unpacking(data));
   newusersmother.partnerNode.props.id=usertypemother.getChild().props.id;
   return await newusersmother.request("add my children");
+});
+
+importFunc.set("db", async (data)=>{
+  for (const child of languages.children) {
+    await child.request("delete myself");
+  }
+  const newLangs=arrayUnpacking(data.languages).map(lang=>new NodeMale().load(lang));
+  await Node.requestMulti("add my tree", newLangs);
+  await loadLanguages();
+  const usersTypes =  await new NodeFemale("TABLE_USERSTYPES").loadRequest("get all my children");
+  const newUsers=new NodeFemale().load(unpacking(data.tree.shift()));
+  // we can not remove the current user without eliminate the auth (login) and then produce safety error
+  if (webuser && webuser.isSystemAdmin()) {
+    usersTypes.removeChild(usersTypes.children.find(child=>child.props.type=="system administrator"));
+    newUsers.removeChild(newUsers.children.find(child=>child.props.type=="system administrator"));
+  }
+  await Node.requestMulti("delete my tree", usersTypes.children);
+  await Node.requestMulti("add my tree", newUsers.children);
+  const {getPageText} = await import('./pagescontent.js')
+  await impData(newLangs, "pageelementsdata",  Node.dataToNode(unpacking(data.tree.shift())), languages.children, getPageText());
+  debugger;
+  await impData(newLangs, "siteelementsdata",  Node.dataToNode(unpacking(data.tree.shift())), languages.children, getSiteText());
+  const {getCategoriesRoot} = await import('./categories.js')
+  await impData(newLangs, "itemcategoriesdata",  Node.dataToNode(unpacking(data.tree.shift())), languages.children, getCategoriesRoot());
+  await impData(newLangs, "shippingtypesdata",  Node.dataToNode(unpacking(data.tree.shift())), languages.children, new NodeFemale("TABLE_SHIPPINGTYPES"));
+  await impData(newLangs, "paymenttypesdata",  Node.dataToNode(unpacking(data.tree.shift())), languages.children, new NodeFemale("TABLE_PAYMENTTYPES"));
 });
 
 export {importFunc};

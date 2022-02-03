@@ -1,6 +1,6 @@
 // Node is the basic object, it will contain data and relationship links to other nodes
 import {parseNumber} from './datainput.js';
-import {detectGender, getRoot, equality} from './utils.js';
+import {detectGender, getRoot, equality, getSysKey} from './utils.js';
 
 // const Node = EventListenerMixing(NodeBasic);
 const NodeMixing=Sup => class extends Sup {
@@ -54,9 +54,7 @@ const NodeFemaleMixing=Sup => class extends Sup {
     this.syschildtablekeysinfo=[];
   }
 
-  load(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown, myConstructor) {
-    super.load(source); //No thisProperties filter for females
-    if (Array.isArray(source)) levelup=0; //load from children
+  loadChildTableKeys(source) {
     if (source.childtablekeys) {
       this.childtablekeys=source.childtablekeys;
     }
@@ -87,6 +85,13 @@ const NodeFemaleMixing=Sup => class extends Sup {
         return schkeysinfo;
       });
     }
+    return this;
+  }
+
+  load(source, levelup, leveldown, thisProperties, thisPropertiesUp, thisPropertiesDown, myConstructor) {
+    super.load(source); //No thisProperties filter for females
+    if (Array.isArray(source)) levelup=0; //load from children
+    else this.loadChildTableKeys(source);
     if (levelup !== 0 && !(levelup < 0)) { //level null and undefined like infinite
       this.loadasc(source, levelup, thisPropertiesUp, myConstructor);
     }
@@ -133,17 +138,9 @@ const NodeFemaleMixing=Sup => class extends Sup {
     this.partnerNode.loadasc(source.partnerNode, level, thisProperties);
   }
   
+  // type: primary, foreignkey, positionkey. return unique value
   static getSysKey(parentNode, type='foreignkey'){
-    for (const syskey of parentNode.syschildtablekeysinfo) {
-      if (type=="primary" && syskey.type==type) {
-        return syskey.name;
-      }
-      if (syskey.parenttablename
-        && syskey.parenttablename==parentNode.props.parenttablename
-        && syskey.type==type) {
-        return syskey.name;
-      }
-    }
+    return getSysKey(parentNode, type);
   }
   
   getMySysKey(type='foreignkey'){
@@ -151,20 +148,17 @@ const NodeFemaleMixing=Sup => class extends Sup {
     return this.constructor.getSysKey(this, type);
   }
   
-  static getChildKey(parentNode, type){
-    const returnkeys=[];
-    for (const mykey of parentNode.childtablekeysinfo) {
-      if (type && mykey.type==type) {
-        returnkeys.push(mykey.Field);
-      }
-      else returnkeys.push(mykey.Field);
-    }
-    return returnkeys;
+  // return an array
+  static getChildKeys(parentNode, type){
+    const returnKeys=[];
+    if (type) parentNode.childtablekeysinfo.forEach(value=>{if (value.type==type) returnKeys.push(value.Field)});
+    else parentNode.childtablekeysinfo.forEach(value=>returnKeys.push(value.Field));
+    return returnKeys;
   }
   
-  getMyChildKey(type){
+  getMyChildKeys(type){
     //Get foreign keys from the actual relatioship
-    return this.constructor.getChildKey(this, type);
+    return this.constructor.getChildKeys(this, type);
   }
   
   static getEqualChild(pNode, toChild){
@@ -209,18 +203,18 @@ const NodeFemaleMixing=Sup => class extends Sup {
   }
 
   replaceChild(oldchild,newchild) {
-    var i= this.children.length;
-    while(i--) {
+    for (let i=0; i<this.children.length; i++) {
       if (this.children[i].props.id == oldchild.props.id) {
         this.children[i]=newchild;
         this.children[i].parentNode=this;
+        break;
       }
     }
   }
 
   removeChild(obj) {
     let removed=false;
-    for (let i in this.children) {
+    for (let i=0; i<this.children.length; i++) {
       if (this.children[i]==obj || (obj.props.id && this.children[i].props.id==obj.props.id)) {
         removed=this.children.splice(i,1)[0];
         break;
@@ -248,10 +242,10 @@ const NodeFemaleMixing=Sup => class extends Sup {
 
   getChild(obj) {
     if (!obj) return this.children[0];
-    if (typeof obj=="string") { //first prop!=id
+    if (typeof obj=="string") { // selecting first prop!=id
       if (this.childtablekeys) {
         for (const key of this.childtablekeys) {
-          if (key!="id") {
+          if (key!='id') {
             obj={[key]: obj};
             break;
           }

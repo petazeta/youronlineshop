@@ -1,5 +1,9 @@
 
 export default function edition(buttonElement, editElement, thisNode, thisProperty, thisAttribute, inlineEdition, dataProcessor) {
+  if (!thisProperty) {
+    thisProperty = thisNode.parentNode.getMyChildKeys()[0]; // first real property
+  }
+  
   function setVisibilityButtons(vis){
     function changeVisibility(buts, vis){
       for (const but of buts) {

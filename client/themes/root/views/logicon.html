@@ -17,6 +17,7 @@
     }
     logbox.getNextChild("title").getRelationship("siteelementsdata").getChild().writeProperty(thisElement);
   }
+  // esto está anticuado, mejor cambiar a patron observer
   setlogstatus();
   webuser.addEventListener("log", () => {
     setlogstatus();
@@ -41,7 +42,8 @@
       }
     }
     else {
-      thisNode.parentNode.getChild("logform").setView(document.getElementById("centralcontent"), "loginform");
+      if (document.getElementById("login-card")) thisNode.parentNode.getChild("logform").setView(document.querySelector(".login-frame .rmbox .body"), "loginform");
+      else thisNode.parentNode.getChild("logform").appendView(document.body, "loginframe");
     }
   }
   thisElement.parentElement.addEventListener("click", function(event){

@@ -7,6 +7,7 @@ const languages=new LanguagesClass("TABLE_LANGUAGES", "TABLE_LANGUAGES");
 let currentLanguage;
 
 async function loadLanguages() {
+  //await languages.loadRequest("get my childtablekeys", {deepLevel: 2});
   return await languages.loadRequest("get my tree", {deepLevel: 2});
 }
 function selectMyLanguage(langParent=languages){

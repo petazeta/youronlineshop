@@ -34,14 +34,21 @@ export function sendResponse(request, response) {
     response.writeHead(200, {'Content-Type': 'application/json'});
     let makeRequestFunc;
     if (Array.isArray(data.action)) {
-      const myresult=[];
-      for (const i in data.action) {
+      const queries=[];
+      for (let i=0; i<data.action.length; i++) {
         let makeRequestParams;
         if (data.parameters) makeRequestParams=[user, data.action[i], data.parameters[i]];
         else makeRequestParams=[user, data.action[i]];
-        myresult.push(makeRequest(...makeRequestParams));
+        queries.push(()=>makeRequest(...makeRequestParams));
       }
-      makeRequestFunc=()=>Promise.all(myresult);
+      makeRequestFunc=async ()=>{
+        const myResults=[];
+        for (const query of queries) {
+          myResults.push(await query());
+        }
+        return myResults;
+      };
+      //makeRequestFunc=()=>Promise.all(queries); //this can produce problems for its asyncronicity
     }
     else {
       // check cache before requesting

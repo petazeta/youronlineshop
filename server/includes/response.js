@@ -1,21 +1,22 @@
 import {startThemes} from './themesback.js';
-import {NodeMale, NodeFemale, dataToNode} from './nodesback.js';
-import {dbGetTables, dbInitDb, dbGetDbLink} from './dbgateway.js';
+import {Node, NodeMale, NodeFemale} from './nodesback.js';
+import {dbRequest} from './dbgateway.js';
 import {User, userLogin} from './user.js';
 import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from './safety.js';
 import {unpacking, arrayUnpacking, packing, detectGender} from './../../shared/modules/utils.js';
 
 export const responseAuth=new Map();
 
-responseAuth.set('check requirements', ()=>true);
-
-responseAuth.set('check db link', ()=>{if (dbGetDbLink(true)) return true;});
+responseAuth.set('check system', async ()=>{
+  const {default: dbConfig} = await import('./../cfg/dbmain.js');
+  return {dbsys: dbConfig.dbsys};
+});
 
 responseAuth.set('get themes tree', ({id})=>packing(startThemes(id)));
 
-responseAuth.set('get tables', dbGetTables);
+responseAuth.set('get tables', ()=>dbRequest("get tables"));
 
-responseAuth.set('init database', dbInitDb);
+responseAuth.set('init database', ()=>dbRequest("init db"));
 
 responseAuth.set('report', (parameters)=>import('./reports.js').then(({makeReport})=>makeReport(parameters.repData)));
 
@@ -26,7 +27,7 @@ responseAuth.set('logout', User.logout);
 responseAuth.set('login', (parameters)=>
   userLogin(parameters.user_name, parameters.user_password)
   .then(result =>{
-    if (result instanceof Error) return result.message;
+    if (result instanceof Error) return {logError: true, code: result.message};
     return packing(result);
   })
 );
@@ -38,7 +39,7 @@ responseAuth.set('update my user pwd', (parameters, user)=>user.dbUpdateMyPwd(pa
 responseAuth.set('create user', (parameters)=>
   User.create(parameters.user_name, parameters.user_password, parameters.user_email)
   .then(result=>{
-    if (result instanceof Error) return result.message;
+    if (result instanceof Error) return {logError: true, code: result.message};
     return result.props.id;
   })
 );
@@ -47,7 +48,7 @@ responseAuth.set('send mail', (parameters, user)=>user.sendMail(parameters.to, p
 
 //<-- Read responseAuth
 
-responseAuth.set('get my childtablekeys', (parameters)=>NodeFemale.dbGetChildTableKeys(unpacking(parameters.nodeData)));
+responseAuth.set('get my childtablekeys', (parameters)=>NodeFemale.dbGetChildTableKeys( unpacking(parameters.nodeData).props.childtablename ));
 
 responseAuth.set('get my root',  async (parameters, user)=>{
   if (! await isAllowedToRead(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
@@ -67,7 +68,7 @@ responseAuth.set('get my children', async (parameters, user)=>{
 // get descendents: equivalent to get my tree down
 responseAuth.set('get my tree', async (parameters, user)=>{
   if (! await isAllowedToRead(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  const req = dataToNode(unpacking(parameters.nodeData));
+  const req = Node.dataToNode(unpacking(parameters.nodeData));
   return req.dbGetMyTree(arrayUnpacking(parameters.extraParents), parameters.deepLevel, parameters.filterProps, parameters.limit, parameters.myself)
   .then(result=>{
     if (!result) return result;
@@ -131,12 +132,9 @@ responseAuth.set('add my tree table content', async (parameters, user)=>{
   if (! await isAllowedToInsert(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
   const req = detectGender(unpacking(parameters.nodeData))=="female" ? new NodeFemale() : new NodeMale();
   return req.load(unpacking(parameters.nodeData)).dbInsertMyTreeTableContent(parameters.tableName, parameters.deepLevel, arrayUnpacking(parameters.extraParents))
-  .then(elements=>{
-    const elementsIds=[];
-    for (const elm of elements) {
-      if (elm.props.id) elementsIds.push(elm.props.id);
-    }
-    return elementsIds;
+  .then(result=>{
+    if (!result) return result;
+    return packing(result);
   });
 });
 
@@ -153,9 +151,17 @@ responseAuth.set('delete myself', async (parameters, user)=>{
 });
 
 responseAuth.set('delete my tree', async (parameters, user)=>{
+  debugger;
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
   const req = detectGender(unpacking(parameters.nodeData))=="female" ? new NodeFemale() : new NodeMale();
-  return req.load(unpacking(parameters.nodeData)).dbDeleteMyTree();
+  const load = parameters.load===undefined ? true : parameters.load;
+  return req.load(unpacking(parameters.nodeData)).dbDeleteMyTree(load);
+});
+
+responseAuth.set('delete my tree table content', async (parameters, user)=>{
+  if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
+  const req = detectGender(unpacking(parameters.nodeData))=="female" ? new NodeFemale() : new NodeMale();
+  return req.load(unpacking(parameters.nodeData)).dbDeleteMyTreeTableContent(parameters.tableName);
 });
 
 responseAuth.set('delete my children', async (parameters, user)=>{
