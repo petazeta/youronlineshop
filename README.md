@@ -3,7 +3,7 @@
 
 ----------------------------------------------------------------------
 
-# Your Online Shop System V 4.1.0
+# Your Online Shop System V 4.0.0
 
 ## Live Demo
 
@@ -25,8 +25,8 @@ https://youronlineshop.net
 
 - Easy edition
 - Quick purchase process
-- Website pages (About, Contact, ect...)
-- Ultra light code
+- Site pages (About, Contact, ect...)
+- Very light code
 - Themes (components / templates)
 - Multi-shop
 - Export / Import
@@ -38,7 +38,7 @@ If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: m
 
 1. Upload the compressed file to your web server.
 2. Unpack it to the desired folder.
-3. Install postgresql and create a new postgresql database.
+3. Install mongodb.
 4. Edit database settings at: server/nodejs/cfg/dbcfg.js.
 5. Open your terminal at main folder and type: npm install and then npm start. Once the server is running then you can open your web browser (port 8000) and continue with the installation process.
 
@@ -60,7 +60,7 @@ Some other configuration can be done by editing some files at cfg folder.
 
 ## Troubleshooting
 
-If the database connection is not working you may need to check settings at server/nodejs/cfg/dbcfg.js.
+If the database connection is not working you may need to check settings at server/nodejs/cfg/dbcfg.js. Also you may need to import manually database content from file: server/utils/pgsqldb.sql.
 
 If the products images can not be uploaded you may need to allow write permisions for catalog-images.
 
@@ -72,7 +72,7 @@ Y.O.S. system has a themes feature. Tou can find theme files at client/themes fo
 
 ## More
 
-Multi-shop feature is now available. You can host several stores by adding their settings to the configuration files.
+Multi-shop feature is now available. You can host several independent stores by adding their settings to the configuration files.
 
 Files server/cfg/dbcfg.js and server/cfg/config.js contains stores configuration. Store folder inside catalog-image one can be replicated for each site. You must also enable multi-shop by stablishing isSiteUnique: false at server/cfg/default.js.
 
