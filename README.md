@@ -3,7 +3,7 @@
 
 ----------------------------------------------------------------------
 
-# Your Online Shop System V 4.1.0
+# Your Online Shop System V 4.1.1
 
 ## Live Demo
 
@@ -34,8 +34,6 @@ https://youronlineshop.net
 
 ## Installation
 
-If you prefer we offer FREE YOUR ONLINE SHOP installation and hosting service: more info by email.
-
 1. Upload the compressed file to your web server.
 2. Unpack it to the desired folder.
 3. Install mongodb.
@@ -49,7 +47,7 @@ Please write: melchorherrera@gmail.com
 
 ## Getting started
 
-Once Your Online Shop is installed you can open your browser at the corresponding url address. Lets log-in with some of the admin users to make changes: user webadmin for web content and productsadmin for catalog content. Other operations can be done by user systemadmin, and to check customer orders log-in with ordersadmin.
+Once Your Online Shop is installed you can open your browser at the correspondent url address. Lets log-in with some of the admin users to make changes: user webadmin for web content and productsadmin for catalog content. Other operations can be done by user systemadmin, and to check customer orders log-in with ordersadmin.
 
 After editing some content press Intro or click outside of the editable area to save changes.
 

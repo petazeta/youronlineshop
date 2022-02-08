@@ -247,3 +247,94 @@ new file
 2022-02-02 23:45:14 ud6pgs : cart item operation
 2022-02-02 23:58:42 log in: productsadmin
 2022-02-02 23:58:42 ud6pgs : checkout
+2022-02-03 12:06:56 localhost:8000 http://localhost:8000/ get tables: 22
+2022-02-03 12:10:36 localhost:8000 http://localhost:8000/?login=0 get tables: 22
+2022-02-03 12:21:02 localhost:8000 http://localhost:8000/?login=0 get tables: 22
+2022-02-03 12:21:38 log in: webadmin
+2022-02-03 12:21:56 log out
+2022-02-03 12:23:31 log in: webadmin
+2022-02-03 12:23:40 log out
+2022-02-03 20:49:26 localhost:8000 http://localhost:8000/ get tables: 22
+2022-02-04 00:13:01 localhost:8002 http://localhost:8002/default/ get tables: 22
+2022-02-04 00:13:02 117fsu : Error: get themes tree. SERVER Message: ENOENT: no such file or directory, scandir './client/themes/root'
+    at http://localhost:8002/default/client/modules/nodesfront.js:287:16
+    at async Object.loadRequest (http://localhost:8002/default/client/modules/nodesfront.js:356:19)
+    at async startTheme (http://localhost:8002/default/client/modules/themesfront.js:26:34)
+    at async http://localhost:8002/default/client/main.js:46:21
+2022-02-04 00:14:12 localhost:8002 http://localhost:8002/default/ get tables: 22
+2022-02-04 00:14:12 119l3i : Error: get themes tree. SERVER Message: ENOENT: no such file or directory, scandir '.yos/client/themes/root'
+    at http://localhost:8002/default/client/modules/nodesfront.js:287:16
+    at async Object.loadRequest (http://localhost:8002/default/client/modules/nodesfront.js:356:19)
+    at async startTheme (http://localhost:8002/default/client/modules/themesfront.js:26:34)
+    at async http://localhost:8002/default/client/main.js:46:21
+2022-02-04 00:14:33 localhost:8002 http://localhost:8002/default/ get tables: 22
+2022-02-04 00:18:22 11a9ct : cart item operation
+2022-02-04 11:57:46 localhost:8002 http://localhost:8002/default/ get tables: 22
+2022-02-04 12:00:02 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-04 12:00:38 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-04 12:09:14 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-04 12:13:45 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-04 12:15:05 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-04 12:15:12 log in: systemadmin
+2022-02-04 12:15:19 log out
+2022-02-04 12:15:19 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-05 01:12:57 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-05 22:50:00 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-05 22:50:14 log in: productsadmin
+2022-02-05 22:51:49 file not found: ./yos/catalog-images/main/small/image_id_61feff33cf6676f34c5afd10.png
+2022-02-05 22:51:55 file not found: ./yos/catalog-images/main/small/image_id_61feff33cf6676f34c5afd10.png
+2022-02-05 22:53:55 file not found: ./yos/catalog-images/main/small/image_id_61feff90f560de0640a0493f.png
+2022-02-05 22:53:57 file not found: ./yos/catalog-images/main/small/image_id_61feff90f560de0640a0493f.png
+2022-02-06 19:45:23 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-06 19:45:24 log in: productsadmin
+2022-02-07 12:41:20 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-07 12:41:22 log in: systemadmin
+2022-02-07 12:41:25 log out
+2022-02-07 12:41:25 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-07 12:41:26 log in: productsadmin
+2022-02-07 15:16:08 localhost:8002 http://localhost:8002/sample/?category=620113727d426280faf5e1a2&subcategory=620113727d426280faf5e1a4 get tables: 22
+2022-02-07 15:16:10 log in: productsadmin
+2022-02-07 15:19:03 file not found: ./yos/catalog-images/main/small/image_id_6201383e4a2efee00027d846.png
+2022-02-07 15:20:32 file not found: ./yos/catalog-images/main/small/image_id_6201389e2208f18018f74f87.png
+2022-02-07 18:10:34 localhost:8002 http://localhost:8002/sample/?category=620113727d426280faf5e1a2&subcategory=620113727d426280faf5e1a4 get tables: 22
+2022-02-07 18:10:36 log in: productsadmin
+2022-02-07 18:10:41 file not found: ./yos/catalog-images/main/big/image_id_6201138b7d426280faf5e356.png
+2022-02-07 18:24:49 localhost:8002 http://localhost:8002/sample/?category=620113727d426280faf5e1a2&subcategory=620113727d426280faf5e1a4 get tables: 22
+2022-02-07 18:24:50 log in: productsadmin
+2022-02-07 19:02:57 localhost:8002 http://localhost:8002/sample/?category=620113727d426280faf5e1a2&subcategory=620113727d426280faf5e1a4 get tables: 22
+2022-02-07 19:02:58 log in: productsadmin
+2022-02-07 20:37:53 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-07 20:37:54 log in: productsadmin
+2022-02-07 20:37:57 file not found: yos/catalog-images/main/small/image_id_620160bac2c4c3f62ed00818.png
+2022-02-07 20:37:59 file not found: yos/catalog-images/main/big/image_id_620160bac2c4c3f62ed00818.png
+2022-02-07 20:37:59 file not found: yos/catalog-images/main/small/image_id_620160bac2c4c3f62ed00818.png
+2022-02-07 20:37:59 file not found: yos/catalog-images/main/small/image_id_62016cefe32cb21fde005377.png
+2022-02-07 20:38:01 file not found: yos/catalog-images/main/small/image_id_620160bac2c4c3f62ed00818.png
+2022-02-07 20:38:05 file not found: yos/catalog-images/main/small/image_id_620160bac2c4c3f62ed00818.png
+2022-02-07 20:38:05 file not found: yos/catalog-images/main/small/image_id_62016cefe32cb21fde005377.png
+2022-02-07 22:15:06 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-07 22:15:25 log in: productsadmin
+2022-02-07 22:38:06 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-07 22:38:13 log in: productsadmin
+2022-02-08 20:59:30 localhost:8002 http://localhost:8002/sample/ get tables: 22
+2022-02-08 20:59:48 log in: productsadmin
+2022-02-08 20:59:48 file not found: yos/client/modules/client/modules/cart.js
+2022-02-08 21:01:00 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 21:01:02 log in: productsadmin
+2022-02-08 21:01:02 file not found: yos/client/modules/client/modules/availablestates.js
+2022-02-08 21:01:41 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 21:01:43 log in: productsadmin
+2022-02-08 21:01:46 log out
+2022-02-08 21:01:54 log in: userError
+2022-02-08 21:15:40 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 21:21:08 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 21:21:39 log in: juan
+2022-02-08 21:49:12 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 21:55:01 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 21:56:46 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 21:58:25 log in: pwdError
+2022-02-08 22:03:37 localhost:8002 http://localhost:8002/sample/?login=0 get tables: 22
+2022-02-08 22:03:55 log out
+2022-02-08 22:25:49 localhost:8000 http://localhost:8000/?login=0 get tables: 22
+2022-02-08 22:26:00 log in: webadmin
+2022-02-08 22:26:02 log out

@@ -20,11 +20,16 @@ const UserFrontMixing=Sup => class extends Sup {
     this.relationships=[];
     this.props={};
   }
-  async login(name, password){
-    const result= await Node.makeRequest("login", {"user_name": name, "user_password": password});
-    if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful login message
+  async login(name, password, user=null){
+    if (!user) {
+      const result = await Node.makeRequest("login", {"user_name": name, "user_password": password});
+      if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful login message
+      this.load(unpacking(result));
+    }
+    else{
+      this.load(user); // login by user data
+    }
     const lastUserType=this.getUserType(); // save last user state to detect change
-    this.load(unpacking(result));
     setAuthorization(name , password);
     this.dispatchEvent("log", lastUserType);
     this.notifyObservers("log", {lastType: lastUserType, currentType: this.getUserType()});
@@ -32,8 +37,8 @@ const UserFrontMixing=Sup => class extends Sup {
   }
   static async create(name, password, email){
     const result=await Node.makeRequest("create user", {"user_name": name, "user_password": password, "user_email": email});
-    if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful login message
-    return result;
+    if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful create message
+    return unpacking(result);
   }
   async updatePwd(username, password){
     const result = await Node.makeRequest("update user pwd", {"user_name": username, "user_password": password});
@@ -56,3 +61,31 @@ const UserFrontMixing=Sup => class extends Sup {
 const User = UserFrontMixing(UserMixing(NodeMale));
 
 export default User;
+
+export async function loginDashboard(textNode){
+  // close login card
+  document.body.removeChild(document.getElementById("login-card"));
+  // if cart it is not empty -> redirect to checkout
+  const {myCart} = await import('./cart.js')
+  if (myCart.getRelationship("cartitem").children.length>0) {
+    textNode.parentNode.getChild("checkout").setView(document.getElementById("centralcontent"), 'chktmain');
+  }
+  else {
+    // esto sería mejor hacerlo mediante patron observer
+    //Come back to the previous page (before login)
+    const url=webuser.referrer;
+    const {getPopStateAction} = await import('./availablestates.js');
+    const action=url && !url.includes("login") && getPopStateAction(url);
+    if (action) {
+      webuser.referrer=null; //reset referrer
+      action();
+      if (!(history.state && history.state.url==url)) {
+        history.pushState({url:url}, null, url);
+      }
+    }
+    else {
+      const basicPath=textNode.parentNode.getChild("dashboard");
+      basicPath.setView(document.getElementById("centralcontent"), "showuserinfo");
+    }
+  }
+}

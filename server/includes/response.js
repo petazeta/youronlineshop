@@ -40,7 +40,7 @@ responseAuth.set('create user', (parameters)=>
   User.create(parameters.user_name, parameters.user_password, parameters.user_email)
   .then(result=>{
     if (result instanceof Error) return {logError: true, code: result.message};
-    return result.props.id;
+    return packing(result);
   })
 );
 
@@ -151,7 +151,6 @@ responseAuth.set('delete myself', async (parameters, user)=>{
 });
 
 responseAuth.set('delete my tree', async (parameters, user)=>{
-  debugger;
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
   const req = detectGender(unpacking(parameters.nodeData))=="female" ? new NodeFemale() : new NodeMale();
   const load = parameters.load===undefined ? true : parameters.load;

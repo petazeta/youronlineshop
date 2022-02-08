@@ -1,0 +1,137 @@
+{"_id":{"$oid":"61f4b346851e44e88d2efb1d"},"value":"User Name","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb1b"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb22"},"value":"Password","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb20"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb27"},"value":"Log in","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb25"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb2c"},"value":"Password is not long enough","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb2a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb31"},"value":"User name is not long enough","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb2f"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb36"},"value":"User Name Incorrect","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb34"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb3b"},"value":"Password Incorrect","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb39"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb40"},"value":"Login Ok","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb3e"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb45"},"value":"Incorrect Email","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb43"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb4a"},"value":"User Name aready taken","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb48"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb4f"},"value":"Sign up","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb4d"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb54"},"value":"Signed In correctly","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb52"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb59"},"value":"&laquo; Back to Log in","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb57"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb62"},"value":"Or create a new account","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb60"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb66"},"value":"Remember me","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb64"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb68"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb13"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb6d"},"value":"+ 1 to the cart","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb6b"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb72"},"value":"Shop example name","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb70"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb77"},"value":"Several products and presents","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb75"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb7f"},"value":"Powered by <a href=\"https://www.youronlineshop.net/\">YourOnlineShop</a>","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb7d"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb81"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb7a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb8c"},"value":"My Account","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb8a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb8e"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb87"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb96"},"value":"Log in","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb94"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb98"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb91"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb9c"},"value":"Users online","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb9a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efb9e"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efb84"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efba6"},"value":"Shopping Cart","parentSiteElements":{"$oid":"61f4b346851e44e88d2efba4"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbab"},"value":"Check out","parentSiteElements":{"$oid":"61f4b346851e44e88d2efba9"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbb0"},"value":"Cart is Empty","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbae"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbb4"},"value":"<b>&times;</b> Discard","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbb2"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbb6"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efba1"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbbe"},"value":"Not any value","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbbc"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbc2"},"value":"Save","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbc0"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbc6"},"value":"Record saved","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbc4"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbca"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbc8"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbcc"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbb9"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbd1"},"value":"My Catalog","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbcf"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbd9"},"value":"Quantity","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbd7"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbde"},"value":"Name","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbdc"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbe3"},"value":"Price","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbe1"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbe5"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbd4"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbed"},"value":"User Info","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbeb"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbf2"},"value":"Address","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbf0"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbf7"},"value":"Show Orders","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbf5"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efbfc"},"value":"Show Address","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbfa"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc00"},"value":"Change Password","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbfe"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc04"},"value":"Log Out","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc02"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc08"},"value":"Dashboard from user:","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc06"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc0e"},"value":"Change Password","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc0c"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc12"},"value":"New Password","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc10"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc16"},"value":"Repeat Password","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc14"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc1a"},"value":"Change","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc18"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc1e"},"value":"The passwords written doesn't match","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc1c"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc22"},"value":"Password successfully changed","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc20"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc26"},"value":"Password Change Error","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc24"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc28"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc0a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc2e"},"value":"new","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc2c"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc32"},"value":"archived","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc30"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc36"},"value":"Date","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc34"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc3a"},"value":"Name","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc38"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc3e"},"value":"Order","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc3c"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc42"},"value":"Actions","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc40"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc44"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc2a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc48"},"value":"Extra Elements Edition","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc46"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc4e"},"value":"Export Area","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc4c"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc52"},"value":"Import Area","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc50"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc56"},"value":"Export","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc54"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc5a"},"value":"Import","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc58"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc5e"},"value":"Performing some operations please wait...","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc5c"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc62"},"value":"Please select an option","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc60"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc66"},"value":"There is no content to import","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc64"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc6c"},"value":"It exports these custom site content: title and subtitle and menus and its content","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc6a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc6e"},"value":"Menus","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc68"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc74"},"value":"It exports this custom site content: Catalog content, that is, categories, subcategories and products","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc72"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b346851e44e88d2efc76"},"value":"Catalog","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc70"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc7c"},"value":"It exports users and its data","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc7a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc7e"},"value":"Users","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc78"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc84"},"value":"It exports this custom site content: shipping methods and payment methods","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc82"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc86"},"value":"Checkout shipping &amp; payment methods","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc80"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc8c"},"value":"It exports general languages content of the app that is not relationed with custom elements like menus, articles, products, ect...","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc8a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc8e"},"value":"Languages","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc88"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc92"},"value":"Languages don't match","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc90"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc94"},"value":"Export/Import","parentSiteElements":{"$oid":"61f4b346851e44e88d2efc4a"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc9a"},"value":"You can use the text box below to create html formated text. Once you have created the content you can copy / paste into the text content of the actual elements you need to edit.","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc98"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc9c"},"value":"Text Edition Tool","parentSiteElements":{"$oid":"61f4b347851e44e88d2efc96"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efc9e"},"value":"","parentSiteElements":{"$oid":"61f4b346851e44e88d2efbe8"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efca4"},"value":"Image File Selection","parentSiteElements":{"$oid":"61f4b347851e44e88d2efca2"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efca8"},"value":"Image file:","parentSiteElements":{"$oid":"61f4b347851e44e88d2efca6"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcac"},"value":"Error loading image","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcaa"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcb0"},"value":"Cancel","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcae"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcb4"},"value":"Send","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcb2"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcb8"},"value":"Uploading Image...","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcb6"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcba"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efca0"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcc0"},"value":"Languages","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcbe"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcc4"},"value":"Performing language data copy... Please wait...","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcc2"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcc8"},"value":"Changing language data ...","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcc6"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcca"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcbc"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcd0"},"value":"Phone number","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcce"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcd4"},"value":"Email address","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcd2"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcd8"},"value":"Full name","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcd6"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcda"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efccc"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efce0"},"value":"ZIP code","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcde"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efce4"},"value":"State","parentSiteElements":{"$oid":"61f4b347851e44e88d2efce2"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efce8"},"value":"Street address","parentSiteElements":{"$oid":"61f4b347851e44e88d2efce6"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcec"},"value":"City","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcea"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcf0"},"value":"Country","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcee"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcf2"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcdc"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efcf9"},"value":"Address","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcf7"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd01"},"value":"About your new order","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcff"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd05"},"value":"A new order has been registered. Thank you.","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd03"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd07"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcfd"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd0d"},"value":"New order registered","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd0b"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd11"},"value":"A new order has been registered.","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd0f"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd13"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd09"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd15"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcfb"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd19"},"value":"Continue Order&nbsp;","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd17"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd1d"},"value":"Shipping","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd1b"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd21"},"value":"Order","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd1f"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd25"},"value":"Discard Order","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd23"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd29"},"value":"Payment","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd27"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd2d"},"value":"The order has been successfully created","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd2b"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd31"},"value":"Please ckeck your Order data below and then click in Confirm Order","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd2f"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd37"},"value":"Total","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd35"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd3b"},"value":"SubTotal","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd39"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd3f"},"value":"Payment transaction completed","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd3d"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd41"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd33"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd43"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efcf4"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd47"},"value":"h","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd45"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd4d"},"value":"Error: Not enough characters.","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd4b"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd51"},"value":"Error: Email not correct.","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd4f"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd53"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd49"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd59"},"value":"DELETE","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd57"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd5d"},"value":"ATENTION: This element and its descedants will be removed.","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd5b"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd61"},"value":"Don't Remove","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd5f"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd65"},"value":"Remove","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd63"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}
+{"_id":{"$oid":"61f4b347851e44e88d2efd67"},"value":"","parentSiteElements":{"$oid":"61f4b347851e44e88d2efd55"},"parentLanguages":{"$oid":"61f305ab9d32b66757ca648b"},"__v":0}

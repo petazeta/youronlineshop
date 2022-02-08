@@ -19,7 +19,7 @@ const UserBackMixing=Sup => class extends Sup {
     super();
     this.parentNode=new NodeFemale("TABLE_USERS", "TABLE_USERSTYPES");
     return this.parentNode.dbLoadMyChildTableKeys()
-    .then(async ()=>{await this.setMyUserType(userType); return this;});
+    .then(async ()=>await this.setMyUserType(userType));
   }
   static async setUserType(myUser, userType){
     //First we get the usertype (parent)
@@ -31,6 +31,7 @@ const UserBackMixing=Sup => class extends Sup {
       await userTypeNode.dbLoadMyRelationships();
       userTypeNode.getRelationship().addChild(myUser);
     }
+    return myUser;
   }
   setMyUserType(userType){
     return User.setUserType(this, userType);
@@ -67,7 +68,6 @@ const UserBackMixing=Sup => class extends Sup {
     const user=await new User(usertype);
     user.props.username=username;
     let hash=bcrypt.hashSync(pwd, 8);
-    //hash = hash.replace(/^\2a(.+)/i, '\2y1');
     user.props.pwd=hash;
     user.props.access=Math.floor(Date.now() / 1000);
     await user.dbInsertMySelf();
@@ -91,7 +91,6 @@ const UserBackMixing=Sup => class extends Sup {
       return new Error("pwdCharError");
     }
     let hash=bcrypt.hashSync(pwd, 8);
-    //hash = hash.replace(/^\2a(.+)/i, '\2y1');
     if (await this.dbUpdateMyProps({pwd: hash})==1) {
       this.props.password=pwd;
       this.props.pwd=hash;
@@ -135,7 +134,7 @@ const UserBackMixing=Sup => class extends Sup {
     user.props.password=upwd;
     user.props.id=userCheck;
     await user.dbLoadMyRelationships();
-    await user.dbLoadMyTreeUp();
+    await user.dbLoadMyTreeUp(); // ¿Por qué cargar esto, si ya el constructor de user crea la parte de typeuser???
     //await user.dbUpdateMyAccess(); //Every conexion we make server login so we are not updating the access time
     return user;
   }

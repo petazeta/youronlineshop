@@ -216,35 +216,11 @@ thisNode -> text node "logform"
       else {
         if (localStorage.getItem("user_name")) localStorage.removeItem("user_name");
       }
-      // close login card
-      document.body.removeChild(document.getElementById("login-card"));
-      //if cart it is not empty -> redirect to checkout
-      const {myCart} = await import('./' + CLIENT_MODULES_PATH + 'cart.js')
-      if (myCart.getRelationship("cartitem").children.length>0) {
-        thisNode.parentNode.getChild("checkout").setView(document.getElementById("centralcontent"), 'chktmain');
-      }
-      else {
-        // esto sería mejor hacerlo mediante patron observer
-        //Come back to the previous page (before login)
-        const url=webuser.referrer;
-        const {getPopStateAction} = await import('./' + CLIENT_MODULES_PATH + 'availablestates.js');
-        const action=url && !url.includes("login") && getPopStateAction(url);
-        if (action) {
-          webuser.referrer=null; //reset referrer
-          action();
-          if (!(history.state && history.state.url==url)) {
-            history.pushState({url:url}, null, url);
-          }
-        }
-        else {
-          const basicPath=thisNode.parentNode.getChild("dashboard");
-          basicPath.setView(document.getElementById("centralcontent"), "showuserinfo");
-        }
-      }
+      const {loginDashboard} = await import('./' + CLIENT_MODULES_PATH + 'userfront.js')
+      loginDashboard(thisNode);
     })
     .catch(error => { //error is Error object
-      let errorMessage=error;
-      if (this.elements[error.message]) errorMessage=this.elements[error.message].value;
+      const errorMessage=thisElement.elements[error.message] && thisElement.elements[error.message].value || error.message;
       new AlertMessage(errorMessage, 3000).showAlert();
     });
   });

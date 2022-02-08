@@ -13,7 +13,7 @@ async function loadImg(imgNode, action, formData, fileSize) {
     body: formData,
   };
   if (webuser.getAuthorizationToken()) fetchParams.headers={...fetchParams.headers, ...webuser.getAuthorizationToken()};
-  return fetch(config.uploadFilePath, fetchParams)
+  return fetch(config.uploadFilePath + '?size=' + fileSize, fetchParams)
   .then(res => res.text())
   .then(resultTxt => {
     let result=null;

@@ -1,0 +1,41 @@
+  335  cd html/mirror/
+  336  ls
+  337  systemctl start serverindex
+  338  ls
+  339  sudo systemctrl start myhttp
+  340  sudo systemctl start myhttp
+  341  systemctl status myhttp.service
+  342  ls /var/
+  343  sudo mkdir /var/www
+  344  cp -r html /var/www
+  345  sudo cp -r html /var/www
+  346  ls /var/www/html/
+
+  355  sudo nano /etc/systemd/system/myhttp.service 
+
+  359  sudo chmod 777 /var/www/html/mirror/yos/server/logs/logs.txt
+
+  362  sudo chmod -R 777 /var/www/html/mirror/yos/catalog-images/
+
+  380  ls -l ./yos/catalog-images/main/big
+  381  sudo chmod -R 777 ./yos/catalog-images/
+
+  391  rm serverindex.js
+  392  mv -r greenlock.d html/mirror
+  393  mv greenlock.d html/mirror
+  394  cd html/mirror
+
+  396  npm install --save greenlock-express@v4
+  397  ls
+  398  nano package.json
+  399  npm start
+  400  nano sslserverindex.js 
+  425  sudo npm start
+  426  ./sslserverindex.js 
+  427  sudo ./sslserverindex.js 
+
+  435  ls /var/www/html/mirror/yos/server/logs/logs.txt 
+  436  cat /var/www/html/mirror/yos/server/logs/logs.txt 
+ 509  sudo nano /var/www/html/mirror/greenlock.d/config.json
+  510  journalctl -u myhttp
+

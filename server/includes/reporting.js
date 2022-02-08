@@ -28,7 +28,7 @@ requestsRep.set('update user pwd', (result)=>console.log(result));
 
 requestsRep.set('update my user pwd', (result)=>console.log(result));
 
-requestsRep.set('create user', (result)=>console.log(result));
+requestsRep.set('create user', (result)=>console.log("user created"));
 
 requestsRep.set('send mail', (result)=>console.log(result));
 

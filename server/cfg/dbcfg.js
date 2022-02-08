@@ -1,5 +1,6 @@
+// For mongodb we just use the url data
 const dbConfigList=new Map(Object.entries({
-  'default':
+  'sample':
   {
     host: "localhost",
     user: "user_name",

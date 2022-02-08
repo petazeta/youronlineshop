@@ -37,7 +37,6 @@ function setDbSchema() {
       city: String,
       state: String,
       zipcode: String,
-      streetaddress: String,
       country: String,
       parentUsers: {
         type: mongoose.SchemaTypes.ObjectId,

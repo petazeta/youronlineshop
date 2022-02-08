@@ -1,5 +1,5 @@
 const configList=new Map(Object.entries({
-  'default':
+  'sample':
   {
     catalogImagesFolderName: "main",
     siteFolderName: "main",

@@ -1088,12 +1088,21 @@ div.quantityselect {
 	align-items: center;
 }
 .login-frame{
+    top: 0;
+    left: 0;
+	bottom: 0;
+	right: 0;
+    position: fixed;
+    z-index: 50;
+	background-color: hsl(0deg 0% 0% / 10%);
+}
+.login-card{
     top: 40%;
     left: 50%;
     transform: translate(-40%, -50%);
     position: fixed;
     background-color: white;
-    z-index: 10;
+    z-index: 51;
     border: 1px solid #AAA;
     border-radius: 0.25rem;
     box-shadow: 6px 6px 10px #ccc;

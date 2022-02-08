@@ -160,7 +160,7 @@ queryMap.get("init db").set("mongodb", async () =>{
   const fs = await import('fs');
   const {unpacking, arrayUnpacking} = await import('../../shared/modules/utils.js');
   const {impData} = await import('./utils.js');
-  let data=fs.readFileSync(dbConfig.importPath + dbConfig.dbsys + '_dtbs.json', 'utf8');
+  let data=fs.readFileSync(dbConfig.importPath + '/' + dbConfig.dbsys + '_dtbs.json', 'utf8');
   data=JSON.parse(data);
   const {Node, NodeMale, NodeFemale} = await import('./nodesback.js');
 
@@ -185,9 +185,9 @@ queryMap.get("init db").set("pgsql", async () =>{
     return "Database tables already present. Import file manually";
   }
   const fs = await import('fs');
-  let sql=fs.readFileSync(dbConfig.importPath + dbConfig.dbsys + 'db.sql', 'utf8');
+  let sql=fs.readFileSync(dbConfig.importPath + '/' + dbConfig.dbsys + 'db.sql', 'utf8');
   if (dbConfig.dbsys=="pgsql") {
-    sql += fs.readFileSync(dbConfig.importPath + dbConfig.dbsys + 'db.sql.sync', 'utf8');
+    sql += fs.readFileSync(dbConfig.importPath + '/' + dbConfig.dbsys + 'db.sql.sync', 'utf8');
   }
   await dbRequest("get db link", [true, {multipleStatements: true, ...dbConfig}]);
   await dbQuery(sql);
@@ -196,6 +196,7 @@ queryMap.get("init db").set("pgsql", async () =>{
   
   return true;
 });
+queryMap.get("init db").set("mysql", queryMap.get("init db").get("pgsql"));
 
 // return array
 queryMap.set("get tables", new Map());
