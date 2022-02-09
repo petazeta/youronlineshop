@@ -21,6 +21,7 @@ const UserFrontMixing=Sup => class extends Sup {
     this.props={};
   }
   async login(name, password, user=null){
+    const lastUserType=this.getUserType(); // save last user state to detect change
     if (!user) {
       const result = await Node.makeRequest("login", {"user_name": name, "user_password": password});
       if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful login message
@@ -29,7 +30,6 @@ const UserFrontMixing=Sup => class extends Sup {
     else{
       this.load(user); // login by user data
     }
-    const lastUserType=this.getUserType(); // save last user state to detect change
     setAuthorization(name , password);
     this.dispatchEvent("log", lastUserType);
     this.notifyObservers("log", {lastType: lastUserType, currentType: this.getUserType()});

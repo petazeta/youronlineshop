@@ -338,3 +338,8 @@ new file
 2022-02-08 22:25:49 localhost:8000 http://localhost:8000/?login=0 get tables: 22
 2022-02-08 22:26:00 log in: webadmin
 2022-02-08 22:26:02 log out
+2022-02-09 17:10:38 localhost:8000 http://localhost:8000/?category=6203f3d59cd14fbeaee4441e&subcategory=6203f3d59cd14fbeaee44420 get tables: 22
+2022-02-09 17:10:40 log in: systemadmin
+2022-02-09 17:10:44 log out
+2022-02-09 17:10:45 localhost:8000 http://localhost:8000/?category=6203f3d59cd14fbeaee4441e&subcategory=6203f3d59cd14fbeaee44420 get tables: 22
+2022-02-09 17:10:48 log in: webadmin
