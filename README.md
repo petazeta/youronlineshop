@@ -36,8 +36,8 @@ https://youronlineshop.net
 
 1. Upload the compressed file to your web server.
 2. Unpack it to the desired folder.
-3. Install mongodb.
-4. Edit database settings at: server/nodejs/cfg/dbcfg.js.
+3. Install node and mongodb.
+4. Edit mongodb settings at: server/nodejs/cfg/dbcfg.js.
 5. Open your terminal at main folder and type: npm install and then npm start. Once the server is running then you can open your web browser (port 8000) and continue with the installation process.
 
 ## Support

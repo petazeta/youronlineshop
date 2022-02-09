@@ -1,4 +1,4 @@
 export default {
-  importPath: "./yos/server/utils",
+  importPath: "./server/utils",
 };
 
