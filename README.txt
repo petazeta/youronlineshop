@@ -20,6 +20,8 @@ This is a dynamic web app (Single Page Application) for e-commerce. It is build 
 
 https://youronlineshop.net
 
+Awards: Community Choice award by SourceForge
+
 
 *****************
 * Main features *

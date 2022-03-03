@@ -20,6 +20,10 @@ This is a dynamic web app (Single Page Application) for e-commerce. It is build 
 
 https://youronlineshop.net
 
+Awards:
+
+![Your Online Shop](docs/oss-community-choice-white.svg "Your Online Shop")
+
 
 ## Main features:
 
