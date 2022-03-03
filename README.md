@@ -22,8 +22,7 @@ https://youronlineshop.net
 
 Awards:
 
-![Your Online Shop](docs/oss-community-choice-white.svg "Your Online Shop")
-
+<img src="docs/oss-community-choice-white.svg" alt="Community choice" width="200"/>
 
 ## Main features:
 
