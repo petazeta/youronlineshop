@@ -12,6 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "*",
-    "mongoose": "^6.1.8"
+    "mongoose": "^6.4.6"
   }
 }
