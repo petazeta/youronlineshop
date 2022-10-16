@@ -78,3 +78,6 @@ Multi-shop feature is now available. You can host several independent stores by 
 Files server/cfg/dbcfg.js and server/cfg/config.js contains stores configuration. Store folder inside catalog-image one can be replicated for each site. You must also enable multi-shop by stablishing isSiteUnique: false at server/cfg/default.js.
 
 Now you should be able to access each shop by adding the shop name (shop name is the label at server/cfg/config.js and server/cfg/dbcfg.js) after the host name: localhost:8000/shopname.
+
+There is a new development in process at this repository:
+https://github.com/petazeta/yosnewverdevelopment
