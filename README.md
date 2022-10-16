@@ -1,18 +1,16 @@
-
-![Your Online Shop](docs/logotype.svg "Your Online Shop")
-
-----------------------------------------------------------------------
+![Your Online Shop](docs/logotype.png "Your Online Shop")
 
 # Your Online Shop System V 4.1.1
 
 ## Live Demo
 
-Video: https://youtu.be/PD_olszbGWA
-
 Shop sample -> [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
 
 Admin -> (usr/password) webadmin/webadmin, productsadmin/productsadmin
 
+Video Demo -> https://youtu.be/PD_olszbGWA
+
+[<img src="docs/youtube.webp">](https://youtu.be/PD_olszbGWA)
 
 ## About
 
