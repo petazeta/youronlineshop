@@ -9,8 +9,13 @@ Shop sample -> [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
 Admin -> (usr/password) webadmin/webadmin, productsadmin/productsadmin
 
 Video Demo -> https://youtu.be/PD_olszbGWA
-
-[<img src="docs/youtube.webp">](https://youtu.be/PD_olszbGWA)
+<table>
+  <tr>
+    <td>
+    <a href="https://youtu.be/PD_olszbGWA"><img src="docs/youtube.webp"></a>
+    </td>
+  </tr>
+</table>
 
 ## About
 
