@@ -39,11 +39,15 @@ Awards:
 
 ## Installation
 
-1. Upload the compressed file to your web server.
-2. Unpack it to the desired folder.
-3. Install node and mongodb.
-4. Edit mongodb settings at: server/cfg/dbcustom.js.
-5. Open your terminal at main folder and type: npm install and then npm start. Once the server is running then you can open your web browser (port 3000) and continue with the installation process.
+1. Copy the source files to your system.
+2. Install node and mongodb.
+3. Edit mongodb settings at: server/cfg/dbcustom.js.
+4. Open your terminal at main folder and type:
+```
+npm install 
+npm start
+```
+5. The server is running now. You can open your web browser (port 3000) and continue with the installation process.
 
 ## Support
 
