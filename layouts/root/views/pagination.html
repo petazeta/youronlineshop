@@ -19,6 +19,6 @@ thisNode: partner
 
     if (!pageIndex.children.find(child=>child.selected) && pageIndex.getChild()) setActive(pageIndex.getChild());
     pageIndex.setChildrenView(thisElement, 'paginationindex');
-    if (pageIndex.children.length == 0 && !webuser.isAdmin()) thisElement.style.visibility='hidden';
+    if (pageIndex.children.length == 1 && !webuser.isAdmin()) thisElement.style.visibility='hidden';
   }
 </script>
