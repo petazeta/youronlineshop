@@ -41,7 +41,7 @@ Awards: Community Choice award by SourceForge
 
 1. Copy the source files to your system.
 2. Install node and mongodb.
-3. Edit mongodb settings at: server/cfg/dbcustom.js.
+3. Edit mongodb settings at: server/cfg/dbcustom.mjs.
 4. Open your terminal at main folder and type:
 npm install 
 npm start
