@@ -33,7 +33,7 @@ Awards:
 - Quick purchase process
 - Website pages (About, Contact, ect...)
 - Ultra light code
-- Themes (templates / css)
+- Themes (Templates and css)
 - Export / Import
 
 

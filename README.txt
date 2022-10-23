@@ -31,7 +31,7 @@ Awards: Community Choice award by SourceForge
 - Quick purchase process
 - Webite pages (About, Contact, ect...)
 - Ultra light code.
-- Themes (templates / css)
+- Themes (Templates and css)
 - Export / Import
 
 
