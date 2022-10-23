@@ -1,0 +1,30 @@
+<!--
+  thisParams.startIndex, thisParams.endIndex
+  thisNode: subcategories node
+-->
+<div class="productlistgrid"></div>
+<script>
+  const {currentLanguage, createInstanceChildText} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+  const {getPagination}= await import('./' + CLIENT_MODULES_PATH + 'pagination.js');
+  const {setActiveInGroup} = await import('./' + CLIENT_MODULES_PATH + 'activelauncher.js');
+  setActiveInGroup("central content", thisNode); // active links in group central content
+
+  const extraParents=[currentLanguage.getRelationship("siteelementsdata")];
+
+  thisNode.getRelationship("items").children=[];
+  await thisNode.getRelationship("items").loadRequest("get my tree", {extraParents: extraParents, limit: [thisParams.startIndex, thisParams.endIndex]});
+  thisNode.getRelationship("items").props.total=getPagination(thisNode).total; // restablecemos el valor sin los límites
+
+
+  //To show add product when no products in the category
+  thisNode.getRelationship("items").addEventListener("setChildrenView", function() {
+    if (webuser.isProductAdmin() && thisNode.getRelationship("items").children.length==0) {
+      createInstanceChildText(this)
+      .then(newNode=>newNode.setView(thisElement, "butaddnewnode"));
+    }
+  }, "addNewNodeButton");
+
+  await thisNode.getRelationship("items").setChildrenView(thisElement, "itemlistpicture");
+  
+  //if (thisElement.parentElement) thisElement.parentElement.style.minHeight="unset"; //Remove minheight to fit page to content, it produces jumping
+</script>

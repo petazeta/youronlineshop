@@ -1,0 +1,122 @@
+<!--
+thisNode textContent -> "dashboard" - "showOrd"
+-->
+<table class="list">
+  <thead>
+    <tr>
+      <th style="position:relative;">
+        <div data-id="butedit" class="bttopcenter"></div>
+        <div></div>
+        <script>
+          const myContent=thisNode.getNextChild("date").getRelationship("siteelementsdata").getChild();
+          myContent.writeProp(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+            myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </th>
+      <th style="position:relative;">
+        <div data-id="butedit" class="bttopcenter"></div>
+        <div></div>
+        <script>
+          const myContent=thisNode.getNextChild("name").getRelationship("siteelementsdata").getChild();
+          myContent.writeProp(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+            myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </th>
+      <th style="position:relative;">
+        <div data-id="butedit" class="bttopcenter"></div>
+        <div></div>
+        <script>
+          const myContent=thisNode.getNextChild("order").getRelationship("siteelementsdata").getChild();
+          myContent.writeProp(thisElement);
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+            myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </th>
+      <template>
+        <th style="position:relative;">
+          <div data-id="butedit" class="bttopcenter"></div>
+          <div></div>
+          <script>
+            const myContent=thisNode.getNextChild("actions").getRelationship("siteelementsdata").getChild();
+            myContent.writeProp(thisElement);
+            //adding the edition pencil
+            if (webuser.isWebAdmin()) {
+              const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+              myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+            }
+          </script>
+        </th>
+      </template>
+    </tr>
+    <script>
+      if (webuser.isOrdersAdmin() || webuser.isWebAdmin()) { //Webadmin for edition porpouses
+        thisNode.appendView(thisElement, thisElement.querySelector('template')); //We add actions to the header first
+      }
+    </script>
+  </thead>
+  <tbody></tbody>
+  <script>
+    const {DataNode, LinkerNode}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+    //first we load orders from database
+    let myaction, myparams, ordersRel;
+    if (webuser.isOrdersAdmin()) {
+      //create virtual ordersmother
+      ordersRel=new LinkerNode("TABLE_ORDERS");
+      myaction="get all my children";
+      myparams={tableName: ordersRel.props.childTableName};
+    }
+    else {
+      myaction="get my children";
+      ordersRel=webuser.getRelationship("orders");
+      ordersRel.children=[];
+      myparams={};
+    }
+    let statusValue=0;
+    if (thisParams.filterorders=="archived") statusValue=1;
+    myparams.filterProps= {status: statusValue};
+    await ordersRel.loadRequest(myaction, myparams);
+    if (ordersRel.children.length == 0) {
+      thisElement.innerHTML="";
+      return;
+    }
+    if (webuser.isOrdersAdmin()) {
+      for (const child of ordersRel.children) {
+        child.addEventListener("deleteNode", function() {
+          ordersRel.removeChild(this);
+          ordersRel.setChildrenView();
+        });
+        child.addEventListener("change order status",function() {
+          ordersRel.removeChild(this);
+          ordersRel.setChildrenView();
+        });
+      }
+      for (const child of ordersRel.children) {
+        child.parent=new LinkerNode();
+        child.parent.loadProperties(ordersRel);
+      }
+      const orders=await DataNode.requestMulti("get my tree up", ordersRel.children);
+      const {unpacking}=await import('./' + SHARED_MODULES_PATH + 'utils.mjs');
+      orders.forEach((order, i)=>{
+        ordersRel.children[i].parent.load(unpacking(order));
+        ordersRel.children[i].parent.partner.parent=new LinkerNode();
+        ordersRel.children[i].parent.partner.parent.props.childTableName=ordersRel.children[i].parent.props.parentTableName;
+      });
+    }
+    ordersRel.setChildrenView(thisElement, "userordersline");
+  </script>
+</table>

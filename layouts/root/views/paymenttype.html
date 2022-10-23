@@ -1,0 +1,96 @@
+<div class="flexbox" style="position:relative;">
+  <div>
+    <input type="radio" name="payment">
+    <script>
+      thisElement.addEventListener("change", function(event) {
+        if (!this.checked) return;
+        const paymenttypesRel=webuser.getRelationship("orders").getChild().getRelationship("orderpaymenttypes");
+        paymenttypesRel.children=[]; //In case we already selected
+        const orderPaymentType=paymenttypesRel.addChild(new thisNode.constructor());
+        orderPaymentType.props.name=thisNode.getRelationship("paymenttypesdata").getChild().props.name;
+        const detailsobj={template: thisNode.props.template, vars: JSON.parse(thisNode.props.vars)};
+        orderPaymentType.props.details=JSON.stringify(detailsobj);
+        import('./' + CLIENT_MODULES_PATH + 'activelauncher.js')
+        .then(({setActive})=>setActive(thisNode));
+      });
+      //selecting first option
+      if (thisNode.parent.getChild()==thisNode) {
+        thisElement.click();
+      }
+    </script>
+  </div>
+  <div style="margin-right:2.2em">
+    <details>
+      <summary style="position:relative; display: inline-block;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <span></span>
+        <script>
+          const thisNodeData=thisNode.getRelationship("paymenttypesdata").getChild();
+          thisNodeData.writeProp(thisElement, "name");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+            thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "name"});
+          }
+        </script>
+      </summary>
+      <span style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <span class="explanation"></span>
+        <script>
+          const thisNodeData=thisNode.getRelationship("paymenttypesdata").getChild();
+          thisNodeData.writeProp(thisElement, "description");
+          if (webuser.isWebAdmin() || webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+            thisNodeData.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "description"});
+          }
+        </script>
+      </span>
+    </details>
+  </div>
+  <div data-id="admnbuts" class="btmiddleright">
+    <div class="admnbtsgrid"></div>
+  </div>
+  <template>
+    <div style="margin-right:2.2em">
+      <div style="display:inline-block; position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input disabled="true">
+        <script>
+          thisNode.writeProp(thisElement, thisParams.thisProperty);
+          if (webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+            thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: thisParams.thisProperty});
+          }
+        </script>
+      </div>
+    </div>
+  </template>
+</div>
+<script>
+  if (webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
+    //We add a table cell for active
+    thisNode.appendView(thisElement, thisElement.querySelector("template"), {thisProperty: "active"});
+    //We add a table cell for from vars to be editable
+    thisNode.appendView(thisElement, thisElement.querySelector("template"), {thisProperty: "vars"});
+    //We add a table cell for template file to be editable
+    thisNode.appendView(thisElement, thisElement.querySelector("template"), {thisProperty: "template"});
+    
+    const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+    visibleOnMouseOver(thisElement.querySelector('[data-id=admnbuts]'), thisElement);
+    thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+    thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butdelete");
+    thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+  }
+  else {
+    //remove if it is not active
+    if (!thisNode.props.active) {
+      thisElement.style.display="none";
+    }
+  }
+  thisElement.addEventListener("click", function(event) {
+    thisElement.querySelector("input").click();
+  });
+</script>

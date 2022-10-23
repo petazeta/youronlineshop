@@ -1,0 +1,17 @@
+<template></template>
+<script>
+  const {intToMoney, moneyToint} = await import('./' + CLIENT_MODULES_PATH + 'money.js');
+  thisNode.addEventListener("changeProperty", function(propertyname) {
+    if (propertyname=="quantity" || propertyname=="price") {
+      thisNode.parent.partner.setView();
+    }
+  }, "reCaluculate");
+  const valueProcessor=(propName, value)=>{
+    if (propName=="price") return intToMoney(value);
+    else return value;
+  };
+  const myVirtualContainer=thisElement.content;
+  const currentItemOrder=thisElement.parentElement.querySelectorAll("[data-property=price] span").length;
+  await thisNode.appendPropsView(myVirtualContainer, "singlefield", {valueProcessor: valueProcessor});
+  thisElement.parentElement.appendChild(myVirtualContainer);
+</script>

@@ -1,0 +1,109 @@
+<!--
+  thisParams.pageNum (start 1)
+-->
+<div class="productlistgrid"></div>
+<script>
+  const {getCurrentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+  const {DataNode} = await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+  const extraParents=[getCurrentLanguage().getRelationship("siteelementsdata")];
+  if (webuser.isProductSeller()) {
+    extraParents.push(webuser.getRelationship("items").clone(0, 0)); //parents
+  }
+  const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+  const pageSize=config.catPageSize;
+  let pageNum=1;
+  if (thisParams.pageNum) pageNum=thisParams.pageNum;
+  thisNode.getRelationship("items").children=[]; //reset children
+  const itemsRel= await thisNode.getRelationship("items").loadRequest("get my tree", {extraParents: extraParents, limit: [(pageNum - 1)*pageSize, pageSize]});
+  //When url init is with product we show product
+  //We can not use the regular script (that cames in product view) cause not all products are listed
+  import('./' + CLIENT_MODULES_PATH + 'initurl.js')
+  .then(({initUrl})=>{
+    if (!initUrl) return;
+    if (itemIdMatch=initUrl.match(/item=(\d+)/)) {
+      for (const child of itemsRel.children) {
+        if (child.props.id==itemIdMatch[1]) {
+          return; //If the product is to be displayed then it will produce the action itself
+        }
+      }
+      //we don't find it in pageSize, so we have to get it from database
+      const myItem=new DataNode();
+      myItem.props.id=itemIdMatch[1];
+      itemsRel.addChild(myItem);
+      myItem.loadRequest("get my tree", {extraParents: extraParents, myself: true})
+      .then(myItem=>{
+        myItem.setView(document.getElementById("centralcontent"), "itempicture");
+        //Productview will produce the action
+      });
+      return; //Ends the entire script
+    }
+  });
+  //To show add product when no products in the category
+  itemsRel.addEventListener("setChildrenView", function() {
+    if (webuser.isProductAdmin() && itemsRel.children.length==0) {
+      const itemView=function(itemNode) {
+        import('./' + CLIENT_MODULES_PATH + 'activelauncher.js')
+        .then(({setActive})=>setActive(itemNode));
+        itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+      }
+      this.createInstanceChildText()
+      .then(newNode=>newNode.setView(thisElement, "butaddnewnode", {onAdded: itemView}));
+    }
+  }, "addNewNodeButton");
+  //in case is seller we still need to load the entire tree
+  if (webuser.isProductSeller()) { // ***** ERROR REUQESTMULTI REQUIRE UNPACKING
+    const myNodes=await DataNode.requestMulti("get my tree", itemsRel.children, {extraParents: getCurrentLanguage().getRelationship("siteelementsdata")});
+    for (const i in itemsRel.children) {
+      itemsRel.children[i].load(myNodes[i]);
+    }
+  }
+  
+  //Pagination indexes
+  const pages=Math.ceil(itemsRel.props.total / pageSize);
+  const {PaginationIndex}= await import('./' + CLIENT_MODULES_PATH + 'pagination.js');
+  const pageParent=new PaginationIndex();
+  const onClickScript= (number)=>{
+    return thisNode.setView(thisElement.parentElement, "catalog", {pageNum: number});
+  }
+  pageParent.createPageIndex=async function(pages){
+    pageParent.children=[]; //reset children
+    const prevPrevUrl='?category=' + thisNode.parent.partner.props.id;
+    const prevUrl=prevPrevUrl + '&subcategory=' + thisNode.props.id;
+    for (let i=1; i<=pages; i++) {
+      const pageNode=new DataNode();
+      pageNode.props.number=i;
+      pageNode.props.href=prevUrl + '&page=' + i;
+      if (i==pageNum) {
+        pageNode.selected=true;
+      }
+      pageParent.addChild(pageNode);
+    }
+    if (pages>1) {
+      await pageParent.setChildrenView(document.getElementById('centralcontent').querySelector('.page-indexes'), 'paginationindex', {onClickScript: onClickScript});
+    }
+  }
+  pageParent.refreshPage=function(pageNum){
+    itemsRel.partner.setView(document.getElementById("centralcontent"), "pagination", {tmpt: "catalog", pageNum: pageNum});
+  }
+  itemsRel.paginationIndex=pageParent; //We will reuse it for adding node and delete node
+  
+  await pageParent.createPageIndex(pages); // So we wait cause it could make a request and skip next actions that could produce error if not
+  
+  await itemsRel.setChildrenView(thisElement, "itemlistpicture");
+  
+  if (thisElement.parentElement) thisElement.parentElement.style.minHeight="unset"; //Remove minheight to fit page to content
+  
+  
+  //if adding the item we have to set the item seller
+  /*
+  thisNode.addEventListener("addNewNode", function(newItemNode) {
+    if (webuser.getRelationship("items")) {
+      //we make a clone of the node to let the actual rel without changes
+      var newItemClone=newItemNode.clone();
+      newItemClone.sort_order=null;
+      webuser.getRelationship("items").addChild(newItemClone);
+      newItemClone.request({action:"add my link"});
+    }
+  }, "setseller");  
+  */
+</script>

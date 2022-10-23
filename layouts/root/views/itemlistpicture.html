@@ -1,0 +1,198 @@
+<!--
+
+-->
+<div class="productshortcontainer">
+  <div class="productgrid">
+    <div class="productimg" style="position:relative;">
+      <div data-id="butedit" class="bttopinsiderightinside" style="z-index:1"></div>
+      <button type="button" class="btmiddlecenter" style="opacity: 0; z-index:1">
+        <div class="zoomimage"></div>
+        <script>
+          if (window.getComputedStyle(thisElement).backgroundImage) {
+            const {setSizeFromStyle}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            setSizeFromStyle(thisElement);
+          }
+        </script>
+      </button>
+      <script>
+        const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+        const {pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
+        let prevUrl='?category=' + thisNode.parent.partner.parent.partner.props.id;
+        prevUrl += '&subcategory=' + thisNode.parent.partner.props.id;
+        const url= prevUrl + '&item=' + thisNode.props.id;
+        if (config.itemExtend_On || webuser.isProductAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver(thisElement, thisElement.parentElement);
+        }
+        thisElement.addEventListener("click",function(event){
+          event.preventDefault();
+          import('./' + CLIENT_MODULES_PATH + 'activelauncher.js')
+          .then(({setActiveInGroup})=>setActiveInGroup('central content', thisNode));
+          thisNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+          //it doesn't record state when: go back (dont state twice the same url)
+          pushHistoryState(url);
+        });
+      </script>
+      <img class="productimg">
+      <script>
+        const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+        const imageDataNode=thisNode.getRelationship("itemsimages").getChild();
+        const myImage=imageDataNode && imageDataNode.props.imagename || config.defaultImg;
+        thisElement.src=pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlSmallPath, myImage);
+        if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+          //For some unknown reason the usual opacity onmouseover makes some not good view effect, we use visibility in this case
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement, 'visibility');
+          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "buteditimage");
+        }
+      </script>
+    </div>
+   <div class="textproduct">
+      <div class="itemname">
+        <h3 style="position:relative; display:inline-block;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <a class="tit"></a>
+          <script>
+            const {setActiveInGroup, highLight} = await import('./' + CLIENT_MODULES_PATH + 'activelauncher.js');
+            thisNode.getRelationship("itemsdata").getChild().writeProp(thisElement, "name");
+            //adding the edition pencil
+            if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+              const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+              thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "name"});
+            }
+            // some tasks regarding to history state
+            let prevUrl='?category=' + thisNode.parent.partner.parent.partner.props.id;
+            prevUrl += '&subcategory=' + thisNode.parent.partner.props.id;
+            const url= prevUrl + '&item=' + thisNode.props.id;
+
+            if (thisNode.selected) {
+              thisNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+              highLight(thisNode);
+              // Sometimes subcategories are refreshed (when login/logout) and they propagate the refreshing.
+            }
+
+            const {setHistoryState, pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
+
+            thisElement.addEventListener("click",function(event){
+              event.preventDefault();
+              if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+              //document.getElementById("centralcontent").innerHTML=''; //This is a patch for a problem at reload page, it still keeps the itemproducts short
+              setActiveInGroup('central content', thisNode);
+              thisNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+              pushHistoryState(url);
+            });
+
+            setHistoryState(thisNode, url, ()=>{
+              thisNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+              setActiveInGroup('central content', thisNode);
+            });
+            
+          </script>
+        </h3>
+      </div>
+      <div class="itemdescription">
+        <div style="display: inline-block; position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <div></div>
+          <script>
+            thisNode.getRelationship("itemsdata").getChild().writeProp(thisElement, "descriptionshort");
+            //adding the edition pencil
+            if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+              const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+              visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+              thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "descriptionshort"});
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+    <div class="addtocart">
+      <form>
+        <div class="addtocartgrid">
+          <div class="productprice">
+            <span style="position:relative;">
+              <div data-id="butedit" class="btmiddleright"></div>
+              <div data-id="money" style="padding-right: 0.2em" data-money-value=""></div>
+              <script>
+                const {intToMoney, moneyToInt} = await import('./' + CLIENT_MODULES_PATH + 'money.js');
+                thisElement.textContent=intToMoney(thisNode.getRelationship("itemsdata").getChild().props.price);
+                //adding the edition pencil
+                if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                  const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                  visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+                  thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "price",  dataProcessor: moneyToInt});
+                  thisElement.onblur=function(){
+                    thisElement.textContent=intToMoney(moneyToInt(thisElement.textContent));
+                  }
+                }
+              </script>
+            </span>
+          </div>
+          <div class="quantityselect"></div>
+          <script>
+            const {createQuantitySelect}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            const myselect=createQuantitySelect();
+            myselect.style.color="#666";
+            myselect.name="pquantity";
+            thisElement.appendChild(myselect);
+          </script>
+          <div style="position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <button type="button" class="btn" data-id="but">
+              <div class="cartplusimage"></div>
+              <script>
+                if (window.getComputedStyle(thisElement).backgroundImage) {
+                  const {setSizeFromStyle}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                  setSizeFromStyle(thisElement);
+                }
+              </script>
+            </button>
+            <script>
+              const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+              const myTitle=getSiteText().getNextChild("addcarttt").getRelationship("siteelementsdata").getChild();
+              myTitle.writeProp(thisElement,null,"title");
+              thisElement.addEventListener("click",(event)=>{
+                event.preventDefault();
+                let quantity=1;
+                if (thisElement.form.elements["pquantity"]) quantity=thisElement.form.elements["pquantity"].value;
+                import('./' + CLIENT_MODULES_PATH + 'cart.js')
+                .then(({myCart})=>myCart.addItem(thisNode.getRelationship("itemsdata").getChild(), quantity));
+              });
+            </script>
+            <input type="hidden" disabled>
+            <script>
+              const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+              const myNode=getSiteText().getNextChild("addcarttt").getRelationship("siteelementsdata").getChild();
+              myNode.writeProp(thisElement);
+              thisElement.onblur=function(){
+                thisElement.type="hidden";
+                thisElement.parentElement.querySelector('button[data-id=but]').title=thisElement.value;
+              }
+              //adding the edition pencil
+              if (webuser.isWebAdmin()) {
+                const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+                myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+              }
+            </script>            
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div style="position:relative;z-index:6;">
+    <div data-id="admnbuts">
+      <div class="admnbtsgrid"></div>
+    </div>
+  </div>
+  <script>
+    if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+      const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+      visibleOnMouseOver(thisElement.querySelector('[data-id=admnbuts]'), thisElement.parentElement);
+      thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+      thisNode.appendView(thisElement.querySelector('.admnbtsgrid'), "butdelete");
+      thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+    }
+  </script>
+</div>

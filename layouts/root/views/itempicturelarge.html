@@ -1,0 +1,182 @@
+<!--
+  picture: picture id
+-->
+<div class="productlargecontainer rmbox" style="color:rgb(40,40,40);">
+  <div class="bttopinsiderightinside">
+    <button type="button" class="closeimage minibtn transp">
+      <div class="closeimage"></div>
+    </button>
+    <script>
+      const {setActiveInGroup} = await import('./' + CLIENT_MODULES_PATH + 'activelauncher.js');
+      const {pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
+      setActiveInGroup("central content", thisNode.parent.partner);
+      thisElement.addEventListener("click", function(event){
+        event.preventDefault();
+        //Go to subcategory
+        let url='?category=' + thisNode.parent.partner.parent.partner.props.id + '&subcategory=' + thisNode.parent.partner.props.id;
+        if (event.isTrusted) {
+          //it doesn't record state when: go back (dont state twice the same url)
+          pushHistoryState(url);
+        }
+        thisNode.parent.partner.setView(document.getElementById("centralcontent"), "pagination");
+      });
+    </script>
+  </div>
+  <div class="productgrid">
+    <div class="productimg" style="position:relative;">
+      <div data-id="butedit" class="btmiddlecenter"  style="z-index:1"></div>
+      <img class="productimg">
+      <script>
+        const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+        const imageDataNode=thisNode.getRelationship("itemsimages").getChild();
+        const myImage=imageDataNode && imageDataNode.props.imagename || config.defaultImg;
+        thisElement.src=pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlBigPath, myImage);
+        thisNode.addEventListener("changeProperty", (property) => {
+          if (property=="image") {
+            thisElement.src==pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlBigPath, thisNode.props.image);
+          }
+        }, "img");
+        if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+          visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+          thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "buteditimage");
+        }
+      </script>
+    </div>
+    <div>
+     <div class="textproduct">
+        <div class="itemname">
+          <div style="display: inline-block; position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <h3></h3>
+            <script>
+              thisNode.getRelationship("itemsdata").getChild().writeProp(thisElement, "name");
+              //adding the edition pencil
+              if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+                thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "name"});
+              }
+            </script>
+          </div>
+        </div>
+        <div class="itemdescription">
+          <div style="display: inline-block; position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <div></div>
+            <script>
+              thisNode.getRelationship("itemsdata").getChild().writeProp(thisElement, "descriptionshort");
+              //adding the edition pencil
+              if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+                thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "descriptionshort"});
+              }
+            </script>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;">
+        <div class="addtocart" style="margin:auto;">
+          <form>
+            <div class="addtocartgrid">
+              <div class="productprice">
+                <span style="position: relative;">
+                  <div data-id="butedit" class="btmiddleright"></div>
+                  <div data-id="money" style="padding-right: 0.2em" data-money-value=""></div>
+                  <script>
+                    const {intToMoney, moneyToInt} = await import('./' + CLIENT_MODULES_PATH + 'money.js');
+                    thisElement.textContent=intToMoney(thisNode.getRelationship("itemsdata").getChild().props.price);
+                    //adding the edition pencil
+                    if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+                      const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                      visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+                      thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "price",  dataProcessor: moneyToInt});
+                      thisElement.onblur=function(){
+                        thisElement.textContent=intToMoney(moneyToInt(thisElement.textContent));
+                      }
+                    }
+                  </script>
+                </span>
+              </div>
+              <div class="quantityselect"></div>
+              <script>
+                const {createQuantitySelect}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                const myselect=createQuantitySelect();
+                myselect.style.color="#666";
+                myselect.name="pquantity";
+                thisElement.appendChild(myselect);
+              </script>
+              <div style="position:relative;">
+                <button type="button" class="btn">
+                  <div class="cartplusimage"></div>
+                  <script>
+                    if (window.getComputedStyle(thisElement).backgroundImage) {
+                      const {setSizeFromStyle}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+                      setSizeFromStyle(thisElement);
+                    }
+                  </script>
+                </button>
+                <script>
+                  const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+                  getSiteText().getNextChild("addcarttt").getRelationship("siteelementsdata").getChild().writeProp(thisElement,null,"title");
+                  thisElement.addEventListener("click", (event)=>{
+                    event.preventDefault();
+                    let quantity=1;
+                    if (thisElement.form.elements["pquantity"]) quantity=thisElement.form.elements["pquantity"].value;
+                    import('./' + CLIENT_MODULES_PATH + 'cart.js')
+                    .then(({myCart})=>myCart.addItem(thisNode.getRelationship("itemsdata").getChild(), quantity));
+                  });
+                </script>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="thumbnails" style="display:flex; gap: 0.6em; margin-left: 0.5em; margin-bottom: 0.5em;"></div>
+  <script>
+    if (thisNode.getRelationship("itemsimages").children.length<2) thisElement.style.display="none";
+    else thisNode.getRelationship("itemsimages").setChildrenView(thisElement, "itemthumbnails");
+  </script>
+  <div style="display: inline-block; position:relative; z-index:6;">
+    <div class="btmiddleright" style="display:flex;">
+      <div data-id="butedit" data-but-name="norm"></div>
+      <div data-id="butedit" data-but-name="code"></div>
+    </div>
+    <div data-id='descriptionlarge' style="padding-top: 1em"></div>
+    <script>
+      thisNode.getRelationship("itemsdata").getChild().writeProp(thisElement, "descriptionlarge");
+      //adding the edition pencil
+      if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+        visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), thisElement.parentElement);
+        thisNode.getRelationship("itemsdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=norm]'), "butedit", {editElement: thisElement, thisProperty: "descriptionlarge", inlineEdition: false, thisAttribute: 'innerHTML'});
+        visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), thisElement.parentElement);
+        thisElement.onblur=function(){
+          thisElement.parentElement.querySelector('textarea').value=thisElement.innerHTML;
+        }
+      }
+    </script>
+    <textarea style="display:none; width:100%" rows="6" disabled></textarea>
+    <script>
+      const myNode=thisNode.getRelationship("itemsdata").getChild();
+      myNode.writeProp(thisElement, "descriptionlarge");
+      thisElement.onblur=function(){
+        thisElement.parentElement.querySelector('div[data-id=descriptionlarge]').innerHTML=thisElement.value;
+        thisElement.style.display="none";
+      }
+      //adding the edition pencil
+      if (webuser.isProductAdmin() || webuser.isProductSeller()) {
+        myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]'), "butedit", {editElement: thisElement, thisProperty: "descriptionlarge", image: 'code', inlineEdition: false})
+        .then(()=>{
+          thisElement.parentElement.querySelector('[data-id=butedit][data-but-name=code]').querySelector('button[data-id=codebut]').addEventListener('click', ()=>{
+            thisElement.style.display="unset";
+            thisElement.focus();
+          });
+        });
+      }
+    </script>
+  </div>
+</div>

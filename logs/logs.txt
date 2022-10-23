@@ -1,0 +1,843 @@
+new file
+2022-10-15 18:08:17 get tables: 22
+2022-10-15 18:08:23 log in: productsadmin
+2022-10-15 18:09:33 get tables: 22
+2022-10-15 18:10:03 log in: productsadmin
+2022-10-15 18:12:41 get tables: 22
+2022-10-15 18:12:47 log in: productsadmin
+2022-10-15 18:13:45 get tables: 22
+2022-10-15 18:29:26 log in: productsadmin
+2022-10-15 18:29:35 get tables: 22
+2022-10-15 19:29:55 get tables: 22
+2022-10-15 19:30:00 log in: productsadmin
+2022-10-15 19:34:56 get tables: 22
+2022-10-15 19:34:57 log in: productsadmin
+2022-10-15 20:05:14 get tables: 22
+2022-10-15 20:05:19 log in: productsadmin
+2022-10-15 20:14:53 get tables: 22
+2022-10-15 20:22:08 get tables: 22
+2022-10-15 20:22:24 log in: productsadmin
+2022-10-15 20:23:42 get tables: 22
+2022-10-15 20:23:44 log in: productsadmin
+2022-10-15 20:27:20 get tables: 22
+2022-10-15 20:27:48 get tables: 22
+2022-10-15 20:28:43 get tables: 22
+2022-10-15 20:30:02 get tables: 22
+2022-10-15 20:30:49 get tables: 22
+2022-10-15 20:32:40 get tables: 22
+2022-10-15 20:34:46 get tables: 22
+2022-10-15 20:39:35 get tables: 22
+2022-10-15 20:40:50 get tables: 22
+2022-10-15 20:43:18 get tables: 22
+2022-10-15 20:44:44 get tables: 22
+2022-10-15 20:45:31 get tables: 22
+2022-10-15 20:46:37 get tables: 22
+2022-10-15 20:48:31 get tables: 22
+2022-10-15 20:49:44 get tables: 22
+2022-10-15 20:51:58 get tables: 22
+2022-10-15 21:00:11 get tables: 22
+2022-10-15 21:01:12 get tables: 22
+2022-10-15 21:05:39 get tables: 22
+2022-10-15 21:10:23 get tables: 22
+2022-10-15 21:12:09 get tables: 22
+2022-10-15 21:13:42 get tables: 22
+2022-10-15 21:17:41 get tables: 22
+2022-10-15 21:18:07 get tables: 22
+2022-10-15 21:18:43 get tables: 22
+2022-10-15 21:21:55 get tables: 22
+2022-10-15 21:25:22 get tables: 22
+2022-10-15 21:25:45 get tables: 22
+2022-10-15 21:26:00 get tables: 22
+2022-10-15 21:29:27 get tables: 22
+2022-10-15 21:29:59 get tables: 22
+2022-10-15 21:30:23 get tables: 22
+2022-10-15 21:30:36 get tables: 22
+2022-10-15 21:30:50 get tables: 22
+2022-10-15 21:31:06 get tables: 22
+2022-10-15 21:31:30 log in: productsadmin
+2022-10-15 21:33:48 get tables: 22
+2022-10-15 21:33:56 log in: productsadmin
+2022-10-15 21:34:08 log out
+2022-10-15 21:34:14 log in: productsadmin
+2022-10-15 21:34:56 get tables: 22
+2022-10-15 21:35:57 get tables: 22
+2022-10-15 21:38:10 get tables: 22
+2022-10-15 21:44:30 get tables: 22
+2022-10-15 22:38:06 log in: productsadmin
+2022-10-15 22:38:35 log out
+2022-10-15 22:38:58 log in: productsadmin
+2022-10-16 08:59:20 Server start
+2022-10-16 08:59:24 get tables: 22
+2022-10-16 08:59:25 get tables: 22
+2022-10-16 08:59:34 log in: productsadmin
+2022-10-16 09:03:24 get tables: 22
+2022-10-16 09:03:30 log in: productsadmin
+2022-10-16 09:04:05 get tables: 22
+2022-10-16 09:04:11 log in: productsadmin
+2022-10-16 09:05:31 get tables: 22
+2022-10-16 09:05:33 log in: productsadmin
+2022-10-16 09:07:41 get tables: 22
+2022-10-16 09:07:46 log in: productsadmin
+2022-10-16 09:08:15 get tables: 22
+2022-10-16 09:08:17 log in: productsadmin
+2022-10-16 09:09:26 get tables: 22
+2022-10-16 09:09:31 log in: productsadmin
+2022-10-16 09:18:13 get tables: 22
+2022-10-16 09:18:16 log in: productsadmin
+2022-10-16 09:19:30 get tables: 22
+2022-10-16 09:21:27 get tables: 22
+2022-10-16 09:21:33 log in: productsadmin
+2022-10-16 09:23:20 get tables: 22
+2022-10-16 09:31:54 log in: productsadmin
+2022-10-16 09:32:04 get tables: 22
+2022-10-16 09:40:46 log in: productsadmin
+2022-10-16 09:54:34 Server start
+2022-10-16 09:55:21 Server start
+2022-10-16 09:55:24 get tables: 22
+2022-10-16 09:55:43 log in: productsadmin
+2022-10-16 09:59:15 Server start
+2022-10-16 10:05:25 get tables: 22
+2022-10-16 10:05:31 log in: productsadmin
+2022-10-16 10:06:52 Server start
+2022-10-16 10:10:01 Server start
+2022-10-16 10:32:45 Server start
+2022-10-16 11:08:34 get tables: 22
+2022-10-16 11:08:42 log in: productsadmin
+2022-10-16 11:10:18 get tables: 22
+2022-10-16 11:10:20 log in: productsadmin
+2022-10-16 11:14:39 get tables: 22
+2022-10-16 11:14:48 log in: productsadmin
+2022-10-16 11:19:46 get tables: 22
+2022-10-16 11:19:51 log in: productsadmin
+2022-10-16 11:25:24 get tables: 22
+2022-10-16 11:28:16 get tables: 22
+2022-10-16 11:30:07 get tables: 22
+2022-10-16 11:30:12 log in: productsadmin
+2022-10-16 11:31:58 get tables: 22
+2022-10-16 11:32:02 log in: productsadmin
+2022-10-16 11:38:36 get tables: 22
+2022-10-16 11:38:42 log in: productsadmin
+2022-10-16 11:45:06 get tables: 22
+2022-10-16 11:45:10 log in: productsadmin
+2022-10-16 11:47:46 get tables: 22
+2022-10-16 11:47:52 log in: productsadmin
+2022-10-16 11:50:33 get tables: 22
+2022-10-16 11:50:45 log in: productsadmin
+2022-10-16 11:51:52 get tables: 22
+2022-10-16 11:51:59 log in: productsadmin
+2022-10-16 11:55:09 get tables: 22
+2022-10-16 11:55:16 log in: productsadmin
+2022-10-16 11:57:38 get tables: 22
+2022-10-16 11:57:40 log in: productsadmin
+2022-10-16 12:01:44 get tables: 22
+2022-10-16 12:01:50 log in: productsadmin
+2022-10-16 12:14:23 get tables: 22
+2022-10-16 12:14:29 log in: productsadmin
+2022-10-16 12:19:53 get tables: 22
+2022-10-16 12:20:16 log in: productsadmin
+2022-10-16 12:20:42 log out
+2022-10-16 12:20:44 log in: productsadmin
+2022-10-16 12:20:59 log out
+2022-10-16 12:21:02 log in: productsadmin
+2022-10-16 16:56:54 Server start
+2022-10-16 16:56:59 get tables: 22
+2022-10-16 16:57:00 get tables: 22
+2022-10-16 16:58:48 get tables: 22
+2022-10-16 16:58:54 log in: productsadmin
+2022-10-16 16:59:06 log out
+2022-10-16 16:59:13 log in: webadmin
+2022-10-16 16:59:33 log in: webadmin
+2022-10-16 17:01:23 log out
+2022-10-16 17:01:37 log in: webadmin
+2022-10-16 17:06:52 get tables: 22
+2022-10-16 17:06:52 get tables: 22
+2022-10-16 17:06:56 log in: webadmin
+2022-10-16 17:11:08 get tables: 22
+2022-10-16 17:11:12 log in: webadmin
+2022-10-16 17:12:52 log out
+2022-10-16 17:35:00 get tables: 22
+2022-10-16 17:35:03 log in: webadmin
+2022-10-16 17:36:50 get tables: 22
+2022-10-16 17:37:01 log in: webadmin
+2022-10-16 17:38:10 get tables: 22
+2022-10-16 17:38:14 log in: webadmin
+2022-10-16 17:40:18 get tables: 22
+2022-10-16 17:42:08 get tables: 22
+2022-10-16 17:42:12 log in: webadmin
+2022-10-16 17:42:18 log out
+2022-10-16 17:42:52 log in: webadmin
+2022-10-16 17:42:55 log out
+2022-10-16 19:02:13 get tables: 22
+2022-10-16 19:02:21 log in: webadmin
+2022-10-16 19:32:37 get tables: 22
+2022-10-16 19:32:42 log in: webadmin
+2022-10-16 19:32:56 log out
+2022-10-16 19:33:25 log in: webadmin
+2022-10-16 19:42:40 log out
+2022-10-16 19:42:47 log in: webadmin
+2022-10-16 20:53:34 get tables: 22
+2022-10-16 20:53:38 h95iak : cart item operation
+2022-10-16 20:53:42 h95iak : cart item operation
+2022-10-16 20:53:45 h95iak : cart item operation
+2022-10-16 20:53:47 h95iak : cart item operation
+2022-10-16 20:53:49 h95iak : cart item operation
+2022-10-16 21:09:40 h95iak : cart item operation
+2022-10-16 21:10:03 get tables: 22
+2022-10-16 21:10:05 ha3o73 : cart item operation
+2022-10-16 21:10:08 ha3o73 : cart item operation
+2022-10-16 21:10:44 ha3o73 : cart item operation
+2022-10-16 21:10:47 get tables: 22
+2022-10-16 21:10:48 ha52v7 : cart item operation
+2022-10-16 21:10:52 ha52v7 : cart item operation
+2022-10-16 21:10:54 ha52v7 : cart item operation
+2022-10-16 21:10:55 ha52v7 : cart item operation
+2022-10-16 21:18:09 get tables: 22
+2022-10-16 21:19:18 get tables: 22
+2022-10-16 21:19:43 get tables: 22
+2022-10-16 21:20:22 get tables: 22
+2022-10-16 21:21:09 get tables: 22
+2022-10-16 21:27:42 get tables: 22
+2022-10-16 21:27:46 hb42c3 : cart item operation
+2022-10-17 11:56:03 Server start
+2022-10-17 11:56:07 get tables: 22
+2022-10-17 11:56:08 get tables: 22
+2022-10-17 13:21:32 get tables: 22
+2022-10-17 13:21:38 j1mjlr : cart item operation
+2022-10-17 13:21:40 j1mjlr : cart item operation
+2022-10-17 13:21:43 j1mjlr : cart item operation
+2022-10-17 13:43:14 get tables: 22
+2022-10-17 13:43:14 j2ub76 : ReferenceError: Linker is not defined
+    at WebUser.init (http://localhost:3000/client/webuser.js:17:23)
+    at http://localhost:3000/client/main.js:42:19
+2022-10-17 13:43:27 get tables: 22
+2022-10-17 13:46:09 Server start
+2022-10-17 13:50:21 Server start
+2022-10-17 13:51:48 Server start
+2022-10-17 13:54:24 get tables: 22
+2022-10-17 13:56:00 get tables: 22
+2022-10-17 13:56:06 log in: webadmin
+2022-10-17 13:56:15 log out
+2022-10-17 14:06:51 get tables: 22
+2022-10-17 14:06:51 j49idf : TypeError: Cannot read properties of undefined (reading 'attachObserver')
+    at Reporter.setReports (http://localhost:3000/client/reports.js:16:13)
+    at setReports (http://localhost:3000/client/reports.js:39:19)
+    at http://localhost:3000/client/main.js:44:3
+2022-10-17 14:07:24 get tables: 22
+2022-10-17 14:07:24 j4aj1q : TypeError: Cannot read properties of undefined (reading 'attachObserver')
+    at Reporter.setReports (http://localhost:3000/client/reports.js:16:13)
+    at setReports (http://localhost:3000/client/reports.js:39:19)
+    at http://localhost:3000/client/main.js:44:3
+2022-10-17 14:07:33 get tables: 22
+2022-10-17 14:07:33 j4ariv : TypeError: Cannot read properties of undefined (reading 'attachObserver')
+    at Reporter.setReports (http://localhost:3000/client/reports.js:16:13)
+    at setReports (http://localhost:3000/client/reports.js:39:19)
+    at http://localhost:3000/client/main.js:44:3
+2022-10-17 14:08:08 get tables: 22
+2022-10-17 14:08:08 j4bthn : TypeError: Cannot read properties of undefined (reading 'attachObserver')
+    at Reporter.setReports (http://localhost:3000/client/reports.js:17:13)
+    at setReports (http://localhost:3000/client/reports.js:40:19)
+    at http://localhost:3000/client/main.js:44:3
+2022-10-17 14:08:34 get tables: 22
+2022-10-17 14:08:34 j4cmtv : ReferenceError: config is not defined
+    at http://localhost:3000/client/main.js:55:34
+2022-10-17 14:09:16 get tables: 22
+2022-10-17 14:09:16 get tables: 22
+2022-10-17 14:22:30 get tables: 22
+2022-10-17 14:22:34 log in: webadmin
+2022-10-17 14:22:40 log out
+2022-10-17 14:23:53 log in: webadmin
+2022-10-17 14:25:01 get tables: 22
+2022-10-17 14:25:04 log in: webadmin
+2022-10-17 14:27:15 get tables: 22
+2022-10-17 14:27:19 log in: webadmin
+2022-10-17 14:27:27 log out
+2022-10-17 14:27:32 log in: webadmin
+2022-10-17 14:29:43 get tables: 22
+2022-10-17 14:29:48 log in: webadmin
+2022-10-17 14:33:39 get tables: 22
+2022-10-17 14:33:41 log in: webadmin
+2022-10-17 14:33:47 log out
+2022-10-17 14:33:50 get tables: 22
+2022-10-17 14:33:57 log in: webadmin
+2022-10-17 14:34:03 log out
+2022-10-17 14:34:09 log in: productsadmin
+2022-10-17 14:34:13 log out
+2022-10-17 14:34:21 log in: productsadmin
+2022-10-17 14:37:59 get tables: 22
+2022-10-17 14:38:00 log in: productsadmin
+2022-10-17 14:38:06 log out
+2022-10-17 14:38:15 log in: productsadmin
+2022-10-17 14:38:37 get tables: 22
+2022-10-17 14:38:39 log in: productsadmin
+2022-10-17 14:39:15 log out
+2022-10-17 14:39:18 log in: productsadmin
+2022-10-17 14:40:05 log out
+2022-10-17 14:40:21 log in: productsadmin
+2022-10-17 14:40:24 log out
+2022-10-17 14:43:01 get tables: 22
+2022-10-17 14:43:07 log in: productsadmin
+2022-10-17 14:43:16 log out
+2022-10-17 14:43:19 log in: productsadmin
+2022-10-17 14:43:43 log out
+2022-10-17 14:43:51 log in: productsadmin
+2022-10-17 14:43:58 log out
+2022-10-17 14:54:49 get tables: 22
+2022-10-17 14:54:52 log in: productsadmin
+2022-10-17 14:54:58 log out
+2022-10-17 14:55:06 log in: productsadmin
+2022-10-17 14:55:09 log out
+2022-10-17 15:31:11 get tables: 22
+2022-10-17 15:31:17 log in: productsadmin
+2022-10-17 15:31:19 log out
+2022-10-17 15:36:01 get tables: 22
+2022-10-17 15:36:05 get tables: 22
+2022-10-17 15:36:09 log in: productsadmin
+2022-10-17 15:37:47 get tables: 22
+2022-10-17 15:40:35 get tables: 22
+2022-10-17 15:40:41 j9l77l : cart item operation
+2022-10-17 15:41:43 get tables: 22
+2022-10-17 15:41:50 j9n98r : cart item operation
+2022-10-17 15:48:37 get tables: 22
+2022-10-17 15:48:39 ja3tk8 : cart item operation
+2022-10-17 15:48:44 ja3tk8 : cart item operation
+2022-10-17 16:02:35 log in: productsadmin
+2022-10-17 16:02:37 log out
+2022-10-18 08:58:20 Server start
+2022-10-18 08:58:40 get tables: 22
+2022-10-18 08:58:40 get tables: 22
+2022-10-18 08:58:40 get tables: 22
+2022-10-18 08:58:40 get tables: 22
+2022-10-18 08:58:40 get tables: 22
+2022-10-18 08:58:41 get tables: 22
+2022-10-18 08:58:41 get tables: 22
+2022-10-18 08:58:41 get tables: 22
+2022-10-18 08:58:41 get tables: 22
+2022-10-18 08:58:41 get tables: 22
+2022-10-18 08:58:41 get tables: 22
+2022-10-18 08:58:42 get tables: 22
+2022-10-18 08:58:42 get tables: 22
+2022-10-18 08:58:42 get tables: 22
+2022-10-18 08:58:42 get tables: 22
+2022-10-18 08:58:42 get tables: 22
+2022-10-18 08:58:42 get tables: 22
+2022-10-18 08:58:43 get tables: 22
+2022-10-18 08:58:43 get tables: 22
+2022-10-18 08:58:43 get tables: 22
+2022-10-18 08:58:43 get tables: 22
+2022-10-18 08:58:43 get tables: 22
+2022-10-18 08:58:43 get tables: 22
+2022-10-18 08:58:43 get tables: 22
+2022-10-18 08:58:44 get tables: 22
+2022-10-18 08:58:44 get tables: 22
+2022-10-18 08:58:44 get tables: 22
+2022-10-18 08:58:44 get tables: 22
+2022-10-18 08:58:44 get tables: 22
+2022-10-18 08:58:44 get tables: 22
+2022-10-18 08:58:45 get tables: 22
+2022-10-18 08:58:45 get tables: 22
+2022-10-18 08:59:04 get tables: 22
+2022-10-18 08:59:04 get tables: 22
+2022-10-18 08:59:05 get tables: 22
+2022-10-18 08:59:05 get tables: 22
+2022-10-18 08:59:05 get tables: 22
+2022-10-18 08:59:05 get tables: 22
+2022-10-18 08:59:06 get tables: 22
+2022-10-18 08:59:06 get tables: 22
+2022-10-18 08:59:06 get tables: 22
+2022-10-18 08:59:07 get tables: 22
+2022-10-18 08:59:07 get tables: 22
+2022-10-18 08:59:07 get tables: 22
+2022-10-18 08:59:07 get tables: 22
+2022-10-18 08:59:07 get tables: 22
+2022-10-18 08:59:08 get tables: 22
+2022-10-18 08:59:08 get tables: 22
+2022-10-18 08:59:08 get tables: 22
+2022-10-18 08:59:08 get tables: 22
+2022-10-18 08:59:09 get tables: 22
+2022-10-18 08:59:09 get tables: 22
+2022-10-18 08:59:36 get tables: 22
+2022-10-18 08:59:37 get tables: 22
+2022-10-18 08:59:37 get tables: 22
+2022-10-18 08:59:37 get tables: 22
+2022-10-18 08:59:37 get tables: 22
+2022-10-18 08:59:38 get tables: 22
+2022-10-18 08:59:38 get tables: 22
+2022-10-18 08:59:38 get tables: 22
+2022-10-18 08:59:38 get tables: 22
+2022-10-18 08:59:39 get tables: 22
+2022-10-18 08:59:39 get tables: 22
+2022-10-18 08:59:39 get tables: 22
+2022-10-18 08:59:39 get tables: 22
+2022-10-18 08:59:40 get tables: 22
+2022-10-18 08:59:40 get tables: 22
+2022-10-18 08:59:40 get tables: 22
+2022-10-18 08:59:40 get tables: 22
+2022-10-18 08:59:41 get tables: 22
+2022-10-18 08:59:41 get tables: 22
+2022-10-18 08:59:41 get tables: 22
+2022-10-18 08:59:42 get tables: 22
+2022-10-18 08:59:42 get tables: 22
+2022-10-18 08:59:42 get tables: 22
+2022-10-18 08:59:42 get tables: 22
+2022-10-18 08:59:43 get tables: 22
+2022-10-18 08:59:43 get tables: 22
+2022-10-18 08:59:43 get tables: 22
+2022-10-18 08:59:43 get tables: 22
+2022-10-18 08:59:44 get tables: 22
+2022-10-18 08:59:44 get tables: 22
+2022-10-18 08:59:44 get tables: 22
+2022-10-18 08:59:45 get tables: 22
+2022-10-18 09:00:11 get tables: 22
+2022-10-18 09:00:11 get tables: 22
+2022-10-18 09:00:11 get tables: 22
+2022-10-18 09:00:11 get tables: 22
+2022-10-18 09:00:11 get tables: 22
+2022-10-18 09:00:11 get tables: 22
+2022-10-18 09:00:12 get tables: 22
+2022-10-18 09:00:12 get tables: 22
+2022-10-18 09:00:12 get tables: 22
+2022-10-18 09:00:12 get tables: 22
+2022-10-18 09:00:12 get tables: 22
+2022-10-18 09:00:12 get tables: 22
+2022-10-18 09:00:13 get tables: 22
+2022-10-18 09:00:53 get tables: 22
+2022-10-18 09:00:53 get tables: 22
+2022-10-18 09:00:53 get tables: 22
+2022-10-18 09:00:53 get tables: 22
+2022-10-18 09:00:53 get tables: 22
+2022-10-18 09:00:54 get tables: 22
+2022-10-18 09:00:54 get tables: 22
+2022-10-18 09:00:54 get tables: 22
+2022-10-18 09:00:54 get tables: 22
+2022-10-18 09:00:54 get tables: 22
+2022-10-18 09:00:54 get tables: 22
+2022-10-18 09:00:55 get tables: 22
+2022-10-18 09:00:55 get tables: 22
+2022-10-18 09:00:55 get tables: 22
+2022-10-18 09:00:55 get tables: 22
+2022-10-18 09:00:55 get tables: 22
+2022-10-18 09:00:56 get tables: 22
+2022-10-18 09:00:56 get tables: 22
+2022-10-18 09:00:56 get tables: 22
+2022-10-18 09:00:56 get tables: 22
+2022-10-18 09:01:04 get tables: 22
+2022-10-18 09:01:09 get tables: 22
+2022-10-18 09:01:31 get tables: 22
+2022-10-18 09:02:25 get tables: 22
+2022-10-18 09:02:33 get tables: 22
+2022-10-18 09:02:34 get tables: 22
+2022-10-18 09:03:22 get tables: 22
+2022-10-18 09:03:30 get tables: 22
+2022-10-18 09:03:30 get tables: 22
+2022-10-18 09:03:37 get tables: 22
+2022-10-18 09:03:50 get tables: 22
+2022-10-18 09:04:04 get tables: 22
+2022-10-18 09:04:42 get tables: 22
+2022-10-18 09:05:54 get tables: 22
+2022-10-18 09:05:55 get tables: 22
+2022-10-18 09:06:03 get tables: 22
+2022-10-18 09:06:45 get tables: 22
+2022-10-18 09:07:02 get tables: 22
+2022-10-18 09:07:09 get tables: 22
+2022-10-18 09:07:10 get tables: 22
+2022-10-18 09:07:16 get tables: 22
+2022-10-18 09:07:16 get tables: 22
+2022-10-18 09:08:04 get tables: 22
+2022-10-18 09:08:08 get tables: 22
+2022-10-18 09:08:09 get tables: 22
+2022-10-18 09:08:12 get tables: 22
+2022-10-18 09:08:52 get tables: 22
+2022-10-18 09:08:57 get tables: 22
+2022-10-18 09:08:58 get tables: 22
+2022-10-18 09:09:20 get tables: 22
+2022-10-18 09:09:21 get tables: 22
+2022-10-18 09:09:37 get tables: 22
+2022-10-18 09:09:38 get tables: 22
+2022-10-18 09:09:50 get tables: 22
+2022-10-18 09:13:26 get tables: 22
+2022-10-18 09:18:27 get tables: 22
+2022-10-18 09:18:28 get tables: 22
+2022-10-18 09:18:47 get tables: 22
+2022-10-18 09:18:48 get tables: 22
+2022-10-18 09:19:02 get tables: 22
+2022-10-18 09:19:49 get tables: 22
+2022-10-18 09:19:50 get tables: 22
+2022-10-18 09:20:01 get tables: 22
+2022-10-18 09:20:02 get tables: 22
+2022-10-18 09:22:55 get tables: 22
+2022-10-18 09:24:51 get tables: 22
+2022-10-18 09:25:04 get tables: 22
+2022-10-18 09:25:54 get tables: 22
+2022-10-18 09:26:19 get tables: 22
+2022-10-18 09:26:59 get tables: 22
+2022-10-18 09:28:37 get tables: 22
+2022-10-18 09:28:46 get tables: 22
+2022-10-18 09:31:06 get tables: 22
+2022-10-18 09:31:20 get tables: 22
+2022-10-18 09:31:54 get tables: 22
+2022-10-18 09:32:15 get tables: 22
+2022-10-18 09:37:42 get tables: 22
+2022-10-18 09:38:23 get tables: 22
+2022-10-18 09:39:32 get tables: 22
+2022-10-18 09:45:04 get tables: 22
+2022-10-18 09:45:35 get tables: 22
+2022-10-18 09:46:24 get tables: 22
+2022-10-18 09:46:45 get tables: 22
+2022-10-18 09:47:21 get tables: 22
+2022-10-18 09:48:07 get tables: 22
+2022-10-18 09:53:12 get tables: 22
+2022-10-18 09:53:27 get tables: 22
+2022-10-18 09:55:31 get tables: 22
+2022-10-18 09:58:12 get tables: 22
+2022-10-18 09:58:55 log in: webadmin
+2022-10-18 09:59:12 log out
+2022-10-18 09:59:16 log in: webadmin
+2022-10-18 10:13:42 get tables: 22
+2022-10-18 10:13:49 log in: webadmin
+2022-10-18 10:14:07 get tables: 22
+2022-10-18 10:14:12 log in: webadmin
+2022-10-18 10:15:04 get tables: 22
+2022-10-18 10:15:08 log in: webadmin
+2022-10-18 10:15:18 log out
+2022-10-18 10:15:22 get tables: 22
+2022-10-18 10:15:34 log in: webadmin
+2022-10-18 10:16:39 get tables: 22
+2022-10-18 10:16:44 log in: webadmin
+2022-10-18 10:17:30 get tables: 22
+2022-10-18 10:17:38 get tables: 22
+2022-10-18 10:17:55 log in: webadmin
+2022-10-18 10:18:34 get tables: 22
+2022-10-18 10:18:43 log in: webadmin
+2022-10-18 10:22:56 get tables: 22
+2022-10-18 10:23:06 log in: webadmin
+2022-10-18 10:23:47 get tables: 22
+2022-10-18 10:23:55 log in: webadmin
+2022-10-18 10:25:15 get tables: 22
+2022-10-18 10:25:20 log in: webadmin
+2022-10-18 10:30:07 get tables: 22
+2022-10-18 10:31:12 get tables: 22
+2022-10-18 10:31:31 get tables: 22
+2022-10-18 10:32:49 get tables: 22
+2022-10-18 10:32:53 log in: webadmin
+2022-10-18 10:34:24 get tables: 22
+2022-10-18 10:34:30 log in: webadmin
+2022-10-18 10:43:19 get tables: 22
+2022-10-18 10:43:25 get tables: 22
+2022-10-18 10:43:29 get tables: 22
+2022-10-18 11:27:02 get tables: 22
+2022-10-18 11:27:09 log in: webadmin
+2022-10-18 11:27:48 get tables: 22
+2022-10-18 11:27:54 log in: webadmin
+2022-10-18 11:28:01 log out
+2022-10-18 11:28:06 log in: productsadmin
+2022-10-18 11:41:33 get tables: 22
+2022-10-18 11:42:10 get tables: 22
+2022-10-18 11:42:15 get tables: 22
+2022-10-18 11:45:17 get tables: 22
+2022-10-18 11:45:35 get tables: 22
+2022-10-18 11:46:51 get tables: 22
+2022-10-18 11:46:57 get tables: 22
+2022-10-18 11:49:59 get tables: 22
+2022-10-18 11:50:27 get tables: 22
+2022-10-18 11:53:10 get tables: 22
+2022-10-18 11:55:56 get tables: 22
+2022-10-18 11:56:11 get tables: 22
+2022-10-18 11:56:14 log in: productsadmin
+2022-10-18 11:56:17 get tables: 22
+2022-10-18 11:56:17 log in: productsadmin
+2022-10-18 11:56:21 log out
+2022-10-18 11:56:23 log in: productsadmin
+2022-10-18 11:56:32 get tables: 22
+2022-10-18 12:05:23 get tables: 22
+2022-10-18 12:05:28 log in: productsadmin
+2022-10-18 12:05:49 log out
+2022-10-18 12:07:36 get tables: 22
+2022-10-18 12:07:42 log in: productsadmin
+2022-10-18 12:07:45 log out
+2022-10-18 12:08:03 log in: productsadmin
+2022-10-18 12:08:08 log out
+2022-10-18 12:08:14 log in: productsadmin
+2022-10-18 12:08:50 log out
+2022-10-18 12:46:31 get tables: 22
+2022-10-18 12:46:38 li36qi : cart item operation
+2022-10-18 12:46:43 log in: productsadmin
+2022-10-18 12:46:47 li36qi : checkout
+2022-10-18 12:47:18 log out
+2022-10-18 12:47:33 li36qi : cart item operation
+2022-10-18 12:47:35 li36qi : cart item operation
+2022-10-18 12:49:25 get tables: 22
+2022-10-18 12:49:29 get tables: 22
+2022-10-18 12:49:35 li8kop : cart item operation
+2022-10-18 12:49:37 li8kop : cart item operation
+2022-10-18 12:50:24 get tables: 22
+2022-10-18 12:50:30 lia9lf : cart item operation
+2022-10-18 12:50:34 get tables: 22
+2022-10-18 12:50:40 liajib : cart item operation
+2022-10-18 12:54:41 get tables: 22
+2022-10-18 12:54:45 log in: productsadmin
+2022-10-18 12:54:49 log out
+2022-10-18 12:54:51 log in: productsadmin
+2022-10-18 12:54:53 get tables: 22
+2022-10-18 12:54:54 log in: productsadmin
+2022-10-18 12:55:01 log out
+2022-10-18 12:56:52 get tables: 22
+2022-10-18 12:58:57 get tables: 22
+2022-10-18 18:34:17 Server start
+2022-10-18 18:34:22 get tables: 22
+2022-10-18 18:34:30 get tables: 22
+2022-10-18 18:34:39 log in: productsadmin
+2022-10-18 18:42:03 get tables: 22
+2022-10-18 18:42:05 log in: productsadmin
+2022-10-18 18:42:29 get tables: 22
+2022-10-18 18:42:36 log in: productsadmin
+2022-10-18 18:43:02 get tables: 22
+2022-10-18 18:43:12 log in: productsadmin
+2022-10-18 18:43:18 log out
+2022-10-18 18:43:23 get tables: 22
+2022-10-18 18:43:31 get tables: 22
+2022-10-18 18:43:39 log in: productsadmin
+2022-10-18 18:44:10 log out
+2022-10-18 18:44:19 log in: productsadmin
+2022-10-18 18:46:08 get tables: 22
+2022-10-18 18:46:15 log in: productsadmin
+2022-10-18 18:46:41 get tables: 22
+2022-10-18 18:46:56 log in: productsadmin
+2022-10-18 18:47:25 get tables: 22
+2022-10-18 18:47:34 get tables: 22
+2022-10-18 18:47:49 log in: productsadmin
+2022-10-18 22:55:04 Server start
+2022-10-18 22:55:07 get tables: 22
+2022-10-18 22:56:05 get tables: 22
+2022-10-18 22:56:15 get tables: 22
+2022-10-18 22:58:51 get tables: 22
+2022-10-18 22:59:02 get tables: 22
+2022-10-18 22:59:05 get tables: 22
+2022-10-18 22:59:09 get tables: 22
+2022-10-18 22:59:11 get tables: 22
+2022-10-18 22:59:43 get tables: 22
+2022-10-18 23:00:37 get tables: 22
+2022-10-18 23:02:52 get tables: 22
+2022-10-18 23:03:11 get tables: 22
+2022-10-18 23:03:26 get tables: 22
+2022-10-18 23:04:41 log in: productsadmin
+2022-10-18 23:07:15 get tables: 22
+2022-10-18 23:08:04 get tables: 22
+2022-10-18 23:09:22 get tables: 22
+2022-10-18 23:09:27 get tables: 22
+2022-10-18 23:13:28 log in: productsadmin
+2022-10-18 23:17:58 get tables: 22
+2022-10-18 23:18:13 log in: productsadmin
+2022-10-18 23:22:55 get tables: 22
+2022-10-18 23:24:09 get tables: 22
+2022-10-18 23:25:21 get tables: 22
+2022-10-18 23:25:26 log in: productsadmin
+2022-10-18 23:42:34 get tables: 22
+2022-10-18 23:45:52 mnkeic : cart item operation
+2022-10-19 07:08:53 Server start
+2022-10-19 07:08:59 get tables: 22
+2022-10-19 07:09:24 log in: productsadmin
+2022-10-19 07:12:44 get tables: 22
+2022-10-19 07:13:26 get tables: 22
+2022-10-19 07:16:01 get tables: 22
+2022-10-19 07:16:31 get tables: 22
+2022-10-19 07:26:06 get tables: 22
+2022-10-19 07:29:16 get tables: 22
+2022-10-20 14:43:10 Server start
+2022-10-20 14:43:15 get tables: 22
+2022-10-20 14:43:15 qtibu9 : Error: No Language Content
+    at http://localhost:3000/client/main.js:48:41
+2022-10-20 14:50:35 Server start
+2022-10-20 14:50:44 get tables: 22
+2022-10-20 14:50:44 qu02mi : Error: No Language Content
+    at http://localhost:3000/client/main.js:48:41
+2022-10-20 16:49:32 Server start
+2022-10-20 16:51:34 Server start
+2022-10-20 16:52:09 Server start
+2022-10-20 16:52:25 Server start
+2022-10-20 16:52:39 Server start
+2022-10-20 16:57:30 Server start
+2022-10-20 16:59:13 Server start
+2022-10-20 16:59:15 r5bdc2 : Error: Database Content Error
+    at loadRoot (http://localhost:3000/client/sitecontent.js:21:24)
+    at async loadText (http://localhost:3000/client/sitecontent.js:27:5)
+    at async http://localhost:3000/client/main.js:29:19
+2022-10-20 17:10:33 Server start
+2022-10-20 17:11:05 Server start
+2022-10-20 17:11:46 Server start
+2022-10-20 17:12:54 Server start
+2022-10-20 17:14:08 Server start
+2022-10-20 17:27:44 Server start
+2022-10-20 19:51:40 Server start
+2022-10-20 19:55:13 Server start
+2022-10-20 19:57:30 Server start
+2022-10-20 20:03:10 Server start
+2022-10-20 20:29:22 Server start
+2022-10-20 20:31:00 log in: userError
+2022-10-20 20:31:13 log in: systemadmin
+2022-10-20 20:33:16 Server start
+2022-10-20 20:35:04 log in: productsadmin
+2022-10-20 20:35:08 log out
+2022-10-20 21:04:07 Server start
+2022-10-20 21:04:20 log in: systemadmin
+2022-10-20 21:35:41 Server start
+2022-10-20 21:35:49 log in: systemadmin
+2022-10-20 21:42:02 log in: systemadmin
+2022-10-20 21:45:11 Server start
+2022-10-20 21:45:19 log in: systemadmin
+2022-10-20 22:00:39 Server start
+2022-10-20 22:23:09 Server start
+2022-10-20 22:29:48 Server start
+2022-10-20 22:31:12 Server start
+2022-10-20 22:36:19 Server start
+2022-10-20 22:40:00 Server start
+2022-10-20 22:45:05 Server start
+2022-10-20 22:48:05 Server start
+2022-10-20 22:53:17 log out
+2022-10-20 22:53:28 log in: productsadmin
+2022-10-20 23:04:24 Server start
+2022-10-20 23:05:14 Server start
+2022-10-20 23:05:22 log in: systemadmin
+2022-10-20 23:17:48 log out
+2022-10-20 23:17:54 log in: productsadmin
+2022-10-20 23:18:37 log in: productsadmin
+2022-10-21 16:55:27 Server start
+2022-10-21 16:55:41 log in: systemadmin
+2022-10-21 17:02:51 Server start
+2022-10-21 17:04:32 Server start
+2022-10-21 17:07:24 Server start
+2022-10-21 17:14:00 Server start
+2022-10-21 17:51:47 Server start
+2022-10-21 17:54:18 Server start
+2022-10-21 17:55:11 Server start
+2022-10-21 17:56:54 Server start
+2022-10-21 17:57:46 Server start
+2022-10-21 20:04:43 Server start
+2022-10-21 20:10:09 u2c0nb : cart item operation
+2022-10-21 20:10:26 u2c0nb : checkout
+2022-10-22 10:32:06 Server start
+2022-10-22 10:32:13 Server start
+2022-10-22 10:32:29 vk0f34 : cart item operation
+2022-10-22 10:34:37 vk4ckj : cart item operation
+2022-10-22 10:34:40 vk4ckj : cart item operation
+2022-10-22 10:34:50 vk4ckj : cart item operation
+2022-10-22 10:34:53 vk4ckj : cart item operation
+2022-10-22 10:36:37 vk849f : cart item operation
+2022-10-22 10:36:38 vk849f : cart item operation
+2022-10-22 10:36:39 vk849f : cart item operation
+2022-10-22 10:36:39 vk849f : cart item operation
+2022-10-22 10:36:39 vk849f : cart item operation
+2022-10-22 10:37:28 vk9mpm : cart item operation
+2022-10-22 10:37:30 vk9mpm : cart item operation
+2022-10-22 10:37:31 vk9mpm : cart item operation
+2022-10-22 10:38:20 vk9mpm : cart item operation
+2022-10-22 10:38:22 vk9mpm : cart item operation
+2022-10-22 10:38:47 vkc3d2 : cart item operation
+2022-10-22 10:38:47 vkc3d2 : cart item operation
+2022-10-22 10:38:49 vkc3d2 : cart item operation
+2022-10-22 10:41:01 vkc3d2 : cart item operation
+2022-10-22 10:58:22 log in: pepe
+2022-10-22 11:28:31 log in: pepe
+2022-10-22 11:41:40 vnv5ku : cart item operation
+2022-10-22 11:41:50 log in: pepe
+2022-10-22 11:45:39 vo6g77 : cart item operation
+2022-10-22 11:45:42 log in: productsadmin
+2022-10-22 11:46:06 vo7c7u : cart item operation
+2022-10-22 11:46:09 log in: productsadmin
+2022-10-22 11:48:10 vob3v3 : cart item operation
+2022-10-22 11:48:16 log in: productsadmin
+2022-10-22 11:50:26 vof9j9 : cart item operation
+2022-10-22 11:50:26 vof9j9 : cart item operation
+2022-10-22 11:50:30 log in: productsadmin
+2022-10-22 11:50:31 vof9j9 : checkout
+2022-10-22 11:54:18 vomcbp : cart item operation
+2022-10-22 11:54:18 vomcbp : cart item operation
+2022-10-22 11:54:21 log in: productsadmin
+2022-10-22 11:54:24 vomcbp : checkout
+2022-10-22 12:01:02 vp2m7k : cart item operation
+2022-10-22 12:01:05 log in: productsadmin
+2022-10-22 12:01:07 vp2m7k : checkout
+2022-10-22 12:03:39 vp7g8k : cart item operation
+2022-10-22 12:03:42 log in: productsadmin
+2022-10-22 12:03:44 vp7g8k : checkout
+2022-10-22 12:09:23 vpi0fs : cart item operation
+2022-10-22 12:09:26 vpi0fs : cart item operation
+2022-10-22 12:09:28 log in: productsadmin
+2022-10-22 12:09:29 vpi0fs : checkout
+2022-10-22 12:14:12 vpqqi0 : cart item operation
+2022-10-22 12:14:12 vpqqi0 : cart item operation
+2022-10-22 12:14:15 log in: productsadmin
+2022-10-22 12:14:16 vpqqi0 : checkout
+2022-10-22 19:28:50 Server start
+2022-10-22 19:36:16 0j47f4 : cart item operation
+2022-10-22 19:36:17 0j47f4 : cart item operation
+2022-10-22 19:36:26 log in: pepe
+2022-10-22 19:36:27 0j47f4 : checkout
+2022-10-22 19:36:53 0j47f4 : cart item operation
+2022-10-22 19:36:56 0j47f4 : cart item operation
+2022-10-22 19:36:56 0j47f4 : cart item operation
+2022-10-22 19:36:58 0j47f4 : checkout
+2022-10-22 19:55:09 log out
+2022-10-22 19:55:11 log in: productsadmin
+2022-10-22 20:03:50 log out
+2022-10-22 20:03:58 log in: pepe
+2022-10-22 20:03:59 0j47f4 : checkout
+2022-10-23 08:53:08 Server start
+2022-10-23 08:53:24 log in: pepe
+2022-10-23 08:53:47 Server start
+2022-10-23 10:14:48 Server start
+2022-10-23 10:14:53 25d4mk : Error: get templates content. SERVER Message: (intermediate value).getChild is not a function
+    at http://localhost:3000/client/nodes.js:44:15
+    at async SiteTheme.loadTemplates (http://localhost:3000/client/themes.js:38:25)
+    at async SiteTheme.getTemplates (http://localhost:3000/client/themes.js:16:7)
+    at async http://localhost:3000/client/main.js:21:3
+2022-10-23 10:15:02 25ddnk : Error: get templates content. SERVER Message: (intermediate value).getChild is not a function
+    at http://localhost:3000/client/nodes.js:44:15
+    at async SiteTheme.loadTemplates (http://localhost:3000/client/themes.js:38:25)
+    at async SiteTheme.getTemplates (http://localhost:3000/client/themes.js:16:7)
+    at async http://localhost:3000/client/main.js:21:3
+2022-10-23 10:19:44 Server start
+2022-10-23 10:19:49 25m5go : Error: get templates content. SERVER Message: (intermediate value).getChild is not a function
+    at http://localhost:3000/client/nodes.js:44:15
+    at async SiteTheme.loadTemplates (http://localhost:3000/client/themes.js:38:25)
+    at async SiteTheme.getTemplates (http://localhost:3000/client/themes.js:16:7)
+    at async http://localhost:3000/client/main.js:21:3
+2022-10-23 10:23:08 Server start
+2022-10-23 10:34:57 Server start
+2022-10-23 10:35:37 Server start
+2022-10-23 10:35:57 Server start
+2022-10-23 10:36:33 Server start
+2022-10-23 10:36:44 log in: pepe
+2022-10-23 10:38:05 Server start
+2022-10-23 10:50:13 Server start
+2022-10-23 10:50:56 Server start
+2022-10-23 10:51:56 Server start
+2022-10-23 11:09:01 26ksav : cart item operation
+2022-10-23 11:09:25 26ksav : checkout
+2022-10-23 11:09:32 Server start
+2022-10-23 11:46:48 log in: pepe
+2022-10-23 11:47:31 Server start
+2022-10-23 11:48:28 log in: pepe
+2022-10-23 11:49:18 log out
+2022-10-23 11:49:19 log in: productsadmin
+2022-10-23 11:54:28 Server start
+2022-10-23 11:54:33 log out
+2022-10-23 11:54:41 log in: productsadmin
+2022-10-23 12:33:27 log in: productsadmin
+2022-10-23 12:35:56 log in: productsadmin
+2022-10-23 12:38:35 log in: productsadmin
+2022-10-23 12:38:57 log in: productsadmin
+2022-10-23 12:39:15 log in: productsadmin
+2022-10-23 12:43:03 log in: productsadmin
+2022-10-23 12:44:42 log out
+2022-10-23 12:44:49 log in: pepe
+2022-10-23 12:45:37 log out
+2022-10-23 12:45:51 log in: pwdError
+2022-10-23 12:45:57 log in: systemadmin
+2022-10-23 12:47:00 log out
+2022-10-23 12:49:49 log in: pwdError
+2022-10-23 12:49:55 log in: systemadmin
+2022-10-23 12:53:26 log in: systemadmin
+2022-10-23 13:14:24 log in: systemadmin
+2022-10-23 13:15:22 log in: systemadmin
+2022-10-23 13:19:28 log in: systemadmin
+2022-10-23 13:22:39 log in: systemadmin

@@ -1,0 +1,31 @@
+<div class="dashboard">
+  <div class="sidebox leftsidebox" id="langbox">
+    <div class="boxtitle"></div>
+    <script>
+      thisNode.getNextChild("langboxtt").getRelationship("siteelementsdata").getChild().writeProp(thisElement);
+    </script>
+    <div class="boxbody"></div>
+    <script> 
+      const {languages, setCurrentLanguage}= await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+      const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+      const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+      const {populateLang}=await import('./' + CLIENT_MODULES_PATH + 'langcopy.js');
+
+      if (webuser.isSystemAdmin()) {
+        const onAdded = async (newLangNode)=>{
+          //We show the msg for waiting
+          const myalert=new AlertMessage(getSiteText().getNextChild("langbox").getNextChild("newlangwait").getRelationship("siteelementsdata").getChild().props.value);
+          myalert.showAlert();
+          await populateLang(newLangNode);
+          myalert.hideAlert();
+          setCurrentLanguage(languages.getChild({id: newLangNode.props.id}));
+
+          languages.setChildrenView(document.querySelector('#langs-select'), document.querySelector('#langs-select-tp'));//Refresh de lang info
+          languages.setChildrenView(document.querySelector('#langbox .boxbody'), "language");  // esto quiza no haria falta:
+        }
+        languages.addEventListener('addNewNode', onAdded);
+      }
+      languages.setChildrenView(thisElement, "language");
+    </script>
+  </div>
+</div>

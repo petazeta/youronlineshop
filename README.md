@@ -1,6 +1,6 @@
-![Your Online Shop](docs/logotype.png "Your Online Shop")
+![Your Online Shop](assets/logotype.png "Your Online Shop")
 
-# Your Online Shop System V 4.1.1
+# Your Online Shop System V 5.0
 
 ## Live Demo
 
@@ -12,20 +12,20 @@ Video Demo -> https://youtu.be/PD_olszbGWA
 <table>
   <tr>
     <td>
-    <a href="https://youtu.be/PD_olszbGWA"><img src="docs/youtube.webp"></a>
+    <a href="https://youtu.be/PD_olszbGWA"><img src="assets/youtube.webp"></a>
     </td>
   </tr>
 </table>
 
 ## About
 
-This is a dynamic web app (Single Page Application) for e-commerce. It is build in Node.js and Mongodb.
+This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb.
 
 https://youronlineshop.net
 
 Awards:
 
-<img src="docs/oss-community-choice-white.svg" alt="Community choice" width="200"/>
+<img src="assets/oss-community-choice-white.svg" alt="Community choice" width="200"/>
 
 ## Main features:
 
@@ -33,8 +33,7 @@ Awards:
 - Quick purchase process
 - Website pages (About, Contact, ect...)
 - Ultra light code
-- Themes (components / templates)
-- Multi-shop
+- Themes (templates / css)
 - Export / Import
 
 
@@ -43,8 +42,8 @@ Awards:
 1. Upload the compressed file to your web server.
 2. Unpack it to the desired folder.
 3. Install node and mongodb.
-4. Edit mongodb settings at: server/nodejs/cfg/dbcfg.js.
-5. Open your terminal at main folder and type: npm install and then npm start. Once the server is running then you can open your web browser (port 8000) and continue with the installation process.
+4. Edit mongodb settings at: server/cfg/dbcustom.js.
+5. Open your terminal at main folder and type: npm install and then npm start. Once the server is running then you can open your web browser (port 3000) and continue with the installation process.
 
 ## Support
 
@@ -59,28 +58,24 @@ After editing some content press Intro or click outside of the editable area to 
 
 To edit some features from the checkout process you should log in with systemadmin user and make an order as if you were a customer. Once you get to the checkout step you should be able to edit checkout options.
 
-Some other configuration can be done by editing some files at cfg folder.
+Some other configuration can be done by editing some files at cfg folders.
 
 
 ## Troubleshooting
 
-If the database connection is not working you may need to check settings at server/nodejs/cfg/dbcfg.js.
+If the database connection is not working you may need to check settings at server/cfg/dbcustom.js.
 
-If the products images can not be uploaded you may need to allow write permisions for catalog-images.
+
+## Documentation
+
+[Documentation](docs/overview.md)
 
 
 ## Themes
 
-Y.O.S. system has a themes feature. Tou can find theme files at client/themes folder.
+Y.O.S. system has a themes feature. Tou can find theme files at layouts folder.
 
 
 ## More
 
-Multi-shop feature is now available. You can host several independent stores by adding their settings to the configuration files.
-
-Files server/cfg/dbcfg.js and server/cfg/config.js contains stores configuration. Store folder inside catalog-image one can be replicated for each site. You must also enable multi-shop by stablishing isSiteUnique: false at server/cfg/default.js.
-
-Now you should be able to access each shop by adding the shop name (shop name is the label at server/cfg/config.js and server/cfg/dbcfg.js) after the host name: localhost:8000/shopname.
-
-There is a new development in process at this repository:
-https://github.com/petazeta/yosnewverdevelopment
+We are still in development process at version 5.0.

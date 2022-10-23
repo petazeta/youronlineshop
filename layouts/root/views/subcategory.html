@@ -1,0 +1,75 @@
+<div>
+  <span data-note="relative position container for admn buttons" style="z-index:1; position: relative;">
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <div data-id="butedit" class="btmiddleleft"></div>
+    <a class="subcategory"></a>
+    <script>
+      const {highLight} = await import('./' + CLIENT_MODULES_PATH + 'activelauncher.js');
+      const {createPagination, getPagination}= await import('./' + CLIENT_MODULES_PATH + 'pagination.js');
+      thisNode.highLightElement=thisElement;
+      
+      const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
+      const prevUrl='?category=' + thisNode.parent.partner.props.id;
+      const url= prevUrl + '&subcategory=' + thisNode.props.id;
+
+      const catalogView=async function() {
+        if (!getPagination(thisNode)) {
+          await thisNode.getRelationship("items").loadRequest("get my children", {count: true});
+          createPagination(thisNode, url, config.catPageSize, thisNode.getRelationship('items'), 'catalog');
+        }
+        thisNode.setView(document.getElementById("centralcontent"), "pagination");
+      }
+
+      if (thisNode.selected) {
+        highLight(thisNode);
+        catalogView(); // Sometimes it is refreshed (when login/logout) so we propagate the refreshing to below nodes
+      }
+
+      const itemView=function(itemNode) {
+        getPagination(thisNode).onAdded(itemNode);
+        itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
+      }
+      thisNode.getRelationship("items").addEventListener('addNewNode', itemView, 'addNewNode');
+
+      const refreshOnDeleted=async function(itemNode){
+        getPagination(thisNode).onDeleted(itemNode);
+      }
+      thisNode.getRelationship("items").addEventListener('deleteChildNode', refreshOnDeleted, 'deleteChildNode');
+
+      const refreshOnMoved=async function(move, itemNode, newOrder){
+        getPagination(thisNode).onMoved(move, itemNode, newOrder);
+      }
+      thisNode.getRelationship("items").addEventListener('moveNode', refreshOnMoved, 'moveNode');
+      
+      const {setHistoryState, pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
+      thisElement.addEventListener("click", function(event) {
+        event.preventDefault();
+        if (this.isContentEditable==true) {return false;} // The event should not be executed at contentiditable state
+        catalogView();
+        //We grab state on mouse click esto quiza ya no hace falta
+        if (event.isTrusted) {
+          pushHistoryState(url);
+        }
+      });
+      
+      setHistoryState(thisNode, url, ()=>{
+        catalogView();
+      });
+      
+      thisNode.getRelationship("itemcategoriesdata").getChild().writeProp(thisElement);
+      if (webuser.isProductAdmin()) {
+        import('./' + CLIENT_MODULES_PATH + 'frontutils.js')
+        .then(({visibleOnMouseOver})=>{
+          visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+          visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=admnbuts]'), thisElement.parentElement);
+        });
+        thisNode.getRelationship("itemcategoriesdata").getChild().appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+        thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+      }
+    </script>
+  </span>
+</div>

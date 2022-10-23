@@ -1,0 +1,14 @@
+<table id="shippingcontainer"></table>
+<script>
+const {currentLanguage, createInstanceChildText}= await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+const shippingsMother= new thisNode.constructor.linkerConstructor("TABLE_SHIPPINGTYPES");
+await shippingsMother.loadRequest("get my tree", {extraParents: currentLanguage.getRelationship("shippingtypesdata")});
+
+shippingsMother.addEventListener("setChildrenView", function() {
+  if (this.children.length==0 && (webuser.isSystemAdmin() || webuser.isOrdersAdmin())) {
+    createInstanceChildText(this)
+    .then(newNode=>newNode.setView(this.childContainer, "butaddnewnode"));
+  }
+}, "addNewNodeButton");
+shippingsMother.setChildrenView(thisElement,  "shippingtype");
+</script>

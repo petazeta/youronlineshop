@@ -1,17 +1,16 @@
 {
   "name": "@petazeta/your-online-shop-server",
-  "version": "1.0.0",
+  "version": "5.0.0",
   "description": "server api for your online shop",
-  "type": "module",
-  "main": "serverindex.js",
+  "main": "serverindex.mjs",
   "scripts": {
-    "start": "node serverindex.js",
-    "test": "node --inspect-brk serverindex.js"
+    "start": "node serverindex.mjs",
+    "test": "node --inspect-brk serverindex.mjs"
   },
   "author": "alberto melchor herrera",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "*",
-    "mongoose": "^6.1.8"
+    "mongoose": "*"
   }
 }

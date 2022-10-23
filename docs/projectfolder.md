@@ -1,0 +1,2 @@
+Project folder schema
+===============

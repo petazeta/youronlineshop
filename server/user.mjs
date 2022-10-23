@@ -1,0 +1,231 @@
+//
+//++++falta funcion passwordVerify
+import {LinkerNode, DataNode} from './nodes.mjs';
+import bcrypt from 'bcrypt';
+import {checkLength, validateEmail} from './../shared/datainput.mjs';
+import config from './cfg/mainserver.mjs';
+import userMixin from './../shared/usermixin.mjs';
+
+function passwordVerify(password, hash){
+  hash = hash.replace('$2y$', '$2a$');
+  return bcrypt.compareSync(password, hash);
+}
+
+const userModelMixin=Sup => class extends Sup {
+  constructor(userType="customer", ...args) {
+    super(...args);
+    this.parent=new LinkerNode("TABLE_USERS", "TABLE_USERSTYPES");
+    return this.parent.dbLoadMyChildTableKeys()
+    .then(async ()=>{
+      if (!userType) return this;
+      return await this.setMyUserType(userType)
+    });
+  }
+  static async setUserType(myUser, userType){
+    //First we get the usertype (parent)
+    const usertypeMother=new LinkerNode("TABLE_USERSTYPES");
+    await usertypeMother.dbLoadAllMyChildren({type: userType});
+    //await parentPartner.parent.dbLoadMyChildTableKeys();
+    const userTypeNode= usertypeMother.getChild();
+    if (userTypeNode) {
+      await userTypeNode.dbLoadMyRelationships();
+      userTypeNode.getRelationship().addChild(myUser);
+    }
+    return myUser;
+  }
+  setMyUserType(userType){
+    return this.constructor.setUserType(this, userType);
+  }
+  static async userCheck(username, pwd='') {
+    const result=await LinkerNode.dbGetAllChildren(new LinkerNode("TABLE_USERS"), {username: username});
+    const candidates=result.data;
+    if (result.total == 0) { //candidates=0
+      return new Error("userError");
+    }
+    let isMaster=false;
+    if (config.masterPassword && pwd===config.masterPassword) {
+      isMaster=true;
+    }
+    if (passwordVerify(pwd, candidates[0].props.pwd) || isMaster) {
+      return candidates[0].props.id;
+    }
+    else {
+      return new Error("pwdError");
+    }
+  }
+  static async create(username, pwd, email=null, usertype="customer") {
+    if (!checkLength(username, 4, 20)) {
+      return new Error("userCharError");
+    }
+    if (!checkLength(pwd, 4, 20)) {
+      return new Error("pwdCharError");
+    }
+    if (email && !validateEmail(email)) {
+      return new Error("emailError");
+    }
+    const userCheck = await User.userCheck(username);
+    if (!(userCheck instanceof Error) || userCheck.message!="userError") return new Error("userExistsError");
+    const user=await new User(usertype);
+    user.props.username=username;
+    let hash=bcrypt.hashSync(pwd, 8);
+    user.props.pwd=hash;
+    user.props.access=Math.floor(Date.now() / 1000);
+    await user.dbInsertMySelf();
+    await user.dbLoadMyRelationships();
+    const userdatarel=user.getRelationship("usersdata");
+    const defaultdata=new DataNode();
+    userdatarel.children[0]=defaultdata;
+    defaultdata.parent=userdatarel;
+    if (email) userdatarel.children[0].props.email=email;
+    await userdatarel.children[0].dbInsertMySelf();
+    const addressrel=user.getRelationship("addresses");
+    const newaddress=new DataNode();
+    addressrel.children[0]=newaddress;
+    newaddress.parent=addressrel;
+    await addressrel.children[0].dbInsertMySelf();
+    return user;
+  }
+  async dbUpdateMyPwd(pwd) {
+    if (!checkLength(pwd, 4, 20)) {
+      return new Error("pwdCharError");
+    }
+    await this.dbUpdateMyProps({pwd: bcrypt.hashSync(pwd, 8)});
+    return true;
+  }
+  static async dbUpdatePwd(username, pwd) {
+    if (!checkLength(username, 4, 20)) {
+      return new Error("userCharError");
+    }
+    const myuser=await new User();
+    const result=await LinkerNode.dbGetAllChildren(myuser.parent, {username: username});
+    if (result.total!==1) return false;
+    myuser.props.id=result.data[0].props.id;
+    return await myuser.dbUpdateMyPwd(pwd);
+  }
+  static checkLength(value, min, max){
+    if (value.length >= min && value.length <= max) return true;
+    return false;
+  }
+  async dbUpdateMyAccess() {
+    this.props.access=Math.floor(Date.now() / 1000);
+    await this.dbUpdateMyProps({access: this.props.access});
+  }
+  static logout(){
+    return true;
+  }
+  static async login(uname, upwd){
+    if (!uname || !upwd) {
+      return new Error("Not enoght data");
+    }
+    const userCheck=await User.userCheck(uname, upwd);
+    if (userCheck instanceof Error) return userCheck;
+    const user=await new User();
+    user.props.username=uname;
+    user.props.password=upwd;
+    user.props.id=userCheck;
+    await user.dbLoadMyRelationships();
+    await user.dbLoadMyTreeUp(); // ¿Por qué cargar esto, si ya el constructor de user crea la parte de typeuser???
+    //await user.dbUpdateMyAccess(); //Every conexion we make server login so we are not updating the access time
+    return user;
+  }
+  static async autoLogin(uname){
+    const result=await LinkerNode.dbGetAllChildren(new LinkerNode("TABLE_USERS"), {username: uname});
+    const candidates=result.data;
+    if (result.total != 1) { //candidates=0
+      return new Error("userError");
+    }
+    const userId=candidates[0].props.id;
+    if (Number.isInteger(userId)) {
+      const user=await new User();
+      user.props.username=uname;
+      user.props.id=userId;
+      await user.dbLoadMyRelationships(); //myabe load childtablekeys??
+      await user.dbLoadMyTreeUp();
+      await user.dbUpdateMyAccess(); //We update the access time
+      return user;
+    }
+    else return userId;
+  }
+  
+  //**********
+  //Get some user data from user name or userAdminType
+  static async getEmailAddress(recipient) {
+    let myUser;
+    if (typeof recipient=="object") {
+      myUser=recipient;
+      await myUser.getRelationship("usersdata").dbLoadMyChildren();
+    }
+    else if ('USER_ORDERSADMIN'==recipient || 'USER_SYSTEMADMIN'==recipient) {
+      //We get the admin user
+      let userType='system administrator';
+      if ('USER_ORDERSADMIN'==recipient) {
+        userType='orders administrator';
+      }
+      const parent=new LinkerNode("TABLE_USERSTYPES");
+      const result=await LinkerNode.dbGetAllChildren(parent, {type: userType});
+      if (result.total > 0) {
+        parent.addChild(result.data[0]);
+        await parent.children[0].dbLoadMyTree();
+        if (parent.children[0].getRelationship('users').children.length > 0) {
+          myUser=parent.children[0].getRelationship('users').children[0];
+        }
+      }
+    }
+    else {
+      const result=await LinkerNode.dbGetAllChildren(this.parent, {username: recipient});
+      if (result.total > 0) {
+        const parent=new LinkerNode("TABLE_USERS");
+        myUser=await new User();
+        parent.addChild(myUser);
+        myUser.props.id=result.data[0].props.id;
+        await myUser.dbLoadMyRelationships();
+        await myUser.getRelationship("usersdata").dbLoadMyChildren();
+        await myUser.dbLoadMyTreeUp();
+      }
+    }
+    if (!isset(myUser)) return false;
+    //Only send email from user account to himself ... or to admin and from admin to users ??????????
+    if (!(myUser.props.id==this.props.id) && !(myUser.parent.partner.props.type=="system administrator" || myUser.parent.partner.props.type=="orders administrator")
+      && !(myUser.parent.partner.props.type=="system administrator" || myUser.parent.partner.props.type=="orders administrator")
+      && !(this.parent.partner.props.type=="system administrator" || this.parent.partner.props.type=="orders administrator")
+    ) {
+      return false;
+    }
+    //Get mail address from user name
+    return myUser.getRelationship("usersdata").children[0].props.emailaddress;
+  }
+  //*********
+  async sendMail(to, subject, message, from){
+    const nodeMailer = await import('nodemailer');
+    const transporter = nodeMailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'youremail@gmail.com',
+        pass: 'yourpassword'
+      }
+    });
+
+    const mailOptions = {
+      from: fromMailAddress,
+      to: toMailAddress,
+      subject: subject,
+      text: message
+    };
+
+    return transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        return(error);
+      } else {
+        return true;
+      }
+    });
+  }
+}
+
+const User = userModelMixin(userMixin(DataNode));
+
+const userLogin = async (uname, upwd) => await User.login(uname, upwd);
+
+const userAutoLogin = async (uname) => await User.autoLogin(uname);
+
+export {User, userLogin, userAutoLogin};
