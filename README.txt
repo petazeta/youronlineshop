@@ -16,7 +16,7 @@ Please write: melchorherrera@gmail.com
 * About *
 *********
 
-This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb.
+This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb and it has no dependencies.
 
 https://youronlineshop.net
 

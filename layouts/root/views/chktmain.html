@@ -101,8 +101,9 @@
           }
           const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
           if (config.chktuserdata_On) {
-            webuser.addEventListener('saveuserdata', checkoutFunction, 'checkout', null, true);
-            document.getElementById('useraddress').querySelector('button[type=submit]').click();
+            webuser.saveUserAddress().then(result=>{
+              if (result===true) checkoutFunction();
+            });
           }
           else {
             checkoutFunction();

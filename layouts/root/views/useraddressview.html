@@ -2,6 +2,7 @@
 This template shows the user data and user address and allows to save the changes when fieldtyp input.
 Param showAddress (if false shows just some data)
 Param fieldtype: input / textnode
+params.externalSave: Don't show save button and attach the save function to thisNode
 -->
 <form style="display:flex; flex-flow:column;">
   <div class="boxframe" style="align-items: center; display: flex; flex-flow: column; margin: 1em;">
@@ -22,6 +23,8 @@ Param fieldtype: input / textnode
             event.preventDefault();
           });
           const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
+          const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+
           const myNode=getSiteText().getNextChild("not located").getNextChild("save").getRelationship("siteelementsdata").getChild();
           myNode.writeProp(thisElement);
           //adding the edition pencil
@@ -30,62 +33,72 @@ Param fieldtype: input / textnode
             visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
             myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
           }
-          const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
-          thisElement.addEventListener("click", async function(event) {
-            event.preventDefault();
+
+          // return true if saved
+          async function saveUserAddress() {
             const {checkValidData, validateEmail, checkDataChange}=await import('./' + SHARED_MODULES_PATH + 'datainput.mjs');
             //Turn input values to element props
             function formToData(relationship, myform) {
               const data=new relationship.partner.constructor();
-              relationship.childTableKeys.forEach((key)=>{
-                if (key!="id" && myform.elements[key]) data.props[key]=myform.elements[key].value;
-              });
+              relationship.childTableKeys.filter(propName=>propName!="id" && myform.elements[propName])
+              .forEach(key=>data.props[key]=myform.elements[key].value);
               return data;
             }
-            const userdata=formToData(thisNode.getRelationship("usersdata"), this.form);
+            async function myUpdateProp(myrel, mydata) {
+              if (!checkDataChange(myrel, mydata)) return;
+              await myrel.getChild().request("edit my props", {props: mydata.props});
+              myrel.childTableKeys.filter(propName=>propName!="id")
+              .forEach(propName=>myrel.getChild().props[propName]=userdata.props[propName]);
+            }
+            const userdata=formToData(thisNode.getRelationship("usersdata"), thisElement.form);
             let addressdata;
             if (thisParams.showAddress) {
-              addressdata=formToData(thisNode.getRelationship("addresses"), this.form);
+              addressdata=formToData(thisNode.getRelationship("addresses"), thisElement.form);
             }
             let myReturn=checkValidData(userdata)
             if (myReturn!==true) {
               //Errors in characters
-              if (this.form.elements[myReturn.errorKey]) this.form.elements[myReturn.errorKey].focus();
-              new AlertMessage(this.form.elements.fieldCharError.value, 5000).showAlert();
+              if (thisElement.form.elements[myReturn.errorKey]) thisElement.form.elements[myReturn.errorKey].focus();
+              new AlertMessage(thisElement.form.elements.fieldCharError.value, 5000).showAlert();
               return;
             }
             if (addressdata) {
               let myReturn=checkValidData(addressdata);
               if (myReturn!==true) {
                 //Errors in characters
-                if (this.form.elements[myReturn.errorKey]) this.form.elements[myReturn.errorKey].focus();
-                new AlertMessage(this.form.elements.fieldCharError.value, 5000).showAlert();
+                if (thisElement.form.elements[myReturn.errorKey]) thisElement.form.elements[myReturn.errorKey].focus();
+                new AlertMessage(thisElement.form.elements.fieldCharError.value, 5000).showAlert();
                 return;
               }
             }
             if (!validateEmail(userdata.props.emailaddress)) {
-              console.log(userdata, this.form.elements);
+              console.log(userdata, thisElement.form.elements);
               //emal format error
-              new AlertMessage(this.form.elements.emailCharError.value, 5000).showAlert();
-              this.form.elements.emailaddress.focus();
+              new AlertMessage(thisElement.form.elements.emailCharError.value, 5000).showAlert();
+              thisElement.form.elements.emailaddress.focus();
               return;
             }
+
             await myUpdateProp(thisNode.getRelationship("usersdata"), userdata);
-            const savedlabel=getSiteText().getNextChild("not located").getNextChild("saved");
             if (addressdata) {
               await myUpdateProp(thisNode.getRelationship("addresses"), addressdata);
             }
-            if (event.isTrusted) {
-              new AlertMessage(savedlabel.getRelationship("siteelementsdata").getChild().props.value, 3000).showAlert();
-            }
-            thisNode.dispatchEvent('saveuserdata');
-            async function myUpdateProp(myrel, mydata) {
-              if (!checkDataChange(myrel, mydata)) return;
-              await myrel.getChild().request("edit my props", {props: mydata.props})
-              myrel.childTableKeys.forEach((propName)=>{
-                if (propName!="id") myrel.getChild().props[propName]=userdata.props[propName];
-              });
-            }
+            return true;
+          }
+
+          if (thisParams.externalSave) {
+            thisNode.saveUserAddress=saveUserAddress;
+            thisElement.form.querySelector('[data-id=save]').style.display='none';
+          }
+
+          thisElement.addEventListener("click", function(event) {
+            event.preventDefault();
+            saveUserAddress().then(result=>{
+              if (result===true) {
+                const savedlabel=getSiteText().getNextChild("not located").getNextChild("saved");
+                new AlertMessage(savedlabel.getRelationship("siteelementsdata").getChild().props.value, 3000).showAlert();
+              }
+            })
           });
         </script>
       </div>

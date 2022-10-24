@@ -4,11 +4,11 @@
 
 ## Live Demo
 
-Shop sample -> [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
+Shop sample => [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
 
-Admin -> (usr/password) webadmin/webadmin, productsadmin/productsadmin
+Admin => (usr/password) webadmin/webadmin, productsadmin/productsadmin
 
-Video Demo -> https://youtu.be/PD_olszbGWA
+Video Demo => https://youtu.be/PD_olszbGWA
 <table>
   <tr>
     <td>
@@ -19,7 +19,7 @@ Video Demo -> https://youtu.be/PD_olszbGWA
 
 ## About
 
-This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb.
+This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb and it has no dependencies.
 
 https://youronlineshop.net
 

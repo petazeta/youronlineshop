@@ -2,8 +2,7 @@
   <div>
     <input type="radio" name="payment">
     <script>
-      thisElement.addEventListener("change", function(event) {
-        if (!this.checked) return;
+      function setOrderPayment(){
         const paymenttypesRel=webuser.getRelationship("orders").getChild().getRelationship("orderpaymenttypes");
         paymenttypesRel.children=[]; //In case we already selected
         const orderPaymentType=paymenttypesRel.addChild(new thisNode.constructor());
@@ -12,10 +11,15 @@
         orderPaymentType.props.details=JSON.stringify(detailsobj);
         import('./' + CLIENT_MODULES_PATH + 'activelauncher.js')
         .then(({setActive})=>setActive(thisNode));
+      }
+      thisElement.addEventListener("change", function(event) {
+        if (!this.checked) return;
+        setOrderPayment();
       });
       //selecting first option
       if (thisNode.parent.getChild()==thisNode) {
-        thisElement.click();
+        thisElement.checked=true;
+        setOrderPayment(); // it seems that change event is not affected by the checked=true
       }
     </script>
   </div>
@@ -90,6 +94,7 @@
       thisElement.style.display="none";
     }
   }
+  // Selection extends to the box area
   thisElement.addEventListener("click", function(event) {
     thisElement.querySelector("input").click();
   });

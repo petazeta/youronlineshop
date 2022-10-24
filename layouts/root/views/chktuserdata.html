@@ -17,10 +17,9 @@
   </div>
   <div id="useraddress"></div>
   <script>
-    const myParams={fieldtype: 'input'};
+    const myParams={fieldtype: 'input', externalSave: true};
     const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
     if (config.chktaddress_On) myParams.showAddress=true;
-    webuser.setView(thisElement, "useraddressview", myParams)
-    .then(()=> thisElement.querySelector('[data-id=save]').style.display='none'); //Save button disabled
+    webuser.setView(thisElement, "useraddressview", myParams);
   </script>
 </div>

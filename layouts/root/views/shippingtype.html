@@ -2,23 +2,24 @@
   <td>
     <input type="radio" name="shipping">
     <script>
-      const {copyProps} = await import('./' + SHARED_MODULES_PATH + 'basicmixin.mjs');
-      thisElement.addEventListener("change", function(event) {
-        if (!this.checked) return;
+      function setOrderShipping(){
         const shippingtypesRel=webuser.getRelationship("orders").getChild().getRelationship("ordershippingtypes");
         shippingtypesRel.children=[]; //In case we already selected
-        const orderShippingType=shippingtypesRel.addChild(new thisNode.constructor());
-        // orderShippingType.loadProperties(thisNode.getRelationship("shippingtypesdata").getChild(), ["name"]);
+        const orderShippingType=shippingtypesRel.addChild(new thisNode.constructor()); // new DataNode
         orderShippingType.props.name=thisNode.getRelationship("shippingtypesdata").getChild().props.name;
         orderShippingType.props.delay_hours=thisNode.props.delay_hours;
         orderShippingType.props.price=thisNode.props.price;
-        //orderShippingType.loadProperties(thisNode, ["delay_hours", "price"]);
         import('./' + CLIENT_MODULES_PATH + 'activelauncher.js')
         .then(({setActive})=>setActive(thisNode));
+      }
+      thisElement.addEventListener("change", function(event) {
+        if (!this.checked) return;
+        setOrderShipping();
       });
       //selecting first option
       if (thisNode.parent.getChild()==thisNode) {
-        thisElement.click();
+        thisElement.checked=true;
+        setOrderShipping(); // it seems that change event is not affected by the checked=true
       }
     </script>
   </td>
@@ -103,6 +104,7 @@
   </td>
 </tr>
 <script>
+  // Selection extends to the box area
   thisElement.addEventListener("click", function(event) {
     thisElement.querySelector("input").click();
   });

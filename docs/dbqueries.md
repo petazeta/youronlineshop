@@ -7,6 +7,6 @@ We have seen at reqres.md how how the request is performed. In this text we will
 
 # Client
 
-nodesfront.js and request.js
+nodes.js and request.js
 
 # Server

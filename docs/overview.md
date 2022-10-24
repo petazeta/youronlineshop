@@ -3,25 +3,23 @@ Overview
 
 ## Introduction
 
-This software performs what now is called a Single Page Application (SPA). Any SPA need some services and it is common to use a framework for this purpouse. We have develop our own framework so our development is not following any other framework. However the framework we are using has a name and it is the Linker framework or linker ecosystem. We are trying to develop it in a modular way so the components are autonomous and can be invoqued in different apps. However there is a common basic pattern: the linker ecosystem and its basic object: the "node".
-
-As we aready see, this ecosystem determines a singleton object: the node. We would use this node for forntend and backend purpouses, each with its own characteristics. This node element defines a model for data objects and its parent-child structure. It allows relationships between child and parents conforming a relational data structure.
-
-The basic node can be extended in the way it is needed.
+This software performs what so called Single Page Application (SPA). Any SPA need some services and it is common to use a framework for this purpouse. We have developed our own framework which name is: [Linker framework](linkerfmwk.md) or linker ecosystem. We are trying to develop it in a modular way so the components are autonomous and can be invoked in different apps. However there is a common basic pattern: the "node" object.
 
 In this guideline we will see some information about the linker ecosystem and the basic services of the SPA, some of them could be included as part of the the linker ecosystem to use them in other applications.
 
+Plus to it we are using templates to show the elements and insert them into the html document (as well as perform some actions). These elements are contained in files at the layouts folder. We will refer sometimes to them using its file name without the file extension.
+
 ## Linker framework / ecosystem
 
-Linker framework core are the following classes defined in these three modules: basicmixin.mjs, linksmixin.mjs and linkermixin.mjs. In this order they are layers of the basic object. (Design pattern is singleton factory)
+Linker framework core are the following classes defined in these three modules: basicmixin.mjs, linksmixin.mjs and linkermixin.mjs. In this order they are layers of the basic object so colled "node". This design belongs to the singleton factory pattern. The "node" is the singleton that performs the vast mayoritiy of the procedures.
+
+The node object can be extended for backend and frontend purpouses and it relates to other nodes in a parent-child tree structure, allowing the relationships regarding to the relational data structure of the database.
 
 For the frontend (client) we are adding some characteristics to the basic node object:
-
 - Loading templates and render them: showing them at the DOM and executing scripts inside them.
 - Making requests to the server and retrieving the responses.
 
 For the backend (server) we add some other characteristics for:
-
 - Making database operations.
 
 [Read more about the linker ecosystem](linkerfmwk.md)
@@ -38,10 +36,10 @@ Server is composed from these main services:
 And also these minor services:
 
 - Authenticate service
-- Cache service
+- [Cache service](cache.md)
 - [Reports service](reporting.md)
 - Services Igniting service
-- Request manager
+- [Request manager](reqres.md)
 - [Entrance script]()
 
 This clasification comes from the diferent services sources or because some services can be shared betwen installations.
@@ -51,35 +49,40 @@ This clasification comes from the diferent services sources or because some serv
 Client main services are:
 
 - [Start service](clientstart.md)
-- Request service
-- Templates service
+- [Request service](reqres.md)
+- [Templates service](layout.md)
 - [User and login service](userlogin.md)
-- Language content service
+- [Languages service](languages.md)
 - [Navigation facility](navigation.md)
 - [Edition](edition.md)
 - [Css](css.md)
 
 Client minor services:
 
-- Alerts
 - Catalog images update service
-- Layout management
-- [Languages service](languages.md)
-- New installation
+- [Layout management](layout.md)
+- [New installation](newinstall.md)
 - [Observable](observerpattern.md)
 - [Reporting](statistics.md)
+- [Event listener](eventlistener.md)
+- Alerts
 
 
 ## Shared services
 
 Services common in client and server are:
 
-- Packing service
+- [Packing service](datatransfer.md)
 - [Config service](config.md)
 
 ## Accesorial services
 
-- Error manging service.
+- [Error manging service](errors.md)
+
+## Fundamentals
+
+- [javascript inheritance](jsinheritance.md)
+- [Asynchronicitiy](asyncawait.md)
 
 ## Template files
 

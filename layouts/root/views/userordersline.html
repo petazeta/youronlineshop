@@ -11,7 +11,7 @@
     <a></a>
     <script>
       let thisUser=webuser, fieldtype='textnode', showAddress=false;
-      if (webuser.isOrdersAdmin) {
+      if (webuser.isOrdersAdmin()) {
       //Complit user information
         thisUser=thisNode.parent.partner;
         await thisUser.loadRequest("get my relationships");
@@ -23,7 +23,7 @@
         thisElement.textContent=webuser.getRelationship("usersdata").getChild().props.fullname;
       }
       const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
-      if (config.chktaddressOn) showAddress=true;
+      if (config.chktaddress_On) showAddress=true;
       thisElement.clickOn=false;
       thisElement.addEventListener('click', async function(event){
         event.preventDefault();

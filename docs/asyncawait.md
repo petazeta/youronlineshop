@@ -35,3 +35,18 @@ end await
 
 The result shows that if we excute a not awaited promise inside to an awaited function, the promise is not awaited.
 
+This situation will cause a non awaited case:
+
+let awaitFunc= () => new Promise(resolve => setTimeout(()=>{console.log("end await");resolve();}, 5000));
+
+let upperFunc = ()=>{
+	awaitFunc();
+}
+console.log("begin upper");
+await upperFunc();
+console.log("end upper");
+
+For the awaited to be perform we must change it in this way:
+let upperFunc = ()=>{
+	return awaitFunc();
+}

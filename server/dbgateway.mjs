@@ -1,4 +1,5 @@
 import dbConfig from './cfg/dbmainserver.mjs';
+import config from './cfg/mainserver.mjs';
 import mongoose from 'mongoose';
 import {setDbSchema} from './mongodb.mjs';
 import path from 'path';
@@ -326,7 +327,7 @@ export function getTableRef() {
 export async function resetDb(){
   await dataBase.connect(dbConfig.url);
   const {total} = await dataBase.elementsFromTable({props: {childTableName: "TABLE_LANGUAGES"}});
-  if (total===0) return await dataBase.resetDb(path.join(dbConfig.importPath, 'mongodb_dtbs.json'));
+  if (total===0) return await dataBase.resetDb(path.join(config.basePath, dbConfig.importPath, 'mongodb_dtbs.json'));
   throw new Error('The database is not empty');
 }
 

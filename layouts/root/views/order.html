@@ -13,7 +13,7 @@
   <div class="form-group ordertotals">
     <span class="form-label"></span>
     <script>
-      //valid also for cart view: checkout and userordersline
+      //valid also for checkout and userordersline
       const myorderpay=thisNode.getRelationship("orderpaymenttypes").getChild();
       if (myorderpay) thisElement.textContent='(' +  myorderpay.props.name + ')';
     </script>
