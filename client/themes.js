@@ -3,12 +3,12 @@
 
 
 import config from './cfg/main.js';
-import {LinkerNode, DataNode} from './nodes.js';
+import {Linker, Node} from './nodes.js';
 import {findTheme} from './../shared/themes.mjs';
 
 export default class SiteTheme {
   constructor(){
-    this.themeTree=new DataNode();
+    this.themeTree=new Node();
     this.tpList=new Map();
   }
   async getTemplates() {
@@ -35,7 +35,7 @@ export default class SiteTheme {
   async loadTemplates(themeId, subThemeId) {
     // loading the theme templates
     const myParent=document.createElement("div");
-    myParent.innerHTML= await DataNode.makeRequest("get templates content", {themeId: themeId, subThemeId: subThemeId});
+    myParent.innerHTML= await Node.makeRequest("get templates content", {themeId: themeId, subThemeId: subThemeId});
     while (myParent.childNodes.length > 0) {
       if (myParent.childNodes[0].tagName=="TEMPLATE") this.tpList.set(myParent.childNodes[0].id, myParent.childNodes[0]);
       myParent.removeChild(myParent.childNodes[0]);
@@ -45,7 +45,7 @@ export default class SiteTheme {
   async loadTemplate(tpId, themeId, subThemeId) {
     // loading the theme templates
     const myParent=document.createElement("div");
-    myParent.innerHTML= await DataNode.makeRequest("get template content", {tpId: tpId, themeId: themeId, subThemeId: subThemeId});
+    myParent.innerHTML= await Node.makeRequest("get template content", {tpId: tpId, themeId: themeId, subThemeId: subThemeId});
     while (myParent.childNodes.length > 0) {
       if (myParent.childNodes[0].tagName=="TEMPLATE") this.tpList.set(myParent.childNodes[0].id, myParent.childNodes[0]);
       myParent.removeChild(myParent.childNodes[0]);
@@ -55,7 +55,7 @@ export default class SiteTheme {
   async loadStyles(styleId, themeId, subThemeId) {
     // loading the theme templates
     const myParent=document.createElement("div");
-    myParent.innerHTML = await DataNode.makeRequest("get css content", {styleId: styleId, themeId: themeId, subThemeId: subThemeId});
+    myParent.innerHTML = await Node.makeRequest("get css content", {styleId: styleId, themeId: themeId, subThemeId: subThemeId});
     for (const style of myParent.querySelectorAll("style")) {
       document.head.appendChild(style);
     }
@@ -65,7 +65,7 @@ export default class SiteTheme {
 /*
 // For the most common case (loadViewsAtOnce & viewsCacheOn) tpList becomes a Map: tp id => tp content
 export const tpList=new Map();
-const themesTreeMum=new LinkerNode();
+const themesTreeMum=new Linker();
 
 export let themeActive, styleActive;
 

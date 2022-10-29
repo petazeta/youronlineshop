@@ -29,7 +29,7 @@ export function setActive(myNode) {
   // We propagate the selection up to parents
   function innerActivate(myNode) {
     setActiveChild(myNode);
-    if (myNode.parent && myNode.parent.partner) innerActivate(myNode.parent.partner)
+    if (myNode.parent?.partner) innerActivate(myNode.parent.partner)
   }
 }
 // Unselects nodes from up and down
@@ -56,7 +56,7 @@ export function setActiveInGroup(groupName, newActive) {
     setActive(newActive);
     return;
   }
-  if (lastActive && lastActive.selected) unselectEntireTree(lastActive);
+  if (lastActive?.selected) unselectEntireTree(lastActive);
   activeGroups.set(groupName, newActive);
   setActive(newActive);
 }

@@ -2,9 +2,7 @@
 
 import config from './cfg/main.js';
 import {authorizationToken} from "./authorization.js";
-import basicMixin from './../shared/basicmixin.mjs';
-import linksMixin from './../shared/linksmixin.mjs';
-import {commonMixin, linkerMixin, dataMixin, linkerExpressMixin, dataExpressMixin} from './../shared/linkermixin.mjs';
+import {BasicLinker, BasicNode} from './../shared/linker.mjs';
 import eventListenerMixin from './eventlistenermixin.js';
 import {getDomElementFromChild} from './frontutils.js';
 
@@ -40,7 +38,7 @@ const modelMixin=Sup => class extends Sup {
           throw new Error(e.message + "Action: " + action + ". Error: Response error: "+ resultTxt);
         }
       }
-      if (result && typeof result=="object" && result.error==true) {
+      if (result?.error==true) {
         throw new Error(action + '. SERVER Message: ' + result.message);
       }
       return result;
@@ -89,21 +87,21 @@ const modelMixin=Sup => class extends Sup {
     if (parameters && !Array.isArray(parameters)) {
       parameters=Array(dataNodes.length).fill(parameters);
     }
-    let reducedDataNodes=[], reducedParams=[], params=[];
+    let reducedNodes=[], reducedParams=[], params=[];
     // we make reduction and save the result also for reduce only option
     for (const index of Object.keys(dataNodes)) {
       if (parameters && parameters[index]) {
-        [reducedDataNodes[index], reducedParams[index]]=await dataNodes[index].request(action[index], parameters[index], true);
-        params[index]={...reducedParams[index], nodeData: reducedDataNodes[index]};
+        [reducedNodes[index], reducedParams[index]]=await dataNodes[index].request(action[index], parameters[index], true);
+        params[index]={...reducedParams[index], nodeData: reducedNodes[index]};
       }
       else {
-        reducedDataNodes[index]=await dataNodes[index].request(action[index], null, true);
-        params[index]={nodeData: reducedDataNodes[index]};
+        reducedNodes[index]=await dataNodes[index].request(action[index], null, true);
+        params[index]={nodeData: reducedNodes[index]};
       }
     }
     if (reduce) {
-      if (parameters) return [reducedDataNodes, reducedParams];
-      return reducedDataNodes;
+      if (parameters) return [reducedNodes, reducedParams];
+      return reducedNodes;
     }
     return this.makeRequest(action, params, url); // static
   }
@@ -186,7 +184,7 @@ const linkerViewMixin=Sup => class extends Sup {
   }
 
   createInstanceChild(position=1) {
-    const newNode=new this.constructor.dataConstructor;
+    const newNode=new this.constructor.nodeConstructor;
     newNode.parent=this;
     const skey=newNode.parent.getSysKey('sort_order');
     if (skey) {
@@ -199,7 +197,7 @@ const linkerViewMixin=Sup => class extends Sup {
   dispatchEvent(){}
 }
 
-const LinkerNode = eventListenerMixin(linkerViewMixin(viewMixin(modelMixin(linkerExpressMixin(linkerMixin(commonMixin(linksMixin(basicMixin(class {})))))))));
+const Linker = eventListenerMixin(linkerViewMixin(viewMixin(modelMixin(BasicLinker))));
 
 const dataViewMixin=Sup => class extends Sup {
   constructor(...args) {
@@ -275,7 +273,7 @@ const dataViewMixin=Sup => class extends Sup {
     if (!append) container.innerHTML='';
 
     const renderedProps=document.createDocumentFragment();
-    const myKeys = this.parent && this.parent.childTableKeys.length > 0 ? [...this.parent.childTableKeys] : Object.keys(this.props);
+    const myKeys = this.parent?.childTableKeys.length > 0 ? [...this.parent.childTableKeys] : Object.keys(this.props);
 
     for (const key of myKeys) {
       if (key=="id") continue;
@@ -326,12 +324,12 @@ const dataViewMixin=Sup => class extends Sup {
   dispatchEvent(){}
 }
 
-const DataNode = eventListenerMixin(dataViewMixin(viewMixin(modelMixin(dataExpressMixin(dataMixin(commonMixin(linksMixin(basicMixin(class {})))))))));
+const Node = eventListenerMixin(dataViewMixin(viewMixin(modelMixin(BasicNode))));
 
-DataNode.linkerConstructor=LinkerNode;
-LinkerNode.dataConstructor=DataNode;
+Node.linkerConstructor=Linker;
+Linker.nodeConstructor=Node;
 
-export {LinkerNode, DataNode}
+export {Linker, Node}
 
 /*
 

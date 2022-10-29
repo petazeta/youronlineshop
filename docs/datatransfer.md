@@ -30,16 +30,11 @@ For testing it we would use it as a script inserted inside an html file to get b
 
 This is the test script that we attach to the html file:
 
-import basicMixin from './shared/modules/basicmixin.js';
-import linksMixin from './shared/modules/linksmixin.js';
-import {commonMixin, linkerMixin, dataMixin, linkerExpressMixin, dataExpressMixin} from './shared/modules/linkermixin.js';
+import {BasicNode: Node, BasicLinker: Linker} from './shared/modules/linker.js';
 import {packing, unpacking} from './shared/modules/utils.js';
 
-const DataNode = dataExpressMixin(dataMixin(commonMixin(linksMixin(basicMixin(class {})))));
-const LinkerNode = linkerExpressMixin(linkerMixin(commonMixin(linksMixin(basicMixin(class {})))));
-
-const MyData = new DataNode({myprop: "hola"});
-const MyLinker = new LinkerNode("table1");
+const MyData = new Node({myprop: "hola"});
+const MyLinker = new Linker("table1");
 
 MyLinker.addChild(MyData);
 

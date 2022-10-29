@@ -41,13 +41,13 @@
       //We add the order to the user so it will be accesible later on
       const {myCart} = await import('./' + CLIENT_MODULES_PATH + 'cart.js');
       const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
-      const {DataNode} = await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+      const {Node} = await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
       webuser.getRelationship("orders").children=[];
-      webuser.getRelationship("orders").addChild(new DataNode());
+      webuser.getRelationship("orders").addChild(new Node());
       webuser.getRelationship("orders").getChild().loadRequest("get my relationships")
       .then(myOrder=>{
         myCart.getRelationship().children.forEach(cartItem=>{
-          myOrder.getRelationship("orderitems").addChild(new DataNode({quantity: cartItem.props.quantity, name: cartItem.item.props.name, price: cartItem.item.props.price}));
+          myOrder.getRelationship("orderitems").addChild(new Node({quantity: cartItem.props.quantity, name: cartItem.item.props.name, price: cartItem.item.props.price}));
         });
         thisNode.setView(thisElement, "ordercart");
         webuser.dispatchEvent("checkout", myOrder);
@@ -89,8 +89,7 @@
             myOrder.props.status=0; // status 0 is "new"
             myOrder.props.creationdate=new Date(await myOrder.constructor.makeRequest("get time")).toISOString(); // Date-time is Universal Time
             myOrder.props.modificationdate=myOrder.props.creationdate;
-            await myOrder.loadRequest("add my tree");
-            // await myOrder.loadRequest("get my tree"); //add my tree load the order with just ids on it ******we are about changing this thing
+            await myOrder.loadRequest("add my tree"); // it saves and loads all the data again and ids
             thisNode.setView(document.getElementById("centralcontent"), "chktend");
             //We remove the items from the cart
             import('./' + CLIENT_MODULES_PATH + 'cart.js')

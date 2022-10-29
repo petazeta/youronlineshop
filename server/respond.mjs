@@ -70,7 +70,7 @@ export function errorResponse(err, response) {
   console.log(err);
   let message="undefined error";
   if (typeof err=="string") message=err;
-  else if (typeof err=="object" && err.message) message=err.message;
+  else if (err?.message) message=err.message;
   response.statusCode=500;
   if (err.name && !isNaN(err.name)) response.statusCode=parseInt(err.name);
   response.setHeader('Content-Type', 'application/json');

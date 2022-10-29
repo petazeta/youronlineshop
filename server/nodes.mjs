@@ -1,11 +1,9 @@
-//
-import basicMixin from './../shared/basicmixin.mjs';
-import linksMixin from './../shared/linksmixin.mjs';
-import {commonMixin, linkerMixin, dataMixin, linkerExpressMixin, dataExpressMixin, detectLinker} from './../shared/linkermixin.mjs';
+import {BasicLinker, BasicNode} from './../shared/linker.mjs';
+
 import dbGateway from './dbgateway.mjs';
 
 export function nodeFromDataSource(dataSource){
-  const myClon= detectLinker(dataSource) ? new LinkerNode() : new DataNode();
+  const myClon= BasicLinker.detectLinker(dataSource) ? new Linker() : new Node();
   return myClon.load(dataSource);
 }
 
@@ -15,7 +13,7 @@ const linkerModelMixin=Sup => class extends Sup {
   static readQuery(result){
     if (!result) return [];
     if (!Array.isArray(result)) result=[result];
-    return result.map(row=>new this.dataConstructor(row));
+    return result.map(row=>new this.nodeConstructor(row));
   }
   
   //foreignkey props removal EXPERIMENTAL
@@ -24,14 +22,13 @@ const linkerModelMixin=Sup => class extends Sup {
     const sysKeys=totalKeys.sysChildTableKeys;
     const sysInfo=totalKeys.sysChildTableKeysInfo;
 
-    for (const child of children) {
-      child.props = Object.fromEntries(Object.entries(child.props).filter(keyValue => {
-        const index=sysKeys.indexOf(keyValue[0]);
-        if (index==-1 || sysInfo[index].type!=type) {
-          return true;
-        }
+    children.forEach(child=>{
+      child.props = Object.fromEntries(Object.entries(child.props).filter(([key]) => {
+        const index=sysKeys.indexOf(key);
+        if (index==-1 || sysInfo[index].type!=type) return true;
       }));
-    }
+    });
+
     return children;
   }
   
@@ -232,7 +229,7 @@ const linkerModelMixin=Sup => class extends Sup {
   async dbGetMyPartner(childId) {
     const foreignKey = await this.getMySysKeyAsync();
     const result = await dbGateway.getPartner(foreignKey, this, childId);
-    const partner=new DataNode(result);
+    const partner=new Node(result);
     this.constructor.removeSysProps([partner], new this.constructor(this.props.parentTableName))
     return partner;
   }
@@ -379,7 +376,7 @@ const linkerModelMixin=Sup => class extends Sup {
   }
 }
 
-const LinkerNode = linkerModelMixin(linkerExpressMixin(linkerMixin(commonMixin(linksMixin(basicMixin(class {}))))));
+const Linker = linkerModelMixin(BasicLinker);
 
 const dataModelMixin=Sup => class extends Sup {
   
@@ -389,7 +386,7 @@ const dataModelMixin=Sup => class extends Sup {
   
   static async dbGetRelationships(data){
     const result = await dbGateway.getRelationshipsFromTable(dbGateway.tableList.get(data.parent.props.childTableName));
-    const relationships=result.map(rel=>new LinkerNode(dbGateway.tableRef.get(rel.childTableName), dbGateway.tableRef.get(rel.parentTableName), rel.name))
+    const relationships=result.map(rel=>new Linker(dbGateway.tableRef.get(rel.childTableName), dbGateway.tableRef.get(rel.parentTableName), rel.name))
     .sort(rel=>rel.props.childTableName==rel.props.parentTableName ? -1 : +1); //Rorder rels
     for (const rel of relationships) {
       await rel.dbLoadMyChildTableKeys();
@@ -504,7 +501,7 @@ const dataModelMixin=Sup => class extends Sup {
     if (myself!==false) {
       newId=await this.dbInsertMySelf(extraParents, updateSiblingsOrder);
     }
-    const myReturn = new DataNode({id: newId});
+    const myReturn = new Node({id: newId});
     for (const rel of this.relationships) {
       myReturn.addRelationship(await rel.dbInsertMyTree(level, extraParents));
     }
@@ -530,7 +527,7 @@ const dataModelMixin=Sup => class extends Sup {
     const isTableContent = this.parent && this.parent.sysChildTableKeysInfo &&
     this.parent.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName==table);
     if (isTableContent) newId = await this.dbInsertMySelf(extraParents);
-    const myReturn = new DataNode({id: newId});
+    const myReturn = new Node({id: newId});
     for (const rel of this.relationships) {
       myReturn.addRelationship(await rel.dbInsertMyTreeTableContent(table, level, extraParents));
     }
@@ -609,9 +606,9 @@ const dataModelMixin=Sup => class extends Sup {
   }
 }
 
-const DataNode = dataModelMixin(dataExpressMixin(dataMixin(commonMixin(linksMixin(basicMixin(class {}))))));
+const Node = dataModelMixin(BasicNode);
 
-DataNode.linkerConstructor=LinkerNode;
-LinkerNode.dataConstructor=DataNode;
+Node.linkerConstructor=Linker;
+Linker.nodeConstructor=Node;
 
-export {LinkerNode, DataNode}
+export {Linker, Node}

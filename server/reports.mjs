@@ -11,7 +11,7 @@ requestsRep.set('init database', (result)=>console.log(result));
 requestsRep.set('logout', ()=>makeReport("log out"));
 
 requestsRep.set('login', (result)=>{
-  if (typeof result == "object" && result.logError) makeReport("log in: " + result.code);
+  if (result?.logError) makeReport("log in: " + result.code);
   else
     import('./../shared/utils.mjs').then(({unpacking})=>makeReport("log in: " + unpacking(result).props.username));
 });

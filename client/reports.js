@@ -1,8 +1,8 @@
-import {DataNode} from './nodes.js';
+import {Node} from './nodes.js';
 import {myCart} from './cart.js';
 import {observerMixin} from './observermixin.js';
 
-const ReporterBase=observerMixin(DataNode);
+const ReporterBase=observerMixin(Node);
 
 class Reporter extends ReporterBase{
   constructor(...args){

@@ -1,6 +1,6 @@
-import {DataNode} from './nodes.js';
+import {Node} from './nodes.js';
 
-export class Alert extends DataNode {
+export class Alert extends Node {
   constructor(msg) {
     super({alertmsg: msg});
   }
@@ -24,7 +24,7 @@ export class Alert extends DataNode {
     return this;
   }
   hideAlert() {
-    const remove = element=>element && element.parentElement & element.parentElement.removeChild(element);
+    const remove = element=>element?.parentElement?.removeChild(element);
     if (this.props.timeout>0) {
       setTimeout(()=>this.container.firstElementChild.style.opacity=0, this.props.timeout);
       setTimeout(()=>remove(this.container), this.props.timeout+500);

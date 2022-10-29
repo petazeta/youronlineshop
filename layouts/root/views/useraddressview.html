@@ -46,7 +46,7 @@ params.externalSave: Don't show save button and attach the save function to this
             }
             async function myUpdateProp(myrel, mydata) {
               if (!checkDataChange(myrel, mydata)) return;
-              await myrel.getChild().request("edit my props", {props: mydata.props});
+              await myrel.getChild().request("edit my props", {values: mydata.props});
               myrel.childTableKeys.filter(propName=>propName!="id")
               .forEach(propName=>myrel.getChild().props[propName]=userdata.props[propName]);
             }

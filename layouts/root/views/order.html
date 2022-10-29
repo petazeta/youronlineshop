@@ -44,18 +44,12 @@
   </div>
   <div class="paybutton"></div>
   <script>
-    //Show Order payment button when payment not succeed valid also for cart view: checkout1.php and userordersline.php
+    // Show Order payment button.
+    // This is valid for chktend and userordersline
     const myorderpay=thisNode.getRelationship("orderpaymenttypes").getChild();
-    if (myorderpay && !myorderpay.props.succeed) {
-      if (myorderpay.props.details && !myorderpay.props.template) {
-        //we must load payment type details when order has not succeed, if it is checkout proccess details in Null
-        let orderpaydata=JSON.parse(myorderpay.props.details);
-        myorderpay.props.template=orderpaydata.template;
-        myorderpay.props.vars=JSON.stringify(orderpaydata.vars);
-      }
-      if (myorderpay.props.template) {
-        myorderpay.setView(thisElement, myorderpay.props.template);
-      }
+    if (myorderpay && !myorderpay.props.succeed && myorderpay.props.details) {
+      const template=JSON.parse(myorderpay.props.details).template;
+      if (template) myorderpay.setView(thisElement, template);
     }
   </script>
 </div>

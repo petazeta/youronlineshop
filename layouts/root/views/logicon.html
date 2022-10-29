@@ -34,18 +34,18 @@
   }
   const butAction=(event)=>{
     if (webuser.props.id) {
-      if (document.getElementById("dashmenu").style.visibility=="visible" && event && event.isTrusted) {
+      if (document.getElementById("dashmenu").style.visibility=="visible" && event?.isTrusted) {
         hideUserMenu();
+        return;
       }
-      else {
-        showUserMenu();
-      }
+      showUserMenu();
+      return;
     }
-    else {
-      if (document.getElementById("login-card")) thisNode.parent.getChild("logform").setView(document.querySelector(".login-frame .rmbox .body"), "loginform");
-      else thisNode.parent.getChild("logform").appendView(document.body, "loginframe");
+    if (document.getElementById("login-card")) {
+      thisNode.parent.getChild("logform").setView(document.querySelector(".login-frame .rmbox .body"), "loginform");
+      return;
     }
-    pushHistoryState(url);
+    thisNode.parent.getChild("logform").appendView(document.body, "loginframe");
   }
 
   const {setHistoryState, pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
@@ -53,14 +53,7 @@
   thisElement.parentElement.addEventListener("click", function(event){
     event.preventDefault();
     butAction(event);
-    /*
-    //We grab state on mouse click when try to login
-    if (event.isTrusted) {
-      const histUrl=window.history.state && window.history.state.url;
-      if (histUrl && (histUrl.includes('category') || histUrl.includes('menu'))) webuser.perviousLoginHistorySate=window.history.state;
-      pushHistoryState(url);
-    }
-    */
+    pushHistoryState(url);
   });
   
   setHistoryState(thisNode, url, butAction)

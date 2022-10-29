@@ -65,7 +65,7 @@ export default function edition(buttonElement, editElement, thisNode, thisProper
     if (elementValue=='') elementValue=null;
     if (thisNode.props[thisProperty] != elementValue) { //just when content change and not void
       if (dataProcessor) elementValue=dataProcessor(elementValue);
-      const response = await thisNode.request("edit my props", {props:{[thisProperty]: elementValue}})
+      const response = await thisNode.request("edit my props", {values:{[thisProperty]: elementValue}})
       if (response!=1) return false;
       thisNode.props[thisProperty]=elementValue;
     }

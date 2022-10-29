@@ -12,14 +12,13 @@
 */
 
 
-import {detectLinker} from './linkermixin.mjs';
-import {getRoot} from './linksmixin.mjs';
+import {BasicNode} from './linker.mjs';
 
 // serializing the node data
 export function deconstruct(myNode){
   // We get to the root node and serialize from it, and for be able to get again to the present node we store it in an index field.
   const indexNode=myNode; // set a pointer to the present node
-  myNode=getRoot(myNode);
+  myNode=BasicNode.getRoot(myNode);
   if (!myNode) myNode=indexNode;
   const serials=new Map();
   // It returns the node with the basic data. It clears the links to parent and children.
@@ -31,7 +30,7 @@ export function deconstruct(myNode){
     maleKeys=[],
     femaleKeys=['childTableKeys', 'childTableKeysInfo', 'sysChildTableKeys', 'sysChildTableKeysInfo'];
 
-    const isLinker = detectLinker(myNode);
+    const isLinker = BasicNode.detectLinker(myNode);
     const myKeys = isLinker ? [...commonKeys, ...femaleKeys] : [...commonKeys, ...maleKeys];
     const serialNode = isLinker ? {...serialCommon, ...serialFemale} : {...serialCommon, ...serialMale};
     for (const key of myKeys) {
@@ -59,7 +58,7 @@ export function deconstruct(myNode){
   innerSerialize(myNode);
   
   serials.forEach((value)=>{
-    if (value && value.props && value.props.__id) delete value.props.__id;
+    if (value?.props?.__id) delete value.props.__id;
   })
   if (!indexKey) return;
   // ponemos un último valor en el map para establecer el valor inicial del bloque: index: id, 
@@ -129,7 +128,7 @@ export const arrayPacking=datas=>{
 export function replaceLangData(targetTree, sourceTree){
   const sourceArray=sourceTree.arrayFromTree();
   targetTree.arrayFromTree().forEach((targetTree, i)=>{
-    if (detectLinker(targetTree)) {
+    if (BasicNode.detectLinker(targetTree)) {
       const isLangContent = targetTree.sysChildTableKeysInfo && targetTree.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
       //Swap the other langs content
       if (isLangContent) targetTree.children[0].props=sourceArray[i].children[0].props;
@@ -146,7 +145,7 @@ export function splitLangTree(origTree, totalLang){
   singleTrees.forEach((singleTree, lang_i)=>{
     const langSerial=singleTree.arrayFromTree();
     origSerial.forEach((orig, i)=>{
-      if (detectLinker(orig)) {
+      if (BasicNode.detectLinker(orig)) {
         const isLangContent = orig.sysChildTableKeysInfo && orig.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
         //The children are the lang conent
         if (isLangContent)langSerial[i].children=[orig.children[lang_i]];
@@ -158,7 +157,7 @@ export function splitLangTree(origTree, totalLang){
 
 export function getChildrenArray(myNode) {
   const relChildrenArray = (rel) => rel.children.reduce((childArray, child)=>childArray = [...childArray, child], []);
-  if (detectLinker(myNode)) {
+  if (BasicNode.detectLinker(myNode)) {
     return relChildrenArray(myNode);
   }
   return myNode.relationships.reduce((totalArray, rel)=>totalArray = [...totalArray, ...relChildrenArray(rel)], []);

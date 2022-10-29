@@ -1,12 +1,11 @@
-import {DataNode, LinkerNode} from './nodes.js';
-import {detectLinker} from './../shared/linkermixin.mjs';
+import {Node, Linker} from './nodes.js';
 import {packing, unpacking} from './../shared/utils.mjs';
 
 const reduceExtraParents = (params)=>{
   if (params.extraParents) {
     if (!Array.isArray(params.extraParents)) params.extraParents=[params.extraParents];
     params.extraParents=params.extraParents.map(eParent=>{
-      if (eParent instanceof LinkerNode) { // por que hace esta comprobación??
+      if (eParent instanceof Linker) { // por que hace esta comprobación??
         return packing(eParent.clone(1, 0, null, "id"));
       }
       return eParent;
@@ -17,68 +16,72 @@ const reduceExtraParents = (params)=>{
 
 const reqReduc = new Map();
 const reqLoaders = new Map();
-const reqMethods = new Map();
+const reqMethods = new Map(); // http request method
 
 reqReduc.set("get my root", myNode=>packing(myNode.clone(0, 0)));
 reqLoaders.set("get my root", (myNode, result)=>{
   myNode.children=[];
-  if (result!=null) myNode.addChild(new DataNode().load(result));
+  if (result!=null) myNode.addChild(new Node().load(result));
 });
 reqReduc.set("get my childtablekeys", reqReduc.get("get my root"));
 reqReduc.set("get my relationships", myNode=>packing(myNode.clone(1, 0, "id")));
 reqLoaders.set("get my relationships", (myNode, result)=>{
   myNode.relationships=[];
-  result.forEach(rel=>myNode.addRelationship(new LinkerNode().load(rel)));
+  result.forEach(rel=>myNode.addRelationship(new Linker().load(rel)));
 });
 reqReduc.set("get my children", [myNode=>packing(myNode.clone(1, 0, "id")), reduceExtraParents]);
 reqLoaders.set("get my children", (myNode, result)=>{
   myNode.children=[];
-  result.data.forEach(child=>myNode.addChild(new DataNode().load(child)));
+  result.data.forEach(child=>myNode.addChild(new Node().load(child)));
   myNode.props.total=result.total;
 });
 reqReduc.set("get all my children", reqReduc.get("get my root"));
 reqLoaders.set("get all my children", reqLoaders.get("get my children"));
 reqReduc.set("get my tree", [myNode=>packing(myNode.clone(1, 0, "id")), reduceExtraParents]);
 reqLoaders.set("get my tree", (myNode, result, params)=>{
-  if (detectLinker(myNode)) {
+  if (Node.detectLinker(myNode)) {
     myNode.children=[];
     if (result.total==0) return;
     const myResult=unpacking(result.data);
     for (const child of myResult.children) {
-      myNode.addChild(new DataNode().load(child));
+      myNode.addChild(new Node().load(child));
     }
     myNode.props.total=result.total;
     return;
   }
-  if (params && params.myself) {
+  if (params?.myself) {
     myNode.load(unpacking(result));
     return;
   }
   myNode.relationships=[];
   const myResult=unpacking(result);
   for (const rel of myResult.relationships) {
-    myNode.addRelationship(new LinkerNode().load(rel));
+    myNode.addRelationship(new Linker().load(rel));
   }
 });
 reqReduc.set("get my ascendent", myNode=>packing(myNode.clone(1, 1, "id")));
 reqReduc.set("get my tree up", reqReduc.get("get my ascendent"));
 reqLoaders.set("get my tree up", (myNode, result)=>{
   if (!result) return result;
-  if (detectLinker(myNode)) {
-    myNode.partner=new DataNode().load(unpacking(result));
-    myNode.partner.addRelationship(this);
+  if (Node.detectLinker(myNode)) {
+    myNode.partner=new Node().load(unpacking(result));
+    myNode.partner.addRelationship(myNode);
     return;
   }
   if (Array.isArray(result)) {
+    /*
     myNode.parent=[];
     for (let i=0; i<result.length; i++) {
-      myNode.parent[i]=new LinkerNode().load(unpacking(result[i]));
-      myNode.parent[i].addChild(this);
+      myNode.parent[i]=new Linker().load(unpacking(result[i]));
+      myNode.parent[i].addChild(myNode);
     }
+    */
+    myNode.parent=result.map(res=>new Linker().load(unpacking(res)));
+    myNode.parent.forEach(parent=>parent.addChild(myNode));
     return;
   }
-  myNode.parent=new LinkerNode().load(unpacking(result));
-  myNode.parent.addChild(this);
+  myNode.parent=new Linker().load(unpacking(result));
+  myNode.parent.addChild(myNode);
 });
 reqLoaders.set("get themes tree", (myNode, result)=>myNode.load(unpacking(result)));
 
@@ -91,20 +94,23 @@ reqLoaders.set("add myself", (myNode, result)=>{
 reqMethods.set("add myself", params=>"put");
 reqReduc.set("add my children", [myNode=>packing(myNode.clone(2, 1, 'id', 'id')), reduceExtraParents]); // we need the partner (and partner->parent for safety check)
 reqLoaders.set("add my children", (myNode, result)=>{
+  /*
   for (const i in result) {
     myNode.children[i].props.id=result[i];
   }
+  */
+  result.forEach((res, i)=>myNode.children[i].props.id=res)
 });
 reqMethods.set("add my children", params=>"put");
 reqReduc.set("add my tree", [myNode=>{
-  if (detectLinker(myNode)) return packing(myNode.clone(2, null, null, 'id'));
+  if (Node.detectLinker(myNode)) return packing(myNode.clone(2, null, null, 'id'));
   else return packing(myNode.clone(3, null, null, 'id'));
 },  reduceExtraParents]); // we need the parent->partner (and parent->partner->parent for safety check)
 reqMethods.set("add my tree", params=>"put");
 reqLoaders.set("add my tree", (myNode, result)=>{
   if (!result) return;
   const resultNode=unpacking(result);
-  if (!detectLinker(myNode)) {
+  if (!Node.detectLinker(myNode)) {
     myNode.props.id=resultNode.props.id;
   }
   myNode.loadDesc(resultNode);

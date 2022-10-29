@@ -15,7 +15,7 @@
 </button>
 <script type="text/javascript">
   thisElement.onclick=function() {
-    thisNode.request("edit my props", {props:{status: thisParams.newStatus}})
+    thisNode.request("edit my props", {values:{status: thisParams.newStatus}})
     .then(res => {
       thisNode.parent.removeChild(thisNode);
       //for no children add a eventlistener to setChildrenView event

@@ -154,7 +154,7 @@ catalog.html
         }
       }
       //we don't find it in pageSize, so we have to get it from database
-      const myItem=new DataNode();
+      const myItem=new Node();
       myItem.props.id=itemIdMatch[1];
       itemsRel.addChild(myItem);
       myItem.loadRequest("get my tree", {extraParents: extraParents, myself: true})

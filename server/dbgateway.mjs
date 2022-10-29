@@ -26,7 +26,11 @@ class SiteDbGateway {
 
   async connect(cfgUrl) {
     if (this.dbLink) return this.dbLink;
-    this.dbLink=mongoose.createConnection(cfgUrl);
+    mongoose.connect(cfgUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    this.dbLink=mongoose.connection;
     setDbSchema(this.dbLink); // ??? Esto deberia ser despues de crear Connection on("connect")
     return new Promise((resolve, reject) => {
       this.dbLink.on("error", err => {      
@@ -61,16 +65,11 @@ class SiteDbGateway {
   }
 
   async getForeignKeys(tableName) {
-    const result=[];
-    for (const [key, value] of Object.entries(this.dbLink.model(tableName).schema.tree)) {
-      if (typeof value == "object" && value.ref) { 
-        result.push({name: key, parentTableName: value.ref.toString()});
-      }
-    }
-    return result;
+    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref).map(([key, value])=>new Object({name: key, parentTableName: value.ref.toString()}));
   }
 
   async getRelationshipsFromTable(tableName) {
+    /*
     const result=[];
     for (const [childTableName, model] of Object.entries(this.dbLink.models)) {
       for (const [key, value] of Object.entries(model.schema.tree)) {
@@ -80,9 +79,15 @@ class SiteDbGateway {
       }
     }
     return result;
+    */
+    // No estoy seguro si en lugar de filter se puede usar find, quizas no puede haber más de un resultado en esa situación
+    return Object.entries(this.dbLink.models).reduce((tot, [childTableName, model])=>tot.concat(
+     Object.entries(model.schema.tree).filter(([key, value])=>value?.ref===tableName).map(()=>new Object({childTableName: childTableName, parentTableName: tableName, name: childTableName.toLowerCase()}))
+    ), []);
   }
 
   async getExtraParentsFromTable(tableName) {
+    /*
     const result=[];
     for (const [key, value] of Object.entries(this.dbLink.model(tableName).schema.tree)) {
       if (typeof value == "object" && value.ref) {
@@ -90,6 +95,8 @@ class SiteDbGateway {
       }
     }
     return result;
+    */
+    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref).map(([key, value])=>new Object({childTableName: tableName, parentTableName: value.ref.toString(), name: tableName.toLowerCase()}));
   }
 
   async setSiblingsOrderOnUpdate(tableName, positioncolumnname, thisId, newOrder, oldOrder, foreigncolumnname, foreignId) {
@@ -102,10 +109,10 @@ class SiteDbGateway {
     let findQuery= this.dbLink.model(tableName).find({ [positioncolumnname]: { $gt: actualPosition } });
     if (foreigncolumnname) findQuery=findQuery.find({ [foreigncolumnname]: { $eq: foreignId } });
     const result =await findQuery.exec();
-    result.forEach(async (elm)=>{
+    for (const elm of result) {
       elm[positioncolumnname]--;
       await elm.save();
-    });
+    }
     return result.length;
   }
 
@@ -113,10 +120,10 @@ class SiteDbGateway {
     let findQuery= this.dbLink.model(tableName).find({ [positioncolumnname]: { $gte: actualPosition} , _id: {$ne: thisId} });
     if (foreigncolumnname) findQuery=findQuery.find({ [foreigncolumnname]: { $eq: foreignId } });
     const result =await findQuery.exec();
-    result.forEach(async (elm)=>{
+    for (const elm of result) {
       elm[positioncolumnname]++;
       await elm.save();
-    });
+    }
     return result.length;
   }
 
@@ -126,14 +133,12 @@ class SiteDbGateway {
       if (row[0]=='id') key.Primary="yes";
       const objType = row[1];
       if (typeof objType == 'function') {
-        const type = objType.name;
-        if (type=="Number") key.Type="integer";
+        if (objType.name=="Number") key.Type="integer";
         return key;
       }
       if (typeof objType == 'object') {
         if (objType.type) {
-          const type = objType.type.name;
-          if (type=="Number") key.Type="integer";
+          if (objType.name=="Number") key.Type="integer";
         }
         if (objType.positionRef) {
           key.Positioning="yes";
@@ -179,7 +184,7 @@ class SiteDbGateway {
 
   async getChildren(foreigncolumnnames, positioncolumnname, data, extraParents=null, filterProp={}, limit=[], count=false) {
     let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(Object.assign(filterProp, {[foreigncolumnnames[0]] : { $eq: data.partner.props.id } }));
-    if (foreigncolumnnames && foreigncolumnnames.length>0) {
+    if (foreigncolumnnames?.length>0) {
       let offset, max;
       if (limit.length == 2) {
         offset=limit[0];
@@ -208,7 +213,7 @@ class SiteDbGateway {
     const myProps={...thisChild.props}; //copy properties to not modify original element
     //add link relationships column properties
     let myforeigncolumnname;
-    if (foreigncolumnnames.length > 0 && data.partner && data.partner.props.id) {
+    if (foreigncolumnnames.length > 0 && data.partner?.props.id) {
       myforeigncolumnname=foreigncolumnnames[0];
       myProps[myforeigncolumnname]=data.partner.props.id;
     }
@@ -226,6 +231,7 @@ class SiteDbGateway {
     }
     //Now we add a value for the props that are null and cannot be null
     if (data.childTableKeysInfo && data.sysChildTableKeys) {
+      /*
       for (const key in data.childTableKeys) {
         let value=data.childTableKeys[key];
         if (data.childTableKeysInfo[key]["Null"]=='NO' && !data.childTableKeysInfo[key]["Default"] && data.childTableKeysInfo[key].Extra!='auto_increment'){
@@ -239,6 +245,17 @@ class SiteDbGateway {
           }
         }
       }
+      */
+
+      data.childTableKeys.filter((key, i)=>data.childTableKeysInfo[i]["Null"]=='NO' && !data.childTableKeysInfo[i]["Default"] && data.childTableKeysInfo[i].Extra!='auto_increment').forEach((key, i)=>{
+        if (Object.keys(myProps).includes(key) && myProps[key]!==null) return;
+        if (data.childTableKeysInfo[i].Type.includes('int') || data.childTableKeysInfo[i].Type.includes('decimal')) {
+          myProps[key]=0;
+          return;
+        }
+        myProps[key]='';
+      });
+
     }
     if (myProps.id) delete myProps.id; //let it give the id
     if (Object.keys(myProps).length==0) {
@@ -289,16 +306,16 @@ class SiteDbGateway {
     const {impData} = await import('./utils.mjs');
     let data=fs.readFileSync(importJsonFilePath, 'utf8');
     data=JSON.parse(data);
-    const {DataNode, LinkerNode, nodeFromDataSource} = await import('./nodes.mjs');
+    const {Node, Linker, nodeFromDataSource} = await import('./nodes.mjs');
 
-    const langs = arrayUnpacking(data.languages).map(lang=>new DataNode().load(lang));
-    const moLang=new LinkerNode("TABLE_LANGUAGES");
+    const langs = arrayUnpacking(data.languages).map(lang=>new Node().load(lang));
+    const moLang=new Linker("TABLE_LANGUAGES");
     for (const lang of langs) {
       moLang.addChild(lang);
     }
     await moLang.dbInsertMyTree();
     const newLangs=moLang.children;
-    const usersMo=new LinkerNode().load(unpacking(data.tree.shift()));
+    const usersMo=new Linker().load(unpacking(data.tree.shift()));
     await usersMo.dbInsertMyTree();
     await impData(newLangs, "pageelementsdata", nodeFromDataSource(unpacking(data.tree.shift())));
     await impData(newLangs, "siteelementsdata", nodeFromDataSource(unpacking(data.tree.shift())));

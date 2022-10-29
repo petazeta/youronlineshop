@@ -9,19 +9,25 @@ const basicMixin=Sup => class extends Sup {
     this.props = {};
     if (props) Object.assign(this.props, props);
   }
-
+  static copyProps(target, source, thisProps){
+    return copyProps(target, source, thisProps);
+  }
+  copyProps(source, thisProps){
+    return copyProps(this, source, thisProps);
+  }
   // thisProps: If not missed defines which props to load
   load(source, thisProps) {
     return copyProps(this, source, thisProps);
   }
-  static equivalent(nodeOne, nodeTwo){
+  static isEquivalent(nodeOne, nodeTwo){
     if (Object.keys(nodeOne.props).length != Object.keys(nodeTwo.props).length) return false;
     if (!Object.keys(nodeOne.props).every(key=> key in nodeTwo.props)) return false;
     return Object.keys(nodeOne.props).every(key=> nodeOne[key]==nodeTwo[key]);
   }
-  equivalentTo(otherNode) {
-    return this.constructor.equivalent(this, otherNode);
+  isEquivalent(otherNode) {
+    return this.constructor.isEquivalent(this, otherNode);
   }
+
 }
 
 export default basicMixin;

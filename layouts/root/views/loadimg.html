@@ -92,7 +92,7 @@ Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se super
       const {default: addition}=await import('./' + CLIENT_MODULES_PATH + 'addition.js');
       const newNode=await addition(childNode, {imgBlob: newImageSmall});
       newNode.props.imagename=`${newNode.props.id}.png`; // anular esto
-      await newNode.request("edit my props", {props:{imagename: newNode.props.imagename}});
+      await newNode.request("edit my props", {values:{imagename: newNode.props.imagename}});
       const {default: loadImg} = await import('./' + CLIENT_MODULES_PATH + 'loadimg.js');
       const loadResult = await loadImg(newNode.props.imagename, newImageSmall, newImageBig);
       newNode.dispatchEvent("loadImage");

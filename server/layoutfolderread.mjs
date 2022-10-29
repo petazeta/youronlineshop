@@ -1,21 +1,21 @@
 import basicMixin from './../shared/basicmixin.mjs';
 import linksMixin from './../shared/linksmixin.mjs';
-import {commonMixin, linkerMixin, dataMixin, linkerExpressMixin, dataExpressMixin} from './../shared/linkermixin.mjs';
+import {BasicLinker, BasicNode} from './../shared/linker.mjs';
 import fs from 'fs';
 import path from 'path';
 
-const LinkerNode = linkerExpressMixin(linkerMixin(commonMixin(linksMixin(basicMixin(class {})))));
-const DataNode = dataExpressMixin(dataMixin(commonMixin(linksMixin(basicMixin(class {})))));
+class Linker extends BasicLinker {};
+class Node extends BasicNode {};
 
-DataNode.linkerConstructor=LinkerNode;
-LinkerNode.dataConstructor=DataNode;
+Node.linkerConstructor=Linker;
+Linker.nodeConstructor=Node;
 
 export default function createTree(folderPath) {
   const viewsFolderName="views";
   const cssFolderName="css";
   const rootFolderName = path.basename(folderPath);
   const root = {[rootFolderName]: readFolderDirectory(folderPath)};
-  const parent=new LinkerNode();
+  const parent=new Linker();
   parent.props.name="descendants";
   innerCreate(root, parent);
   return parent.getChild();
@@ -23,23 +23,23 @@ export default function createTree(folderPath) {
     //The tree has a root and then there could be children (at children folder)
     //each subfolder is a theme (child)
     for (const key in themes) {
-      let myChild=new DataNode();
+      let myChild=new Node();
       parent.addChild(myChild);
       myChild.props.id=key;
       myChild.props.relPath=key;
       if (parent.partner) myChild.props.path=parent.partner.props.path + '/children/' + key;
       else myChild.props.path=key; //is root
       
-      let myBranch=new LinkerNode();
+      let myBranch=new Linker();
       myBranch.props.name='descendants';
       myChild.addRelationship(myBranch);
       
-      let stylesBranch=new LinkerNode();
+      let stylesBranch=new Linker();
       stylesBranch.props.name='styles';
       myChild.addRelationship(stylesBranch);
       createBranch(themes[key], stylesBranch, cssFolderName, true);
       
-      let templatesBranch=new LinkerNode();
+      let templatesBranch=new Linker();
       templatesBranch.props.name=viewsFolderName;
       myChild.addRelationship(templatesBranch);
       createBranch(themes[key], templatesBranch, viewsFolderName, true);
@@ -55,7 +55,7 @@ function createBranch(folderTree, myBranch, folderName, subfolders) {
   if (folderTree[folderName]) {
     for (const key in folderTree[folderName]) {
       if (typeof folderTree[folderName][key]=="string") {
-        let myNode=new DataNode();
+        let myNode=new Node();
         myNode.props.fileName=folderTree[folderName][key];
         myNode.props.id=myNode.props.fileName.replace(/\.[^/.]+$/, '');
         myNode.props.relPath=folderName;
@@ -67,7 +67,7 @@ function createBranch(folderTree, myBranch, folderName, subfolders) {
       else if (subfolders && typeof folderTree[folderName][key]=="object") {
         for (const subkey in folderTree[folderName][key]) {
           if (typeof folderTree[folderName][key][subkey]=="string") {
-            let myNode=new DataNode();
+            let myNode=new Node();
             myNode.props.fileName=folderTree[folderName][key][subkey];
             myNode.props.id=myNode.props.fileName.replace(/\.[^/.]+$/, '');
             myNode.props.relPath=folderName + '/' + key;

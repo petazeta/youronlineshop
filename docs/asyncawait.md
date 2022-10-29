@@ -50,3 +50,5 @@ For the awaited to be perform we must change it in this way:
 let upperFunc = ()=>{
 	return awaitFunc();
 }
+
+we can not make a map, foreEach, etc... function with await [1,2].map(async ()=>2) // [Promise, Promise]

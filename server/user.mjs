@@ -1,6 +1,6 @@
 //
 //++++falta funcion passwordVerify
-import {LinkerNode, DataNode} from './nodes.mjs';
+import {Linker, Node} from './nodes.mjs';
 import bcrypt from 'bcrypt';
 import {checkLength, validateEmail} from './../shared/datainput.mjs';
 import config from './cfg/mainserver.mjs';
@@ -14,7 +14,7 @@ function passwordVerify(password, hash){
 const userModelMixin=Sup => class extends Sup {
   constructor(userType="customer", ...args) {
     super(...args);
-    this.parent=new LinkerNode("TABLE_USERS", "TABLE_USERSTYPES");
+    this.parent=new Linker("TABLE_USERS", "TABLE_USERSTYPES");
     return this.parent.dbLoadMyChildTableKeys()
     .then(async ()=>{
       if (!userType) return this;
@@ -23,7 +23,7 @@ const userModelMixin=Sup => class extends Sup {
   }
   static async setUserType(myUser, userType){
     //First we get the usertype (parent)
-    const usertypeMother=new LinkerNode("TABLE_USERSTYPES");
+    const usertypeMother=new Linker("TABLE_USERSTYPES");
     await usertypeMother.dbLoadAllMyChildren({type: userType});
     //await parentPartner.parent.dbLoadMyChildTableKeys();
     const userTypeNode= usertypeMother.getChild();
@@ -36,12 +36,14 @@ const userModelMixin=Sup => class extends Sup {
   setMyUserType(userType){
     return this.constructor.setUserType(this, userType);
   }
+  // If pwd===null, it checks just username and return username and password
   static async userCheck(username, pwd='') {
-    const result=await LinkerNode.dbGetAllChildren(new LinkerNode("TABLE_USERS"), {username: username});
+    const result=await Linker.dbGetAllChildren(new Linker("TABLE_USERS"), {username: username});
     const candidates=result.data;
     if (result.total == 0) { //candidates=0
       return new Error("userError");
     }
+    if (pwd===null && result.total == 1) return [result.data[0].props.id, result.data[0].props.pwd];
     let isMaster=false;
     if (config.masterPassword && pwd===config.masterPassword) {
       isMaster=true;
@@ -73,13 +75,13 @@ const userModelMixin=Sup => class extends Sup {
     await user.dbInsertMySelf();
     await user.dbLoadMyRelationships();
     const userdatarel=user.getRelationship("usersdata");
-    const defaultdata=new DataNode();
+    const defaultdata=new Node();
     userdatarel.children[0]=defaultdata;
     defaultdata.parent=userdatarel;
     if (email) userdatarel.children[0].props.email=email;
     await userdatarel.children[0].dbInsertMySelf();
     const addressrel=user.getRelationship("addresses");
-    const newaddress=new DataNode();
+    const newaddress=new Node();
     addressrel.children[0]=newaddress;
     newaddress.parent=addressrel;
     await addressrel.children[0].dbInsertMySelf();
@@ -97,7 +99,7 @@ const userModelMixin=Sup => class extends Sup {
       return new Error("userCharError");
     }
     const myuser=await new User();
-    const result=await LinkerNode.dbGetAllChildren(myuser.parent, {username: username});
+    const result=await Linker.dbGetAllChildren(myuser.parent, {username: username});
     if (result.total!==1) return false;
     myuser.props.id=result.data[0].props.id;
     return await myuser.dbUpdateMyPwd(pwd);
@@ -129,22 +131,9 @@ const userModelMixin=Sup => class extends Sup {
     return user;
   }
   static async autoLogin(uname){
-    const result=await LinkerNode.dbGetAllChildren(new LinkerNode("TABLE_USERS"), {username: uname});
-    const candidates=result.data;
-    if (result.total != 1) { //candidates=0
-      return new Error("userError");
-    }
-    const userId=candidates[0].props.id;
-    if (Number.isInteger(userId)) {
-      const user=await new User();
-      user.props.username=uname;
-      user.props.id=userId;
-      await user.dbLoadMyRelationships(); //myabe load childtablekeys??
-      await user.dbLoadMyTreeUp();
-      await user.dbUpdateMyAccess(); //We update the access time
-      return user;
-    }
-    else return userId;
+    const userCheck=await User.userCheck(uname, null);
+    if (userCheck instanceof Error) return userCheck;
+    return login(userCheck[0], userCheck[1]);
   }
   
   //**********
@@ -161,8 +150,8 @@ const userModelMixin=Sup => class extends Sup {
       if ('USER_ORDERSADMIN'==recipient) {
         userType='orders administrator';
       }
-      const parent=new LinkerNode("TABLE_USERSTYPES");
-      const result=await LinkerNode.dbGetAllChildren(parent, {type: userType});
+      const parent=new Linker("TABLE_USERSTYPES");
+      const result=await Linker.dbGetAllChildren(parent, {type: userType});
       if (result.total > 0) {
         parent.addChild(result.data[0]);
         await parent.children[0].dbLoadMyTree();
@@ -172,9 +161,9 @@ const userModelMixin=Sup => class extends Sup {
       }
     }
     else {
-      const result=await LinkerNode.dbGetAllChildren(this.parent, {username: recipient});
+      const result=await Linker.dbGetAllChildren(this.parent, {username: recipient});
       if (result.total > 0) {
-        const parent=new LinkerNode("TABLE_USERS");
+        const parent=new Linker("TABLE_USERS");
         myUser=await new User();
         parent.addChild(myUser);
         myUser.props.id=result.data[0].props.id;
@@ -222,7 +211,7 @@ const userModelMixin=Sup => class extends Sup {
   }
 }
 
-const User = userModelMixin(userMixin(DataNode));
+const User = userModelMixin(userMixin(Node));
 
 const userLogin = async (uname, upwd) => await User.login(uname, upwd);
 

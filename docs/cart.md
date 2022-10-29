@@ -17,8 +17,8 @@ We start at body template by launching carticon and cartbox. The first one is th
 
 ## Cart module
 
-Cart class is a extended [Linker](linkerfmwk.md) with [observable](observerpattern.md) facilities (To send notifications to [reports](statistics.md)). Cart children are the cart items. When te user adds a item to the cart, cart adds a new cart item which props are "id" and "quantity". It attachs also the item object to the cart not as a prop but in the object property item. Cart main method "addItem" checks if the item is already in the cart, and in that case it sums the quantity.
+Cart class is a extended [Linker](linkerfmwk.md) with [observable](observerpattern.md) facilities (To send notifications to [reports](statistics.md)). Cart children are the cart items. When the user adds a item to the cart, cart adds a new cart item which props are "id" and "quantity". It attachs also the item object to the cart not as a "prop" but directly in the object (as a property) with the name item. Cart main method "addItem" checks if the item is already in the cart and in that case it sums the quantity.
 
 ## Checkout
 
-Checkout process is at template chkmain. It will get the cart information to make the order through the webuser element.ordercart and orderitems. The checkout process is described more in detail at [checkout](checkout.md).
+Checkout process is at template chkmain. It will get the cart information to make the order through the webuser elements at relationships ordercart and orderitems. The checkout process is described more in detail at [checkout](checkout.md).

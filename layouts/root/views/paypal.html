@@ -1,4 +1,5 @@
 <!--
+  thisNode => orderpaymenttype
 -->
 <div style="display:table;position:relative;">
   <div data-id="butedit" class="btmiddleright"></div>
@@ -18,25 +19,14 @@
 </div>
 <div id="paypal-button-container"></div>
 <script>
-const {getSiteText}=await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
 const {default: {currencyCode}}=await import('./' + CLIENT_CONFIG_PATH + 'main.js');
-const checkout=getSiteText().getNextChild("checkout");
+const {sumTotal}=await import('./' + CLIENT_MODULES_PATH + 'cart.js');
 const orderpaymenttype=thisNode;
 const order=orderpaymenttype.parent.partner;
-const myVars=JSON.parse(orderpaymenttype.props.vars);
+const myVars=JSON.parse(orderpaymenttype.props.details).vars;
 const myorderitems=order.getRelationship("orderitems");
 const myordership=order.getRelationship("ordershippingtypes");
-const sumTotal=function(node) {
-  let total=0;
-  let i=node.children.length;
-  while (i--) {
-    var quantity=node.children[i].props.quantity;
-    if (!quantity) quantity=1;
-    total=total+quantity * node.children[i].props.price;
-  }
-  return total;
-}
-const mytotal=(sumTotal(myorderitems) + sumTotal(myordership)) / 100;
+const mytotal=(sumTotal(myorderitems.children) + sumTotal(myordership.children)) / 100;
   
 const onScriptLoaded=function(){
   paypal.Buttons({
@@ -61,12 +51,12 @@ const onScriptLoaded=function(){
           .then(function(details) {
             //We have to save status to payed
             orderpaymenttype.props.succeed=1;
-            orderpaymenttype.request("edit my props", {props: {succeed: 1}})
+            orderpaymenttype.request("edit my props", {values: {succeed: 1}})
             .then(res=>{
               //We have added the orderpaymenttype to the order
               import('./' + CLIENT_MODULES_PATH + 'alert.js')
               .then(({AlertMessage})=>{
-                (new AlertMessage(thisElement.previousElementSibling.querySelector('[name=succeedNotice]').value, 3000)).showAlert();
+                new AlertMessage(thisElement.previousElementSibling.querySelector('[name=succeedNotice]').value, 3000).showAlert();
               });
             });
           });

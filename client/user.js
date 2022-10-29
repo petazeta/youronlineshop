@@ -1,11 +1,11 @@
-import {DataNode, LinkerNode} from './nodes.js';
+import {Node, Linker} from './nodes.js';
 import sharedUserMixin from './../shared/usermixin.mjs'
 import {authorizationToken, setAuthorization} from './authorization.js'
 import {unpacking} from './../shared/utils.mjs';
 
 const userMixin=Sup => class extends Sup {
   async logout(){
-    const result=await DataNode.makeRequest("logout");
+    const result=await Node.makeRequest("logout");
     if (result!==true) throw new Error(result);
     const lastUserType=this.getUserType(); 
     //remove session and user data
@@ -22,10 +22,10 @@ const userMixin=Sup => class extends Sup {
   }
   async login(name, password, user=null){
     // const histUrl=window.history.state && window.history.state.url;
-    // if (histUrl && histUrl.includes('category') || histUrl.includes('menu')) webuser.perviousLoginHistorySate=window.history.state;
+    // if (histUrl?.includes('category') || histUrl.includes('menu')) webuser.perviousLoginHistorySate=window.history.state;
     const lastUserType=this.getUserType(); // save last user state to detect change
     if (!user) {
-      const result = await DataNode.makeRequest("login", {"user_name": name, "user_password": password});
+      const result = await Node.makeRequest("login", {"user_name": name, "user_password": password});
       if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful login message
       this.load(unpacking(result));
     }
@@ -39,29 +39,29 @@ const userMixin=Sup => class extends Sup {
     return this;
   }
   static async create(name, password, email){
-    const result=await DataNode.makeRequest("create user", {"user_name": name, "user_password": password, "user_email": email});
+    const result=await Node.makeRequest("create user", {"user_name": name, "user_password": password, "user_email": email});
     if (typeof result=="object" && result.logError) throw new Error(result.code); //not successful create message
     return unpacking(result);
   }
   static async updatePwd(username, password){
-    const result = await DataNode.makeRequest("update user pwd", {"user_name": username, "user_password": password});
+    const result = await Node.makeRequest("update user pwd", {"user_name": username, "user_password": password});
     if (result!==true) throw new Error(result); //not successful
     return result;
   }
   async updateMyPwd(password){
-    const result = await DataNode.makeRequest("update my user pwd", {"user_password": password});
+    const result = await Node.makeRequest("update my user pwd", {"user_password": password});
     if (result!==true) throw new Error(result); //not successful
     return result;
   }
   sendmail(to, subject, message, from){
-    return DataNode.makeRequest("send mail", {to: to, subject: subject, message: message, from: from});
+    return Node.makeRequest("send mail", {to: to, subject: subject, message: message, from: from});
   }
   getAuthorizationToken(){
     return authorizationToken;
   }
 }
 
-const User = userMixin(sharedUserMixin(DataNode));
+const User = userMixin(sharedUserMixin(Node));
 
 export default User;
 

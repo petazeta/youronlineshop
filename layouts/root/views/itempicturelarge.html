@@ -28,8 +28,8 @@
       <img class="productimg">
       <script>
         const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
-        const imageDataNode=thisNode.getRelationship("itemsimages").getChild();
-        const myImage=imageDataNode && imageDataNode.props.imagename || config.defaultImg;
+        const imageNode=thisNode.getRelationship("itemsimages").getChild();
+        const myImage=imageNode?.props.imagename || config.defaultImg;
         thisElement.src=pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlBigPath, myImage);
         thisNode.addEventListener("changeProperty", (property) => {
           if (property=="image") {

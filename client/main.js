@@ -1,5 +1,5 @@
 import {setConfig} from './cfg/main.js';
-import {DataNode} from './nodes.js';
+import {Node} from './nodes.js';
 import initWebUser from './webuser.js';
 import {getTemplates, getStyles} from './themesserver.js';
 import {Alert, AlertMessage} from './alert.js';
@@ -36,7 +36,7 @@ try {
 catch(myError) {
   // Managing installing situations
   if (myError instanceof Error && myError.message=='No Language Content') {
-    new DataNode().setView(document.body, "dbimport");
+    new Node().setView(document.body, "dbimport");
   }
   else {
     // Error Output Messange

@@ -18,7 +18,7 @@
               const myContent=getSiteText().getNextChild("deletealert").getNextChild("titalert").getRelationship("siteelementsdata").getChild();
               myContent.writeProp(thisElement);
               //adding the edition pencil
-              if (webuser && webuser.isWebAdmin()) {
+              if (webuser?.isWebAdmin()) {
                 const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
                 visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
                 myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
@@ -37,7 +37,7 @@
             const myContent=getSiteText().getNextChild("deletealert").getNextChild("textalert").getRelationship("siteelementsdata").getChild();
             myContent.writeProp(thisElement);
             //adding the edition pencil
-            if (webuser && webuser.isWebAdmin()) {
+            if (webuser?.isWebAdmin()) {
               const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
               visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
               myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
@@ -55,7 +55,7 @@
               const myContent=getSiteText().getNextChild("deletealert").getNextChild("dontdelbutton").getRelationship("siteelementsdata").getChild();
               myContent.writeProp(thisElement);
               //adding the edition pencil
-              if (webuser && webuser.isWebAdmin()) {
+              if (webuser?.isWebAdmin()) {
                 const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
                 visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
                 myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
@@ -75,7 +75,7 @@
               const myContent=getSiteText().getNextChild("deletealert").getNextChild("delbutton").getRelationship("siteelementsdata").getChild();
               myContent.writeProp(thisElement);
               //adding the edition pencil
-              if (webuser && webuser.isWebAdmin()) {
+              if (webuser?.isWebAdmin()) {
                 const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
                 visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
                 myContent.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});

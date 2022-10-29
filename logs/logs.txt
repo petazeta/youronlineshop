@@ -1,0 +1,14 @@
+2022-10-23 16:46:25 Server start
+2022-10-23 17:44:52 Server start
+2022-10-23 17:45:18 log in: userError
+2022-10-23 17:46:11 2v6hti : cart item operation
+2022-10-23 17:46:25 2v6hti : checkout
+2022-10-23 17:46:49 2v6hti : checkout
+2022-10-23 17:47:05 2v92fv : cart item operation
+2022-10-23 17:47:13 log in: pepe
+2022-10-23 17:47:14 2v92fv : checkout
+2022-10-23 17:48:30 2vbkfk : cart item operation
+2022-10-23 17:48:34 log in: productsadmin
+2022-10-23 17:48:38 log out
+2022-10-23 17:48:46 log in: pepe
+2022-10-23 17:48:46 2vbkfk : checkout

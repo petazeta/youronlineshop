@@ -41,4 +41,4 @@ ssh root@youronlineshop.net
 # consola
 
 let {unpacking}= await import('./' + SHARED_MODULES_PATH + 'utils.mjs');
-let {DataNode}= await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+let {Node}= await import('./' + CLIENT_MODULES_PATH + 'nodes.js');

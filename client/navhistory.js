@@ -37,7 +37,7 @@ export function setHistoryState(myNode, url, butAction) {
 
 export function pushHistoryState(url){
   initalNavSearch=null; // Ending the initial search procedure when clicking any state element.
-  if (!(history.state && history.state.url===url)) history.pushState({url:url}, null, url); //it doesn't record state when: go back (dont state twice the same url)
+  if (!(window.history.state?.url===url)) history.pushState({url:url}, null, url); //it doesn't record state when: go back (dont state twice the same url)
 }
 
 function initialNavUrlProcedure(url, butAction){
@@ -65,8 +65,4 @@ export function setInitialNavSearch(initUrlSearch) {
   }
   if (!initUrlSearch) return;
   initalNavSearch=initUrlSearch;
-    // NO STATE
-  //const url=initUrlSearch;
-  // if (!(history.state && history.state.url===url)) history.pushState({url:url}, null, url); //it doesn't record state when: go back (dont state twice the same url)
-
 }

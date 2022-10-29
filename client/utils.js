@@ -1,5 +1,5 @@
 import {replaceLangData, splitLangTree} from './../shared/utils.mjs';
-import {DataNode} from './nodes.js';
+import {Node} from './nodes.js';
 // recursively inspect the tree to replace lang data
 export function replaceData(origin, target, relName, relDataName) {
   const innerReplace=(origin, target)=>{
@@ -35,7 +35,7 @@ export async function impData(newLangs, langrelname, datatree, currentLangs, roo
       requestData.push(replaceLangData(newTree, singleTrees[i]).clone());
       requestParams.push({extraParents: currentLangs[i].getRelationship(langrelname), tableName: "TABLE_LANGUAGES"});
     }
-    return await DataNode.requestMulti("add my tree table content", requestData, requestParams);
+    return await Node.requestMulti("add my tree table content", requestData, requestParams);
   }
 }
 

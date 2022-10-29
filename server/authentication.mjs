@@ -7,6 +7,7 @@ import config from './cfg/mainserver.mjs';
 export default (headers) => config.autoLogin ? userAutoLogin(config.autoLogin) : userAuthentication(headers);
 
 export function userAuthentication(headers) {
+  /*
   let username, password;
   let auth;
   Object.keys(headers).some(key=>{
@@ -16,10 +17,11 @@ export function userAuthentication(headers) {
     }
     else return false;
   });
-  if (auth!==undefined){
-    const token=auth.match(/Basic (.*)/)[1];
-    [username, password]=Buffer.from(token, 'base64').toString().split(':');
-    //[username, password]=atob(token).split(':');
+  */
+  const auth=Object.entries(headers).find(([key, value])=>typeof key == "string" && key.toLowerCase()=='authorization');
+  if (auth){
+    const token=auth[1].match(/Basic (.*)/)[1];
+    const [username, password]=Buffer.from(token, 'base64').toString().split(':');
+    return userLogin(username, password);
   }
-  return userLogin(username, password);
 }

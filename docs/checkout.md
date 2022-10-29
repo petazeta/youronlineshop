@@ -11,11 +11,11 @@ Checkout process is some of the largest facilities. The templates that take part
 
 It starts when launching template chktmain. It shows the order but first it creates the order node inside webuser node. The following code is for creating the order node and populating it with the cart elements.
 ```
-  webuser.getRelationship("orders").addChild(new DataNode());
+  webuser.getRelationship("orders").addChild(new Node());
   webuser.getRelationship("orders").getChild().loadRequest("get my relationships")
   .then(myOrder=>{
     myCart.getRelationship().children.forEach(cartItem=>{
-      myOrder.getRelationship("orderitems").addChild(new DataNode({quantity: cartItem.props.quantity, name: cartItem.item.props.name, price: cartItem.item.props.price}));
+      myOrder.getRelationship("orderitems").addChild(new Node({quantity: cartItem.props.quantity, name: cartItem.item.props.name, price: cartItem.item.props.price}));
     });
 [...]
 ```
@@ -40,11 +40,26 @@ Payment view is very similar to the shipping one. Layouts are: chktpayment, paym
 
 ### Continue with the order action
 
-When clicking the continue button we are saving the user data and adding the order to the database. Then we are launching chktend template. We are also reseting the cart. The next step is proceed payment.
+When clicking the continue button at chktmain we are saving the user data and adding the order to the database. We set the order with status=0 so this is the status for orders still not processed. Then we are launching chktend template. We are also reseting the cart. The next step is proceed payment.
 
 ### Proceed payment layout
 
-This layout has two elements: the order view and a payment button.
-The first one is showing the order including the shipping price and total. Its layouts are order and orderitem. Second element
+This layout starts with chktend and it has in turn another layout element: the order view. This is showing the order including the shipping price, total and payment button and its layouts are order, orderitem and payment template. This last one payment template can be configured at the payment type. The payment template depends on the payment provider, in our case is paypal.
+
+When the payment is done the orders payment prop "succeed" will be set to true.
 
 ## Order config params
+
+There are some configuration parameters at client/cfg/default.js related to this implementation:
+```
+  chktuserdata_On: true, // if false skip user data and address insertion
+  chktaddress_On: true, // if false skip address data insertion
+  chktshipping_On: true, // if false skip shipping type selection
+  chktpayment_On: true, // if false skip payment type selection
+  currencyCode: 'USD', // 'USD', 'EUR' ...
+```
+And the other configuration is related to the payment type and it is setled at its prop vars:
+```
+vars: {merchantId: 'test', template: 'paypal'}
+```
+The merchantId value is an identifier for the merchant that the payment provider supplies. To set this value you should log-in with systemadmin user and get to this page so the element will be editable.

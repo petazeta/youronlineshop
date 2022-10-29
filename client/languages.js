@@ -1,8 +1,8 @@
-import {LinkerNode} from './nodes.js';
+import {Linker} from './nodes.js';
 import {observableMixin} from './observermixin.js';
 
 //load languages
-const ObsLanguages=observableMixin(LinkerNode);
+const ObsLanguages=observableMixin(Linker);
 
 const languages=new ObsLanguages("TABLE_LANGUAGES");
 

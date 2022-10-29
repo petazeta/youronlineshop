@@ -1,11 +1,11 @@
-import {DataNode, LinkerNode} from './nodes.js';
+import {Node, Linker} from './nodes.js';
 import {languages, getCurrentLanguage} from './languages.js';
 import {observerMixin} from './observermixin.js';
 import {replaceData} from './utils.js';
 
 // load languages
 let categoriesRoot;
-const CatMotherClass=observerMixin(LinkerNode);
+const CatMotherClass=observerMixin(Linker);
 const catMother=new CatMotherClass("TABLE_ITEMCATEGORIES", "TABLE_ITEMCATEGORIES");
 languages.attachObserver("language change", catMother);
 catMother.setReaction("language change", async (params)=>{
@@ -42,8 +42,8 @@ async function load() {
     }
     */
     const subCatData=categoriesRoot.getRelationship().children.reduce((acc, rootChild)=>[...acc, ...rootChild.getRelationship().children.map(child=>child.getRelationship("itemcategoriesdata"))], []);
-    const result = await DataNode.requestMulti("get my children", subCatData, {extraParents: langParent});
-    result.forEach((value, key)=>subCatData[key].addChild(new DataNode().load(value.data[0])))
+    const result = await Node.requestMulti("get my children", subCatData, {extraParents: langParent});
+    result.forEach((value, key)=>subCatData[key].addChild(new Node().load(value.data[0])))
     return categoriesRoot;
   }
   if (!categoriesRoot) {

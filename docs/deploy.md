@@ -1,4 +1,6 @@
-deploy.md
+He creado una aplicación firewall para eliminar las entradas de bots que buscan wordpress.
+
+He creado un repositorio (git --bare) en el servidor, de esa manera podria pasar los cambios mas facilmente sin pasar por github. El repositorio remoto es: /var/github. El local es dev/nube/digitalocean/github/.git
 
 How to deploy yos
 

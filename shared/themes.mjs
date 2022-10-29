@@ -1,10 +1,10 @@
 // It searchs for the theme (child of descendants) from prop id as search
-import {detectLinker} from './linkermixin.mjs';
+import {BasicNode} from './linker.mjs';
 
 export function findTheme(search, themeMum){
   if (typeof search== "string") search={id: search};
   if (!search) {
-    if (detectLinker(themeMum)) return themeMum.getChild();
+    if (BasicNode.detectLinker(themeMum)) return themeMum.getChild();
     return themeMum;
   }
   function innerFind(search, myTree) {
@@ -18,6 +18,6 @@ export function findTheme(search, themeMum){
     }
     return false;
   }
-  if (detectLinker(themeMum)) return innerFind(search, themeMum.getChild());
+  if (BasicNode.detectLinker(themeMum)) return innerFind(search, themeMum.getChild());
   return innerFind(search, themeMum);
 }

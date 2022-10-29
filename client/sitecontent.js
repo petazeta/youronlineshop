@@ -1,10 +1,10 @@
-import {LinkerNode} from './nodes.js'
+import {Linker} from './nodes.js'
 import {observerMixin, observableMixin} from './observermixin.js'
 import {languages, getCurrentLanguage} from './languages.js';
 import {replaceData} from './utils.js';
 
 let siteText;
-const SiteTextMumClass=observableMixin(observerMixin(LinkerNode));
+const SiteTextMumClass=observableMixin(observerMixin(Linker));
 const siteTextMum = new SiteTextMumClass("TABLE_SITEELEMENTS", "TABLE_SITEELEMENTS");
 languages.attachObserver(siteTextMum, "language change");
 siteTextMum.setReaction("language change", async (params)=>{

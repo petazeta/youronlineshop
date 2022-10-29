@@ -11,7 +11,7 @@ Plus to it we are using templates to show the elements and insert them into the 
 
 ## Linker framework / ecosystem
 
-Linker framework core are the following classes defined in these three modules: basicmixin.mjs, linksmixin.mjs and linkermixin.mjs. In this order they are layers of the basic object so colled "node". This design belongs to the singleton factory pattern. The "node" is the singleton that performs the vast mayoritiy of the procedures.
+Linker framework belongs to the singleton factory pattern. The "node" is the singleton that performs the vast mayoritiy of the procedures.
 
 The node object can be extended for backend and frontend purpouses and it relates to other nodes in a parent-child tree structure, allowing the relationships regarding to the relational data structure of the database.
 

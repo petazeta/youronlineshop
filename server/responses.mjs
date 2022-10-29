@@ -1,10 +1,9 @@
 import {getTemplate, getTemplatesContent, getCssContent} from './themesserver.mjs';
-import {DataNode, LinkerNode, nodeFromDataSource} from './nodes.mjs';
+import {Node, Linker, nodeFromDataSource} from './nodes.mjs';
 import dbGateway, {getTableList, resetDb} from './dbgateway.mjs';
 import {User, userLogin} from './user.mjs';
 import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from './safety.mjs';
 import {unpacking, arrayUnpacking, packing} from './../shared/utils.mjs';
-import {detectLinker} from './../shared/linkermixin.mjs';
 import config from './cfg/mainserver.mjs';
 import path from 'path';
 import makeReport from './reporting.mjs';
@@ -76,21 +75,21 @@ responseAuth.set('send mail', (parameters, user)=>user.sendMail(parameters.to, p
 
 //<-- Read responseAuth
 
-responseAuth.set('get my childtablekeys', (parameters)=>LinkerNode.dbGetChildTableKeys( unpacking(parameters.nodeData).props.childTableName ));
+responseAuth.set('get my childtablekeys', (parameters)=>Linker.dbGetChildTableKeys( unpacking(parameters.nodeData).props.childTableName ));
 
 responseAuth.set('get my root',  async (parameters, user)=>{
   if (! await isAllowedToRead(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return LinkerNode.dbGetRoot(unpacking(parameters.nodeData));
+  return Linker.dbGetRoot(unpacking(parameters.nodeData));
 });
 
 responseAuth.set('get all my children', async (parameters, user)=>{
   if (! await isAllowedToRead(user,unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return LinkerNode.dbGetAllChildren(unpacking(parameters.nodeData), parameters.filterProps, parameters.limit);
+  return Linker.dbGetAllChildren(unpacking(parameters.nodeData), parameters.filterProps, parameters.limit);
 });
   
 responseAuth.set('get my children', async (parameters, user)=>{
   if (! await isAllowedToRead(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return LinkerNode.dbGetChildren(unpacking(parameters.nodeData), arrayUnpacking(parameters.extraParents), parameters.filterProps, parameters.limit, parameters.count);
+  return Linker.dbGetChildren(unpacking(parameters.nodeData), arrayUnpacking(parameters.extraParents), parameters.filterProps, parameters.limit, parameters.count);
 });
 
 // get descendents: equivalent to get my tree down
@@ -101,14 +100,14 @@ responseAuth.set('get my tree', async (parameters, user)=>{
   .then(result=>{
     if (!result) return result;
     // careful the result list has still parentNode or partnerNode,
-    if (detectLinker(unpacking(parameters.nodeData))) {
+    if (Node.detectLinker(unpacking(parameters.nodeData))) {
       if (result.total==0) return {total: 0};
-      const myResult = new LinkerNode();
+      const myResult = new Linker();
       result.data.forEach(child=>myResult.addChild(child));
       return {data: packing(myResult), total: result.total};
     }
     if (parameters.myself) return packing(result);
-    const myResult = new DataNode();
+    const myResult = new Node();
     result.forEach(rel=>myResult.addRelationship(rel));
     return packing(myResult);
   });
@@ -130,18 +129,18 @@ responseAuth.set('get my tree up', async (parameters, user)=>{
   });
 });
 
-responseAuth.set('get my relationships', (parameters, user)=>DataNode.dbGetRelationships(unpacking(parameters.nodeData)));
+responseAuth.set('get my relationships', (parameters, user)=>Node.dbGetRelationships(unpacking(parameters.nodeData)));
   
 //<-- Insert responseAuth
 
 responseAuth.set('add myself', async (parameters, user)=>{
   if (! await isAllowedToInsert(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new DataNode().load(unpacking(parameters.nodeData)).dbInsertMySelf(arrayUnpacking(parameters.extraParents), parameters.updateSiblingsOrder);
+  return new Node().load(unpacking(parameters.nodeData)).dbInsertMySelf(arrayUnpacking(parameters.extraParents), parameters.updateSiblingsOrder);
 });
 
 responseAuth.set('add my children', async (parameters, user)=>{
   if (! await isAllowedToInsert(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new LinkerNode().load(unpacking(parameters.nodeData)).dbInsertMyChildren(arrayUnpacking(parameters.extraParents));
+  return new Linker().load(unpacking(parameters.nodeData)).dbInsertMyChildren(arrayUnpacking(parameters.extraParents));
 });
   
 responseAuth.set('add my tree', async (parameters, user)=>{
@@ -166,14 +165,14 @@ responseAuth.set('add my tree table content', async (parameters, user)=>{
 
 responseAuth.set('add my link', async (parameters, user)=>{
   if (! await isAllowedToInsert(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new DataNode().load(unpacking(parameters.nodeData)).dbInsertMyLink(arrayUnpacking(parameters.extraParents));
+  return new Node().load(unpacking(parameters.nodeData)).dbInsertMyLink(arrayUnpacking(parameters.extraParents));
 });
 
 //<-- Delete queries
 
 responseAuth.set('delete myself', async (parameters, user)=>{
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new DataNode().load(unpacking(parameters.nodeData)).dbDeleteMySelf();
+  return new Node().load(unpacking(parameters.nodeData)).dbDeleteMySelf();
 });
 
 responseAuth.set('delete my tree', async (parameters, user)=>{
@@ -191,24 +190,24 @@ responseAuth.set('delete my tree table content', async (parameters, user)=>{
 
 responseAuth.set('delete my children', async (parameters, user)=>{
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new LinkerNode().load(unpacking(parameters.nodeData)).dbDeleteMyChildren();
+  return new Linker().load(unpacking(parameters.nodeData)).dbDeleteMyChildren();
 });
 
 responseAuth.set('delete my link', async (parameters, user)=>{
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new DataNode().load(unpacking(parameters.nodeData)).dbDeleteMyLink();
+  return new Node().load(unpacking(parameters.nodeData)).dbDeleteMyLink();
 });
 
 //<-- Update queries
 
 responseAuth.set('edit my props', async (parameters, user)=>{
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new DataNode().load(unpacking(parameters.nodeData)).dbUpdateMyProps(parameters.props);
+  return new Node().load(unpacking(parameters.nodeData)).dbUpdateMyProps(parameters.values);
 });
   
 responseAuth.set('edit my sort_order', async (parameters, user)=>{
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  return new DataNode().load(unpacking(parameters.nodeData)).dbUpdateMySortOrder(parameters.newSortOrder)
+  return new Node().load(unpacking(parameters.nodeData)).dbUpdateMySortOrder(parameters.newSortOrder)
   .then(afected=>{
     if (afected==1) return parameters.newSortOrder;
     else return false;

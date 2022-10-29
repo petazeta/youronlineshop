@@ -1,5 +1,5 @@
 import config from './cfg/main.js';
-import {LinkerNode, DataNode} from './nodes.js';
+import {Linker, Node} from './nodes.js';
 import {setActive} from './activelauncher.js';
 
 class Pagination{
@@ -12,7 +12,7 @@ class Pagination{
     this.total=this.elementsNode.props.total;
     this.baseUrl=baseUrl;
     this.pageSize=pageSize;
-    this.pageIndex=new LinkerNode();
+    this.pageIndex=new Linker();
     this.pageIndex.pagination=this;
   }
   // it needs porps.total to be loaded
@@ -27,7 +27,7 @@ class Pagination{
   }
 
   createIndexChild(i){
-    const pageNode=new DataNode();
+    const pageNode=new Node();
     pageNode.props.number=i;
     pageNode.props.href=this.baseUrl + '&page=' + i;
     return pageNode;

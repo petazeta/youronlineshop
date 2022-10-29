@@ -1,6 +1,6 @@
 import User from './user.js';
 import {observableMixin} from './observermixin.js'
-import {LinkerNode} from './nodes.js';
+import {Linker} from './nodes.js';
 
 const ObservableUser= observableMixin(User);
 
@@ -10,7 +10,7 @@ class WebUser extends ObservableUser {
   }
   async init(){
     // It loads the user type data for customer type
-    const typesMother=new LinkerNode("TABLE_USERSTYPES");
+    const typesMother=new Linker("TABLE_USERSTYPES");
     const userType=(await typesMother.loadRequest('get all my children')).getChild({type: 'customer'});
     await userType.loadRequest('get my relationships');
     userType.getRelationship('users').addChild(this);

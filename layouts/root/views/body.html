@@ -5,7 +5,7 @@
       import(pathJoin('./', CLIENT_MODULES_PATH, 'onappendlistener.js'))
       .then(({setOnAppend})=>{
         setOnAppend( myNode => {
-          if (window.screen.width<700 && myNode.container && myNode.container.id=='centralcontent') {
+          if (window.screen.width<700 && myNode.container?.id=='centralcontent') {
             myNode.container.scrollIntoView();
           }
         });
@@ -137,7 +137,6 @@
         <script type="text/javascript">
           const {setMenus} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'menus.js'));
           const {setInitialNavSearch} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'navhistory.js'));
-          const {setActive} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'activelauncher.js'));
           const menusMother = await setMenus();
           // Starting web point first menu
           const {default: config} = await import(pathJoin('./', CLIENT_CONFIG_PATH, 'main.js'));
@@ -192,7 +191,7 @@
                 if (this.children.length==0) {
                   document.getElementById("centralcontent").innerHTML="";
                 }
-              });
+              }, "delANode");
               categoriesRoot.getRelationship().setChildrenView(thisElement,  "category");
             </script>
           </div>

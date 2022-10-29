@@ -1,14 +1,14 @@
-import {LinkerNode, DataNode} from './nodes.js'
+import {Linker, Node} from './nodes.js'
 import {AlertMessage} from './alert.js';
 import {getSiteText} from './sitecontent.js';
 import {observableMixin} from './observermixin.js';
 
-const BaseCart=observableMixin(DataNode);
+const BaseCart=observableMixin(Node);
 
 class Cart extends BaseCart {
   constructor(...args) {
     super(...args);
-    this.addRelationship(new LinkerNode()); // items container
+    this.addRelationship(new Linker()); // items container
   }
   
   addItem(item, quantity) {
@@ -23,7 +23,7 @@ class Cart extends BaseCart {
       cartItemMatch.item=item; // Update item (if lang item data changes this item lang data changes)
     }
     else {
-      const cartItem=new DataNode({id: item.props.id, quantity: quantity});
+      const cartItem=new Node({id: item.props.id, quantity: quantity});
       cartItem.item=item;
       this.getRelationship().addChild(cartItem);
     }

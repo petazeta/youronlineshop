@@ -33,7 +33,7 @@ const userMixin = Sup => class extends Sup {
   }
 
   getUserType(){
-    if (this.parent && this.parent.partner) return this.parent.partner.props.type;
+    return this.parent?.partner?.props.type;
   }
 }
 

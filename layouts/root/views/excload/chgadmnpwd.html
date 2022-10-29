@@ -81,9 +81,9 @@
     <div style="display:flex; flex-direction: row; margin:1em; flex-wrap: wrap;"></div>
     <script>
     //We load administration users
-    const {LinkerNode}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+    const {Linker}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
     const {default: User}=await import('./' + CLIENT_MODULES_PATH + 'user.js');
-    const usersTypesMother=await new LinkerNode('TABLE_USERSTYPES').loadRequest("get all my children");
+    const usersTypesMother=await new Linker('TABLE_USERSTYPES').loadRequest("get all my children");
 
     for (const userType of usersTypesMother.children) {
       await userType.loadRequest("get my relationships");

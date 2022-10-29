@@ -20,7 +20,7 @@ async function loadImgForm(formData) {
     catch(e){//To send errors from server in case the error catching methods at backend fail
       throw new Error(`Image loading. Response error: ${resultTxt}`);
     }
-    if (result && typeof result=="object" && result.error==true) {
+    if (result?.error) {
       throw new Error(`Image loading Message: ${result.message}`);
     }
     return result;

@@ -1,10 +1,10 @@
-import {LinkerNode} from './nodes.js';
+import {Linker} from './nodes.js';
 import {languages, getCurrentLanguage} from './languages.js';
 import {observerMixin} from './observermixin.js';
 import {replaceData} from './utils.js';
 
 export let pageText;
-const pageMotherClass=observerMixin(LinkerNode);
+const pageMotherClass=observerMixin(Linker);
 const pageMother=new pageMotherClass("TABLE_PAGEELEMENTS", "TABLE_PAGEELEMENTS");
 languages.attachObserver("language change", pageMother);
 pageMother.setReaction("language change", async (params)=>{

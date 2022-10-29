@@ -5,7 +5,7 @@
       function setOrderShipping(){
         const shippingtypesRel=webuser.getRelationship("orders").getChild().getRelationship("ordershippingtypes");
         shippingtypesRel.children=[]; //In case we already selected
-        const orderShippingType=shippingtypesRel.addChild(new thisNode.constructor()); // new DataNode
+        const orderShippingType=shippingtypesRel.addChild(new thisNode.constructor()); // new Node
         orderShippingType.props.name=thisNode.getRelationship("shippingtypesdata").getChild().props.name;
         orderShippingType.props.delay_hours=thisNode.props.delay_hours;
         orderShippingType.props.price=thisNode.props.price;

@@ -1,12 +1,12 @@
 import {nodeFromDataSource} from './nodes.mjs'; 
 import TABLES from './admintableslist.mjs';
 import ADMINUSERS from './adminusertypes.mjs';
-import {detectLinker} from './../shared/linkermixin.mjs';
+import {BasicNode} from './../shared/linker.mjs';
 
 //Safety check functions
 function getTableName(myNode){
   if (typeof myNode=="string") return myNode;
-  if (detectLinker(myNode)) return myNode.props.childTableName;
+  if (BasicNode.detectLinker(myNode)) return myNode.props.childTableName;
   return myNode.parent.props.childTableName;
 }
 function getUserType(user){
@@ -32,7 +32,7 @@ async function isOwner(myNode, userId) {
   if (myNode.props.id==userId && myNode.parent.childTableName=="TABLE_USERS") return true;
   function isOwnerCore(pointer) {
     while (pointer) {
-      if (pointer.props.parentTableName=="TABLE_USERS" && pointer.partner && pointer.partner.props.id==userId) return true;
+      if (pointer.props.parentTableName=="TABLE_USERS" && pointer.partner?.props.id==userId) return true;
       pointer=pointer.getAscendent();
     }
   }

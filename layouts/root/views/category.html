@@ -51,14 +51,12 @@
           }, "addANewNode");
           //If node was selected then we select the following one
           subcategoriesMother.addEventListener("deleteChildNode", function(delNode) {
-            if (delNode.selected 
-            && this.getSysKey("sort_order")
-            && this.children.length>0) {
+            if (delNode.selected && this.getSysKey("sort_order") && this.children.length>0) {
               let position=1;
               if (delNode.props[this.getSysKey("sort_order")] > 1) position=delNode.props[this.getSysKey("sort_order")]-1;
               catalogView(this.children[position-1]);
             }
-          }, "delANewNode");
+          }, "delANode");
           //we show subcategories (and click some subcategory)
           await subcategoriesMother.setChildrenView(thisElement.parentElement.parentElement.parentElement.querySelector(".subcategorycontainer"), "subcategory");
           //subcategories container set to visible ?

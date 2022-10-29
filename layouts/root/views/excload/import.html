@@ -90,7 +90,7 @@ falta corregir lo de labels y texts
                   <input type="radio" value="lang" name="dataoption">
                   <script>
                     const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
-                    const {LinkerNode, DataNode}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+                    const {Linker, Node}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
                     const {arrayUnpacking}=await import('./' + SHARED_MODULES_PATH + 'utils.mjs');
                     thisElement.form.dataoption.forEach(radio=>{
                       radio.addEventListener("change", (ev)=>{
@@ -101,8 +101,8 @@ falta corregir lo de labels y texts
                           return false;
                         }
                         let data=JSON.parse(thisElement.form.impdata.value);
-                        let datalang=new LinkerNode();
-                        arrayUnpacking(data.languages).forEach(lang=>datalang.addChild(new DataNode().load(lang)));
+                        let datalang=new Linker();
+                        arrayUnpacking(data.languages).forEach(lang=>datalang.addChild(new Node().load(lang)));
                         datalang.setChildrenView(thisElement.parentElement.querySelector("template").nextElementSibling, thisElement.parentElement.querySelector("template"));
                         thisElement.parentElement.querySelector("template").nextElementSibling.style.display="block";
                       }
@@ -222,7 +222,7 @@ falta corregir lo de labels y texts
         
         //const {languages} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
         const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
-        const {DataNode, LinkerNode}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+        const {Node, Linker}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
         //const {loadText} = await import('./' + CLIENT_MODULES_PATH + 'pagescontent.js');
         //const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
         const {importFunc}=await import('./' + CLIENT_MODULES_PATH + 'import.js');
@@ -248,7 +248,7 @@ falta corregir lo de labels y texts
             // It imports new langs and add it
             
             // <-- Get user selected (check box) langs: exportedDataLangs, exportedDataTrees => importedDataLangs, importedDataTrees
-            const exportedDataLangs = arrayUnpacking(data.languages).map(lang=>new DataNode().load(lang));
+            const exportedDataLangs = arrayUnpacking(data.languages).map(lang=>new Node().load(lang));
             if (exportedDataLangs.length==0) {
               // we show the alert message No selection
               new AlertMessage(thisElement.form.elements.nocontent.value, 2000).showAlert();
@@ -262,13 +262,13 @@ falta corregir lo de labels y texts
             }
             myimpalert.showAlert(); //importing in process
             //Now we filter the languages selected from the exportedDataLangs
-            const exportedDataTrees = arrayUnpacking(data.trees).map(dataTree=>new DataNode().load(dataTree));
+            const exportedDataTrees = arrayUnpacking(data.trees).map(dataTree=>new Node().load(dataTree));
             const importedDataTrees=[], importedDataLangs=[];
             for (const selLang of selectedLangs) {
               for (const i of exportedDataLangs.keys()) {
                 if (selLang==exportedDataLangs[i].props.id) {
                   //we need to add the mother
-                  exportedDataTrees[i].parent=new LinkerNode();
+                  exportedDataTrees[i].parent=new Linker();
                   exportedDataTrees[i].parent.addChild(exportedDataTrees[i]);
                   importedDataTrees.push(exportedDataTrees[i]);
                   importedDataLangs.push(exportedDataLangs[i]);

@@ -1,2 +1,5 @@
 node_modules
 backup
+catalog-images
+server/cfg/dbcustom.mjs
+logs/logs.txt
