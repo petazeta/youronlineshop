@@ -3,13 +3,15 @@ import {Node} from './nodes.js';
 import initWebUser from './webuser.js';
 import {getTemplates, getStyles} from './themesserver.js';
 import {Alert, AlertMessage} from './alert.js';
-import makeReport from './reports.js';
+import makeReport, {setReports} from './reports.js';
 import {selectMyLanguage} from './languages.js';
 import {loadText} from './sitecontent.js';
 import {setInitialNavSearch} from './navhistory.js';
 //import devConfig from './cfg/devconfig.js'; // dev configuration
 
 try {
+  setReports(); // Setting some reporting situations
+
   //const config=setConfig(devConfig); // dev configuration
   const config=setConfig();
 

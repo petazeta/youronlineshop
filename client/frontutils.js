@@ -1,12 +1,13 @@
 
-export function getDomElementFromChild(myNode) {
-  if (!myNode.parent || !myNode.parent.childContainer) return false;
+export function getDomElementFromChild(myNode, virtualParent) {
+  const myParent=virtualParent? virtualParent: myNode.parent;
+  if (!myParent || !myParent.childContainer) return false;
   // This method only works well in wrapped templates
   // We have a child and the container is at the parent.
-  const skey=myNode.parent.getSysKey('sort_order');
+  const skey=myParent.getSysKey('sort_order');
   // if no skey order it will not change
-  const children=myNode.parent.children.sort((a,b)=>a.props[skey]-b.props[skey]);
-  return Array.from(myNode.parent.childContainer.children).filter((child)=>!['SCRIPT', 'TEMPLATE'].includes(child.tagName))[children.indexOf(myNode)];
+  const children=myParent.children.sort((a,b)=>a.props[skey]-b.props[skey]);
+  return Array.from(myParent.childContainer.children).filter((child)=>!['SCRIPT', 'TEMPLATE'].includes(child.tagName))[children.indexOf(myNode)];
 }
 
 // NOT REVISED:

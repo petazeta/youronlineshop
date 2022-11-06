@@ -2,6 +2,7 @@ import {Linker, Node} from './nodes.js'
 import {AlertMessage} from './alert.js';
 import {getSiteText} from './sitecontent.js';
 import {observableMixin} from './observermixin.js';
+import {setActiveInGroup} from './activelauncher.js';
 
 const BaseCart=observableMixin(Node);
 
@@ -57,6 +58,7 @@ class Cart extends BaseCart {
       else getSiteText().getNextChild("logform").appendView(document.body, "loginframe");
       return;
     }
+    setActiveInGroup('central content', getSiteText().getNextChild("checkout"));
     getSiteText().getNextChild("checkout").setView(document.getElementById("centralcontent"), "chktmain");
   }
 }

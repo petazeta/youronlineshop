@@ -31,7 +31,7 @@ class SiteDbGateway {
       useUnifiedTopology: true,
     });
     this.dbLink=mongoose.connection;
-    setDbSchema(this.dbLink); // ??? Esto deberia ser despues de crear Connection on("connect")
+    setDbSchema();
     return new Promise((resolve, reject) => {
       this.dbLink.on("error", err => {      
         console.log("db connect error: ", err);
@@ -42,9 +42,9 @@ class SiteDbGateway {
     });
   }
 
-  async getTableList() {
+  getTableList() {
     if (this.tableList.size==0) {
-      const tables = await this.getTables();
+      const tables = this.getTables();
       for (const tableName of tables) {
         this.tableList.set('TABLE_' + tableName.toUpperCase(), tableName);
         this.tableRef.set(tableName, 'TABLE_' + tableName.toUpperCase());
@@ -60,15 +60,15 @@ class SiteDbGateway {
     return this.tableRef;
   }
 
-  async getTables(){
+  getTables(){
     return Array.from(Object.keys(this.dbLink.models))
   }
 
-  async getForeignKeys(tableName) {
+  getForeignKeys(tableName) {
     return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref).map(([key, value])=>new Object({name: key, parentTableName: value.ref.toString()}));
   }
 
-  async getRelationshipsFromTable(tableName) {
+  getRelationshipsFromTable(tableName) {
     /*
     const result=[];
     for (const [childTableName, model] of Object.entries(this.dbLink.models)) {
@@ -127,7 +127,7 @@ class SiteDbGateway {
     return result.length;
   }
 
-  async getTableKeys(tableName) {
+  getTableKeys(tableName) {
     return Object.entries(this.dbLink.model(tableName).schema.tree).filter(row=>!(["_id", "__v"].includes(row[0]))).map(row=>{
       const key={Field: row[0], Type: "text"};
       if (row[0]=='id') key.Primary="yes";
@@ -307,14 +307,10 @@ class SiteDbGateway {
     let data=fs.readFileSync(importJsonFilePath, 'utf8');
     data=JSON.parse(data);
     const {Node, Linker, nodeFromDataSource} = await import('./nodes.mjs');
-
-    const langs = arrayUnpacking(data.languages).map(lang=>new Node().load(lang));
-    const moLang=new Linker("TABLE_LANGUAGES");
-    for (const lang of langs) {
-      moLang.addChild(lang);
-    }
-    await moLang.dbInsertMyTree();
-    const newLangs=moLang.children;
+    const langsRoot=new Node().load(unpacking(data.languages));
+    const langs=langsRoot.getRelationship();
+    await langsRoot.dbInsertMyTree();
+    const newLangs=langs.children;
     const usersMo=new Linker().load(unpacking(data.tree.shift()));
     await usersMo.dbInsertMyTree();
     await impData(newLangs, "pageelementsdata", nodeFromDataSource(unpacking(data.tree.shift())));
@@ -330,7 +326,7 @@ const dataBase=new SiteDbGateway();
 
 export async function initDb(){
   await dataBase.connect(dbConfig.url);
-  await dataBase.getTableList();
+  dataBase.getTableList();
 }
 
 export function getTableList() {

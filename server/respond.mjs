@@ -25,19 +25,16 @@ export default function sendResponse(request, response) {
     user= await authentication(request.headers);
     data = await collectRequest(request);
     if (Array.isArray(data.action)) {
-      const queries=[];
-      for (let i=0; i<data.action.length; i++) {
-        let makeRequestParams;
-        if (data.parameters) makeRequestParams=[user, data.action[i], data.parameters[i]];
-        else makeRequestParams=[user, data.action[i]];
-        queries.push(()=>makeRequest(...makeRequestParams));
-      }
+      const queries=data.action.map((myAction, i)=>{
+        if (data.parameters) return ()=>makeRequest(user, data.action[i], data.parameters[i]);
+        else return ()=>makeRequest(user, data.action[i]);
+      });
+      //Promise.all(queries); //this can produce problems for its asyncronicity
       const myResults=[];
       for (const query of queries) {
         myResults.push(await query());
       }
       return myResults;
-      //Promise.all(queries); //this can produce problems for its asyncronicity
     }
     else {
       // check cache before requesting

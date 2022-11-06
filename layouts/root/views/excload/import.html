@@ -163,7 +163,7 @@ falta corregir lo de labels y texts
               <td>
                 <span style="position:relative;">
                   <input type="radio" value="db" name="dataoption">
-                  <span>Entiry database</span>
+                  <span>Entire database</span>
                 </span>
               </td>
             </tr>
@@ -263,6 +263,7 @@ falta corregir lo de labels y texts
             myimpalert.showAlert(); //importing in process
             //Now we filter the languages selected from the exportedDataLangs
             const exportedDataTrees = arrayUnpacking(data.trees).map(dataTree=>new Node().load(dataTree));
+            /*
             const importedDataTrees=[], importedDataLangs=[];
             for (const selLang of selectedLangs) {
               for (const i of exportedDataLangs.keys()) {
@@ -276,6 +277,13 @@ falta corregir lo de labels y texts
                 }
               }
             }
+            */
+            
+            const selectedIndexes = exportedDataLangs.map((exportedDataLang, i)=>selectedLangs.includes(exportedDataLang.props.id) ? i : -1);
+            const importedDataLangs = exportedDataLangs.filter((exportedDataLang, i)=>selectedIndexes[i]!=-1);
+            const importedDataTrees = exportedDataTrees.filter((exportedDataTree, i)=>selectedIndexes[i]!=-1);
+            importedDataTrees.forEach(importedDataTree=>new Linker().addChild(importedDataTree));
+
             // <-- Get user selected (check box) langs: exportedDataLangs, exportedDataTrees => importedDataLangs, importedDataTrees
             await myFunc(importedDataTrees, importedDataLangs);
             myimpalert.hideAlert();

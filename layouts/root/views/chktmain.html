@@ -87,8 +87,9 @@
           async function checkoutFunction(){
             const myOrder=webuser.getRelationship("orders").getChild();
             myOrder.props.status=0; // status 0 is "new"
-            myOrder.props.creationdate=new Date(await myOrder.constructor.makeRequest("get time")).toISOString(); // Date-time is Universal Time
-            myOrder.props.modificationdate=myOrder.props.creationdate;
+            myOrder.props.creationDate=new Date(await myOrder.constructor.makeRequest("get time")).toISOString(); // Date-time is Universal Time
+            myOrder.props.modificationDate=myOrder.props.creationDate;
+            console.log(myOrder);
             await myOrder.loadRequest("add my tree"); // it saves and loads all the data again and ids
             thisNode.setView(document.getElementById("centralcontent"), "chktend");
             //We remove the items from the cart

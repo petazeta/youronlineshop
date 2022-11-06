@@ -72,7 +72,7 @@ If the database connection is not working you may need to check settings at serv
 
 ## Documentation
 
-[Documentation](docs/overview.md)
+[Check Documentation](docs/overview.md)
 
 
 ## Themes

@@ -12,14 +12,11 @@ function passwordVerify(password, hash){
 }
 
 const userModelMixin=Sup => class extends Sup {
-  constructor(userType="customer", ...args) {
+  constructor(...args) {
     super(...args);
     this.parent=new Linker("TABLE_USERS", "TABLE_USERSTYPES");
-    return this.parent.dbLoadMyChildTableKeys()
-    .then(async ()=>{
-      if (!userType) return this;
-      return await this.setMyUserType(userType)
-    });
+    this.parent.dbLoadMyChildTableKeys();
+    return this;
   }
   static async setUserType(myUser, userType){
     //First we get the usertype (parent)
@@ -28,7 +25,8 @@ const userModelMixin=Sup => class extends Sup {
     //await parentPartner.parent.dbLoadMyChildTableKeys();
     const userTypeNode= usertypeMother.getChild();
     if (userTypeNode) {
-      await userTypeNode.dbLoadMyRelationships();
+      userTypeNode.dbLoadMyRelationships();
+      console.log("setUserType userTypeNode", userTypeNode);
       userTypeNode.getRelationship().addChild(myUser);
     }
     return myUser;
@@ -55,7 +53,8 @@ const userModelMixin=Sup => class extends Sup {
       return new Error("pwdError");
     }
   }
-  static async create(username, pwd, email=null, usertype="customer") {
+  // the email field is not implemented in client, we keep it for some other implementations
+  static async create(username, pwd, email=null, userType="customer") {
     if (!checkLength(username, 4, 20)) {
       return new Error("userCharError");
     }
@@ -67,11 +66,13 @@ const userModelMixin=Sup => class extends Sup {
     }
     const userCheck = await User.userCheck(username);
     if (!(userCheck instanceof Error) || userCheck.message!="userError") return new Error("userExistsError");
-    const user=await new User(usertype);
+    const user=new User();
+    await user.setMyUserType(userType);
     user.props.username=username;
     let hash=bcrypt.hashSync(pwd, 8);
     user.props.pwd=hash;
-    user.props.access=Math.floor(Date.now() / 1000);
+    user.props.creationDate=new Date().toISOString();
+    user.props.access=user.props.creationDate;
     await user.dbInsertMySelf();
     await user.dbLoadMyRelationships();
     const userdatarel=user.getRelationship("usersdata");
@@ -98,7 +99,7 @@ const userModelMixin=Sup => class extends Sup {
     if (!checkLength(username, 4, 20)) {
       return new Error("userCharError");
     }
-    const myuser=await new User();
+    const myuser=new User();
     const result=await Linker.dbGetAllChildren(myuser.parent, {username: username});
     if (result.total!==1) return false;
     myuser.props.id=result.data[0].props.id;
@@ -108,12 +109,8 @@ const userModelMixin=Sup => class extends Sup {
     if (value.length >= min && value.length <= max) return true;
     return false;
   }
-  async dbUpdateMyAccess() {
-    this.props.access=Math.floor(Date.now() / 1000);
-    await this.dbUpdateMyProps({access: this.props.access});
-  }
-  static logout(){
-    return true;
+  async dbUpdateAccess() {
+    await this.dbUpdateMyProps({access: (new Date()).toISOString()});
   }
   static async login(uname, upwd){
     if (!uname || !upwd) {
@@ -121,13 +118,13 @@ const userModelMixin=Sup => class extends Sup {
     }
     const userCheck=await User.userCheck(uname, upwd);
     if (userCheck instanceof Error) return userCheck;
-    const user=await new User();
+    const user=new User();
     user.props.username=uname;
     user.props.password=upwd;
     user.props.id=userCheck;
     await user.dbLoadMyRelationships();
     await user.dbLoadMyTreeUp(); // ¿Por qué cargar esto, si ya el constructor de user crea la parte de typeuser???
-    //await user.dbUpdateMyAccess(); //Every conexion we make server login so we are not updating the access time
+    //await user.dbUpdateAccess(); //Every conexion we make server login so we are not updating the access time
     return user;
   }
   static async autoLogin(uname){
@@ -164,7 +161,7 @@ const userModelMixin=Sup => class extends Sup {
       const result=await Linker.dbGetAllChildren(this.parent, {username: recipient});
       if (result.total > 0) {
         const parent=new Linker("TABLE_USERS");
-        myUser=await new User();
+        myUser=new User();
         parent.addChild(myUser);
         myUser.props.id=result.data[0].props.id;
         await myUser.dbLoadMyRelationships();

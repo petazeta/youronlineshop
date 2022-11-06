@@ -6,7 +6,7 @@ import {replaceData} from './utils.js';
 // load languages
 let categoriesRoot;
 const CatMotherClass=observerMixin(Linker);
-const catMother=new CatMotherClass("TABLE_ITEMCATEGORIES", "TABLE_ITEMCATEGORIES");
+const catMother=new CatMotherClass("TABLE_ITEMCATEGORIES");
 languages.attachObserver("language change", catMother);
 catMother.setReaction("language change", async (params)=>{
   console.log(`catMother said "change language" `);
@@ -50,6 +50,7 @@ async function load() {
     await loadRoot();
     return await innerLoad(categoriesRoot);
   }
+  // to keep the childContainers vars etc..
   const rootClon=categoriesRoot.clone();
   await innerLoad(rootClon);
   replaceData(rootClon, categoriesRoot, "itemcategories", "itemcategoriesdata");

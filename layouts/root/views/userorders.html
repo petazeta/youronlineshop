@@ -1,5 +1,6 @@
 <!--
-thisNode textContent -> "dashboard" - "showOrd"
+thisNode textContent => "dashboard" - "showOrd"
+thisParams.filterorders: "archived" => status=1
 -->
 <table class="list">
   <thead>
@@ -71,52 +72,24 @@ thisNode textContent -> "dashboard" - "showOrd"
   </thead>
   <tbody></tbody>
   <script>
-    const {Node, Linker}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
-    //first we load orders from database
-    let myaction, myparams, ordersRel;
+    const statusValue = thisParams.filterorders=="archived"? 1 : 0;
     if (webuser.isOrdersAdmin()) {
-      //create virtual ordersmother
-      ordersRel=new Linker("TABLE_ORDERS");
-      myaction="get all my children";
-      myparams={tableName: ordersRel.props.childTableName};
+      const {Node, Linker}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
+      const {unpacking}=await import('./' + SHARED_MODULES_PATH + 'utils.mjs');
+      // create virtual ordersViewParent for showing everyone
+      const ordersViewParent=await new Linker("TABLE_ORDERS").loadRequest("get all my children", {filterProps: {status: statusValue}});
+      for (const order of ordersViewParent.children) {
+        order.parent=Node.copyProps(new Linker(), ordersViewParent);
+      }
+      const ordersUserParents=await Node.requestMulti("get my tree up", ordersViewParent.children);
+      ordersUserParents.forEach((ordersUserParent, i)=>{
+        ordersViewParent.children[i].parent.load(unpacking(ordersUserParent));
+      });
+      ordersViewParent.setChildrenView(thisElement, "userordersline", {viewParent: ordersViewParent});
     }
     else {
-      myaction="get my children";
-      ordersRel=webuser.getRelationship("orders");
-      ordersRel.children=[];
-      myparams={};
+      webuser.getRelationship("orders").loadRequest("get my children", {filterProps: {status: statusValue}});
+      webuser.getRelationship("orders").setChildrenView(thisElement, "userordersline");
     }
-    let statusValue=0;
-    if (thisParams.filterorders=="archived") statusValue=1;
-    myparams.filterProps= {status: statusValue};
-    await ordersRel.loadRequest(myaction, myparams);
-    if (ordersRel.children.length == 0) {
-      thisElement.innerHTML="";
-      return;
-    }
-    if (webuser.isOrdersAdmin()) {
-      for (const child of ordersRel.children) {
-        child.addEventListener("deleteNode", function() {
-          ordersRel.removeChild(this);
-          ordersRel.setChildrenView();
-        });
-        child.addEventListener("change order status",function() {
-          ordersRel.removeChild(this);
-          ordersRel.setChildrenView();
-        });
-      }
-      for (const child of ordersRel.children) {
-        child.parent=new Linker();
-        child.parent.loadProperties(ordersRel);
-      }
-      const orders=await Node.requestMulti("get my tree up", ordersRel.children);
-      const {unpacking}=await import('./' + SHARED_MODULES_PATH + 'utils.mjs');
-      orders.forEach((order, i)=>{
-        ordersRel.children[i].parent.load(unpacking(order));
-        ordersRel.children[i].parent.partner.parent=new Linker();
-        ordersRel.children[i].parent.partner.parent.props.childTableName=ordersRel.children[i].parent.props.parentTableName;
-      });
-    }
-    ordersRel.setChildrenView(thisElement, "userordersline");
   </script>
 </table>

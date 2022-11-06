@@ -1,10 +1,12 @@
 <!--
+  viewParent: the parent for setChildrenView (the normal parent could be user)
 -->
 <tr>
   <td>
     <span></span>
     <script>
-      thisNode.writeProp(thisElement, "creationdate");
+      const creationDate=new Date(thisNode.props.creationDate);
+      thisElement.textContent=creationDate.toDateString();
     </script>
   </td>
   <td>
@@ -71,9 +73,8 @@
       <div class="admnbtsgrid"></div>
       <script>
         if (webuser.isOrdersAdmin()) {
-          var myNewStatus=1;
-          if (thisNode.props.status==1) myNewStatus=0;
-          thisNode.appendView(thisElement, "butsuccessorder", {newStatus: myNewStatus});
+          const newStatusValue = thisNode.props.status==1? 0 : 1;
+          thisNode.appendView(thisElement, "butsuccessorder", {viewParent: thisParams.viewParent, newStatus: newStatusValue});
           thisNode.appendView(thisElement, "butdelete");
         }
       </script>
@@ -82,6 +83,6 @@
 </tr>
 <script>
   if (webuser.isOrdersAdmin()) {
-    thisNode.appendView(thisElement, thisElement.querySelector('template'))
+    thisNode.appendView(thisElement, thisElement.querySelector('template'), thisParams)
   }
 </script>

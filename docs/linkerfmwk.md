@@ -65,3 +65,5 @@ La implementación se está haciendo mediante el sistema de multiple inheritance
 
 
 Parece que hay una estrategia para ahorrar memoria que convendría revisar, un patron de programación que cuando dos objetos tienen el mismo valor los guarda en un solo lugar. En cualquier caso cabría revisar la implementación the mother ya que es siempre igual en toda la cadena y sin embargo se crea un objecto diferente cada vez. Podría hacerse un sólo objecto y referir a este en lugar en crear uno nuevo para cada relación de objetos.
+
+Notas: Conviene siempre tener un root para cualquier elemento que tenga que tener una posición, un orden y es así más fácil, aunque el root propiamente no tenga utilidad.

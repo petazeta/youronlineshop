@@ -39,25 +39,31 @@
     <div data-id="butedit" class="btmiddleright"></div>
     <button type="button" class="btn" data-id="but"></button>
     <script>
+      const {getActiveInGroup} = await import('./' + CLIENT_MODULES_PATH + 'activelauncher.js');
+      const {default: config} = await import(pathJoin('./', CLIENT_CONFIG_PATH, 'main.js'));
+      const {pageText} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'pagescontent.js'));
+      const {dispatchPopStateEvent} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'navhistory.js'));
       const myTxtNode=thisNode.getNextChild("btLogOut").getRelationship("siteelementsdata").getChild();
+
       myTxtNode.writeProp(thisElement);
       thisElement.onclick=function(){
         document.getElementById("dashmenu").style.transform="translateY(-15px)";
-        webuser.logout().then(async ()=>{
-          if (localStorage.getItem("user_name")) localStorage.removeItem("user_name"); //stay logged => not anymore
-          // we must return to some init point. If not defined it clears any user info and show loginform
-          /*
-          const loginPrevUrl=webuser.perviousLoginHistorySate && webuser.perviousLoginHistorySate.url;
-          if (loginPrevUrl) {
-            // go history login back
-            const {dispatchPopStateEvent} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
-            if (loginPrevUrl.includes('category') || loginPrevUrl.includes('menu')) dispatchPopStateEvent(loginPrevUrl);
+        webuser.logout();
+        if (localStorage.getItem("user_name")) localStorage.removeItem("user_name"); //stay logged => not anymore
+        // removing log screen
+        if (!getActiveInGroup('central content')?.parent?.props.childTableName.match(/TABLE_ITEMCATEGORIES|TABLE_PAGEELEMENTS/)) {
+          if (config.initUrlSearch) {
+            dispatchPopStateEvent(config.initUrlSearch);
+            return;
           }
-          else document.getElementById("centralcontent").innerHTML='';
-          */
-          // QUIZA HABRIA QUE COMPROBAR PARA SALIR DE AQUI Y DEJARLO BLANCO EN ALGUNAS OCASIONES
-          thisNode.parent.getChild("logform").appendView(document.body, "loginframe");
-        });
+          const menusMother=pageText.getRelationship();
+          if (menusMother.getChild()) {
+            dispatchPopStateEvent('?menu=' + menusMother.getChild().props.id);
+            return;
+          }
+          document.getElementById('centralcontent').innerHTML='';
+        }
+        // thisNode.parent.getChild("logform").appendView(document.body, "loginframe");
       }
       //adding the edition pencil
       if (webuser.isWebAdmin()) {

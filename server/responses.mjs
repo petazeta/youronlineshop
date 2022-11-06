@@ -46,13 +46,13 @@ responseAuth.set('report', (parameters)=>makeReport(parameters.repData));
 
 //<-- User responseAuth
 
-responseAuth.set('logout', User.logout);
-
 responseAuth.set('login', (parameters)=>
   userLogin(parameters.user_name, parameters.user_password)
   .then(result =>{
     if (result instanceof Error) return {logError: true, code: result.message};
-    return packing(result);
+    const user=result;
+    user.dbUpdateAccess();
+    return packing(user);
   })
 );
 
@@ -63,13 +63,10 @@ responseAuth.set('update user pwd', async (parameters, user)=>{
 
 responseAuth.set('update my user pwd', (parameters, user)=>user.dbUpdateMyPwd(parameters.user_password));
 
-responseAuth.set('create user', (parameters)=>
-  User.create(parameters.user_name, parameters.user_password, parameters.user_email)
-  .then(result=>{
-    if (result instanceof Error) return {logError: true, code: result.message};
-    return packing(result);
-  })
-);
+responseAuth.set('create user', (parameters)=>User.create(parameters.user_name, parameters.user_password).then(result=>{
+  if (result instanceof Error) return {logError: true, code: result.message};
+  return packing(result);
+}));
 
 responseAuth.set('send mail', (parameters, user)=>user.sendMail(parameters.to, parameters.subject, parameters.message, parameters.from));
 
@@ -120,10 +117,7 @@ responseAuth.set('get my tree up', async (parameters, user)=>{
   .then(result=>{
     if (!result) return result;
     if (Array.isArray(result)) {
-      for (let i=0; i<result.length;  i++) {
-        result[i]=packing(result[i]);
-      }
-      return result;
+      return result.map(result=>packing(result));
     }
     return packing(result);
   });

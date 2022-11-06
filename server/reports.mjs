@@ -8,8 +8,6 @@ requestsRep.set('get tables', (result)=>makeReport("get tables: " + result.lengt
 
 requestsRep.set('init database', (result)=>console.log(result));
 
-requestsRep.set('logout', ()=>makeReport("log out"));
-
 requestsRep.set('login', (result)=>{
   if (result?.logError) makeReport("log in: " + result.code);
   else
@@ -20,7 +18,7 @@ requestsRep.set('update user pwd', (result)=>console.log(result));
 
 requestsRep.set('update my user pwd', (result)=>console.log(result));
 
-requestsRep.set('create user', ()=>console.log("user created"));
+requestsRep.set('create user', ()=>makeReport("user created"));
 
 requestsRep.set('send mail', (result)=>console.log(result));
 

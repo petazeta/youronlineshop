@@ -190,6 +190,7 @@ thisNode -> text node "logform"
 </form>
 <script>
   const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+  const {loginDashboard} = await import('./' + CLIENT_MODULES_PATH + 'user.js');
   thisElement.addEventListener('submit', async function(event) {
     event.preventDefault();
     const {checkValidData} = await import('./' + SHARED_MODULES_PATH + 'datainput.mjs')
@@ -216,11 +217,10 @@ thisNode -> text node "logform"
       else {
         if (localStorage.getItem("user_name")) localStorage.removeItem("user_name");
       }
-      const {loginDashboard} = await import('./' + CLIENT_MODULES_PATH + 'user.js')
       loginDashboard(thisNode);
     })
     .catch(error => { //error is Error object
-      const errorMessage=thisElement.elements[error.message] && thisElement.elements[error.message].value || error.message;
+      const errorMessage=thisElement.elements[error.message]?.value || error.message;
       new AlertMessage(errorMessage, 3000).showAlert();
     });
   });

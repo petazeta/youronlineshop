@@ -12,3 +12,393 @@
 2022-10-23 17:48:38 log out
 2022-10-23 17:48:46 log in: pepe
 2022-10-23 17:48:46 2vbkfk : checkout
+2022-10-23 18:04:54 309jju : cart item operation
+2022-10-23 18:04:58 log in: productsadmin
+2022-10-23 18:04:59 log out
+2022-10-23 18:05:07 log in: pepe
+2022-10-23 18:05:07 309jju : checkout
+2022-10-23 19:12:57 log in: pepe
+2022-10-23 19:14:44 log in: pepe
+2022-10-23 19:15:54 log in: pepe
+2022-10-23 19:18:07 log in: pepe
+2022-10-24 13:28:09 Server start
+2022-10-24 13:28:19 52rs02 : cart item operation
+2022-10-24 13:28:20 52rs02 : cart item operation
+2022-10-24 13:28:39 log in: pepe
+2022-10-24 13:28:39 52rs02 : checkout
+2022-10-24 13:29:09 52rs02 : checkout
+2022-10-24 13:29:20 52rs02 : checkout
+2022-10-24 13:38:32 log in: productsadmin
+2022-10-24 13:38:41 log out
+2022-10-24 13:38:43 53ehmk : cart item operation
+2022-10-24 13:38:44 53ehmk : cart item operation
+2022-10-24 13:38:53 log in: pepe
+2022-10-24 13:38:53 53ehmk : checkout
+2022-10-24 13:47:16 53uksr : cart item operation
+2022-10-24 13:47:24 log in: pepe
+2022-10-24 13:47:24 53uksr : checkout
+2022-10-24 13:48:24 540mj5 : cart item operation
+2022-10-24 13:48:26 540mj5 : cart item operation
+2022-10-24 13:48:33 log in: pepe
+2022-10-24 13:48:34 540mj5 : checkout
+2022-10-24 13:51:19 5462pc : cart item operation
+2022-10-24 13:51:19 5462pc : cart item operation
+2022-10-24 13:51:27 log in: pepe
+2022-10-24 13:51:27 5462pc : checkout
+2022-10-24 19:28:35 Server start
+2022-10-24 19:28:48 5nfrlq : cart item operation
+2022-10-24 19:28:58 log in: pepe
+2022-10-24 19:28:58 5nfrlq : checkout
+2022-10-25 12:26:00 Server start
+2022-10-25 12:26:28 7hmpj2 : cart item operation
+2022-10-25 12:26:28 7hmpj2 : cart item operation
+2022-10-25 12:26:41 log in: pepe
+2022-10-25 12:26:42 7hmpj2 : checkout
+2022-10-25 12:38:16 7id1a8 : cart item operation
+2022-10-25 12:38:17 7id1a8 : cart item operation
+2022-10-25 12:38:20 log in: productsadmin
+2022-10-25 12:38:23 7id1a8 : cart item operation
+2022-10-25 12:38:23 7id1a8 : cart item operation
+2022-10-25 12:38:25 7id1a8 : checkout
+2022-10-25 12:38:42 log out
+2022-10-25 12:38:48 log in: pepe
+2022-10-25 12:38:48 7id1a8 : checkout
+2022-10-25 12:41:27 7iir90 : cart item operation
+2022-10-25 12:41:27 7iir90 : cart item operation
+2022-10-25 12:41:44 log in: pepe
+2022-10-25 12:41:44 7iir90 : checkout
+2022-10-25 12:50:44 7j3rj9 : cart item operation
+2022-10-25 12:50:45 7j3rj9 : cart item operation
+2022-10-25 12:50:54 log in: pepe
+2022-10-25 12:50:55 7j3rj9 : checkout
+2022-10-25 12:51:21 7j3rj9 : cart item operation
+2022-10-25 12:51:22 7j3rj9 : checkout
+2022-10-25 12:52:00 7j3rj9 : cart item operation
+2022-10-25 12:52:04 7j6aeo : cart item operation
+2022-10-25 12:52:04 7j6aeo : cart item operation
+2022-10-25 12:52:13 log in: pepe
+2022-10-25 12:52:13 7j6aeo : checkout
+2022-10-25 12:54:18 7jacq2 : cart item operation
+2022-10-25 12:54:19 7jacq2 : cart item operation
+2022-10-25 12:54:25 log in: pepe
+2022-10-25 12:54:25 7jacq2 : checkout
+2022-10-25 12:54:48 7jacq2 : cart item operation
+2022-10-25 12:54:50 7jacq2 : checkout
+2022-10-25 12:56:04 7jdkac : cart item operation
+2022-10-25 12:56:13 log in: pepe
+2022-10-25 12:56:13 7jdkac : checkout
+2022-10-25 15:25:48 Server start
+2022-10-25 15:25:53 7s00r3 : Error: get my tree. SERVER Message: this.addChild is not a function
+    at http://localhost:3000/client/nodes.js:44:15
+    at async Object.loadRequest (http://localhost:3000/client/nodes.js:75:19)
+    at async selectMyLanguage (http://localhost:3000/client/languages.js:16:38)
+    at async http://localhost:3000/client/main.js:24:9
+2022-10-25 15:30:22 7s87l1 : Error: get my tree. SERVER Message: this.addChild is not a function
+    at http://localhost:3000/client/nodes.js:44:15
+    at async Object.loadRequest (http://localhost:3000/client/nodes.js:75:19)
+    at async selectMyLanguage (http://localhost:3000/client/languages.js:16:38)
+    at async http://localhost:3000/client/main.js:24:9
+2022-10-25 15:30:30 Server start
+2022-10-25 15:32:38 7scd60 : TypeError: Cannot read properties of undefined (reading 'length')
+    at selectMyLanguage (http://localhost:3000/client/languages.js:16:27)
+    at http://localhost:3000/client/main.js:24:15
+2022-10-25 18:32:14 Server start
+2022-10-25 18:32:28 86ldhg : cart item operation
+2022-10-25 18:32:32 86ldhg : cart item operation
+2022-10-25 18:32:35 log in: productsadmin
+2022-10-26 10:18:12 Server start
+2022-10-26 10:54:39 Server start
+2022-10-26 10:54:53 9us6jg : cart item operation
+2022-10-26 11:06:10 Server start
+2022-10-26 11:06:20 9vhce1 : cart item operation
+2022-10-26 12:03:03 Server start
+2022-10-26 12:03:06 a2pebi : TypeError: Class constructors cannot be invoked without 'new'
+    at Object.loadAsc (http://localhost:3000/shared/linkermixin.mjs:307:41)
+    at Object.load (http://localhost:3000/shared/linksmixin.mjs:28:12)
+    at http://localhost:3000/client/request.js:47:34
+    at Object.loadRequest (http://localhost:3000/client/nodes.js:78:5)
+    at async selectMyLanguage (http://localhost:3000/client/languages.js:16:38)
+    at async http://localhost:3000/client/main.js:24:9
+2022-10-26 12:03:33 Server start
+2022-10-26 12:03:39 a2qat6 : cart item operation
+2022-10-26 12:06:53 Server start
+2022-10-26 12:07:00 a30g2j : cart item operation
+2022-10-26 12:24:26 Server start
+2022-10-26 12:40:16 Server start
+2022-10-27 10:40:28 Server start
+2022-10-27 10:43:03 log in: productsadmin
+2022-10-27 10:57:52 log in: productsadmin
+2022-10-27 18:38:29 Server start
+2022-10-27 19:26:23 Server start
+2022-10-28 06:59:33 Server start
+2022-10-28 07:12:30 Server start
+2022-10-28 07:26:41 Server start
+2022-10-28 07:26:46 enoski : Error: get my tree. SERVER Message: Parameter "obj" to Document() must be an object, got Languages
+    at http://localhost:3000/client/nodes.js:42:15
+    at async Object.loadRequest (http://localhost:3000/client/nodes.js:73:19)
+    at async selectMyLanguage (http://localhost:3000/client/languages.js:16:38)
+    at async http://localhost:3000/client/main.js:24:9
+2022-10-28 07:28:58 Server start
+2022-10-28 08:14:06 Server start
+2022-10-28 08:30:27 Server start
+2022-10-28 08:36:07 Server start
+2022-10-28 08:37:29 Server start
+2022-10-28 09:12:45 Server start
+2022-10-28 09:12:49 log in: productsadmin
+2022-10-28 09:14:56 Server start
+2022-10-28 09:19:03 Server start
+2022-10-28 09:53:11 Server start
+2022-10-28 09:56:23 Server start
+2022-10-28 09:57:17 Server start
+2022-10-28 09:58:17 Server start
+2022-10-28 09:59:43 Server start
+2022-10-28 10:01:29 Server start
+2022-10-29 09:22:52 Server start
+2022-10-29 09:23:12 log in: productsadmin
+2022-10-29 09:23:31 log out
+2022-10-29 11:34:19 log in: systemadmin
+2022-10-31 11:45:46 Server start
+2022-10-31 11:46:04 Server start
+2022-10-31 11:46:13 log in: systemadmin
+2022-10-31 11:46:17 log out
+2022-10-31 11:46:31 log in: productsadmin
+2022-10-31 11:47:20 log out
+2022-10-31 11:47:30 log in: systemadmin
+2022-10-31 11:50:23 log in: systemadmin
+2022-10-31 11:51:22 log in: systemadmin
+2022-10-31 11:52:31 log in: systemadmin
+2022-10-31 11:53:11 log in: systemadmin
+2022-10-31 11:54:01 log in: systemadmin
+2022-10-31 11:59:33 log in: systemadmin
+2022-10-31 12:00:37 log in: systemadmin
+2022-10-31 12:02:04 log in: systemadmin
+2022-10-31 12:11:35 log in: systemadmin
+2022-10-31 12:16:32 log out
+2022-10-31 12:16:39 log in: productsadmin
+2022-10-31 12:18:01 log out
+2022-10-31 12:19:12 log in: productsadmin
+2022-10-31 12:19:21 log out
+2022-10-31 12:19:38 log in: productsadmin
+2022-10-31 12:19:46 log out
+2022-10-31 12:19:52 log in: productsadmin
+2022-11-01 08:40:26 Server start
+2022-11-01 08:44:01 log in: productsadmin
+2022-11-01 08:44:04 log out
+2022-11-01 08:45:00 log in: productsadmin
+2022-11-01 08:45:02 log out
+2022-11-01 08:45:06 log in: productsadmin
+2022-11-01 08:45:08 log out
+2022-11-01 09:26:08 log in: productsadmin
+2022-11-01 09:26:11 log out
+2022-11-01 10:39:37 Server start
+2022-11-01 10:40:03 log in: pwdError
+2022-11-01 10:40:09 log in: systemadmin
+2022-11-03 10:23:34 Server start
+2022-11-03 10:23:49 log in: productsadmin
+2022-11-03 10:23:53 log out
+2022-11-03 10:26:05 Server start
+2022-11-03 10:28:08 Server start
+2022-11-03 10:34:08 Server start
+2022-11-03 10:34:14 log in: productsadmin
+2022-11-03 10:34:50 log out
+2022-11-03 10:34:54 log in: productsadmin
+2022-11-03 10:34:58 log out
+2022-11-03 10:36:37 Server start
+2022-11-03 10:38:04 Server start
+2022-11-03 10:39:54 Server start
+2022-11-03 10:40:49 Server start
+2022-11-03 10:41:08 uh93gb : Error: get my tree. SERVER Message: result.map is not a function
+    at http://localhost:3000/client/nodes.js:42:15
+    at async Object.loadRequest (http://localhost:3000/client/nodes.js:73:19)
+    at async selectMyLanguage (http://localhost:3000/client/languages.js:16:38)
+    at async http://localhost:3000/client/main.js:24:9
+2022-11-03 10:42:24 Server start
+2022-11-03 10:42:38 user created
+2022-11-03 23:58:41 Server start
+2022-11-04 00:07:18 Server start
+2022-11-04 00:07:39 log in: pepe
+2022-11-04 00:07:43 vvda9i : cart item operation
+2022-11-04 00:07:45 vvda9i : checkout
+2022-11-04 00:07:54 vvda9i : logout
+2022-11-04 00:07:57 log in: productsadmin
+2022-11-04 00:08:47 vvda9i : logout
+2022-11-04 00:08:57 log in: ordersadmin
+2022-11-04 00:16:00 vvda9i : logout
+2022-11-04 00:16:16 log in: ordersadmin
+2022-11-04 00:23:55 log in: ordersadmin
+2022-11-04 07:46:19 Server start
+2022-11-04 07:49:20 0pr39q : cart item operation
+2022-11-04 07:49:30 log in: pepe
+2022-11-04 07:49:30 0pr39q : checkout
+2022-11-04 07:54:11 0pr39q : logout
+2022-11-04 07:55:05 0q5ccc : cart item operation
+2022-11-04 07:55:13 log in: pepe
+2022-11-04 07:55:14 0q5ccc : checkout
+2022-11-04 07:58:03 log in: pepe
+2022-11-04 08:02:01 log in: ordersadmin
+2022-11-04 08:04:14 log in: ordersadmin
+2022-11-04 08:05:51 log in: ordersadmin
+2022-11-04 08:06:06 log in: ordersadmin
+2022-11-04 08:07:05 log in: ordersadmin
+2022-11-04 08:07:16 log in: ordersadmin
+2022-11-04 08:14:14 log in: ordersadmin
+2022-11-04 08:14:21 log in: ordersadmin
+2022-11-04 08:14:32 log in: ordersadmin
+2022-11-04 08:48:52 log in: ordersadmin
+2022-11-04 08:49:07 log in: ordersadmin
+2022-11-04 08:53:41 log in: ordersadmin
+2022-11-04 08:54:41 log in: ordersadmin
+2022-11-04 08:55:09 log in: ordersadmin
+2022-11-04 08:55:42 log in: ordersadmin
+2022-11-04 08:57:38 log in: ordersadmin
+2022-11-04 09:03:48 log in: ordersadmin
+2022-11-04 09:05:49 log in: ordersadmin
+2022-11-04 10:49:30 0u79kc : logout
+2022-11-04 10:49:45 log in: ordersadmin
+2022-11-04 10:49:46 1458r0 : logout
+2022-11-04 10:49:52 log in: webadmin
+2022-11-04 10:59:36 1458r0 : logout
+2022-11-04 10:59:43 log in: systemadmin
+2022-11-04 16:48:14 Server start
+2022-11-04 16:50:28 log in: webadmin
+2022-11-04 16:50:33 1omgn2 : logout
+2022-11-04 16:50:42 log in: systemadmin
+2022-11-04 17:18:56 log in: systemadmin
+2022-11-04 17:25:36 log in: systemadmin
+2022-11-04 17:28:11 log in: systemadmin
+2022-11-04 17:29:08 log in: systemadmin
+2022-11-04 17:30:25 log in: webadmin
+2022-11-04 17:30:27 1r36e7 : logout
+2022-11-04 17:33:17 log in: systemadmin
+2022-11-04 17:41:27 log in: systemadmin
+2022-11-04 17:50:05 log in: systemadmin
+2022-11-04 18:12:07 log in: systemadmin
+2022-11-04 18:45:57 log in: systemadmin
+2022-11-04 18:59:01 log in: systemadmin
+2022-11-04 18:59:40 log in: systemadmin
+2022-11-05 09:53:45 Server start
+2022-11-05 09:53:49 log in: systemadmin
+2022-11-05 09:56:05 3jbsrn : cart item operation
+2022-11-05 09:56:07 3jbsrn : checkout
+2022-11-05 10:55:24 log in: systemadmin
+2022-11-05 10:56:05 log in: systemadmin
+2022-11-05 11:01:27 log in: systemadmin
+2022-11-05 11:01:32 log in: systemadmin
+2022-11-05 11:03:46 log in: systemadmin
+2022-11-05 11:04:05 log in: systemadmin
+2022-11-05 11:04:37 log in: systemadmin
+2022-11-05 13:10:10 Server start
+2022-11-05 13:10:15 log in: systemadmin
+2022-11-05 17:10:13 Server start
+2022-11-05 17:10:28 log in: systemadmin
+2022-11-05 17:10:32 4cbdjt : logout
+2022-11-05 17:17:34 log in: systemadmin
+2022-11-05 17:18:10 log in: systemadmin
+2022-11-05 19:13:08 Server start
+2022-11-05 19:13:23 log in: systemadmin
+2022-11-05 19:29:54 Server start
+2022-11-05 19:30:22 log in: systemadmin
+2022-11-05 19:37:11 Server start
+2022-11-05 19:37:23 log in: productsadmin
+2022-11-05 19:38:40 log in: productsadmin
+2022-11-05 19:39:11 4kqo07 : logout
+2022-11-05 19:39:46 Server start
+2022-11-05 19:40:01 log in: systemadmin
+2022-11-05 19:41:17 4kqo07 : logout
+2022-11-05 19:41:31 Server start
+2022-11-05 19:41:36 log in: productsadmin
+2022-11-05 19:41:54 4kqo07 : logout
+2022-11-05 19:43:15 Server start
+2022-11-05 19:43:25 log in: productsadmin
+2022-11-05 19:43:48 4l385l : logout
+2022-11-05 19:44:10 log in: systemadmin
+2022-11-05 19:45:04 4l47t2 : logout
+2022-11-05 19:45:46 Server start
+2022-11-05 19:45:51 log in: systemadmin
+2022-11-05 19:45:55 4l7sca : logout
+2022-11-05 19:46:06 log in: systemadmin
+2022-11-05 19:50:36 log in: systemadmin
+2022-11-05 19:59:19 log in: systemadmin
+2022-11-05 19:59:23 4m0hbc : logout
+2022-11-05 20:00:07 Server start
+2022-11-05 20:00:20 log in: systemadmin
+2022-11-05 20:01:37 log in: systemadmin
+2022-11-05 20:01:46 Server start
+2022-11-05 20:01:50 4m4no0 : logout
+2022-11-05 20:01:59 log in: systemadmin
+2022-11-05 20:03:09 Server start
+2022-11-05 20:03:19 log in: systemadmin
+2022-11-05 20:03:49 Server start
+2022-11-05 20:06:10 Server start
+2022-11-05 20:07:09 Server start
+2022-11-05 20:07:48 Server start
+2022-11-05 20:08:22 4m7ma5 : logout
+2022-11-05 20:08:37 Server start
+2022-11-05 20:09:42 log in: systemadmin
+2022-11-05 20:38:40 Server start
+2022-11-05 20:39:52 log in: systemadmin
+2022-11-05 21:02:52 Server start
+2022-11-05 21:03:08 log in: systemadmin
+2022-11-05 21:19:48 log in: systemadmin
+2022-11-05 21:19:51 4qjqsh : logout
+2022-11-05 21:20:02 log in: systemadmin
+2022-11-05 21:20:43 Server start
+2022-11-05 21:24:41 log in: systemadmin
+2022-11-06 08:20:21 Server start
+2022-11-06 08:20:33 log in: systemadmin
+2022-11-06 08:20:37 60dme5 : logout
+2022-11-06 08:20:50 log in: systemadmin
+2022-11-06 08:21:26 60e04u : cart item operation
+2022-11-06 08:24:05 log in: systemadmin
+2022-11-06 08:24:51 60jtel : logout
+2022-11-06 08:24:57 log in: webadmin
+2022-11-06 10:05:01 log in: webadmin
+2022-11-06 19:14:45 Server start
+2022-11-06 19:15:58 Server start
+2022-11-06 19:25:12 76erc2 : TypeError: Cannot read properties of undefined (reading 'children')
+    at selectMyLanguage (http://localhost:3000/client/languages.js:28:18)
+    at http://localhost:3000/client/main.js:26:15
+2022-11-06 19:26:33 76hau5 : TypeError: Cannot read properties of undefined (reading 'children')
+    at selectMyLanguage (http://localhost:3000/client/languages.js:30:33)
+    at http://localhost:3000/client/main.js:26:15
+2022-11-06 19:27:32 76j49l : ReferenceError: linker is not defined
+    at loadRoot (http://localhost:3000/client/languages.js:8:24)
+    at loadLanguages (http://localhost:3000/client/languages.js:16:29)
+    at selectMyLanguage (http://localhost:3000/client/languages.js:28:43)
+    at http://localhost:3000/client/main.js:26:15
+2022-11-06 19:27:52 76jobf : Error: Database Content Error
+    at loadRoot (http://localhost:3000/client/languages.js:11:29)
+    at async loadLanguages (http://localhost:3000/client/languages.js:16:23)
+    at async selectMyLanguage (http://localhost:3000/client/languages.js:28:37)
+    at async http://localhost:3000/client/main.js:26:9
+2022-11-06 19:31:01 76pg7g : Error: Database Content Error
+    at loadLanguages (http://localhost:3000/client/languages.js:15:29)
+    at async selectMyLanguage (http://localhost:3000/client/languages.js:26:37)
+    at async http://localhost:3000/client/main.js:26:3
+2022-11-06 19:32:11 76rl7d : TypeError: Cannot read properties of undefined (reading 'children')
+    at selectMyLanguage (http://localhost:3000/client/languages.js:28:33)
+    at async http://localhost:3000/client/main.js:26:3
+2022-11-06 19:33:30 76u20d : Error: Database Content Error
+    at loadRoot (http://localhost:3000/client/sitecontent.js:16:24)
+    at async loadText (http://localhost:3000/client/sitecontent.js:22:5)
+    at async http://localhost:3000/client/main.js:31:19
+2022-11-06 19:34:19 76vi0g : Error: Database Content Error
+    at loadRoot (http://localhost:3000/client/sitecontent.js:16:24)
+    at async loadText (http://localhost:3000/client/sitecontent.js:22:5)
+    at async http://localhost:3000/client/main.js:31:19
+2022-11-06 19:41:50 Server start
+2022-11-06 19:44:26 Server start
+2022-11-06 19:46:09 Server start
+2022-11-06 19:48:10 Server start
+2022-11-06 19:49:53 Server start
+2022-11-06 19:54:52 Server start
+2022-11-06 20:05:47 log in: systemadmin
+2022-11-06 20:05:51 78p37v : logout
+2022-11-06 20:12:56 log in: systemadmin
+2022-11-06 20:13:30 log in: systemadmin
+2022-11-06 20:31:59 log in: systemadmin
+2022-11-06 20:39:27 log in: systemadmin
+2022-11-06 20:54:37 log in: systemadmin
+2022-11-06 21:07:14 log in: systemadmin
+2022-11-06 21:07:26 7c9b9c : logout
+2022-11-06 21:07:29 log in: webadmin

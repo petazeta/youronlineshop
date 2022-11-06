@@ -223,7 +223,7 @@
       });
     })
     .catch(error=>{
-      const errorMessage=thisElement.elements[error.message] && thisElement.elements[error.message].value || error.message;
+      const errorMessage=thisElement.elements[error.message]?.value || error.message;
       new AlertMessage(errorMessage, 3000).showAlert();
     });
   });

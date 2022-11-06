@@ -1,5 +1,6 @@
 <!--
   newStatus
+  viewParent: the parent rel for setChildrenView
 -->
 <button type="button" class="buttons">
   <div class="checkimage"></div>
@@ -14,13 +15,21 @@
   </script>
 </button>
 <script type="text/javascript">
+  const {getDomElementFromChild} = await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+  const myParent=thisParams.viewParent? thisParams.viewParent: thisNode.parent;
   thisElement.onclick=function() {
     thisNode.request("edit my props", {values:{status: thisParams.newStatus}})
     .then(res => {
-      thisNode.parent.removeChild(thisNode);
-      //for no children add a eventlistener to setChildrenView event
-      if (thisNode.parent.childContainer) thisNode.parent.setChildrenView();
-      thisNode.parent.dispatchEvent("change order status", [thisNode]);
+      const element=getDomElementFromChild(thisNode, myParent);
+      
+      if (myParent.childContainer) {
+        if (element) {
+          element.parentElement.removeChild(element);
+        }
+        else myParent.setChildrenView();
+      }
+      myParent.removeChild(thisNode);
+      myParent.dispatchEvent("change order status", [thisNode]);
       thisNode.dispatchEvent("change order status")
     });
     return false;

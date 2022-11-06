@@ -35,7 +35,7 @@ Server is composed from these main services:
 
 And also these minor services:
 
-- Authenticate service
+- [Authenticate service](userlogin.md)
 - [Cache service](cache.md)
 - [Reports service](reporting.md)
 - Services Igniting service
@@ -51,7 +51,7 @@ Client main services are:
 - [Start service](clientstart.md)
 - [Request service](reqres.md)
 - [Templates service](layout.md)
-- [User and login service](userlogin.md)
+- [Login service](userlogin.md)
 - [Languages service](languages.md)
 - [Navigation facility](navigation.md)
 - [Edition](edition.md)
@@ -90,3 +90,4 @@ Template files define the screen views and are included in themes. A theme is a 
 
 Main facilities implementations that you can find in templates are:
 - [Checkout](checkout.md)
+- [User area](userarea.md)

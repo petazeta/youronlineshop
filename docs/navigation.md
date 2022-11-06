@@ -59,8 +59,6 @@ thisNode.setReaction("history event", (params)=>{
 
 For the browser url search (initial) params we will use a similar approach. We just need to check at the clickable elements in layous if the element path name matchs the one at the search params and then produce the action.
 
-Comportamiento indeseado en subcategorias, carga dos veces la subcategoría seleccionada...
-
 # Search params and history implementation
 
 This is the idea, and the implementation module is at navhistory.js with these functions:
@@ -68,7 +66,9 @@ This is the idea, and the implementation module is at navhistory.js with these f
 - setHistoryState(myNode, url, butAction); // For managing popstate event. It is called for the clickable nodes that has effect at the history state at the layout loading
 - pushHistoryState(url); // Grabing the history at the browser when the user clicks a button element that take effect at the history state
 
-Aqui falta explicar como se hace lo de browser search params al principio
+# Search params and history status cases
+
+Categiries/items, menus/docs and login
 
 # Active buttons
 

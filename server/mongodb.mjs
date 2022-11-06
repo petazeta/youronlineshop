@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 const {Schema, SchemaTypes} = mongoose;
 
 function setDbSchema(dbLink) {
+
+  if (!dbLink) dbLink=mongoose;
   
   if (Object.entries(dbLink.models).length > 0) return dbLink.models;
   
@@ -20,7 +22,8 @@ function setDbSchema(dbLink) {
       username: String,
       pwd: String,
       status: Number,
-      access: Number,
+      access: Date,
+      creationDate: Date,
       parentUsersTypes: {
         type: SchemaTypes.ObjectId,
         ref: "UsersTypes",
@@ -61,6 +64,10 @@ function setDbSchema(dbLink) {
   dbLink.model("Languages",
     new Schema({
       code: String,
+      parentLanguages: {
+        type: SchemaTypes.ObjectId,
+        ref: "Languages",
+      },
       positionLanguages: {
         type: Number,
         positionRef: "Languages",
@@ -264,8 +271,8 @@ function setDbSchema(dbLink) {
     
   dbLink.model("Orders",
     new Schema({
-      creationdate: Date,
-      modificationdate: Date,
+      creationDate: Date,
+      modificationDate: Date,
       status: Number,
       parentUsers: {
         type: SchemaTypes.ObjectId,

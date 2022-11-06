@@ -1,3 +1,3 @@
 export default {
-  url: "mongodb://admin:password@localhost/testdb?authSource=admin"
+  url: "mongodb://admin:password@localhost/newdb?authSource=admin"
 };

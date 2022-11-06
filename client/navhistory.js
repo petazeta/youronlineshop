@@ -53,7 +53,7 @@ function initialNavUrlProcedure(url, butAction){
   }
 }
 
-export function dispatchPopStateEvent(url, grab=false){
+export function dispatchPopStateEvent(url, grab=true){
   dispatchEvent(new PopStateEvent('popstate', {state: {url: url},  url: url }));
   if (grab) pushHistoryState(url);
 }

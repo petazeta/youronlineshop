@@ -88,7 +88,7 @@
                 .then(() => thisElement.selectedIndex=languages.children.indexOf(getCurrentLanguage()));
                 const {AlertMessage}=await import(pathJoin('./', CLIENT_MODULES_PATH, 'alert.js'));
                 thisElement.onchange=async function(){
-                  setCurrentLanguage(thisElement.selectedIndex);
+                  setCurrentLanguage(languages.children[thisElement.selectedIndex]);
                   new AlertMessage(thisNode.getNextChild("langbox").getNextChild("changelangwait").getRelationship("siteelementsdata").getChild().props.value, 3000).showAlert();
                 };
               </script>

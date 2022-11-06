@@ -5,7 +5,7 @@ import {replaceData} from './utils.js';
 
 export let pageText;
 const pageMotherClass=observerMixin(Linker);
-const pageMother=new pageMotherClass("TABLE_PAGEELEMENTS", "TABLE_PAGEELEMENTS");
+const pageMother=new pageMotherClass("TABLE_PAGEELEMENTS");
 languages.attachObserver("language change", pageMother);
 pageMother.setReaction("language change", async (params)=>{
   console.log(`pageMother said "change language" `);
@@ -33,7 +33,7 @@ async function loadText() {
     await loadRoot();
     return await pageText.loadRequest("get my tree", {extraParents: getCurrentLanguage().getRelationship("pageelementsdata"), deepLevel: 4});
   }
-  //We load menus and its relationships. We want to load menus elementsdata children but not elements children
+  //We load menus and its relationships. We want to load menus elementsdata children but not elements children to keep the childContainers vars etc..
   const newPageText=pageText.clone();
   await newPageText.loadRequest("get my tree", {extraParents: getCurrentLanguage().getRelationship("pageelementsdata"), deepLevel: 4});
 

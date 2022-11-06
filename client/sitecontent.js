@@ -5,12 +5,7 @@ import {replaceData} from './utils.js';
 
 let siteText;
 const SiteTextMumClass=observableMixin(observerMixin(Linker));
-const siteTextMum = new SiteTextMumClass("TABLE_SITEELEMENTS", "TABLE_SITEELEMENTS");
-languages.attachObserver(siteTextMum, "language change");
-siteTextMum.setReaction("language change", async (params)=>{
-  await loadText(); // Refresh site text data
-  siteTextMum.notifyObservers("language change"); // some elements on the tree will be refreshed
-});
+const siteTextMum = new SiteTextMumClass("TABLE_SITEELEMENTS");
 
 
 async function loadRoot() {
@@ -33,6 +28,13 @@ async function loadText() {
   await newSiteText.loadRequest("get my tree", {extraParents: getCurrentLanguage().getRelationship("siteelementsdata")});
 
   replaceData(newSiteText, siteText, 'siteelements', 'siteelementsdata');
+
+  languages.attachObserver("language change", siteTextMum);
+  siteTextMum.setReaction("language change", async (params)=>{
+    await loadText(); // Refresh site text data
+    siteTextMum.notifyObservers("language change"); // some elements on the tree will be refreshed
+  });
+
   return siteText;
 }
 

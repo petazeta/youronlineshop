@@ -30,7 +30,7 @@ async function addNewNode(currentNode, noLangs) {
     const relLangCandidates=currentNode.arrayFromTree();
     const relLangs=relLangCandidates.filter(relLang=>{
       if (!relLang.detectLinker()) return false;
-      const findLangkey=relLang.sysChildTableKeysInfo.find(syskey=>syskey.parentTableName==languages.props.parentTableName && syskey.type=='foreignkey');
+      const findLangKey=relLang.sysChildTableKeysInfo.find(syskey=>syskey.parentTableName==languages.props.parentTableName && syskey.type=='foreignkey');
       if (findLangKey) return true;
     });
     restLanguages.forEach(lang=>relLangs.forEach(relLang=>relLang.request("add my children", {extraParents: lang.getRelationship(relLang.props.name)})));

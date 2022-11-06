@@ -32,9 +32,9 @@ const linkerModelMixin=Sup => class extends Sup {
     return children;
   }
   
-  static async getSysKeyAsync(parent, type='foreignkey', forceLoad=false) {
+  static getSysKeyAsync(parent, type='foreignkey', forceLoad=false) {
     if (forceLoad || !parent.sysChildTableKeysInfo || parent.sysChildTableKeysInfo.length==0) {
-      const pElement=await this.dbGetChildTableKeys(parent.props.childTableName);
+      const pElement=this.dbGetChildTableKeys(parent.props.childTableName);
       pElement.props=parent.props;
       return super.getSysKey(pElement, type);
     }
@@ -70,26 +70,30 @@ const linkerModelMixin=Sup => class extends Sup {
   }
   
   //Get foreignkeys from the rel and from extraParents related to the same child
-  static async getRealForeignKeys(data, extraParents=null, forceLoad=false){
+  static getRealForeignKeys(data, extraParents=null, forceLoad=false){
     const foreigns=[];
-    const myforeign= await this.getSysKeyAsync(data, 'foreignkey', forceLoad);
+    const myforeign= this.getSysKeyAsync(data, 'foreignkey', forceLoad);
     if (myforeign) foreigns.push(myforeign);
     if (!extraParents) return foreigns;
     if (!Array.isArray(extraParents)) extraParents=[extraParents];
     //We filter the extraParents foreign key cause it could be a generic request (load my tree with a language for example.)
     //**********¿?¿?
+    /*
     for (const extraParent of extraParents) {
-      let fkey= await this.getSysKeyAsync(extraParent, 'foreignkey', forceLoad);
+      let fkey= this.getSysKeyAsync(extraParent, 'foreignkey', forceLoad);
       if (data.sysChildTableKeys.includes(fkey)) foreigns.push(fkey);
     }
     return foreigns;
+    */
+    return foreigns.concat(extraParents.map(extraParent=>this.getSysKeyAsync(extraParent, 'foreignkey', forceLoad)).filter(fkey=>data.sysChildTableKeys.includes(fkey)));
+
   }
   
   getMyRealForeignKeys(extraParents=null, forceLoad=false){
     return this.constructor.getRealForeignKeys(this, extraParents, forceLoad);
   }
 
-  static async dbGetChildTableKeys(tableName){
+  static dbGetChildTableKeys(tableName){
     const wrapper={};
     wrapper.childTableKeys=[];
     wrapper.childTableKeysInfo=[];
@@ -97,7 +101,7 @@ const linkerModelMixin=Sup => class extends Sup {
     wrapper.sysChildTableKeysInfo=[];
     
     //lets load systablekeys (referenced columns)
-    let result = await dbGateway.getForeignKeys(dbGateway.tableList.get(tableName));
+    let result = dbGateway.getForeignKeys(dbGateway.tableList.get(tableName));
     for (const keyObj of result) {
       let sysKey={};
       sysKey.type='foreignkey';
@@ -110,7 +114,7 @@ const linkerModelMixin=Sup => class extends Sup {
     }
     
     //Now the childTableKeys and positions skey
-    result = await dbGateway.getTableKeys(dbGateway.tableList.get(tableName));
+    result = dbGateway.getTableKeys(dbGateway.tableList.get(tableName));
     for (const keyObj of result) {
       if (keyObj.Positioning=="yes") {
         let sysKey={};
@@ -143,12 +147,12 @@ const linkerModelMixin=Sup => class extends Sup {
     return this.constructor.dbGetChildTableKeys(this.props.childTableName);
   }
   
-  async dbLoadMyChildTableKeys(){
-    return this.loadChildTableKeys(await this.dbGetMyChildTableKeys());
+  dbLoadMyChildTableKeys(){
+    return this.loadChildTableKeys(this.dbGetMyChildTableKeys());
   }
   
   static async dbGetRoot(data) {
-    const foreignKey= await this.getSysKeyAsync(data);
+    const foreignKey= this.getSysKeyAsync(data);
     const result = await dbGateway.getRoot(foreignKey, data);
 
     return this.readQuery(result)[0] || null;
@@ -168,7 +172,7 @@ const linkerModelMixin=Sup => class extends Sup {
   
   static async dbGetChildren(data, extraParents=null, filterProp={}, limit=[], count=false) {
     const foreigncolumnnames=await this.getRealForeignKeys(data, extraParents);
-    const positioncolumnname=await this.getSysKeyAsync(data, 'sort_order');
+    const positioncolumnname=this.getSysKeyAsync(data, 'sort_order');
     let result = await dbGateway.getChildren(foreigncolumnnames, positioncolumnname, data, extraParents, filterProp, limit, count);
     let children = this.readQuery(result.data);
     children = await this.removeSysProps(children, data);
@@ -384,12 +388,12 @@ const dataModelMixin=Sup => class extends Sup {
   //<-- Load queries
   //It requires parent.props.childTableName
   
-  static async dbGetRelationships(data){
-    const result = await dbGateway.getRelationshipsFromTable(dbGateway.tableList.get(data.parent.props.childTableName));
+  static dbGetRelationships(data){
+    const result = dbGateway.getRelationshipsFromTable(dbGateway.tableList.get(data.parent.props.childTableName));
     const relationships=result.map(rel=>new Linker(dbGateway.tableRef.get(rel.childTableName), dbGateway.tableRef.get(rel.parentTableName), rel.name))
     .sort(rel=>rel.props.childTableName==rel.props.parentTableName ? -1 : +1); //Rorder rels
     for (const rel of relationships) {
-      await rel.dbLoadMyChildTableKeys();
+      rel.dbLoadMyChildTableKeys();
     }
     return relationships;
   }
@@ -398,8 +402,8 @@ const dataModelMixin=Sup => class extends Sup {
     return this.constructor.dbGetRelationships(this);
   }
   
-  async dbLoadMyRelationships() {
-    const relationships=await this.dbGetMyRelationsihps();
+  dbLoadMyRelationships() {
+    const relationships=this.dbGetMyRelationsihps();
     for (const rel of relationships) {
       this.addRelationship(rel);
     }

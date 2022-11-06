@@ -258,6 +258,7 @@
           if (!webuser.isSystemAdmin) thisElement.disabled=true; //Only sysadmin, not webadmin allowed
           const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
           const {exportFunc}=await import('./' + CLIENT_MODULES_PATH + 'export.js');
+          const {exportFormat} = await import('./' + SHARED_MODULES_PATH + 'utils.mjs');
           
           //This facility is for export the customized data of a shop so we could update the shop software and keep the data
           thisElement.addEventListener("click", async function(event){
@@ -284,10 +285,10 @@
                 new AlertMessage(thisElement.form.elements.noselection.value, 2000).showAlert();
                 return;
               }
-              thisElement.form.result.value=JSON.stringify(await expFunc(langdata));
+              thisElement.form.result.value=exportFormat(JSON.stringify(await expFunc(langdata)));
               return;
             }
-            thisElement.form.result.value=JSON.stringify(await expFunc());
+            thisElement.form.result.value=exportFormat(JSON.stringify(await expFunc()));
           });
         </script>
         <input type="hidden" disabled>

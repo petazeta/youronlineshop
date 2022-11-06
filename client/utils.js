@@ -9,7 +9,7 @@ export function replaceData(origin, target, relName, relDataName) {
   }
   innerReplace(origin, target);
   if (!origin.getRelationship(relName)) return;
-  for (let i=0; i<origin.getRelationship(relName).children.length; i++) {
+  for (const i of origin.getRelationship(relName).children.keys()) {
     if (!target.getRelationship(relName) || !target.getRelationship(relName).children[i]) continue;
     replaceData(origin.getRelationship(relName).children[i], target.getRelationship(relName).children[i], relName, relDataName);
   }

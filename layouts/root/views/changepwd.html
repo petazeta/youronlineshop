@@ -144,9 +144,9 @@ thisNode -> ... dashboard - changepwd
   </form>
   <script>
     const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
-    thisElement.onsubmit=async function(event) {
+    const {checkValidData}= await import('./' + SHARED_MODULES_PATH + 'datainput.mjs');
+    thisElement.onsubmit=function(event) {
       event.preventDefault();
-      const {checkValidData}= await import('./' + SHARED_MODULES_PATH + 'datainput.mjs');
       const myCheck=checkValidData({props: {new_password: this.elements.new_password.value}});
       if (myCheck!==true) {
         //Errors in characters

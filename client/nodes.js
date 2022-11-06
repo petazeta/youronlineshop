@@ -87,7 +87,7 @@ const modelMixin=Sup => class extends Sup {
     if (parameters && !Array.isArray(parameters)) {
       parameters=Array(dataNodes.length).fill(parameters);
     }
-    let reducedNodes=[], reducedParams=[], params=[];
+    const reducedNodes=[], reducedParams=[], params=[];
     // we make reduction and save the result also for reduce only option
     for (const index of Object.keys(dataNodes)) {
       if (parameters && parameters[index]) {
@@ -296,8 +296,8 @@ const dataViewMixin=Sup => class extends Sup {
   // It uses config
   writeProp(container, propName, attribute, onEmptyValueText) {
     if (!propName) { //we must guess the propName value if it is not settled
-      const keys= this.parent & this.parent.childTableKeys.length > 0 ? this.parent.childTableKeys : Object.keys(this.props);
-      propName = keys.find(key => key!="id"); //Order minds!!
+      if (this.parent?.childTableKeys.length) propName = this.parent.childTableKeys.filter(key=>!this.parent.sysChildTableKeys.includes(key))[0];
+      else propName = Object.keys(this.props).find(key => key!="id"); //Order minds!!
     }
     let value=this.props[propName];
     if (!value && value!==0) value=''; //Parse undefined

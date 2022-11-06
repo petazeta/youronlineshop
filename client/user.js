@@ -2,18 +2,19 @@ import {Node, Linker} from './nodes.js';
 import sharedUserMixin from './../shared/usermixin.mjs'
 import {authorizationToken, setAuthorization} from './authorization.js'
 import {unpacking} from './../shared/utils.mjs';
+import {setActiveInGroup} from './activelauncher.js';
+import makeReport from './reports.js';
+
 
 const userMixin=Sup => class extends Sup {
-  async logout(){
-    const result=await Node.makeRequest("logout");
-    if (result!==true) throw new Error(result);
+  logout(){
     const lastUserType=this.getUserType(); 
     //remove session and user data
     setAuthorization(); //reset authorization
     this.resetData(); // Webuser resetData method is async so await could be useful but not awaiting is ok
     this.dispatchEvent("log", lastUserType);
     this.notifyObservers("log", {lastType: lastUserType, currentType: this.getUserType()});
-    return this;
+    return makeReport("logout");
   }
   resetData(){
     this.parent=null;
@@ -70,22 +71,15 @@ export async function loginDashboard(textNode){
   document.body.removeChild(document.getElementById("login-card"));
   if (webuser.isAdmin()) {
     return; // No dashboard screen no need to do anything
-    /*
-    const {dispatchPopStateEvent} = await import('./navhistory.js')
-    const url=webuser.perviousLoginHistorySate && webuser.perviousLoginHistorySate.url;
-    if (!url) return;
-    // go history back
-    if (url.includes('category') || url.includes('menu')) dispatchPopStateEvent(url);
-    // webuser.perviousLoginHistorySate=null; // reset previous state
-    return; // No dashboard screen
-    */
   }
   // if cart it is not empty -> redirect to checkout
   const {myCart} = await import('./cart.js')
   if (myCart.getRelationship().children.length>0) {
+    setActiveInGroup('central content', textNode.parent.getChild("checkout"));
     textNode.parent.getChild("checkout").setView(document.getElementById("centralcontent"), 'chktmain');
   }
   else {
+    setActiveInGroup('central content', textNode.parent.getChild("dashboard"));
     textNode.parent.getChild("dashboard").setView(document.getElementById("centralcontent"), "showuserinfo");
   }
 }

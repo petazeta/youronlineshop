@@ -7,7 +7,7 @@ Ordering process starts when user adds a product to the [cart](cart.md). When ca
 
 ## Implementation
 
-Checkout process is some of the largest facilities. The templates that take part on it are: chktmain, ordercart, orderitem, chktuserdata, useraddressview, userdata, chktshipping, shippinglist, shippingtype, chktpayment, paymnentlist, paymenttype, chktend, order, ordershipping and the template for the payment: paypal.
+Checkout process is some of the largest facilities. The templates that take part on it are: chktmain, ordercart, orderitem, chktuserdata, useraddressview, userdata, singleinput, chktshipping, shippinglist, shippingtype, chktpayment, paymnentlist, paymenttype, chktend, order, ordershipping and the template for the payment: paypal.
 
 It starts when launching template chktmain. It shows the order but first it creates the order node inside webuser node. The following code is for creating the order node and populating it with the cart elements.
 ```
@@ -26,7 +26,7 @@ In this order view the order is still not confirmed. Its templates are ordercart
 
 ### User address
 
-The user address checkout process starts at template chktuserdata that in turn launchs useraddressview with parameter externalSave: true. This parameter allows other elements to perform saving address process. There is also the parameter showAddress for including the address data (other way it shows just name and contact data). The useraddressview template launchs in turn userdata. This last one is efectivelly showing the user address. It does it through the node method setPropsView.
+The user address checkout process starts at template chktuserdata that in turn launchs useraddressview with parameter externalSave: true. This parameter allows other elements to perform saving address process. There is also the parameter showAddress for including the address data (other way it shows just name and contact data). The useraddressview template launchs in turn userdata. This last one is efectivelly showing the user address. It does it through the node method setPropsView that in turn uses the template singleinput that could use singlelabel as well.
 
 ### Shipping selection
 

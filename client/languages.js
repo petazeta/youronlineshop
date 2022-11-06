@@ -1,19 +1,30 @@
 import {Linker} from './nodes.js';
-import {observableMixin} from './observermixin.js';
+import {observableMixin, observableMixinConstructorCallable} from './observermixin.js';
 
 //load languages
-const ObsLanguages=observableMixin(Linker);
+let currentLanguage, languages;
 
-const languages=new ObsLanguages("TABLE_LANGUAGES");
+async function loadRoot() {
+  const languagesMum = new Linker("TABLE_LANGUAGES");
+  await languagesMum.loadRequest("get my root");
+  return languagesMum.getChild();
+}
 
-let currentLanguage;
-
-export function loadLanguages() {
-  return languages.loadRequest("get my tree", {deepLevel: 2});
+export async function loadLanguages() {
+  const languagesRoot=await loadRoot();
+  if (!languagesRoot) return;
+  await languagesRoot.loadRequest("get my tree", {deepLevel: 3});
+  languages=languagesRoot.getRelationship();
+  // add observer prototype
+  const MyLanguagesClass = observableMixin(languages.constructor);
+  Object.setPrototypeOf(languages, MyLanguagesClass.prototype); // adding observers characteristics
+  observableMixinConstructorCallable(languages);
+  return languages;
 }
 
 export async function selectMyLanguage(langParent=languages){
-  if (langParent.children.length==0) await loadLanguages();
+  if (!langParent?.children.length) langParent = await loadLanguages();
+  if (!langParent) return;
   //we are taking care when code is null, maybe better avoid this situtation when addin new lang
   const webLangCodes=langParent.children.filter(child => child.props.code).map(child => child.props.code.toUpperCase());
   const winLangCodes=window.navigator.languages.map(langCode=>{
@@ -29,14 +40,12 @@ export async function selectMyLanguage(langParent=languages){
   return currentLanguage=langParent.getChild(); //if no lang found we select first one
 }
 //Set language directly
-export function setCurrentLanguage(langOrIndex) {
-  if (Number.isInteger(langOrIndex)) return currentLanguage = languages.children[langOrIndex];
-  else {
-    if (!languages.children.includes(langOrIndex)) return currentLanguage;
-    if (langOrIndex!=currentLanguage) {
-      languages.notifyObservers("language change", {lastLanguage: currentLanguage});
-      return currentLanguage=langOrIndex;
-    }
+export function setCurrentLanguage(lang) {
+  if (!languages.children.includes(lang)) return currentLanguage;
+  if (lang!=currentLanguage) {
+    const lastLanguage=currentLanguage;
+    currentLanguage=lang;
+    languages.notifyObservers("language change", {lastLanguage: lastLanguage});
   }
 }
 

@@ -124,6 +124,14 @@ export const arrayPacking=datas=>{
   return datas;
 };
 
+export const splitLinesFormat=jsonData=>{
+  return jsonData.replaceAll('],[', '],\n[');
+};
+
+export const exportFormat=jsonData=>{
+  return splitLinesFormat(jsonData).replaceAll('[[[', '\n[[[').replaceAll(']]],', ']]],\n')
+};
+
 // Only when structure is identical
 export function replaceLangData(targetTree, sourceTree){
   const sourceArray=sourceTree.arrayFromTree();
@@ -157,8 +165,6 @@ export function splitLangTree(origTree, totalLang){
 
 export function getChildrenArray(myNode) {
   const relChildrenArray = (rel) => rel.children.reduce((childArray, child)=>childArray = [...childArray, child], []);
-  if (BasicNode.detectLinker(myNode)) {
-    return relChildrenArray(myNode);
-  }
+  if (BasicNode.detectLinker(myNode)) return relChildrenArray(myNode);
   return myNode.relationships.reduce((totalArray, rel)=>totalArray = [...totalArray, ...relChildrenArray(rel)], []);
 }

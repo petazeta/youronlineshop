@@ -12,8 +12,6 @@ export async function impData(newLangs, langrelname, datatree, currentLangs, roo
 
   //Now we add the new language content, just lang content
   if (newLangs.length > 1) {
-    const requestData=[];
-    const requestParams=[];
     for (let i=1; i<newLangs.length; i++) {
       await replaceLangData(newTree, singleTrees[i]).clone().dbInsertMyTreeTableContent("TABLE_LANGUAGES", null, currentLangs[i].getRelationship(langrelname));
     }

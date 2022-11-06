@@ -29,10 +29,13 @@ export const observerMixin=Sup => class extends Sup {
   }
 }
 // observable would be an object whose change would affect others behaviour
+export const observableMixinConstructorCallable = (myObject)=>{
+  myObject._observers=new Map();
+}
 export const observableMixin=Sup => class extends Sup {
   constructor(...args) {
     super(...args);
-    this._observers=new Map();
+    observableMixinConstructorCallable(this);
   }
   attachObserver(notice, observer) {
     if (!this._observers.get(notice)) {

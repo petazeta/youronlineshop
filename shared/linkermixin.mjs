@@ -251,6 +251,7 @@ const nodeMixin=Sup => class extends Sup {
         const targetLinker=new this.constructor.linkerConstructor();
         this.parent.push(targetLinker);
         copyProps(targetLinker, sourceLinker);
+        targetLinker.loadChildTableKeys(sourceLinker);
         targetLinker.addChild(this); // new thing
         targetLinker.loadAsc(sourceLinker, level, thisProps);
       })
@@ -258,6 +259,7 @@ const nodeMixin=Sup => class extends Sup {
     }
     const targetLinker=new this.constructor.linkerConstructor();
     copyProps(targetLinker, source.parent);
+    targetLinker.loadChildTableKeys(source.parent);
     this.setAscendent(targetLinker);
     targetLinker.loadAsc(source.parent, level, thisProps);
   }

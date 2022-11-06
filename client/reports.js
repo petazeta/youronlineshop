@@ -8,7 +8,6 @@ class Reporter extends ReporterBase{
   constructor(...args){
     super(...args);
     this.uniqueId=new Date().getTime().toString(32).substring(3);
-    this.setReports();
   }
   makeReport(msg) {
     return this.constructor.makeRequest("report", {repData: `${this.uniqueId} : ${msg}`});
@@ -32,4 +31,8 @@ const reporter=new Reporter();
 
 export default function makeReport(msg) {
   return reporter.makeReport(msg);
+}
+
+export function setReports() {
+  return reporter.setReports();
 }

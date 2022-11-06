@@ -6,13 +6,15 @@
     </script>
     <div class="boxbody"></div>
     <script> 
-      const {languages, setCurrentLanguage}= await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+      const {languages, setCurrentLanguage, getCurrentLanguage}= await import('./' + CLIENT_MODULES_PATH + 'languages.js');
       const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
       const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.js');
       const {populateLang}=await import('./' + CLIENT_MODULES_PATH + 'langcopy.js');
 
       if (webuser.isSystemAdmin()) {
         const onAdded = async (newLangNode)=>{
+          newLangNode.props.code=getCurrentLanguage().props.code;
+          await newLangNode.request("edit my props", {values:{code: getCurrentLanguage().props.code}});
           //We show the msg for waiting
           const myalert=new AlertMessage(getSiteText().getNextChild("langbox").getNextChild("newlangwait").getRelationship("siteelementsdata").getChild().props.value);
           myalert.showAlert();
@@ -21,9 +23,9 @@
           setCurrentLanguage(languages.getChild({id: newLangNode.props.id}));
 
           languages.setChildrenView(document.querySelector('#langs-select'), document.querySelector('#langs-select-tp'));//Refresh de lang info
-          languages.setChildrenView(document.querySelector('#langbox .boxbody'), "language");  // esto quiza no haria falta:
+          //languages.setChildrenView(document.querySelector('#langbox .boxbody'), "language");  // esto quiza no haria falta:
         }
-        languages.addEventListener('addNewNode', onAdded);
+        languages.addEventListener('addNewNode', onAdded, "addALang");
       }
       languages.setChildrenView(thisElement, "language");
     </script>

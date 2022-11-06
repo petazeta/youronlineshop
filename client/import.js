@@ -14,14 +14,15 @@ function dataToNode(source){
 const importFunc = new Map();
 
 importFunc.set("menus", async (data)=>{
-  const {getPageText} = await import('./pagescontent.js')
-  return await impData(arrayUnpacking(data.languages), "pageelementsdata",  new Linker().load(unpacking(data.tree)), languages.children, getPageText().getRelationship("pageelements"));
+  const {pageText} = await import('./pagescontent.js')
+  await impData(arrayUnpacking(data.languages), "pageelementsdata",  new Linker().load(unpacking(data.tree)), languages.children, pageText.getRelationship("pageelements"));
+  pageText.parent.reactNotice("language change");
 });
 
 importFunc.set("catalog", async (data)=>{
   const {getCategoriesRoot} = await import('./categories.js')
-  return await impData(arrayUnpacking(data.languages), "itemcategoriesdata", new Node().load(unpacking(data.tree)), languages.children, getCategoriesRoot());
-  // falta algo aqui para actualizar (reload catalogs)*****************
+  await impData(arrayUnpacking(data.languages), "itemcategoriesdata", new Linker().load(unpacking(data.tree)), languages.children, getCategoriesRoot().getRelationship("itemcategories"));
+  getCategoriesRoot().parent.reactNotice("language change");
 });
 
 importFunc.set("checkout", async (data)=>{
@@ -96,8 +97,8 @@ importFunc.set("lang", async (importedDataTrees, importedDataLangs)=>{
     await langClone.loadRequest("add myself");
     
     const parentList = await NoderequestMulti("get my tree up", langDataArray, {deepLevel: 2});
+    /*
     const insertDatas=[], parameters=[];
-
     for (let i=0; i<parentList.length; i++) {
       insertDatas[i]=new Node();
       Node.copyProps(insertDatas[i], langDataArray[i]);
@@ -109,6 +110,12 @@ importFunc.set("lang", async (importedDataTrees, importedDataLangs)=>{
         }
       }
     }
+    */
+
+    const insertDatas=langDataArray.map(langData=>Node.copyProps(new Node(), langData));
+    insertDatas.forEach((insertData, i)=>new Linker().load(arrayUnpacking(parentList[i]).find(pNode=>pNode.props.parentTableName!=languages.props.childTableName)).addChild(insertData));
+    const parameters=insertDatas.map(insertData=>new Object({extraParents: langClone.getRelationship(insertData.parent.props.name)}));
+
     return NoderequestMulti("add myself", insertDatas, parameters);
   }
 });
@@ -116,6 +123,7 @@ importFunc.set("lang", async (importedDataTrees, importedDataLangs)=>{
 importFunc.set("users", async (data)=>{
   //First we add the remove tree request
   const usertypemother=await new Linker("TABLE_USERSTYPES").loadRequest("get all my children", {filterProps: {type: "customer"}});
+  // quiza seria interesante una acción delete all my children y así no tener que borrar el pripio tipo customer.
   await usertypemother.getChild().request("delete myself"); //deleting the root will delete every children
   await usertypemother.getChild().loadRequest("add myself");
   const newusersmother=new Linker().load(unpacking(data));
@@ -124,11 +132,14 @@ importFunc.set("users", async (data)=>{
 });
 
 importFunc.set("db", async (data)=>{
-  for (const child of languages.children) {
-    await child.request("delete myself");
+  for (const lang of languages.children) {
+    await lang.request("delete myself");
   }
-  const newLangs=arrayUnpacking(data.languages).map(lang=>new Node().load(lang));
-  await NoderequestMulti("add my tree", newLangs);
+  const newLangsRoot=new Node().load(unpacking(data.languages));
+  const newLangs=newLangsRoot.getRelationship().children;
+  languages.children=[];
+  newLangs.forEach(newLang=>languages.addChild(newLang));
+  await languages.request("add my tree");
   await loadLanguages();
   const usersTypes =  await new Linker("TABLE_USERSTYPES").loadRequest("get all my children");
   const newUsers=new Linker().load(unpacking(data.tree.shift()));
@@ -146,6 +157,8 @@ importFunc.set("db", async (data)=>{
   await impData(newLangs, "itemcategoriesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, getCategoriesRoot());
   await impData(newLangs, "shippingtypesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, new Linker("TABLE_SHIPPINGTYPES"));
   await impData(newLangs, "paymenttypesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, new Linker("TABLE_PAYMENTTYPES"));
+
+  // En lugar de utilizar newLangs para impData, sería mejor utilizar quizás ya los languages ya insertados: loadLanguages() => languages ?
 });
 
 export {importFunc};

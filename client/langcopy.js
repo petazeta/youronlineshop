@@ -14,7 +14,9 @@ async function populateLang(newLangNode) {
   newLangNode.relationships.forEach(rel=>rel.children=[]); //removing children nodes from new lang root, so we just needed in it for loading purposes
 
   // Now the easy way is, for each node, to load the parent - partner (from its structure tree) and then insert the node to the data base through that parent and adding the extraParent for the lang.
-  let parentList = await Node.requestMulti("get my tree up", langDataArray, {deepLevel: 2});
+  const parentList = await Node.requestMulti("get my tree up", langDataArray, {deepLevel: 2});
+
+/*
   const parameters=[],  insertDatas=[];
   parentList.map(value=>arrayUnpacking(value)).forEach((myParent, key)=>{
     const insertData=new Node();
@@ -26,6 +28,13 @@ async function populateLang(newLangNode) {
     }
     insertDatas[key]=insertData;
   });
+  */
+
+  const insertDatas=langDataArray.map(langData=>Node.copyProps(new Node(), langData));
+  insertDatas.forEach(langData=>delete langData.props.id);
+  insertDatas.forEach((insertData, i)=>new Linker().load(arrayUnpacking(parentList[i]).find(pNode=>pNode.props.parentTableName!=languages.props.childTableName)).addChild(insertData));
+  const parameters=insertDatas.map(insertData=>new Object({extraParents: newLangNode.getRelationship(insertData.parent.props.name)}));
+
   await Node.requestMulti("add myself", insertDatas, parameters);
 };
 export {populateLang}

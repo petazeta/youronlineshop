@@ -12,15 +12,14 @@ exportFunc.set("menus", async ()=>{
   const pagesText=await getPageText();
   const textClone=pagesText.clone(null, 0);
   await textClone.loadRequest("get my tree");
-  const myRel=textClone.getRelationship("pageelements");
-  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await myRel.request("add my tree", null, true)};
+  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await textClone.getRelationship("pageelements").request("add my tree", null, true)};
 });
 
 exportFunc.set("catalog", async ()=>{
   const {getCategoriesRoot} = await import('./categories.js');
   const catRoot = await getCategoriesRoot().clone(null, 0).loadRequest("get my tree");
   //data from the structure
-  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await catRoot.request("add my tree", null, true)};
+  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await catRoot.getRelationship("itemcategories").request("add my tree", null, true)};
 });
 
 exportFunc.set("checkout", async ()=>{
@@ -33,14 +32,14 @@ exportFunc.set("lang", async (langdata)=>{
   //data from the structure
   const myNodes=await Node.requestMulti( "get my tree", Array(langdata.children.length).fill(getSiteText().clone(null, 0)), langdata.children.map(result => new Object({extraParents: result.getRelationship("siteelementsdata")})));
   const nodesInsert=[];
-  for (let i=0; i<myNodes.length; i++) {
+  for (const i of myNodes.keys()) {
     // Request result is an array of arrays with the relationships. myNodes[0] => siteelements
     let loadNode=getSiteText().clone(0, 0);
     loadNode.load(unpacking(myNodes[i]));
     //Now we remove titles custom elements
     loadNode.getRelationship().removeChild(loadNode.getNextChild("page_head_title"));
     loadNode.getRelationship().removeChild(loadNode.getNextChild("page_head_subtitle"));
-    nodesInsert.push(await loadNode.request("add my tree", null, true));
+    nodesInsert[i]=await loadNode.request("add my tree", null, true);
   }
   return {"languages": await Node.requestMulti("add my tree", langdata.children, null, true), "trees": nodesInsert};
 });
@@ -48,29 +47,14 @@ exportFunc.set("lang", async (langdata)=>{
 exportFunc.set("users", async ()=>{
   const usertypemother=await new Linker("TABLE_USERSTYPES").loadRequest("get all my children", {filterProps: {type: "customer"}});
   const usertype=await usertypemother.getChild().loadRequest("get my tree", {deepLevel: 3});
+  // No se hace usertype.getRelationship("users").loadRequest("get my tree") para no cargar los pedidos
   const users= usertype.getRelationship("users").children;
-  const mydatanodes=[];
-  for (let i=0; i<users.length; i++) {
-    mydatanodes.push(users[i].getRelationship("usersdata"));
-    mydatanodes.push(users[i].getRelationship("addresses"));
-  }
-  //I think we are using multi because is mor straight forward thant doing itchild by child
-  const resultData=await Node.requestMulti("get my children", mydatanodes);
-  const arrayusersdata=[];
-  const arrayaddresses=[];
-  
-  for (let i=0; i<resultData.length; i++) {
-    if (i % 2) { //impar
-      arrayaddresses.push(resultData[i].data);
-    }
-    else {
-      arrayusersdata.push(resultData[i].data);
-    }
-  }
-  for (let i=0; i<users.length; i++) {
-    users[i].getRelationship("usersdata").load(arrayusersdata[i]);
-    users[i].getRelationship("addresses").load(arrayaddresses[i]);
-  }
+  const usersData=await Node.requestMulti("get my children", users.map(user=>user.getRelationship("usersdata")));
+  const usersAddress=await Node.requestMulti("get my children", users.map(user=>user.getRelationship("address")));
+  users.forEach((user, i)=>{
+    user.getRelationship("usersdata").load(usersData[i]);
+    user.getRelationship("addresses").load(usersAddress[i]);
+  })
   return packing(usertype.getRelationship("users"));
 });
 
@@ -86,7 +70,7 @@ exportFunc.set("db", async ()=>{
   db.push(await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my tree"));
   db.push(await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my tree"));
   
-  return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": await Node.requestMulti("add my tree", db, null, true)};
+  return {"languages": await languages.partner.request("add my tree", null, true), "tree": await Node.requestMulti("add my tree", db, null, true)};
 });
 
 export {exportFunc};
