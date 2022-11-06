@@ -86,7 +86,7 @@ Check: docs/overview.md
 * Themes *
 **********
 
-Y.O.S. system has a themes feature. Tou can find theme files at layouts folder.
+Y.O.S. system has a themes feature. You can find theme files at layouts folder.
 
 
 ********
