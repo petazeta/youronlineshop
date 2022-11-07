@@ -28,20 +28,17 @@ exportFunc.set("checkout", async ()=>{
   return {"languages": await Node.requestMulti("add my tree", languages.children, null, true), "tree": [await shippingtypesmother.request("add my tree", null, true), await paymenttypesmother.request("add my tree", null, true)]};
 });
 
-exportFunc.set("lang", async (langdata)=>{
+exportFunc.set("lang", async (selectedLangs)=>{
   //data from the structure
-  const myNodes=await Node.requestMulti( "get my tree", Array(langdata.children.length).fill(getSiteText().clone(null, 0)), langdata.children.map(result => new Object({extraParents: result.getRelationship("siteelementsdata")})));
-  const nodesInsert=[];
-  for (const i of myNodes.keys()) {
-    // Request result is an array of arrays with the relationships. myNodes[0] => siteelements
-    let loadNode=getSiteText().clone(0, 0);
-    loadNode.load(unpacking(myNodes[i]));
-    //Now we remove titles custom elements
-    loadNode.getRelationship().removeChild(loadNode.getNextChild("page_head_title"));
-    loadNode.getRelationship().removeChild(loadNode.getNextChild("page_head_subtitle"));
-    nodesInsert[i]=await loadNode.request("add my tree", null, true);
+  const siteTextsData=await Node.requestMulti( "get my tree", Array(selectedLangs.children.length).fill(getSiteText().clone(null, 0)), selectedLangs.children.map(lang => new Object({extraParents: lang.getRelationship("siteelementsdata")})));
+  const siteTexts=[];
+  for (const i of siteTextsData.keys()) {
+    // Request result is an array of arrays with the relationships. siteTextsData[0] => siteelements
+    let siteText=getSiteText().clone(0, 0);
+    siteText.load(unpacking(siteTextsData[i]));
+    siteTexts[i]=await siteText.request("add my tree", null, true);
   }
-  return {"languages": await Node.requestMulti("add my tree", langdata.children, null, true), "trees": nodesInsert};
+  return {"languages": await Node.requestMulti("add my tree", selectedLangs.children, null, true), "trees": siteTexts};
 });
 
 exportFunc.set("users", async ()=>{

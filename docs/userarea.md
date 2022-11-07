@@ -63,6 +63,11 @@ La plantilla import que se ayuda del script import.js permite cargar datos expor
 - Contenido de los menus y su contenido en páginas
 - Contenido del catálogo
 - Tipos de envios y de pagos
-- ...
+- Idiomas de la página
+- Usuarios
+
+Para esto se requiere el rol de systemadmin.
 
 ### Languages
+
+Se pueden añadir idiomas nuevos los cuales serán una copia del idioma primero, luego se han de editar con el rol webadmin y productsadmin.

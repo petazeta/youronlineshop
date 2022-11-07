@@ -65,7 +65,7 @@ Client minor services:
 - [Observable](observerpattern.md)
 - [Reporting](statistics.md)
 - [Event listener](eventlistener.md)
-- Alerts
+- [Active link](activation.md)
 
 
 ## Shared services
@@ -91,3 +91,4 @@ Template files define the screen views and are included in themes. A theme is a 
 Main facilities implementations that you can find in templates are:
 - [Checkout](checkout.md)
 - [User area](userarea.md)
+- [Alerts]()

@@ -156,7 +156,7 @@ export function splitLangTree(origTree, totalLang){
       if (BasicNode.detectLinker(orig)) {
         const isLangContent = orig.sysChildTableKeysInfo && orig.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
         //The children are the lang conent
-        if (isLangContent)langSerial[i].children=[orig.children[lang_i]];
+        if (isLangContent) langSerial[i].children=[orig.children[lang_i]];
       }
     })
   });
@@ -164,7 +164,8 @@ export function splitLangTree(origTree, totalLang){
 }
 
 export function getChildrenArray(myNode) {
-  const relChildrenArray = (rel) => rel.children.reduce((childArray, child)=>childArray = [...childArray, child], []);
+  // const relChildrenArray = (rel) => rel.children.reduce((childArray, child)=>childArray = [...childArray, child], []);
+  const relChildrenArray = (rel) => [...rel.children];
   if (BasicNode.detectLinker(myNode)) return relChildrenArray(myNode);
   return myNode.relationships.reduce((totalArray, rel)=>totalArray = [...totalArray, ...relChildrenArray(rel)], []);
 }

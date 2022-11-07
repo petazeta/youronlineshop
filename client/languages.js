@@ -62,4 +62,18 @@ export function createInstanceChildText(parentNode, position=1){
 
 const getCurrentLanguage=()=>currentLanguage; // It could be useful in some cases to ensure currentLanguage will not be modified
 
+export const onSelected= async (langNode)=>{
+  const {AlertMessage}=await import('./alert.js');
+  const {getSiteText, loadText} = await import('./sitecontent.js');
+  const {setActive} = await import('./activelauncher.js');
+  setActive(langNode);
+  setCurrentLanguage(langNode);
+  const myalert=new AlertMessage(getSiteText().getNextChild("langbox").getNextChild("changelangwait").getRelationship("siteelementsdata").getChild().props.value);
+  myalert.showAlert();
+  await loadText();
+  //getSiteText().parent.dispatchEvent("language change"); mal
+  myalert.props.timeout=3000;
+  myalert.hideAlert();
+}
+
 export {languages, currentLanguage, getCurrentLanguage};

@@ -159,14 +159,6 @@ falta corregir lo de labels y texts
                 </span>
               </td>
             </tr>
-            <tr>
-              <td>
-                <span style="position:relative;">
-                  <input type="radio" value="db" name="dataoption">
-                  <span>Entire database</span>
-                </span>
-              </td>
-            </tr>
           </table>
         </div>
       </div>
@@ -254,7 +246,7 @@ falta corregir lo de labels y texts
               new AlertMessage(thisElement.form.elements.nocontent.value, 2000).showAlert();
               return;
             }
-            const selectedLangs = Array.from(thisElement.form.querySelectorAll('input[type="checkbox"]')).filter(lang=>lang.checked).map(lang=>Number(lang.value));
+            const selectedLangs = Array.from(thisElement.form.querySelectorAll('input[type="checkbox"]')).filter(lang=>lang.checked).map(lang=>lang.value);
             if (selectedLangs.length==0) {
               // we show the alert message No selection
               new AlertMessage(thisElement.form.previousElementSibling.elements.nocontent.value, 2000).showAlert();
@@ -263,6 +255,7 @@ falta corregir lo de labels y texts
             myimpalert.showAlert(); //importing in process
             //Now we filter the languages selected from the exportedDataLangs
             const exportedDataTrees = arrayUnpacking(data.trees).map(dataTree=>new Node().load(dataTree));
+            
             /*
             const importedDataTrees=[], importedDataLangs=[];
             for (const selLang of selectedLangs) {

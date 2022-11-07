@@ -19,6 +19,8 @@ export function replaceData(origin, target, relName, relDataName) {
 // import tree that contains lang data
 export async function impData(newLangs, langrelname, datatree, currentLangs, rootelement) {
   if (!currentLangs) currentLangs=newLangs;
+
+  if (currentLangs.length!=newLangs.length) throw new Error('Languages are different');
   
   if (rootelement) await rootelement.request("delete my tree");
   
