@@ -36,5 +36,4 @@ Other posibility is to add a new language to the site. This will produce to repl
 
 Other procedures regarding to languages are the export/import facility. When we export elements that have lang text content we have to collect as well the languages list. We are collecting root element that we want to export with its descendents and the languages list. By collecting the languages list we can check that the importing languages check with the actual languages and we can assing the correspondent language to each language content.
 
-
 There is also a procedure to explicity import a new language. That is the lang content of the siteElement data, the content includes just the site elements common to all sites, it doesn't inlclude pages nor categories.

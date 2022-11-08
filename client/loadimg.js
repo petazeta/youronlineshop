@@ -1,4 +1,5 @@
 import config from './cfg/main.js';
+import {authorizationToken} from "./authorization.js";
 
 //Change the size of a file
 //var file = fileInput.files[0];  fd.append(filename, result, resultPropName, filename + ".png");
@@ -7,9 +8,9 @@ async function loadImgForm(formData) {
   const fetchParams={
     method: 'post',
     body: formData,
-    headers: userAuth
+    headers: {}
   };
-  
+  if (authorizationToken) fetchParams.headers={...fetchParams.headers, ...authorizationToken};
   return fetch(config.uploadImagesUrlPath, fetchParams)
   .then(res => res.text())
   .then(resultTxt => {

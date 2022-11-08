@@ -70,4 +70,4 @@ Para esto se requiere el rol de systemadmin.
 
 ### Languages
 
-Se pueden añadir idiomas nuevos los cuales serán una copia del idioma primero, luego se han de editar con el rol webadmin y productsadmin.
+Se pueden añadir idiomas nuevos los cuales serán una copia del idioma primero, luego el contenido del idioma se ha de editar con el rol webadmin y productsadmin.
