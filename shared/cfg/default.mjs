@@ -1,7 +1,7 @@
 // Estoy creando un shared cfg
 
 export default {
-  requestBasePath: "",
+  //urlBasePath: "sample", // deprecated
   requestUrlPath: "request.cmd",
   uploadImagesUrlPath: "upload.cmd",
   catalogImagesUrlPath: "catalog-images",

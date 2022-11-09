@@ -1,7 +1,7 @@
 {
   "name": "@petazeta/your-online-shop-server",
   "version": "5.0.0",
-  "description": "server api for your online shop",
+  "description": "server for your online shop",
   "main": "serverindex.mjs",
   "scripts": {
     "start": "node serverindex.mjs",
@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "nodemailer": "*"
   }
 }

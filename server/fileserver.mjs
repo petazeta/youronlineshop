@@ -10,8 +10,8 @@ import makeReport from './reports.mjs';
 import config from './cfg/mainserver.mjs';
 import respond from './streamfile.mjs';
 
-export default function fileServer(pathName, request, response) {
-  if (pathName===undefined) pathName=new URL(request.url, 'http://localhost').pathname;
+export default function fileServer(request, response) {
+  let pathName=new URL(request.url, 'http://localhost').pathname;
   if (pathName=='/') pathName= '/index.html';
   if (pathName.match(/^\/index\.html/)) {
     pathName=path.join(config.basePath, config.sitePath,  pathName);
