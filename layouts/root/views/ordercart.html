@@ -10,7 +10,8 @@
     <div data-id="butedit" class="btmiddleright"></div>
     <span class="form-label"></span>
     <script>
-      thisNode.getNextChild("order").getNextChild("subtotal").getRelationship("siteelementsdata").getChild().writeProp(thisElement);
+      const total=thisNode.getNextChild("order").getNextChild("subtotal").getRelationship("siteelementsdata").getChild();
+      total.writeProp(thisElement);
       //adding the edition pencil
       if (webuser.isWebAdmin()) {
         const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');

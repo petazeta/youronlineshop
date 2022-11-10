@@ -1,15 +1,17 @@
 # Como hacer actualizaciones
 
-Se suben los cambios: git (removete => ssh://youronlineshop.net/var/lib/github) y luego en servidor hacer un git clone (/var/lib/github/)
-Se reconstruye la imagen yos (no hace falta cambiar nada del source!!) asegurandose de poner la opcion --no-cache: ver "Imagen para yos". En principio no habría que reconstruir las imagenes de capas superiores pero si los contenedores: sudo docker-compose restart
+Se suben los cambios(no hace falta cambiar nada pero es mas conveniente borrar lo que no es necesario para la aplicación): git (removete => ssh://youronlineshop.net/var/lib/github) y luego en servidor hacer un git clone (/var/lib/github/)
+Se reconstruye la imagen yos: ver "Imagen para yos" (opcion --no-cache). Se reconstruyen las imagenes de las instancias. Se actualizan los contenedores: docker-compose up -d --build --no-deps. No-deps para que no se recreen los contenedores dependientes porque no es necesario. 
+
+Parece que docker-compose utiliza el nombre del directorio para crear prefijos que luego utiliza en sus operaciones. Por esto hay que usar docker-compose en la misma carpeta, en mi caso la carpeta se llama docker.
 
 # Como añadir una instancia de yos
 
-Se crea la imagen nueva (ver Servicio yos-sample-server / Imagen). Se crean los directorios en var/lib/yos.
+Se crea la imagen nueva (ver Servicio yos-sample-server / Imagen). Se crean los directorios para los volumenes en var/lib/yos.
 Se cambia site-index para que enrute al nuevo servicio.
 Se crea de nuevo la imagen de site-index con la opcion --no-cache.
 Se añade el servicio a docker-compose y se ejecuta de esta manera:
-docker-compose up -d --no-deps --build site-index-service // aunque quiza baste con un compose simple hay que probar
+docker-compose up -d --no-deps --build site-index-service
 
 -------
 
@@ -105,8 +107,8 @@ CMD ["node", "serverindex.mjs"]
 Ahora que tenemos la imagen tenemos que crear el contenedor. Ya tenemos funcionando la base de datos y por eso hay que conectarse a esa red. (docker network ls, docker network inspect < >)
 ```
 docker run -d \
-  -p 8002:8002 \
   --name yos-sample-server \
+  -p 8002:8002 \
   -v /var/lib/yos-sample/images:/home/yos/catalog-images \
   -v /var/lib/yos-sample/logs:/home/yos/logs \
   --network docker_default \
@@ -164,7 +166,8 @@ CMD ["node", "sslserverindex.mjs"]
 
 ```
 docker run -d \
-  -p 8000:8000 \
+  -p 80:80 \
+  -p 443:443 \
   --name site-index-server \
   site-index
 ```
@@ -192,16 +195,12 @@ services:
     image: yos-landing  
     restart: always 
     container_name: yos-landing-server 
-    ports: 
-    - "8001:8001" 
     networks:
     - mynet
   yos-sample-service: 
     image: yos-sample  
     restart: always 
     container_name: yos-sample-server 
-    ports: 
-    - "8002:8002" 
     volumes: 
       - "/var/lib/yos/sample/images:/home/yos/catalog-images" 
       - "/var/lib/yos/sample/logs:/home/yos/logs"
@@ -213,8 +212,6 @@ services:
     image: yos-test  
     restart: always 
     container_name: yos-test-server 
-    ports: 
-    - "8003:8003" 
     volumes: 
       - "/var/lib/yos/test/images:/home/yos/catalog-images" 
       - "/var/lib/yos/test/logs:/home/yos/logs"
@@ -226,8 +223,6 @@ services:
     image: mongo:latest
     restart: always # allways up
     container_name: mongo-server 
-    ports:
-      - 27017:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
@@ -358,4 +353,16 @@ CMD ["node", "sslserverindex.js"]
 ## la barra al final en el url
 
 La barra en el url signific aque las proximas peticiones del cliente tomaran como url base hasta la barra, por tanto es importante que si queremos acceder a una web y no se pone la barra al final, la web redireccione a la url con la barra al final.
+
+# Algunos commandos para reutilizar
+
+sudo docker build --tag yos . -f Dockerfile-yos
+sudo docker build --tag yos-sample . -f Dockerfile-yos-sample
+sudo docker build --tag yos-test . -f Dockerfile-yos-test
+sudo docker build --tag yos-test2 . -f Dockerfile-yos-test2
+docker-compose up -d --build --no-deps
+
+# Administración del sistema
+
+He instalado firewalld, se puede parar con systemctl stop firewalld y se puede quitar del boot con sudo systemctl unable firewalld. Este firewall funciona con las reglas de docker. Si se instala un firewall hay que reiniciar el sistema para que docker haga las operaciones pertinentes en las reglas del firewall.
 

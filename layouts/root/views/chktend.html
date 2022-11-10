@@ -20,7 +20,7 @@
     webuser.getRelationship("orders").getChild().setView(thisElement, "order");
   </script>
   <div>
-    <div style="display:table; position:relative;">
+    <span style="position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
       <input type="hidden" name="customsubject" disabled="true">
       <script>
@@ -34,8 +34,8 @@
           thisElement.type="text";
         }
       </script>
-    </div>
-    <div style="display:table; position:relative;">
+    </span>
+    <span style="position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
       <textarea name="custommessage" style="visibility:hidden;" disabled="true"></textarea>
       <script>
@@ -49,8 +49,8 @@
           thisElement.style.visibility="visible"
         }
       </script>
-    </div>
-    <div style="display:table; position:relative;">
+    </span>
+    <span style="position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
       <input type="hidden" name="adminsubject" disabled="true">
       <script>
@@ -64,8 +64,8 @@
           thisElement.type="text";
         }
       </script>
-    </div>
-    <div style="display:table; position:relative;">
+    </span>
+    <span style="position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
       <textarea name="adminmessage" style="visibility:hidden;" disabled="true"></textarea>
       <script>
@@ -79,7 +79,7 @@
           thisElement.style.visibility="visible"
         }
       </script>
-    </div>
+    </span>
   </div>
   <script>
     const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');

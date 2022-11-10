@@ -73,6 +73,7 @@ thisParams.filterorders: "archived" => status=1
   <tbody></tbody>
   <script>
     const statusValue = thisParams.filterorders=="archived"? 1 : 0;
+
     if (webuser.isOrdersAdmin()) {
       const {Node, Linker}=await import('./' + CLIENT_MODULES_PATH + 'nodes.js');
       const {unpacking}=await import('./' + SHARED_MODULES_PATH + 'utils.mjs');
@@ -88,7 +89,8 @@ thisParams.filterorders: "archived" => status=1
       ordersViewParent.setChildrenView(thisElement, "userordersline", {viewParent: ordersViewParent});
     }
     else {
-      webuser.getRelationship("orders").loadRequest("get my children", {filterProps: {status: statusValue}});
+      await webuser.getRelationship("orders").loadRequest("get my children", {filterProps: {status: statusValue}});
+      if (!webuser.getRelationship("usersdata").getChild()) await webuser.getRelationship("usersdata").loadRequest("get my children"); // to show the user name
       webuser.getRelationship("orders").setChildrenView(thisElement, "userordersline");
     }
   </script>

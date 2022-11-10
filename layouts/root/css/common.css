@@ -1102,7 +1102,7 @@ div.quantityselect {
 .login-card{
     top: 40%;
     left: 50%;
-    transform: translate(-40%, -50%);
+    transform: translate(-50%, -50%);
     position: fixed;
     background-color: white;
     z-index: 51;
