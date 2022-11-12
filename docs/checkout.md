@@ -48,6 +48,13 @@ This layout starts with chktend and it has in turn another layout element: the o
 
 When the payment is done the orders payment prop "succeed" will be set to true.
 
+#### Paypal integration
+
+The paypal integration we have is based in the client side. The default parameters are for the test enviroment. It is needed a paypal business account to receive payments. For the test enviroment you must use the virutal users (they call it sandbox accounts).
+
+Aqui hay un ejemplo de la integración:
+https://developer.paypal.com/demo/checkout/
+
 ## Order config params
 
 There are some configuration parameters at client/cfg/default.js related to this implementation:

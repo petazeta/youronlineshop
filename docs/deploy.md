@@ -73,6 +73,11 @@ Esto hará que se puedan crear nuevos servicios de forma más independiente. Tam
 FROM node:16-alpine
 
 ADD yos /home/yos
+
+# set default dir
+WORKDIR /home/yos
+
+RUN npm install
 ```
 `docker build --tag yos ./`
 
@@ -95,8 +100,6 @@ COPY ./yos-sample /home/yos
 
 # set default dir
 WORKDIR /home/yos
-
-RUN npm install
 
 CMD ["node", "serverindex.mjs"]
 ```
@@ -360,7 +363,9 @@ sudo docker build --tag yos . -f Dockerfile-yos
 sudo docker build --tag yos-sample . -f Dockerfile-yos-sample
 sudo docker build --tag yos-test . -f Dockerfile-yos-test
 sudo docker build --tag yos-test2 . -f Dockerfile-yos-test2
-docker-compose up -d --build --no-deps
+sudo docker build --tag yos-landing . -f Dockerfile-yos-landing
+sudo docker build --tag site-index . -f Dockerfile-site-index
+sudo docker-compose up -d --build --no-deps
 
 # Administración del sistema
 

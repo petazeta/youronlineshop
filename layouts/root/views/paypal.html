@@ -13,15 +13,22 @@ const myVars=JSON.parse(orderPaymentType.props.details).vars;
 const myorderitems=order.getRelationship("orderitems");
 const myordership=order.getRelationship("ordershippingtypes");
 const mytotal=(sumTotal(myorderitems.children) + sumTotal(myordership.children)) / 100;
-const onApprove=(details)=>{
-  orderPaymentType.props.succeed=1;
-  orderPaymentType.request("edit my props", {values: {succeed: 1}})
-  .then(res=>{
-    const myNode=getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("paysucceed").getRelationship("siteelementsdata").getChild();
-    new AlertMessage(myNode.props.value, 3000).showAlert();
-    // we update the order view
-    webuser.getRelationship("orders").getChild().setView(document.getElementById("centralcontent"), 'onsucceed');
-  });
+const onApprove=(orderData)=>{
+  const transactionStatus = orderData.purchase_units[0]?.payments?.captures[0]?.status;
+  const transactionId = orderData.purchase_units[0]?.payments?.captures[0]?.id;
+  if (transactionStatus=='COMPLETED' || transactionStatus=='PROCESSED') {
+    orderPaymentType.props.succeed=1;
+    orderPaymentType.request("edit my props", {values: {succeed: 1, details: "Payment id:" + transactionId}})
+    .then(res=>{
+      const myNode=getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("paysucceed").getRelationship("siteelementsdata").getChild();
+      new AlertMessage(myNode.props.value, 3000).showAlert();
+      // we update the order view
+      order.setView(document.getElementById("centralcontent"), 'onsucceed');
+    });
+  }
+  else {
+    new AlertMessage("Order status: " + transactionStatus, 3000).showAlert();
+  }
 }
   
 const onScriptLoaded=function(){
