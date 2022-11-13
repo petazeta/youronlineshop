@@ -12,7 +12,7 @@ Main tasks:
 */
 
 import config from './cfg/mainserver.mjs';
-import reporting from './reports.mjs';
+import reporting from './reportcases.mjs';
 import makeRequest, {getResponseContentType} from './responses.mjs';
 import authentication from './authentication.mjs';
 import {cacheRequest, cacheResponse} from './cache.mjs';

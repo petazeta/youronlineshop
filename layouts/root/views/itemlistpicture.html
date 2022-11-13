@@ -38,7 +38,7 @@
         const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
         const imageNode=thisNode.getRelationship("itemsimages").getChild();
         const myImage=imageNode && imageNode.props.imagename || config.defaultImg;
-        thisElement.src=pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlSmallPath, myImage);
+        thisElement.src=pathJoin(config.catalogImagesUrlPath, 'small', myImage);
         if (webuser.isProductAdmin() || webuser.isProductSeller()) {
           //For some unknown reason the usual opacity onmouseover makes some not good view effect, we use visibility in this case
           const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');

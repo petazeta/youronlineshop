@@ -13,27 +13,28 @@ We need the root theme as well as the subtheme (activeTheme) because we would ne
 
 import readTree from './layoutfolderread.mjs';
 import fs from 'fs';
-import config from './cfg/mainserver.mjs';
 import path from 'path';
 
 export default class SiteLayout {
-  constructor(){
+  constructor(layoutsPath){
     this.treeRoot;
+    this.layoutsPath=layoutsPath;
+    this.layoutsPath=layoutsPath;
   }
   readTree(themeId){
-    this.treeRoot=readTree(path.join(config.basePath, config.layoutsPath, themeId));
+    this.treeRoot=readTree(path.join(this.layoutsPath, themeId));
   }
   getTpFilesList(themeId, subThemeId, excluded=false) {
     if (!this.treeRoot || this.treeRoot.props.id!=themeId) this.readTree(themeId);
     let active = this.treeRoot;
     if (subThemeId) active = this.findTheme(subThemeId);
-    return getTpFilesList(active, excluded);
+    return getTpFilesList(this.layoutsPath, active, excluded);
   }
   getCssFilesList(themeId, subThemeId) {
     if (!this.treeRoot || this.treeRoot.props.id!=themeId) this.readTree(themeId);
     let active = this.treeRoot;
     if (subThemeId) active = this.findTheme(subThemeId);
-    return getCssFilesList(active);
+    return getCssFilesList(this.layoutsPath, active);
   }
   getContent(themeId, subThemeId) {
     return Array.from(this.getTpFilesList(themeId, subThemeId)).reduce((cc, [tpId, tpFilePath])=>cc+=getTp(tpId, tpFilePath), '');
@@ -69,7 +70,7 @@ export default class SiteLayout {
     if (!this.treeRoot || this.treeRoot.props.id!=themeId) this.readTree(themeId);
     let active = this.treeRoot;
     if (subThemeId) active = this.findTheme(subThemeId);
-    const cssContent= [getCommonStyle(active), getStyle(styleId, active)].reduce((cc, cssFilePath)=>cc+=getCss(cssFilePath), '');
+    const cssContent= [getCommonStyle(this.layoutsPath, active), getStyle(this.layoutsPath, styleId, active)].reduce((cc, cssFilePath)=>cc+=getCss(cssFilePath), '');
     return encondeCssImageNames(cssContent, themeId, subThemeId);
   }
 }
@@ -101,22 +102,22 @@ function encondeCssImageNames(cssContent, themeId, subThemeId){
 // It creates a list of templates files with paths from the theme tree
 // ***** It uses inheritance at templates not present at child layouts
 // Option includeSubs is to include template files at subfolders of the view folder. We usually reserve the subfolder to save the templates that are not loaded with the others at the begining because they are not often accesed.
-function getTpFilesList(myTheme, includeSubs=false) {
-  return getFilesList("views", myTheme, includeSubs);
+function getTpFilesList(layoutsPath, myTheme, includeSubs=false) {
+  return getFilesList(layoutsPath, "views", myTheme, includeSubs);
 }
 
-function getCssFilesList(myTheme) {
-  return getFilesList("styles", myTheme, true);
+function getCssFilesList(layoutsPath, myTheme) {
+  return getFilesList(layoutsPath, "styles", myTheme, true);
 }
 
-function getFilesList(folderName, myTheme, includeSubs=false) {
+function getFilesList(layoutsPath, folderName, myTheme, includeSubs=false) {
   let pointer=myTheme;
   const result=new Map();
   while (pointer) {
     if (!pointer.getRelationship(folderName)) break;
     for (const child of pointer.getRelationship(folderName).children) {
       if (includeSubs || !child.props.relPath.match(/.+\/.+/)) { //exclude files in subfolders
-        if (!result.has(child.props.id)) result.set(child.props.id, path.join(config.basePath, config.layoutsPath, child.props.path, child.props.fileName));
+        if (!result.has(child.props.id)) result.set(child.props.id, path.join(layoutsPath, child.props.path, child.props.fileName));
       }
     }
     if (pointer.parent) pointer=pointer.parent.partner;
@@ -126,11 +127,11 @@ function getFilesList(folderName, myTheme, includeSubs=false) {
 }
 
 // common style can be at the activetheme or if not it search in ascendents
-function getCommonStyle(activeTheme){
-  return getStyle("common", activeTheme)
+function getCommonStyle(layoutsPath, activeTheme){
+  return getStyle(layoutsPath, "common", activeTheme)
 }
 
-function getStyle(styleId, activeTheme) {
-  const myList = getCssFilesList(activeTheme);
+function getStyle(layoutsPath, styleId, activeTheme) {
+  const myList = getCssFilesList(layoutsPath, activeTheme);
   return myList.get(styleId);
 }

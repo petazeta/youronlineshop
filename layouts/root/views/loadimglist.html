@@ -12,7 +12,7 @@
       else {
         const {default: config} = await import(pathJoin('./', CLIENT_CONFIG_PATH, 'main.js'));
         const myImage=thisNode.props.imagename || config.defaultImg;
-        thisElement.src=pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlSmallPath, myImage);
+        thisElement.src=pathJoin(config.catalogImagesUrlPath, 'small', myImage);
       }
     </script>
   </td>

@@ -14,21 +14,24 @@ export default function fileServer(request, response) {
   let pathName=new URL(request.url, 'http://localhost').pathname;
   if (pathName=='/') pathName= '/index.html';
   if (pathName.match(/^\/index\.html/)) {
-    pathName=path.join(config.basePath, config.sitePath,  pathName);
+    pathName=path.join(config.sitePath,  pathName);
     respond(pathName, response);
   }
   else if (pathName.match(/^\/images\//)) {
-    pathName=path.join(config.basePath, config.sitePath,  pathName);
+    pathName=path.join(config.sitePath,  pathName);
     respond(pathName, response);
   }
   else if (pathName.match(/^\/(client|shared)\//)) {
-    pathName= path.join(config.basePath, pathName);
+    // sin nada seria: pathName=path.join('./',  pathName);
+    const match=pathName.match(/^\/(client|shared)\//)[1];
+    pathName=pathName.replace(match, '/');
+    if (match=='client') pathName = path.join(config.clientPath, pathName);
+    if (match=='shared') pathName = path.join(config.sharedPath, pathName);
     respond(pathName, response);
   }
   else if (pathName.match(new RegExp('^/' + config.catalogImagesUrlPath + '/'))) {
-    const fileName=path.basename(pathName);
-    if (pathName.includes(config.catalogImagesUrlBigPath)) pathName=path.join(config.basePath, config.catalogImagesPath, config.catalogImagesBigPath, fileName);
-    else pathName=path.join(config.basePath, config.catalogImagesPath, config.catalogImagesSmallPath, fileName);
+    pathName=pathName.replace(`/${config.catalogImagesUrlPath}/`, '/');
+    pathName=path.join(config.catalogImagesPath,  pathName);
     respond(pathName, response);
   }
   else {

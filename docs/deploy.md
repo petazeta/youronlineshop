@@ -1,9 +1,60 @@
+# Servidor de tiendas
+
+Se construye la imagen de yos
+```
+FROM node:16-alpine
+
+ENV MONGO_DB_USERNAME=admin \
+    MONGO_DB_PWD=password
+
+ADD yos /home/yos
+
+WORKDIR /home/yos
+
+RUN npm install
+```
+`docker build --tag yos . -f Dockerfile-yos`
+
+Se construyen las instancias teniendo como base yos/server y cambiando cfg/dbcustom.mjs para la base de datos: "mongodb://admin:password@mongodb/yos-test?authSource=admin" y cfg/default.mjs para el tema de los logs y catalog-images: catalogImagesPath: "./catalog-images/test", reportsFilePath: "./logs/logs-test.txt"
+
+Se construye la imagen de yos-instances teniendo en cuenta todas las instancias
+
+```
+FROM yos
+
+COPY --from=yos /home/yos/server /home/yos/test-server
+COPY --from=yos /home/yos/server /home/yos/test2-server
+
+# Replacing config files
+COPY ./yos-test-server /home/yos/test-server
+COPY ./yos-test2-server /home/yos/test2-server
+
+WORKDIR /home/yos
+
+CMD ["node", "serverindex.mjs", "instances=./test-server/index.mjs:8001,./test2-server/index.mjs:8002"]
+```
+
+`docker build --tag yos-instances . -f Dockerfile-yos-instances`
+
+Se crean (si no los hay) los directorios de catalog-images de las instancias creadas: /var/lib/yos/catalog-images/test, /var/lib/yos/catalog-images/test2
+
+Se levanta el contenedor:
+`docker run -d \
+  --name yos-instances-server \
+  -v /var/lib/yos/catalog-images:/home/yos/catalog-images \
+  -v /var/lib/yos/logs:/home/yos/logs \
+  yos-instances`
+
+# Como instalar una instancia nueva
+
+Nos podemos basar en el contendedor anterior: yos-instances y hacer los mismos pasos.
+
 # Como hacer actualizaciones
 
-Se suben los cambios(no hace falta cambiar nada pero es mas conveniente borrar lo que no es necesario para la aplicación): git (removete => ssh://youronlineshop.net/var/lib/github) y luego en servidor hacer un git clone (/var/lib/github/)
+Se suben los cambios(no hace falta cambiar nada pero es mas conveniente borrar lo que no es necesario para la aplicación): git (remote => ssh://youronlineshop.net/var/lib/github) y luego en servidor hacer un git clone (/var/lib/github/)
 Se reconstruye la imagen yos: ver "Imagen para yos" (opcion --no-cache). Se reconstruyen las imagenes de las instancias. Se actualizan los contenedores: docker-compose up -d --build --no-deps. No-deps para que no se recreen los contenedores dependientes porque no es necesario. 
 
-Parece que docker-compose utiliza el nombre del directorio para crear prefijos que luego utiliza en sus operaciones. Por esto hay que usar docker-compose en la misma carpeta, en mi caso la carpeta se llama docker.
+Parece que docker-compose utiliza el nombre del directorio para crear prefijos que luego utiliza en sus operaciones. Por esto hay que usar docker-compose en la misma carpeta, en mi caso la carpeta se llama docker. Algunas de las operaciones que quedan comprometidas son: nombre de networks, volumes guardados en docker. Los volumes que se ponen entre comillas no se guardan en docker.
 
 # Como añadir una instancia de yos
 
@@ -72,6 +123,9 @@ Esto hará que se puedan crear nuevos servicios de forma más independiente. Tam
 ```
 FROM node:16-alpine
 
+ENV MONGO_DB_USERNAME=admin \
+    MONGO_DB_PWD=password
+
 ADD yos /home/yos
 
 # set default dir
@@ -92,9 +146,6 @@ serverindex.mjs => const serverPort='8002';
 Dockerfile
 ```
 FROM yos
-
-ENV MONGO_DB_USERNAME=admin \
-    MONGO_DB_PWD=password
 
 COPY ./yos-sample /home/yos
 
@@ -370,4 +421,3 @@ sudo docker-compose up -d --build --no-deps
 # Administración del sistema
 
 He instalado firewalld, se puede parar con systemctl stop firewalld y se puede quitar del boot con sudo systemctl unable firewalld. Este firewall funciona con las reglas de docker. Si se instala un firewall hay que reiniciar el sistema para que docker haga las operaciones pertinentes en las reglas del firewall.
-

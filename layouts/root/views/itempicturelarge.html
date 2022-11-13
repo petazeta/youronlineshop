@@ -30,10 +30,10 @@
         const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.js');
         const imageNode=thisNode.getRelationship("itemsimages").getChild();
         const myImage=imageNode?.props.imagename || config.defaultImg;
-        thisElement.src=pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlBigPath, myImage);
+        thisElement.src=pathJoin(config.catalogImagesUrlPath, 'big', myImage);
         thisNode.addEventListener("changeProperty", (property) => {
           if (property=="image") {
-            thisElement.src==pathJoin(config.catalogImagesUrlPath, config.catalogImagesUrlBigPath, thisNode.props.image);
+            thisElement.src==pathJoin(config.catalogImagesUrlPath, 'big', thisNode.props.image);
           }
         }, "img");
         if (webuser.isProductAdmin() || webuser.isProductSeller()) {

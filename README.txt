@@ -30,9 +30,11 @@ Awards: Community Choice award by SourceForge
 - Easy edition
 - Quick purchase process
 - Webite pages (About, Contact, ect...)
+- Multilingual
 - Ultra light code.
 - Themes (Templates and css)
 - Export / Import
+- Multi shop
 
 
 ****************

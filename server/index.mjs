@@ -1,6 +1,6 @@
 import path from 'path';
 import config from './cfg/mainserver.mjs';
-import makeReport from './reporting.mjs';
+import makeReport from './reports.mjs';
 import initServer from './serverstart.mjs';
 
 await initServer();
@@ -42,7 +42,7 @@ routerMap.add((request, response)=>{
 // css image
 routerMap.add((request, response)=>{
   const pathName=new URL(request.url, 'http://localhost').pathname;
-  if (!pathName.match(new RegExp('^/' + config.cssImagesUrlPath + '/'))) return false;
+  if (!pathName.match(new RegExp('^/css-images/'))) return false;
   import('./cssimageserver.mjs').then(({default: sendResponse}) => sendResponse(request, response));
   return true;
 });

@@ -6,7 +6,7 @@ import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from './safety.mj
 import {unpacking, arrayUnpacking, packing} from './../shared/utils.mjs';
 import config from './cfg/mainserver.mjs';
 import path from 'path';
-import makeReport from './reporting.mjs';
+import makeReport from './reports.mjs';
 
 const responseAuth=new Map();
 const responseContentType=new Map();

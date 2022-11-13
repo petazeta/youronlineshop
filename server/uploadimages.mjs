@@ -13,8 +13,8 @@ export default async function uploadImages(request, response){
 
     function nameToPath(name, fileName) {
       const imageName = path.basename(fileName);
-      const imageSizePath = name.includes('big') ? config.catalogImagesBigPath : config.catalogImagesSmallPath;
-      const imagePath=path.join(config.basePath, config.catalogImagesPath, imageSizePath, imageName);
+      const imageSizeFolderName = name.includes('big') ? 'big' : 'small';
+      const imagePath=path.join(config.catalogImagesPath, imageSizeFolderName, imageName);
       return imagePath;
     }
     response.write('true');

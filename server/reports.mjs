@@ -1,35 +1,33 @@
-import makeReport from './reporting.mjs';
+// hay que cambiarlo a una clase para que pueda utilizarse con server
+import fs from 'fs';
+import path from 'path';
 
-// falta un initial report con headers.host y header.referer que quizá se haga en cliente
+import config from './cfg/mainserver.mjs';
 
-const requestsRep=new Map();
+const fileNamePath=path.join(config.reportsFilePath);
 
-requestsRep.set('get tables', (result)=>makeReport("get tables: " + result.length));
+export default function makeReport(data) {
+  if (typeof data=="string") {
+    data=[data];
+  }
+  return addRecord(data);
+}
 
-requestsRep.set('init database', (result)=>console.log(result));
+function addRecord(dataRow){
+  process.env.TZ = 'Europe/Madrid';
+  const myDate=new Date();
+  dataRow.unshift(myDate.toISOString().split('T')[0] + ' ' + myDate.toISOString().split('T')[1].slice(0, 8))
 
-requestsRep.set('login', (result)=>{
-  if (result?.logError) makeReport("log in: " + result.code);
-  else
-    import('./../shared/utils.mjs').then(({unpacking})=>makeReport("log in: " + unpacking(result).props.username));
-});
+  return fs.promises.appendFile(fileNamePath, dataRow.join(' ') + "\n")
+  .then(()=>resetAtMax())
+  .catch(err=>console.log("Error reporting", err));
+}
 
-requestsRep.set('update user pwd', (result)=>console.log(result));
-
-requestsRep.set('update my user pwd', (result)=>console.log(result));
-
-requestsRep.set('create user', ()=>makeReport("user created"));
-
-requestsRep.set('send mail', (result)=>console.log(result));
-
-requestsRep.set('edit my props', (result)=>console.log(result));
-
-requestsRep.set('edit my sort_order', (result)=>console.log(result));
-
-requestsRep.set('error', (result)=>console.log(result));
-
-export default function reporting(result, action){
-  if (typeof requestsRep.get(action)=="function") { 
-    requestsRep.get(action)(result);
-  } 
-};
+function resetAtMax(){
+  return fs.promises.stat(fileNamePath)
+  .then((stat)=>{
+    if (stat.size > config.reportsFileMaxSize) {
+      fs.promises.rename(fileNamePath, fileNamePath.replace('.txt', '') + '.old.txt').then(()=>fs.promises.writeFile(fileNamePath, "new file\n"));
+    }
+  });
+}

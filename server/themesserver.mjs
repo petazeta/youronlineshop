@@ -1,7 +1,8 @@
 
-import SiteTheme, {decodeCssImageUrlPath} from './themes.mjs';
+import config from './cfg/mainserver.mjs';
+import SiteTheme, {decodeCssImageUrlPath} from './../shared/server/themes.mjs';
 
-const myTheme = new SiteTheme();
+const myTheme = new SiteTheme(config.layoutsPath);
 
 export function startThemes(themeId) {
   return myTheme.readTree(themeId);

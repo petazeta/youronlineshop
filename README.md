@@ -32,9 +32,11 @@ Awards:
 - Easy edition
 - Quick purchase process
 - Website pages (About, Contact, ect...)
+- Multilingual
 - Ultra light code
 - Themes (Templates and css)
 - Export / Import
+- [Multi shop](multishopguide.md)
 
 
 ## Installation
