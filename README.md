@@ -36,7 +36,7 @@ Awards:
 - Ultra light code
 - Themes (Templates and css)
 - Export / Import
-- [Multi shop](multishopguide.md)
+- [Multi shop](docs/multishopguide.md)
 
 
 ## Installation
