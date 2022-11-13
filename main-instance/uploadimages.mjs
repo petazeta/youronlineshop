@@ -1,7 +1,7 @@
 import config from './cfg/mainserver.mjs';
 import authentication from './authentication.mjs';
 import path from 'path';
-import parseContent from './multipartreceiver.mjs';
+import parseContent from '../server/multipartreceiver.mjs';
 import {errorResponse} from './respond.mjs';
 import {isAllowedToUpdateCatalogImage} from './safety.mjs';
 

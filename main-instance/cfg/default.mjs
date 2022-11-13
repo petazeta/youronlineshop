@@ -1,5 +1,5 @@
 export default {
-  masterPassword: false,
+  // masterPassword: false, // not implemented
   autoLogin: false,
   // serverPath: "server", // for logs
   // basePath: "./", // For folders: shared, client, catalog-images, layouts, site
@@ -18,4 +18,5 @@ export default {
   // catalogImagesSmallFolderName: "small",
   // catalogImagesBigFolderName: "big",
   // cssImagesUrlPath: "css-images",
+  timeZone: 'Europe/Madrid',
 }

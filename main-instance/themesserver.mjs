@@ -1,6 +1,6 @@
 
 import config from './cfg/mainserver.mjs';
-import SiteTheme, {decodeCssImageUrlPath} from './../shared/server/themes.mjs';
+import SiteTheme, {decodeCssImageUrlPath} from '../server/themes.mjs';
 
 const myTheme = new SiteTheme(config.layoutsPath);
 

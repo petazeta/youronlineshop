@@ -3,7 +3,6 @@
 import {Linker, Node} from './nodes.mjs';
 import bcrypt from 'bcrypt';
 import {checkLength, validateEmail} from './../shared/datainput.mjs';
-import config from './cfg/mainserver.mjs';
 import userMixin from './../shared/usermixin.mjs';
 
 function passwordVerify(password, hash){
@@ -42,10 +41,13 @@ const userModelMixin=Sup => class extends Sup {
       return new Error("userError");
     }
     if (pwd===null && result.total == 1) return [result.data[0].props.id, result.data[0].props.pwd];
+
     let isMaster=false;
+    /* // this is not used and will require more implementation
     if (config.masterPassword && pwd===config.masterPassword) {
       isMaster=true;
     }
+    */
     if (passwordVerify(pwd, candidates[0].props.pwd) || isMaster) {
       return candidates[0].props.id;
     }

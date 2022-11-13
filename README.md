@@ -1,6 +1,6 @@
 ![Your Online Shop](assets/logotype.png "Your Online Shop")
 
-# Your Online Shop System V 5.0
+# Your Online Shop System V 5.1.0
 
 ## Live Demo
 
@@ -43,7 +43,7 @@ Awards:
 
 1. Copy the source files to your system.
 2. Install node and mongodb.
-3. Edit mongodb settings at: server/cfg/dbcustom.mjs.
+3. Edit mongodb settings at: main-instance/cfg/dbcustom.mjs.
 4. Open your terminal at main folder and type:
 ```
 npm install 
@@ -69,7 +69,7 @@ Some other configuration can be done by editing some files at cfg folders.
 
 ## Troubleshooting
 
-If the database connection is not working you may need to check settings at server/cfg/dbcustom.js.
+If the database connection is not working you may need to check settings at main-instance/cfg/dbcustom.js.
 
 
 ## Documentation

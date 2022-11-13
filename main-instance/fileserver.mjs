@@ -6,7 +6,7 @@
   - ./client/ ./shared/ ./catalog-images/ <==>
 */
 import path from 'path';
-import makeReport from './reports.mjs';
+import makeReport from './reportsserver.mjs';
 import config from './cfg/mainserver.mjs';
 import respond from './streamfile.mjs';
 

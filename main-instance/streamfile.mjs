@@ -1,6 +1,6 @@
 import fs from 'fs';
-import getMimeType from './mimetypes.mjs';
-import makeReport from './reports.mjs';
+import getMimeType from '../server/mimetypes.mjs';
+import makeReport from './reportsserver.mjs';
 
 export default function streamFile(pathName, response) {
   return fs.stat(pathName, function(err, stat) {

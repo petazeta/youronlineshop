@@ -15,15 +15,15 @@ import config from './cfg/mainserver.mjs';
 import reporting from './reportcases.mjs';
 import makeRequest, {getResponseContentType} from './responses.mjs';
 import authentication from './authentication.mjs';
-import {cacheRequest, cacheResponse} from './cache.mjs';
-import collectRequest from './collectrequest.mjs';
+import {cacheRequest, cacheResponse} from './cacheserver.mjs';
+import collectRequest from '../server/collectrequest.mjs';
 
 export default function sendResponse(request, response) {
   let data, user;
 
   async function mainRequest(request) {
     user= await authentication(request.headers);
-    data = await collectRequest(request);
+    data = await collectRequest(request, config.requestMaxSize);
     if (Array.isArray(data.action)) {
       const queries=data.action.map((myAction, i)=>{
         if (data.parameters) return ()=>makeRequest(user, data.action[i], data.parameters[i]);

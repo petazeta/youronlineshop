@@ -1,7 +1,7 @@
 import http from 'http';
 // import app from './server/index.mjs';
 
-let defaultInstance='./server/index.mjs';
+let defaultInstance='./main-instance/index.mjs';
 let defaultPort='3000';
 let instances=[];
 

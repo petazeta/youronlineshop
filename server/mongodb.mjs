@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 const {Schema, SchemaTypes} = mongoose;
 
-function setDbSchema(dbLink) {
-
+export function setDbSchema(dbLink) {
   if (!dbLink) dbLink=mongoose;
   
   if (Object.entries(dbLink.models).length > 0) return dbLink.models;
@@ -326,10 +325,9 @@ function setDbSchema(dbLink) {
   
   return dbLink.models;
 }
-
+/*
 async function populateDb() {
-  //await mongoose.connection.dropDatabase();
-  //await dbLink.models["Languages"].create({code: "en"});
+  await mongoose.connection.dropDatabase();
+  await dbLink.models["Languages"].create({code: "en"});
 }
-    
-export {setDbSchema, populateDb};
+*/

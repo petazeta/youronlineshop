@@ -1,6 +1,6 @@
-import basicMixin from './../basicmixin.mjs';
-import linksMixin from './../linksmixin.mjs';
-import {BasicLinker, BasicNode} from './../linker.mjs';
+import basicMixin from '../shared/basicmixin.mjs';
+import linksMixin from '../shared/linksmixin.mjs';
+import {BasicLinker, BasicNode} from '../shared/linker.mjs';
 import fs from 'fs';
 import path from 'path';
 

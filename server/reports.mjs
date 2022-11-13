@@ -1,33 +1,33 @@
-// hay que cambiarlo a una clase para que pueda utilizarse con server
 import fs from 'fs';
 import path from 'path';
 
-import config from './cfg/mainserver.mjs';
-
-const fileNamePath=path.join(config.reportsFilePath);
-
-export default function makeReport(data) {
-  if (typeof data=="string") {
-    data=[data];
+export default class SiteReport {
+  constructor(reportsFile, maxSize=50000){
+    this.reportsFile=reportsFile;
+    this.maxSize=maxSize;
   }
-  return addRecord(data);
-}
-
-function addRecord(dataRow){
-  process.env.TZ = 'Europe/Madrid';
-  const myDate=new Date();
-  dataRow.unshift(myDate.toISOString().split('T')[0] + ' ' + myDate.toISOString().split('T')[1].slice(0, 8))
-
-  return fs.promises.appendFile(fileNamePath, dataRow.join(' ') + "\n")
-  .then(()=>resetAtMax())
-  .catch(err=>console.log("Error reporting", err));
-}
-
-function resetAtMax(){
-  return fs.promises.stat(fileNamePath)
-  .then((stat)=>{
-    if (stat.size > config.reportsFileMaxSize) {
-      fs.promises.rename(fileNamePath, fileNamePath.replace('.txt', '') + '.old.txt').then(()=>fs.promises.writeFile(fileNamePath, "new file\n"));
+  makeReport(data) {
+    if (typeof data=="string") {
+      data=[data];
     }
-  });
+    return this.addRecord(data);
+  }
+
+  addRecord(dataRow){
+    const myDate=new Date();
+    dataRow.unshift(myDate.toISOString().split('T')[0] + ' ' + myDate.toISOString().split('T')[1].slice(0, 8))
+
+    return fs.promises.appendFile(this.reportsFile, dataRow.join(' ') + "\n")
+    .then(()=>this.resetIfMaxSize())
+    .catch(err=>console.log("Error reporting", err));
+  }
+
+  resetIfMaxSize(){
+    return fs.promises.stat(this.reportsFile)
+    .then((stat)=>{
+      if (stat.size > this.maxSize) {
+        fs.promises.rename(this.reportsFile, this.reportsFile.replace('.txt', '') + '.old.txt').then(()=>fs.promises.writeFile(this.reportsFile, "new file\n"));
+      }
+    });
+  }
 }

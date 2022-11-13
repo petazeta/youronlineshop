@@ -5,7 +5,7 @@
   - ./images/ => site/images
   - ./client/ ./shared/ ./catalog-images/ <==>
 */
-import makeReport from './reports.mjs';
+import makeReport from './reportsserver.mjs';
 import respond from './streamfile.mjs';
 import {getCssImagePathFromUrlPath} from './themesserver.mjs';
 

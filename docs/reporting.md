@@ -7,15 +7,15 @@ Collecting some crutical information from the app it is very valuable to check s
 
 # The reports
 
-To get a list of the events that would produce reports we have got a list ot them at the file reports.js. This is a way of centralize some of the events that would produce reports. But there could be reports generated in other parts of the code.
+To get a list of the events that would produce reports we have got a list ot them at the file reportcases.mjs. This is a way of centralize some of the events that would produce reports. But there could be reports generated in other parts of the code.
 
-Module reports.mjs is used by the request manager: respond.mjs and it lists the request actions that would produce a report and which information is reported.
+Module reportcases.mjs is used by the request manager: respond.mjs and it lists the request actions that would produce a report and which information is reported.
 
 # The reporting process
 
 For the reporting process we would need a module for performing the event registering
 
-Reporting process is implemented at reporting.mjs
+Reporting process is implemented at reports.mjs
 
 # Future of reporting
 

@@ -1,4 +1,4 @@
-import makeReport from './reports.mjs';
+import makeReport from './reportsserver.mjs';
 
 // falta un initial report con headers.host y header.referer que quizá se haga en cliente
 

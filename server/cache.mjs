@@ -9,7 +9,7 @@ mem_id ; memory: usually object
 mem_id ; function(query)
 */
 
-import {unpacking, arrayUnpacking} from './../shared/utils.mjs';
+import {unpacking, arrayUnpacking} from '../shared/utils.mjs';
 
 const isCacheFunc=new Map();
 const inCacheFunc=new Map();
@@ -63,7 +63,7 @@ pushCacheFunc.set('siteTextReset', (cacheMem, data, user, action, parameters) =>
   }
 });
 
-class SiteCache{
+export default class SiteCache{
   constructor(){
     this.cacheMem=new Map();
   }
@@ -88,14 +88,4 @@ class SiteCache{
       }
     }
   }
-}
-
-const cache=new SiteCache();
-
-export function cacheRequest(user, action, parameters) {
-  return cache.request(user, action, parameters);
-}
-
-export function cacheResponse(data, user, action, parameters) {
-  return cache.response(data, user, action, parameters);
 }

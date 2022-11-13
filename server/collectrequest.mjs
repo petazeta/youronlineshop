@@ -1,11 +1,10 @@
-import config from './cfg/mainserver.mjs';
-export default async function collectRequest(request) {
+export default async function collectRequest(request, requestMaxSize) {
   const buffers = [];
   let totalLength=0;
   for await (const chunk of request) {
     buffers.push(chunk);
     totalLength += chunk.length;
-    if (totalLength > config.requestMaxSize) {
+    if (totalLength > requestMaxSize) {
       request.connection.destroy();
       const myError = new Error('Max request length exceeded');
       myError.name="400";

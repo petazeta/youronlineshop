@@ -1,7 +1,7 @@
 import dbConfig from './cfg/dbmainserver.mjs';
 import config from './cfg/mainserver.mjs';
 import mongoose from 'mongoose';
-import {setDbSchema} from './mongodb.mjs';
+import {setDbSchema} from './../server/mongodb.mjs';
 import path from 'path';
 
 const queryMap=new Map();
@@ -303,7 +303,7 @@ class SiteDbGateway {
   async resetDb(importJsonFilePath) {
     const fs = await import('fs');
     const {unpacking, arrayUnpacking} = await import('./../shared/utils.mjs');
-    const {impData} = await import('./utils.mjs');
+    const {impData} = await import('../server/utils.mjs');
     let data=fs.readFileSync(importJsonFilePath, 'utf8');
     data=JSON.parse(data);
     const {Node, Linker, nodeFromDataSource} = await import('./nodes.mjs');

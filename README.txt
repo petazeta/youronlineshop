@@ -2,7 +2,7 @@
 * YOS Version *
 ***************
 
-5.0.0 23-10-2022 (month-day-year)
+5.1.0 13-11-2022 (day-month-year)
 
 
 ***********
@@ -43,7 +43,7 @@ Awards: Community Choice award by SourceForge
 
 1. Copy the source files to your system.
 2. Install node and mongodb.
-3. Edit mongodb settings at: server/cfg/dbcustom.mjs.
+3. Edit mongodb settings at: main-instance/cfg/dbcustom.mjs.
 4. Open your terminal at main folder and type:
 npm install 
 npm start
@@ -74,7 +74,7 @@ Some other configuration can be done by editing some files at cfg folders.
 * Troubleshooting *
 *******************
 
-If the database connection is not working you may need to check settings at server/cfg/dbcustom.js.
+If the database connection is not working you may need to check settings at main-instance/cfg/dbcustom.js.
 
 
 *****************

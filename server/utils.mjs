@@ -1,4 +1,4 @@
-import {replaceLangData, splitLangTree} from './../shared/utils.mjs';
+import {replaceLangData, splitLangTree} from '../shared/utils.mjs';
 // import tree that contains lang data
 export async function impData(newLangs, langrelname, datatree, currentLangs, rootelement) {
   if (!currentLangs) currentLangs=newLangs;
