@@ -15,23 +15,23 @@ RUN npm install
 ```
 `docker build --tag yos . -f Dockerfile-yos`
 
-Se construyen las instancias teniendo como base yos/server y cambiando cfg/dbcustom.mjs para la base de datos: "mongodb://admin:password@mongodb/yos-test?authSource=admin" y cfg/default.mjs para el tema de los logs y catalog-images: catalogImagesPath: "./catalog-images/test", reportsFilePath: "./logs/logs-test.txt"
+Se construyen las instancias teniendo como base yos/main-instance y cambiando cfg/dbcustom.mjs para la base de datos: "mongodb://admin:password@mongodb/yos-test?authSource=admin" y cfg/default.mjs para el tema de los logs y catalog-images: catalogImagesPath: "./catalog-images/test", reportsFilePath: "./logs/logs-test.txt"
 
 Se construye la imagen de yos-instances teniendo en cuenta todas las instancias
 
 ```
 FROM yos
 
-COPY --from=yos /home/yos/server /home/yos/test-server
-COPY --from=yos /home/yos/server /home/yos/test2-server
+COPY --from=yos /home/yos/main-instance /home/yos/test-instance
+COPY --from=yos /home/yos/main-instance /home/yos/test2-instance
 
 # Replacing config files
-COPY ./yos-test-server /home/yos/test-server
-COPY ./yos-test2-server /home/yos/test2-server
+COPY ./test-instance /home/yos/test-instance
+COPY ./test2-instance /home/yos/test2-instance
 
 WORKDIR /home/yos
 
-CMD ["node", "serverindex.mjs", "instances=./test-server/index.mjs:8001,./test2-server/index.mjs:8002"]
+CMD ["node", "serverindex.mjs", "instances=./test-instance/index.mjs:8001,./test2-instance/index.mjs:8002"]
 ```
 
 `docker build --tag yos-instances . -f Dockerfile-yos-instances`

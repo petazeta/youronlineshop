@@ -38,8 +38,6 @@ responseContentType.set('get templates content', 'text/html');
 responseAuth.set('get css content', async (parameters)=>getCssContent(parameters.styleId, parameters.themeId, parameters.subThemeId));
 responseContentType.set('get css content', 'text/html');
 
-responseAuth.set('get tables', ()=>Array.from(getTableList().values())); // deprecated
-
 responseAuth.set('reset database', resetDb);
 
 responseAuth.set('report', (parameters)=>makeReport(parameters.repData));

@@ -315,6 +315,15 @@ export function setDbSchema(dbLink) {
       }
     })
   );
+
+  dbLink.model("Cache",
+    new Schema({
+      key: String,
+      value: String,
+      isJSON: Boolean,
+    })
+  );
+
   Object.entries(dbLink.models).forEach(model => model[1].schema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()

@@ -1,5 +1,4 @@
 import {BasicLinker, BasicNode} from './../shared/linker.mjs';
-
 import dbGateway from './dbgateway.mjs';
 
 export function nodeFromDataSource(dataSource){
@@ -479,8 +478,12 @@ const dataModelMixin=Sup => class extends Sup {
     return parent;
   }
 
+  async dbGetMyProps(){
+    return await dbGateway.getMyProps(dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
+  }
+
   async dbLoadMySelf(){
-    const result = await dbGateway.getMyProps(dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
+    const result = await this.dbGetMyProps();
     if (result) {
       Object.assign(this.props, (result[0]));
     }

@@ -1,7 +1,7 @@
 import {nodeFromDataSource} from './nodes.mjs'; 
-import TABLES from './admintableslist.mjs';
-import ADMINUSERS from './adminusertypes.mjs';
-import {BasicNode} from './../shared/linker.mjs';
+import TABLES from '../server/admintableslist.mjs';
+import ADMINUSERS from '../server/adminusertypes.mjs';
+import {BasicNode} from '../shared/linker.mjs';
 
 //Safety check functions
 function getTableName(myNode){

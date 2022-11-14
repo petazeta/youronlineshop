@@ -6,7 +6,7 @@
   - ./client/ ./shared/ ./catalog-images/ <==>
 */
 import makeReport from './reportsserver.mjs';
-import respond from './streamfile.mjs';
+import respond from '../server/streamfile.mjs';
 import {getCssImagePathFromUrlPath} from './themesserver.mjs';
 
 export default function fileServer(request, response) {

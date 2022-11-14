@@ -38,8 +38,12 @@ export default function sendResponse(request, response) {
     }
     else {
       // check cache before requesting
-      const cacheResult = cacheRequest(user, data.action, data.parameters);
-      return cacheResult!==false ? cacheResult : makeRequest(user, data.action, data.parameters);
+      const cacheResult = await cacheRequest(user, data.action, data.parameters);
+      if (cacheResult!==false) {
+        console.log(`${data.action} comes from cache`);
+        return cacheResult;
+      }
+      return makeRequest(user, data.action, data.parameters);
     }
   }
   

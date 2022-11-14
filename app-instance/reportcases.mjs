@@ -4,8 +4,6 @@ import makeReport from './reportsserver.mjs';
 
 const requestsRep=new Map();
 
-requestsRep.set('get tables', (result)=>makeReport("get tables: " + result.length));
-
 requestsRep.set('init database', (result)=>console.log(result));
 
 requestsRep.set('login', (result)=>{

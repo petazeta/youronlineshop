@@ -17,25 +17,45 @@ export default function (request, response) {
 routerMap.add((request, response)=>{
   const pathName=new URL(request.url, 'http://localhost').pathname;
   if (!pathName.match(new RegExp('^/' + config.requestUrlPath))) return false;
-  import('./respond.mjs').then(({default: sendResponse}) => sendResponse(request, response));
+  import('./respond.mjs')
+  .then(({default: sendResponse}) => sendResponse(request, response))
+  .catch(err=>{
+    makeReport(err);
+    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
+  });
   return true;
 });
 // css image
 routerMap.add((request, response)=>{
   const pathName=new URL(request.url, 'http://localhost').pathname;
   if (!pathName.match(new RegExp('^/css-images/'))) return false;
-  import('./cssimageserver.mjs').then(({default: sendResponse}) => sendResponse(request, response));
+  import('./cssimageserver.mjs')
+  .then(({default: sendResponse}) => sendResponse(request, response))
+  .catch(err=>{
+    makeReport(err);
+    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
+  });
   return true;
 });
 // upload
 routerMap.add((request, response)=>{
   const pathName=new URL(request.url, 'http://localhost').pathname;
   if (!pathName.match(new RegExp('^/' + config.uploadImagesUrlPath))) return false;
-  import('./uploadimages.mjs').then(({default: upload})=>upload(request, response));
+  import('./uploadimages.mjs')
+  .then(({default: upload})=>upload(request, response))
+  .catch(err=>{
+    makeReport(err);
+    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
+  });
   return true;
 });
 // static
 routerMap.add((request, response)=>{
-  import('./fileserver.mjs').then(({default: fileServer})=>fileServer(request, response));
+  import('./fileserver.mjs')
+  .then(({default: fileServer})=>fileServer(request, response))
+  .catch(err=>{
+    makeReport(err);
+    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
+  });
   return true;
 });

@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt": "*",
     "mongoose": "*",
-    "nodemailer": "*"
+    "nodemailer": "*",
+    "redis": "^4.5.0"
   }
 }

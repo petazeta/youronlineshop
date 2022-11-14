@@ -7,9 +7,7 @@ export default class SiteReport {
     this.maxSize=maxSize;
   }
   makeReport(data) {
-    if (typeof data=="string") {
-      data=[data];
-    }
+    if (!Array.isArray(data)) data=[data];
     return this.addRecord(data);
   }
 
@@ -24,7 +22,7 @@ export default class SiteReport {
 
   resetIfMaxSize(){
     return fs.promises.stat(this.reportsFile)
-    .then((stat)=>{
+    .then(stat=>{
       if (stat.size > this.maxSize) {
         fs.promises.rename(this.reportsFile, this.reportsFile.replace('.txt', '') + '.old.txt').then(()=>fs.promises.writeFile(this.reportsFile, "new file\n"));
       }

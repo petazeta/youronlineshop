@@ -24,11 +24,11 @@ isCacheFunc.set('siteText', (user, action, parameters) => {
   return false;
 });
 
-inCacheFunc.set('siteText', (cacheMem, user, action, parameters) => {
+inCacheFunc.set('siteText', async (cacheMem, user, action, parameters) => {
   const extraParents=arrayUnpacking(parameters.extraParents);
   const myLangId = extraParents && extraParents[0]?.partner && extraParents[0].partner.props.id;
-  if (!cacheMem.get('siteText')) return false;
-  if (myLangId!=cacheMem.get('lang_id')) return false;
+  if (!await cacheMem.get('siteText')) return false;
+  if (myLangId!=await cacheMem.get('lang_id')) return false;
   return true;
 });
 
@@ -63,27 +63,64 @@ pushCacheFunc.set('siteTextReset', (cacheMem, data, user, action, parameters) =>
   }
 });
 
+isCacheFunc.set('templates', (user, action, parameters) => {
+  if (action!="get templates content") return false;
+  return true;
+});
+
+inCacheFunc.set('templates', async (cacheMem, user, action, parameters) => {
+  if (parameters.themeId!=await cacheMem.get('theme_id') || parameters.subThemeId!=await cacheMem.get('subtheme_id')) return false;
+  if (!await cacheMem.get('templates')) return false;
+  return true;
+});
+
+pushCacheFunc.set('templates', (cacheMem, result, user, action, parameters) => {
+  // there are options like error result that should be cache free! still not implemented
+  cacheMem.set('templates', result);
+  cacheMem.set('theme_id', parameters.themeId);
+  cacheMem.set('subtheme_id', parameters.subThemeId);
+});
+
+function excludeKeys(excKeys) {
+  escKeys.forEach((escKey)=>{
+    isCacheFunc.delete(excKey);
+    inCacheFunc.delete(excKey);
+    pushCacheFunc.delete(excKey);
+  });
+  return isCacheFunc.keys();
+}
+
 export default class SiteCache{
-  constructor(){
-    this.cacheMem=new Map();
+  constructor(memDriver, excKeys=["templates"]){
+    /*
+    if (type=='redis') {
+      this.cacheMem=new Map();
+      return;
+    }
+    if (type=='mongodb') {
+      this.cacheMem=new Map();
+      return;
+    }
+    */
+    this.cacheMem=memDriver;
+    if (excKeys.length) excludeKeys(excKeys);
   }
-  
-  request(user, action, parameters) {
+
+  async request(user, action, parameters) {
     const myKeys=isCacheFunc.keys();
     for (const myKey of myKeys) {
-      if (isCacheFunc.get(myKey)(user, action, parameters) && inCacheFunc.get(myKey)(this.cacheMem, user, action, parameters)) {
-        console.log(`${action} comes from cache`);
-        return this.cacheMem.get(myKey);
+      if (isCacheFunc.get(myKey)(user, action, parameters) && await inCacheFunc.get(myKey)(this.cacheMem, user, action, parameters)) {
+        return await this.cacheMem.get(myKey);
       }
     }
     return false;
   }
 
-  response(data, user, action, parameters) {
+  async response(data, user, action, parameters) {
     const myKeys=isCacheFunc.keys();
     for (const myKey of myKeys) {
       // it only push when the cache is empty to avoid refreshing every time
-      if (isCacheFunc.get(myKey)(user, action, parameters) && !inCacheFunc.get(myKey)(this.cacheMem, user, action, parameters)) {
+      if (isCacheFunc.get(myKey)(user, action, parameters) && ! await inCacheFunc.get(myKey)(this.cacheMem, user, action, parameters)) {
         pushCacheFunc.get(myKey)(this.cacheMem, data, user, action, parameters);
       }
     }

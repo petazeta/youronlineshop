@@ -19,4 +19,5 @@ export default {
   // catalogImagesBigFolderName: "big",
   // cssImagesUrlPath: "css-images",
   timeZone: 'Europe/Madrid',
+  cache: 'mongodb', // => mem, redis, mongodb, none.
 }
