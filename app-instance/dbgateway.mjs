@@ -160,7 +160,7 @@ class SiteDbGateway {
       offset=limit[0];
       max=limit[1] - limit[0];
     }
-    const query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp);
+    let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp);
     if (max) query=query.limit(max);
     if (offset) query=query.skip(offset);
     const result = (await query.exec()).map(mo=>mo.toJSON());
