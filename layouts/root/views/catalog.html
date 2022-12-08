@@ -13,7 +13,7 @@
 
   thisNode.getRelationship("items").children=[];
   await thisNode.getRelationship("items").loadRequest("get my tree", {extraParents: extraParents, limit: [thisParams.startIndex, thisParams.endIndex]});
-  thisNode.getRelationship("items").props.total=getPagination(thisNode).total; // restablecemos el valor sin los límites
+  // thisNode.getRelationship("items").props.total=getPagination(thisNode).total; // restablecemos el valor sin los límites POR QUE??
 
 
   //To show add product when no products in the category

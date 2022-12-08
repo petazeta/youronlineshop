@@ -12,9 +12,9 @@ export default class SiteReport {
   }
 
   addRecord(dataRow){
+    console.log("reporting", dataRow);
     const myDate=new Date();
     dataRow.unshift(myDate.toISOString().split('T')[0] + ' ' + myDate.toISOString().split('T')[1].slice(0, 8))
-
     return fs.promises.appendFile(this.reportsFile, dataRow.join(' ') + "\n")
     .then(()=>this.resetIfMaxSize())
     .catch(err=>console.log("Error reporting", err));

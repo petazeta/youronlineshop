@@ -9,7 +9,7 @@ requestsRep.set('init database', (result)=>console.log(result));
 requestsRep.set('login', (result)=>{
   if (result?.logError) makeReport("log in: " + result.code);
   else
-    import('./../shared/utils.mjs').then(({unpacking})=>makeReport("log in: " + unpacking(result).props.username));
+    import('../../shared/utils.mjs').then(({unpacking})=>makeReport("log in: " + unpacking(result).props.username));
 });
 
 requestsRep.set('update user pwd', (result)=>console.log(result));

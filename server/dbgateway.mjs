@@ -1,28 +1,12 @@
-import dbConfig from './cfg/dbmainserver.mjs';
-import config from './cfg/mainserver.mjs';
 import mongoose from 'mongoose';
-import {setDbSchema} from './../server/mongodb.mjs';
-import path from 'path';
+import {setDbSchema} from './dbschema.mjs';
 
-const queryMap=new Map();
-
-class SiteDbGateway {
+export default class SiteDbGateway {
   constructor(){
-    this.tableList=new Map();
-    this.tableRef=new Map();
+    this.tableList;
+    this.tableRef;
     this.dbLink;
   }
-/*
-  setQueryMap(){
-    queryMap.set("get tables", this.getTables);
-    queryMap.set("get foreign keys", this.getForeignKeys);
-    queryMap.set("get relationships from table", this.getRelationshipsFromTable);
-  }
-
-  async dbRequest(query, params=[]) {
-    return await this.queryMap.get(query)(...params);
-  }
-  */
 
   async connect(cfgUrl) {
     if (this.dbLink) return this.dbLink;
@@ -42,22 +26,12 @@ class SiteDbGateway {
     });
   }
 
-  getTableList() {
-    if (this.tableList.size==0) {
-      const tables = this.getTables();
-      for (const tableName of tables) {
-        this.tableList.set('TABLE_' + tableName.toUpperCase(), tableName);
-        this.tableRef.set(tableName, 'TABLE_' + tableName.toUpperCase());
-      }
+  setTableList() {
+    if (!this.tableList) {
+      this.tableList=new Map(this.getTables().map(tableName=>['TABLE_' + tableName.toUpperCase(), tableName]));
+      this.tableRef=new Map(this.getTables().map(tableName=>[tableName, 'TABLE_' + tableName.toUpperCase()]));
     }
     return this.tableList;
-  }
-  // return array
-  async getTableRef() {
-    if (this.tableList.size==0) {
-      await this.getTableList();
-    }
-    return this.tableRef;
   }
 
   getTables(){
@@ -65,38 +39,21 @@ class SiteDbGateway {
   }
 
   getForeignKeys(tableName) {
-    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref).map(([key, value])=>new Object({name: key, parentTableName: value.ref.toString()}));
+    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref)
+    .map(([key, value])=>({name: key, parentTableName: value.ref.toString()}));
   }
 
   getRelationshipsFromTable(tableName) {
-    /*
-    const result=[];
-    for (const [childTableName, model] of Object.entries(this.dbLink.models)) {
-      for (const [key, value] of Object.entries(model.schema.tree)) {
-        if (typeof value == "object" && value.ref && value.ref===tableName) {
-          result.push({childTableName: childTableName, parentTableName: tableName, name: childTableName.toLowerCase()});
-        }
-      }
-    }
-    return result;
-    */
-    // No estoy seguro si en lugar de filter se puede usar find, quizas no puede haber más de un resultado en esa situación
-    return Object.entries(this.dbLink.models).reduce((tot, [childTableName, model])=>tot.concat(
-     Object.entries(model.schema.tree).filter(([key, value])=>value?.ref===tableName).map(()=>new Object({childTableName: childTableName, parentTableName: tableName, name: childTableName.toLowerCase()}))
-    ), []);
+    return Object.entries(this.dbLink.models).reduce((tot, [childTableName, model])=>{
+      if (Object.entries(model.schema.tree).find(([key, value])=>value?.ref===tableName))
+        tot.push({childTableName: childTableName, parentTableName: tableName, name: childTableName.toLowerCase()});
+      return tot;
+    }, []);
   }
 
-  async getExtraParentsFromTable(tableName) {
-    /*
-    const result=[];
-    for (const [key, value] of Object.entries(this.dbLink.model(tableName).schema.tree)) {
-      if (typeof value == "object" && value.ref) {
-        result.push({childTableName: tableName, parentTableName: value.ref.toString(), name: tableName.toLowerCase()});
-      }
-    }
-    return result;
-    */
-    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref).map(([key, value])=>new Object({childTableName: tableName, parentTableName: value.ref.toString(), name: tableName.toLowerCase()}));
+  getExtraParentsFromTable(tableName) {
+    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref)
+    .map(([key, value])=>({childTableName: tableName, parentTableName: value.ref.toString(), name: tableName.toLowerCase()}));
   }
 
   async setSiblingsOrderOnUpdate(tableName, positioncolumnname, thisId, newOrder, oldOrder, foreigncolumnname, foreignId) {
@@ -128,10 +85,12 @@ class SiteDbGateway {
   }
 
   getTableKeys(tableName) {
-    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(row=>!(["_id", "__v"].includes(row[0]))).map(row=>{
-      const key={Field: row[0], Type: "text"};
-      if (row[0]=='id') key.Primary="yes";
-      const objType = row[1];
+    return Object.entries(this.dbLink.model(tableName).schema.tree)
+    .filter(([keyName, keyProps])=>!["_id", "__v"].includes(keyName))
+    .map(([keyName, keyProps])=>{
+      const key={Field: keyName, Type: "text"};
+      if (keyName=='id') key.Primary="yes";
+      const objType = keyProps;
       if (typeof objType == 'function') {
         if (objType.name=="Number") key.Type="integer";
         return key;
@@ -184,24 +143,20 @@ class SiteDbGateway {
 
   async getChildren(foreigncolumnnames, positioncolumnname, data, extraParents=null, filterProp={}, limit=[], count=false) {
     let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(Object.assign(filterProp, {[foreigncolumnnames[0]] : { $eq: data.partner.props.id } }));
-    if (foreigncolumnnames?.length>0) {
-      let offset, max;
-      if (limit.length == 2) {
-        offset=limit[0];
-        max=limit[1] - limit[0];
-      }
-      query = query.find({[foreigncolumnnames[0]]: {$eq: data.partner.props.id}});
-      for (let i=1; i<foreigncolumnnames.length; i++) {
-        query = query.find({[foreigncolumnnames[i]]: {$eq: extraParents[i-1].partner.props.id}});
-      }
-      if (positioncolumnname) {
-         query = query.sort({[positioncolumnname] : 1})
-      }
+    for (let i=1; i<foreigncolumnnames.length; i++) {
+      query = query.find({[foreigncolumnnames[i]]: {$eq: extraParents[i-1].partner.props.id}});
+    }
+    if (positioncolumnname) {
+       query = query.sort({[positioncolumnname] : 1})
+    }
+    if (limit.length == 2) {
+      let offset=limit[0];
+      let max=limit[1] - limit[0];
       if (max) query=query.limit(max);
       if (offset) query=query.skip(offset);
     }
     if (count) {
-      const result = await query.count().exec();
+      const result = await query.count().exec(); // count(true) => with limit
       return {total: result, data: null};
     }
     const result = (await query.exec()).map(mo=>mo.toJSON());
@@ -219,8 +174,9 @@ class SiteDbGateway {
     }
     if (positioncolumnname && !myProps[positioncolumnname]) {
       // Insert to last position order by default
-      const req=myforeigncolumnname ? {[myforeigncolumnname] : data.partner.props.id} : {}; 
-      const result = await this.dbLink.model(this.tableList.get(data.props.childTableName)).findOne(req, {[positioncolumnname]: 1, _id:0}).sort({[positioncolumnname]:-1});
+      let positionRq={}
+      if (myforeigncolumnname) positionRq={[myforeigncolumnname] : data.partner.props.id}
+      const result = await this.dbLink.model(this.tableList.get(data.props.childTableName)).findOne(positionRq, {[positioncolumnname]: 1, _id:0}).sort({[positioncolumnname]:-1});
       if (!result || !result[positioncolumnname]) myProps[positioncolumnname]=1;
       else myProps[positioncolumnname]=result[positioncolumnname] + 1;
     }
@@ -302,8 +258,8 @@ class SiteDbGateway {
 
   async resetDb(importJsonFilePath) {
     const fs = await import('fs');
-    const {unpacking, arrayUnpacking} = await import('./../shared/utils.mjs');
-    const {impData} = await import('../server/utils.mjs');
+    const {unpacking, arrayUnpacking} = await import('../../shared/utils.mjs');
+    const {impData} = await import('../../server/utils.mjs');
     let data=fs.readFileSync(importJsonFilePath, 'utf8');
     data=JSON.parse(data);
     const {Node, Linker, nodeFromDataSource} = await import('./nodes.mjs');
@@ -321,27 +277,3 @@ class SiteDbGateway {
     return true;
   }
 }
-
-const dataBase=new SiteDbGateway();
-
-export async function initDb(){
-  await dataBase.connect(dbConfig.url);
-  dataBase.getTableList();
-}
-
-export function getTableList() {
-  return dataBase.tableList;
-}
-
-export function getTableRef() {
-  return dataBase.tableRef;
-}
-
-export async function resetDb(){
-  await dataBase.connect(dbConfig.url);
-  const {total} = await dataBase.elementsFromTable({props: {childTableName: "TABLE_LANGUAGES"}});
-  if (total===0) return await dataBase.resetDb(path.join(dbConfig.importPath, 'mongodb_dtbs.json'));
-  throw new Error('The database is not empty');
-}
-
-export default dataBase;

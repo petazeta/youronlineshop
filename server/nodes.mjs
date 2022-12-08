@@ -1,10 +1,4 @@
-import {BasicLinker, BasicNode} from './../shared/linker.mjs';
-import dbGateway from './dbgateway.mjs';
-
-export function nodeFromDataSource(dataSource){
-  const myClon= BasicLinker.detectLinker(dataSource) ? new Linker() : new Node();
-  return myClon.load(dataSource);
-}
+import {BasicLinker, BasicNode} from '../shared/linker.mjs';
 
 const linkerModelMixin=Sup => class extends Sup {
 
@@ -100,20 +94,20 @@ const linkerModelMixin=Sup => class extends Sup {
     wrapper.sysChildTableKeysInfo=[];
     
     //lets load systablekeys (referenced columns)
-    let result = dbGateway.getForeignKeys(dbGateway.tableList.get(tableName));
+    let result = this.dbGateway.getForeignKeys(this.dbGateway.tableList.get(tableName));
     for (const keyObj of result) {
       let sysKey={};
       sysKey.type='foreignkey';
       Object.assign(sysKey, keyObj);
       // to constant table names
-      sysKey.parentTableName=dbGateway.tableRef.get(sysKey.parentTableName);
+      sysKey.parentTableName=this.dbGateway.tableRef.get(sysKey.parentTableName);
       
       wrapper.sysChildTableKeysInfo.push(sysKey);
       wrapper.sysChildTableKeys.push(sysKey.name);
     }
     
     //Now the childTableKeys and positions skey
-    result = dbGateway.getTableKeys(dbGateway.tableList.get(tableName));
+    result = this.dbGateway.getTableKeys(this.dbGateway.tableList.get(tableName));
     for (const keyObj of result) {
       if (keyObj.Positioning=="yes") {
         let sysKey={};
@@ -152,7 +146,7 @@ const linkerModelMixin=Sup => class extends Sup {
   
   static async dbGetRoot(data) {
     const foreignKey= this.getSysKeyAsync(data);
-    const result = await dbGateway.getRoot(foreignKey, data);
+    const result = await this.dbGateway.getRoot(foreignKey, data);
 
     return this.readQuery(result)[0] || null;
   }
@@ -172,7 +166,7 @@ const linkerModelMixin=Sup => class extends Sup {
   static async dbGetChildren(data, extraParents=null, filterProp={}, limit=[], count=false) {
     const foreigncolumnnames=await this.getRealForeignKeys(data, extraParents);
     const positioncolumnname=this.getSysKeyAsync(data, 'sort_order');
-    let result = await dbGateway.getChildren(foreigncolumnnames, positioncolumnname, data, extraParents, filterProp, limit, count);
+    let result = await this.dbGateway.getChildren(foreigncolumnnames, positioncolumnname, data, extraParents, filterProp, limit, count);
     let children = this.readQuery(result.data);
     children = await this.removeSysProps(children, data);
     result.data=children;
@@ -193,7 +187,7 @@ const linkerModelMixin=Sup => class extends Sup {
     return children;
   }
   static async dbGetAllChildren(data, filterProp={}, limit=[]) {
-    let result = await dbGateway.elementsFromTable(data, filterProp, limit);
+    let result = await this.dbGateway.elementsFromTable(data, filterProp, limit);
     let children = this.readQuery(result.data);
     children = await this.removeSysProps(children, data);
     result.data=children;
@@ -231,8 +225,8 @@ const linkerModelMixin=Sup => class extends Sup {
 
   async dbGetMyPartner(childId) {
     const foreignKey = await this.getMySysKeyAsync();
-    const result = await dbGateway.getPartner(foreignKey, this, childId);
-    const partner=new Node(result);
+    const result = await this.constructor.dbGateway.getPartner(foreignKey, this, childId);
+    const partner=new this.constructor.nodeConstructor(result);
     this.constructor.removeSysProps([partner], new this.constructor(this.props.parentTableName))
     return partner;
   }
@@ -271,7 +265,7 @@ const linkerModelMixin=Sup => class extends Sup {
     if (extraParents && !Array.isArray(extraParents)) extraParents=[extraParents];
     const foreigncolumnnames=await this.getMyRealForeignKeys(extraParents);
     const positioncolumnname=await this.getMySysKeyAsync('sort_order');
-    return await dbGateway.insertChild(foreigncolumnnames, positioncolumnname, this, thisChild, extraParents, updateSiblingsOrder);
+    return await this.constructor.dbGateway.insertChild(foreigncolumnnames, positioncolumnname, this, thisChild, extraParents, updateSiblingsOrder);
   }
   
   async dbInsertMyLink(thisChild, extraParents=null) {
@@ -282,7 +276,7 @@ const linkerModelMixin=Sup => class extends Sup {
 
     //We try to update sort_order at the rest of elements
     if (!thisChild.props[positioncolumnname]) return afected;
-    await dbGateway.setSiblingsOrderOnInsert(dbGateway.tableList.get(this.props.childTableName), positioncolumnname, thisChild.props[positioncolumnname], thisChild.props.id, foreigncolumnnames[0], this.partner.props.id);
+    await this.constructor.dbGateway.setSiblingsOrderOnInsert(this.constructor.dbGateway.tableList.get(this.props.childTableName), positioncolumnname, thisChild.props[positioncolumnname], thisChild.props.id, foreigncolumnnames[0], this.partner.props.id);
     return afected;
   }
   
@@ -290,7 +284,7 @@ const linkerModelMixin=Sup => class extends Sup {
     if (extraParents && !Array.isArray(extraParents)) extraParents=[extraParents];
     const foreigncolumnnames=await this.getMyRealForeignKeys(extraParents);
     const positioncolumnname=await this.getMySysKeyAsync('sort_order');
-    return await dbGateway.setChildLink(foreigncolumnnames, positioncolumnname, this, thisChild, extraParents);
+    return await this.constructor.dbGateway.setChildLink(foreigncolumnnames, positioncolumnname, this, thisChild, extraParents);
   }
   
   //<-- it seems this is not needed anymore
@@ -361,8 +355,8 @@ const linkerModelMixin=Sup => class extends Sup {
     const positioncolumnname=await this.getMySysKeyAsync('sort_order');
     if (!positioncolumnname) return afected;
     //Now we got to update the sort_order of the borothers
-    if (foreigncolumnname) await dbGateway.setSiblingsOrderOnDelete(dbGateway.tableList.get(this.props.childTableName), positioncolumnname, child.props.id, foreigncolumnname, this.partner.props.id);
-    else dbGateway.setSiblingsOrderOnDelete(dbGateway.tableList.get(this.props.childTableName), positioncolumnname, child.props.id);
+    if (foreigncolumnname) await this.constructor.dbGateway.setSiblingsOrderOnDelete(this.constructor.dbGateway.tableList.get(this.props.childTableName), positioncolumnname, child.props.id, foreigncolumnname, this.partner.props.id);
+    else this.constructor.dbGateway.setSiblingsOrderOnDelete(this.constructor.dbGateway.tableList.get(this.props.childTableName), positioncolumnname, child.props.id);
     return afected;
   }
 
@@ -371,10 +365,10 @@ const linkerModelMixin=Sup => class extends Sup {
     if (!child.props.id) return false;
     const foreigncolumnname=await this.getMySysKeyAsync();
     if (!foreigncolumnname) throw new Error('Imposible to delete link');
-    const afected = dbGateway.deleteChildLink(dbGateway.tableList.get(this.props.childTableName), foreigncolumnname, child.props.id);
+    const afected = this.constructor.dbGateway.deleteChildLink(this.constructor.dbGateway.tableList.get(this.props.childTableName), foreigncolumnname, child.props.id);
     const positioncolumnname=await this.getMySysKeyAsync('sort_order');
     if (!positioncolumnname) return afected;
-    await dbGateway.setSiblingsOrderOnDelete(dbGateway.tableList.get(this.props.childTableName), positioncolumnname, child.props.id, foreigncolumnname, this.partner.props.id);
+    await this.constructor.dbGateway.setSiblingsOrderOnDelete(this.constructor.dbGateway.tableList.get(this.props.childTableName), positioncolumnname, child.props.id, foreigncolumnname, this.partner.props.id);
     return afected;
   }
 }
@@ -386,10 +380,10 @@ const dataModelMixin=Sup => class extends Sup {
   //<-- Database queries
   //<-- Load queries
   //It requires parent.props.childTableName
-  
+
   static dbGetRelationships(data){
-    const result = dbGateway.getRelationshipsFromTable(dbGateway.tableList.get(data.parent.props.childTableName));
-    const relationships=result.map(rel=>new Linker(dbGateway.tableRef.get(rel.childTableName), dbGateway.tableRef.get(rel.parentTableName), rel.name))
+    const result = this.dbGateway.getRelationshipsFromTable(this.dbGateway.tableList.get(data.parent.props.childTableName));
+    const relationships=result.map(rel=>new this.linkerConstructor(this.dbGateway.tableRef.get(rel.childTableName), this.dbGateway.tableRef.get(rel.parentTableName), rel.name))
     .sort(rel=>rel.props.childTableName==rel.props.parentTableName ? -1 : +1); //Rorder rels
     for (const rel of relationships) {
       rel.dbLoadMyChildTableKeys();
@@ -418,10 +412,10 @@ const dataModelMixin=Sup => class extends Sup {
     }
     else if (this.relationships.length > 0) myTableName=this.relationships[0].props.parentTableName;
     else return false;
-    const result = await dbGateway.getExtraParentsFromTable(dbGateway.tableList.get(myTableName));
+    const result = await this.constructor.dbGateway.getExtraParentsFromTable(this.constructor.dbGateway.tableList.get(myTableName));
     this.parent=result.length > 0 ? [] : null;
     for (let i=0; i<result.length; i++) {
-      this.parent[i] = new this.constructor.linkerConstructor(dbGateway.tableRef.get(result[i].childTableName), dbGateway.tableRef.get(result[i].parentTableName), result[i].name);
+      this.parent[i] = new this.constructor.linkerConstructor(this.constructor.dbGateway.tableRef.get(result[i].childTableName), this.constructor.dbGateway.tableRef.get(result[i].parentTableName), result[i].name);
       await this.parent[i].dbLoadMyChildTableKeys();
       this.parent[i].children[0]=this;
     }
@@ -479,7 +473,7 @@ const dataModelMixin=Sup => class extends Sup {
   }
 
   async dbGetMyProps(){
-    return await dbGateway.getMyProps(dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
+    return await this.constructor.dbGateway.getMyProps(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
   }
 
   async dbLoadMySelf(){
@@ -534,7 +528,7 @@ const dataModelMixin=Sup => class extends Sup {
     const isTableContent = this.parent && this.parent.sysChildTableKeysInfo &&
     this.parent.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName==table);
     if (isTableContent) newId = await this.dbInsertMySelf(extraParents);
-    const myReturn = new Node({id: newId});
+    const myReturn = new this.constructor({id: newId});
     for (const rel of this.relationships) {
       myReturn.addRelationship(await rel.dbInsertMyTreeTableContent(table, level, extraParents));
     }
@@ -575,11 +569,11 @@ const dataModelMixin=Sup => class extends Sup {
     if (foreigncolumnname && this.parent.partner && this.parent.partner.props.id) {
       //await this.parent.dbReleaseMyLink(this); //****** para que borrar el link si el link va en el propio elemento?????
       //Now we got to update the sort_order of the brothers
-      if (positioncolumnname) await dbGateway.setSiblingsOrderOnDelete(dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id, foreigncolumnname, this.parent.partner.props.id);
+      if (positioncolumnname) await this.constructor.dbGateway.setSiblingsOrderOnDelete(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id, foreigncolumnname, this.parent.partner.props.id);
     }
-    else if (positioncolumnname) await dbGateway.setSiblingsOrderOnDelete(dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id);
+    else if (positioncolumnname) await this.constructor.dbGateway.setSiblingsOrderOnDelete(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id);
     
-    return await dbGateway.deleteMe(dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
+    return await this.constructor.dbGateway.deleteMe(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
   }
 
   dbDeleteMyLink() {
@@ -593,29 +587,26 @@ const dataModelMixin=Sup => class extends Sup {
   //<-- Update queries
   async dbUpdateMyProps(proparray){
     if (!this.props.id) return false;
-    return await dbGateway.updateMe(dbGateway.tableList.get(this.parent.props.childTableName), this.props.id, proparray);
+    return await this.constructor.dbGateway.updateMe(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), this.props.id, proparray);
   }
 
   async dbUpdateMySortOrder(newSortOrder){
     if (!this.props.id || !Number.isInteger(newSortOrder)) return false;
     const positioncolumnname=await this.parent.getMySysKeyAsync('sort_order');
-    const myProps = await dbGateway.getMyProps(dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
+    const myProps = await this.constructor.dbGateway.getMyProps(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), this.props.id);
     const oldSortOrder=myProps[positioncolumnname];
     const proparray={[positioncolumnname]: newSortOrder};
-    const updated = await dbGateway.updateMe(dbGateway.tableList.get(this.parent.props.childTableName), this.props.id, proparray);
+    const updated = await this.constructor.dbGateway.updateMe(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), this.props.id, proparray);
     if (!updated) return updated;
     const foreigncolumnname=await this.parent.getMySysKeyAsync();
     if (foreigncolumnname) { //update sibling sort_order
-      await dbGateway.setSiblingsOrderOnUpdate(dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id, newSortOrder, oldSortOrder, foreigncolumnname, this.parent.partner.props.id);
+      await this.constructor.dbGateway.setSiblingsOrderOnUpdate(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id, newSortOrder, oldSortOrder, foreigncolumnname, this.parent.partner.props.id);
     }
-    else await dbGateway.setSiblingsOrderOnUpdate(dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id, newSortOrder, oldSortOrder);
+    else await this.constructor.dbGateway.setSiblingsOrderOnUpdate(this.constructor.dbGateway.tableList.get(this.parent.props.childTableName), positioncolumnname, this.props.id, newSortOrder, oldSortOrder);
     return updated;
   }
 }
 
 const Node = dataModelMixin(BasicNode);
-
-Node.linkerConstructor=Linker;
-Linker.nodeConstructor=Node;
 
 export {Linker, Node}

@@ -2,11 +2,9 @@
 // Basic Node mixin for parent - children relationships (links)
 // It contains some facilities related to parent children link elements: load, clone, addChild, etc...
 
-import {copyProps} from './basicmixin.mjs';
-
 export function getRoot(element) {
   if (!element._parent) return element;
-  else return getRoot(element._parent);
+  return getRoot(element._parent);
 }
 
 const linksMixin=Sup => class extends Sup {
@@ -23,13 +21,11 @@ const linksMixin=Sup => class extends Sup {
   // thisProps, up and down: when not missed it is an array of the properties names that should be loaded for the current element. And the upwards and downwards version.
   // The load procedures would replace children and parent
   load(source, levelUp, levelDown, thisProps, thisPropsUp, thisPropsDown) {
-    copyProps(this, source, thisProps); // basic data load (props)
-    if (levelUp !== 0) {
+    this.copyProps(source, thisProps); // basic data load (props)
+    if (levelUp !== 0)
       this.loadAsc(source, levelUp, thisPropsUp);
-    }
-    if (levelDown !== 0) {
+    if (levelDown !== 0)
       this.loadDesc(source, levelDown, thisPropsDown);
-    }
     return this;
   }
   
@@ -40,24 +36,23 @@ const linksMixin=Sup => class extends Sup {
   }
 
   loadDesc(source, level, thisProps) {
+    if (!surce?._children) return;
     if (level===0) return;
     if (level > 0) level--;
     this._children=[]; // reset children
-    for (const i in source._children) {
-      this._children[i]=new this.constructor;
-      this._children[i]._parent=this;
-      copyProps(this._children[i], source._children[i], thisProps); // loading just some props
-      this._children[i].loadDesc(source._children[i], level, thisProps);
-    }
+    source._children.forEach(sourceChild => {
+      const thisChild=this.addDescendent(new this.constructor());
+      this.constructor.copyProps(thisChild, sourceChild, thisProps);
+      thisChild.loadDesc(sourceChild, level, thisProps);
+    });
   }
 
   loadAsc(source, level, thisProps) {
+    if (!surce?._parent) return;
     if (level===0) return;
     if (level > 0) level--;
-    this._parent=null; // reset parent
-    this._parent=new this.constructor;
-    copyProps(this._parent, source._parent, thisProps);
-    this._parent.addChild(this); // new thing
+    this.setAscendant(new this.constructor());
+    this.constructor.copyProps(this._parent, source._parent, thisProps);
     this._parent.loadAsc(source._parent, level, thisProps);
   }
   
@@ -84,39 +79,34 @@ const linksMixin=Sup => class extends Sup {
   }
 
   removeDescendent(obj) {
-    if (obj) this._children = this._children.filter(child => child != obj);
+    return this._children = this._children.filter(child => child != obj);
   }
 
   removeDescendents(){
-    this._children=null;
+    this._children=[];
   }
 
   // Finds the child which value is as in obj key value pair. If no argument it returs first child
   getAscendent(objSearch) {
     if (!this._parent) return;
     if (!objSearch) return this._parent;
-    return Object.entries(objSearch).every(([objKey, objValue])=>
-      Object.entries(this._parent.props).find(([parentKey, parentValue])=>objKey==parentKey && objValue==parentValue));
+    if (Object.entries(objSearch).every(([objKey, objValue])=>
+      Object.entries(this._parent.props).find(([parentKey, parentValue])=>objKey==parentKey && objValue==parentValue)))
+      return this._parent;
   }
 
   setAscendent(obj) { // It replaces previous parent if present
-    this._parent=obj;
-    obj.addChild(this);
+    obj.addDescendent(this);
     return obj;
   }
 
   removeAscendent(obj) {
-    if (!obj) this._parent=null;
+    if (!obj) return this._parent=null;
     if (this._parent===obj) this._parent=null;
   }
 
   arrayFromTree() {
-    let container=[];
-    container.push(this);
-    for (const obj of this._children) {
-      container=container.concat(obj.arrayFromTree());
-    }
-    return container;
+    return this._children.reduce((acc, value)=>acc=acc.concat(value.arrayFromTree()), [this])
   }
 }
 

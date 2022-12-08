@@ -15,7 +15,7 @@ export default {
   itemExtend_On: true, // if true expand item extend is available
   viewsCacheOn: true, // true, sometimes false for development
   loadViewsAtOnce: true, // true
-  catPageSize: 10, // false if we don't want product pagination
+  catPageSize: 2, // false if we don't want product pagination
   currencyCode: 'USD', // 'USD', 'EUR' ...
   currencyLocale: null, // 'en-IN', 'en-US'  null => let for browser config
   categoryLevels: 2, // 1 or 2

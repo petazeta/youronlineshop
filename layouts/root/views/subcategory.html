@@ -27,21 +27,13 @@
         catalogView(); // Sometimes it is refreshed (when login/logout) so we propagate the refreshing to below nodes
       }
 
-      const itemView=function(itemNode) {
+      const itemViewOnAdded=function(itemNode) {
         getPagination(thisNode).onAdded(itemNode);
         itemNode.setView(document.getElementById("centralcontent"), "itempicturelarge");
       }
-      thisNode.getRelationship("items").addEventListener('addNewNode', itemView, 'addNewNode');
-
-      const refreshOnDeleted=async function(itemNode){
-        getPagination(thisNode).onDeleted(itemNode);
-      }
-      thisNode.getRelationship("items").addEventListener('deleteChildNode', refreshOnDeleted, 'deleteChildNode');
-
-      const refreshOnMoved=async function(move, itemNode, newOrder){
-        getPagination(thisNode).onMoved(move, itemNode, newOrder);
-      }
-      thisNode.getRelationship("items").addEventListener('moveNode', refreshOnMoved, 'moveNode');
+      thisNode.getRelationship("items").addEventListener('addNewNode', itemViewOnAdded, 'addNewNode');
+      thisNode.getRelationship("items").addEventListener('deleteChildNode', itemNode=>getPagination(thisNode).onDeleted(itemNode), 'deleteChildNode');
+      thisNode.getRelationship("items").addEventListener('moveNode', (move, itemNode, newOrder)=>getPagination(thisNode).onMoved(move, itemNode, newOrder), 'moveNode');
       
       const {setHistoryState, pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
       thisElement.addEventListener("click", function(event) {

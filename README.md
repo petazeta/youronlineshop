@@ -67,11 +67,6 @@ To edit some features from the checkout process you should log in with systemadm
 Some other configuration can be done by editing some files at cfg folders.
 
 
-## Troubleshooting
-
-If the database connection is not working you may need to check settings at main-instance/cfg/dbcustom.js.
-
-
 ## Documentation
 
 [Check Documentation](docs/overview.md)
@@ -82,6 +77,11 @@ If the database connection is not working you may need to check settings at main
 Y.O.S. system has a themes feature. You can find theme files at layouts folder.
 
 
+## Extensions
+
+There is a extensions folder which could include some extensions. Follow the extension readme file instructions for executing it.
+
+
 ## More
 
-We are still in development process at version 5.0.
+Consider giving us a star.

@@ -54,7 +54,7 @@ cover the View paradigm with the linker relational framework, templates, etc...
 
 # The Model
 
-some database queries examples
+some database queries examples. Model requesting is similar to graphQL.
 
 # Framework implementation
 

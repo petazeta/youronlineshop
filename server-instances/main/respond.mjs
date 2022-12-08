@@ -16,7 +16,7 @@ import reporting from './reportcases.mjs';
 import makeRequest, {getResponseContentType} from './responses.mjs';
 import authentication from './authentication.mjs';
 import {cacheRequest, cacheResponse} from './cacheserver.mjs';
-import collectRequest from '../server/collectrequest.mjs';
+import collectRequest from '../../server/collectrequest.mjs';
 
 export default function sendResponse(request, response) {
   let data, user;

@@ -1,6 +1,8 @@
 Activate selected Feature
 ===============
 
-# Intro
+## Intro
 
 Links active by the module activelauncher.js. thisNode.highLightElement
+
+## Procedure

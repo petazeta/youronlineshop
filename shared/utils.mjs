@@ -15,47 +15,48 @@
 import {BasicNode} from './linker.mjs';
 
 // serializing the node data
-export function deconstruct(myNode){
-  // We get to the root node and serialize from it, and for be able to get again to the present node we store it in an index field.
-  const indexNode=myNode; // set a pointer to the present node
-  myNode=BasicNode.getRoot(myNode);
-  if (!myNode) myNode=indexNode;
-  const serials=new Map();
+export function deconstruct(inputNode){
   // It returns the node with the basic data. It clears the links to parent and children.
   const clearNode = (myNode) => {
     const serialCommon={_parent: null, _children:[]},
-    serialFemale={partner: null, children:[]},
-    serialMale={parent: null, relationships:[]},
+    serialLinker={partner: null, children:[]},
+    serialNode={parent: null, relationships:[]},
     commonKeys=['props'],
-    maleKeys=[],
-    femaleKeys=['childTableKeys', 'childTableKeysInfo', 'sysChildTableKeys', 'sysChildTableKeysInfo'];
+    nodeKeys=[],
+    linkerKeys=['childTableKeys', 'childTableKeysInfo', 'sysChildTableKeys', 'sysChildTableKeysInfo'];
 
     const isLinker = BasicNode.detectLinker(myNode);
-    const myKeys = isLinker ? [...commonKeys, ...femaleKeys] : [...commonKeys, ...maleKeys];
-    const serialNode = isLinker ? {...serialCommon, ...serialFemale} : {...serialCommon, ...serialMale};
+    const myKeys = isLinker ? [...commonKeys, ...linkerKeys] : [...commonKeys, ...nodeKeys];
+    const serialResult = isLinker ? {...serialCommon, ...serialLinker} : {...serialCommon, ...serialNode};
     for (const key of myKeys) {
-      serialNode[key]=myNode[key];
+      serialResult[key]=myNode[key];
     }
-    return serialNode;
+    return serialResult;
   }
+  // We get to the root node and serialize from it, and for be able to get again to the present node we store it in an index field.
+  const indexNode=inputNode; // set a pointer to the present node
+  let rootNode=BasicNode.getRoot(inputNode);
+  if (!rootNode) rootNode=indexNode;
+  const serials=new Map();
   let indexKey; // For storing the indexKey
-  const innerSerialize = (myNode) => {
+  // uses indexNode, indexKey and serials
+  const innerSerialize = (rootNode) => {
     const myId=serials.size + 1; // this ensures unique ids
-    if (myNode===indexNode) indexKey=myId;
-    const newOne=clearNode(myNode);
+    if (rootNode===indexNode) indexKey=myId;
+    const newOne=clearNode(rootNode);
     newOne.props.__id=myId; // We set the id into the properties
 
-    if (myNode._parent && myNode._parent.props.__id) {
-      newOne._parent=myNode._parent.props.__id; // we assing the parent id to "_parent" property
+    if (rootNode._parent?.props.__id) {
+      newOne._parent=rootNode._parent.props.__id; // we assing the parent id to "_parent" property
     }
 
     serials.set(myId, newOne);
-    for (const re of myNode._children) {
+    for (const re of rootNode._children) {
       innerSerialize(re);
     }
   }
   
-  innerSerialize(myNode);
+  innerSerialize(rootNode);
   
   serials.forEach((value)=>{
     if (value?.props?.__id) delete value.props.__id;

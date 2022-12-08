@@ -8,7 +8,7 @@
 import path from 'path';
 import makeReport from './reportsserver.mjs';
 import config from './cfg/mainserver.mjs';
-import respond from '../server/streamfile.mjs';
+import respond from '../../server/streamfile.mjs';
 
 export default function fileServer(request, response) {
   let pathName=new URL(request.url, 'http://localhost').pathname;

@@ -3,7 +3,7 @@ Overview
 
 ## Introduction
 
-This software performs what so called Single Page Application (SPA). Any SPA need some services and it is common to use a framework for this purpouse. We have developed our own framework which name is: [Linker framework](linkerfmwk.md) or linker ecosystem. We are trying to develop it in a modular way so the components are autonomous and can be invoked in different apps. However there is a common basic pattern: the "node" object.
+This software performs what so called Single Page Application (SPA). Any SPA need some services and it is common to use a framework for this purpouse. We have developed our own framework which name is: [Linker framework](linkerfmwk.md) or linker ecosystem.
 
 In this guideline we will see some information about the linker ecosystem and the basic services of the SPA, some of them could be included as part of the the linker ecosystem to use them in other applications.
 
@@ -11,7 +11,9 @@ Plus to it we are using templates to show the elements and insert them into the 
 
 ## Linker framework / ecosystem
 
-Linker framework belongs to the singleton factory pattern. The "node" is the singleton that performs the vast mayoritiy of the procedures.
+Object classes where introduced to produce structured elements that could contain the basic data types. What is the next step forward? It is the way to produce structured elements containing another elements. This is what the linker framework helps doing by using relationships in database elements.
+
+Linker framework is belonging to the singleton factory pattern. The "node" is the singleton that performs the vast mayoritiy of the procedures.
 
 The node object can be extended for backend and frontend purpouses and it relates to other nodes in a parent-child tree structure, allowing the relationships regarding to the relational data structure of the database.
 
@@ -29,7 +31,7 @@ For the backend (server) we add some other characteristics for:
 Server is composed from these main services:
 
 - [Files deliver service](staticserver.md)
-- Database service
+- [Database service](db.md)
 - [Layout service](layout.md)
 - [Catalog images upload service](uploadimages.md)
 
@@ -38,11 +40,9 @@ And also these minor services:
 - [Authenticate service](userlogin.md)
 - [Cache service](cache.md)
 - [Reports service](reporting.md)
-- Services Igniting service
+- Starting service
 - [Request manager](reqres.md)
 - [Entrance script]()
-
-This clasification comes from the diferent services sources or because some services can be shared betwen installations.
 
 ## Client
 
@@ -66,6 +66,7 @@ Client minor services:
 - [Reporting](statistics.md)
 - [Event listener](eventlistener.md)
 - [Active link](activation.md)
+- [Pagination facility](pagination.md)
 
 
 ## Shared services
@@ -83,6 +84,7 @@ Services common in client and server are:
 
 - [javascript inheritance](jsinheritance.md)
 - [Asynchronicitiy](asyncawait.md)
+- [Function composition](composition.md)
 
 ## Template files
 
@@ -92,3 +94,7 @@ Main facilities implementations that you can find in templates are:
 - [Checkout](checkout.md)
 - [User area](userarea.md)
 - [Alerts]()
+
+## Creating a desktop client with Electron
+
+[Electron client](electron.md)

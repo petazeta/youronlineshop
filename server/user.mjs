@@ -2,8 +2,8 @@
 //++++falta funcion passwordVerify
 import {Linker, Node} from './nodes.mjs';
 import bcrypt from 'bcrypt';
-import {checkLength, validateEmail} from './../shared/datainput.mjs';
-import userMixin from './../shared/usermixin.mjs';
+import {checkLength, validateEmail} from '../shared/datainput.mjs';
+import userMixin from '../shared/usermixin.mjs';
 
 function passwordVerify(password, hash){
   hash = hash.replace('$2y$', '$2a$');
@@ -13,19 +13,18 @@ function passwordVerify(password, hash){
 const userModelMixin=Sup => class extends Sup {
   constructor(...args) {
     super(...args);
-    this.parent=new Linker("TABLE_USERS", "TABLE_USERSTYPES");
+    this.parent=new this.constructor.linkerConstructor("TABLE_USERS", "TABLE_USERSTYPES");
     this.parent.dbLoadMyChildTableKeys();
     return this;
   }
   static async setUserType(myUser, userType){
     //First we get the usertype (parent)
-    const usertypeMother=new Linker("TABLE_USERSTYPES");
+    const usertypeMother=new this.linkerConstructor("TABLE_USERSTYPES");
     await usertypeMother.dbLoadAllMyChildren({type: userType});
     //await parentPartner.parent.dbLoadMyChildTableKeys();
     const userTypeNode= usertypeMother.getChild();
     if (userTypeNode) {
       userTypeNode.dbLoadMyRelationships();
-      console.log("setUserType userTypeNode", userTypeNode);
       userTypeNode.getRelationship().addChild(myUser);
     }
     return myUser;
@@ -35,7 +34,7 @@ const userModelMixin=Sup => class extends Sup {
   }
   // If pwd===null, it checks just username and return username and password
   static async userCheck(username, pwd='') {
-    const result=await Linker.dbGetAllChildren(new Linker("TABLE_USERS"), {username: username});
+    const result=await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("TABLE_USERS"), {username: username});
     const candidates=result.data;
     if (result.total == 0) { //candidates=0
       return new Error("userError");
@@ -66,9 +65,9 @@ const userModelMixin=Sup => class extends Sup {
     if (email && !validateEmail(email)) {
       return new Error("emailError");
     }
-    const userCheck = await User.userCheck(username);
+    const userCheck = await this.userConstructor.userCheck(username);
     if (!(userCheck instanceof Error) || userCheck.message!="userError") return new Error("userExistsError");
-    const user=new User();
+    const user=new this.userConstructor();
     await user.setMyUserType(userType);
     user.props.username=username;
     let hash=bcrypt.hashSync(pwd, 8);
@@ -78,13 +77,13 @@ const userModelMixin=Sup => class extends Sup {
     await user.dbInsertMySelf();
     await user.dbLoadMyRelationships();
     const userdatarel=user.getRelationship("usersdata");
-    const defaultdata=new Node();
+    const defaultdata=new this.nodeConstructor();
     userdatarel.children[0]=defaultdata;
     defaultdata.parent=userdatarel;
     if (email) userdatarel.children[0].props.email=email;
     await userdatarel.children[0].dbInsertMySelf();
     const addressrel=user.getRelationship("addresses");
-    const newaddress=new Node();
+    const newaddress=new this.nodeConstructor();
     addressrel.children[0]=newaddress;
     newaddress.parent=addressrel;
     await addressrel.children[0].dbInsertMySelf();
@@ -101,8 +100,8 @@ const userModelMixin=Sup => class extends Sup {
     if (!checkLength(username, 4, 20)) {
       return new Error("userCharError");
     }
-    const myuser=new User();
-    const result=await Linker.dbGetAllChildren(myuser.parent, {username: username});
+    const myuser=new this.userConstructor();
+    const result=await this.linkerConstructor.dbGetAllChildren(myuser.parent, {username: username});
     if (result.total!==1) return false;
     myuser.props.id=result.data[0].props.id;
     return await myuser.dbUpdateMyPwd(pwd);
@@ -118,9 +117,9 @@ const userModelMixin=Sup => class extends Sup {
     if (!uname || !upwd) {
       return new Error("Not enoght data");
     }
-    const userCheck=await User.userCheck(uname, upwd);
+    const userCheck=await this.userConstructor.userCheck(uname, upwd);
     if (userCheck instanceof Error) return userCheck;
-    const user=new User();
+    const user=new this.userConstructor();
     user.props.username=uname;
     user.props.password=upwd;
     user.props.id=userCheck;
@@ -130,9 +129,9 @@ const userModelMixin=Sup => class extends Sup {
     return user;
   }
   static async autoLogin(uname){
-    const userCheck=await User.userCheck(uname, null);
+    const userCheck=await this.userConstructor.userCheck(uname, null);
     if (userCheck instanceof Error) return userCheck;
-    return login(userCheck[0], userCheck[1]);
+    return this.userConstructor.login(userCheck[0], userCheck[1]);
   }
   
   //**********
@@ -149,8 +148,8 @@ const userModelMixin=Sup => class extends Sup {
       if ('USER_ORDERSADMIN'==recipient) {
         userType='orders administrator';
       }
-      const parent=new Linker("TABLE_USERSTYPES");
-      const result=await Linker.dbGetAllChildren(parent, {type: userType});
+      const parent=new this.linkerConstructor("TABLE_USERSTYPES");
+      const result=await this.linkerConstructor.dbGetAllChildren(parent, {type: userType});
       if (result.total > 0) {
         parent.addChild(result.data[0]);
         await parent.children[0].dbLoadMyTree();
@@ -160,10 +159,10 @@ const userModelMixin=Sup => class extends Sup {
       }
     }
     else {
-      const result=await Linker.dbGetAllChildren(this.parent, {username: recipient});
+      const result=await this.linkerConstructor.dbGetAllChildren(this.parent, {username: recipient});
       if (result.total > 0) {
-        const parent=new Linker("TABLE_USERS");
-        myUser=new User();
+        const parent=new this.linkerConstructor("TABLE_USERS");
+        myUser=new this.userConstructor();
         parent.addChild(myUser);
         myUser.props.id=result.data[0].props.id;
         await myUser.dbLoadMyRelationships();
@@ -211,9 +210,4 @@ const userModelMixin=Sup => class extends Sup {
 }
 
 const User = userModelMixin(userMixin(Node));
-
-const userLogin = async (uname, upwd) => await User.login(uname, upwd);
-
-const userAutoLogin = async (uname) => await User.autoLogin(uname);
-
-export {User, userLogin, userAutoLogin};
+export default User;

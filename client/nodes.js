@@ -27,6 +27,14 @@ const modelMixin=Sup => class extends Sup {
     };
     if (authorizationToken) fetchParams.headers={...fetchParams.headers, ...authorizationToken};
     return fetch(url, fetchParams)
+    .then(res => res.json())
+    .then(resultJSON => {
+      if (resultJSON?.error==true) {
+        throw new Error(action + '. SERVER Message: ' + result.message);
+      }
+      return resultJSON;
+    });
+    /*
     .then(res => res.text())
     .then(resultTxt => {
       let result=null;
@@ -43,6 +51,8 @@ const modelMixin=Sup => class extends Sup {
       }
       return result;
     });
+    */
+
   }
   //~ makeRequest nick for when the data node is the actual node
   //~ Reduce option is for just removing the not necesary nodes and return the package version but not make the request

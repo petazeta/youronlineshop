@@ -3,7 +3,7 @@ export default {
   autoLogin: false,
   // serverPath: "server", // for logs
   // basePath: "./", // For folders: shared, client, catalog-images, layouts, site
-  sitePath: "./site/main",
+  sitePath: "./loader/main",
   // siteImagesPath: "./site/main/images",
   layoutsPath: "./layouts",
   catalogImagesPath: "./catalog-images/main",

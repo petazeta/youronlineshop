@@ -1,6 +1,6 @@
 import config from './cfg/mainserver.mjs';
 import dbConfig from './cfg/dbmainserver.mjs';
-import dbGateway, {initDb} from './dbgateway.mjs';
+import dbGateway, {initDb} from './dbgatewayserver.mjs';
 import {startThemes} from './themesserver.mjs';
 import {createClient} from 'redis';
 

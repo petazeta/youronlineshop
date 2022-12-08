@@ -2,7 +2,7 @@
 Layouts element
 
 - ThemeRoot dataNode
-  - Rel descendants :  [...]
+  - Rel descendents :  [...]
   - Rel styles: [css files]
   - Rel views: [html files: {id, fileName, path, relPath}]
 
@@ -11,7 +11,7 @@ id is the filename without the extension
 We need the root theme as well as the subtheme (activeTheme) because we would need to search at parent layouts for files not present at subtheme.
 */
 
-import readTree from './layoutfolderread.mjs';
+import {default as readTree} from './layoutfolderread.mjs';
 import fs from 'fs';
 import path from 'path';
 
@@ -19,9 +19,8 @@ export default class SiteLayout {
   constructor(layoutsPath){
     this.treeRoot;
     this.layoutsPath=layoutsPath;
-    this.layoutsPath=layoutsPath;
   }
-  readTree(themeId){
+  readTree(themeId='root'){
     this.treeRoot=readTree(path.join(this.layoutsPath, themeId));
   }
   getTpFilesList(themeId, subThemeId, excluded=false) {
@@ -47,22 +46,21 @@ export default class SiteLayout {
     const fileList=this.getCssFilesList(themeId, subThemeId);
     return fileList.get(imageId);
   }
-  // It searchs for the theme (child of descendants) from prop id as search
+  // It searchs for the theme (child of descendents) from prop id as search
   findTheme(search) {
     if (typeof search== "string") search={id: search};
     if (!search) {
       return this.treeMum.getChild();
     }
     function innerFind(search, myTree) {
-      if (!myTree) return false;
-      if (myTree.props[Object.keys(search)[0]]==Object.values(search)[0]) {
+      if (!myTree) return;
+      if (Object.entries(search).every(srch=>Object.entries(myTree.props).find(src=>srch[0]==src[0] && src[1]==srch[1]))) {
         return myTree;
       }
-      for (const child of myTree.getRelationship("descendants").children) {
+      for (const child of myTree.getRelationship("descendents").children) {
         let result=innerFind(search, child);
         if (result) return result;
       }
-      return false;
     }
     return innerFind(search, this.treeMum.getChild());
   }
@@ -70,12 +68,13 @@ export default class SiteLayout {
     if (!this.treeRoot || this.treeRoot.props.id!=themeId) this.readTree(themeId);
     let active = this.treeRoot;
     if (subThemeId) active = this.findTheme(subThemeId);
-    const cssContent= [getCommonStyle(this.layoutsPath, active), getStyle(this.layoutsPath, styleId, active)].reduce((cc, cssFilePath)=>cc+=getCss(cssFilePath), '');
+    const cssContent= getCss(getCommonStyle(this.layoutsPath, active)) + getCss(getStyle(this.layoutsPath, styleId, active));
     return encondeCssImageNames(cssContent, themeId, subThemeId);
   }
 }
 
 function getTp(tpId, tpFilePath) {
+  if (!fs.statSync(tpFilePath).isFile()) throw new Error('No Tp File: ', tpFilePath);
   return "<template id='tp" + tpId + "'>\n" + fs.readFileSync(tpFilePath, {encoding: "utf8"}) + "\n</template>\n";
 }
 function getCss(cssFilePath) {
@@ -83,16 +82,14 @@ function getCss(cssFilePath) {
   return "<style>\n" + fs.readFileSync(cssFilePath, {encoding: "utf8"}) + "\n</style>\n";
 }
 
-export function decodeCssImageUrlPath(imageUrlPath){
-  const imageFileName=path.basename(imageUrlPath);
-  const ImageData=new Map();
-  ImageData.set("imageId", imageFileName.split('.')[0].split('_')[0]);
-  ImageData.set("themeId", imageFileName.split('.')[0].split('_')[1]);
-  ImageData.set("subThemeId", imageFileName.split('.')[0].split('_')[2]);
+export function decodeCssImageUrlPath(/*string*/imageUrlPath){
+  const imageFileName=path.parse(imageUrlPath).name;
+  let [imageId, themeId, subThemeId]=imageFileName.split('_');
+  const ImageData=new Map([["imageId", imageId],["themeId", themeId],["subThemeId", subThemeId]]);
   return ImageData;
 }
 
-function encondeCssImageNames(cssContent, themeId, subThemeId){
+function encondeCssImageNames(/*string*/cssContent, /*string*/themeId, /*string*/subThemeId){
   let searchParams='';
   if (themeId) searchParams += '_' + themeId;
   if (subThemeId) searchParams += '_' + subThemeId;
@@ -110,7 +107,7 @@ function getCssFilesList(layoutsPath, myTheme) {
   return getFilesList(layoutsPath, "styles", myTheme, true);
 }
 
-function getFilesList(layoutsPath, folderName, myTheme, includeSubs=false) {
+function getFilesList(/*string*/layoutsPath, /*string*/folderName, myTheme, includeSubs=false) {
   let pointer=myTheme;
   const result=new Map();
   while (pointer) {

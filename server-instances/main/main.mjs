@@ -12,7 +12,19 @@ const routerMap=new Set();
 export default function (request, response) {
   Array.from(routerMap).some(myFunc=>myFunc(request, response));
 }
-
+/*
+// EXPERIMENTAL: para hacer streaming del resultado de la bd
+routerMap.add((request, response)=>{
+  const pathName=new URL(request.url, 'http://localhost').pathname;
+  if (!pathName.match(new RegExp('^/' + 'stream-cache-from-database'))) return false;
+  import('./streamfromdatabase_experimental.mjs')
+  .then(({default: sendResponse}) => sendResponse(request, response))
+  .catch(err=>{
+    makeReport(err);
+  });
+  return true;
+});
+*/
 // Request
 routerMap.add((request, response)=>{
   const pathName=new URL(request.url, 'http://localhost').pathname;
@@ -21,7 +33,6 @@ routerMap.add((request, response)=>{
   .then(({default: sendResponse}) => sendResponse(request, response))
   .catch(err=>{
     makeReport(err);
-    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
   });
   return true;
 });
@@ -33,7 +44,6 @@ routerMap.add((request, response)=>{
   .then(({default: sendResponse}) => sendResponse(request, response))
   .catch(err=>{
     makeReport(err);
-    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
   });
   return true;
 });
@@ -45,7 +55,6 @@ routerMap.add((request, response)=>{
   .then(({default: upload})=>upload(request, response))
   .catch(err=>{
     makeReport(err);
-    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
   });
   return true;
 });
@@ -55,7 +64,14 @@ routerMap.add((request, response)=>{
   .then(({default: fileServer})=>fileServer(request, response))
   .catch(err=>{
     makeReport(err);
-    if (err instanceof SyntaxError || err instanceof ReferenceError) throw err;
   });
   return true;
 });
+/*
+// quizas convendria crear una funcion para distinguir si el error viene del codigo, y quizas en ese caso salir del catch
+// tambien se podria crear un Error propio, llamarlo ThrowError: if (!err instanceof ThrowError) throw err;
+  .catch(err=>{
+    makeReport(err);
+    if (err instanceof SyntaxError || err instanceof ReferenceError || err instanceof TypeError) throw err;
+  });
+*/

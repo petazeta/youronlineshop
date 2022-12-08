@@ -228,7 +228,7 @@ docker run -d \
 
 De una vez levantando los contenedores
 ```
-version: '3' 
+version: '3.5' 
 services: 
   site-index-service: 
     image: site-index  
@@ -278,6 +278,7 @@ services:
     restart: always # allways up
     container_name: mongo-server 
     environment:
+    #Probar sin passwords
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
@@ -289,6 +290,7 @@ networks:
     driver: bridge
     ipam:
       driver: default
+    name: mynet
 volumes:
   mongo-data:
     driver: local
@@ -417,6 +419,8 @@ sudo docker build --tag yos-test2 . -f Dockerfile-yos-test2
 sudo docker build --tag yos-landing . -f Dockerfile-yos-landing
 sudo docker build --tag site-index . -f Dockerfile-site-index
 sudo docker-compose up -d --build --no-deps
+
+sudo docker-compose up -d mongo-express
 
 # Administración del sistema
 

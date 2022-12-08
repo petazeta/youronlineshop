@@ -1,9 +1,9 @@
 import {getTemplate, getTemplatesContent, getCssContent} from './themesserver.mjs';
-import {Node, Linker, nodeFromDataSource} from './nodes.mjs';
-import dbGateway, {getTableList, resetDb} from './dbgateway.mjs';
-import {User, userLogin} from './user.mjs';
+import {nodeFromDataSource, Node, Linker} from './nodesserver.mjs';
+import {getTableList, resetDb} from './dbgatewayserver.mjs';
+import {User, userLogin} from './userserver.mjs';
 import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from './safety.mjs';
-import {unpacking, arrayUnpacking, packing} from './../shared/utils.mjs';
+import {unpacking, arrayUnpacking, packing} from '../../shared/utils.mjs';
 import config from './cfg/mainserver.mjs';
 import path from 'path';
 import makeReport from './reportsserver.mjs';
@@ -38,7 +38,7 @@ responseContentType.set('get templates content', 'text/html');
 responseAuth.set('get css content', async (parameters)=>getCssContent(parameters.styleId, parameters.themeId, parameters.subThemeId));
 responseContentType.set('get css content', 'text/html');
 
-responseAuth.set('reset database', resetDb);
+responseAuth.set('reset database', resetDb); // mejor llamarlo pupulateDb
 
 responseAuth.set('report', (parameters)=>makeReport(parameters.repData));
 

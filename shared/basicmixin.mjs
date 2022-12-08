@@ -19,6 +19,7 @@ const basicMixin=Sup => class extends Sup {
   load(source, thisProps) {
     return copyProps(this, source, thisProps);
   }
+  /*
   static isEquivalent(nodeOne, nodeTwo){
     if (Object.keys(nodeOne.props).length != Object.keys(nodeTwo.props).length) return false;
     if (!Object.keys(nodeOne.props).every(key=> key in nodeTwo.props)) return false;
@@ -26,17 +27,17 @@ const basicMixin=Sup => class extends Sup {
   }
   isEquivalent(otherNode) {
     return this.constructor.isEquivalent(this, otherNode);
-  }
+  }*/
 
 }
 
 export default basicMixin;
 
-export function copyProps(target, source, thisProps) {
+export function copyProps(target, source, thisKeys) {
   if (!source) return target;
-  if (thisProps) {
-    if (!Array.isArray(thisProps)) thisProps=[thisProps]; // single type
-    thisProps.filter(key=>Object.keys(source.props).includes(key)).forEach(key=>target.props[key] = source.props[key]);
+  if (thisKeys) {
+    if (!Array.isArray(thisKeys)) thisKeys=[thisKeys]; // single type
+    thisKeys.filter(key=>Object.keys(source.props).includes(key)).forEach(key=>target.props[key] = source.props[key]);
     return target;
   }
   Object.assign(target.props, source.props);

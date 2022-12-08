@@ -10,7 +10,7 @@
   rel1 (parent) -> chldren: [child1 Node, child2 Node]
 */
 
-import {copyProps} from './basicmixin.mjs';
+//import {copyProps} from './basicmixin.mjs';
 
 export function detectLinker(myNode){
   return 'partner' in myNode;
@@ -60,25 +60,17 @@ const commonMixin=Sup => class extends Sup {
 
 // type: primary, foreign or position. return unique value
 // returns the first system key name of given type
-export function getSysKey(parentNode, type='foreignkey'){
+export function getSysKey(parent, type='foreignkey'){
   if (type=="primary") {
-    const result = parentNode.sysChildTableKeysInfo.find(value=>value.type=="primary");
-    if (result) return result.name;
-    return;
+    return parent.sysChildTableKeysInfo.find(value=>value.type=="primary")?.name;
   }
-  const result = parentNode.sysChildTableKeysInfo.find(value=>value.type==type && value.parentTableName && value.parentTableName==parentNode.props.parentTableName);
-  if (result) return result.name;
-  return;
+  return parent.sysChildTableKeysInfo.find(value=>value.type==type && value.parentTableName && value.parentTableName==parent.props.parentTableName)?.name;
 }
 
 // defines node relationships
 const linkerMixin=Sup => class extends Sup {
   constructor(childTableName, parentTableName, name) {
-    const params = {};
-    if (childTableName) params.childTableName=childTableName;
-    if (parentTableName) params.parentTableName=parentTableName;
-    if (name) params.name=name;
-    super(params);
+    super({childTableName, parentTableName, name});
     this.childTableKeys=[];
     this.childTableKeysInfo=[];
     this.sysChildTableKeys=[];
@@ -130,41 +122,40 @@ const linkerMixin=Sup => class extends Sup {
   // We need to set nodeConstructor at the concret linker class
 
   loadDesc(source, level, thisProps) {
+    if (!source?.children) return;
     if (level===0) return;
     if (level > 0) level--;
     this.children=[]; // reset children
-    if (!source.children) return;
     source.children.forEach(sourceChild=>{
       const targetChild=this.addChild(new this.constructor.nodeConstructor());
-      copyProps(targetChild, sourceChild, thisProps); // loading just some props
+      this.constructor.copyProps(targetChild, sourceChild, thisProps); // loading just some props
       targetChild.loadDesc(sourceChild, level, thisProps);
     });
   }
 
   loadAsc(source, level, thisProps) {
+    if (!source?.partner) return;
     if (level===0) return;
     if (level > 0) level--;
-    if (!source.partner) return;
-    this.partner=new this.constructor.nodeConstructor;
-    copyProps(this.partner, source.partner, thisProps);
-    this.partner.addRelationship(this); // new thing
+    this.setPartner(new this.constructor.nodeConstructor())
+    this.constructor.copyProps(this.partner, source.partner, thisProps);
     this.partner.loadAsc(source.partner, level, thisProps);
   }
   
   // type: primary, foreignkey, positionkey. return unique value
-  static getSysKey(parentNode, type='foreignkey'){
-    return getSysKey(parentNode, type);
+  static getSysKey(parent, type='foreignkey'){
+    return getSysKey(parent, type);
   }
   
   getSysKey(type='foreignkey'){
     //Get foreign keys from the actual relatioship
-    return this.constructor.getSysKey(this, type);
+    return getSysKey(this, type);
   }
   
   // returns an array
-  static getChildKeys(parentNode, type){
-    let filterKeys = parentNode.childTableKeysInfo;
-    if (type) filterKeys = parentNode.childTableKeysInfo.filter(value => value.type==type);
+  static getChildKeys(parent, type){
+    let filterKeys = parent.childTableKeysInfo;
+    if (type) filterKeys = parent.childTableKeysInfo.filter(value => value.type==type);
     return filterKeys.map(value => value.Field);
   }
   
@@ -177,6 +168,12 @@ const linkerMixin=Sup => class extends Sup {
   }
 
   addChild(obj) {
+    if (Array.isArray(obj.parent)) {
+      if (!obj.parent.includes(this))
+        obj.parent.push(this)
+      this.children.push(obj);
+      return obj;
+    }
     return super.addDescendent(obj);
   }
 
@@ -197,7 +194,7 @@ const linkerMixin=Sup => class extends Sup {
   }
 
   removePartner(obj){
-    if (Array.isArray(this.partner)) this.partner = this.partner.filter(partner => partner != obj);
+    if (Array.isArray(this.partner)) return this.partner = this.partner.filter(partner => partner != obj);
     return super.removeAscendent(obj);
   }
 
@@ -227,40 +224,36 @@ const nodeMixin=Sup => class extends Sup {
   // We need to set linkerConstructor at the concret node class
 
   loadDesc(source, level, thisProps) {
+    if (!source?.relationships) return;
     if (level===0) return;
     if (level > 0) level--;
     this.relationships=[]; // reset rels
-    if (!source.relationships) return;
     source.relationships.forEach(sourceLinker=>{
       const targetLinker=this.addRelationship(new this.constructor.linkerConstructor());
-      copyProps(targetLinker, sourceLinker, thisProps); // loading just props
+      this.constructor.copyProps(targetLinker, sourceLinker, thisProps); // loading just props
       targetLinker.loadChildTableKeys(sourceLinker);
       targetLinker.loadDesc(sourceLinker, level, thisProps);
     });
   }
 
   loadAsc(source, level, thisProps) {
+    if (!source?.parent) return;
     if (level===0) return;
     if (level > 0) level--;
-
-    if (!source.parent) return;
-
     if (Array.isArray(source.parent)) {
       this.parent=[];
       source.parent.forEach(sourceLinker=>{
         const targetLinker=new this.constructor.linkerConstructor();
-        this.parent.push(targetLinker);
-        copyProps(targetLinker, sourceLinker);
+        this.constructor.copyProps(targetLinker, sourceLinker);
         targetLinker.loadChildTableKeys(sourceLinker);
-        targetLinker.addChild(this); // new thing
+        this.addParent(targetLinker);
         targetLinker.loadAsc(sourceLinker, level, thisProps);
       })
       return;
     }
-    const targetLinker=new this.constructor.linkerConstructor();
-    copyProps(targetLinker, source.parent);
+    const targetLinker=this.setParent(new this.constructor.linkerConstructor());
+    this.constructor.copyProps(targetLinker, source.parent);
     targetLinker.loadChildTableKeys(source.parent);
-    this.setAscendent(targetLinker);
     targetLinker.loadAsc(source.parent, level, thisProps);
   }
 
@@ -280,10 +273,6 @@ const nodeMixin=Sup => class extends Sup {
     return super.removeDescendents();
   }
 
-  getParent(obj) {
-    return super.getAscendent(obj);
-  }
-
   getParent(objSearch) {
     if (Array.isArray(this.parent)) {
       if (!objSearch) return this.parent[0];
@@ -298,8 +287,9 @@ const nodeMixin=Sup => class extends Sup {
     if (!this.parent) this.parent=obj;
     else {
       if (!Array.isArray(this.parent)) this.parent=[this.parent];
-      this.parent.push(obj);
+      if (!this.parent.includes(obj)) this.parent.push(obj);
     }
+    if (!obj.relationships.includes(this)) obj.relationships.push(this);
   }
 
   setParent(obj) {
@@ -316,9 +306,9 @@ const nodeMixin=Sup => class extends Sup {
 const nodeExpressMixin=Sup => class extends Sup {
   getRelationship(obj) {
     if (typeof obj=="string") {
-      return super.getDescendent({"name": obj});
+      return super.getRelationship({"name": obj});
     }
-    return super.getDescendent(obj);
+    return super.getRelationship(obj);
   }
   getNextChild(obj) {
     return this.relationships[0].getChild(obj);
@@ -329,7 +319,7 @@ const linkerExpressMixin=Sup => class extends Sup {
   getChild(obj) {
     if (typeof obj=="string") { // selecting first prop!=id
       const firstKey = this.childTableKeys.find(myKey=>myKey!='id');
-      return super.getDescendent({[firstKey]: obj});
+      if (firstKey) return super.getDescendent({[firstKey]: obj});
     }
     return super.getDescendent(obj);
   }
