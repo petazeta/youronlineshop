@@ -10,6 +10,7 @@ export default class SiteDbGateway {
 
   async connect(cfgUrl) {
     if (this.dbLink) return this.dbLink;
+    mongoose.set('strictQuery', false);
     mongoose.connect(cfgUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

@@ -43,7 +43,7 @@ Awards:
 
 1. Copy the source files to your system.
 2. Install node and mongodb.
-3. Edit mongodb settings at: main-instance/cfg/dbcustom.mjs.
+3. Edit mongodb settings at: server-instances/main/cfg/dbcustom.mjs.
 4. Open your terminal at main folder and type:
 ```
 npm install 

@@ -1,0 +1,6 @@
+2022-12-08 17:09:43 Server start
+2022-12-08 17:09:49 trying to access forbiden content: /favicon.ico
+2022-12-08 17:12:53 Server start
+2022-12-08 17:13:39 Server start
+2022-12-08 17:15:18 Server start
+2022-12-08 17:18:02 Server start

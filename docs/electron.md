@@ -13,10 +13,10 @@ There would be some adventages of having our own client version runing insted of
 
 ## Loading client files from file system
 
-For doing so we should use the `loadFile` method insted the `loadURL` one and copy the loader/main content into the root folder. The other files needed for the client (server is runing apart) are the ones at the folders client and shared. The next step is to change the API (server) entry points paths that are defined as relatives to the browser url path (which by now is the file system). To do so we must change the client script at shared/cfg/default.mjs (or custom.mjs) for pointing to the new server entry point that can be either a localhost one or a remote one.
+For doing so we should use the `loadFile` method insted the `loadURL` one and copy the folder "loader/main" content into the root folder. The other files needed for the client (server is runing apart) are the ones at the folders "client" and "shared". The next step is to change the API (server) entry points paths that are defined as relatives to the browser url path (which by now is the file system). To do so we must change the client script at shared/cfg/default.mjs (or custom.mjs) for pointing to the new server entry point that can be either a localhost one or a remote one.
 
 There should be some adjustments for the svg image files that are defined at the css. These files are being loaded from server, and not from the client folder structure, because they belong to the css themes feature. These behaviour is hidden from the client so Electron client version would try to get these files directly from the client folder structure. Therefore we would need to change some scripts (or css files) to change the path of these files to ensure the client is retrieving them from server. Other way of doing so it would be by moving the uploading themes feature from server to client or by patching the svg css process: copying the svg files to the image-css folder and renaming them to themeId_svg-name.
 
 ## Client / Server integration
 
-I should mention that here are client/server (API) integration posibilities that could be interesting in another applications.
+I should mention that I think there are client/server (API) integration posibilities in Electron that could be interesting for some applications.
