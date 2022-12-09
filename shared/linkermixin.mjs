@@ -56,6 +56,10 @@ const commonMixin=Sup => class extends Sup {
   isEquivalentTo(otherNode) {
     return isEquivalentTo(this, otherNode);
   }
+  static clone(dataSource, levelUp, levelDown, thisProps, thisPropsUp, thisPropsDown){
+    const myClon= detectLinker(dataSource) ? new this.linkerConstructor() : new this.nodeConstructor();
+    return myClon.load(dataSource, levelUp, levelDown, thisProps, thisPropsUp, thisPropsDown);
+  }
 }
 
 // type: primary, foreign or position. return unique value

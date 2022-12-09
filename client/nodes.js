@@ -27,16 +27,9 @@ const modelMixin=Sup => class extends Sup {
     };
     if (authorizationToken) fetchParams.headers={...fetchParams.headers, ...authorizationToken};
     return fetch(url, fetchParams)
-    .then(res => res.json())
-    .then(resultJSON => {
-      if (resultJSON?.error==true) {
-        throw new Error(action + '. SERVER Message: ' + result.message);
-      }
-      return resultJSON;
-    });
-    /*
     .then(res => res.text())
     .then(resultTxt => {
+      // This is allowing a null result, it doesnt throw errur if resultTxt==null
       let result=null;
       if (resultTxt) {
         try {
@@ -51,8 +44,6 @@ const modelMixin=Sup => class extends Sup {
       }
       return result;
     });
-    */
-
   }
   //~ makeRequest nick for when the data node is the actual node
   //~ Reduce option is for just removing the not necesary nodes and return the package version but not make the request
@@ -337,6 +328,8 @@ const dataViewMixin=Sup => class extends Sup {
 const Node = eventListenerMixin(dataViewMixin(viewMixin(modelMixin(BasicNode))));
 
 Node.linkerConstructor=Linker;
+Node.nodeConstructor=Node;
+Linker.linkerConstructor=Linker;
 Linker.nodeConstructor=Node;
 
 export {Linker, Node}

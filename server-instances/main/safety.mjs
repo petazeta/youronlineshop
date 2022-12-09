@@ -1,12 +1,11 @@
-import {nodeFromDataSource} from './nodesserver.mjs'; 
+import {Node} from './nodesserver.mjs'; 
 import TABLES from '../../server/admintableslist.mjs';
 import ADMINUSERS from '../../server/adminusertypes.mjs';
-import {BasicNode} from '../../shared/linker.mjs';
 
 //Safety check functions
 function getTableName(myNode){
   if (typeof myNode=="string") return myNode;
-  if (BasicNode.detectLinker(myNode)) return myNode.props.childTableName;
+  if (Node.detectLinker(myNode)) return myNode.props.childTableName;
   return myNode.parent.props.childTableName;
 }
 function getUserType(user){
@@ -36,7 +35,7 @@ async function isOwner(myNode, userId) {
       pointer=pointer.getAscendent();
     }
   }
-  myNode=nodeFromDataSource(myNode);
+  myNode=Node.clone(myNode);
   if (isOwnerCore(myNode)) return true;
   await myNode.dbLoadMyTreeUp();
   if (isOwnerCore(myNode)) return true;

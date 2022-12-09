@@ -1,5 +1,5 @@
 import {getTemplate, getTemplatesContent, getCssContent} from './themesserver.mjs';
-import {nodeFromDataSource, Node, Linker} from './nodesserver.mjs';
+import {Node, Linker} from './nodesserver.mjs';
 import {getTableList, resetDb} from './dbgatewayserver.mjs';
 import {User, userLogin} from './userserver.mjs';
 import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from './safety.mjs';
@@ -90,7 +90,7 @@ responseAuth.set('get my children', async (parameters, user)=>{
 // get descendents: equivalent to get my tree down
 responseAuth.set('get my tree', async (parameters, user)=>{
   if (! await isAllowedToRead(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  const req = nodeFromDataSource(unpacking(parameters.nodeData));
+  const req = Node.clone(unpacking(parameters.nodeData));
   return req.dbGetMyTree(arrayUnpacking(parameters.extraParents), parameters.deepLevel, parameters.filterProps, parameters.limit, parameters.myself)
   .then(result=>{
     if (!result) return result;
@@ -110,7 +110,7 @@ responseAuth.set('get my tree', async (parameters, user)=>{
 
 responseAuth.set('get my tree up', async (parameters, user)=>{
   if (! await isAllowedToRead(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  const req = nodeFromDataSource(unpacking(parameters.nodeData));
+  const req = Node.clone(unpacking(parameters.nodeData));
   return req.dbGetMyTreeUp(parameters.deepLevel)
   .then(result=>{
     if (!result) return result;
@@ -137,7 +137,7 @@ responseAuth.set('add my children', async (parameters, user)=>{
   
 responseAuth.set('add my tree', async (parameters, user)=>{
   if (! await isAllowedToInsert(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  const req = nodeFromDataSource(unpacking(parameters.nodeData));
+  const req = Node.clone(unpacking(parameters.nodeData));
   return req.dbInsertMyTree(parameters.deepLevel, arrayUnpacking(parameters.extraParents), parameters.myself, parameters.updateSiblingsOrder)
   .then(result=>{
     if (!result) return result;
@@ -147,7 +147,7 @@ responseAuth.set('add my tree', async (parameters, user)=>{
 
 responseAuth.set('add my tree table content', async (parameters, user)=>{
   if (! await isAllowedToInsert(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  const req = nodeFromDataSource(unpacking(parameters.nodeData));
+  const req = Node.clone(unpacking(parameters.nodeData));
   return req.dbInsertMyTreeTableContent(parameters.tableName, parameters.deepLevel, arrayUnpacking(parameters.extraParents))
   .then(result=>{
     if (!result) return result;
@@ -169,14 +169,14 @@ responseAuth.set('delete myself', async (parameters, user)=>{
 
 responseAuth.set('delete my tree', async (parameters, user)=>{
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  const req = nodeFromDataSource(unpacking(parameters.nodeData));
+  const req = Node.clone(unpacking(parameters.nodeData));
   const load = parameters.load===undefined ? true : parameters.load;
   return req.dbDeleteMyTree(load);
 });
 
 responseAuth.set('delete my tree table content', async (parameters, user)=>{
   if (! await isAllowedToModify(user, unpacking(parameters.nodeData))) throw new Error("Database safety");
-  const req = nodeFromDataSource(unpacking(parameters.nodeData));
+  const req = Node.clone(unpacking(parameters.nodeData));
   return req.dbDeleteMyTreeTableContent(parameters.tableName);
 });
 

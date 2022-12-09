@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import {setDbSchema} from './dbschema.mjs';
+import {zip} from '../shared/utils.mjs'
 
 export default class SiteDbGateway {
   constructor(){
@@ -143,10 +144,11 @@ export default class SiteDbGateway {
   }
 
   async getChildren(foreigncolumnnames, positioncolumnname, data, extraParents=null, filterProp={}, limit=[], count=false) {
-    let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(Object.assign(filterProp, {[foreigncolumnnames[0]] : { $eq: data.partner.props.id } }));
-    for (let i=1; i<foreigncolumnnames.length; i++) {
-      query = query.find({[foreigncolumnnames[i]]: {$eq: extraParents[i-1].partner.props.id}});
+    Object.assign(filterProp, {[foreigncolumnnames[0]] : { $eq: data.partner.props.id } });
+    if (foreigncolumnnames.length > 1) {
+      Array.from(zip(foreigncolumnnames.slice(1), extraParents)).reduce((tot, [key, value])=>Object.assign(tot, {[key]: {$eq: value.partner.props.id}}), filterProp);
     }
+    let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp);
     if (positioncolumnname) {
        query = query.sort({[positioncolumnname] : 1})
     }
@@ -182,37 +184,19 @@ export default class SiteDbGateway {
       else myProps[positioncolumnname]=result[positioncolumnname] + 1;
     }
     if (extraParents) {
-      for (let i=1; i<foreigncolumnnames.length; i++) {
-        if (extraParents[i-1].partner.props.id) myProps[foreigncolumnnames[i]]=extraParents[i-1].partner.props.id;
-      }
+      Array.from(zip(foreigncolumnnames.slice(1), extraParents)).reduce((tot, [key, value])=>Object.assign(tot, {[key]: value.partner?.props.id}), myProps);
     }
     //Now we add a value for the props that are null and cannot be null
-    if (data.childTableKeysInfo && data.sysChildTableKeys) {
-      /*
-      for (const key in data.childTableKeys) {
-        let value=data.childTableKeys[key];
-        if (data.childTableKeysInfo[key]["Null"]=='NO' && !data.childTableKeysInfo[key]["Default"] && data.childTableKeysInfo[key].Extra!='auto_increment'){
-          if (!Object.keys(myProps).includes(value) || myProps[value]===null) {
-            if (data.childTableKeysInfo[key].Type.includes('int') || data.childTableKeysInfo[key].Type.includes('decimal')) {
-              myProps[value]=0;
-            }
-            else {
-              myProps[value]='';
-            }
+    if (data.childTableKeysInfo) {
+      data.childTableKeysInfo.filter(keyInfo=>keyInfo["Null"]=='NO' && !keyInfo["Default"] && keyInfo['Extra']!='auto_increment').forEach(keyInfo=>{
+        if (myProps[keyInfo["name"]]===null) {
+          if (keyInfo['Type']=='integer') {
+            myProps[keyInfo["name"]]=0;
+            return;
           }
+          myProps[keyInfo["name"]]='';
         }
-      }
-      */
-
-      data.childTableKeys.filter((key, i)=>data.childTableKeysInfo[i]["Null"]=='NO' && !data.childTableKeysInfo[i]["Default"] && data.childTableKeysInfo[i].Extra!='auto_increment').forEach((key, i)=>{
-        if (Object.keys(myProps).includes(key) && myProps[key]!==null) return;
-        if (data.childTableKeysInfo[i].Type.includes('int') || data.childTableKeysInfo[i].Type.includes('decimal')) {
-          myProps[key]=0;
-          return;
-        }
-        myProps[key]='';
       });
-
     }
     if (myProps.id) delete myProps.id; //let it give the id
     if (Object.keys(myProps).length==0) {
@@ -255,26 +239,5 @@ export default class SiteDbGateway {
 
   async updateMe(tableName, thisId,  proparray) {
     return await this.dbLink.model(tableName).findByIdAndUpdate(thisId, proparray);
-  }
-
-  async resetDb(importJsonFilePath) {
-    const fs = await import('fs');
-    const {unpacking, arrayUnpacking} = await import('../../shared/utils.mjs');
-    const {impData} = await import('../../server/utils.mjs');
-    let data=fs.readFileSync(importJsonFilePath, 'utf8');
-    data=JSON.parse(data);
-    const {Node, Linker, nodeFromDataSource} = await import('./nodes.mjs');
-    const langsRoot=new Node().load(unpacking(data.languages));
-    const langs=langsRoot.getRelationship();
-    await langsRoot.dbInsertMyTree();
-    const newLangs=langs.children;
-    const usersMo=new Linker().load(unpacking(data.tree.shift()));
-    await usersMo.dbInsertMyTree();
-    await impData(newLangs, "pageelementsdata", nodeFromDataSource(unpacking(data.tree.shift())));
-    await impData(newLangs, "siteelementsdata", nodeFromDataSource(unpacking(data.tree.shift())));
-    await impData(newLangs, "itemcategoriesdata", nodeFromDataSource(unpacking(data.tree.shift())));
-    await impData(newLangs, "shippingtypesdata", nodeFromDataSource(unpacking(data.tree.shift())));
-    await impData(newLangs, "paymenttypesdata", nodeFromDataSource(unpacking(data.tree.shift())));
-    return true;
   }
 }
