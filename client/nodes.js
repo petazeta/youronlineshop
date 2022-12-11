@@ -39,11 +39,33 @@ const modelMixin=Sup => class extends Sup {
           throw new Error(e.message + "Action: " + action + ". Error: Response error: "+ resultTxt);
         }
       }
+      return result;
+    })
+    .then(resultJSON => {
+      if (resultJSON?.error==true) {
+        throw new Error(action + '. SERVER Message: ' + result.message);
+      }
+      return resultJSON;
+    });
+    /*
+    .then(res => res.text())
+    .then(resultTxt => {
+      let result=null;
+      if (resultTxt) {
+        try {
+          result=JSON.parse(resultTxt);
+        }
+        catch(e){//To send errors from server in case the error catching methods at backend fail
+          throw new Error(e.message + "Action: " + action + ". Error: Response error: "+ resultTxt);
+        }
+      }
       if (result?.error==true) {
         throw new Error(action + '. SERVER Message: ' + result.message);
       }
       return result;
     });
+    */
+
   }
   //~ makeRequest nick for when the data node is the actual node
   //~ Reduce option is for just removing the not necesary nodes and return the package version but not make the request

@@ -4,7 +4,7 @@
   "description": "server for your online shop",
   "main": "serverindex.mjs",
   "scripts": {
-    "start": "node serverindex.mjs default-port=3000",
+    "start": "node serverindex.mjs default-port=6001",
     "test": "node --inspect-brk serverindex.mjs"
   },
   "author": "alberto melchor herrera",
@@ -13,6 +13,6 @@
     "bcrypt": "*",
     "mongoose": "*",
     "nodemailer": "*",
-    "redis": "^4.5.0"
+    "redis": "*"
   }
 }

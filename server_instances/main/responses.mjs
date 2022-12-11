@@ -5,7 +5,7 @@ import {User, userLogin} from './userserver.mjs';
 import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from './safety.mjs';
 import {unpacking, arrayUnpacking, packing} from '../../shared/utils.mjs';
 import config from './cfg/mainserver.mjs';
-import path from 'path';
+import * as path from 'path';
 import makeReport from './reportsserver.mjs';
 
 const responseAuth=new Map();

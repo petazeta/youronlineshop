@@ -6,7 +6,7 @@
    Developer note: To proper encode the binary files is important to write always buffers form function toString('binary');
 */
 
-import fs from 'fs';
+import * as fs from 'fs';
 import {pipeline} from 'stream';
 
 export default function parseContent(request, nameToPath) {

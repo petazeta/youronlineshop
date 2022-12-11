@@ -22,7 +22,7 @@ Streaming implementation is a build in feature in Node.js so we just need to use
 
 Below there is the main code for the file server delivery script. 
 ````
-import fs from 'fs';
+import * as fs from 'fs';
 
 fs.stat(filename, function(err, stat) {
   if (err) {
@@ -134,9 +134,9 @@ From these content elements we can now stablish a strategy for parsing the eleme
 The following script is a module and works for a multi-part of one file and any inputs. To use it we must import function parseContent and pass it the http request and the path of the file destination folder.
 
 ```
-import fs from 'fs';
+import * as fs from 'fs';
 import {pipeline} from 'stream';
-import path from 'path';
+import * as path from 'path';
 
 let source, entriesBoundary, contentPipe, filePath, contents=[];
 

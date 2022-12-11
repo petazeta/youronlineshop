@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 import getMimeType from '../server/mimetypes.mjs';
 // import makeReport from './reportsserver.mjs';
 

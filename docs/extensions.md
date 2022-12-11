@@ -1,4 +1,4 @@
 Extensions
 ==========
 
-We can make extensions by making: layout files plus app_instance files. First we should duplicate this folders, and for the layouts folder we change this layout at the new app_instance/cfg/custom.mjs
+We can make extensions and other applications using layout files plus app_instance files. First we should duplicate these folders, and for the layouts folder we change layout path at the new app_instance/cfg/custom.mjs

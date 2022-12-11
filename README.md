@@ -1,6 +1,6 @@
 ![Your Online Shop](assets/logotype.png "Your Online Shop")
 
-# Your Online Shop System V 5.1.0
+# Your Online Shop System. Last stable Version: 5.1.0
 
 ## Live Demo
 
@@ -43,13 +43,13 @@ Awards:
 
 1. Copy the source files to your system.
 2. Install node and mongodb.
-3. Edit mongodb settings at: server-instances/main/cfg/dbcustom.mjs.
+3. Edit mongodb settings at: server_instances/main/cfg/dbcustom.mjs.
 4. Open your terminal at main folder and type:
 ```
 npm install 
 npm start
 ```
-5. The server is running now. You can open your web browser (port 3000) and continue with the installation process.
+5. The server is running now. You can open your web browser (port: as indicated in log message) and continue with the installation process.
 
 ## Support
 

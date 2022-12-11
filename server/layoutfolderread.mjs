@@ -1,6 +1,6 @@
 import {BasicLinker, BasicNode} from '../shared/linker.mjs';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 class Linker extends BasicLinker {};
 class Node extends BasicNode {};

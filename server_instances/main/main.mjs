@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import config from './cfg/mainserver.mjs';
 import makeReport from './reportsserver.mjs';
 import initServer from './serverstart.mjs';

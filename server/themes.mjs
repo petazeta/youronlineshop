@@ -12,8 +12,8 @@ We need the root theme as well as the subtheme (activeTheme) because we would ne
 */
 
 import {default as readTree} from './layoutfolderread.mjs';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export default class SiteLayout {
   constructor(layoutsPath){

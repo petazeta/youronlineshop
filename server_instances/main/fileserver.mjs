@@ -5,7 +5,7 @@
   - ./images/ => site/images
   - ./client/ ./shared/ ./catalog-images/ <==>
 */
-import path from 'path';
+import * as path from 'path';
 import makeReport from './reportsserver.mjs';
 import config from './cfg/mainserver.mjs';
 import respond from '../../server/streamfile.mjs';
