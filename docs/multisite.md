@@ -3,6 +3,12 @@ Multi site
 
 # Introduction
 
+Update:
+
+Se ha creado una forma de encapsular las instancias, y esto es más fácil ahora mediante esta forma. Para que la base de datos funcione para cada instancia las conexiones con la base de datos se hacen ahora mediante crateConnection en lugar de mediante connect.
+
+--
+
 Parece que la mejor forma de realizar este elemento no es mediante el propio software si no creando diferentes instancias al software. Esto es así al menos porque los módulos que utiliza el programa contienen datos que no pueden ser compartidos con otras ejecuciones del propio programa en otros hilos distintos y esto podría ocasionar la interferencia entre hilos y datos erroneos.
 
 Se podría ir mirando de orientar los módulos a servicios independientes de cada instalación. Llegará un momento que la aplicación tenga toda su funcionalidad implementada con estos servicios y se podrá independizar las instalaciones de los servicios.

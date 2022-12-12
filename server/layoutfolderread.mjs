@@ -1,5 +1,5 @@
 import {BasicLinker, BasicNode} from '../shared/linker.mjs';
-import * as fs from 'fs';
+import {statSync, readdirSync} from 'fs';
 import * as path from 'path';
 
 class Linker extends BasicLinker {};
@@ -81,9 +81,9 @@ export default function createTree(folderPath) {
   // root.views => {exload: {0: "export.html"}, 1: "alert.html"}
   function readFolderDirectory(dir) {
     const listDir={};
-    fs.readdirSync(dir).forEach((sub, i)=>{
+    readdirSync(dir).forEach((sub, i)=>{
       if (sub!='.' && sub!='..') {
-        if (fs.statSync(path.join(dir,sub)).isDirectory()) listDir[sub]=readFolderDirectory(path.join(dir, sub));
+        if (statSync(path.join(dir,sub)).isDirectory()) listDir[sub]=readFolderDirectory(path.join(dir, sub));
         else listDir[i]=sub;
       }
     });

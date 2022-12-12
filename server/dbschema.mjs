@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 const {Schema, SchemaTypes} = mongoose;
 
+// Collection names for mongoose models: Mongoose automatically looks for the plural, lowercased version of your model name
+
 export function setDbSchema(dbLink) {
   if (!dbLink) dbLink=mongoose;
   

@@ -1,5 +1,4 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import {promises as fs} from 'fs';
 
 export default class SiteReport {
   constructor(reportsFile, maxSize=50000){
@@ -15,16 +14,16 @@ export default class SiteReport {
     console.log("reporting", dataRow);
     const myDate=new Date();
     dataRow.unshift(myDate.toISOString().split('T')[0] + ' ' + myDate.toISOString().split('T')[1].slice(0, 8))
-    return fs.promises.appendFile(this.reportsFile, dataRow.join(' ') + "\n")
+    return fs.appendFile(this.reportsFile, dataRow.join(' ') + "\n")
     .then(()=>this.resetIfMaxSize())
     .catch(err=>console.log("Error reporting", err));
   }
 
   resetIfMaxSize(){
-    return fs.promises.stat(this.reportsFile)
+    return fs.stat(this.reportsFile)
     .then(stat=>{
       if (stat.size > this.maxSize) {
-        fs.promises.rename(this.reportsFile, this.reportsFile.replace('.txt', '') + '.old.txt').then(()=>fs.promises.writeFile(this.reportsFile, "new file\n"));
+        fs.rename(this.reportsFile, this.reportsFile.replace('.txt', '') + '.old.txt').then(()=>fs.writeFile(this.reportsFile, "new file\n"));
       }
     });
   }

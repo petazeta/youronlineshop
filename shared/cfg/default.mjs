@@ -1,12 +1,6 @@
-// Estoy creando un shared cfg
-
 export default {
-  //urlBasePath: "sample", // deprecated
   requestUrlPath: "request.cmd",
   uploadImagesUrlPath: "upload.cmd",
   catalogImagesUrlPath: "catalog-images",
-  // catalogImagesUrlBigPath: "big",
-  // catalogImagesUrlSmallPath: "small",
+  electronIntegrationMode: 'none', // file-server, server, none
 }
-
-// requestFilePath => requesteEgExp, uploadFilePath => uploadUrlPath, loadAllComponentsUrlPath => loadAllComponentsUrlPath

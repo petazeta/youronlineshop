@@ -12,7 +12,7 @@ We need the root theme as well as the subtheme (activeTheme) because we would ne
 */
 
 import {default as readTree} from './layoutfolderread.mjs';
-import * as fs from 'fs';
+import {readFileSync, statSync} from 'fs';
 import * as path from 'path';
 
 export default class SiteLayout {
@@ -74,12 +74,12 @@ export default class SiteLayout {
 }
 
 function getTp(tpId, tpFilePath) {
-  if (!fs.statSync(tpFilePath).isFile()) throw new Error('No Tp File: ', tpFilePath);
-  return "<template id='tp" + tpId + "'>\n" + fs.readFileSync(tpFilePath, {encoding: "utf8"}) + "\n</template>\n";
+  if (!statSync(tpFilePath).isFile()) throw new Error('No Tp File: ', tpFilePath);
+  return "<template id='tp" + tpId + "'>\n" + readFileSync(tpFilePath, {encoding: "utf8"}) + "\n</template>\n";
 }
 function getCss(cssFilePath) {
   if (!cssFilePath) return '';
-  return "<style>\n" + fs.readFileSync(cssFilePath, {encoding: "utf8"}) + "\n</style>\n";
+  return "<style>\n" + readFileSync(cssFilePath, {encoding: "utf8"}) + "\n</style>\n";
 }
 
 export function decodeCssImageUrlPath(/*string*/imageUrlPath){

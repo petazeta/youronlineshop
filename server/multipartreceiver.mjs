@@ -6,7 +6,7 @@
    Developer note: To proper encode the binary files is important to write always buffers form function toString('binary');
 */
 
-import * as fs from 'fs';
+import {createWriteStream} from 'fs';
 import {pipeline} from 'stream';
 
 export default function parseContent(request, nameToPath) {
@@ -62,7 +62,7 @@ export default function parseContent(request, nameToPath) {
             if (fileName) {
               contents.push({name: name, filename: fileName});
               if (nameToPath) {
-                fs.createWriteStream(nameToPath(name, fileName), {encoding: 'binary'}).end(partContent);
+                createWriteStream(nameToPath(name, fileName), {encoding: 'binary'}).end(partContent);
               }
             }
             else {
@@ -103,7 +103,7 @@ export default function parseContent(request, nameToPath) {
       if (fileName) {
         currentElement={name: name, filename: fileName};
         if (!nameToPath) return;
-        currentElement.writer=fs.createWriteStream(nameToPath(name, fileName), {encoding: 'binary'});
+        currentElement.writer=createWriteStream(nameToPath(name, fileName), {encoding: 'binary'});
         const fileContent=extractPartContent(data);
         currentElement.writer.write(fileContent);
       }

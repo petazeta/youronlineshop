@@ -31,7 +31,7 @@ For the backend (server) we add some other characteristics for:
 Server is composed from these main services:
 
 - [Files deliver service](staticserver.md)
-- [Database service](db.md)
+- [Database service](database.md)
 - [Layout service](layout.md)
 - [Catalog images upload service](uploadimages.md)
 
