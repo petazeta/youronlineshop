@@ -12,7 +12,7 @@ We need the root theme as well as the subtheme (activeTheme) because we would ne
 */
 
 import {default as readTree} from './layoutfolderread.mjs';
-import {readFileSync, statSync} from 'fs';
+import fs, {readFileSync, statSync} from 'fs';
 import * as path from 'path';
 
 export default class SiteLayout {
@@ -42,10 +42,6 @@ export default class SiteLayout {
   getTpContent(tpId, themeId, subThemeId){
     return getTp(tpId, this.getTpFilesList(themeId, subThemeId, true).get(tpId));
   }
-  getCssImagePath(imageId, themeId, subThemeId){
-    const fileList=this.getCssFilesList(themeId, subThemeId);
-    return fileList.get(imageId);
-  }
   // It searchs for the theme (child of descendents) from prop id as search
   findTheme(search) {
     if (typeof search== "string") search={id: search};
@@ -64,12 +60,40 @@ export default class SiteLayout {
     }
     return innerFind(search, this.treeMum.getChild());
   }
-  getCssContent(styleId, themeId, subThemeId){
+  getCssContent_old(styleId, themeId, subThemeId){
     if (!this.treeRoot || this.treeRoot.props.id!=themeId) this.readTree(themeId);
     let active = this.treeRoot;
     if (subThemeId) active = this.findTheme(subThemeId);
     const cssContent= getCss(getCommonStyle(this.layoutsPath, active)) + getCss(getStyle(this.layoutsPath, styleId, active));
     return encondeCssImageNames(cssContent, themeId, subThemeId);
+  }
+  getCssContent(styleId, themeId, subThemeId){
+    if (!this.treeRoot || this.treeRoot.props.id!=themeId) this.readTree(themeId);
+    let active = this.treeRoot;
+    if (subThemeId) active = this.findTheme(subThemeId);
+    const cssContent= getCss(getCommonStyle(this.layoutsPath, active)) + getCss(getStyle(this.layoutsPath, styleId, active));
+    const imageNamesIter=cssContent.matchAll(/url\(images\/(.+?)\.svg\)/g);
+    let cssSvg=cssContent;
+    for (const [_, imageId] of imageNamesIter) {
+      let imagePath=this.getCssFilesList(themeId, subThemeId).get(imageId);
+      let svgImageData=readFileSync(imagePath, {encoding: "utf8"});
+      let svgImage64Data=btoa(svgImageData);
+      //svgImageData=svgImageData.replaceAll("'", '"').replaceAll("\n", '').replaceAll('#', '%23');
+
+      const imgWidthMatch=svgImageData.match(/width=[',"](.+?)[',"]/), imgHeightMatch=svgImageData.match(/height=[',"](.+?)[',"]/);
+      if (Array.isArray(imgWidthMatch) && imgWidthMatch[1] && Array.isArray(imgHeightMatch) && imgHeightMatch[1]) {
+        let imgWidth=imgWidthMatch[1], imgHeight=imgHeightMatch[1];
+        if (!isNaN(imgWidth)) imgWidth+='px';
+        if (!isNaN(imgHeight)) imgHeight+='px';
+        let cssSizeContent=`\nwidth: ${imgWidth}; height: ${imgHeight};\n`
+        cssSvg=cssSvg.replaceAll(new RegExp(`images\/${imageId}.svg.+?;`, 'g'), '$&' + cssSizeContent)
+      }
+      //svgImage=encodeURIComponent(svgImage);
+      //cssSvg=cssSvg.replaceAll(new RegExp("'?" + 'images\/' + imageId + '.svg' + "'?", 'g'), `'data:image/svg+xml;utf8,${svgImageData}'`);
+      cssSvg=cssSvg.replaceAll(new RegExp("'?" + 'images\/' + imageId + '.svg' + "'?", 'g'), `'data:image/svg+xml;base64,${svgImage64Data}'`);
+    }
+    fs.writeFileSync(path.join('./', this.layoutsPath, 'borrador.css'), cssSvg, {encoding: "utf8"})
+    return cssSvg;
   }
 }
 
@@ -82,14 +106,14 @@ function getCss(cssFilePath) {
   return "<style>\n" + readFileSync(cssFilePath, {encoding: "utf8"}) + "\n</style>\n";
 }
 
-export function decodeCssImageUrlPath(/*string*/imageUrlPath){
+export function decodeCssImageUrlPath_old(/*string*/imageUrlPath){
   const imageFileName=path.parse(imageUrlPath).name;
   let [imageId, themeId, subThemeId]=imageFileName.split('_');
   const ImageData=new Map([["imageId", imageId],["themeId", themeId],["subThemeId", subThemeId]]);
   return ImageData;
 }
 
-function encondeCssImageNames(/*string*/cssContent, /*string*/themeId, /*string*/subThemeId){
+function encondeCssImageNames_old(/*string*/cssContent, /*string*/themeId, /*string*/subThemeId){
   let searchParams='';
   if (themeId) searchParams += '_' + themeId;
   if (subThemeId) searchParams += '_' + subThemeId;

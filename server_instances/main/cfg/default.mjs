@@ -17,7 +17,6 @@ export default {
   defaultStyleId: "main", // Select the style
   // catalogImagesSmallFolderName: "small",
   // catalogImagesBigFolderName: "big",
-  // cssImagesUrlPath: "css-images",
   timeZone: 'Europe/Madrid',
   cache: 'mongodb', // => mem, redis, mongodb, none.
 }

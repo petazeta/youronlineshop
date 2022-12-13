@@ -47,7 +47,7 @@ Awards: Community Choice award by SourceForge
 4. Open your terminal at main folder and type:
 npm install 
 npm start
-5. The server is running now. You can open your web browser (port: as indicated in log message) and continue with the installation process.
+5. The server is running now. Continue in browser.
 
 
 ***********

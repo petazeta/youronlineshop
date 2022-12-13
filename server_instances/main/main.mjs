@@ -36,6 +36,7 @@ routerMap.add((request, response)=>{
   });
   return true;
 });
+/*
 // css image
 routerMap.add((request, response)=>{
   const pathName=new URL(request.url, 'http://localhost').pathname;
@@ -47,6 +48,7 @@ routerMap.add((request, response)=>{
   });
   return true;
 });
+*/
 // upload
 routerMap.add((request, response)=>{
   const pathName=new URL(request.url, 'http://localhost').pathname;

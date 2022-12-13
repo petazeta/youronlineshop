@@ -227,7 +227,7 @@ td,th{padding:0;vertical-align:top;} /* Padding 0 because this tables are used a
   color: #3705D2 !important;
 }
 div.closeimage {
-  background: url(css-images/closeicon.svg) no-repeat;
+  background: url(images/closeicon.svg) no-repeat;
   background-size: contain;
 	cursor: pointer;
 	width: 1em;
@@ -537,55 +537,55 @@ details .explanation{
   padding: 5px 7px;
  }
 .editimage {
-  background: url(css-images/pencil.svg) no-repeat;
+  background: url(images/pencil.svg) no-repeat;
   background-size: contain;
 }
 .editcodeimage {
-  background: url(css-images/code.svg) no-repeat;
+  background: url(images/code.svg) no-repeat;
   background-size: contain;
 }
 .delimage {
-  background: url(css-images/trash.svg) no-repeat;
+  background: url(images/trash.svg) no-repeat;
   background-size: contain;
 }
 .plusimage {
-  background: url(css-images/plus.svg) no-repeat;
+  background: url(images/plus.svg) no-repeat;
   background-size: contain;
 }
 .arrowleftimage {
-  background: url(css-images/arrowleft.svg) no-repeat;
+  background: url(images/arrowleft.svg) no-repeat;
   background-size: contain;
 }
 .arrowrightimage {
-  background: url(css-images/arrowright.svg) no-repeat;
+  background: url(images/arrowright.svg) no-repeat;
   background-size: contain;
 }
 .arrowupimage {
-  background: url(css-images/arrowup.svg) no-repeat;
+  background: url(images/arrowup.svg) no-repeat;
   background-size: contain;
 }
 .arrowdownimage {
-  background: url(css-images/arrowdown.svg) no-repeat;
+  background: url(images/arrowdown.svg) no-repeat;
   background-size: contain;
 }
 .zoomimage {
-  background: url(css-images/zoom.svg) no-repeat;
+  background: url(images/zoom.svg) no-repeat;
   background-size: contain;
 }
 .checkimage {
-  background: url(css-images/check.svg) no-repeat;
+  background: url(images/check.svg) no-repeat;
   background-size: contain;
 }
 .viewinimage {
-  background: url(css-images/viewin.svg) no-repeat;
+  background: url(images/viewin.svg) no-repeat;
   background-size: contain;
 }
 .undoimage {
-  background: url(css-images/undo.svg) no-repeat;
+  background: url(images/undo.svg) no-repeat;
   background-size: contain;
 }
 .dotsimage {
-  background: url(css-images/dots.svg) no-repeat;
+  background: url(images/dots.svg) no-repeat;
   background-size: contain;
 }
 .circleloader {
@@ -703,12 +703,12 @@ header .toolbar a.toolbaricon{
 	top: 7px;
 }
 .shoppingcartimage {
-  background: url(css-images/shoppingcart.svg) no-repeat;
+  background: url(images/shoppingcart.svg) no-repeat;
   background-size: contain;
   margin: 0 auto 2px auto;
 }
 .userimage {
-  background: url(css-images/user.svg) no-repeat;
+  background: url(images/user.svg) no-repeat;
   background-size: contain;
   margin: 0 auto 2px auto;
 }
@@ -868,7 +868,7 @@ a.subcategory{
   line-height: 1.6em;
 }
 .cartplusimage {
-  background: url(css-images/cartplus.svg) no-repeat;
+  background: url(images/cartplus.svg) no-repeat;
   background-size: contain;
 }
 /* items */

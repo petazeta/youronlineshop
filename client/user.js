@@ -36,7 +36,6 @@ const userMixin=Sup => class extends Sup {
     setAuthorization(name , password);
     this.dispatchEvent("log", lastUserType);
     this.notifyObservers("log", {lastType: lastUserType, currentType: this.getUserType()});
-    console.log(this, this.getUserType())
     return this;
   }
   static async create(name, password, email){
@@ -70,6 +69,30 @@ export async function loginDashboard(textNode){
   // close login card
   document.body.removeChild(document.getElementById("login-card"));
   if (webuser.isAdmin()) {
+    async function blink(domElement){
+      function innerBlink(){
+        domElement.dispatchEvent(new Event('mouseover'));
+        setTimeout(()=>domElement.dispatchEvent(new Event('mouseout')), 500);
+      }
+      innerBlink();
+      const intervalActive=setInterval(innerBlink, 1000);
+      setTimeout(()=>clearInterval(intervalActive), 2000);
+    }
+    await new Promise(resolve => setTimeout(resolve, 500));
+    if (webuser.isProductAdmin()) {
+      const {getCategoriesRoot} = await import('./categories.js');
+      for (const cat of getCategoriesRoot().getRelationship('itemcategories').children) {
+        blink(cat.highLightElement.parentElement);
+      }
+    }
+    if (webuser.isWebAdmin()) {
+      const {getPageText} = await import('./pagescontent.js');
+      for (const menu of getPageText().getRelationship('pageelements').children) {
+        blink(menu.highLightElement.querySelector('a.menu'));
+      }
+      console.log(window.document.querySelector('.pgtitle h1 div'));
+      blink(window.document.querySelector('.pgtitle h1 div'));
+    }
     return; // No dashboard screen no need to do anything
   }
   // if cart it is not empty -> redirect to checkout
@@ -83,3 +106,4 @@ export async function loginDashboard(textNode){
     textNode.parent.getChild("dashboard").setView(document.getElementById("centralcontent"), "showuserinfo");
   }
 }
+

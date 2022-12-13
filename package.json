@@ -4,7 +4,7 @@
   "description": "server for your online shop",
   "main": "serverindex.mjs",
   "scripts": {
-    "start": "node serverindex.mjs default-port=6001",
+    "start": "node serverindex.mjs default-port=6001 open-browser-instances",
     "test": "node --inspect-brk serverindex.mjs"
   },
   "author": "alberto melchor herrera",

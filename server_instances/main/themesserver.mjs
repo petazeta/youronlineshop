@@ -1,6 +1,6 @@
 
 import config from './cfg/mainserver.mjs';
-import {default as SiteTheme, decodeCssImageUrlPath} from '../../server/themes.mjs';
+import {default as SiteTheme} from '../../server/themes.mjs';
 
 const myTheme = new SiteTheme(config.layoutsPath);
 
@@ -20,7 +20,7 @@ export function getCssContent(styleId, themeId, subThemeId) {
   return myTheme.getCssContent(styleId, themeId, subThemeId)
 }
 
-export function getCssImagePathFromUrlPath(imageUrlPath) {
+export function getCssImagePathFromUrlPath_old(imageUrlPath) {
   const imageData=decodeCssImageUrlPath(imageUrlPath);
   return myTheme.getCssImagePath(imageData.get('imageId'), imageData.get('themeId'), imageData.get('subThemeId'));
 }
