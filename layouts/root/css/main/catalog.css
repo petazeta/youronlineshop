@@ -1,0 +1,141 @@
+a.category{
+  font-size: 0.9em;
+  color: #303030;
+  font-weight: bold;
+  pointer-events: none;
+  margin-bottom: 0.2em;
+}
+a.subcategory{
+  font-size: 0.9em;
+  color: #303030;
+  margin-top: 0.2em;
+}
+.categorycontainer{
+}
+.subcategorycontainer{
+  margin-left: 1em;
+}
+.paragraph {
+  position: relative; /*?????????*/
+  padding: 0.2em 0 1.2em 0;
+  line-height: 1.6em;
+}
+/* items */
+.productlistgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
+.productgrid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  gap: 10px;
+  height: 100%; /* All the elements in a row have the same long*/
+  border-radius: 3px;
+}
+.productimg {
+  position: relative;
+	margin-left: 0.5em;
+	margin-top: 1.3em;
+}
+img.productimg {
+	align-self: center;
+	margin: auto;
+  min-width: 170px; /* to not move content on load */
+}
+.productlargecontainer {
+	width:100%;
+	padding-top: 2em; 
+}
+.productprice {
+  display: flex;
+  align-items: center;
+}
+.pricevalue {
+  padding-right: 0.2em
+}
+.productgrid p{
+  color:#30270c;
+  margin: 0px;
+  padding: 0px;
+}
+.productgrid a.selected{
+  font-weight: bold;
+}
+.textpoduct h3{
+  margin: 0px 0px 0.5rem;
+  padding: 0px;
+}
+@media screen and (max-width: 400px){
+	.textpoduct h3{
+		margin: 0px 0px 0.2em;
+		font-size: 13pt;
+	}
+}
+div.textproduct {
+  margin: 0 0.4em 1em 0.4em;
+  min-width: 10em; // for not change in content load
+}
+div.textproduct a.tit{
+  color: rgb(80,80,80);
+}
+div.textproduct a.tit:hover{
+  color: rgb(20,20,20);
+}
+#loadimg input[type="file"] {
+	border: 1px solid #ccc;
+	font-size: 12pt;
+	padding: 5px 10px;
+	border-radius: 6px;
+}
+@media screen and (max-width: 400px){
+  .productlistgrid {
+    grid-template-columns: auto;
+  }
+  div.productshortcontainer div.textproduct div.itemdescription{
+    display: none;
+  }
+  div.productshortcontainer{
+    font-size: 9pt;
+  }
+  div.productshortcontainer{
+    color:rgb(40,40,40);
+  }
+  div.productgrid {
+    grid-template-columns: auto;
+  }
+  div.productimg img.productimg {
+    max-width: 210px;
+    display: flex; /* for cernter image*/
+  }
+  div.thumbnails div.productimage img{
+    max-width: 60px;
+  }
+  div.productlargecontainer {
+    padding-top: 2.5em; 
+  }
+  div.productlargecontainer .descriptionlarge {
+    font-size: 9pt;
+  }
+  .maincolumns nav.categories{
+    margin: auto;
+  }
+  nav.categories div.boxtitle {
+    display: none;
+  }
+  #loadimg img{
+    max-width: 80px;
+  }
+  #loadimg input[type="file"]{
+    font-size: 7pt;
+  }
+}
+.maincolumns nav.categories{
+  min-width: 18em;
+}
+#catalogbox {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+}

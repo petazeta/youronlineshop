@@ -1,0 +1,51 @@
+/*
+specific design
+*/
+.productshortcontainer {
+	border-radius: 3px;
+	border: solid 1px rgb(238, 237, 233);
+  padding: 0.3em;
+	
+}
+.sidebox .boxlist{
+  margin-bottom: -1px;
+  border-bottom: 1px solid rgb(238, 237, 233);
+  border-top: 1px solid rgb(238, 237, 233);
+}
+.menuscontainer {
+  border: 1px solid grey;
+  border-left: 0px;
+  border-right: 0px;
+}
+.sidebox {
+  background-color: white;
+}
+.btn {
+  background-color: aliceblue;
+}
+.alertmsg {
+	border-color: darkgrey;
+	background-color: palegreen;
+	box-shadow: 5px 5px 6px 1px rgb(158 171 220 / 50%);
+}
+.dialogbox {
+	border-color: darkgrey;
+	background-color: aliceblue;
+	box-shadow: 5px 5px 6px 1px rgb(158 171 220 / 50%);
+}
+details .explanation{
+	background: #dbedff;
+	border-color: rgb(4 66 137 / 0.2);
+}
+.page-indexes a.selected, .page-indexes a.selected:hover{
+	background-color: #099e89;
+	color: white;
+	border-color: #099e89;
+}
+.page-indexes a:hover{
+	background-color: #eee;
+	color: #099e89;
+}
+.page-indexes a {
+	background-color: #fafafa;
+}

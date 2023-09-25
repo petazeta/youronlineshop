@@ -1,0 +1,10 @@
+<!-- 
+This template shows the user data and user address.
+Param showAddress to show also address data
+Param fieldtype: input / textnode
+-->
+<div class="useraddressbox" data-user-data></div>
+<script>
+  const {showUserData} = await import(pathJoin("./client", thisAppFolder, "webuser/userdata.mjs"))
+  showUserData(thisElement, thisParams.showAddress, thisParams.fieldtype)
+</script>

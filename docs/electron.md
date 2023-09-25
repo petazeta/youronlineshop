@@ -5,19 +5,19 @@ Building a desktop application
 
 Our application is splited in the client and the server. We can run the server independly in a local or a remote computer and the client using Electron. Electron will wrap the client app into chrome. To do it we need to install Electron and use the basic Electron main.js script.
 
-Building a client/server desktop application is a quite straightforward process by using Electron. The easiest way would be to load everything from server. And we can make so by using an electron main.js file containing a instruction like `mainWindow.loadURL('http://host:port')`. There is an Electron main.js sample in resources/electron/sample.
+Building a client/server desktop application is a quite straightforward process by using Electron. The easiest way would be to load everything from a server that is running independentlly. And we can make it so by using an electron main.js file containing a instruction like `mainWindow.loadURL('http://host:port')`. There is an Electron main.js sample in resources/electron/sample.
 
 ## Desktop adventages
 
-There would be some adventages of having our own client version runing insted of the generic one. By using Electron we can manipulate directly the client file system so, for example, we can make automatic catalog backup copies into the client computer. We could also manage the printer device or any other devices.
+There would be some adventages of having our own client version runing insted of the generic one. By using Electron we can manipulate directly the client file system so, for example, we can make automatic catalog backup copies into the client computer or we could manage the printer device or any other devices.
 
 ## Loading client files from file system instead of server
 
-We could also try to integrate the client side files in Electron which would be similar to try to open the client files (starting by loader/main/index.html) directly from browser. In this case the load method would be like `mainWindow.loadFile('loader/main/index.html')`. And for doing so, even using Elecron, we must deactivate the code at client/main.js that prevents it: `if window.location.protocol=="file:" ...`.
+We could also try to integrate the client side files in Electron which would be like opening them (starting by loader/main/index.html) directly from browser. In this case the load method would be `mainWindow.loadFile('loader/main/index.html')` insted of 'loadUrl'. Apart from the 'loader' files the other files needed for the client (server is runing apart) are the ones at the folders "client" and "shared". We should adjust the scripts paths at "loader/main/index.html" to point to the correct client and shared paths. We could do it automatically in Electron preload.js by searching for scripts and changing their source attribute. In this case check out that when accesing the source attribute it becomes the full path and not the relative one.
 
-Other adjustments are also needed. Next one is correcting the js scripts paths at "loader/main/index.html": adding '../../'. Apart of the loader files the other files needed for the client (server is runing apart) are the ones at the folders "client" and "shared". The next step is to change the API (server) entry points paths that are defined as relatives to the browser url path (which now is the file system). To do so we must change the client script at shared/cfg/default.mjs (or custom.mjs) for pointing to the new server entry point that can be either a localhost one or a remote one.
+The next step is to change the API (server) entry points paths that are defined as relatives to the browser url path (which now is the file system). To do so we must change the settings at shared/cfg/default.mjs (or custom.mjs) correcting the entry point host part that can be either a localhost or a remote one.
 
-There should be some adjustments for the svg image files that are defined at the css. These files are being loaded from server, and not from the client folder structure, because they belong to the css themes feature. These behaviour is hidden from the client so Electron client version would try to get these files directly from the client folder structure. Therefore we would need to correct the scripts (or css files) to change the path of these files to ensure the client is retrieving them from server. Other way of doing so is by bringing the uploading themes functionality to Electron client or by patching the svg css process: copying the svg files to the image-css folder and renaming them to themeId_svg-name.
+If we want to load the themes layouts templates from the client file system instead of loading them from server we must transfer themes functionallity to Electron. We can not just do it by using server facilities diretly in client files. The procedure is by making a bridge between client js files and Electron (server) functionallity.
 
 ## Client / Server integration
 
@@ -32,7 +32,7 @@ Then at the client script we can access the data by:
 const myFetch=window.myFuncKey;
 const myReturn=myFetch(data);`
 
-It seems that Electron is not using ECMASCript for the import statements at server and it could be necesary to change the syntax to CommonJs or using require.
+It seems that Electron is not using ECMASCript for the import statements at server and it could be necesary to change the syntax to CommonJs or using 'require'. There are also another alternative https://www.npmjs.com/package/esm
 
-For mongodb check this document:
+For mongodb check also this document:
 https://www.mongodb.com/docs/realm/sdk/node/integrations/electron/

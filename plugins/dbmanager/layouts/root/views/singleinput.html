@@ -1,0 +1,25 @@
+<!--
+  It displays the props of a node (a single property)
+  It receives:
+   editPropName
+   (optional) labelNode, labelName and noEditLabel
+--> 
+<div style="padding-right:2.2em;">
+  <div class="form-group">
+    <div></div>
+    <script>
+      if (thisParams.labelNode) {
+        thisParams.labelNode.setView(thisElement, "singlelabel", {editPropName: thisParams.editPropName, noEditLabel: thisParams.noEditLabel});
+      }
+      else if (thisParams.labelName) {
+        thisNode.setView(thisElement, "singlelabel", {labelName: thisParams.labelName, editPropName: thisParams.editPropName});
+      }
+    </script>
+    <input class="form-field" name="" placeholder="">
+    <script>
+      thisNode.writeProp(thisElement, thisParams.editPropName);
+      thisElement.attributes.name.value=thisParams.editPropName;
+      thisElement.attributes.placeholder.value=thisParams.editPropName;
+    </script>
+  </div>
+</div>

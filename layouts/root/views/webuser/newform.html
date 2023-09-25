@@ -1,0 +1,143 @@
+<!--
+  thisNode: middle -> logform
+-->
+<form>
+  <div id="logform">
+  <!--
+    <div class="msgbox" style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <span></span>
+      <script>
+        const title=thisNode.getNextChild("signuptt").getRelationship("siteelementsdata").getChild();
+        title.writeProp(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
+          visibleOnMouseOver( thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </div>
+    -->
+    <div class="loginform">
+      <div class="form-group">
+        <div>
+          <span style="position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <label class="form-label" for="user_name" data-id="value"></label>
+          </span>
+        </div>
+        <script>
+          thisNode.getNextChild("userName").setContentLangView(thisElement)
+        </script>
+        <input class="form-control" name="user_name" data-id="value">
+        <script>
+          thisNode.getNextChild("userName").writeLangData(thisElement, undefined, undefined, "placeholder")
+        </script>
+      </div>
+      <div class="form-group">
+        <div>
+          <span style="position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <label class="form-label" for="user_password" data-id="value"></label>
+          </span>
+        </div>
+        <script>
+          thisNode.getNextChild("password").setContentLangView(thisElement)
+        </script>
+        <input type="password" class="form-control" placeholder="" name="user_password" data-id="value">
+        <script>
+          thisNode.getNextChild("password").writeLangData(thisElement, undefined, undefined, "placeholder")
+        </script>
+      </div>
+      <div class="form-group">
+        <div>
+          <span style="position:relative;">
+            <div data-id="butedit" class="btmiddleright"></div>
+            <label class="form-label" for="repeat_password" data-id="value"></label>
+          </span>
+        </div>
+        <script>
+          const {getRoot} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
+          getRoot().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").setContentLangView(thisElement)
+        </script>
+        <input type="password" class="form-control" name="repeat_password" data-id="value">
+        <script>
+          const {getRoot} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
+          getRoot().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").writeLangData(thisElement, undefined, undefined, "placeholder")
+        </script>
+      </div>
+      <div class="sign-up-button" style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="submit" class="btn" data-id="value"></button>
+      </div>
+      <script>
+        thisNode.getNextChild("signIn").setContentLangView(thisElement)
+      </script>
+    </div>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="userCharError" disabled data-id="value">
+    </div>
+    <script>
+      cthisNode.getNextChild("userCharError").setContentLangView(thisElement)
+    </script>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdCharError" disabled data-id="value">
+    </div>
+    <script>
+      thisNode.getNextChild("pwdCharError").setContentLangView(thisElement)
+    </script>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="signedIn" disabled data-id="value">
+    </div>
+    <script>
+      thisNode.getNextChild("signedIn").setContentLangView(thisElement)
+    </script>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="userExistsError" disabled data-id="value">
+    </div>
+    <script>
+      thisNode.getNextChild("userExistsError").setContentLangView(thisElement)
+    </script>
+    <div style="position:relative;">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <input type="hidden" name="pwdDoubleError" disabled data-id="value">
+    </div>
+    <script>
+      const {getRoot} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
+      getRoot().getNextChild("dashboard").getNextChild("changepwd").getNextChild("pwdDoubleError").setContentLangView(thisElement)
+    </script>
+    <!--
+    <div class="dashbuttons">
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright"></div>
+        <button type="button" class="btn" data-id="but"></button>
+        <script>
+          const myTextNode=thisNode.getNextChild("loginBack").getRelationship("siteelementsdata").getChild();
+          myTextNode.writeProp(thisElement);
+          thisElement.onclick=function(){
+            thisNode.setView(document.getElementById("centralcontent"), "loginform");
+          }
+          //adding the edition pencil
+          if (webuser.isWebAdmin()) {
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+            myTextNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+          }
+        </script>
+      </div>
+    </div>
+    -->
+  </div>
+</form>
+<script>
+  const {signUpFormSubm} = await import(pathJoin("./client", thisAppFolder, "webuser/login"))
+  thisElement.addEventListener('submit', async function(event) {
+    event.preventDefault()
+    signUpFormSubm(thisElement)
+  })
+</script>

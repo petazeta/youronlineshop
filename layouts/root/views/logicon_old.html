@@ -1,0 +1,118 @@
+<!--
+  thisNode: text content
+-->
+<div class="userimage"></div>
+<div data-id="value"></div>
+<script>
+  const {writeLangData, setTextNode} = await import(pathJoin('./client/contexts', thisAppFolder, 'sitecontent.mjs'))
+  const {webuser} = await import(pathJoin('./client/contexts', thisAppFolder, 'webuser.mjs'))
+  const {setHistoryState, pushHistoryState} = await import(pathJoin('./client/contexts', thisAppFolder, 'navhistory.mjs'))
+  const {observerMixin, observerMixinConstructorCallable} = await import(pathJoin('./client/observermixin.mjs'))
+
+  // add observer and observable prototype
+  Object.setPrototypeOf(thisNode, observerMixin(thisNode.constructor).prototype) // adding methods 
+  observerMixinConstructorCallable(thisNode) // adding properties : calling constructor
+
+  const setLogOutLabel = () => writeLangData(thisNode.getNextChild("logboxout").getNextChild("title"), thisElement)
+  const setLogInLabel = () => writeLangData(thisNode.getNextChild("logboxin").getNextChild("title"), thisElement)
+  const setLogLabel = () => webuser.props.id ? setLogInLabel() : setLogOutLabel()
+  const showUserMenu=()=>{
+    thisNode.parent.getChild("dashboard").setView(document.getElementById("dashmenu"), "usermenu")
+    document.getElementById("dashmenu").style.visibility="visible"
+    document.getElementById("dashmenu").style.transform="translateY(15px)"
+  }
+  const hideUserMenu=()=>{
+    document.getElementById("dashmenu").style.transform="translateY(-15px)"
+    document.getElementById("dashmenu").style.visibility="hidden"
+  }
+  const butAction=(event)=>{
+    if (webuser.props.id) {
+      if (document.getElementById("dashmenu").style.visibility=="visible" && event?.isTrusted) {
+        hideUserMenu()
+        return
+      }
+      showUserMenu()
+      return
+    }
+    if (document.getElementById("login-card")) {
+      thisNode.parent.getChild("logform").setView(document.querySelector(".login-frame .rmbox .body"), "loginform")
+      return
+    }
+    thisNode.parent.getChild("logform").appendView(document.body, "loginframe")
+  }
+  const loginUrl="?login=0"
+
+  thisElement.parentElement.addEventListener("click", function(event){
+    event.preventDefault()
+    butAction(event)
+    pushHistoryState(loginUrl)
+  })
+
+  setLogLabel()
+  setHistoryState(thisNode, loginUrl, butAction)
+  if (webuser.props.id) showUserMenu()
+  webuser.attachObserver("log", thisNode)
+  thisNode.setReaction("log", params=>{
+    console.log(`logicon node id=${thisNode.props.id} said "webuser log ${webuser.props.id}"`)
+    setlogstatus()
+    if (webuser.props.id) showUserMenu()
+    else hideUserMenu()
+  })
+
+  // esto está anticuado, mejor cambiar a patron observer
+
+  /*
+    Surgen dudas, se podría hacer a partir de la reacción de sitecontent rootNode o directamente desnde webuser
+
+
+  webuser.addEventListener("log", () => {
+    setlogstatus()
+  }, "setlogstatus")
+  const url='?login=0'
+  const showUserMenu=()=>{
+    thisNode.parent.getChild("dashboard").setView(document.getElementById("dashmenu"), "usermenu");
+    document.getElementById("dashmenu").style.visibility="visible";
+    document.getElementById("dashmenu").style.transform="translateY(15px)";
+  }
+  const hideUserMenu=()=>{
+    document.getElementById("dashmenu").style.transform="translateY(-15px)";
+    document.getElementById("dashmenu").style.visibility="hidden";
+  }
+  const butAction=(event)=>{
+    if (webuser.props.id) {
+      if (document.getElementById("dashmenu").style.visibility=="visible" && event?.isTrusted) {
+        hideUserMenu();
+        return;
+      }
+      showUserMenu();
+      return;
+    }
+    if (document.getElementById("login-card")) {
+      thisNode.parent.getChild("logform").setView(document.querySelector(".login-frame .rmbox .body"), "loginform");
+      return;
+    }
+    thisNode.parent.getChild("logform").appendView(document.body, "loginframe");
+  }
+
+  const {setHistoryState, pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.mjs');
+
+  thisElement.parentElement.addEventListener("click", function(event){
+    event.preventDefault();
+    butAction(event);
+    pushHistoryState(url);
+  });
+  
+  setHistoryState(thisNode, url, butAction)
+  
+  //If user is loged in we show user menu (after refresh when login)
+  if (webuser.props.id) showUserMenu();
+
+  // Event for refreshing when log
+  webuser.attachObserver("log", thisNode);
+  thisNode.setReaction("log", (params)=>{
+    console.log(`logicon node id=${thisNode.props.id} said "webuser log ${webuser.props.id}"`);
+    if (webuser.props.id) showUserMenu();
+    else hideUserMenu()
+  });
+  */
+</script>

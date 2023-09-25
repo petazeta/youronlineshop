@@ -1,0 +1,94 @@
+<!--
+  thisNode => orderPaymentType
+-->
+<div id="paypal-button-container"></div>
+<script>
+const {default: {currencyCode}}=await import('./' + CLIENT_CONFIG_PATH + 'main.mjs');
+const {sumTotal}=await import('./' + CLIENT_MODULES_PATH + 'cart.mjs');
+const {AlertMessage} = await import('./' + CLIENT_MODULES_PATH + 'alert.mjs');
+const {getSiteText}=await import('./' + CLIENT_MODULES_PATH + 'sitecontent.mjs');
+const orderPaymentType=thisNode;
+const order=orderPaymentType.parent.partner;
+const myVars=JSON.parse(orderPaymentType.props.details).vars;
+const myorderitems=order.getRelationship("orderitems");
+const myordership=order.getRelationship("ordershippingtypes");
+const mytotal=(sumTotal(myorderitems.children) + sumTotal(myordership.children)) / 100;
+const onApprove=(orderData)=>{
+  const transactionStatus = orderData.purchase_units[0]?.payments?.captures[0]?.status;
+  const transactionId = orderData.purchase_units[0]?.payments?.captures[0]?.id;
+  if (transactionStatus=='COMPLETED' || transactionStatus=='PROCESSED') {
+    orderPaymentType.props.succeed=1;
+    orderPaymentType.request("edit my props", {values: {succeed: 1, details: "Payment id:" + transactionId}})
+    .then(res=>{
+      const myNode=getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("paysucceed").getRelationship("siteelementsdata").getChild();
+      new AlertMessage(myNode.props.value, 3000).showAlert();
+      // we update the order view
+      order.setView(document.getElementById("centralcontent"), 'onsucceed');
+    });
+  }
+  else {
+    new AlertMessage("Order status: " + transactionStatus, 3000).showAlert();
+  }
+}
+  
+const onScriptLoaded=function(){
+  paypal.Buttons({
+      style: {
+          shape: 'rect',
+          color: 'gold',
+          layout: 'vertical',
+          label: 'paypal',
+      },
+      createOrder: function(data, actions) {
+          return actions.order.create({
+              purchase_units: [{
+                  amount: {
+                      value: mytotal,
+                      currency_code: currencyCode
+                  }
+              }]
+          });
+      },
+      onApprove: function(data, actions) {
+          return actions.order.capture()
+          .then(onApprove);
+      }
+  }).render('#paypal-button-container');
+}
+  /**
+ * Loads a JavaScript file and returns a Promise for when it is loaded
+ */
+const loadScript = src => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.onload = resolve
+    script.onerror = reject
+    script.src = src
+    document.head.append(script)
+  })
+}
+let paypalurl='https://www.paypal.com/sdk/js' + '?' + 'client-id=' + myVars.merchantId + '&' + 'currency=' +  currencyCode;
+loadScript(paypalurl)
+  .then(() => {
+    onScriptLoaded();
+  })
+  .catch(() => console.error('Something went wrong with paypal.'))
+</script>
+<!-- edition of the alert message -->
+<span style="position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <input type="hidden" name="succeedNotice" disabled>
+  <script>
+    const {getSiteText}=await import('./' + CLIENT_MODULES_PATH + 'sitecontent.mjs');
+    const myNode=getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("paysucceed").getRelationship("siteelementsdata").getChild();
+    myNode.writeProp(thisElement);
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
+      visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+      myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+      thisElement.type="text";
+    }
+  </script>
+</span>

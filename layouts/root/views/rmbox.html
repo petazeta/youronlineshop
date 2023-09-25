@@ -1,27 +1,8 @@
-<!--
-It recieves thisNode, myTp, removeContainer and make a frame that removes myContainer content when clicking close button.
-After closing it fires the event closewindow.
--->
-<div class="rmbox">
+<div class="rmbox" data-container>
   <div class="bt-wrapper">
-    <button type="button" class="closeimage minibtn transp">
+    <button type="button" class="closeimage minibtn transp" data-rm-close-but>
       <div class="closeimage"></div>
     </button>
-    <script>
-      const rmBox=thisElement.parentElement.parentElement;
-      thisElement.addEventListener('click', ()=>{
-        if (thisParams.removeContainer) {
-          thisParams.removeContainer.parentElement.removeChild(thisParams.removeContainer);
-        }
-        else {
-          rmBox.parentElement.removeChild(rmBox);
-        }
-        thisNode.dispatchEvent("closewindow");
-      });
-    </script>
   </div>
-  <div class="body"></div>
-  <script>
-    thisNode.setView(thisElement, thisParams.myTp, thisParams.myParams);
-  </script>
+  <div class="body" data-rm-body></div>
 </div>

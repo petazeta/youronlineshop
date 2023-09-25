@@ -3,8 +3,8 @@
 // It contains some facilities related to parent children link elements: load, clone, addChild, etc...
 
 export function getRoot(element) {
-  if (!element._parent) return element;
-  return getRoot(element._parent);
+  if (!element._parent) return element
+  return getRoot(element._parent)
 }
 
 const linksMixin=Sup => class extends Sup {
@@ -73,17 +73,21 @@ const linksMixin=Sup => class extends Sup {
   }
 
   addDescendent(obj) { // It replaces previous parent if present
-    this._children.push(obj);
-    obj._parent=this;
-    return obj;
+    this._children.push(obj)
+    obj._parent=this
+    return obj
   }
 
   removeDescendent(obj) {
-    return this._children = this._children.filter(child => child != obj);
+    if (this._children.includes(obj)) {
+      this._children = this._children.filter(child => child != obj)
+      return true
+    }
+    return false
   }
 
   removeDescendents(){
-    this._children=[];
+    this._children=[]
   }
 
   // Finds the child which value is as in obj key value pair. If no argument it returs first child
@@ -104,7 +108,7 @@ const linksMixin=Sup => class extends Sup {
     if (!obj) return this._parent=null;
     if (this._parent===obj) this._parent=null;
   }
-
+  // Deprecated: use utils.mjs version
   arrayFromTree() {
     return this._children.reduce((acc, value)=>acc=acc.concat(value.arrayFromTree()), [this])
   }

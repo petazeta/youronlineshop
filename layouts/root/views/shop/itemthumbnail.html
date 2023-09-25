@@ -1,0 +1,13 @@
+<!--
+thisNode: itemimage
+--> 
+<div class="productimage" style="position:relative;" data-id="thumbnail-container">
+  <button type="button" class="btmiddlecenter" style="opacity: 0; z-index:1" data-id="to-large-image-button">
+    <div class="zoomimage"></div>
+  </button>
+  <img data-id="value">
+</div>
+<script>
+  const {setThumbnail} = await import(pathJoin('./client', thisAppFolder, "catalog/categories.mjs"))
+  setThumbnail(thisNode)
+</script>

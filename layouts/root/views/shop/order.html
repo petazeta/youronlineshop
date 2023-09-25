@@ -1,0 +1,26 @@
+<!--
+  templated used at checkout and show user orders
+  mejor seria que class orderitems fuera una table
+-->
+<div class="boxframe orderframe order">
+  <div class="orderitems" data-items></div>
+  <div class="shippingitem form-group" data-shipping></div>
+  <div class="form-group ordertotals" data-total>
+    <span class="form-label" data-payment-type></span>
+    <span style="position:relative;" data-total-label>
+      <div data-butedit class="btmiddleright"></div>
+      <span class="form-label" style="margin-right:0.5em" data-value></span>
+    </span>
+    <span data-total-value></span>
+  </div>
+  <div class="paybutton" data-payment></div>
+  <script>
+    // Show Order payment button.
+    // This is valid for chktend and userordersline
+    const myorderpay=thisNode.getRelationship("orderpaymenttypes").getChild();
+    if (myorderpay && !myorderpay.props.succeed && myorderpay.props.details) {
+      const template=JSON.parse(myorderpay.props.details).template;
+      if (template) myorderpay.setView(thisElement, template);
+    }
+  </script>
+</div>

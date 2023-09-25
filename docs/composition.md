@@ -1,46 +1,58 @@
-Function Composition
-====================
+Object composition
+==================
 
-## Introduction
+Object composition is just a really basic concept of Object Oriented Programming. It just states that we can use references of some objets in some other object properties.
 
-Composition is the resulting of applying some function to the function that is taked as an argument.
-add=x,y=>x+y;
+We are using this technique masively in the software because it is based in nodes that contains child nodes forming a node tree.
 
-add3= x => add(x,3);
-add4= x => add(x,4);
+## Inheritance through object composition
 
-## Application
+We can use composition as a way of building inheritance. In this case we create the ascendant element when constructing asinging it to some object property. We must explicity define the ascendant methods we want to use in the descendent class. We will replace the super keyword with the property containing the ascendant element.
 
-We can use this function to add other functions:
+class Dog{
+  constructor(name) {
+    this.name = name
+    this.mammal = new Mammal(name)
+  }
+  giveBirth() {
+    return this.mammal.giveBirth()
+  }
+}
 
-compose = (x, f1, f2) => f2 (f1(x));
+## Inheritance versus composition
 
-compose(2, add3, add4)
+Concernig to what some people say about that is preferable using composition (decorator) over inheritance I dont agree because any decorator can be done using inheritance (prefarable multi-inheritance) in a simpler way. I would use composition only sometimes when the inheritance line is not clear and the functionalities are not related therefore we would mantain more coherence in the object structure.
 
-For any number:
+## Decorator pattern
 
-const pipe = (x0, ...fns) => fns.reduce(
-    (x, f) => f(x),
-    x0
-);
+This patter is similar to the above one but the different is that we encapsulate some already created objet. The purpose is to set some object functionality without modifying it.
 
-pipe(2, add3, add4)
+class SpeakingDog{
+  constructor(someDog) {
+    this.dog=someDog
+  }
+  // Optional: we can set decorator method or use decorated object directly
+  giveBirth() {
+    return this.dog.giveBirth()
+  }
+  speak() {
+    return "hello my name is " + this.dog.name
+  }
+}
 
-If we need to do some functions sequentially to an array of elements and use the array map method we can use this helper function :
+## Strategy pattern
 
-compose = (f1, f2) => x => f2 (f1(x));
+This patter is very similar to decorator but this time the purpose is not to extend an object functionality but to set some funtionality as the one from other object.
 
-For any number:
+class Mammal{
+  constructor(someAnimal) {
+    this.animal=someAnimal
+  }
+  giveBirth() {
+    return this.animal.giveBirth()
+  }
+}
 
-const flow = (...fns) => x0 => fns.reduce(
-    (x, f) => f(x),
-    x0
-);
+## For more Composing techniques
 
-```
-flow((a)=> a * 3, (a)=>a + 3, (a)=>a * 2)(2); // == 18
-arrayElement.map(compose(f1,f2));
-arrayElement.map(flow(f1,f2,f3));
-```
-
-
+Check Eric Elliott Composing software

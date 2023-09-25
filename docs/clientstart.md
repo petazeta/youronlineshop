@@ -3,15 +3,15 @@ Client Start
 
 ## Introduction
 
-Server initial loading is the site/main/index.html document. This document starts the initial script client/main.js and the client/global.js. This last one is just a list of the vars that can be accessed as global in the client application.
+The client initial loading point is the 'index.html' document. This document path is defined at server config 'sitePath' parameter. The default value of the initial loading point is 'loader/main/index.html'. The 'index.html' document contains a loading animation that will appear meanwhile the entire application is loading. 'index.html' starts the initial script client/index.mjs that will call the main application module 'client/contexts/main/main.mjs'.
 
-## site/main/index.html
+## index.html
 
-The index html element that is loading at the very first it contains a template for the errors showing and a loading element indicator. It is everything that is needed at this stage of the loading. Once the elements are loaded by the script at main.js, then the loading indicator will desapear and the app will start running.
+The index html element that is loading at the very first contains a template for the errors showing and a loading element indicator. This is everything that is needed at this stage of the loading. Once the elements are loaded by the script at main.mjs, then the loading indicator will vanish and the app will start running.
 
-## main.js
+## The main module
 
-This script starts the process making some initial procedures and showing the errors that could happend. Some other initialization process occurs at the modules when they are loaeded the first time. So in main.js there is some modlues imports. These imports can also make initializations.
+This script starts the process making some initial procedures and showing the errors that could happend.
 
 We will see the main.js steps to expain them.
 

@@ -1,17 +1,22 @@
 // Parece que con mongoose no es necesario pasar a ObjectId el id cuyo formato es string
-import mongoose from 'mongoose';
-import {zip} from '../shared/utils.mjs'
+import mongoose from "mongoose";
+import {zip} from "../shared/utils.mjs"
 
-export default class SiteDbGateway {
+
+// Esta clase se debe de iniciar con connect
+export class SiteDbGateway {
   constructor(){
     this.tableList;
     this.tableRef;
     this.dbLink;
   }
 
+  // La creación de conexión mediante mongoose se puede hacer con createConnection y con connect.
+  // CreateConnection permite establecer diferentes conexiones mientras que connect solo se refiere a la conexión por defecto
+  // Nosotros establecemos diferentes conexiones para permitir el uso de este módulo por aplicaciones independientes
   async connect(cfgUrl, setDbSchema) {
     if (this.dbLink) return this.dbLink;
-    mongoose.set('strictQuery', false);
+    mongoose.set("strictQuery", false);
     this.dbLink=mongoose.createConnection(cfgUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -29,30 +34,10 @@ export default class SiteDbGateway {
     });
   }
 
-  /*
-  async connect(cfgUrl, setDbSchema) {
-    if (this.dbLink) return this.dbLink;
-    mongoose.set('strictQuery', false);
-    return mongoose.createConnection(cfgUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then(() => {
-      this.dbLink=mongoose.connection;
-      if (setDbSchema) setDbSchema(this.dbLink);
-      this.setTableList();
-      return this.dbLink;
-    })
-    .catch(err => {
-      console.error('Database connection error', err);
-    })
-  }
-  */
-
   setTableList() {
     if (!this.tableList) {
-      this.tableList=new Map(this.getTables().map(tableName=>['TABLE_' + tableName.toUpperCase(), tableName]));
-      this.tableRef=new Map(this.getTables().map(tableName=>[tableName, 'TABLE_' + tableName.toUpperCase()]));
+      this.tableList=new Map(this.getTables().map(tableName=>["TABLE_" + tableName.toUpperCase(), tableName]));
+      this.tableRef=new Map(this.getTables().map(tableName=>[tableName, "TABLE_" + tableName.toUpperCase()]));
     }
     return this.tableList;
   }
@@ -84,13 +69,13 @@ export default class SiteDbGateway {
     .filter(([keyName, keyProps])=>!["_id", "__v"].includes(keyName))
     .map(([keyName, keyProps])=>{
       const key={Field: keyName, Type: "text"};
-      if (keyName=='id') key.Primary="yes";
+      if (keyName=="id") key.Primary="yes";
       const objType = keyProps;
-      if (typeof objType == 'function') {
+      if (typeof objType == "function") {
         if (objType.name=="Number") key.Type="integer";
         return key;
       }
-      if (typeof objType == 'object') {
+      if (typeof objType == "object") {
         if (objType.type) {
           if (objType.name=="Number") key.Type="integer";
         }
@@ -138,7 +123,7 @@ export default class SiteDbGateway {
     }
     let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp);
     if (positioncolumnname) {
-       query = query.sort({[positioncolumnname] : 1})
+       query.sort({[positioncolumnname] : 1})
     }
     if (limit.length == 2) {
       let offset=limit[0];
@@ -165,33 +150,35 @@ export default class SiteDbGateway {
 
   // return the inserted id or throw an error
   async insertChild(foreigncolumnnames, positioncolumnname, data, thisChild, extraParents, updateSiblingsOrder) {
-    const myProps={...thisChild.props}; //copy properties to not modify original element
+    const myProps={...thisChild.props} //copy properties to not modify original element
     //add link relationships column properties
-    let myforeigncolumnname;
+    let myforeigncolumnname
     if (foreigncolumnnames.length > 0 && data.partner?.props.id) {
-      myforeigncolumnname=foreigncolumnnames[0];
+      myforeigncolumnname=foreigncolumnnames[0]
       myProps[myforeigncolumnname]=data.partner.props.id;
     }
     if (positioncolumnname && !myProps[positioncolumnname]) {
       // Insert to last position order by default
       let positionRq={}
       if (myforeigncolumnname) positionRq={[myforeigncolumnname] : data.partner.props.id}
-      const result = await this.dbLink.model(this.tableList.get(data.props.childTableName)).findOne(positionRq, {[positioncolumnname]: 1, _id:0}).sort({[positioncolumnname]:-1});
-      if (!result || !result[positioncolumnname]) myProps[positioncolumnname]=1;
-      else myProps[positioncolumnname]=result[positioncolumnname] + 1;
+      const result = await this.dbLink.model(this.tableList.get(data.props.childTableName))
+      .findOne(positionRq, {[positioncolumnname]: 1, _id:0})
+      .sort({[positioncolumnname]:-1})
+      if (!result || !result[positioncolumnname]) myProps[positioncolumnname]=1
+      else myProps[positioncolumnname]=result[positioncolumnname] + 1
     }
     if (extraParents) {
       Array.from(zip(foreigncolumnnames.slice(1), extraParents)).reduce((tot, [key, value])=>Object.assign(tot, {[key]: value.partner?.props.id}), myProps);
     }
     //Now we add a value for the props that are null and cannot be null
     if (data.childTableKeysInfo) {
-      data.childTableKeysInfo.filter(keyInfo=>keyInfo["Null"]=='NO' && !keyInfo["Default"] && keyInfo['Extra']!='auto_increment').forEach(keyInfo=>{
+      data.childTableKeysInfo.filter(keyInfo=>keyInfo["Null"]=="NO" && !keyInfo["Default"] && keyInfo["Extra"]!="auto_increment").forEach(keyInfo=>{
         if (myProps[keyInfo["name"]]===null) {
-          if (keyInfo['Type']=='integer') {
+          if (keyInfo["Type"]=="integer") {
             myProps[keyInfo["name"]]=0;
             return;
           }
-          myProps[keyInfo["name"]]='';
+          myProps[keyInfo["name"]]="";
         }
       });
     }

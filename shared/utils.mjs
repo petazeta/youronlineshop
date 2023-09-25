@@ -132,27 +132,81 @@ export const splitLinesFormat=jsonData=>{
 export const exportFormat=jsonData=>{
   return splitLinesFormat(jsonData).replaceAll('[[[', '\n[[[').replaceAll(']]],', ']]],\n')
 };
+// DEPRECATED -> replaceLangData
+export function replaceData(target, source, relName, relDataName) {
+  // myElement => [sourceChildren, targetChildren]
+  const transformation = (myElement, previousElement) => {
+    const sourceDataRel=myElement[0].map(sourceChild=>sourceChild.getParent()).find(sourceChildParent=>sourceChildParent.props.name==relDataName)
+    if (sourceDataRel?.getChild()) {
+      const targetDataRel=myElement[1].map(targetChild=>targetChild.getParent()).find(targetChildParent=>targetChildParent.props.name==relDataName)
+      if (targetDataRel) {
+        targetDataRel.children=[];
+        targetDataRel.addChild(sourceDataRel.getChild());
+      }
+    }
+  }
+  // return [sourceChildren, targetChildren]
+  const splitting=(myElement, resultElement)=>[ myElement[0].getRelationship(relName)?.children || [], myElement[1].getRelationship(relName)?.children || [] ]
 
-// Only when structure is identical
+  for (const _iteration of walkThrough([source, target], splitting, transformation)) continue;
+  return target
+}
+
+export function replaceLangData(target, source, langCollectionName) {
+  const isDataBranch=myParent=>myParent.sysChildTableKeysInfo?.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName==langCollectionName)
+  // myElement => [sourceChildren, targetChildren]
+  const transformation = (myElement, previousElement) => {
+    const sourceDataRel=myElement[0].map(sourceChild=>sourceChild.getParent()).find(isDataBranch)
+    if (sourceDataRel?.getChild()) {
+      const targetDataRel=myElement[1].map(targetChild=>targetChild.getParent()).find(isDataBranch)
+      if (targetDataRel) {
+        targetDataRel.children=[]
+        targetDataRel.addChild(sourceDataRel.getChild())
+      }
+    }
+  }
+  // return [sourceChildren, targetChildren]
+  const splitting=(myElement, resultElement)=>[ myElement[0].getRelationship(relName)?.children || [], myElement[1].getRelationship(relName)?.children || [] ]
+
+  for (const _iteration of walkThrough([source, target], splitting, transformation)) continue;
+  return target
+}
+
+export async function reloadLangData(target, getDataBranch){ //ESTA MAL REVISAR
+  const subCatData=target.getMainBranch().children.reduce((acc, rootChild)=>[...acc, ...rootChild.getMainBranch().children.map(child=>getDataBranch(child))], []);
+  const langParent=this.getCurrentLanguage().getRelationship({childTableName: getDataBranch(this.treeRoot).childTableName});
+  const result = await Node.requestMulti("get my children", subCatData, {extraParents: langParent});
+  result.forEach((value, key)=>subCatData[key].addChild(new Node().load(value.data[0])))
+}
+
+export function getMainBranchDataNodes(startNode, justThisLevel=-1, maxDepth){
+  return Array.from(walkThrough(startNode, (myElement)=>myElement.getMainBranch().children, undefined, undefined,
+    (resultElement, resultParent, currentDepth)=>{
+      if (justThisLevel==-1 || currentDepth==justThisLevel) return true;
+    }, undefined, maxDepth))
+}
+/*
+// Only when structure is identical should be refactored to be similar to replaceData
 export function replaceLangData(targetTree, sourceTree){
   const sourceArray=sourceTree.arrayFromTree();
   targetTree.arrayFromTree().forEach((targetTree, i)=>{
     if (BasicNode.detectLinker(targetTree)) {
-      const isLangContent = targetTree.sysChildTableKeysInfo && targetTree.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
+      const isLangContent = targetTree.sysChildTableKeysInfo?.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
       //Swap the other langs content
       if (isLangContent) targetTree.children[0].props=sourceArray[i].children[0].props;
     }
   });
   return targetTree;
 }
+*/
 
-// split the languages data in one array of langdata for each language
+// split the languages data in one array of langdata for each language - Maybe should be revised
 export function splitLangTree(origTree, totalLang){
   if (totalLang<2) return [origTree];
-  const origSerial=origTree.arrayFromTree();
+  const origSerial=arrayFromTree(origTree);
   const singleTrees=new Array(totalLang).fill(undefined).map(()=>origTree.clone());
   singleTrees.forEach((singleTree, lang_i)=>{
-    const langSerial=singleTree.arrayFromTree();
+    const langSerial=arrayFromTree(singleTree);
     origSerial.forEach((orig, i)=>{
       if (BasicNode.detectLinker(orig)) {
         const isLangContent = orig.sysChildTableKeysInfo && orig.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
@@ -171,11 +225,60 @@ export function getChildrenArray(myNode) {
   return myNode.relationships.reduce((totalArray, rel)=>totalArray = [...totalArray, ...relChildrenArray(rel)], []);
 }
 
+export function arrayFromTree(thisNode){
+  return Array.from(walkThrough(thisNode))
+}
+
 export function* zip (...iterables){
-    let iterators = iterables.map(i => i[Symbol.iterator]() )
-    while (true) {
-        let results = iterators.map(iter => iter.next() )
-        if (results.some(res => res.done) ) return
-        else yield results.map(res => res.value )
+  let iterators = iterables.map(i => i[Symbol.iterator]() )
+  while (true) {
+    let results = iterators.map(iter => iter.next() )
+    if (results.some(res => res.done) ) return
+    else yield results.map(res => res.value )
+  }
+}
+
+// ** Large used **
+// Transformation is to produce a diferent resulting element that is to be yield: resultElement,
+// but we can also use it for changing the actual element, in this case result
+// would be the own element. The same (resultElement = myElement) when no transformation applyed.
+// We keep track of the parent, the result element, the current iteration deep, etc...
+// to use them as parameters for the next iteration execution functions.
+// The yielding result can differ however from resultElement so there are others transformation posibilities
+// at the output and It can also be filtered.
+
+export function* walkThrough(startElement
+  , splitting=(myElement, resultElement, currentDepth)=>myElement._children
+  , transformation=(myElement, resultParent, currentDepth)=>myElement // last resultElement
+  , toYield=(resultElement, resultParent, currentDepth)=>resultElement
+  , filterYield=(resultElement, resultParent, currentDepth)=>true
+  , startParent=null
+  , maxDepth=-1){
+  function* innerLoop(resultElement, myElement, resultParent, myParent, currentDepth) {
+    if (filterYield(resultElement, resultParent, currentDepth)) yield toYield(resultElement, resultParent, currentDepth)
+    if (maxDepth-currentDepth==0) return;
+    for (const child of splitting(myElement, resultElement, currentDepth)) {
+      yield* innerLoop(transformation(child, resultElement, currentDepth), child, resultElement, myElement, currentDepth+1)
     }
+  }
+  yield* innerLoop(transformation(startElement, startParent, 0), startElement, startParent, startParent, 0)
+}
+// estoy transformandolo a async pero aun no va
+export async function* walkThroughAsync(startElement
+  , splitting = async (myElement, resultElement, currentDepth)=>myElement._children
+  , transformation = (myElement, resultParent, currentDepth)=>myElement // last resultElement
+  , toYield = (resultElement, resultParent, currentDepth)=>resultElement
+  , filterYield = (resultElement, resultParent, currentDepth)=>true
+  , startParent = null
+  , maxDepth=-1){
+  async function* innerLoop(resultElement, myElement, resultParent, myParent, currentDepth) {
+    if (await filterYield(resultElement, resultParent, currentDepth))
+      yield await toYield(resultElement, resultParent, currentDepth)
+    if (maxDepth-currentDepth==0)
+      return
+    for (const child of await splitting(myElement, resultElement, currentDepth)) {
+      yield* await innerLoop(transformation(child, resultElement, currentDepth), child, resultElement, myElement, currentDepth+1)
+    }
+  }
+  yield* await innerLoop(transformation(startElement, startParent, 0), startElement, startParent, startParent, 0)
 }

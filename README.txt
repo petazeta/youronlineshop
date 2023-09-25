@@ -1,15 +1,13 @@
-***************
-* YOS Version *
-***************
-
-Last stable version: 5.1.0 13-11-2022 (day-month-year)
-
+*******
+* YOS *
+*******
+*******
 
 ***********
 * Support *
 ***********
 
-Please write: melchorherrera@gmail.com
+Please write to: melchorherrera@gmail.com
 
 
 *********
@@ -29,9 +27,9 @@ Awards: Community Choice award by SourceForge
 
 - Easy edition
 - Quick purchase process
-- Webite pages (About, Contact, ect...)
+- Website pages (About, Contact, ect...)
 - Multilingual
-- Ultra light code.
+- Bazingly fast
 - Themes (Templates and css)
 - Export / Import
 - Multi shop
@@ -41,14 +39,13 @@ Awards: Community Choice award by SourceForge
 * Installation *
 ****************
 
-1. Copy the source files to your system.
-2. Install node and mongodb.
-3. Edit mongodb settings at: server_instances/main/cfg/dbcustom.mjs.
-4. Open your terminal at main folder and type:
+1. Get the source files.
+2. Install node and mongodb when necesary.
+3. Edit the mongodb settings at: server/contexts/main/cfg/dbcustom.mjs.
+4. Open your terminal at the source top folder and type:
 npm install 
 npm start
-5. The server is running now. Continue in browser.
-
+5. The server is running now. Continue in browser as prompt tells.
 
 ***********
 * Support *

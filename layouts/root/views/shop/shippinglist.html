@@ -1,0 +1,18 @@
+<table id="shippingcontainer"></table>
+<script>
+const {default: BasicText} = await import('./client/basictext.mjs');
+const {currentLanguage, createInstanceChildText}= await import('./' + CLIENT_MODULES_PATH + 'languages.mjs');
+class SippingText extend BasicText{
+  setReactions(){}
+}
+let shippingText=new SippingText("TABLE_SHIPPINGTYPES")
+await shippingText.init()
+
+shippingText.treeRoot.getMainBranch().addEventListener("setChildrenView", function() {
+  if (this.children.length==0 && (webuser.isSystemAdmin() || webuser.isOrdersAdmin())) {
+    createInstanceChildText(this)
+    .then(newNode=>newNode.setView(this.childContainer, "butaddnewnode"));
+  }
+}, "addNewNodeButton");
+shippingText.treeRoot.getMainBranch().setChildrenView(thisElement,  "shippingtype");
+</script>

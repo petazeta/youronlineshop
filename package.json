@@ -1,18 +1,15 @@
 {
   "name": "@petazeta/your-online-shop-server",
-  "version": "5.0.0",
   "description": "server for your online shop",
   "main": "serverindex.mjs",
   "scripts": {
-    "start": "node serverindex.mjs default-port=6001 open-browser-instances",
-    "test": "node --inspect-brk serverindex.mjs"
+    "start": "node serverindex.mjs",
+    "test": "node --inspect serverindex.mjs"
   },
   "author": "alberto melchor herrera",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "*",
     "mongoose": "*",
-    "nodemailer": "*",
-    "redis": "*"
+    "nodemailer": "*"
   }
 }

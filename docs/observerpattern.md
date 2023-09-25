@@ -1,6 +1,10 @@
 Javascript observer pattern implementation
 ==========================================
 
+[Notas]
+Quizás se podría hacer un canal de comunicación para mandar y recibir señales, quizás mediante async generators para crear un eventFeed o eventBroadcaster.
+https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel/message_event
+Ver tambien: [iterables](iterables.md)
 # About
 
 This is about the implementation of the observer pattern in Javascript. We will write the implementation in a module file and will explain it. We will also write some javascript examples with the porpouse of check the correct implementation performance. We are writing it in the context of a web app.

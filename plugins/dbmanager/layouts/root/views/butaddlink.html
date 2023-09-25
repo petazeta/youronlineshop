@@ -1,0 +1,108 @@
+<!--
+  thisNode: the node
+  thisParams:
+    onDeleted:
+-->
+<button type="button" class="butadd">
+  <template>
+  <!--
+    thisParams:
+      dataNode: thisNode
+      onDeleted:
+  -->
+    <div class="alert alertmsg redalert">
+      <div>
+        <span style="position:relative;">
+          <div data-id="butedit" class="btmiddleright"></div>
+          <h1 style="font-size:1.5em" style="display:block;">ADD LINK</h1>
+        </span>
+      </div>
+      <span style="position:relative;">
+  <!--
+    We have to select unlinked elements of the childtable
+    select unlinked children
+    so we select all children and pass it thisProperties with the foreigncolumn name == null
+  -->
+        <select style="margin:1em;">
+          <template>
+            <option></option>
+            <script>
+              const fields=[];
+              const idKey=thisNode.parentNode.getMySysKey('primary');
+              const myKeys=[idKey, ...thisNode.parentNode.childtablekeys];
+              for (const tableKey of myKeys) {
+                let value=thisNode.props[tableKey];
+                if (value) {
+                  if (value.length > 40) value=value.substring(0, 10) + "...";
+                  fields.push(tableKey + ": " + value);
+                }
+              }
+              thisElement.value=thisNode.props[idKey];
+              thisElement.textContent=fields.join();
+              thisElement.thisNode=thisNode;
+            </script>
+          </template>
+        </select>
+        <script>
+          const foreignKey = thisParams.dataNode.parentNode.getMySysKey();
+          
+          const result = await thisParams.dataNode.parentNode.request("get all my children", {filterProps: {[foreignKey]: null}});
+          if (result.total==0) return;
+          const unlinkedNodes = result.data;
+          unlinkedNodes.shift(); //the first one is the root
+          const launcher=thisParams.dataNode.parentNode.cloneNode();
+          launcher.children=[];
+          for (const unlinkedNode of unlinkedNodes) {
+            let child=(new thisParams.dataNode.constructor()).load(unlinkedNode);
+            const posKey = thisParams.dataNode.parentNode.getMySysKey("sort_order");
+            if (posKey) {
+              child.props[posKey]=thisParams.dataNode.props[posKey]+1;
+            }
+            launcher.addChild(child);
+          }
+          launcher.setChildrenView(thisElement, thisElement.querySelector('template'));
+        </script>
+
+      </span>
+      <div style="margin:1em;">
+        <span style="position:relative;">
+          <button type="button" class="btn"data-id="but" >Cancel</button>
+          <script>
+            thisElement.onclick=function(){
+              thisNode.hideAlert();
+            }
+          </script>
+        </span>
+        <span style="position:relative;">
+          <button type="button" class="btn" data-id="but">Add link</button>
+          <script>
+            thisElement.addEventListener("click", async function(ev) {
+              ev.preventDefault();
+              const mySelect=thisElement.closest(".alert").querySelector("select");
+              const currentNode=mySelect.options[mySelect.selectedIndex].thisNode;
+              const result=await currentNode.request("add my link");
+              thisParams.dataNode.parentNode.addChild(currentNode);
+              if (currentNode.parentNode.children.length<=1) await currentNode.parentNode.setChildrenView(); //to remove the single addition button
+              else await currentNode.parentNode.appendChildView(currentNode);
+
+              thisNode.hideAlert();
+            });
+          </script>
+        </span>
+      </div>
+    </div>
+  </template>
+  <div class="add-link-image"></div>
+  <script>
+    if (window.getComputedStyle(thisElement).backgroundImage) {
+      const {setSizeFromStyle}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+      setSizeFromStyle(thisElement);
+    }
+  </script>
+</button>
+<script>
+  const {Alert}=await import('./' + CLIENT_MODULES_PATH + 'alert.js');
+  thisElement.onclick=function() {
+    (new Alert()).showAlert(thisElement.querySelector("template"), {dataNode: thisNode});
+  }
+</script>

@@ -38,7 +38,7 @@
           else thisElement.textContent=thisParams.valueProcessor(thisParams.editPropName, thisNode.props[thisParams.editPropName]);
           //adding the edition pencil
           if (typeof thisParams.editableFunc=="function" && thisParams.editableFunc()) {
-            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
             visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
             thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty : thisParams.editPropName});
             visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit][data-sub=code]'), thisElement.parentElement);
@@ -56,7 +56,7 @@
           //adding the edition pencil
           if (typeof thisParams.editableFunc=="function" && thisParams.editableFunc()) {
             thisElement.disabled=true;
-            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
             visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
             thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
           }

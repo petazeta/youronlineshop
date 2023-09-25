@@ -1,0 +1,33 @@
+<!-- -->
+<div class="bt-wrapper">
+  <button type="button" class="closeimage minibtn transp" style="margin-left: 0.2em; margin-top: 0.2em;" data-close>
+    <div class="closeimage"></div>
+  </button>
+  <div class="boxtitle" data-tit>
+    <span style="position:relative;">
+      <div data-butedit class="btmiddleright"></div>
+      <a data-value></a>
+    </span>
+  </div>
+</div>
+<div class="boxbody">
+  <div data-itemlistcontainer></div>
+  <div class="checkoutcontainer" data-checkoutcontainer>
+    <span style="position:relative">
+      <div class="btmiddleright" data-butedit></div>
+      <button type="button" class="btn" data-value></button>
+    </span>
+    <script>
+      const {setCkOutBtn} = await import(pathJoin("./client", thisAppFolder, "shop/cart.mjs"))
+      setCkOutBtn(thisElement)
+    </script>
+    <span style="position:relative">
+      <div data-id="butedit" class="btmiddleright"></div>
+      <button type="button" class="btn" data-id="value"></button>
+    </span>
+    <script>
+      const {setCkOutDiscardBtn} = await import(pathJoin("./client", thisAppFolder, "shop/cart.mjs"))
+      setCkOutDiscardBtn(thisElement)
+    </script>
+  </div>
+</div>

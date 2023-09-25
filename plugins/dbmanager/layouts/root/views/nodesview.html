@@ -1,0 +1,29 @@
+<!--
+  thisParams.startIndex, thisParams.endIndex
+  thisParams.rootMother
+  thisNode: tableName node
+-->
+<div class="productlistgrid"></div>
+<script>
+  const {currentLanguage} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
+  const {getPagination}= await import('./' + CLIENT_MODULES_PATH + 'pagination.js');
+  const myrootmother=thisNode.getRelationship();
+  //we have to load root element if autorelated or all the elements if not
+  if (myrootmother.props.parentTableName==myrootmother.props.childTableName) {
+    await myrootmother.loadRequest("get my root");
+  }
+  else {
+    await myrootmother.loadRequest("get all my children", {limit: [thisParams.startIndex, thisParams.endIndex]});
+    // myrootmother.props.total=getPagination(thisNode).total; // restablecemos el valor sin los límites
+  }
+
+  //To show add product when no products in the category
+  myrootmother.addEventListener("setChildrenView", async function() {
+    if (myrootmother.children.length==0) {
+      const newNode=await myrootmother.createInstanceChild();
+      newNode.setView(thisElement, "butaddnewnode");
+    }
+  }, "addNewNodeButton");
+
+  await myrootmother.setChildrenView(thisElement, "node");
+</script>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="images/logo.png">
+    <title></title>
+    <link rel="icon" href="images/icon.svg" sizes="any" type="image/svg+xml">
+    <script src="client/globals.js"></script>
+    <script defer type="module" src="client/main.js"></script>
+    <template id="syserror">
+      <div style="display: table; position: fixed !important; top: 20%; left: 50%; transform: translateX(-50%); min-width: 200px; max-width: 90%; z-index:100; border: 1px solid #AAA; background: rgb(240, 245, 245); padding: 0.5rem; text-align: center; border-radius: 3px;"></div>
+      <script>
+        if (thisNode.props.alertclass) {
+          thisElement.classList.add(thisNode.props.alertclass);
+        }
+        if (thisNode.props.alertmsg) {
+          thisNode.writeProp(thisElement, "alertmsg");
+        }
+      </script>
+    </template>
+    <style>
+      .spinner-wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .spinner div{
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 100%;
+        background-color: #00bfd8;
+        animation: sk-bouncedelay 1.4s ease-in-out infinite both;
+      }
+      .spinner .bounce1 {
+        animation-delay: -.32s;
+      }
+      .spinner .bounce2 {
+        animation-delay: -.16s;
+      }
+      @keyframes sk-bouncedelay{
+        0%,
+        80%,
+        to{transform:scale(0)}
+        40%{transform:scale(1)}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="spinner-wrapper">
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -7,7 +7,7 @@ La paginación consta de dos apartados:
 - La parte que contiene los resultados (marco)
 - La parte que contiene los índices (botones)
 
-Antes de muostrar la paginación ha de conocerse de antemano el número de resultados para que la parte del índice pueda generarse. Por ello se carga el numero de resultados primero haciendo un loadRequest get my children con el parámetro count: true. (Esto es en subcategory tp).
+Antes de mostrar la paginación ha de conocerse de antemano el número de resultados para que la parte del índice pueda generarse. Por ello se carga el numero de resultados primero haciendo un loadRequest get my children con el parámetro count: true. (Esto es en subcategory tp).
 
 Una vez cargado este número se crea un nuevo objecto pagination (clase pagination creada para tal fin) y se carga el template pagination. El template pagination a partir del objecto pagination genera el index (botones) y lo carga.
 
@@ -27,7 +27,7 @@ Otra cosa que podría pasar es que la última página quedara vacía y por tanto
 
 Al añadir un elemento si estamos en la última página y la página aún tiene espacio para un elemento más no habría que hacer nada especial. 
 
-Si no estamos en la última página o la página es la última pero está completa habría que sacar el elemento último. Además si el elemento añadido coincide con el que se saca convendría pasar a esa página donde esta nuevo.
+Si no estamos en la última página o la página es la última pero está completa habría que sacar del cuadro el elemento último. Además si el elemento añadido coincide con el que se saca convendría pasar a esa página donde esta nuevo.
 
 Si se incrementa el número de páginas hay que actualizar el índice.
 

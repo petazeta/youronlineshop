@@ -1,0 +1,51 @@
+<!--
+
+thisParams.setView
+---
+
+thisParams ==> No vale :-> myNode, labelNode, fileName 
+----
+
+myNode => itemNode
+
+Aparecen la lista y debaj el boton de selecionar archivo.
+Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se supera el limite de imágenes.
+
+-->
+<div class="alert dialogbox" data-container>
+  <div class="bttopinsiderightinside">
+    <button type="button" class="closeimage minibtn transp" style="margin-right:10px; margin-top: 6px;" data-close>
+      <div class="closeimage"></div>
+    </button>
+  </div>
+  <form enctype="multipart/form-data" id="loadimg" data-form>
+    <div style="display:flex; flex-flow: column; gap: 1em;">
+      <div data-head-note>
+        <span style="position:relative;">
+          <div data-butedit class="btmiddleright"></div>
+          <h3 style="margin: 0.2em" data-value></h3>
+        </span>
+      </div>
+      <table style="align-self: center;" data-items-images></table>
+      <div style="margin-bottom: 0.2em">
+        <div class="form-group">
+          <div style="position:relative;" data-file>
+            <div data-butedit class="btmiddleright"></div>
+            <label for="fileData" style="align-self: left;" data-value></label>
+          </div>
+          <script>
+            // este div no tiene style=inline
+          </script>
+          <div>
+            <div class="circleloader minicircleloader" style="visibility: hidden;"></div>
+            <input name="fileData" type="file">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  const {setLoadImgForm} = await import(pathJoin("./client", thisAppFolder, "catalog/admin/loadimg.mjs"))
+  setLoadImgForm(thisParams.item, thisElement)
+</script>

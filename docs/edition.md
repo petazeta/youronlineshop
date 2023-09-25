@@ -3,9 +3,48 @@ Edition Feature
 
 ## Introduction
 
-This feature is about editing an element, deleting an element or adding a new element. Edition buttons are layout elements (templates) that appears in certain situations when user has administration permisions. The buttons target is some node elements (usually children attached to a parent relationship). After the edition the changes are displayed at screen and a notification can be showed.
+This feature is about editing an element, deleting an element or adding a new element. Edition buttons are layout elements (templates) that appears in certain situations when user has administration permisions. The buttons target is some node. After the edition the changes are displayed at screen and a notification can be showed.
 
 ## Procedure
+
+### Content Edition Only
+
+For a node conent edition (changes in node view element (layout) and the node model element (database)) we usually use the layout that display the node element. By setting the edition at layout will assure that the layout element is already loaded.
+
+The layout (template) will have a wrapper element, a container for the edition button, a container for the text content and a script element.
+
+The wrapper element purpose is to provide a frame for the element content. The wrapper display style used to fit an inline style for the wrapper to keep in their content size. It is used as a reference to know the element content dimensions and position.
+
+The script element will import a module that will implement "write", "setEditionButton" and "setEventsReactions" interface for executing these functions over the node. This interface is coming from some derivative of the "TextContentView" class at "textcontent.mjs". The edition button container and the text content container will have a "data-id" attribute for identification.
+
+The "write" method is filling the container with the node content, setEditionButton is adding the edition button for when needed and setEventsReactions will update the node view in some situations. We will not need this last one method if the element is loading on demand (central content) because the layout update will be produced by other mechanisms.
+
+You can check a practical example at "toph1.html" and "toph2.html" layouts.
+
+When clicking the edit button the editable element (data-id="value") will be set for content edition. The class "content-editable-active" will be added to the element. Once the property has been changed at the database a "changeProperty" event is dispached for the node.
+
+### Addition, Deletion and shorting
+
+When we can not only change the node content but also the node itself there is another procedure. At the layout we will have a wrapper element, a container for the node modification buttons, another inner container for setting up a grid to the edition buttons, a container for the content edition button, a container for the text content and a script element. The modification buttons container, the edition button container and the text content container will have a "data-id" attribute for identification.
+
+The wrapper element has the same porpouse as in the conent edition.
+
+The script element will import a module that will implement "write", "setEditionButton" and "setEventsReactions" interface for executing these functions over the node. This interface is coming from some derivative of the "TextContentView" class at "textcontent.mjs". The edition button container and the text content container will have a "data-id" attribute for identification.
+
+The "write" method is filling the container with the node content, setEditionButton is adding the edition button for when needed and setEventsReactions will update the node view in some situations. We will not need this last one method if the element is loading on demand (central content) because the layout update will be produced by other mechanisms.
+
+You can check a practical example at "toph1.html" and "toph2.html" layouts.
+
+## Implementation
+
+### Content Edition
+
+Function "setEditionButton" from "client/textcontent.mjs" inserts the edition button throug the "butedit.html" template layout. This edition button when clicked it will start the edition procedure. Editiion procedure is at "client/edition.mjs" module.
+
+
+
+Implementations
+
 
 A typical script for the edition button can be something like this
 
@@ -80,6 +119,12 @@ Moving a node position template is butchpos. It receives a parameter to show its
 ## Content edition
 
 La edición de contenido se produce directamente en la pantalla.
+
+### Implementación
+
+#### Las plantillas
+
+#### El código
 
 ### Content that can not be edited directly on them.
 

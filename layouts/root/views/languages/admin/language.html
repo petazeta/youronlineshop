@@ -1,0 +1,60 @@
+<!--
+-->
+<div class="boxlist" style="text-align:center;">
+  <span style="z-index:1; position:relative;">
+    <div data-id="admnbuts" class="btmiddleright">
+      <div class="admnbtsgrid"></div>
+    </div>
+    <div data-id="butedit" class="btmiddleleft"></div>
+    <a></a>
+    <script>
+      thisNode.highLightElement=thisElement;
+      const {setActive} = await import('./' + CLIENT_MODULES_PATH + 'activelauncher.mjs');
+      const {languages, setCurrentLanguage}= await import('./' + CLIENT_MODULES_PATH + 'languages.mjs');
+      const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.mjs');
+      const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.mjs');
+      const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.mjs');
+      function onSelected(langNode){
+        setActive(langNode);
+        setCurrentLanguage(langNode);
+        const myalert=new AlertMessage(thisContext.getDataBranch(getSiteText().getNextChild("langbox").getNextChild("changelangwait")).getChild().props.value);
+        myalert.showAlert();
+        getSiteText().notifyObservers("language change")
+        myalert.props.timeout=3000;
+        myalert.hideAlert();
+      }
+
+      if (thisNode.selected) setActive(thisNode); //restablish the active status after clonning parent rel and when refreshing setSelected
+      thisNode.writeProp(thisElement);
+      
+      if (webuser.isSystemAdmin()) {
+        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
+        visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+        thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty: "code"});
+      }
+      
+      if (config.languagesOn==true) {
+        if (webuser.isSystemAdmin()) {
+          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
+          visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=admnbuts]'), thisElement.parentElement);
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+          if (thisNode.parent.children.length>1) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+          thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode", {noLang: true});
+        }
+        thisElement.addEventListener("click", async function(event) {
+          event.preventDefault();
+          onSelected(thisNode);
+        });
+
+        thisNode.addEventListener("changeProperty",
+        ()=>languages.setChildrenView(document.querySelector('#langs-select'), document.querySelector('#langs-select-tp'))
+        ,"changLang");
+      }
+      else {
+        thisElement.addEventListener("click", function(event) {
+          event.preventDefault();
+        });
+      }
+    </script>
+  </span>
+</div>

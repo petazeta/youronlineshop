@@ -1,214 +1,67 @@
 <div class="backgroundimage">
   <div class="backgroundspace">
-    <script>
-      //scroll to content in phone screens
-      import(pathJoin('./', CLIENT_MODULES_PATH, 'onappendlistener.js'))
-      .then(({setOnAppend})=>{
-        setOnAppend( myNode => {
-          if (window.screen.width<700 && myNode.container?.id=='centralcontent') {
-            myNode.container.scrollIntoView();
-          }
-        });
-      });
-    </script>
-    <div class="mainblock">
+    <div class="mainblock" data-body-container>
       <header>
         <div class="headertop">
-          <div class="pgtitle"></div>
-          <script>
-            const headTopText=thisNode.getNextChild("page_head_title");
-            headTopText.getRelationship("siteelementsdata").getChild().setView(thisElement, "toph1");
-            //web site title
-            import(pathJoin('./', CLIENT_MODULES_PATH, 'websitetitle.js'))
-            .then(({setTitle})=>{
-              setTitle(thisNode, headTopText.getRelationship("siteelementsdata").getChild());
-            });
-
-            // Event for refreshing when log
-            const {observerMixin, observerMixinConstructorCallable} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'observermixin.js'));
-            const HeadTopTextClass = observerMixin(headTopText.constructor);
-            Object.setPrototypeOf(headTopText, HeadTopTextClass.prototype); // adding observers characteristics
-            observerMixinConstructorCallable(headTopText);
-            
-            webuser.attachObserver("log", headTopText);
-            thisNode.parent.attachObserver("language change", headTopText);
-            headTopText.setReaction("log", (params)=>{
-              console.log(`headTopText node id=${headTopText.props.id} said "webuser log => ${params.currentType}" `);
-              if (params.lastType!=params.currentType) {
-                headTopText.getRelationship("siteelementsdata").getChild().setView(thisElement, "toph1");
-              }
-            });
-            headTopText.setReaction("language change", (params)=>{
-              console.log(`headTopText node id=${headTopText.props.id} said "change language" `);
-              headTopText.getRelationship("siteelementsdata").getChild().setView(thisElement, "toph1");
-            });
-          </script>
+          <div class="pgtitle" data-id="pgtitle">
+            <h1 style="position:relative; display: inline-block;" data-title>
+              <div data-butedit class="btmiddleright"></div>
+              <span data-value></span>
+            </h1>
+          </div>
           <div class="toolbar">
-            <div class="nav-toggle">
+            <div class="nav-toggle" data-navtoggle>
               <span></span>
             </div>
-            <script>
-              //showing up the menus on pc screens
-              thisElement.addEventListener("click", (event)=>{
-                event.preventDefault();
-                if (document.querySelector("nav.menus").style.transform=="scale(1, 1)") {
-                  //document.querySelector("nav.menus").style.display="none";
-                  document.querySelector("nav.menus").style.transform="scale(1, 0)";
-                }
-                else {
-                  //document.querySelector("nav.menus").style.display="block";
-                  document.querySelector("nav.menus").style.transform="scale(1, 1)";
-                }
-              });
-              //??? body.html can be reloaded on log event so this can be executed several times, I dont know if this affect the behaviour
-              function menusViewSwitch(mediaQuery) {
-                if (mediaQuery.matches) {
-                  //0document.querySelector("nav.menus").style.display="block";
-                  document.querySelector("nav.menus").style.transform="scale(1, 1)";
-                }
-                else {
-                  //document.querySelector("nav.menus").style.display="none";
-                  document.querySelector("nav.menus").style.transform="scale(1, 0)";
-                }
-              }
-              const mediaQuery=window.matchMedia("(min-width: 400px)");
-              mediaQuery.addListener(menusViewSwitch);
-            </script>
-            <template id="langs-select-tp">
-              <option></option>
-              <script>
-                thisNode.writeProp(thisElement, 'code');
-              </script>
-            </template>
-            <div class="langsdropdown">
-              <select id="langs-select"></select>
-              <script>
-                const {languages, setCurrentLanguage, getCurrentLanguage} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'languages.js'));
-                languages.setChildrenView(thisElement, thisElement.parentElement.previousElementSibling)
-                .then(() => thisElement.selectedIndex=languages.children.indexOf(getCurrentLanguage()));
-                const {AlertMessage}=await import(pathJoin('./', CLIENT_MODULES_PATH, 'alert.js'));
-                thisElement.onchange=async function(){
-                  setCurrentLanguage(languages.children[thisElement.selectedIndex]);
-                  new AlertMessage(thisNode.getNextChild("langbox").getNextChild("changelangwait").getRelationship("siteelementsdata").getChild().props.value, 3000).showAlert();
-                };
-              </script>
+            <div class="langsdropdown" data-lang-select-container>
+              <select data-value></select>
             </div>
-            <a class="toolbaricon"></a>
-            <script>
-              thisNode.getNextChild("logbox").setView(thisElement, "logicon");
-            </script>
+            <a class="toolbaricon" data-log-icon-button>
+              <div class="userimage"></div>
+              <div data-value></div>
+            </a>
             <div class="sidebox" id="dashmenu"></div>
-            <a class="toolbaricon"></a>
-            <script>
-              thisNode.getNextChild("cartbox").getNextChild("crtbxtt").setView(thisElement, "carticon");
-            </script>
-            <div class="sidebox" id="cartbox" style="visibility:hidden;"></div>
-            <script>
-              thisNode.getNextChild("cartbox").setView(thisElement, "cartbox");
-            </script>
+            <a class="toolbaricon"  data-cart-icon-button>
+              <div class="shoppingcartimage"></div>
+              <div data-value></div>
+            </a>
+            <div class="sidebox" id="cartbox" data-cartbox></div>
           </div>
         </div>
       </header>
-      <div class="pgsubtitle"></div>
-      <script>
-        const headSubTopText=thisNode.getNextChild("page_head_subtitle");
-        headSubTopText.getRelationship("siteelementsdata").getChild().setView(thisElement, "toph2");
-        
-        // Event for refreshing when log
-        const {observerMixin, observerMixinConstructorCallable} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'observermixin.js'));
-        const HeadSubTopTextClass = observerMixin(headSubTopText.constructor);
-        Object.setPrototypeOf(headSubTopText, HeadSubTopTextClass.prototype); // adding observers characteristics
-        observerMixinConstructorCallable(headSubTopText);
-        webuser.attachObserver("log", headSubTopText);
-        thisNode.parent.attachObserver("language change", headSubTopText);
-        headSubTopText.setReaction("log", (params)=>{
-          console.log(`headSubTopText node id=${headSubTopText.props.id} said "webuser log => ${params.currentType}" `);
-          if (params.lastType!=params.currentType) {
-            headSubTopText.getRelationship("siteelementsdata").getChild().setView(thisElement, "toph2");
-          }
-        });
-        headSubTopText.setReaction("language change", (params)=>{
-          console.log(`headSubTopText node id=${headSubTopText.props.id} said "change language" `);
-          headSubTopText.getRelationship("siteelementsdata").getChild().setView(thisElement, "toph2");
-        });
-      </script>
-      <nav class="menus">
-        <ul class="menuscontainer"></ul>
-        <script type="text/javascript">
-          const {setMenus} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'menus.js'));
-          const {setInitialNavSearch} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'navhistory.js'));
-          const menusMother = await setMenus();
-          // Starting web point first menu
-          const {default: config} = await import(pathJoin('./', CLIENT_CONFIG_PATH, 'main.js'));
-          if (!config.initUrlSearch && !window.location.search && menusMother.children.length>0) {
-            const url='?menu=' + menusMother.getChild().props.id;
-            setInitialNavSearch(url);
-          }
-          menusMother.setChildrenView(thisElement, "menu");
-
-        </script>
+      <div class="pgsubtitle">
+        <h2 style="position:relative; display: inline-block;" data-subtitle>
+          <div data-butedit class="btmiddleright"></div>
+          <span data-value></span>
+        </h2>
+      </div>
+      <nav class="menus" data-menus>
+        <ul class="menuscontainer" data-container></ul>
       </nav>
       <div class="maincolumns">
         <nav class="categories">
           <div class="sidebox leftsidebox" id="catalogbox">
-            <div class="boxtitle"></div>
-            <script>
-              const catTitle=thisNode.getNextChild("ctgbxtt");
-              catTitle.getRelationship("siteelementsdata").getChild().setView(thisElement, "boxhead");
-              
-              // Event for refreshing when log
-              const {observerMixin, observerMixinConstructorCallable} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'observermixin.js'));
-              const CatTitleClass = observerMixin(catTitle.constructor);
-              Object.setPrototypeOf(catTitle, CatTitleClass.prototype); // adding observers characteristics
-              observerMixinConstructorCallable(catTitle);
-
-              webuser.attachObserver("log", catTitle);
-              thisNode.parent.attachObserver("language change", catTitle);
-              catTitle.setReaction("log", (params)=>{
-                console.log(`catTitle node id=${catTitle.props.id} said "webuser log => ${params.currentType}" `);
-                if (params.lastType!=params.currentType) {
-                  catTitle.getRelationship("siteelementsdata").getChild().setView(thisElement, "boxhead");
-                }
-              });
-              catTitle.setReaction("language change", (params)=>{
-                console.log(`catTitle node id=${catTitle.props.id} said "change language" `);
-                catTitle.getRelationship("siteelementsdata").getChild().setView(thisElement, "boxhead");
-              });
-            </script>
-            <div class="boxbody"></div>
-            <script>
-              const {load} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'categories.js'));
-              const {createInstanceChildText} = await import('./' + CLIENT_MODULES_PATH + 'languages.js');
-              const categoriesRoot = await load();
-              categoriesRoot.getRelationship().addEventListener("setChildrenView", async function() {
-                if (webuser.isProductAdmin() && this.children.length==0) {
-                  const newNode = await createInstanceChildText(this);
-                  newNode.setView(this.childContainer, "butaddnewnode");
-                }
-              }, "addNewNodeButton");
-              categoriesRoot.getRelationship().addEventListener("deleteChildNode", function(nodedeleted) {
-                //Remove the productscontainer content
-                if (this.children.length==0) {
-                  document.getElementById("centralcontent").innerHTML="";
-                }
-              }, "delANode");
-              categoriesRoot.getRelationship().setChildrenView(thisElement,  "category");
-            </script>
+            <div class="boxtitle">
+              <span style="position:relative" data-ctgtitle>
+                <div data-butedit class="btmiddleright"></div>
+                <span data-value></span>
+              </span>
+            </div>
+            <div class="boxbody" data-cats-container></div>
           </div>
           <div class="space"></div>
         </nav>
         <main>
           <div class="centercolumn">
-            <div id="centralcontent"></div>
+            <div id="centralcontent" data-centralcontent></div>
           </div>
         </main>
       </div>
       <footer>
-        <div style="text-align:right;" class="pwby">
-          <p></p>
-          <script>
-            thisNode.getNextChild("bottom").getNextChild("designed").getRelationship("siteelementsdata").getChild().setView(thisElement, "designed");
-          </script>
+        <div style="text-align:right;">
+          <p data-designed>
+            <span data-value></span>
+          </p>
         </div>
       </footer>
     </div>

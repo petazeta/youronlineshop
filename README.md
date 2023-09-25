@@ -1,6 +1,6 @@
-![Your Online Shop](assets/logotype.png "Your Online Shop")
+![Your Online Shop](readme_images/logotype.png "Your Online Shop")
 
-# Your Online Shop System. Last stable Version: 5.1.0
+# Your Online Shop System
 
 ## Live Demo
 
@@ -12,7 +12,7 @@ Video Demo => https://youtu.be/PD_olszbGWA
 <table>
   <tr>
     <td>
-    <a href="https://youtu.be/PD_olszbGWA"><img src="assets/youtube.webp"></a>
+    <a href="https://youtu.be/PD_olszbGWA"><img src="readme_images/youtube.webp"></a>
     </td>
   </tr>
 </table>
@@ -25,7 +25,7 @@ https://youronlineshop.net
 
 Awards:
 
-<img src="assets/oss-community-choice-white.svg" alt="Community choice" width="200"/>
+<img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="200"/>
 
 ## Main features:
 
@@ -33,27 +33,26 @@ Awards:
 - Quick purchase process
 - Website pages (About, Contact, ect...)
 - Multilingual
-- Ultra light code
+- Blazingly fast
 - Themes (Templates and css)
 - Export / Import
 - [Multi shop](docs/multishopguide.md)
 
-
 ## Installation
 
-1. Copy the source files to your system.
-2. Install node and mongodb.
-3. Edit mongodb settings at: server_instances/main/cfg/dbcustom.mjs.
-4. Open your terminal at main folder and type:
+1. Get the source files.
+2. Install node and mongodb when necesary.
+3. Edit the mongodb settings at: server/contexts/main/cfg/dbcustom.mjs.
+4. Open your terminal at the source top folder and type:
 ```
 npm install 
 npm start
 ```
-5. The server is running now. Continue in browser.
+5. The server is running now. Continue in browser as prompt tells.
 
 ## Support
 
-Please write: melchorherrera@gmail.com
+Please write to: melchorherrera@gmail.com
 
 
 ## Getting started

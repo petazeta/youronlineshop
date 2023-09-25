@@ -1,0 +1,32 @@
+<!--
+  thisNode -> "showOrd"
+-->
+<div class="dashboard">
+  <div style="display:table; margin: 1em auto;">
+    <form>
+      <div style="position:relative;" data-new>
+        <div data-id="butedit" class="btmiddleright"></div>
+        <input type="hidden" name="new" disabled data-has-target data-target-id="new-status" data-value>
+      </div>
+      <div style="position:relative;">
+        <div data-id="butedit" class="btmiddleright" data-archived></div>
+        <input type="hidden" name="archived" disabled data-has-target data-target-id="archived-status" data-value>
+      </div>
+      <select name="ordersStatus" class="" data-status>
+        <option value="new" data-new-status></option>
+        <option value="archived" data-archived-status></option>
+      </select>
+      <script>
+        const textContent=thisNode;
+        thisElement.onchange=function(){
+          textContent.setView(document.getElementById("ordersContainer"), "userorders", {filterorders: thisElement.options[thisElement.selectedIndex].value});
+        }
+      </script>
+    </form>
+  </div>
+  <div style="margin-bottom:1em" id="ordersContainer"></div>
+  <script>
+    const textContent=thisNode;
+    textContent.setView(thisElement, "userorders");
+  </script>
+</div>

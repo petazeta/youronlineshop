@@ -1,0 +1,48 @@
+<button class="btn" data-hbutton="true"></button>
+<script>
+  thisNode.writeProp(thisElement);
+  const {createPagination, getPagination}= await import('./' + CLIENT_MODULES_PATH + 'pagination.js');
+  const {setActiveInGroup} = await import('./' + CLIENT_MODULES_PATH + 'activelauncher.js');
+  const {setHistoryState, pushHistoryState} = await import('./' + CLIENT_MODULES_PATH + 'navhistory.js');
+
+  const url='?table=' + thisNode.props.tableName;
+  
+  thisNode.highLightElement=thisElement;
+
+  const nodesView=async function() {
+    if (!getPagination(thisNode)) {
+      const myrootmother=new thisNode.parent.constructor('TABLE_' + thisNode.props.tableName.toUpperCase());
+      thisNode.relationships=[];
+      thisNode.addRelationship(myrootmother);
+      //we have to load root element if autorelated or all the elements if not
+      await myrootmother.loadRequest("get my childtablekeys");
+      let autorelated=false;
+      for (const syskey of myrootmother.sysChildTableKeysInfo) {
+        if (syskey.type=="foreignkey" && syskey.parentTableName==myrootmother.props.childTableName) {
+          autorelated=true;
+        }
+      }
+      if (autorelated) {
+        myrootmother.props.parentTableName=myrootmother.props.childTableName;
+        await myrootmother.loadRequest("get my root", {count: true});
+      }
+      else {
+        await myrootmother.loadRequest("get all my children", {count: true});
+      }
+      createPagination(thisNode, url, 10, myrootmother, 'nodesview');
+      myrootmother.addEventListener('addNewNode', (elementNode)=>getPagination(thisNode).onAdded(elementNode), 'addNewNode');
+      myrootmother.addEventListener('deleteChildNode', (elementNode)=>getPagination(thisNode).onDeleted(elementNode), 'deleteChildNode');
+      myrootmother.addEventListener('moveNode', (move, elementNode, newOrder)=>getPagination(thisNode).onMoved(move, elementNode, newOrder), 'moveNode');
+    }
+    thisNode.setView(document.getElementById("treecontainer"), "pagination");
+    setActiveInGroup("central content", thisNode); // active links in group central content
+    pushHistoryState(url);
+  }
+
+  //thisElement.textContent=thisNode.props.tableName;
+  thisElement.addEventListener("click", async function(ev) {
+    ev.preventDefault();
+    nodesView();
+  });
+  setHistoryState(thisNode, url, nodesView);
+</script>

@@ -215,7 +215,7 @@ const ChiwawaMixin = Sup => class extends Sup {
 }
 ````
 
-So with this methodology we can build multi inheritance at the top of the class syntax procedure preserving all the inheritance elements.
+So with this methodology we can build multi inheritance at the top of the class syntax procedure preserving all the inheritance elements. We would call it mixins as they are mixing classes.
 
 Another option for a similar implementation could be through functional way:
 ````
@@ -290,14 +290,37 @@ Esto es similar o igual al llamado strategy pattern.
 
 # Extending an object class
 
-Changing an object class is as easy as this sentence:
+Changing an object class is as easy as these:
 
-Object.setPrototypeOf(myObject, TheNewClass.prototype); // To make it completly well we should do as well: myObject.constructor=TheNewClass;
+Object.setPrototypeOf(myObject, TheNewClass.prototype)
+myObject.constructor=TheNewClass
 
-But if what we want is to extend the object class we could do it with mixins:
+But there is still a problem: TheNewClass constructor is not applyed to the object so not any of the new class properties would be settled to the object prototype.
 
-Object.setPrototpyeOf(myObject, newClassMixin(myObject.constructor).prototype);
+For solving these problem we can not use the new class constructor over the object because javascript language prevents tu use constructors as normal functions. So we have to make a workaround these way:
+we can desing the class to have a init method to be used for the constructor, this way we can apply this method to the object:
+class TheNewClass{
+  constructor(...args){
+    super(...args)
+    this.init()
+  }
+  init(){
+    this.myVar = "value" // init functionality
+  }
+}
+TheNewClass.prototype.init.call(myObject)
 
+When using mixins the solution is these way:
+
+Object.setPrototpyeOf(myObject, newClassMixin(myObject.constructor).prototype)
+myObject.constructor=newClassMixin(myObject.constructor)
+newClassMixin(Object).prototype.init.call(myObject)
+
+## Mixins
+
+## Polymorphism
+
+We call polymorphism the characteristic of a method of having diferent behavior depending of the type of object in which it is called. We can achieve it through inheritance by overriding an inherited method.
 
 # Resources
 

@@ -1,60 +1,30 @@
-import * as fs from 'fs';
-import getMimeType from '../server/mimetypes.mjs';
-// import makeReport from './reportsserver.mjs';
+import {createReadStream, promises as fs} from "fs";
+import getMimeType from "../server/mimetypes.mjs"
+import {streamErrorGuard} from "./errors.mjs"
 
-export default function streamFile(pathName, response) {
-  return fs.promises.stat(pathName)
-  .then(stat=>{
-    response.writeHead(200, {
-      'Content-Type': getMimeType(pathName),
-      'Content-Length': stat.size
-    });
-    const readStream = fs.createReadStream(pathName);
-
-    readStream.on('open', () => {
-      readStream.pipe(response);
-    });
-
-    readStream.on('error', function (err) {
-      response.end();
-      readStream.destroy();
-      // makeReport("file read error: " + pathName);
-      throw new Error("file read error: " + pathName);
-    });
+// Errors are catched and reporter in main.mjs
+export async function streamFile(pathName, response, source /* stream from other source*/) {
+  // no entiendo por que hay que hacer writeHead aqui y en otros no hace falta
+  response.writeHead(200, {
+    "Content-Type": getMimeType(pathName),
+    "Content-Length": (await fs.stat(pathName)).size
   })
-  .catch(err=>{
-    response.writeHead(404);
-    response.end();
-    // makeReport("file not found: " + pathName);
-    //throw new Error("file not found: " + pathName);
-    throw err;
-  });
-/*
-  return fs.stat(pathName, function(err, stat) {
-    if (err) {
-      response.writeHead(404);
-      response.end();
-      // makeReport("file not found: " + pathName);
-      throw new Error("file not found: " + pathName);
-      return;
-    }
-    response.writeHead(200, {
-      'Content-Type': getMimeType(pathName),
-      'Content-Length': stat.size
-    });
-    
-    const readStream = fs.createReadStream(pathName);
-
-    readStream.on('open', () => {
-      readStream.pipe(response);
-    });
-
-    readStream.on('error', function (err) {
-      response.end();
-      readStream.destroy();
-      // makeReport("file read error: " + pathName);
-      throw new Error("file read error: " + pathName);
-    });
-  });
-  */
+  const readStream = source || createReadStream(pathName)
+  streamErrorGuard(readStream, response)
+  // I don't really know the difference between do pipe directly or after open event triggered
+  readStream.pipe(response) // pipe => equiv to on("data") (chk)=> resp.write(chk); on("end") ()=> resp.end())
 }
+
+export async function writeFile(pathName, response) {
+  const readStream = createReadStream(pathName)
+  streamErrorGuard(readStream, response)
+  // I don't really know the difference between do pipe directly or after open event triggered
+  readStream.on("open", ()=> readStream.pipe(response)) // pipe => equiv to on("data") (chk)=> resp.write(chk); on("end") ()=> resp.end())
+}
+
+/*
+ No entiendo por que hay que hacer writeHead, en su lugar sería mejor simplemente establecer los headers:
+  response.setHeader("Content-Type", "text/html")
+  response.setHeader("Content-Length", (await fs.stat(pathName)).size)
+
+*/

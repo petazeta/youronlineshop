@@ -17,21 +17,21 @@ const linkerModelMixin=Sup => class extends Sup {
 
     children.forEach(child=>{
       child.props = Object.fromEntries(Object.entries(child.props).filter(([key]) => {
-        const index=sysKeys.indexOf(key);
-        if (index==-1 || sysInfo[index].type!=type) return true;
-      }));
-    });
-
+        const index=sysKeys.indexOf(key)
+        if (index==-1 || sysInfo[index].type!=type)
+          return true
+      }))
+    })
     return children;
   }
   
   static getSysKeyAsync(parent, type='foreignkey', forceLoad=false) {
     if (forceLoad || !parent.sysChildTableKeysInfo || parent.sysChildTableKeysInfo.length==0) {
-      const pElement=this.dbGetChildTableKeys(parent.props.childTableName);
-      pElement.props=parent.props;
-      return super.getSysKey(pElement, type);
+      const pElement=this.dbGetChildTableKeys(parent.props.childTableName)
+      pElement.props=parent.props
+      return super.getSysKey(pElement, type)
     }
-    return super.getSysKey(parent, type);
+    return super.getSysKey(parent, type)
   }
   
   getMySysKeyAsync(type='foreignkey', forceLoad=false){
@@ -144,17 +144,16 @@ const linkerModelMixin=Sup => class extends Sup {
     return this.loadChildTableKeys(this.dbGetMyChildTableKeys());
   }
   
-  static async dbGetRoot(data) {
-    const foreignKey= this.getSysKeyAsync(data);
-    const result = await this.dbGateway.getRoot(foreignKey, data);
+  static async dbGetRoot(dbCollection) {
+    const data=new this.linkerConstructor(dbCollection, dbCollection)
+    const foreignKey= this.getSysKeyAsync(data)
+    const result = await this.dbGateway.getRoot(foreignKey, data)
 
-    return this.readQuery(result)[0] || null;
+    return this.readQuery(result)[0] || null
   }
   
   async dbGetMyRoot() {
-    const children= await this.constructor.dbGetRoot(this);
-    if (Array.isArray(children) && children.length>0) return children[0];
-    return children;
+    return await this.constructor.dbGetRoot(this.props.childTableName)
   }
   
   async dbLoadMyRoot() {
@@ -207,10 +206,14 @@ const linkerModelMixin=Sup => class extends Sup {
   async dbLoadMyTree(extraParents=null, level=null, filterProp={}, limit=[]) {
     if (level===0) return true;
     if (level) level--;
-    if (this.partner) await this.dbLoadMyChildren(extraParents, filterProp, limit);
-    else await this.dbLoadAllMyChildren(filterProp, limit);
+    if (this.partner) await this.dbLoadMyChildren(extraParents, filterProp, limit)
+    else {
+      await this.dbLoadMyRoot()
+      if (!this.children.length) await this.dbLoadAllMyChildren(filterProp, limit)
+      // esto ultimo habría que revisarlo para que se pudieran cargar no todos los elementos si no solo los que tuvieran padre vacio en caso de tener syskey
+    }
     for (const child of this.children) {
-      await child.dbLoadMyTree(extraParents, level);
+      await child.dbLoadMyTree(extraParents, level)
     }
     return {data: this.children, total: this.props.total};
   }
@@ -382,13 +385,9 @@ const dataModelMixin=Sup => class extends Sup {
   //It requires parent.props.childTableName
 
   static dbGetRelationships(data){
-    const result = this.dbGateway.getRelationshipsFromTable(this.dbGateway.tableList.get(data.parent.props.childTableName));
-    const relationships=result.map(rel=>new this.linkerConstructor(this.dbGateway.tableRef.get(rel.childTableName), this.dbGateway.tableRef.get(rel.parentTableName), rel.name))
-    .sort(rel=>rel.props.childTableName==rel.props.parentTableName ? -1 : +1); //Rorder rels
-    for (const rel of relationships) {
-      rel.dbLoadMyChildTableKeys();
-    }
-    return relationships;
+    return this.dbGateway.getRelationshipsFromTable(this.dbGateway.tableList.get(data.parent.props.childTableName))
+    .map(rel=>new this.linkerConstructor(this.dbGateway.tableRef.get(rel.childTableName), this.dbGateway.tableRef.get(rel.parentTableName), rel.name).dbLoadMyChildTableKeys())
+    .sort(rel=>rel.props.childTableName==rel.props.parentTableName ? -1 : +1) // mainBranch will be the first One
   }
   
   dbGetMyRelationsihps() {
@@ -396,11 +395,9 @@ const dataModelMixin=Sup => class extends Sup {
   }
   
   dbLoadMyRelationships() {
-    const relationships=this.dbGetMyRelationsihps();
-    for (const rel of relationships) {
-      this.addRelationship(rel);
-    }
-    return this;
+    this.dbGetMyRelationsihps()
+    .forEach(rel=>this.addRelationship(rel))
+    return this
   }
   
   //It requires parent.props.childTableName or relationships[0].props.parentTableName
@@ -436,12 +433,10 @@ const dataModelMixin=Sup => class extends Sup {
   }
   
   async dbGetMyTree(extraParents=null, level=null, filterProp={}, limit=[], myself=false) {
-    await this.dbLoadMyTree(extraParents, level, filterProp, limit, myself);
-    if (myself) return this;
-    for (const rel of this.relationships)  {
-      rel.partner=null;
-    }
-    return this.relationships;
+    await this.dbLoadMyTree(extraParents, level, filterProp, limit, myself)
+    if (myself) return this
+    this.relationships.forEach(rel=>rel.partner=null)
+    return this.relationships
   }
   
   async dbLoadMyTreeUp(level=null) {
@@ -460,16 +455,10 @@ const dataModelMixin=Sup => class extends Sup {
   }
   
   async dbGetMyTreeUp(level=null) {
-    const parent=await this.dbLoadMyTreeUp(level);
-    if (!parent) return parent;
-    if (Array.isArray(parent)) {
-      for (const pNode of parent) {
-        pNode.children=[];
-      }
-      return parent;
-    }
-    parent.children=[];
-    return parent;
+    const parent=await this.dbLoadMyTreeUp(level)
+    if (!parent) return parent
+    Array.isArray(parent) ? parent.forEach(p=>p.children=[]) : parent.children=[]
+    return parent
   }
 
   async dbGetMyProps(){
@@ -477,11 +466,10 @@ const dataModelMixin=Sup => class extends Sup {
   }
 
   async dbLoadMySelf(){
-    const result = await this.dbGetMyProps();
-    if (result) {
-      Object.assign(this.props, (result[0]));
-    }
-    return 1;
+    const result = await this.dbGetMyProps()
+    if (!result) return 0
+    Object.assign(this.props, (result[0]))
+    return 1
   }
 
   //<-- Insert queries

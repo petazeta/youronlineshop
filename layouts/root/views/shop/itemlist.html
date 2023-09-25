@@ -1,0 +1,30 @@
+<div class="cartitemscontainer" data-container>
+  <div>
+    <a data-quantity></a>
+    <script>
+      thisNode.writeProp(thisElement, "quantity");
+      thisElement.addEventListener("click", function(ev){
+        ev.preventDefault();
+        import('./' + CLIENT_MODULES_PATH + 'cart.mjs')
+        .then(({myCart})=>{
+          myCart.addItem(thisNode.item, -thisNode.props.quantity);
+          myCart.refreshCartBox();
+        });
+      });
+      thisElement.onmouseover=function(){
+        this.textContent="x";
+        this.style.fontWeight="bold";
+        this.style.transform="translateY(-1px)";
+      };
+      thisElement.onmouseout=function(){
+        thisNode.writeProp(this, "quantity");
+        this.style.fontWeight="normal";
+        this.style.transform="none";
+      };
+    </script>
+  </div>
+  <div>
+    <a title="+ Info" data-value></a>
+    <script>thisNode.item.writeProp(thisElement, "name");</script>
+  </div>
+</div>

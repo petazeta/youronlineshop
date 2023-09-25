@@ -1,0 +1,27 @@
+<!-- 
+  This template shows the user data and user address and allows to save the changes when fieldtyp input.
+-->
+<form style="display:flex; flex-flow:column;" data-form>
+  <div class="boxframe" style="align-items: center; display: flex; flex-flow: column; margin: 1em;">
+    <div class="useraddressbox" data-user-data></div>
+    <div data-saver>
+      <div style="margin-top:1em;position:relative">
+        <div data-butedit class="btmiddleright"></div>
+        <button type="submit" class="btn" data-value></button>
+      </div>
+    </div>
+  </div>
+  <!-- We need a wrapper for the butedit with inline-block and another for positioning -->
+  <div>
+    <div style="position:relative; display: inline-block;" data-fieldcharerror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="fieldCharError" disabled data-value>
+    </div>
+  </div>
+  <div>
+    <div style="position:relative; display: inline-block;" data-emailcharerror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="emailCharError" disabled data-value>
+    </div>
+  </div>
+</form>

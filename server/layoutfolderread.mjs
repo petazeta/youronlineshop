@@ -1,92 +1,73 @@
+/* Falta implementarlo en forma asincrona */
+
 import {BasicLinker, BasicNode} from '../shared/linker.mjs';
-import {statSync, readdirSync} from 'fs';
+import {walkThrough, walkThroughAsync} from '../shared/utils.mjs';
+import {promises as fs} from 'fs';
 import * as path from 'path';
 
-class Linker extends BasicLinker {};
-class Node extends BasicNode {};
-
-Node.linkerConstructor=Linker;
-Linker.nodeConstructor=Node;
-
-export default function createTree(folderPath) {
-  const viewsFolderName="views";
-  const cssFolderName="css";
-  const root = {[path.basename(folderPath)]: readFolderDirectory(folderPath)};
-  const parent=new Linker();
-  parent.props.name="descendents";
-  innerCreate(root, parent);
-  return parent.getChild();
-  function innerCreate(themes, parent) {
-    //The tree has a root and then there could be children (at children folder)
-    //each subfolder is a theme (child)
-    for (const key in themes) {
-      let myChild=new Node();
-      parent.addChild(myChild);
-      myChild.props.id=key;
-      myChild.props.relPath=key;
-      if (parent.partner) myChild.props.path=path.join(parent.partner.props.path, 'children', key);
-      else myChild.props.path=key; //is root
-      
-      let myBranch=new Linker();
-      myBranch.props.name='descendents';
-      myChild.addRelationship(myBranch);
-      
-      let stylesBranch=new Linker();
-      stylesBranch.props.name='styles';
-      myChild.addRelationship(stylesBranch);
-      createBranch(themes[key], stylesBranch, cssFolderName, true);
-      
-      let templatesBranch=new Linker();
-      templatesBranch.props.name=viewsFolderName;
-      myChild.addRelationship(templatesBranch);
-      createBranch(themes[key], templatesBranch, viewsFolderName, true);
-      
-      if (themes[key].children) {
-        innerCreate(themes[key].children, myBranch);
-      }
-    }
+const nodesConstructorsMixin=Sup => class extends Sup {
+  static get nodeConstructor(){
+    return Node
   }
-  function createBranch(folderTree, myBranch, folderName, subfolders) {
-    if (folderTree[folderName]) {
-      for (const key in folderTree[folderName]) {
-        if (typeof folderTree[folderName][key]=="string") {
-          let myNode=new Node();
-          myNode.props.fileName=folderTree[folderName][key];
-          myNode.props.id=path.parse(myNode.props.fileName).name;
-          myNode.props.relPath=folderName;
-          if (myBranch.partner) myNode.props.path=path.join(myBranch.partner.props.path, myNode.props.relPath);
-          else myNode.props.path=myNode.props.relPath;
-          myBranch.addChild(myNode);
-        }
-        //sometimes for subfolders also get content
-        else if (subfolders && typeof folderTree[folderName][key]=="object") {
-          for (const subkey in folderTree[folderName][key]) {
-            if (typeof folderTree[folderName][key][subkey]=="string") {
-              let myNode=new Node();
-              myNode.props.fileName=folderTree[folderName][key][subkey];
-              myNode.props.id=path.parse(myNode.props.fileName).name;
-              myNode.props.relPath=path.join(folderName, key);
-              if (myBranch.partner) myNode.props.path=path.join(myBranch.partner.props.path, myNode.props.relPath);
-              else myNode.props.path=myNode.props.relPath;
-              myBranch.addChild(myNode);
-            }
-          }
-        }
-      }
-    }
-    return myBranch;
+  static get linkerConstructor(){
+    return Linker
   }
+}
+const Node = nodesConstructorsMixin(BasicNode)
+const Linker = nodesConstructorsMixin(BasicLinker)
 
-  // Generic function to read a directory tree:
-  // root.views => {exload: {0: "export.html"}, 1: "alert.html"}
-  function readFolderDirectory(dir) {
-    const listDir={};
-    readdirSync(dir).forEach((sub, i)=>{
-      if (sub!='.' && sub!='..') {
-        if (statSync(path.join(dir,sub)).isDirectory()) listDir[sub]=readFolderDirectory(path.join(dir, sub));
-        else listDir[i]=sub;
-      }
-    });
-    return listDir;
+// Crea un listado de todos los archivos del directorio (incluyendo los subdirectorios de forma recursiva)
+async function createListDirectory(folderPath, excludeDirs=[]){
+  if (!Array.isArray(excludeDirs)) excludeDirs=[excludeDirs]
+  const folderContentList = async (dirPath) => (await fs.stat(dirPath))?.isDirectory() && !(excludeDirs.includes(path.basename(dirPath))) ? ( await fs.readdir(dirPath)).map(file=>path.join(dirPath, file)) : [];
+  const dirList = []
+  for await (const dirPath of walkThroughAsync(folderPath, folderContentList, undefined, undefined, async pathName => ! (await fs.stat(pathName))?.isDirectory())) {
+    dirList.push(dirPath)
   }
+  return dirList
+}
+// con esta base se puede hacer el nivel superior que podría crear todo el arbol, basándose unicamente en la carpeta children para la recursión
+// It creates 
+const childrenFolderName = "children";
+async function createLayout(layoutFolderPath) {
+  const viewsFolderName = "views";
+  const stylesFolderName = "css";
+
+  async function createBranch(parentElement, folderPath, excludeDirs=[]) {
+    (await createListDirectory(folderPath, excludeDirs))
+      .forEach( childPath => parentElement.addChild(new Node({path: childPath})))
+  }
+  const layout = new Node({path: layoutFolderPath})
+  const viewsBranch=new Linker();
+  viewsBranch.props.name='views'
+  await createBranch(viewsBranch, path.join(layoutFolderPath, viewsFolderName))
+  layout.addRelationship(viewsBranch)
+  const stylesBranch=new Linker();
+  stylesBranch.props.name='styles'
+  await createBranch(stylesBranch, path.join(layoutFolderPath, stylesFolderName))
+  layout.addRelationship(stylesBranch)
+  const childrenBranch=new Linker();
+  childrenBranch.props.name='descendents'
+  layout.addRelationship(childrenBranch)
+
+  return layout
+}
+
+export async function readTree(layoutFolderPath) {
+  async function layoutChildren(parentLayout) {
+    if ( !(await fs.stat(parentLayout.props.path))?.isDirectory() || !(await fs.readdir(parentLayout.props.path)).includes(childrenFolderName) )
+      return []
+    const childrenPath = path.join(parentLayout.props.path, childrenFolderName)
+    if ( !(await fs.stat(childrenPath))?.isDirectory() )
+      return []
+    return await Promise.all((
+      await fs.readdir(childrenPath))
+        .map( async sublayoutFolder =>
+          parentLayout.getRelationship('descendents')
+            .addChild(await createLayout(path.join(childrenPath, sublayoutFolder)))
+      ) )
+  }
+  const rootLayout = await createLayout(path.join(layoutFolderPath))
+  for await (const _layout of walkThroughAsync(rootLayout, layoutChildren)) continue
+  return rootLayout
 }

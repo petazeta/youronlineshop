@@ -1,0 +1,119 @@
+
+export function getDomElementFromChild(myNode, virtualParent) { // deprecated
+  const myParent = virtualParent || myNode.parent
+  if (!myParent || !myParent.childContainer) return false;
+  // This method only works well in wrapped templates
+  // We have a child and the container is at the parent.
+  const skey=myParent.getSysKey('sort_order');
+  // if no skey order it will not change
+  const children=myParent.children.sort((a,b)=>a.props[skey]-b.props[skey]);
+  return Array.from(myParent.childContainer.children).filter((child)=>!['SCRIPT', 'TEMPLATE'].includes(child.tagName))[children.indexOf(myNode)];
+}
+
+export function getChildViewElmts(myNode) {
+  const myParent = myNode.parent
+  if (!myParent || !myParent.childContainer) return false
+  const numElmts=myParent.children.length && myParent.childContainer.childElementCount / myParent.children.length
+  const viewElements=[myNode.firstElement]
+  for (let i=1; i<numElmts; i++) {
+    console.log(viewElements[i-1], i)
+    viewElements.push(viewElements[i-1].nextElementSibling)
+  }
+  return viewElements
+}
+
+// DOM utilities
+
+// Switching visibility on visibleElement when there is an on mouse over event on it or on onOverElement
+// Setting myElement status on some event on it and on another element, usually the parent.
+export function visibleOnMouseOver(visibleElement, onOverElement){
+  function setVisOn(){
+    visibleElement.style["opacity"] = 1
+  }
+  function setVisOff(){
+    visibleElement.style["opacity"] = 0
+  }
+  setVisOff()
+  visibleElement._setVisOn = setVisOn
+  visibleElement._setVisOff = setVisOff
+  visibleElement.addEventListener("mouseover", setVisOn)
+  visibleElement.addEventListener("mouseout", setVisOff)
+  onOverElement.addEventListener("mouseover", setVisOn)
+  onOverElement.addEventListener("mouseout", setVisOff)
+}
+export function removeVisibleOnMouseOver(visibleElement, onOverElement){
+  if (visibleElement._setVisOn) {
+    visibleElement._setVisOn() // letting the element as in the begining
+    visibleElement.removeEventListener("mouseover", visibleElement._setVisOn)
+    onOverElement.removeEventListener("mouseover", visibleElement._setVisOn)
+  }
+  if (visibleElement._setVisOff) {
+    visibleElement.removeEventListener("mouseout", visibleElement._setVisOff)
+    onOverElement.removeEventListener("mouseout", visibleElement._setVisOff)
+  }
+}
+
+// NOT REVISED:
+
+export function switchVisibility_old(velement) { // use classList.toggle instead
+  velement.style.visibility=="hidden" ? velement.style.visibility="visible" : velement.style.visibility="hidden";
+}
+
+// it includes elm and its children nodes in the query
+export function selectorFromAttr(elm, attName, attValue){
+  if (attValue===undefined) {
+    // nodeType==11 => template content, hasAttribute not applied
+    if (elm.nodeType!=11 && elm.hasAttribute(attName)) return elm
+    return elm.querySelector(`[${attName}]`)
+  }
+  if (elm.nodeType!=11 && elm.hasAttribute(attName) && elm.getAttribute(attName)===attValue) return elm
+  return elm.querySelector(`[${attName}=${attValue}]`)
+}
+
+// Deprecated. Can be used to set the size of an element based in the backround svg image. But we dont need it anymore, style width is setled at server css service.
+export function setSizeFromStyle(myElement) {
+  const image = new Image();
+  image.onload = function(){
+    if (image.width && image.height) {
+      myElement.style.width=image.width + 'px';
+      myElement.style.height=image.height + 'px';
+      return true;
+    }
+  }
+  // image.src = window.getComputedStyle(myElement).backgroundImage.replace(/url\((['"])?(.*?)\1\)/gi, '$2'); // base64
+  image.src = window.getComputedStyle(myElement).backgroundImage.replace(/url\((['"])?(.*?)\1\)/gi, '$2').split(',')[0]; // no base64
+}
+// it swaps two Elements positions
+export function swapElement (aElement, bElement) {
+  const parentElement=aElement.parentElement
+  const tempElement=aElement.cloneNode()
+  parentElement.insertBefore(tempElement, aElement) // inserting a mark in the a element swaped position
+  parentElement.insertBefore(aElement, bElement) // inserting a element at b element position
+  parentElement.insertBefore(bElement, tempElement) // inserting b element at a element position
+  parentElement.removeChild(tempElement)
+}
+
+export function onEventSetStatus(myElement, parentElement, myStatus='opacity=1:0', myEvent='mouseover/mouseout'){
+  const [[method], [valueOn, valueOff]] = myStatus.split('=').map(s=>s.split(':'))
+  const [eventOn, eventOff] = myEvent.split('/')
+  myElement.style[method] = valueOff
+  function setOn(){
+    myElement.style[method]=valueOn
+  }
+  function setOff(){
+    myElement.style[method]=valueOff
+  }
+  function switchStatus(){
+    myElement.style[method]==valueOn ? setOff() : setOn()
+  }
+  if (myEvent.indexOf('/')==-1) { // myEvent => single status (switch status on event)
+    myElement.addEventListener(eventOn, switchStatus)
+    parentElement.addEventListener(eventOn, switchStatus)
+
+    return // end 
+  }
+  myElement.addEventListener(eventOn, setOn)
+  myElement.addEventListener(eventOff, setOff)
+  parentElement.addEventListener(eventOn, setOn)
+  parentElement.addEventListener(eventOff, setOff)
+}

@@ -1,0 +1,21 @@
+<!--
+  thisParams.setView
+
+  ----
+<script>
+  /*
+  thisElement.addEventListener('click', async event => {
+    event.preventDefault();
+    const {Alert}=await import('./' + CLIENT_MODULES_PATH + 'alert.mjs');
+    (new Alert()).showAlert("loadimg", {myNode: thisNode});
+  });
+  */
+</script>
+-->
+<button type="button" class="butedit" data-button">
+  <div class="editimage"></div>
+</button>
+<script>
+  const {setButEditImgView} = await import(pathJoin("./client", thisAppFolder, "catalog/admin/loadimg.mjs"))
+  setButEditImgView(thisParams.item, thisElement)
+</script>

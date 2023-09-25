@@ -7,17 +7,9 @@
     <title></title>
     <link rel="icon" href="images/icon.svg" sizes="any" type="image/svg+xml">
     <script src="client/globals.js"></script>
-    <script defer type="module" src="client/main.js"></script>
+    <script defer type="module" src="client/index.mjs"></script>
     <template id="syserror">
-      <div style="display: table; position: fixed !important; top: 20%; left: 50%; transform: translateX(-50%); min-width: 200px; max-width: 90%; z-index:100; border: 1px solid #AAA; background: rgb(240, 245, 245); padding: 0.5rem; text-align: center; border-radius: 3px;"></div>
-      <script>
-        if (thisNode.props.alertclass) {
-          thisElement.classList.add(thisNode.props.alertclass);
-        }
-        if (thisNode.props.alertmsg) {
-          thisNode.writeProp(thisElement, "alertmsg");
-        }
-      </script>
+      <dialog style="min-width: 200px; max-width: 90%; border-radius: 3px;" data-value></dialog>
     </template>
     <style>
       .spinner-wrapper {

@@ -1,0 +1,36 @@
+<!--
+  viewParent: the parent for setChildrenView (the normal parent could be user)
+-->
+<tr>
+  <td data-date>
+    <span data-value></span>
+  </td>
+  <!-- implementar que si no es administrador no muestre esto... ?? -->
+  <td data-user>
+    <a data-button></a>
+  </td>
+  <td class="containerbuttons" data-order>
+    <button type="button" class="iconbuttons" data-button>
+      <div class="viewinimage"></div>
+    </button>
+  </td>
+  <template>
+    <td class="containerbuttons" style="position:relative;">
+      <div class="admnbtsgrid"></div>
+      <script>
+        // se creo un viewParent virtual que contiene las orders de diereentes usuarios
+        // parece que lo usa butsuccessorder, quiza mirar de cambiarlo y hacerlo de otra manera, quiza simplemente un array de orders
+        if (webuser.isOrdersAdmin()) {
+          const newStatusValue = thisNode.props.status==1? 0 : 1;
+          thisNode.appendView(thisElement, "butsuccessorder", {viewParent: thisParams.viewParent, newStatus: newStatusValue});
+          thisNode.appendView(thisElement, "butdelete");
+        }
+      </script>
+    </td>
+  </template>
+</tr>
+<script>
+  if (webuser.isOrdersAdmin()) {
+    thisNode.appendView(thisElement, thisElement.querySelector('template'), thisParams)
+  }
+</script>

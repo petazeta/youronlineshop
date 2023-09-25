@@ -1,0 +1,73 @@
+<li style="position:relative;">
+  <div class="adminlauncher" data-hbutton="true" data-button="true">
+    <table>
+    <tbody>
+      <tr>
+        <td>
+          <a style="margin:2px" href="">
+            <div class="expander" style="width: 14px; height: 14px;"></div>
+          </a>
+          <script>
+            let liPointer=thisElement.closest("LI");
+            thisElement.addEventListener("click", function(ev) {
+              ev.preventDefault();
+              thisElement.style.display="none";
+              thisElement.parentElement.querySelectorAll("a")[1].style.display="inline";
+              thisNode.loadRequest("get my relationships")
+              .then(()=>{
+                liPointer.getElementsByTagName("ul")[0].innerHTML="";
+                // tenemos que crear un nodemale a partir del female con las propiedades del female
+                // quizás hay que enviar en parametros el female para la función posterior
+                const launcher=new thisNode.constructor();
+                for (const rel of thisNode.relationships) {
+                  launcher.appendView(liPointer.getElementsByTagName("ul")[0], "linker", {rel: rel})
+                }
+                //thisNode.setChildrenView(liPointer.getElementsByTagName("ul")[0], "femaletp");
+                if (liPointer.lastElementChild.style.display=="none") {
+                  liPointer.lastElementChild.style.display="block";
+                }
+              });
+            });
+          </script>
+          <a style="margin:2px; display: none;" href="">
+            <div class="reducer" style="width: 14px; height: 14px;"></div>
+          </a>
+          <script>
+            thisElement.addEventListener("click", function(ev) {
+              ev.preventDefault();
+              thisElement.style.display="none";
+              thisElement.parentElement.querySelectorAll("a")[0].style.display="inline";
+              var liPointer=thisElement.closest("LI");
+              liPointer.lastElementChild.style.display="none";
+            });
+          </script>
+        </td>
+        <td style="position:relative;">
+          <div data-id="admnbuts" class="btmiddleright" style="padding-top: 0.9em;">
+            <div class="admnbtsgrid"></div>
+          </div>
+          <div style="display:flex;"></div>
+          <script>
+            //thisNode.editable=true;
+            console.log("thisNode", thisNode, thisElement);
+            // thisNode.appendView(thisElement,"singlefield", {labelName: true, editpropertyname: thisNode.parent.getSysKey('primary'), editableFunc: () =>false});
+            thisNode.appendPropsView(thisElement,"singlefield", {labelName: true, editableFunc: () =>true, codeEdition: true});
+        
+            //we have to check for which edition elements we should show:
+            //delete, add, position if syskeys has position for the relation, delete link, add link, edit link ?
+            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.js');
+            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=admnbuts]'), thisElement.parentElement);
+            if (thisNode.parent.getSysKey("sort_order")) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butchpos", {position: 'vertical'});
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdelete");
+            thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddnewnode");
+            if (thisNode.parent.getSysKey()) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butdeletelink");
+            if (thisNode.parent.getSysKey()) thisNode.appendView(thisElement.parentElement.querySelector('.admnbtsgrid'), "butaddlink");
+          </script>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+  <ul>
+  </ul>
+</li>
