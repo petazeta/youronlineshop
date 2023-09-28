@@ -1,7 +1,7 @@
 import {webuser, init as initWebUser} from './webuser/webuser.mjs'
 import {myCart} from './shop/cart.mjs'
 import {getTemplate, getTemplates, getStyles} from './layouts.mjs'
-import makeReport, {setReportReactions} from './reports.mjs'
+import makeReport from './reports.mjs'
 import {Alert} from './alert.mjs'
 import {init as initLanguages, selectMyLanguage} from './languages/languages.mjs'
 import {initData as initSiteText} from './sitecontent.mjs'
@@ -13,7 +13,7 @@ export async function main() {
   try {
     //const {default: devConfig} = await import('./cfg/devconfig.mjs') // development configuration
     //const config=setConfig(devConfig); // dev configuration (some parameters could have been taken in advance from the standard config)
-    const config=setConfig()
+    const config = setConfig()
 
     // Alert element definition
     customElements.define("alert-element", Alert)
@@ -25,8 +25,7 @@ export async function main() {
     await initLanguages() // Load languages for server
     if (! selectMyLanguage()) throw new Error('No Language Content');
 
-    await initWebUser(); // Loading initial user type (customer) data and automatic login (remember me)
-    setReportReactions(myCart, webuser); // Setting some reporting situations
+    await initWebUser() // Loading initial user type (customer) data and automatic login (remember me)
 
     // Load web site text content
     const siteText = await initSiteText()

@@ -1,5 +1,4 @@
 import cartMixin from '../../shop/cartmixin.mjs'
-import {observableMixin} from '../../observermixin.mjs'
 import {Node} from '../nodes.mjs'
 import {webuser} from '../webuser/webuser.mjs'
 import {setActiveInSite} from '../activeingroup.mjs'
@@ -7,8 +6,11 @@ import {getRoot as getSiteText} from "../sitecontent.mjs"
 import {selectorFromAttr} from "../../frontutils.mjs" // (elm, attName, attValue)
 import {getLangBranch} from '../languages/languages.mjs'
 import {getTemplate} from '../layouts.mjs'
+import makeReport from '../reports.mjs'
+import {rmBoxView} from "../../rmbox.mjs"
+import {loginFormView} from '../webuser/login.mjs'
 
-const Cart = observableMixin(cartMixin(Node))
+const Cart = cartMixin(Node)
 export const myCart = new Cart()
 
 export function addItem(item, quantity) {
@@ -18,6 +20,7 @@ export function addItem(item, quantity) {
   if (quantity > 0)
     alertMsg = "+ " + alertMsg
   document.createElement("alert-element").showMsg(alertMsg, 3000)
+  makeReport("cart item operation")
 }
 //<<<<<<<<<<
 function refreshCartBox(){
@@ -28,28 +31,31 @@ function resetCartBox(){
   myCart.getRelationship().children = []
   displayItemList(document.getElementById("cartbox"))
 }
-function toCheckOut(){
+async function toCheckOut(){
   if (myCart.getRelationship().children.length==0) {
     document.createElement("alert-element").showMsg(getLangBranch(getSiteText().getNextChild("cartbox").getNextChild("emptyCart")).getChild().props.value, 3000)
     return
   }
   if (!webuser.props.id) {
-    if (document.getElementById("login-card")) getSiteText().getNextChild("logform").setView(document.querySelector(".login-frame .rmbox .body"), "loginform")
-    else getSiteText().getNextChild("logform").appendView(document.body, "loginframe")
+    const loginFrame = await getTemplate("loginframe")
+    selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView(), selectorFromAttr(loginFrame, "data-container")))
+    document.body.appendChild(loginFrame)
     return
   }
+  //<<<<<<<
   setActiveInSite(getSiteText().getNextChild("checkout"))
   getSiteText().getNextChild("checkout").setView(document.getElementById("centralcontent"), "chktmain")
 }
-export function setCkOutBtn(ckOutContainer){
+// Helper
+function setCkOutBtn(ckOutContainer){
   getSiteText().getNextChild("cartbox").getNextChild("ckouttt").setContentView(ckOutContainer, false)
   ckOutContainer.querySelector("button").onclick = toCheckOut
 }
-export function setCkOutDiscardBtn(ckOutDiscardContainer){
+function setCkOutDiscardBtn(ckOutDiscardContainer){
   getSiteText().getNextChild("cartbox").getNextChild("discardtt").setContentView(ckOutDiscardContainer, false)
   ckOutDiscardContainer.querySelector("button").onclick = function(){  
-    myCart.getRelationship().children=[]
-    myCart.refreshCartBox()
+    myCart.getRelationship().children = []
+    refreshCartBox()
   }
 }
 export function setCartIcon(iconContainer,  cartBoxContainer) {
@@ -72,11 +78,19 @@ export async function cartBoxView( cartBoxContainer) {
     cartBoxContainer.style.visibility="hidden"
   })
   await displayItemList(cbTp)
+  setCkOutBtn(selectorFromAttr(cbTp, "data-checkoutcontainer"))
+  setCkOutDiscardBtn(selectorFromAttr(cbTp, "data-discardcontainer"))
+
+
   // <<<<<<<<<faltan cosas
   return cbTp
 }
 
 // new
+// -- Helper function
+function write(myNode, viewContainer, propKey, dataId="value", attrKey) {
+  getLangBranch(myNode).getChild().writeProp(selectorFromAttr(viewContainer, "data-" + dataId), propKey, attrKey)
+}
 
 async function displayItemList(viewContainer) {
   const itemListContainer = selectorFromAttr(viewContainer, "data-itemlistcontainer")
@@ -94,7 +108,7 @@ async function itemListView(itemList) {
   itemList.writeProp(qttyContainer, "quantity")
   qttyContainer.addEventListener("click", function(ev){
     ev.preventDefault()
-    myCart.addItem(itemList.item, -itemList.props.quantity)
+    myCart.addItem(getLangBranch, itemList.item, -itemList.props.quantity)
     refreshCartBox()
   })
   qttyContainer.onmouseover = function(){
@@ -106,7 +120,6 @@ async function itemListView(itemList) {
     this.classList.remove("mouseover")
   }
   const nameContainer = selectorFromAttr(itemListContainer, "data-value")
-  // tenemos que usar itemList.item y el branch con el data lang para el name, fijarse en catalog
-  //itemList.item.writeProp(nameContainer, "name")
+  write(itemList.item, nameContainer, "name")
   return itemListTp
 }

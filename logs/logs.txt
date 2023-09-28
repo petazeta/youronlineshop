@@ -568,3 +568,38 @@ async*@http://localhost:6001/client/index.mjs:3:1
 2023-09-14 10:47:15 trying to access forbiden content: /undefined
 2023-09-14 11:00:13 trying to access forbiden content: /undefined
 2023-09-14 11:01:01 trying to access forbiden content: /undefined
+2023-09-26 07:52:28 Server start
+2023-09-26 07:53:01 trying to access forbiden content: /undefined
+2023-09-26 07:54:08 trying to access forbiden content: /undefined
+2023-09-26 07:55:25 trying to access forbiden content: /undefined
+2023-09-26 08:21:11 trying to access forbiden content: /undefined
+2023-09-26 08:21:37 trying to access forbiden content: /undefined
+2023-09-26 08:23:12 89bdp8 : cart item operation
+2023-09-26 08:23:30 89bdp8 : cart item operation
+2023-09-26 08:23:32 89bdp8 : cart item operation
+2023-09-26 10:45:57 Server start
+2023-09-26 10:59:42 8ia14o : cart item operation
+2023-09-26 16:13:22 Server start
+2023-09-26 16:15:56 Server start
+2023-09-26 16:16:07 94d87s : cart item operation
+2023-09-27 06:56:41 Server start
+2023-09-27 06:57:46 amrr6f : TypeError: reporter.setReportReactions is not a function
+    at setReportReactions (http://localhost:6001/client/context__main/reports.mjs:11:19)
+    at main (http://localhost:6001/client/context__main/main.mjs:29:5)
+2023-09-27 06:59:51 amvh8p : cart item operation
+2023-09-27 07:03:28 amvh8p : cart item operation
+2023-09-27 07:03:30 amvh8p : cart item operation
+2023-09-27 07:10:39 anjca6 : cart item operation
+2023-09-27 07:10:44 anjca6 : cart item operation
+2023-09-27 07:10:44 anjca6 : cart item operation
+2023-09-27 07:10:47 anjca6 : cart item operation
+2023-09-27 07:10:48 anjca6 : cart item operation
+2023-09-27 07:10:48 anjca6 : cart item operation
+2023-09-27 07:21:48 ao7pom : cart item operation
+2023-09-27 15:13:54 Server start
+2023-09-27 15:14:31 bj96qk : cart item operation
+2023-09-27 15:15:06 bjae0o : cart item operation
+2023-09-27 15:15:10 bjae0o : cart item operation
+2023-09-27 15:15:11 bjae0o : cart item operation
+2023-09-28 08:21:01 Server start
+2023-09-28 08:21:55 de2hds : cart item operation

@@ -64,6 +64,7 @@ export default class SiteLayouts {
     }
   }
 }
+// Helper
 function makeRequest(layoutsUrlPath) {
   return fetch(layoutsUrlPath)
   .then(res => {

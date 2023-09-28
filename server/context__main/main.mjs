@@ -18,7 +18,7 @@ const routerMap = new Set()
 
 // Deliver client source files static content. It is first because it is more often
 routerMap.add(async (request, response)=>{
-  const pathName=new URL(request.url, "http://localhost").pathname
+  const pathName = new URL(request.url, "http://localhost").pathname
   if (pathName.match(new RegExp(".cmd$")))
     return false
   const {fileServer} = await import("./clientsource.mjs")
@@ -27,7 +27,7 @@ routerMap.add(async (request, response)=>{
 })
 // DB Request
 routerMap.add(async (request, response)=>{
-  const pathName=new URL(request.url, "http://localhost").pathname;
+  const pathName = new URL(request.url, "http://localhost").pathname;
   if (!pathName.match(new RegExp("^/" + config.get("request-url-path"))))
     return false
   const {respond} = await import("./respond.mjs")
@@ -36,7 +36,7 @@ routerMap.add(async (request, response)=>{
 })
 // Deliver product image files static content
 routerMap.add(async (request, response)=>{
-  const pathName=new URL(request.url, "http://localhost").pathname
+  const pathName = new URL(request.url, "http://localhost").pathname
   if (!pathName.match(new RegExp("^" + new URL(config.get("catalog-images-url-path"), "http://localhost").pathname)))
     return false
   const {fileServer} = await import("./productimages.mjs")
@@ -45,7 +45,7 @@ routerMap.add(async (request, response)=>{
 })
 // layouts
 routerMap.add(async (request, response)=>{
-  const pathName=new URL(request.url, "http://localhost").pathname;
+  const pathName = new URL(request.url, "http://localhost").pathname;
   if (!pathName.match(new RegExp("^" + new URL(config.get("layouts-url-path"), "http://localhost").pathname)))
     return false // config comes with default searchParams
   const {respond} = await import("./layouts.mjs")
@@ -54,12 +54,21 @@ routerMap.add(async (request, response)=>{
 })
 // upload
 routerMap.add(async (request, response)=>{
-  const pathName=new URL(request.url, "http://localhost").pathname;
+  const pathName = new URL(request.url, "http://localhost").pathname;
   if (!pathName.match(new RegExp("^/" + config.get("upload-images-url-path"))))
     return false
   const {uploadImages} = await import("./uploadimages.mjs")
   uploadImages(request, response)
-  return true;
+  return true
+})
+// reports
+routerMap.add(async (request, response)=>{
+  const pathName = new URL(request.url, "http://localhost").pathname;
+  if (!pathName.match(new RegExp("^/" + config.get("reports-url-path"))))
+    return false
+  const {reporting} = await import("./reporting.mjs")
+  reporting(request, response)
+  return true
 })
 
 // ** entrance point, serving suitable app **

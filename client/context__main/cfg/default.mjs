@@ -16,6 +16,7 @@ export default {
   requestUrlPath: "request.cmd", // url paths should have ".cmd" extension" to make it apart from client source files requests
   layoutsUrlPath: "layouts.cmd", // layouts.cmd?skin=skinId&subskin=subskinId&style=styleId
   uploadImagesUrlPath: "upload.cmd",
-  catalogImagesUrlPath: "catalogimages.cmd"
+  catalogImagesUrlPath: "catalogimages.cmd",
+  reportsUrlPath: "reports.cmd"
 }
 

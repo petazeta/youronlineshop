@@ -10,6 +10,7 @@ export const config = new Map([
   ["layouts-url-path", "layouts.cmd"],
   ["upload-images-url-path", "upload.cmd"],
   ["catalog-images-url-path", "catalogimages.cmd"],
+  ["reports-url-path", "reports.cmd"],
   ["db-url", "mongodb://admin:password@localhost/"],
   ["request-max-size", 1e6],
   ["timeZone", "Europe/Madrid"],

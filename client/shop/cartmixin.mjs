@@ -21,7 +21,6 @@ const cartMixin = Sup => class extends Sup {
       this.getRelationship().addChild(cartItem)
     }
     this.dispatchEvent("cart item", item)
-    this.notifyObservers("cart item", item)
   }
 }
 

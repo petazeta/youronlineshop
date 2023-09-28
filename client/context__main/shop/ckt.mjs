@@ -5,6 +5,7 @@ import {myCart} from './cart.mjs'
 import configValues from '../cfg/main.mjs'
 import {webuser} from '../webuser/webuser.mjs'
 import {Node} from '../nodes.mjs'
+import makeReport from '../reports.mjs'
 /*
 import cartMixin from '../../shop/cartmixin.mjs'
 import {observableMixin} from '../../observermixin.mjs'
@@ -34,7 +35,7 @@ export function setChktmainView(viewContainer){
     })
     new Node().setView(chktOrderContainer, "ordercart")
     webuser.dispatchEvent("checkout", myOrder)
-    webuser.notifyObservers("checkout", myOrder)
+    makeReport("checkout")
   })
   document.getElementById("cartbox").style.visibility="hidden"
   //After loading myOrder now we go forward and set the container with the address, shipping and payment data

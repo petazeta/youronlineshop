@@ -12,22 +12,14 @@
 </div>
 <div class="boxbody">
   <div data-itemlistcontainer></div>
-  <div class="checkoutcontainer" data-checkoutcontainer>
-    <span style="position:relative">
+  <div class="checkoutcontainer">
+    <span style="position:relative" data-checkoutcontainer>
       <div class="btmiddleright" data-butedit></div>
       <button type="button" class="btn" data-value></button>
     </span>
-    <script>
-      const {setCkOutBtn} = await import(pathJoin("./client", thisAppFolder, "shop/cart.mjs"))
-      setCkOutBtn(thisElement)
-    </script>
-    <span style="position:relative">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <button type="button" class="btn" data-id="value"></button>
+    <span style="position:relative" data-discardcontainer>
+      <div data-butedit class="btmiddleright"></div>
+      <button type="button" class="btn" data-value></button>
     </span>
-    <script>
-      const {setCkOutDiscardBtn} = await import(pathJoin("./client", thisAppFolder, "shop/cart.mjs"))
-      setCkOutDiscardBtn(thisElement)
-    </script>
   </div>
 </div>

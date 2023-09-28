@@ -1,27 +1,23 @@
-import {makeRequest} from './request.mjs';
-import {observerMixin} from './observermixin.mjs';
+//import {makeRequest} from './request.mjs'
+//import {observerMixin} from './observermixin.mjs'
 
-const ReporterBase=observerMixin(Object);
-
-export default class Reporter extends ReporterBase{
+export default class Reporter{
   constructor(){
-    super()
-    this.uniqueId=new Date().getTime().toString(32).substring(3);
+    this.uniqueId = new Date().getTime().toString(32).substring(3)
   }
   makeReport(msg, url) {
-    return makeRequest("report", {repData: `${this.uniqueId} : ${msg}`}, url);
+    const reqUrl = new URL(window.location.protocol + "//" + window.location.host + '/' + url)
+    reqUrl.searchParams.append("message", `${this.uniqueId} : ${msg}`)
+    return makeRequest(reqUrl)
   }
-  setReportReactions(myCart, webuser) {
-    webuser.attachObserver("checkout", this);
-    this.setReaction("checkout", order=>{
-      console.log(`reporter said "webuser checkout"`);
-      this.makeReport('checkout');
-    });
+}
 
-    myCart.attachObserver("cart item", this);
-    this.setReaction("cart item", item=>{
-      console.log(`reporter said "cart item"`);
-      this.makeReport('cart item operation');
-    });
-  }
+// Helper
+function makeRequest(reportsUrlPath) {
+  return fetch(reportsUrlPath)
+  .then(res => {
+    if (!res?.ok)
+      throw new Error("Error server: report")
+    return res.text()
+  })
 }

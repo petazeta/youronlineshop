@@ -67,7 +67,7 @@ export async function setLogIcon(logContainer) {
   })
 }
 
-async function loginFormView() {
+export async function loginFormView() {
   const logTp = await getTemplate("loginform")
   const logContainer = selectorFromAttr(logTp, "data-container")
   const logformTxt = getSiteText().getNextChild("logform")
