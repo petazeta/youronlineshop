@@ -1,4 +1,4 @@
-import {Content, ContentView} from '../contentbase.mjs'
+import {Content} from '../contentbase.mjs'
 import {getMainBranchDataNodes} from '../../shared/utils.mjs'
 import {selectorFromAttr} from '../frontutils.mjs'
 
@@ -19,9 +19,7 @@ export class Categories extends Content{
     langDataResult.forEach((value, key)=>subCatLangRels[key].addChild(new Node().load(value.data[0])))
   }
   async reloadInitLangData(getCurrentLanguage, getLangParent, getLangBranch, Node){
-    await this.reloadInitLangData(getCurrentLanguage, getLangParent)
+    await super.reloadInitLangData(getCurrentLanguage, getLangParent)
     await this.setExtraContent(getLangParent, getLangBranch, Node)
   }
-}
-export class CategoriesView extends ContentView{
 }

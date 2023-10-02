@@ -1,7 +1,6 @@
-import cartMixin from '../../shop/cartmixin.mjs'
+import {cartMixin} from '../../shop/cartmixin.mjs'
 import {Node} from '../nodes.mjs'
 import {webuser} from '../webuser/webuser.mjs'
-import {setActiveInSite} from '../activeingroup.mjs'
 import {getRoot as getSiteText} from "../sitecontent.mjs"
 import {selectorFromAttr} from "../../frontutils.mjs" // (elm, attName, attValue)
 import {getLangBranch} from '../languages/languages.mjs'
@@ -11,10 +10,10 @@ import {rmBoxView} from "../../rmbox.mjs"
 import {loginFormView} from '../webuser/login.mjs'
 
 const Cart = cartMixin(Node)
-export const myCart = new Cart()
+const myCart = new Cart()
 
 export function addItem(item, quantity) {
-  myCart.addItem(getLangBranch, item, quantity)
+  myCart.addItem(item, quantity)
   refreshCartBox()
   let alertMsg = `${quantity} ${getLangBranch(item).getChild().props.name}`
   if (quantity > 0)
@@ -36,15 +35,17 @@ async function toCheckOut(){
     document.createElement("alert-element").showMsg(getLangBranch(getSiteText().getNextChild("cartbox").getNextChild("emptyCart")).getChild().props.value, 3000)
     return
   }
-  if (!webuser.props.id) {
+  if (false && !webuser.props.id) { // ***temporal
     const loginFrame = await getTemplate("loginframe")
     selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView(), selectorFromAttr(loginFrame, "data-container")))
     document.body.appendChild(loginFrame)
     return
   }
   //<<<<<<<
-  setActiveInSite(getSiteText().getNextChild("checkout"))
-  getSiteText().getNextChild("checkout").setView(document.getElementById("centralcontent"), "chktmain")
+  const {cktView} = await import("../shop/ckt.mjs")
+  document.getElementById("centralcontent").innerHTML=""
+  document.getElementById("centralcontent").appendChild(await cktView())
+  //getSiteText().getNextChild("checkout").setView(document.getElementById("centralcontent"), "chktmain")
 }
 // Helper
 function setCkOutBtn(ckOutContainer){
@@ -58,9 +59,10 @@ function setCkOutDiscardBtn(ckOutDiscardContainer){
     refreshCartBox()
   }
 }
+
 export function setCartIcon(iconContainer,  cartBoxContainer) {
   getSiteText().getNextChild("cartbox").getNextChild("crtbxtt").write(iconContainer)
-  selectorFromAttr(iconContainer, "data-cart-icon-button").addEventListener("click", function(event){
+  selectorFromAttr(iconContainer, "data-cart-icon-button").addEventListener("click", (event)=>{
     event.preventDefault()
     cartBoxContainer.classList.toggle("appear")
   })
@@ -75,23 +77,19 @@ export async function cartBoxView( cartBoxContainer) {
   getSiteText().getNextChild("cartbox").getNextChild("crtbxtt").setContentView(cartTitView)
   selectorFromAttr(cartTitView, "data-value").addEventListener("click",  (event)=>{
     event.preventDefault()
-    cartBoxContainer.style.visibility="hidden"
+    cartBoxContainer.style.visibility = "hidden"
   })
   await displayItemList(cbTp)
   setCkOutBtn(selectorFromAttr(cbTp, "data-checkoutcontainer"))
   setCkOutDiscardBtn(selectorFromAttr(cbTp, "data-discardcontainer"))
-
-
-  // <<<<<<<<<faltan cosas
   return cbTp
 }
 
-// new
-// -- Helper function
+// -- Helpers functions
+
 function write(myNode, viewContainer, propKey, dataId="value", attrKey) {
   getLangBranch(myNode).getChild().writeProp(selectorFromAttr(viewContainer, "data-" + dataId), propKey, attrKey)
 }
-
 async function displayItemList(viewContainer) {
   const itemListContainer = selectorFromAttr(viewContainer, "data-itemlistcontainer")
   myCart.getRelationship().childContainer = itemListContainer
@@ -106,9 +104,9 @@ async function itemListView(itemList) {
   itemList.firstElement = itemListContainer
   const qttyContainer = selectorFromAttr(itemListContainer, "data-quantity")
   itemList.writeProp(qttyContainer, "quantity")
-  qttyContainer.addEventListener("click", function(ev){
+  qttyContainer.addEventListener("click", (ev)=>{
     ev.preventDefault()
-    myCart.addItem(getLangBranch, itemList.item, -itemList.props.quantity)
+    myCart.addItem(itemList.item, -itemList.props.quantity)
     refreshCartBox()
   })
   qttyContainer.onmouseover = function(){
@@ -119,7 +117,6 @@ async function itemListView(itemList) {
     itemList.writeProp(this, "quantity")
     this.classList.remove("mouseover")
   }
-  const nameContainer = selectorFromAttr(itemListContainer, "data-value")
-  write(itemList.item, nameContainer, "name")
+  write(itemList.item, itemListContainer, "name")
   return itemListTp
 }

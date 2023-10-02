@@ -1,9 +1,9 @@
-const cartMixin = Sup => class extends Sup {
+export const cartMixin = Sup => class extends Sup {
   constructor() {
     super()
     this.addRelationship(new this.constructor.linkerConstructor()) // items container
   }
-  addItem(getLangBranch, item, quantity) {
+  addItem(item, quantity) {
     if (!quantity)
       quantity = 1
     quantity = window.parseInt(quantity)
@@ -20,7 +20,7 @@ const cartMixin = Sup => class extends Sup {
       cartItem.item = item
       this.getRelationship().addChild(cartItem)
     }
-    this.dispatchEvent("cart item", item)
+    this.dispatchEvent("cart item", item) // It inheredits from Node. Node descendet.
   }
 }
 
@@ -31,5 +31,3 @@ export const sumTotal = children => children.reduce(
     return tot + quantity * price
   }, 0
 )
-
-export default cartMixin

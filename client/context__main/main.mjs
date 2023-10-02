@@ -1,5 +1,4 @@
 import {webuser, init as initWebUser} from './webuser/webuser.mjs'
-import {myCart} from './shop/cart.mjs'
 import {getTemplate, getTemplates, getStyles} from './layouts.mjs'
 import makeReport from './reports.mjs'
 import {Alert} from './alert.mjs'

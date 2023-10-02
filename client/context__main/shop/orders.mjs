@@ -16,20 +16,19 @@ async function orderView(order){
       }
     }, "reCaluculate")
   })
-  selectorFromAttr(orderTp, "data-items").appendView(itemsTable)
-  selectorFromAttr(orderTp, "data-shipping").appendView(await shippingView(order.getRelationship("ordershippingtypes")))
+  selectorFromAttr(orderTp, "data-items").appendChild(itemsTable)
+  selectorFromAttr(orderTp, "data-shipping").appendChild(await shippingView(order.getRelationship("ordershippingtypes")))
   setTotal(order, selectorFromAttr(orderTp, "data-total"))
-    // Show Order payment button.
-    // This is valid for chktend and userordersline
-    const myorderpay=order.getRelationship("orderpaymenttypes").getChild()
-    if (myorderpay && !myorderpay.props.succeed && myorderpay.props.details) {
-      const template=JSON.parse(myorderpay.props.details).template
-      // aqui lo mejor quizas sería que tuviera ademas de template el nombre del script, y de ese script se importe una funcion: payemtView
-      if (template) {
-        //myorderpay.setView(thisElement, template)
-      }
+  // Show Order payment button.
+  // This is valid for chktend and userordersline
+  const myorderpay=order.getRelationship("orderpaymenttypes").getChild()
+  if (myorderpay && !myorderpay.props.succeed && myorderpay.props.details) {
+    const template=JSON.parse(myorderpay.props.details).template
+    // aqui lo mejor quizas sería que tuviera ademas de template el nombre del script, y de ese script se importe una funcion: payemtView
+    if (template) {
+      //myorderpay.setView(thisElement, template)
     }
-
+  }
 }
 function setTotal(order, totView){
   const myorderpay=order.getRelationship("orderpaymenttypes").getChild()
@@ -46,7 +45,7 @@ async function shippingView(shipping){
 }
 
 async function itemView(orderItem){
-  function setFields(myNode, fieldTpName){
+  async function setFields(myNode, fieldTpName){
     const fieldsContainer = document.createElement("template").content
     for (const propKey in myNode.props) {
       let fieldTp = await getTemplate(fieldTpName)

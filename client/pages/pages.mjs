@@ -1,4 +1,4 @@
-import {Content, ContentView} from '../contentbase.mjs'
+import {Content} from '../contentbase.mjs'
 
 export class PagesContent extends Content{
   constructor(){ // reduced args=> super.deepLevel: undefined, super.db_collection: 'TABLE_SITEELEMENTS'
@@ -30,5 +30,3 @@ export class PagesContent extends Content{
     await menuNode.getMainBranch().loadRequest('get my tree', {extraParents: langParent}) // loading data
   }
 }
-
-export class PagesView extends ContentView{}

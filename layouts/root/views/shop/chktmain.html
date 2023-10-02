@@ -7,24 +7,14 @@
 -->
 <div class="checkout">
   <div style="text-align:center;">
-    <div class="msgbox" style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <span data-id="value"></span>
+    <div class="msgbox" style="position:relative;" data-ckt-tit>
+      <div data-butedit class="btmiddleright"></div>
+      <span data-value></span>
     </div>
-    <script>
-      // css wrapper no inline??
-      const {getRoot: getSiteText} = await import("./client", thisAppFolder, "sitecontent.mjs")
-      getSiteText().getNextChild("checkout").getNextChild("checkoutTit").setContentLangView(thisElement)
-    </script>
-    <div style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <h3 data-id="value"></h3>
+    <div style="position:relative;" data-order-tit>
+      <div data-butedit class="btmiddleright"></div>
+      <h3 data-value></h3>
     </div>
-    <script>
-      // css wrapper no inline??
-      const {getRoot: getSiteText} = await import("./client", thisAppFolder, "sitecontent.mjs")
-      getSiteText().getNextChild("checkout").getNextChild("orderTit").setContentLangView(thisElement)
-    </script>
     <div data-chkt-order-container></div>
   </div>
   <div data-user-data-container></div>

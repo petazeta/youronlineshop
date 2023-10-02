@@ -1,4 +1,4 @@
-import {SiteContent, SiteContentView} from "../sitecontent.mjs"
+import {SiteContent} from "../sitecontent.mjs"
 import {Node, Linker} from "./nodes.mjs"
 import {webuser} from "./webuser/webuser.mjs"
 import {getCurrentLanguage, getLangParent, getLangBranch} from "./languages/languages.mjs"
@@ -8,7 +8,6 @@ import {observerMixin} from '../observermixin.mjs'
 // --- General elements ---
 
 const mySiteText = new SiteContent()
-const mySiteView = new SiteContentView()
 
 export async function initData(){
   return await mySiteText.initData(SiteContentLinker, getLangParent, webuser, getCurrentLanguage)

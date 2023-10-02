@@ -2,24 +2,23 @@
   thisNode: sitetext chkout
 -->
 <div class="boxframe ordercartframe ordercart">
-  <div class="ordercartitems"></div>
-  <script>
-    webuser.getRelationship("orders").getChild().getRelationship("orderitems").setChildrenView(thisElement, "orderitem"); // clone is to set the cart and the order cart apart, so the cart container doesn't change
-  </script>
-  <div class="form-group ordercarttotals" style="position:relative;">
-    <div data-id="butedit" class="btmiddleright"></div>
-    <span class="form-label"></span>
-    <script>
-      const total=thisNode.getNextChild("order").getNextChild("subtotal").getRelationship("siteelementsdata").getChild();
-      total.writeProp(thisElement);
-      //adding the edition pencil
-      if (webuser.isWebAdmin()) {
-        const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
-        visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
-        total.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-      }
-    </script>
-    <span></span>
+  <div class="ordercartitems" data-items></div>
+  <div class="form-group ordercarttotals" data-total>
+    <span style="position:relative;" data-total-label>
+      <div data-butedit class="btmiddleright"></div>
+      <span class="form-label" data-value></span>
+      <script>
+        const total=thisNode.getNextChild("order").getNextChild("subtotal").getRelationship("siteelementsdata").getChild();
+        total.writeProp(thisElement);
+        //adding the edition pencil
+        if (webuser.isWebAdmin()) {
+          const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
+          visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+          total.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+        }
+      </script>
+    </span>
+    <span data-total-value></span>
     <script>
       const {sumTotal} = await import('./' + CLIENT_MODULES_PATH + 'cart.mjs')
       const {intToMoney} = await import('./' + CLIENT_MODULES_PATH + 'money.mjs');

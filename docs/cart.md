@@ -8,16 +8,16 @@ Shopping cart feature is about a container for the products added to it. It disp
 ## Implementation
 
 Cart implementation elements are:
-- Cart module (It contains the class Cart)
-- Money module (Money formatting)
-- Specific templates: carticon, cartbox, cartboxtitle, cartboxckout and itemlist.
+- Shop/Cartmixin.mjs:
+  - It contains the class Cart
+  - It contains sumTotal function
+- context__main/Shop/cart.mjs: Contexted version. Main functions: CartBoxView (cart container) and SetCartIcon (button) for body.mjs.
+- Specific templates: cartbox, itemlist.
 - Templates itemlistpicture and itempicturelarge contain the add item to cart button.
 
-We start at body template by launching carticon and cartbox. The first one is the button to show the cart. Cartbox is the cart continer. 
+## Cart class
 
-## Cart module
-
-Cart class is a extended [Linker](linkerfmwk.md) with [observable](observerpattern.md) facilities (To send notifications to [reports](statistics.md)). Cart children are the cart items. When the user adds a item to the cart, cart adds a new cart item which props are "id" and "quantity". It attachs also the item object to the cart not as a "prop" but directly in the object (as a property) with the name item. Cart main method "addItem" checks if the item is already in the cart and in that case it sums the quantity.
+Cart class is descendent from [Node](linker.md). Cart has one relationship wich children are the cart items. When the user adds a item to the cart, cart adds a new cart item (it is just a single Node) which props are "id" and "quantity". It attachs also the item object to the cart not as a "prop" but directly in the object (as a property) with the name item. Cart method "addItem" checks if the item is already in the cart and in that case it sums the quantity.
 
 ## Checkout
 

@@ -5,7 +5,7 @@
 falta hacer mas pruebas
 ****/
 
-import {PagesContent, PagesView} from '../../pages/pages.mjs'
+import {PagesContent} from '../../pages/pages.mjs'
 import {visibleOnMouseOver, removeVisibleOnMouseOver, selectorFromAttr} from '../../frontutils.mjs'
 import {Linker} from '../nodes.mjs'
 import {webuser} from '../webuser/webuser.mjs'
@@ -18,7 +18,6 @@ import {observerMixin} from '../../observermixin.mjs'
 // -- General elements --
 
 const mySitePages = new PagesContent()
-//const myPagesView = new PagesView() // deprecated
 
 // -- helpers
 function write(myNode, viewContainer, propKey, dataId="value", attrKey) {

@@ -1,6 +1,6 @@
 // Hay que ampliar esta clase, introducir lo de navhistory y opción pagination
 import {addItem} from '../shop/cart.mjs'
-import {Categories, CategoriesView} from '../../catalog/categories.mjs'
+import {Categories} from '../../catalog/categories.mjs'
 import {selectorFromAttr, visibleOnMouseOver, removeVisibleOnMouseOver} from '../../frontutils.mjs'
 import {pathJoin} from '../../urlutils.mjs'
 import {Node, Linker} from '../nodes.mjs'
@@ -18,7 +18,6 @@ import {observerMixin} from '../../observermixin.mjs'
 // --- General elements ---
 
 const mySiteCategories = new Categories()
-const myCategoriesView = new CategoriesView()
 const searchParamsKeys = ["category", "subcategory", "item"]
 
 // -- helpers

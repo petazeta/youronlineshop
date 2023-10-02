@@ -65,6 +65,7 @@ export class Content{
 // It needs the HTML element attribute data-edit, data-butedit, ... (data-id="butedit" deprecated)
 // searchParamsKeys = we need the whole path of search params to reproduce the view state. It will be settled in extended classes
 // ***** DEPRECATED
+/*
 export class ContentView{
   constructor(){
     this.searchParamsKeys=null
@@ -100,3 +101,4 @@ export class ContentView{
     })
   }
 }
+*/
