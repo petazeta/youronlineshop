@@ -19,4 +19,3 @@ export default {
   catalogImagesUrlPath: "catalogimages.cmd",
   reportsUrlPath: "reports.cmd"
 }
-

@@ -2,36 +2,38 @@
 import {pbkdf2, randomBytes} from "crypto"
 import {checkLength, validateEmail} from "../shared/datainput.mjs";
 
-export const userModelMixin=Sup => class extends Sup {
+export const userModelMixin = Sup => class extends Sup {
   constructor(...args) {
     super(...args)
-    this.parent = new this.constructor.linkerConstructor("TABLE_USERS", "TABLE_USERSTYPES")
-    this.parent.dbLoadMyChildTableKeys() // sync
+    const userParent = new this.constructor.linkerConstructor("TABLE_USERS", "TABLE_USERSTYPES")
+    userParent.dbLoadMyChildTableKeys() // sync (no need to use db connection for table keys)
+    userParent.addChild(this)
     return this
   }
   static async setUserType(myUser, userType){
     //First we get the usertype (parent)
-    const usertypeMother=new this.linkerConstructor("TABLE_USERSTYPES");
-    await usertypeMother.dbLoadAllMyChildren({type: userType});
-    //await parentPartner.parent.dbLoadMyChildTableKeys();
-    const userTypeNode= usertypeMother.getChild();
+    const usertypeMother = new this.linkerConstructor("TABLE_USERSTYPES")
+    await usertypeMother.dbLoadAllMyChildren({type: userType})
+    const userTypeNode = usertypeMother.getChild()
     if (userTypeNode) {
-      userTypeNode.dbLoadMyRelationships();
-      userTypeNode.getRelationship().addChild(myUser);
+      //userTypeNode.dbLoadMyRelationships()
+      //userTypeNode.getRelationship().addChild(myUser) // users relationship addChild
+      userTypeNode.addRelationship(myUser.parent)
     }
-    return myUser;
+    return myUser
   }
   setMyUserType(userType){
-    return this.constructor.setUserType(this, userType);
+    return this.constructor.setUserType(this, userType)
   }
   // If pwd===null, it checks just username and return username and password
   static async userCheck(username, pwd="") {
-    const result=await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("TABLE_USERS"), {username: username});
-    const candidates=result.data;
+    const result = await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("TABLE_USERS"), {username: username})
+    const candidates = result.data
     if (result.total == 0) { //candidates=0
-      return new Error("userError");
+      return new Error("userError")
     }
-    if (pwd===null && result.total == 1) return [result.data[0].props.id, result.data[0].props.pwd];
+    if (pwd===null && result.total == 1) // autologin
+      return [result.data[0].props.id, result.data[0].props.pwd]
 
     let isMaster=false;
     /* // this is not used and will require more implementation
@@ -40,46 +42,41 @@ export const userModelMixin=Sup => class extends Sup {
     }
     */
     if (await verifyPwd(pwd, candidates[0].props.pwd) || isMaster) {
-      return candidates[0].props.id;
+      return candidates[0].props.id
     }
-    else {
-      return new Error("pwdError");
-    }
+    return new Error("pwdError")
   }
   // the email field is not implemented in client, we keep it for some other implementations
   static async create(username, pwd, email, userType="customer") {
     if (!checkLength(username, 4, 20)) {
-      return new Error("userCharError");
+      return new Error("userCharError")
     }
     if (!checkLength(pwd, 4, 20)) {
-      return new Error("pwdCharError");
+      return new Error("pwdCharError")
     }
     if (email && !validateEmail(email)) {
-      return new Error("emailError");
+      return new Error("emailError")
     }
-    const userCheck = await this.userCheck(username);
-    if (!(userCheck instanceof Error) || userCheck.message!="userError") return new Error("userExistsError");
-    const user=new this();
-    await user.setMyUserType(userType);
-    user.props.username=username;
+    const userCheck = await this.userCheck(username)
+    if (!(userCheck instanceof Error) || userCheck.message!="userError")
+      return new Error("userExistsError")
+    const user = new this()
+    await user.setMyUserType(userType)
+    user.props.username = username
     let hash = await cryptPwd(pwd)
-    user.props.pwd=hash;
-    user.props.creationDate=new Date().toISOString();
-    user.props.access=user.props.creationDate;
-    await user.dbInsertMySelf();
-    await user.dbLoadMyRelationships();
-    const userdatarel=user.getRelationship("usersdata");
-    const defaultdata=new this.nodeConstructor();
-    userdatarel.children[0]=defaultdata;
-    defaultdata.parent=userdatarel;
-    if (email) userdatarel.children[0].props.email=email;
-    await userdatarel.children[0].dbInsertMySelf();
-    const addressrel=user.getRelationship("addresses");
-    const newaddress=new this.nodeConstructor();
-    addressrel.children[0]=newaddress;
-    newaddress.parent=addressrel;
-    await addressrel.children[0].dbInsertMySelf();
-    return user;
+    user.props.pwd = hash
+    user.props.creationDate = new Date().toISOString()
+    user.props.access = user.props.creationDate
+    await user.dbInsertMySelf()
+    await user.dbLoadMyRelationships()
+    const userdatarel = user.getRelationship("usersdata")
+    user.getRelationship("usersdata").addChild(new this.nodeConstructor())
+    if (email)
+      user.getRelationship("usersdata").getChild().props.email = email
+    await user.getRelationship("usersdata").getChild().dbInsertMySelf()
+    user.getRelationship("addresses").addChild(new this.nodeConstructor())
+    await user.getRelationship("addresses").getChild().dbInsertMySelf()
+    return user
   }
   async dbUpdateMyPwd(pwd) {
     if (!checkLength(pwd, 4, 20)) {
@@ -103,11 +100,12 @@ export const userModelMixin=Sup => class extends Sup {
     return false;
   }
   async dbUpdateAccess() {
-    await this.dbUpdateMyProps({access: (new Date()).toISOString()});
+    await this.dbUpdateMyProps({access: (new Date()).toISOString()})
   }
+  // This is often used when the connection needs authentication
   static async login(uname, upwd){
     if (!uname || !upwd) {
-      return new Error("Not enoght data");
+      return new Error("Not enoght data")
     }
     const userCheck = await this.userCheck(uname, upwd)
     if (userCheck instanceof Error)
@@ -117,14 +115,14 @@ export const userModelMixin=Sup => class extends Sup {
     user.props.password = upwd
     user.props.id = userCheck
     await user.dbLoadMyRelationships()
-    await user.dbLoadMyTreeUp(); // ¿Por qué cargar esto, si ya el constructor de user crea la parte de typeuser???
-    //await user.dbUpdateAccess(); //Every conexion we make server login so we are not updating the access time
-    return user;
+    await user.dbLoadMyTreeUp() // It loads user type
+    return user
   }
   static async autoLogin(uname){
-    const userCheck=await this.userCheck(uname, null);
-    if (userCheck instanceof Error) return userCheck;
-    return this.login(userCheck[0], userCheck[1]);
+    const userCheck = await this.userCheck(uname, null)
+    if (userCheck instanceof Error)
+      return userCheck
+    return this.login(userCheck[0], userCheck[1])
   }
   
   //**********

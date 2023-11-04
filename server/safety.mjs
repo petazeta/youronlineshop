@@ -1,6 +1,18 @@
-import {Node} from './nodes.mjs'; 
+import {Node as ProtoNode, Linker as ProtoLinker} from './nodes.mjs'; 
 import TABLES from './admintableslist.mjs';
 import ADMINUSERS from './adminusertypes.mjs';
+
+const nodesConstructorsMixin = Sup => class extends Sup {
+  static get nodeConstructor(){
+    return Node
+  }
+  static get linkerConstructor(){
+    return Linker
+  }
+}
+
+const Node = nodesConstructorsMixin(ProtoNode)
+const Linker = nodesConstructorsMixin(ProtoLinker)
 
 //Safety check functions
 function getTableName(myNode){

@@ -308,9 +308,11 @@ const nodeMixin=Sup => class extends Sup {
     }
     return super.getAscendent(objSearch)
   }
-
+  // This is not clear, probably is erroneous, better use addChild in parent
+  // Multple parents is not well implemented, what about addChild? why addChild doesn't implement multple parents in child?
   addParent(obj) {
-    if (!this.parent) this.parent=obj
+    if (!this.parent)
+      this.parent = obj
     else {
       if (!Array.isArray(this.parent)) this.parent=[this.parent]
       if (!this.parent.includes(obj)) this.parent.push(obj)

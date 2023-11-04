@@ -190,9 +190,9 @@ export class Responses{
     this.responseAuth.set("edit my props", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
-      await siteContentCacheReset(parameters)
-      return new Node().load(unpacking(parameters.nodeData)).dbUpdateMyProps(parameters.values);
-    });
+      //await siteContentCacheReset(parameters) *** parece que no se ha implementado ningún sistema par resetear cache para estos casos
+      return new Node().load(unpacking(parameters.nodeData)).dbUpdateMyProps(parameters.values)
+    })
       
     this.responseAuth.set("edit my sort_order", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))

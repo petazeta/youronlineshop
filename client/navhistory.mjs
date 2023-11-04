@@ -1,18 +1,7 @@
 import {observableMixin, observerMixin} from './observermixin.mjs';
 
-function extractSearchParamsUrl(myNode, searchParamKey, searchParamsKeys){
-  let currentNode=myNode
-  const level=searchParamsKeys.indexOf(searchParamKey)
-  const searchParams=[]
-  for (let i=level; i>=0; i--) {
-    searchParams.unshift(`${searchParamsKeys[i]}=${currentNode.props.id}`)
-    currentNode=currentNode.getParent().getPartner()
-  }
-  return "?" + searchParams.join('&')
-}
-
-export default class NavHistory{
-  constructor(initalNavSearch){
+export default class NavHistory {
+  constructor(initalNavSearch) {
     this.navigationObservable = new (observableMixin(Object)) // Object == Class {}
     this.initalNavSearch = window.location.search || initalNavSearch
     window.onpopstate = (event) => {
@@ -27,14 +16,13 @@ export default class NavHistory{
       const MyNodeClass = observerMixin(myNode.constructor)
       Object.setPrototypeOf(myNode, MyNodeClass.prototype) // adding observers characteristics
       observerMixin(Object).prototype.initObserver.call(myNode)
-
     }
     this.navigationObservable.attachObserver("history event", myNode)
     myNode.setReactionOnce("history event", (stateUrlObject)=>{
       // Falta ignorar lo de pagination
-      const myUrlSearchParams=new URL(url, 'http://localhost').searchParams
-      const myUrlMatch=Array.from(myUrlSearchParams).every(([key, value])=>stateUrlObject.searchParams.get(key)===value)
-      const stateUrlMatch=Array.from(stateUrlObject.searchParams).every(([key, value])=>myUrlSearchParams.get(key)===value)
+      const myUrlSearchParams = new URL(url, 'http://localhost').searchParams
+      const myUrlMatch = Array.from(myUrlSearchParams).every(([key, value])=>stateUrlObject.searchParams.get(key)===value)
+      const stateUrlMatch = Array.from(stateUrlObject.searchParams).every(([key, value])=>myUrlSearchParams.get(key)===value)
       // only total match will produce the action
       if (myUrlMatch && stateUrlMatch) butAction(myNode)
     })
@@ -74,6 +62,23 @@ export default class NavHistory{
     if (!this.initalNavSearch)
       this.initalNavSearch = altNavSearch
   }
+}
+
+// Helpers
+
+// It calculates the SearchParams url
+function extractSearchParamsUrl(myNode, searchParamKey, searchParamsKeys){
+  let currentNode = myNode
+  const level = searchParamsKeys.indexOf(searchParamKey)
+  const searchParams = []
+  for (let i=level; i>=0; i--) {
+    if (currentNode.props.id)
+      searchParams.unshift(`${searchParamsKeys[i]}=${currentNode.props.id}`)
+    else
+      searchParams.unshift(`${searchParamsKeys[i]}=true`)
+    currentNode = currentNode.getParent()?.getPartner()
+  }
+  return "?" + searchParams.join('&')
 }
 
 /*

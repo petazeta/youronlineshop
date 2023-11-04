@@ -3,7 +3,9 @@ Making orders
 
 ## Introduction
 
-Ordering process starts when user adds a product to the [cart](cart.md). When cart is not empty we can click the checkout button. If the user is not logged in it will show the login layout. After login the checkout process starts. It is showing the order and requesting user to introduce some data like the address and to select th shipping type and payment type. Then it will show the order and a button for the payment process that is external.
+Ordering process starts when user adds a product to the [cart](cart.md). When cart is not empty we can click the checkout button. If the user is not logged in it will show the login layout and after the login the checkout process will continue.
+
+It is showing the order and requesting user to introduce some data like the address and to select th shipping type and payment type. Then it will show the order and a button for the payment process that is external.
 
 ## Implementation
 

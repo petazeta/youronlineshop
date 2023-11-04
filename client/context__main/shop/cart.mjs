@@ -6,51 +6,89 @@ import {selectorFromAttr} from "../../frontutils.mjs" // (elm, attName, attValue
 import {getLangBranch} from '../languages/languages.mjs'
 import {getTemplate} from '../layouts.mjs'
 import makeReport from '../reports.mjs'
-import {rmBoxView} from "../../rmbox.mjs"
-import {loginFormView} from '../webuser/login.mjs'
+import {toCheckOut} from "./ckt.mjs"
 
 const Cart = cartMixin(Node)
-const myCart = new Cart()
+export const myCart = new Cart()
 
+export function setCartIcon(iconContainer,  cartBoxContainer) {
+  getSiteText().getNextChild("cartbox").getNextChild("crtbxtt").write(iconContainer)
+  selectorFromAttr(iconContainer, "data-cart-icon-button").addEventListener("click", (event)=>{
+    event.preventDefault()
+    toggleCartBox(cartBoxContainer)
+  })
+}
+export async function cartBoxView(cartBoxContainer) {
+  const cbTp = await getTemplate("cartbox")
+  selectorFromAttr(cbTp, "data-close").addEventListener("click",  (ev)=>{
+    ev.preventDefault()
+    hideCartBox(cartBoxContainer)
+  })
+  const cartTitView = selectorFromAttr(cbTp, "data-tit")
+  getSiteText().getNextChild("cartbox").getNextChild("crtbxtt").setContentView(cartTitView)
+  selectorFromAttr(cartTitView, "data-value").addEventListener("click",  (event)=>{
+    event.preventDefault()
+    hideCartBox(cartBoxContainer)
+  })
+  await displayItemList(cbTp)
+  setCkOutBtn(selectorFromAttr(cbTp, "data-checkoutcontainer"))
+  setCkOutDiscardBtn(selectorFromAttr(cbTp, "data-discardcontainer"))
+  return cbTp
+}
 export function addItem(item, quantity) {
   myCart.addItem(item, quantity)
-  refreshCartBox()
+  refreshCartBox(document.getElementById("cartbox"))
   let alertMsg = `${quantity} ${getLangBranch(item).getChild().props.name}`
   if (quantity > 0)
     alertMsg = "+ " + alertMsg
   document.createElement("alert-element").showMsg(alertMsg, 3000)
   makeReport("cart item operation")
 }
-//<<<<<<<<<<
-function refreshCartBox(){
-  displayItemList(document.getElementById("cartbox"))
-  document.getElementById("cartbox").classList.add("appear")
+// Helpers
+function refreshCartBox(cartBoxContainer){
+  displayItemList(cartBoxContainer)
+  showCartBox(cartBoxContainer)
 }
-function resetCartBox(){
+function resetCartBox(cartBoxContainer){
   myCart.getRelationship().children = []
-  displayItemList(document.getElementById("cartbox"))
+  displayItemList(cartBoxContainer)
 }
-async function toCheckOut(){
-  if (myCart.getRelationship().children.length==0) {
-    document.createElement("alert-element").showMsg(getLangBranch(getSiteText().getNextChild("cartbox").getNextChild("emptyCart")).getChild().props.value, 3000)
-    return
-  }
-  if (false && !webuser.props.id) { // ***temporal
-    const loginFrame = await getTemplate("loginframe")
-    selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView(), selectorFromAttr(loginFrame, "data-container")))
-    document.body.appendChild(loginFrame)
-    return
-  }
-  //<<<<<<<
-  const {cktView} = await import("../shop/ckt.mjs")
-  document.getElementById("centralcontent").innerHTML=""
-  document.getElementById("centralcontent").appendChild(await cktView())
-  //getSiteText().getNextChild("checkout").setView(document.getElementById("centralcontent"), "chktmain")
+function hideCartBox(cartBoxContainer){
+  cartBoxContainer.classList.remove("appear")
 }
-// Helper
+function showCartBox(cartBoxContainer){
+  cartBoxContainer.classList.add("appear")
+}
+function toggleCartBox(cartBoxContainer){
+  cartBoxContainer.classList.toggle("appear")
+}
+
 function setCkOutBtn(ckOutContainer){
   getSiteText().getNextChild("cartbox").getNextChild("ckouttt").setContentView(ckOutContainer, false)
-  ckOutContainer.querySelector("button").onclick = toCheckOut
+  ckOutContainer.querySelector("button").addEventListener("click", async ev=>{
+    ev.preventDefault()
+    const cartBoxContainer = document.getElementById("cartbox")
+    if (myCart.getRelationship().children.length==0) {
+      document.createElement("alert-element").showMsg(getLangBranch(getSiteText().getNextChild("cartbox").getNextChild("emptyCart")).getChild().props.value, 3000)
+      return
+    }
+    hideCartBox(cartBoxContainer)
+    if (!webuser.props.id) {
+      const {loginFormView} = await import("../webuser/login.mjs")
+      const {rmBoxView} = await import("../../rmbox.mjs")
+      const loginFrame = await getTemplate("loginframe")
+      selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView(), selectorFromAttr(loginFrame, "data-container")))
+      document.body.appendChild(loginFrame)
+      return
+    }
+    await cartToCheckOut()
+  })
+}
+export async function cartToCheckOut(){
+  if (myCart.getRelationship().children.length == 0)
+    return
+  await toCheckOut(myCart, ()=>hideCartBox(cartBoxContainer))
+  return true
 }
 function setCkOutDiscardBtn(ckOutDiscardContainer){
   getSiteText().getNextChild("cartbox").getNextChild("discardtt").setContentView(ckOutDiscardContainer, false)
@@ -59,34 +97,6 @@ function setCkOutDiscardBtn(ckOutDiscardContainer){
     refreshCartBox()
   }
 }
-
-export function setCartIcon(iconContainer,  cartBoxContainer) {
-  getSiteText().getNextChild("cartbox").getNextChild("crtbxtt").write(iconContainer)
-  selectorFromAttr(iconContainer, "data-cart-icon-button").addEventListener("click", (event)=>{
-    event.preventDefault()
-    cartBoxContainer.classList.toggle("appear")
-  })
-}
-export async function cartBoxView( cartBoxContainer) {
-  const cbTp = await getTemplate("cartbox")
-  selectorFromAttr(cbTp, "data-close").addEventListener("click",  (ev)=>{
-    ev.preventDefault()
-    cartBoxContainer.classList.remove("appear")
-  })
-  const cartTitView = selectorFromAttr(cbTp, "data-tit")
-  getSiteText().getNextChild("cartbox").getNextChild("crtbxtt").setContentView(cartTitView)
-  selectorFromAttr(cartTitView, "data-value").addEventListener("click",  (event)=>{
-    event.preventDefault()
-    cartBoxContainer.style.visibility = "hidden"
-  })
-  await displayItemList(cbTp)
-  setCkOutBtn(selectorFromAttr(cbTp, "data-checkoutcontainer"))
-  setCkOutDiscardBtn(selectorFromAttr(cbTp, "data-discardcontainer"))
-  return cbTp
-}
-
-// -- Helpers functions
-
 function write(myNode, viewContainer, propKey, dataId="value", attrKey) {
   getLangBranch(myNode).getChild().writeProp(selectorFromAttr(viewContainer, "data-" + dataId), propKey, attrKey)
 }

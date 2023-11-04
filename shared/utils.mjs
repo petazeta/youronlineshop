@@ -18,53 +18,81 @@ import {BasicNode} from './linker.mjs';
 export function deconstruct(inputNode){
   // It returns the node with the basic data. It clears the links to parent and children.
   const clearNode = (myNode) => {
-    const serialCommon={_parent: null, _children:[]},
-    serialLinker={partner: null, children:[]},
-    serialNode={parent: null, relationships:[]},
-    commonKeys=['props'],
-    nodeKeys=[],
-    linkerKeys=['childTableKeys', 'childTableKeysInfo', 'sysChildTableKeys', 'sysChildTableKeysInfo'];
+    const serialCommon ={_parent: null, _children:[]},
+    serialLinker = {partner: null, children:[]},
+    serialNode = {parent: null, relationships:[]},
+    commonKeys = ['props'],
+    nodeKeys = [],
+    linkerKeys = ['childTableKeys', 'childTableKeysInfo', 'sysChildTableKeys', 'sysChildTableKeysInfo']
 
-    const isLinker = BasicNode.detectLinker(myNode);
+    const isLinker = BasicNode.detectLinker(myNode)
     const myKeys = isLinker ? [...commonKeys, ...linkerKeys] : [...commonKeys, ...nodeKeys];
     const serialResult = isLinker ? {...serialCommon, ...serialLinker} : {...serialCommon, ...serialNode};
     for (const key of myKeys) {
-      serialResult[key]=myNode[key];
+      serialResult[key] = myNode[key]
     }
-    return serialResult;
+    return serialResult
   }
+  /*
   // We get to the root node and serialize from it, and for be able to get again to the present node we store it in an index field.
-  const indexNode=inputNode; // set a pointer to the present node
-  let rootNode=BasicNode.getRoot(inputNode);
-  if (!rootNode) rootNode=indexNode;
-  const serials=new Map();
-  let indexKey; // For storing the indexKey
+  const indexNode = inputNode // set a pointer to the present node
+  let rootNode = BasicNode.getRoot(inputNode)
+  if (!rootNode)
+    rootNode = indexNode
+
+  const serials = new Map()
+  let indexKey // For storing the indexKey
   // uses indexNode, indexKey and serials
   const innerSerialize = (rootNode) => {
-    const myId=serials.size + 1; // this ensures unique ids
-    if (rootNode===indexNode) indexKey=myId;
-    const newOne=clearNode(rootNode);
-    newOne.props.__id=myId; // We set the id into the properties
+    const myId = serials.size + 1 // this ensures unique ids
+    if (rootNode===indexNode)
+      indexKey = myId
+    const newOne = clearNode(rootNode)
+    newOne.props.__id = myId // We set the id into the properties
 
     if (rootNode._parent?.props.__id) {
-      newOne._parent=rootNode._parent.props.__id; // we assing the parent id to "_parent" property
+      newOne._parent = rootNode._parent.props.__id // we assing the parent id to "_parent" property
     }
 
-    serials.set(myId, newOne);
+    serials.set(myId, newOne)
     for (const re of rootNode._children) {
-      innerSerialize(re);
+      innerSerialize(re)
     }
   }
-  
-  innerSerialize(rootNode);
+
+  innerSerialize(rootNode)
   
   serials.forEach((value)=>{
-    if (value?.props?.__id) delete value.props.__id;
+    if (value?.props?.__id)
+      delete value.props.__id
   })
-  if (!indexKey) return;
+  if (!indexKey) {
+    throw new Error("incorrect deconstruct")
+  }
   // ponemos un último valor en el map para establecer el valor inicial del bloque: index: id, 
-  serials.set('index', indexKey);
-  return serials;
+  serials.set('index', indexKey)
+*/
+  let rootNode = BasicNode.getRoot(inputNode)
+  if (!rootNode)
+    rootNode = indexNode
+  const serialNodes = arrayFromTree(rootNode)
+  const serials = new Map(serialNodes.map((val, ind)=>{
+    const newOne = clearNode(val)
+    if (val._parent) {
+      const parentInd = serialNodes.findIndex(parentVal=>parentVal == val._parent)
+      if (parentInd!=-1)
+        newOne._parent = parentInd + 1 // we assing the parent id to "_parent" property
+    }
+    return [ind + 1, newOne]
+  }))
+  const indexKey = serialNodes.findIndex(val=>val==inputNode)
+  if (indexKey==-1) {
+    throw new Error("incorrect deconstruct")
+  }
+  // ponemos un último valor en el map para establecer el valor inicial del bloque: index: id, 
+  serials.set('index', indexKey + 1)
+
+  return serials
 }
 
 /*
@@ -84,42 +112,42 @@ Quizá podría ponerse en cada nodo de la lista además de parent__id children[.
 */
 
 export function construct(serials){
-  //const tree = new Map([[serials.entries().next().value[0], serials.entries().next().value[1]]]);
-  const tree = new Map();
+  const tree = new Map() // we return a copy not to modify the original
   serials.forEach((dataValue, id)=>{
-    if (id=='index') return;
-    let value=JSON.parse(JSON.stringify(dataValue)); // make a copy
-    tree.set(id, value);
+    if (id=='index')
+      return
+    let value = JSON.parse(JSON.stringify(dataValue)) // make a copy
+    tree.set(id, value)
     // set the antecesor
-    if (value._parent) {
-      const parent=tree.get(value._parent);
-      if (parent) {
-        // add child to parent
-        value._parent=parent;
-        if ("parent" in value) value.parent = parent;
-        else value.partner = parent;
-        if ("children" in parent) parent.children.push(value);
-        else parent.relationships.push(value);
-      }
+    const parent = value._parent && tree.get(value._parent)
+    if (parent) {
+      // add child to parent
+      value._parent = parent
+      if ("parent" in value)
+        value.parent = parent
+      else value.partner = parent
+      if ("children" in parent)
+        parent.children.push(value)
+      else parent.relationships.push(value)
     }
-  });
-  // devuelve el nodo adecuado, no el primero: return tree.get(tree.get('index'));
-  return tree.get(serials.get('index'));
-  //return tree.entries().next().value[1];
+  })
+  return tree.get(serials.get('index')) // devuelve el nodo adecuado, no el primero
 }
 
-export const unpacking=data=>{
-  if (typeof data == 'object') return construct(new Map(data));
-  return data;
-};
+export const unpacking = data=>{
+  if (typeof data == 'object')
+    return construct(new Map(data))
+  return data
+}
 export const arrayUnpacking=datas=>{
   if (typeof datas == 'object') return datas.map(data => unpacking(data));
   return datas;
 };
-export const packing=data=>{
-  if (typeof data == 'object') return Array.from(deconstruct(data));
-  return data;
-};
+export const packing = data=>{
+  if (typeof data == 'object')
+    return Array.from(deconstruct(data))
+  return data
+}
 export const arrayPacking=datas=>{
   if (typeof datas == 'object') return datas.map(data => packing(data));
   return datas;

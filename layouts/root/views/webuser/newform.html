@@ -1,7 +1,4 @@
-<!--
-  thisNode: middle -> logform
--->
-<form>
+<form  data-container data-form>
   <div id="logform">
   <!--
     <div class="msgbox" style="position:relative;">
@@ -21,96 +18,57 @@
     -->
     <div class="loginform">
       <div class="form-group">
-        <div>
+        <div data-username-label>
           <span style="position:relative;">
-            <div data-id="butedit" class="btmiddleright"></div>
-            <label class="form-label" for="user_name" data-id="value"></label>
+            <div data-butedit class="btmiddleright"></div>
+            <label class="form-label" for="user_name" data-value></label>
           </span>
         </div>
-        <script>
-          thisNode.getNextChild("userName").setContentLangView(thisElement)
-        </script>
-        <input class="form-control" name="user_name" data-id="value">
-        <script>
-          thisNode.getNextChild("userName").writeLangData(thisElement, undefined, undefined, "placeholder")
-        </script>
+        <input class="form-control" name="user_name" data-username-input data-value>
       </div>
       <div class="form-group">
-        <div>
+        <div data-password-label>
           <span style="position:relative;">
-            <div data-id="butedit" class="btmiddleright"></div>
-            <label class="form-label" for="user_password" data-id="value"></label>
+            <div data-butedit class="btmiddleright"></div>
+            <label class="form-label" for="user_password" data-value></label>
           </span>
         </div>
-        <script>
-          thisNode.getNextChild("password").setContentLangView(thisElement)
-        </script>
-        <input type="password" class="form-control" placeholder="" name="user_password" data-id="value">
-        <script>
-          thisNode.getNextChild("password").writeLangData(thisElement, undefined, undefined, "placeholder")
-        </script>
+        <input type="password" class="form-control" placeholder="" name="user_password" data-value data-password-input>
       </div>
       <div class="form-group">
-        <div>
+        <div data-repeat-password-label>
           <span style="position:relative;">
-            <div data-id="butedit" class="btmiddleright"></div>
-            <label class="form-label" for="repeat_password" data-id="value"></label>
+            <div data-butedit class="btmiddleright"></div>
+            <label class="form-label" for="repeat_password" data-value></label>
           </span>
         </div>
-        <script>
-          const {getRoot} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
-          getRoot().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").setContentLangView(thisElement)
-        </script>
-        <input type="password" class="form-control" name="repeat_password" data-id="value">
-        <script>
-          const {getRoot} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
-          getRoot().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").writeLangData(thisElement, undefined, undefined, "placeholder")
-        </script>
+        <input type="password" class="form-control" name="repeat_password" data-value data-repeat-password-input>
       </div>
-      <div class="sign-up-button" style="position:relative;">
-        <div data-id="butedit" class="btmiddleright"></div>
-        <button type="submit" class="btn" data-id="value"></button>
+      <div class="sign-up-button" style="position:relative;" data-sign-up-button>
+        <div data-butedit class="btmiddleright"></div>
+        <button type="submit" class="btn" data-value></button>
       </div>
-      <script>
-        thisNode.getNextChild("signIn").setContentLangView(thisElement)
-      </script>
     </div>
-    <div style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <input type="hidden" name="userCharError" disabled data-id="value">
+    <div style="position:relative;" data-usercharerror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="userCharError" disabled data-hidden data-value>
     </div>
-    <script>
-      cthisNode.getNextChild("userCharError").setContentLangView(thisElement)
-    </script>
-    <div style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <input type="hidden" name="pwdCharError" disabled data-id="value">
+    <div style="position:relative;" data-pwdcharerror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="pwdCharError" disabled data-hidden data-value>
     </div>
-    <script>
-      thisNode.getNextChild("pwdCharError").setContentLangView(thisElement)
-    </script>
-    <div style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <input type="hidden" name="signedIn" disabled data-id="value">
+    <div style="position:relative;"  data-signed-up-ok>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="signedUp" disabled data-hidden data-value>
     </div>
-    <script>
-      thisNode.getNextChild("signedIn").setContentLangView(thisElement)
-    </script>
-    <div style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <input type="hidden" name="userExistsError" disabled data-id="value">
+    <div style="position:relative;" data-UserExistsError>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="userExistsError" disabled data-hidden data-value>
     </div>
-    <script>
-      thisNode.getNextChild("userExistsError").setContentLangView(thisElement)
-    </script>
-    <div style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <input type="hidden" name="pwdDoubleError" disabled data-id="value">
+    <div style="position:relative;" data-pwdDoubleError>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="pwdDoubleError" disabled data-hidden data-value>
     </div>
-    <script>
-      const {getRoot} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
-      getRoot().getNextChild("dashboard").getNextChild("changepwd").getNextChild("pwdDoubleError").setContentLangView(thisElement)
-    </script>
     <!--
     <div class="dashbuttons">
       <div style="position:relative;">
@@ -134,10 +92,3 @@
     -->
   </div>
 </form>
-<script>
-  const {signUpFormSubm} = await import(pathJoin("./client", thisAppFolder, "webuser/login"))
-  thisElement.addEventListener('submit', async function(event) {
-    event.preventDefault()
-    signUpFormSubm(thisElement)
-  })
-</script>

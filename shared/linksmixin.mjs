@@ -74,7 +74,7 @@ const linksMixin=Sup => class extends Sup {
 
   addDescendent(obj) { // It replaces previous parent if present
     this._children.push(obj)
-    obj._parent=this
+    obj._parent = this
     return obj
   }
 

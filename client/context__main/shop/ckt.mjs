@@ -1,12 +1,28 @@
 import {getRoot as getSiteText} from "../sitecontent.mjs"
 import {selectorFromAttr} from "../../frontutils.mjs" // (elm, attName, attValue)
-import {myCart} from './cart.mjs'
+//import {myCart} from './cart.mjs'
 import configValues from '../cfg/main.mjs'
 import {webuser} from '../webuser/webuser.mjs'
 import {Node} from '../nodes.mjs'
 import makeReport from '../reports.mjs'
 import {setActiveInSite} from '../activeingroup.mjs'
 import {getTemplate} from '../layouts.mjs'
+
+export async function cartToOrder(myCart){
+  webuser.getRelationship("orders").children = []
+  webuser.getRelationship("orders").addChild(new Node())
+  await webuser.getRelationship("orders").getChild().loadRequest("get my relationships")
+  for (const cartItem of myCart.getRelationship().children) {
+    webuser.getRelationship("orders").getChild().getRelationship("orderitems").addChild(new Node({quantity: cartItem.props.quantity, name: cartItem.item.props.name, price: cartItem.item.props.price}))
+  }
+}
+
+export async function toCheckOut(myCart, hideCartBox){
+  hideCartBox()
+  await cartToOrder(myCart)
+  document.getElementById("centralcontent").innerHTML=""
+  document.getElementById("centralcontent").appendChild(await cktView())
+}
 
 export async function cktView(){
   setActiveInSite(getSiteText().getNextChild("checkout"))
@@ -22,19 +38,11 @@ export async function cktView(){
   const chktOrderContainer = selectorFromAttr(cktTp, "data-chkt-order-container")
   // First we create a clone of mycart to not include modifications made at mycart.
   // We add the order to the user so it will be accesible later on
-  webuser.getRelationship("orders").children=[]
-  webuser.getRelationship("orders").addChild(new Node())
-  webuser.getRelationship("orders").getChild().loadRequest("get my relationships")
-  .then(async myOrder=>{
-    myCart.getRelationship().children.forEach(cartItem=>{
-      myOrder.getRelationship("orderitems").addChild(new Node({quantity: cartItem.props.quantity, name: cartItem.item.props.name, price: cartItem.item.props.price}))
-    })
-    debugger
-    chktOrderContainer.innerHTML = ""
-    chktOrderContainer.appendChild(await orderCartView(myOrder))
+  debugger
+  chktOrderContainer.innerHTML = ""
+  chktOrderContainer.appendChild(await orderCartView(webuser.getRelationship("orders").getChild()))
 
-    makeReport("checkout")
-  })
+  makeReport("checkout")
   /*
   document.getElementById("cartbox").style.visibility="hidden"
   //After loading myOrder now we go forward and set the container with the address, shipping and payment data
@@ -58,17 +66,20 @@ export async function cktView(){
     console.log(myOrder)
     await myOrder.loadRequest("add my tree") // it saves and loads all the data again and ids
     new Node().setView(document.getElementById("centralcontent"), "chktend")
-    //We remove the items from the cart
-    myCart.resetCartBox()
-    document.getElementById("cartbox").style.visibility="hidden"
+    //We remove the items from the cart and hide
+
+    //myCart.resetCartBox()
+    //document.getElementById("cartbox").style.visibility="hidden"
+    resetCartBox()
 	}
 
 	// setting discard button
 	
 	const discardBut=selectorFromAttr(selectorFromAttr(viewContainer, "data-but-discard-container"), "data-id", "value")
   discardBut.onclick=function(){
-    myCart.resetCartBox();
-    document.getElementById("cartbox").style.visibility="hidden"
+    //myCart.resetCartBox();
+    //document.getElementById("cartbox").style.visibility="hidden"
+    resetCartBox()
     new Node().setView(document.getElementById("centralcontent"), "showuserinfo")
   }
   */
@@ -107,16 +118,16 @@ async function itemView(orderItem){
 
       let fieldElm = selectorFromAttr(fieldTp, "data-value")
       let myValue = myNode.props[propKey]
-      if (propkey == "price")
+      if (propKey == "price")
         myValue = intToMoney(myValue)
-      fieldElm.textContent = myVaule
+      fieldElm.textContent = myValue
 
       myNode.writeProp(fieldElm, propKey)
       inputElm.value = myNode.props[propKey]
       inputElm.attributes.name.value=propKey
       inputElm.attributes.placeholder.value=propKey
       if (webadmin.isOrdersAdmin()) {
-        if (propkey == "price") {
+        if (propKey == "price") {
           setEdition("butedit", myNode, fieldTp, undefined, propKey, undefined, undefined, undefined, intToMoney)
         }
         else setEdition("butedit", myNode, fieldTp, undefined, propKey)

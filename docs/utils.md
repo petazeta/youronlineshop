@@ -7,7 +7,7 @@ There are some general purpouse tools that need special mention for being quite 
 
 ## Walk trough
 
-This tool is made to perform recursive operations relationated mainly with walk into a tree structure. The node class perform its recursive operations through its own methods of its structure but sometimes we need to performe some recursive operations not implemented for the class structure and for those situations this tool is useful.
+This tool is made to perform recursive operations relationated mainly with walk into a tree structure. The node class perform its recursive operations through its own methods of its structure but sometimes we need to perform some recursive operations not implemented for the class structure and for those situations this tool is useful.
 
 The information of this tool is at [iterables.md](iterables.md)
 

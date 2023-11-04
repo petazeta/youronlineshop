@@ -33,6 +33,6 @@ async function getTp(tp /* string or tp */) {
   return tp // tp is in DOM
 }
 
-// old
+// old just for not throwing errors in old stuff
 export class AlertMessage{}
 export {Alert}

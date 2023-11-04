@@ -624,3 +624,114 @@ async*@http://localhost:6001/client/index.mjs:3:1
 2023-10-02 18:42:45 or1ji3 : cart item operation
 2023-10-02 18:44:19 or937s : cart item operation
 2023-10-02 18:44:30 or937s : cart item operation
+2023-10-04 15:23:35 Server start
+2023-10-18 08:29:30 Server start
+2023-10-18 13:21:45 log in: productsadmin
+2023-10-19 08:30:49 Server start
+2023-10-24 19:28:07 Server start
+2023-10-26 11:01:16 Server start
+2023-10-26 15:56:51 Server start
+2023-10-26 16:01:51 log in: productsadmin
+2023-10-26 16:03:22 log in: userError
+2023-10-26 16:03:34 log in: webadmin
+2023-10-28 10:00:53 Server start
+2023-10-28 11:13:45 log in: webadmin
+2023-10-28 11:14:07 log in: productsadmin
+2023-10-28 17:27:18 Server start
+2023-10-29 08:11:06 Server start
+2023-10-29 08:11:15 t7p89f : cart item operation
+2023-10-29 08:11:17 t7p89f : cart item operation
+2023-10-29 08:13:49 t7u1a8 : cart item operation
+2023-10-29 08:18:59 t87c1e : cart item operation
+2023-10-29 08:19:31 log in: userError
+2023-10-29 08:19:36 log in: webadmin
+2023-10-29 08:21:01 log in: webadmin
+2023-10-29 08:21:02 t8b0kh : cart item operation
+2023-10-29 08:23:28 log in: pwdError
+2023-10-29 08:23:37 log in: webadmin
+2023-10-29 08:23:40 t8fcgl : cart item operation
+2023-10-29 08:25:07 log in: webadmin
+2023-10-29 08:25:14 t8ig2l : cart item operation
+2023-10-29 14:29:59 Server start
+2023-10-29 16:54:49 Server start
+2023-10-29 16:55:22 user created
+2023-10-29 16:55:59 log in: pepe
+2023-10-29 17:04:52 Server start
+2023-10-29 17:05:02 log in: pepe
+2023-10-29 17:39:25 log in: pepe
+2023-10-29 17:39:58 log in: pepe
+2023-10-29 17:40:40 log in: pepe
+2023-10-29 17:44:17 log in: pepe
+2023-10-29 17:55:49 log in: pepe
+2023-10-29 18:50:09 log in: pepe
+2023-10-29 18:51:19 log in: pepe
+2023-10-29 18:53:38 log in: pepe
+2023-10-29 18:56:45 log in: pepe
+2023-10-29 20:29:55 Server start
+2023-10-29 20:30:11 log in: pepe
+2023-10-30 17:21:32 Server start
+2023-10-30 17:22:11 log in: pepe
+2023-10-30 17:38:00 Server start
+2023-10-30 18:27:28 Server start
+2023-10-31 08:45:06 Server start
+2023-10-31 08:47:30 Server start
+2023-10-31 08:47:34 2elant : Error: Database Content Error
+    at Languages.init (http://localhost:6001/client/languages/languages.mjs:14:31)
+    at async init (http://localhost:6001/client/context__main/languages/languages.mjs:7:10)
+    at async main (http://localhost:6001/client/context__main/main.mjs:24:5)
+2023-10-31 08:53:59 Server start
+2023-10-31 08:54:52 Server start
+2023-10-31 17:16:58 Server start
+2023-10-31 17:18:45 log in: userError
+2023-10-31 17:18:57 user created
+2023-10-31 17:27:19 log in: pepe
+2023-10-31 17:28:00 log in: pepe
+2023-10-31 17:33:30 log in: pepe
+2023-10-31 17:38:50 log in: pepe
+2023-10-31 17:39:36 log in: pepe
+2023-11-03 14:45:43 Server start
+2023-11-03 14:55:41 trying to access forbiden content: /sitecontent.mjs
+2023-11-03 14:56:22 trying to access forbiden content: /lient/context__main/sitecontent.mjs
+2023-11-03 16:21:30 Server start
+2023-11-03 16:23:12 log in: pepe
+2023-11-03 18:33:58 log in: pepe
+2023-11-03 18:36:41 log in: pepe
+2023-11-03 18:38:59 log in: pepe
+2023-11-03 18:43:43 log in: pepe
+2023-11-03 18:45:05 log in: pepe
+2023-11-04 09:02:36 Server start
+2023-11-04 09:10:01 log in: pepe
+2023-11-04 09:11:13 log in: pepe
+2023-11-04 12:02:05 log in: pepe
+2023-11-04 12:02:43 log in: pepe
+2023-11-04 12:11:16 log in: pepe
+2023-11-04 12:17:33 Server start
+2023-11-04 12:25:05 Server start
+2023-11-04 12:27:07 Server start
+2023-11-04 12:27:18 trying to access forbiden content: client/includes__main/webuser/webuser.msj
+2023-11-04 12:30:52 log in: pepe
+2023-11-04 13:37:45 log in: pepe
+2023-11-04 16:02:54 Server start
+2023-11-04 16:03:32 log in: pepe
+2023-11-04 16:07:04 log in: pepe
+2023-11-04 16:09:00 Server start
+2023-11-04 16:09:11 log in: pepe
+2023-11-04 16:35:55 Server start
+2023-11-04 16:37:37 log in: pepe
+2023-11-04 16:39:40 error trying to access file: client/includes__main/webuser/webuser.msj
+2023-11-04 16:39:54 error trying to access file: client/context__main/webuser/webuser.msj
+2023-11-04 16:40:03 error trying to access file: client/contexts__main/webuser/webuser.msj
+2023-11-04 17:15:01 log in: pepe
+2023-11-04 17:15:13 log in: pwdError
+2023-11-04 17:15:20 log in: webadmin
+2023-11-04 17:25:47 log in: pepe
+2023-11-04 17:26:49 log in: pepe
+2023-11-04 17:31:39 log in: pepe
+2023-11-04 17:33:15 log in: pepe
+2023-11-04 17:33:55 log in: pepe
+2023-11-04 17:35:24 log in: pepe
+2023-11-04 17:35:50 log in: pepe
+2023-11-04 17:37:53 log in: pepe
+2023-11-04 17:38:49 log in: pepe
+2023-11-04 17:39:55 log in: pepe
+2023-11-04 17:40:48 log in: pepe

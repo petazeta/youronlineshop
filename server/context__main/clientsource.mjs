@@ -14,26 +14,31 @@ export async function fileServer(request, response) {
   let filePathName = new URL(request.url, "http://localhost").pathname
   if (filePathName == "/")
     filePathName = "/index.html"
-  if (filePathName.match(/^\/index\.html/)) {
-    filePathName = pathJoin(config.get("loader-path"),  filePathName)
-    await streamFile(filePathName, response)
-    return
+  try {
+    if (filePathName.match(/^\/index\.html/)) {
+      filePathName = pathJoin(config.get("loader-path"),  filePathName)
+      await streamFile(filePathName, response)
+      return
+    }
+    if (filePathName.match(/^\/images\//)) {
+      filePathName = pathJoin(config.get("loader-path"),  filePathName)
+      await streamFile(filePathName, response)
+      return
+    }
+    if (filePathName.match(/^\/(client|shared)\//)) {
+      // sin nada seria: filePathName=pathJoin("./",  filePathName)
+      const match = filePathName.match(/^\/(client|shared)\//)[1]
+      filePathName = filePathName.replace(match, "/")
+      if (match == "client") filePathName = pathJoin(config.get("client-path"), filePathName)
+      if (match == "shared") filePathName = pathJoin(config.get("shared-path"), filePathName)
+      await streamFile(filePathName, response)
+      return
+    }
+    else throw new Error("stream file error")
   }
-  if (filePathName.match(/^\/images\//)) {
-    filePathName = pathJoin(config.get("loader-path"),  filePathName)
-    await streamFile(filePathName, response)
-    return
+  catch(err) {
+    response.writeHead(404)
+    makeReport("error trying to access file: " + filePathName)
+    response.end()
   }
-  if (filePathName.match(/^\/(client|shared)\//)) {
-    // sin nada seria: filePathName=pathJoin("./",  filePathName)
-    const match = filePathName.match(/^\/(client|shared)\//)[1]
-    filePathName = filePathName.replace(match, "/")
-    if (match == "client") filePathName = pathJoin(config.get("client-path"), filePathName)
-    if (match == "shared") filePathName = pathJoin(config.get("shared-path"), filePathName)
-    await streamFile(filePathName, response)
-    return
-  }
-  response.writeHead(404)
-  makeReport("trying to access forbiden content: " + filePathName)
-  response.end() // bad request
 }

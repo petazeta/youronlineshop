@@ -1,5 +1,5 @@
-export function checkDataChange(relationship, data) {
-  return relationship.childTableKeys.some(key=>key!='id' && data.props[key]!=relationship.getChild().props[key]);
+export function checkDataChange(myNode, data) {
+  return myNode.parent.childTableKeys.some(key=>key!='id' && data[key]!=myNode.props[key])
 }
 
 export function checkLength(value, min, max){
@@ -9,23 +9,20 @@ export function checkLength(value, min, max){
 };
 
 export function checkValidData(data) {
-  if (!data) return false;
-  let minchar=3;
-  let maxchar=120;
-  for (const key in data.props) {
-    const value=data.props[key];
-    if (key=="id") continue;
-    if (!value ||
-    !checkLength(value, minchar, maxchar)) {
-      return {errorKey: key, minchar: minchar, maxchar: maxchar};
+  let minchar = 3
+  let maxchar = 120
+  for (const [key, value] of Object.entries(data)) {
+    if (key=="id")
+      continue
+    if (!checkLength(value, minchar, maxchar)) {
+      return new Error(`{"errorKey": "${key}", "minchar": ${minchar}, "maxchar": ${maxchar}}`)
     }
   }
-  return true;
 }
 
 export function validateEmail(email) {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
 }
 
 const detectNumber=(x)=>{

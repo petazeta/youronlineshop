@@ -3,57 +3,55 @@ Navigation utility
 
 # Intro
 
-At any single page application (SPA) the traditional navigation browser features as the navigation history: buttons for backward and forward are useless unless we would take control of them. This feature plus the active link highlight and also the pagination feature is what we would cover in this chapter.
+At any single page application (SPA) the navigation browser features, for example buttons for backward and forward, are useless unless we would take control of them. There are some DOM objects methods that will help us to develop the navigation feature.
 
-# Navigation search params
+Navigation facility has two features:
 
-The navigation search params used to set the history and to get an element from its url works for these layout elements (at the time of this writting): doc menus, categories-subcategories-products, login screen and checkout screen. For the categories and products the params should come with the full path, for example: ?category=cat_id&subcategory=subcat_id&product=product_id. This way we can know in advance the clicking events needed to get the last param element.
+- The initial search params at the entrance url that determines the page we are looking for.
 
-# Navigation History
+- The navigation states which are reachable through out the backward and forward buttons.
 
-There are these browsers navegation history features:
+# Search params
 
-- window.onpopstate = (event) => {}
-- window.history.pushState(stateElement, null, url);
+The two features shown above are working through out search params. Search params are key value pairs and determines the application history states that we can reach through out the initial search params or by the navigation buttons.
 
-The first feature is for dispatching an event when some navigator feature like backward browser button is clicked.
+We have params available for some application elements, like menus pages, categories and items and login form. Some of these, like items, need a full path to reach them because some searchs are made in steps. A path to an item would look like: "?category=cat_Id&subcategory=subcat_Id&item=item_Id"
 
-To implement this feature we would use the observable pattern. There would be an observable that would notify about browser history events. The observers to be noticed would be the nodes that would be clickable elements and that have effect at the navigation history. To set these elements we will do it dinamically when each link object that has an effect on the state will load. There is a code example of this feature below.
+Navigation states are defined by an url and search params define these urls. We can get to them through browser navigation buttons and the url search field.
 
-The pushState function allows to grab at the browser state some props that we would use as arguments for when the recovering state event happens. This can be an example of the grab state situation at the login state:
+# Browser History
 
-```
-history.pushState({url: '?login=0'}, null, '?login=0');
-```
-Managing onpopstate event example code:
+We are using these browsers navegation history features:
 
-```
-// Observable:
+- window.onpopstate = (event) => {} // Dispatching an event when some navigator feature like backward browser button is clicked
+- window.history.pushState(stateElement, null, url) // Set a browser history states
 
-const navigationObservable=new observableMixin(Object); // Object == Class {}
+# Observer pattern applyed to browser history
 
-window.onpopstate = (event) => {
-  if (!event.state) return;
-  navigationObservable.notifyObservers("history event", new URL(event.state.url, 'http://localhost'));
-};
+We are implementing navigation facility through out a observable object which we are creating specially for this facility. We will attach an observer for every reachable history state. Observer object would be the node that defines the status key value, for example, some subcategory. The node id property would be the value to check for coincidence with the url search params. There can be situations where observer has no id, for example for the login screen state. In these cases we will be searching just for a key with value equal to "true". Here it is a example url search params: "?login=true"
 
-// Observers:
+When a browser navigation action is fired the observable navigation object will notify observers and they will check if their params values match to the url params search. When params are matching, the appropiate action is being performed.
 
-// Adding observerMixin feature when needed
-const {observerMixin, observerMixinConstructorCallable} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'observermixin.js'));
-const ThisNodeClass = observerMixin(thisNode.constructor);
-Object.setPrototypeOf(thisNode, ThisNodeClass.prototype); // adding observers characteristics
-observerMixinConstructorCallable(thisNode);
+# Implementation
 
-const {navigationObservable} = await import(pathJoin('./', CLIENT_MODULES_PATH, 'navigation.js'));
+The navigation object class is defined at client/navhistory.mjs. This object is implementing two facilities: the initial navigation url search procedure and the history buttons behaviour.
 
-navigationObservable.attachObserver("history event", thisNode);
+The procedure for using this facility at rendering is as follows:
 
-thisNode.setReaction("history event", (params)=>{
-  let coincide=params.urlObject.searchParams.get("login")===0;
-  if (coincide) thisNodeButAction();
-});
-```
+The initial action would be to stablish the url states of the site. This states become available as soon as page elements are being rendered. The rendering elements that are part of some navigation history state are responsible of register its state. SetNav method helps to do so. When there there is posible to reach the state from the initial url param search then we should search for coincidences between the element search params and the browser url search params. For this we can use the initialNavSearch method.
+
+## Initial navigation url search procedure
+
+The initialNavSearch method helps to look for the corresponding action when there is a match between the inital url search and elements that have asociated a navigation state. This method should be executed everytime there is a rendering of some element that have a history state asociated.
+
+## Search params herarchy
+
+For rendering some history state pages there can be some rendering stages. 
+
+## History procedure
+
+When user gets to some page which an associated history state then it should be pushed. The pushNav method helps to do so. When the navigation buttons are pressed then an event is dispatched and the associated history state action is fired.
+
 
 # Browser search params (client routing)
 
@@ -66,7 +64,7 @@ This is the general idea, and the implementation module is at navhistory.js with
 - setHistoryState(myNode, url, butAction); // For managing popstate event. It is called for the clickable nodes that has effect at the history state at the layout loading
 - pushHistoryState(url); // Grabing the history at the browser when the user clicks a button element that take effect at the history state
 
-# Search params and history status cases
+# Search params and history states cases
 
 Categiries/items, menus/docs and login
 

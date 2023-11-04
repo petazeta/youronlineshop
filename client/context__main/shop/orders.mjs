@@ -46,7 +46,7 @@ async function shippingView(shipping){
 
 async function itemView(orderItem){
   async function setFields(myNode, fieldTpName){
-    const fieldsContainer = document.createElement("template").content
+    const fieldsContainer = document.createElement("tr")
     for (const propKey in myNode.props) {
       let fieldTp = await getTemplate(fieldTpName)
 
@@ -54,7 +54,7 @@ async function itemView(orderItem){
       let myValue = myNode.props[propKey]
       if (propkey == "price")
         myValue = intToMoney(myValue)
-      fieldElm.textContent =myVaule
+      fieldElm.textContent = myVaule
 
       myNode.writeProp(fieldElm, propKey)
       inputElm.value = myNode.props[propKey]

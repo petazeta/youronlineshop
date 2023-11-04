@@ -52,7 +52,9 @@ npm start
 
 ## Support
 
-Please write to: melchorherrera@gmail.com
+I'd like to receive a lot of comments and suggestions.
+
+For any issues please write to: melchorherrera@gmail.com
 
 
 ## Getting started
