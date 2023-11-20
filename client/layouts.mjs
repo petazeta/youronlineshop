@@ -29,7 +29,7 @@ export default class SiteLayouts {
     const tpId = new URL(layoutsUrlPath, "http://localhost").searchParams.get("tp")
     if (!tpId)
       throw new Error("no tpId")
-    if (!this.tpList.has('tp_' + tpId)) {
+    if (!this.tpList.has('tp_' + tpId)) { // For dev purpose we could skip the if statement so it loads templates from file
       await this.loadTemplates(layoutsUrlPath)
     }
     const tpElement = this.tpList.get('tp_' + tpId); // templates have "tp" prefix
@@ -46,7 +46,8 @@ export default class SiteLayouts {
     myParent.innerHTML= await makeRequest(layoutsUrlPath)
     // This iteration gets just the direct child templates (templates could have another child templates)
     while (myParent.childNodes.length > 0) {
-      if (myParent.childNodes[0].tagName=="TEMPLATE") this.tpList.set(myParent.childNodes[0].id, myParent.childNodes[0])
+      if (myParent.childNodes[0].tagName=="TEMPLATE")
+        this.tpList.set(myParent.childNodes[0].id, myParent.childNodes[0])
       myParent.removeChild(myParent.childNodes[0])
     }
     return this.tpList

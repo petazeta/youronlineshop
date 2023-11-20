@@ -21,8 +21,6 @@ export function getTemplates(){
 
 // it returns tpelement.content
 export function getTemplate(tpId){
-  if (!tpId)
-    throw new Error("no tpId")
   const mySp = new URLSearchParams()
   searchParams.get("skin") && mySp.append("skin", searchParams.get("skin"))
   searchParams.get("subskin") && mySp.append("subskin", searchParams.get("subskin"))

@@ -1,10 +1,10 @@
 <!--
   thisNode: sitetext chkout
 -->
-<div class="boxframe ordercartframe ordercart">
-  <div class="ordercartitems" data-items></div>
-  <div class="form-group ordercarttotals" data-total>
-    <span style="position:relative;" data-total-label>
+<div class="boxframe ordercartframe ordercart" data-container>
+  <div data-items class="orderitemscontainer"></div>
+  <div class="form-group ordercarttotals" data-subtotal>
+    <span style="position:relative;" data-label>
       <div data-butedit class="btmiddleright"></div>
       <span class="form-label" data-value></span>
       <script>
@@ -18,7 +18,7 @@
         }
       </script>
     </span>
-    <span data-total-value></span>
+    <span data-subtotal-value></span>
     <script>
       const {sumTotal} = await import('./' + CLIENT_MODULES_PATH + 'cart.mjs')
       const {intToMoney} = await import('./' + CLIENT_MODULES_PATH + 'money.mjs');

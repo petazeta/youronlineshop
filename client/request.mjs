@@ -136,6 +136,9 @@ reqMethods.set("delete my tree table content", ()=>"delete")
 reqReduc.set("delete myself", reqReduc.get("delete my tree"))
 reqMethods.set("delete myself", ()=>"delete")
 
+// ***Por que no añadir una funcion default para parametros y asi seguir el mismo patron:
+// reqReduc.set("default", myNode=>packing(myNode.clone()), params=>params)
+
 reqReduc.set("default", myNode=>packing(myNode.clone()))
 reqLoaders.set("default", (myNode, result)=>myNode.load(result))
 reqMethods.set("default", ()=>"post")

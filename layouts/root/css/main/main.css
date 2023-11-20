@@ -447,61 +447,7 @@ nav ul{
 		font-size: 0.9em;
 	}
 }
-.useraddressbox {
-	display:grid;
-	grid-template-columns: auto auto;
-	gap: 1em;
-	margin: 1em;
-}
-@media screen and (max-width: 400px){
-	.useraddressbox {
-		grid-template-columns: auto;
-	}
-}
-.checkout h3{
-  margin-bottom: 0px;
-}
-#paymentcontainer{
-	margin: 1em auto;
-	display: inline-flex;
-	flex-flow: column;
-}
-#shippingcontainer{
-	margin: 0.2em auto;
-}
-#shippingcontainer td{
-	padding-top: 0.2em;
-	padding-bottom: 0.2em;
-}
-.ordercartframe, .orderframe{
-	display: inline-block;
-	margin: 1em;
-}
-.ordercartitems, .orderitems {
-	display:grid;
-	grid-template-columns:1fr 4fr 1fr;
-	row-gap: 0.5em;
-	padding: 0.5em;
-}
-.ordercarttotals, .ordertotals {
-	border-top:1px solid #666;
-	padding-top: 0.5em;
-    text-align: right;
-    padding-right: 2.2em;
-}
-.shippingitem{
-	padding: 0.5em;
-	text-align:right;
-	padding-right:2.2em
-}
-.paybutton {
-	align-self: center;
-}
-.ordershipping {
-	display: inline-flex;
-	flex-flow: row;
-	margin-left:auto;
-}
+
 .dashboard {
 	display: flex;
 	flex-flow: column;

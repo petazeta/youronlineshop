@@ -1,3 +1,6 @@
+/*
+Cambiar al formato Map, como en server, y olvidarse de la carpeta y de main.
+*/
 export default {
   languagesOn: true, // true or false if deactivated
   chktuserdata_On: true, // if false skip user data and address insertion

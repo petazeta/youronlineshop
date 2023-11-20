@@ -1,5 +1,5 @@
 <tr style="position:relative;">
-  <td>
+  <td data-select>
     <input type="radio" name="shipping">
     <script>
       function setOrderShipping(){
@@ -25,9 +25,9 @@
   </td>
   <td style="padding-left:1em; padding-right:2.2em;text-align:left;">
     <details>
-      <summary style="position:relative; display: inline-block;">
-        <div data-id="butedit" class="btmiddleright"></div>
-        <span></span>
+      <summary style="position:relative; display: inline-block;" data-name>
+        <div data-butedit class="btmiddleright"></div>
+        <span data-value></span>
         <script>
           const thisNodeData=thisNode.getRelationship("shippingtypesdata").getChild();
           thisNodeData.writeProp(thisElement, "name");
@@ -38,9 +38,9 @@
           }
         </script>
       </summary>
-      <span style="position:relative;">
-        <div data-id="butedit" class="btmiddleright"></div>
-        <span class="explanation"></span>
+      <span style="position:relative;" data-description>
+        <div data-butedit class="btmiddleright"></div>
+        <span class="explanation" data-value></span>
         <script>
           const thisNodeData=thisNode.getRelationship("shippingtypesdata").getChild();
           thisNodeData.writeProp(thisElement, "description");
@@ -54,9 +54,9 @@
     </details>
   </td>
   <td style="padding-right:2em;text-align:right;">
-    <span style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <span></span>
+    <span style="position:relative;" data-delay-hours>
+      <div data-butedit class="btmiddleright"></div>
+      <span data-value></span>
       <script>
         thisNode.writeProp(thisElement, "delay_hours");
         if (webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {
@@ -66,16 +66,19 @@
         }
       </script>
     </span>
-    <span></span>
+    <span style="position:relative;" data-hours>
+      <div data-butedit class="btmiddleright"></div>
+      <span data-value></span>
+    </span>
     <script>
       const {getSiteText} = await import('./' + CLIENT_MODULES_PATH + 'sitecontent.mjs');
       getSiteText().getNextChild("hours").getRelationship("siteelementsdata").getChild().writeProp(thisElement);
     </script>
   </td>
   <td style="padding-right:2em;text-align: right;">
-    <span style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <span></span>
+    <span style="position:relative;" data-price>
+      <div data-butedit class="btmiddleright"></div>
+      <span data-value></span>
       <script>
         const {intToMoney, moneyToInt} = await import('./' + CLIENT_MODULES_PATH + 'money.mjs');
         thisElement.textContent=intToMoney(thisNode.props.price);
@@ -89,8 +92,8 @@
         }
       </script>
     </span>
-    <div data-id="admnbuts" class="btmiddleright">
-      <div class="admnbtsgrid"></div>
+    <div class="btmiddleright">
+      <div class="admnbtsgrid" data-admnbuts></div>
     </div>
     <script>
       if (webuser.isSystemAdmin() || webuser.isOrdersAdmin()) {

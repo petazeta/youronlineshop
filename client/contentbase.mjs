@@ -14,7 +14,8 @@ export class Content{
     if (!this.db_lang_collection) {
       this.treeRoot=(await new Linker(this.db_collection).loadRequest("get my tree", {deepLevel: 2})).getChild() // level 2: needed for extraParent
       //if no root means that table domelements doesn't exist or has no elements
-      if (!this.treeRoot) throw new Error('Database Content Error'); // esto convendría explicarlo
+      if (!this.treeRoot)
+        throw new Error('Database Content Error'); // esto convendría explicarlo
       await this.loadInitContent(this.treeRoot, getLangParent(this.treeRoot))
     }
     else {

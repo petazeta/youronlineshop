@@ -28,6 +28,11 @@ specific design
 	background-color: palegreen;
 	box-shadow: 5px 5px 6px 1px rgb(158 171 220 / 50%);
 }
+.warningmsg {
+	border-color: darkgrey;
+	background-color: rgb(250, 209, 99);
+	box-shadow: 5px 5px 6px 1px rgb(158 171 220 / 50%);
+}
 .dialogbox {
 	border-color: darkgrey;
 	background-color: aliceblue;

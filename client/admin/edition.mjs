@@ -23,9 +23,11 @@ export function startEdition(myNode, editElement, butsContainer, thisProperty, t
   const setProp=()=>{
     // src, href, value (general rule is getAttribute but sometimes it doesn't work)
     const getElmValue = (myElement, thisAttribute) => myElement.hasAttribute(thisAttribute) ? myElement.getAttribute(thisAttribute) : myElement[thisAttribute]
-    let myValue=getElmValue(editElement, thisAttribute)
-    if (dataProcessor) myValue=dataProcessor(myValue)
-    if (myValue==='') myValue=null
+    let myValue = getElmValue(editElement, thisAttribute)
+    if (dataProcessor)
+      myValue = dataProcessor(myValue)
+    if (myValue==='')
+      myValue = null
     if (myNode.props[thisProperty] != myValue) {
       changeProperty(myNode, thisProperty, myValue)
       .then(newValue=>{
@@ -37,7 +39,7 @@ export function startEdition(myNode, editElement, butsContainer, thisProperty, t
         }
       })
       .catch(myE=>{
-        editElement[thisAttribute]=myNode.props[thisProperty] // reset editElement changes
+        editElement[thisAttribute] = myNode.props[thisProperty] // reset editElement changes
         throw(myE)
       })
     }
@@ -67,7 +69,7 @@ export function startEdition(myNode, editElement, butsContainer, thisProperty, t
 async function changeProperty(myNode, thisProperty, myValue){
   console.log("change in content", myNode.props[thisProperty], myValue)
   await myNode.request("edit my props", {values:{[thisProperty]: myValue}})
-  myNode.props[thisProperty]=myValue
+  myNode.props[thisProperty] = myValue
   myNode.dispatchEvent("changeProperty", thisProperty)
   return myValue
 }

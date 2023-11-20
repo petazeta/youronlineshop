@@ -67,6 +67,8 @@ exportFunc.set("db", async ()=>{
   db.push(await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my tree"));
   db.push(await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my tree"));
   
+// El uso de request esta desfasado, actualmente no se utiliza request para devolver la version reducida del nodo
+// creo que se usa prepareRequest, prepareMultiRequest
   return {"languages": await getLanguagesRoot().request("add my tree", null, true), "tree": await Node.requestMulti("add my tree", db, null, true)};
 });
 

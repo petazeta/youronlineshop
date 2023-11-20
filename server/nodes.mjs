@@ -508,7 +508,8 @@ const dataModelMixin=Sup => class extends Sup {
     }
     return this;
   }
-  
+// Creo que podríamos eliminar la necesidad de usar dbInsertMyTreeTableContent y reemplazarla por un algoritmo que use walkthrough para seleccionar en el arbol lo que
+// es de esa tabla
   async dbInsertMyTreeTableContent(table, level=null, extraParents=null) {
     if (level===0) return true;
     if (level) level--;

@@ -222,9 +222,29 @@ export function setDbSchema(dbLink) {
       vars: String,
       template: String,
       active: Number,
+      parentPaymentTypes: {
+        type: SchemaTypes.ObjectId,
+        ref: "PaymentTypes",
+      },
       positionPaymentTypes: {
         type: Number,
         positionRef: "PaymentTypes",
+      }
+    })
+  );
+
+  dbLink.model("ShippingTypes",
+    new Schema({
+      image: String,
+      delay_hours: Number,
+      price: Number,
+      parentShippingTypes: {
+        type: SchemaTypes.ObjectId,
+        ref: "ShippingTypes",
+      },
+      positionShippingTypes: {
+        type: Number,
+        positionRef: "ShippingTypes",
       }
     })
   );
@@ -240,18 +260,6 @@ export function setDbSchema(dbLink) {
       parentLanguages: {
         type: SchemaTypes.ObjectId,
         ref: "Languages",
-      }
-    })
-  );
-    
-  dbLink.model("ShippingTypes",
-    new Schema({
-      image: String,
-      delay_hours: Number,
-      price: Number,
-      positionShippingTypes: {
-        type: Number,
-        positionRef: "ShippingTypes",
       }
     })
   );

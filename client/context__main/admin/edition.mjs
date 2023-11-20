@@ -25,7 +25,7 @@ import {getTemplate} from '../layouts.mjs'
     const editTpName = image=="code" ? "buteditcode" : "butedit"
 */
 export async function setEdition(langDataNode, elmView, editButtonTpName="butedit", editAttribute="textContent", editProp, dataIdValue="value", dataIdButContainer="butedit", inlineEdition=true, dataProcessor){
-  const editElement=selectorFromAttr(elmView, "data-" + dataIdValue)
+  const editElement = selectorFromAttr(elmView, "data-" + dataIdValue)
   const butEditContainer=selectorFromAttr(elmView, "data-" + dataIdButContainer)
   const butsEditContainer=selectorFromAttr(elmView, "data-edit-buts") || butEditContainer
 
@@ -35,7 +35,8 @@ export async function setEdition(langDataNode, elmView, editButtonTpName="butedi
     startEdition(langDataNode, editElement, butsEditContainer, editProp, editAttribute, inlineEdition, dataProcessor, elmView)
   )
   // this is to set element to visible for edition purpouse. Edtion element sometimes is hidden, usually when it is a not displayed element (for example some alert msg) that is turn out to be displayed as an input for edition purpouses
-  if (!editElement.hasAttribute("data-toggle") && editElement.style.display=="none") editElement.style.display="unset"
+  if (!editElement.hasAttribute("data-toggle") && editElement.style.display=="none")
+    editElement.style.display="unset"
   //butEditContainer.innerHTML="" // ??????? es realmente necesario?
   butEditContainer.appendChild(btEditTp)
 }

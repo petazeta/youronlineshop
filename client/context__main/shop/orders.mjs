@@ -1,4 +1,15 @@
-// setEdition, webadmin, intToMoney, getSiteText, sumTotal (cart), Linker
+import {getRoot as getSiteText} from "../sitecontent.mjs"
+import {selectorFromAttr, visibleOnMouseOver} from "../../frontutils.mjs" // (elm, attName, attValue)
+import configValues from '../cfg/main.mjs'
+import {webuser} from '../webuser/webuser.mjs'
+import {Node} from '../nodes.mjs'
+import makeReport from '../reports.mjs'
+import {setActiveInSite} from '../activeingroup.mjs'
+import {getTemplate} from '../layouts.mjs'
+import {intToMoney} from '../money.mjs'
+import {myCart, hideCartBox, sumTotal} from "./cart.mjs"
+import {getLangBranch} from '../languages/languages.mjs'
+import {userView} from "../webuser/userdata.mjs"
 
 async function orderView(order){
   // esto se puede reformar para que lo haga mediante una <table> que sería mas apropiado
@@ -30,13 +41,7 @@ async function orderView(order){
     }
   }
 }
-function setTotal(order, totView){
-  const myorderpay=order.getRelationship("orderpaymenttypes").getChild()
-  if (myorderpay) selectorFromAttr(totView, "data-pyment-type").textContent=`(${myorderpay.props.name})`
-  const totalLabel = getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("total")
-  totalLabel.setContentView(selectorFromAttr(totView, "data-total-label"))
-  selectorFromAttr(totView, "data-total-value").textContent = intToMoney(sumTotal(order.getRelationship("orderitems").children) + sumTotal(order.getRelationship("ordershippingtypes").children))
-}
+
 async function shippingView(shipping){
   const shipTp = await getTemplate("ordershipping")
   selectorFromAttr(shipTp, "data-name").textContent=shipping.props.name
@@ -44,35 +49,32 @@ async function shippingView(shipping){
   return shipTp
 }
 
-async function itemView(orderItem){
-  async function setFields(myNode, fieldTpName){
-    const fieldsContainer = document.createElement("tr")
-    for (const propKey in myNode.props) {
-      let fieldTp = await getTemplate(fieldTpName)
-
-      let fieldElm = selectorFromAttr(fieldTp, "data-value")
-      let myValue = myNode.props[propKey]
-      if (propkey == "price")
-        myValue = intToMoney(myValue)
-      fieldElm.textContent = myVaule
-
-      myNode.writeProp(fieldElm, propKey)
-      inputElm.value = myNode.props[propKey]
-      inputElm.attributes.name.value=propKey
-      inputElm.attributes.placeholder.value=propKey
-      if (webadmin.isOrdersAdmin()) {
-        if (propkey == "price") {
-          setEdition("butedit", myNode, fieldTp, undefined, propKey, undefined, undefined, undefined, intToMoney)
-        }
-        else setEdition("butedit", myNode, fieldTp, undefined, propKey)
+async function itemView(orderItem, fieldsContainer, fieldElementSample) {
+  orderItem.firstElement = fieldsContainer
+  for (const propKey in orderItem.props) {
+    let myField = fieldElementSample.cloneNode(true)
+    let fieldElm = selectorFromAttr(myField, "data-value")
+    let myValue = orderItem.props[propKey]
+    if (propKey == "price")
+      myValue = intToMoney(myValue)
+    fieldElm.textContent = myValue
+    if (webuser.isOrdersAdmin()) {
+      const {setEdition} = await import('../admin/edition.mjs')
+      if (propKey == "price") {
+        // ** no va bien, fijarse en setPriceEdition de categories.mjs
+        await setEdition(orderItem, myField, undefined, propKey, undefined, undefined, undefined, intToMoney)
       }
-      // si cambia el precio hay que cambiar el total
-      fieldsContainer.appendChild(inputTp)
+      else {
+        await setEdition(orderItem, myField, undefined, propKey)
+      }
+      visibleOnMouseOver(selectorFromAttr(myField, "data-butedit"), myField) // on mouse over edition button visibility
     }
-    return fieldsContainer
+    // si cambia el precio hay que cambiar el total
+    fieldsContainer.appendChild(myField)
   }
-  return setFields(orderItem, "orderitemcolumn")
+  return fieldsContainer
 }
+
 // fildterOrders: "archived"
 async function ordersList(filterorders="none"){
   const ordersviewTp = await getTemplate("userorders")
@@ -110,7 +112,7 @@ async function ordersList(filterorders="none"){
     if (!webuser.getRelationship("usersdata").getChild()) await webuser.getRelationship("usersdata").loadRequest("get my children") // to show the user name
     
   }
-  ordersList.forEach(order => listBody.appendChild(await orderLineView(order, ordersList))
+  ordersList.forEach(async order => listBody.appendChild(await orderLineView(order, ordersList)))
 
   //------
   
@@ -182,11 +184,19 @@ async function ordersView(){
         }
         thisElement.form.elements.ordersStatus[1].innerHTML=thisElement.value;
 
-  .getNextChild("btShowOrd")
+  //.getNextChild("btShowOrd")
   await setUserData(selectorFromAttr(userviewTp, "data-user-data"))
   getSiteText().getNextChild("not located").getNextChild("save").setContentView(selectorFromAttr(userviewTp, "data-saver"))
   getSiteText().getNextChild("userdataform").getNextChild("fieldCharError").setContentLangView(selectorFromAttr(userviewTp, "data-fieldcharerror"))
   getSiteText().getNextChild("userdataform").getNextChild("emailCharError").setContentLangView(selectorFromAttr(userviewTp, "data-fieldemailerror"))
   await setUserDataSaver(userviewTp)
   return userviewTp
+}
+
+function setTotal(order, totView){
+  const myorderpay = order.getRelationship("orderpaymenttypes").getChild()
+  if (myorderpay)
+    selectorFromAttr(totView, "data-pyment-type").textContent = `(${myorderpay.props.name})`
+  getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("total").setContentView(selectorFromAttr(totView, "data-total-label"))
+  selectorFromAttr(totView, "data-total-value").textContent = intToMoney(sumTotal(order.getRelationship("orderitems").children) + sumTotal(order.getRelationship("ordershippingtypes").children))
 }

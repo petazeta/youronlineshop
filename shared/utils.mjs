@@ -229,12 +229,17 @@ export function replaceLangData(targetTree, sourceTree){
 */
 
 // split the languages data in one array of langdata for each language - Maybe should be revised
+// En lugar de copiar todo el tree original podriamos hacerlo mejor haciendo una función específica par el walkthrough en lugar de usar arrayFromTree
+// esta funcion haría la seleccion del lenguaje, sería más directo que copiar todo el lenguaje separandolo en nodos y luego quitar de los nodos
+// linker que coincidan y todo eso
+// directamente se haria todo con el walkthrough de una vez
 export function splitLangTree(origTree, totalLang){
-  if (totalLang<2) return [origTree];
-  const origSerial=arrayFromTree(origTree);
-  const singleTrees=new Array(totalLang).fill(undefined).map(()=>origTree.clone());
+  if (totalLang<2)
+    return [origTree]
+  const origSerial = arrayFromTree(origTree)
+  const singleTrees = new Array(totalLang).fill().map(()=>origTree.clone()) // Array(N) alone doesn't work, that's why we need to call fill()
   singleTrees.forEach((singleTree, lang_i)=>{
-    const langSerial=arrayFromTree(singleTree);
+    const langSerial = arrayFromTree(singleTree)
     origSerial.forEach((orig, i)=>{
       if (BasicNode.detectLinker(orig)) {
         const isLangContent = orig.sysChildTableKeysInfo && orig.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
@@ -242,8 +247,8 @@ export function splitLangTree(origTree, totalLang){
         if (isLangContent) langSerial[i].children=[orig.children[lang_i]];
       }
     })
-  });
-  return singleTrees;
+  })
+  return singleTrees
 }
 
 export function getChildrenArray(myNode) {

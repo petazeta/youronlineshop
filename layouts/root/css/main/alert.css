@@ -8,19 +8,12 @@
   max-width: 90%;
   z-index:100;
 }
-.alertmsg, .dialogbox  {
+.alertmsg, .dialogbox, .warningmsg {
 	border: 1px solid;
 	padding: 0.5rem;
 	text-align: center;
 	border-radius: 3px;
 }
-.greenalert{
-	background-color: yellowgreen;
-}
-.redalert{
-	background-color: rgb(250, 209, 99);
-}
-
 div.closeimage {
   background: url(images/closeicon.svg) no-repeat;
   background-size: contain;

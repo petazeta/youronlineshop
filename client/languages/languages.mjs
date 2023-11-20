@@ -4,15 +4,18 @@ export default class Languages{
   constructor(){
     this.currentLanguage
     this.treeRoot
-    this.db_collection='TABLE_LANGUAGES'
+    this.db_collection = 'TABLE_LANGUAGES'
   }
 
   async init(Linker){
     // It loads languages and its relationships (we would need these relationships for the getLangParent method performance)
-    this.treeRoot=(await new Linker(this.db_collection).loadRequest("get my tree", {deepLevel: 4})).getChild()
+    this.treeRoot = (await new Linker(this.db_collection).loadRequest("get my tree", {deepLevel: 4})).getChild()
     //if no root means that table domelements doesn't exist or has no elements
-    if (!this.treeRoot) throw new Error('Database Content Error'); // esto convendría explicarlo
+    if (!this.treeRoot)
+      throw new Error('Database Content Error')
     // add observer and observable prototype
+    // Sería más adecuado en este caso hacer esto directamente al llamar al constructor en línea 12:
+    // new observerMixin(observableMixin(Linker(...
     Object.setPrototypeOf(this.treeRoot, observerMixin(observableMixin(this.treeRoot.constructor)).prototype) // adding methods
     observerMixin(Object).prototype.initObserver.call(this.treeRoot)
     observableMixin(Object).prototype.initObservable.call(this.treeRoot)

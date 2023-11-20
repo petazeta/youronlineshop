@@ -1,17 +1,20 @@
 import {unpacking, arrayUnpacking, packing} from "../shared/utils.mjs"
 import {Readable} from "stream"
+import {populateDb} from "./import.mjs"
 
 export class Responses{
-  constructor(Node, Linker, User, isAllowedToRead, isAllowedToInsert, isAllowedToModify, makeReport){
+  constructor(Node, Linker, User, isAllowedToRead, isAllowedToInsert, isAllowedToModify, makeReport, importPath){
     this.responseAuth = new Map()
     this.responseContentType = new Map()
 
     // this.responseAuth: get a request response.
 
     this.responseAuth.set("populate database", async (response)=>{
-      const {default: populateDb} = await import("./import.mjs")
-      return await populateDb()
-    }) // mejor llamarlo pupulateDb
+      const {total} = await Node.dbGateway.elementsFromTable({props: {childTableName: "TABLE_LANGUAGES"}})
+      if (total > 0)
+        throw new Error('The database is not empty')
+      return await populateDb(Node, importPath)
+    })
 
     this.responseAuth.set("report", async (parameters)=>{
       makeReport(parameters.repData)

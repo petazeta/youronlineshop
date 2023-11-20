@@ -83,7 +83,7 @@ export async function app(request, response) {
       response.end()
       request.destroy()
       throw err // development mode
-      makeReport(err) // production mode
+      // makeReport(err) // production mode
     }
   }
 }

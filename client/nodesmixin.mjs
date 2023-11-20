@@ -205,8 +205,9 @@ export const dataViewMixin=Sup => class extends Sup {
 
     //Write the new value
     if (!attribute) {
-      if (container.tagName=="INPUT") container.value=value;
-      else container.innerHTML=value;
+      if (container.tagName=="INPUT")
+        container.value = value
+      else container.innerHTML = value
     }
     else container.hasAttribute(attribute) ? container.setAttribute(attribute, value) : container[attribute]=value;
 

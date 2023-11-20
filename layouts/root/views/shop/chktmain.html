@@ -5,47 +5,35 @@
 
   showing order data and options
 -->
-<div class="checkout">
-  <div style="text-align:center;">
-    <div class="msgbox" style="position:relative;" data-ckt-tit>
-      <div data-butedit class="btmiddleright"></div>
-      <span data-value></span>
+<div data-container>
+  <div class="checkout">
+    <div style="text-align:center;">
+      <div class="msgbox" style="position:relative;" data-ckt-tit>
+        <div data-butedit class="btmiddleright"></div>
+        <span data-value></span>
+      </div>
+      <div style="position:relative;" data-order-tit>
+        <div data-butedit class="btmiddleright"></div>
+        <h3 data-value></h3>
+      </div>
+      <div data-chkt-order-container></div>
     </div>
-    <div style="position:relative;" data-order-tit>
-      <div data-butedit class="btmiddleright"></div>
-      <h3 data-value></h3>
+    <div data-user-data-container></div>
+    <div>
+      <div class="flexjoin" data-shipping-and-payment-container></div>
     </div>
-    <div data-chkt-order-container></div>
   </div>
-  <div data-user-data-container></div>
-  <div>
-    <div class="flexjoin" data-shipping-and-payment-container></div>
-  </div>
-</div>
-<div style="margin-top:1.5em;">
-  <!-- Checkout Buttons -->
-  <div class="dashbuttons" data-but-confirm-container>
-    <div style="position:relative;">
-      <div data-id="butedit" class="btmiddleright"></div>
-      <button type="button" class="btn" data-id="value"></button>
+  <div style="margin-top:1.5em;">
+    <!-- Checkout Buttons -->
+    <div class="dashbuttons">
+      <div style="position:relative;" data-confirm>
+        <div data-butedit class="btmiddleright"></div>
+        <button type="button" class="btn" data-value></button>
+      </div>
+      <div style="position:relative;" data-discard>
+        <div data-butedit class="btmiddleright"></div>
+        <button type="button" class="btn" data-value></button>
+      </div>
     </div>
-    <script>
-      // css wrapper no inline??
-      const {getRoot: getSiteText} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
-      getSiteText().getNextChild("checkout").getNextChild("confirmButLabel").setContentLangView(thisElement)
-    </script>
-    <div style="position:relative;" data-but-discard-container>
-      <div data-id="butedit" class="btmiddleright"></div>
-      <button type="button" class="btn" data-id="value"></button>
-    </div>
-    <script>
-      // css wrapper no inline??
-      const {getRoot: getSiteText} = await import(pathJoin("./client", thisAppFolder, "sitecontent.mjs"))
-      getSiteText().getNextChild("checkout").getNextChild("discardButLabel").setContentLangView(thisElement)
-    </script>
   </div>
 </div>
-<script>
-  const {setChktmainView} = await import(pathJoin("./client", thisAppFolder, "shop/ckt.mjs"))
-  setChktmainView(thisElement)
-</script>

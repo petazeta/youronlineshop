@@ -13,6 +13,8 @@ This software belongs to a bigger software project product which is still not fi
 
 At the current stage of the sofware we are trying to produce a documentation that could be used like a guide for any developer. Reading and understanding this documentation is the best way to understand the software which is following an exclusive design paradigm.
 
+There is also a [development guide](devguide.md). 
+
 There are three pilars that holds the most important software implemention, these are:
 
 - [Linker-web System](linker.md)

@@ -1,19 +1,18 @@
-<div class="alert dialogbox">
-  <div>
-    <h1 style="font-size:1.5em" style="display:block;">
-      <p>No Database Tables!</p>
-    </h1>
-  </div>
-  <div style="padding:1em;">
-    <div style="padding:1em;">
-      <template>
-        <div class="alert">
-          <p><b>Populating database ... It could take some time, please be patient.</b></p>
-          <div style="text-align:center"><div class="circleloader"></div></div>
-        </div>
-      </template>
-      <button class="btn" type="button" style="padding:1em;">Populate Database with Initial data</button>
-      <script>
+import {selectorFromAttr} from "../frontutils.mjs"
+import {getTemplate} from "./layouts.mjs"
+import {Node} from './nodes.mjs'
+
+export async function dbPopView() {
+  const mainTp = await getTemplate("dbpop")
+  const container = selectorFromAttr(mainTp, "data-container")
+  selectorFromAttr(container, "data-button").addEventListener("click", async()=>{
+    document.createElement("alert-element").showAlert(selectorFromAttr(container, "data-alert"))
+    if (!await Node.makeRequest("populate database"))
+      return document.createElement("alert-element").showMsg("Error populating database")
+  })
+  return mainTp
+  /*
+
         thisElement.addEventListener("click", async ()=>{
           const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.mjs');
           thisNode.setView(document.body, thisElement.previousElementSibling);
@@ -35,7 +34,5 @@
           // Este texto mejor que lo tome de la base de datos
           new AlertMessage("<BR/>Database Populated saccesfully.<BR/><BR/><B>Please Change Administration Passwords.</B><BR/><BR/>", 6000).showAlert();
         });
-      </script>
-    </div>
-  </div>
-</div>
+        */
+}

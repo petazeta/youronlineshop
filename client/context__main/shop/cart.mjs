@@ -1,4 +1,4 @@
-import {cartMixin} from '../../shop/cartmixin.mjs'
+import {cartMixin, sumTotal} from '../../shop/cartmixin.mjs'
 import {Node} from '../nodes.mjs'
 import {webuser} from '../webuser/webuser.mjs'
 import {getRoot as getSiteText} from "../sitecontent.mjs"
@@ -6,8 +6,8 @@ import {selectorFromAttr} from "../../frontutils.mjs" // (elm, attName, attValue
 import {getLangBranch} from '../languages/languages.mjs'
 import {getTemplate} from '../layouts.mjs'
 import makeReport from '../reports.mjs'
-import {toCheckOut} from "./ckt.mjs"
 
+export {sumTotal}
 const Cart = cartMixin(Node)
 export const myCart = new Cart()
 
@@ -31,8 +31,8 @@ export async function cartBoxView(cartBoxContainer) {
     hideCartBox(cartBoxContainer)
   })
   await displayItemList(cbTp)
-  setCkOutBtn(selectorFromAttr(cbTp, "data-checkoutcontainer"))
-  setCkOutDiscardBtn(selectorFromAttr(cbTp, "data-discardcontainer"))
+  setCkOutBtn(selectorFromAttr(cbTp, "data-checkoutcontainer"), cartBoxContainer)
+  setCkOutDiscardBtn(selectorFromAttr(cbTp, "data-discardcontainer"), cartBoxContainer)
   return cbTp
 }
 export function addItem(item, quantity) {
@@ -45,70 +45,44 @@ export function addItem(item, quantity) {
   makeReport("cart item operation")
 }
 // Helpers
-function refreshCartBox(cartBoxContainer){
-  displayItemList(cartBoxContainer)
-  showCartBox(cartBoxContainer)
-}
-function resetCartBox(cartBoxContainer){
-  myCart.getRelationship().children = []
-  displayItemList(cartBoxContainer)
-}
-function hideCartBox(cartBoxContainer){
-  cartBoxContainer.classList.remove("appear")
-}
-function showCartBox(cartBoxContainer){
-  cartBoxContainer.classList.add("appear")
-}
-function toggleCartBox(cartBoxContainer){
-  cartBoxContainer.classList.toggle("appear")
-}
 
-function setCkOutBtn(ckOutContainer){
+function setCkOutBtn(ckOutContainer, cartBoxContainer){
   getSiteText().getNextChild("cartbox").getNextChild("ckouttt").setContentView(ckOutContainer, false)
   ckOutContainer.querySelector("button").addEventListener("click", async ev=>{
     ev.preventDefault()
-    const cartBoxContainer = document.getElementById("cartbox")
     if (myCart.getRelationship().children.length==0) {
       document.createElement("alert-element").showMsg(getLangBranch(getSiteText().getNextChild("cartbox").getNextChild("emptyCart")).getChild().props.value, 3000)
       return
     }
-    hideCartBox(cartBoxContainer)
+    hideCartBox(document.getElementById("cartbox"))
     if (!webuser.props.id) {
       const {loginFormView} = await import("../webuser/login.mjs")
       const {rmBoxView} = await import("../../rmbox.mjs")
       const loginFrame = await getTemplate("loginframe")
-      selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView(), selectorFromAttr(loginFrame, "data-container")))
+      selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView("checkout"), selectorFromAttr(loginFrame, "data-container")))
       document.body.appendChild(loginFrame)
       return
     }
-    await cartToCheckOut()
+    const {toCheckOut} = await import("./ckt.mjs")
+    await toCheckOut(cartBoxContainer)
   })
 }
-export async function cartToCheckOut(){
-  if (myCart.getRelationship().children.length == 0)
-    return
-  await toCheckOut(myCart, ()=>hideCartBox(cartBoxContainer))
-  return true
-}
-function setCkOutDiscardBtn(ckOutDiscardContainer){
-  getSiteText().getNextChild("cartbox").getNextChild("discardtt").setContentView(ckOutDiscardContainer, false)
-  ckOutDiscardContainer.querySelector("button").onclick = function(){  
-    myCart.getRelationship().children = []
-    refreshCartBox()
-  }
+function setCkOutDiscardBtn(cktDiscardContainer, cartBoxContainer){
+  getSiteText().getNextChild("cartbox").getNextChild("discardtt").setContentView(cktDiscardContainer, false)
+  cktDiscardContainer.querySelector("button").onclick = ()=>resetCartBox(cartBoxContainer)
 }
 function write(myNode, viewContainer, propKey, dataId="value", attrKey) {
   getLangBranch(myNode).getChild().writeProp(selectorFromAttr(viewContainer, "data-" + dataId), propKey, attrKey)
 }
-async function displayItemList(viewContainer) {
-  const itemListContainer = selectorFromAttr(viewContainer, "data-itemlistcontainer")
+async function displayItemList(cartBoxContainer) {
+  const itemListContainer = selectorFromAttr(cartBoxContainer, "data-itemlistcontainer")
   myCart.getRelationship().childContainer = itemListContainer
   itemListContainer.innerHTML = ""
   for (const itemList of myCart.getRelationship().children) {
-    itemListContainer.appendChild(await itemListView(itemList))
+    itemListContainer.appendChild(await itemListView(itemList, cartBoxContainer))
   }
 }
-async function itemListView(itemList) {
+async function itemListView(itemList, cartBoxContainer) {
   const itemListTp = await getTemplate("itemlist") // everytime a new tp is created
   const itemListContainer = selectorFromAttr(itemListTp, "data-container")
   itemList.firstElement = itemListContainer
@@ -117,7 +91,7 @@ async function itemListView(itemList) {
   qttyContainer.addEventListener("click", (ev)=>{
     ev.preventDefault()
     myCart.addItem(itemList.item, -itemList.props.quantity)
-    refreshCartBox()
+    refreshCartBox(cartBoxContainer)
   })
   qttyContainer.onmouseover = function(){
     this.textContent = "x"
@@ -129,4 +103,21 @@ async function itemListView(itemList) {
   }
   write(itemList.item, itemListContainer, "name")
   return itemListTp
+}
+function refreshCartBox(cartBoxContainer){
+  displayItemList(cartBoxContainer)
+  showCartBox(cartBoxContainer)
+}
+function resetCartBox(cartBoxContainer){
+  myCart.getRelationship().children = []
+  displayItemList(cartBoxContainer)
+}
+export function hideCartBox(cartBoxContainer){
+  cartBoxContainer.classList.remove("appear")
+}
+function showCartBox(cartBoxContainer){
+  cartBoxContainer.classList.add("appear")
+}
+function toggleCartBox(cartBoxContainer){
+  cartBoxContainer.classList.toggle("appear")
 }

@@ -22,6 +22,7 @@ import makeReport from "./reports.mjs"
 import {Responses} from "../responses.mjs"
 import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from "../safety.mjs"
 
+
 export async function respond(request, response) {
   //const [hostname, port] = request.headers.host.split(":")
   const enviroment = enviroments.get(request.headers.host)
@@ -46,7 +47,7 @@ export async function respond(request, response) {
   const Linker = nodeSettingsMixin(nodesConstructorsMixin(ProtoLinker))
   const User = userModelMixin(userMixin(Node))
 
-  const responses = new Responses(Node, Linker, User, isAllowedToRead, isAllowedToInsert, isAllowedToModify, makeReport)
+  const responses = new Responses(Node, Linker, User, isAllowedToRead, isAllowedToInsert, isAllowedToModify, makeReport, config.get("db-import-path"))
   
   const user = await authenticate(User, request.headers)
   const data = await collectRequest(request, config.get("request-max-size"))

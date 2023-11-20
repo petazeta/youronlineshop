@@ -20,9 +20,15 @@ export async function main() {
     // Layouts init
     await getTemplates() // Load the templates from server
     await getStyles() // Load the css from server
-
-    await initLanguages() // Load languages for server
-    if (! selectMyLanguage()) throw new Error('No Language Content');
+    try {
+      await initLanguages() // Load languages for server
+    }
+    catch(err) {
+      if(err.message=="Database Content Error")
+        throw new Error('No Language Content')
+    }
+    if (! selectMyLanguage())
+      throw new Error('No Language Content')
 
     await initWebUser() // Loading initial user type (customer) data and automatic login (remember me)
 
@@ -36,7 +42,10 @@ export async function main() {
   catch(myError) {
     // Managing installing situations
     if (myError instanceof Error && myError.message=='No Language Content') {
-      document.body.appendChild(prepareTpScripts(await getTemplate("dbimport")))
+      const {dbPopView} = await import("./dbpop.mjs")
+      document.body.appendChild(await dbPopView())
+
+      //document.body.appendChild(prepareTpScripts(await getTemplate("dbimport")))
     }
     else {
       // Error Output Messange

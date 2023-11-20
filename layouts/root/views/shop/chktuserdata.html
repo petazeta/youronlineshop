@@ -1,25 +1,9 @@
 <!--
 -->
-<div class="centerelements">
-  <div style="position:relative;">
-    <div data-id="butedit" class="btmiddleright"></div>
-    <h3></h3>
-    <script>
-      const title=thisNode.getNextChild("addressTit").getRelationship("siteelementsdata").getChild();
-      //title.writeProp(thisElement);
-      //adding the edition pencil
-      if (webuser.isWebAdmin()) {
-        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
-        visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
-        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-      }
-    </script>
+<div class="centerelements" data-container>
+  <div style="position:relative;" data-address-tit>
+    <div data-butedit class="btmiddleright"></div>
+    <h3 data-value></h3>
   </div>
-  <div id="useraddress"></div>
-  <script>
-    const myParams={fieldtype: 'input', externalSave: true};
-    const {default: config} = await import('./' + CLIENT_CONFIG_PATH + 'main.mjs');
-    if (config.chktaddress_On) myParams.showAddress=true;
-    webuser.setView(thisElement, "userview", myParams);
-  </script>
+  <div data-useraddress class="boxframe" style="margin: 1em"></div>
 </div>

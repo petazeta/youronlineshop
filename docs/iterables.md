@@ -46,7 +46,7 @@ We must take in account that meanwhile the splitting function is being applyed t
 
 This approach could be more clear and more explicit.
 
-The iteration route for the two approachs are not equivalent. The none recursive approach walks in levels. It doesn't walk through the next level untill all node levels are complete. Te recursive approach nevertheless is walking through branches, starting one branch and not walking through the next until the branch is complete (not completely sure).
+The iteration route for the two approachs are not equivalent. The none recursive approach walks in levels. It doesn't walk through the next level untill all node levels are complete. Te recursive approach nevertheless is walking through branches, starting one branch and not walking through the next until the branch is complete. Both routes doesn't jump any node, in the way that at any time if a node is processed every parents nodes are being already processed. This is important for the packing-unpacking algoritm that requires that parents appear before their children.
 
 ### Reading file system tree
 

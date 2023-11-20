@@ -11,7 +11,10 @@ export const config = new Map([
   ["upload-images-url-path", "upload.cmd"],
   ["catalog-images-url-path", "catalogimages.cmd"],
   ["reports-url-path", "reports.cmd"],
+  ["reports-file-maxsize", 50000],
+  ["reports-file-path", "./logs/logs.txt"],
   ["db-url", "mongodb://admin:password@localhost/"],
   ["request-max-size", 1e6],
   ["timeZone", "Europe/Madrid"],
+  ["db-import-path", "./server/utils"],
 ])
