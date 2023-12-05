@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="images/logo.png">
+    <title>Database Manager</title>
+    <link rel="icon" href="images/icon.svg" sizes="any" type="image/svg+xml">
+    <script defer type="module" src="client/context__dbmanager/main.mjs"></script>
+    <template id="syserror">
+      <dialog style="min-width: 200px; max-width: 90%; border-radius: 3px;" data-value></dialog>
+    </template>
+    <style>
+      .spinner-wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .spinner div{
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 100%;
+        background-color: #00bfd8;
+        animation: sk-bouncedelay 1.4s ease-in-out infinite both;
+      }
+      .spinner .bounce1 {
+        animation-delay: -.32s;
+      }
+      .spinner .bounce2 {
+        animation-delay: -.16s;
+      }
+      @keyframes sk-bouncedelay{
+        0%,
+        80%,
+        to{transform:scale(0)}
+        40%{transform:scale(1)}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="spinner-wrapper">
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+  </body>
+</html>

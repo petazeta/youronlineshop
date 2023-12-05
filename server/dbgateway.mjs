@@ -23,23 +23,23 @@ export class SiteDbGateway {
     });
     //this.dbLink=mongoose.connection;
     if (setDbSchema) setDbSchema(this.dbLink);
-    this.setTableList();
+    this.setTableList()
     return new Promise((resolve, reject) => {
       this.dbLink.on("error", err => {      
-        console.log("db connect error: ", err);
-        this.dbLink=false;
-        reject(err.stack);
+        console.log("db connect error: ", err)
+        this.dbLink = false
+        reject(err.stack)
       });
-      this.dbLink.once("open", ()=>resolve(this.dbLink));     
-    });
+      this.dbLink.once("open", ()=>resolve(this.dbLink))
+    })
   }
 
   setTableList() {
     if (!this.tableList) {
-      this.tableList=new Map(this.getTables().map(tableName=>["TABLE_" + tableName.toUpperCase(), tableName]));
-      this.tableRef=new Map(this.getTables().map(tableName=>[tableName, "TABLE_" + tableName.toUpperCase()]));
+      this.tableList = new Map(this.getTables().map(tableName=>["TABLE_" + tableName.toUpperCase(), tableName]))
+      this.tableRef = new Map(this.getTables().map(tableName=>[tableName, "TABLE_" + tableName.toUpperCase()]))
     }
-    return this.tableList;
+    return this.tableList
   }
 
   getTables(){
@@ -92,13 +92,15 @@ export class SiteDbGateway {
     let offset, max;
     if (limit.length == 2) {
       offset=limit[0];
-      max=limit[1] - limit[0];
+      max=limit[1] - limit[0]
     }
-    let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp);
-    if (max) query=query.limit(max);
-    if (offset) query=query.skip(offset);
-    const result = (await query.exec()).map(mo=>mo.toJSON());
-    return {total: Object.entries(result).length, data: result};
+    let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp)
+    if (max)
+      query = query.limit(max)
+    if (offset)
+      query = query.skip(offset)
+    const result = (await query.exec()).map(mo=>mo.toJSON())
+    return {total: Object.entries(result).length, data: result}
   }
 
   // it returns an array of one element, of nothing found an empty array
@@ -121,7 +123,7 @@ export class SiteDbGateway {
     if (foreigncolumnnames.length > 1 && extraParents) {
       Array.from(zip(foreigncolumnnames.slice(1), extraParents)).reduce((tot, [key, value])=>Object.assign(tot, {[key]: value.partner.props.id}), filterProp);
     }
-    let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp);
+    let query = this.dbLink.model(this.tableList.get(data.props.childTableName)).find(filterProp)
     if (positioncolumnname) {
        query.sort({[positioncolumnname] : 1})
     }

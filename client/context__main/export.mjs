@@ -1,7 +1,46 @@
-import {getSiteText} from './sitecontentserver.mjs';
-import {Node, Linker} from './nodesserver.mjs';
-import {packing, unpacking} from '../../../shared/utils.mjs';
-import {getLanguagesRoot} from './languagesserver.mjs';
+import {getRoot as getSiteText} from "./sitecontent.mjs"
+import {Node, Linker} from './nodes.mjs'
+import {packing, unpacking} from '../../../shared/utils.mjs'
+import {getLanguages} from './languages/languages.mjs'
+import {getTemplate} from './layouts.mjs'
+import {selectorFromAttr} from "../frontutils.mjs"
+
+export async function exportView(){
+  const expPath = getSiteText().getNextChild("dashboard").getNextChild("expimp")
+  const expTp = await getTemplate("export")
+  const expContainer = selectorFromAttr(expTp, "data-container")
+  expPath.getNextChild("titexp").setContentView(selectorFromAttr(expContainer, "data-title"))
+  expPath.getNextChild("noselection").setContentView(selectorFromAttr(expContainer, "data-nosel"))
+  expPath.getNextChild("chkgeneral").setContentView(selectorFromAttr(expContainer, "data-chkgeneral"))
+  expPath.getNextChild("chkgeneral").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chkgeneral-details"))
+  expPath.getNextChild("chkcatg").setContentView(selectorFromAttr(expContainer, "data-chkcatg"))
+  expPath.getNextChild("chkcatg").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chkcatg-details"))
+  expPath.getNextChild("chkcheckout").setContentView(selectorFromAttr(expContainer, "data-chkcheckout"))
+  expPath.getNextChild("chkcheckout").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chkcheckout-details"))
+  expPath.getNextChild("chklang").setContentView(selectorFromAttr(expContainer, "data-chklang"))
+  expPath.getNextChild("chklang").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chklang-details"))
+  expPath.getNextChild("chkusers").setContentView(selectorFromAttr(expContainer, "data-chkusers"))
+  expPath.getNextChild("chkusers").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chkusers-details"))
+  expPath.getNextChild("butexp").setContentView(selectorFromAttr(expContainer, "data-butexp"))
+  const langContainer = selectorFromAttr(expContainer, "data-languages")
+  const langSample = langContainer.firstElementChild.cloneNode(true)
+  langContainer.removeChild(langContainer.firstElementChild)
+  for (const lang of getLanguages()) {
+    let langElm = langSample.cloneNode(true)
+    lang.writeProp(selectorFromAttr(langElm, "data-input"), "id", "value")
+    lang.writeProp(selectorFromAttr(langElm, "data-input"), "code", "name")
+    lang.writeProp(selectorFromAttr(langElm, "data-code"), "code")
+    langContainer.appendChild(langElm)
+  }
+
+
+  /*
+  webuser.writeProp(selectorFromAttr(showuserinfo, "data-username"))
+  selectorFromAttr(showuserinfo, "data-userinfo").appendChild(await userDataInfoView())
+  */
+  return expTp
+}
+
 
 const exportFunc = new Map();
 

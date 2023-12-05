@@ -1,0 +1,27 @@
+<button type="button" class="butdel" data-del-button>
+  <div class="delimage"></div>
+</button>
+<template data-del-alert>
+  <div class="alert alertmsg redalert">
+    <div>
+      <span style="position:relative;" data-titalert>
+        <div data-butedit class="btmiddleright"></div>
+        <h1 style="font-size:1.5em" style="display:block;" data-value>DELETE</h1>
+      </span>
+    </div>
+    <span style="position:relative;" data-textalert>
+      <div data-butedit class="btmiddleright"></div>
+      <div style="margin:1em;" data-value>ATENTION: This element and its descedants will be removed.</div>
+    </span>
+    <div style="margin:1em;">
+      <span style="position:relative;" data-cancel>
+        <div data-butedit class="btmiddleleft"></div>
+        <button type="button" class="btn" data-value data-button>Don't remove</button>
+      </span>
+      <span style="position:relative;" data-confirm>
+        <div data-butedit class="btmiddleright"></div>
+        <button type="button" class="btn" data-value data-button>Remove</button>
+      </span>
+    </div>
+  </div>
+</template>

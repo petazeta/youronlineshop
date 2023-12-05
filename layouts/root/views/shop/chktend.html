@@ -1,20 +1,10 @@
 <!-- we show order made and give the option to go to the user area-->
-<div class="centerelements">
-  <div class="msgbox" style="position:relative;">
-    <div data-id="butedit" class="btmiddleright"></div>
-    <span></span>
-    <script>
-      const title=thisNode.getNextChild("successTit").getRelationship("siteelementsdata").getChild();
-      title.writeProp(thisElement);
-      //adding the edition pencil
-      if (webuser.isWebAdmin()) {
-        const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
-        visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
-        title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-      }
-    </script>
+<div class="centerelements" data-container>
+  <div class="msgbox" style="position:relative;" data-tit>
+    <div data-butedit class="btmiddleright"></div>
+    <span data-value></span>
   </div>
-  <div></div>
+  <div data-order></div>
   <script>
     //We show the order
     webuser.getRelationship("orders").getChild().setView(thisElement, "order");

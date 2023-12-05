@@ -101,3 +101,173 @@ new file
 2023-11-20 12:17:35 ma4oc1 : cart item operation
 2023-11-20 12:17:51 log in: ordersadmin
 2023-11-20 12:17:51 ma4oc1 : checkout
+2023-11-23 10:27:45 Server start
+2023-11-23 10:28:07 log in: ordersadmin
+2023-11-23 10:28:10 trhfh7 : cart item operation
+2023-11-23 10:28:11 trhfh7 : checkout
+2023-11-23 10:30:47 trmpuc : cart item operation
+2023-11-23 10:30:56 log in: ordersadmin
+2023-11-23 10:30:56 trmpuc : checkout
+2023-11-23 10:52:21 tsu8qr : cart item operation
+2023-11-23 10:52:29 log in: ordersadmin
+2023-11-23 10:52:30 tsu8qr : checkout
+2023-11-23 10:53:05 tsvkc1 : cart item operation
+2023-11-23 10:53:13 log in: ordersadmin
+2023-11-23 10:53:13 tsvkc1 : checkout
+2023-11-23 10:55:40 tt4b8j : cart item operation
+2023-11-23 10:55:52 log in: productsadmin
+2023-11-23 10:56:07 tt56if : cart item operation
+2023-11-23 10:56:16 log in: productsadmin
+2023-11-23 10:56:17 tt56if : checkout
+2023-11-23 11:13:00 tu42oo : cart item operation
+2023-11-23 11:13:11 log in: productsadmin
+2023-11-23 11:13:11 tu42oo : checkout
+2023-11-23 12:44:39 log in: ordersadmin
+2023-11-24 10:46:43 Server start
+2023-11-24 10:47:01 log in: ordersadmin
+2023-11-24 10:49:10 log in: ordersadmin
+2023-11-24 10:49:38 log in: ordersadmin
+2023-11-24 10:50:19 log in: ordersadmin
+2023-11-24 11:14:02 Server start
+2023-11-24 11:14:15 log in: ordersadmin
+2023-11-24 11:14:57 log in: ordersadmin
+2023-11-24 11:15:26 log in: ordersadmin
+2023-11-24 11:17:02 log in: ordersadmin
+2023-11-24 11:17:33 log in: ordersadmin
+2023-11-24 12:06:38 Server start
+2023-11-24 12:08:34 log in: webadmin
+2023-11-24 12:23:30 0jm9fb : cart item operation
+2023-11-24 12:23:31 0jm9fb : checkout
+2023-11-24 12:26:15 log in: webadmin
+2023-11-24 14:24:23 Server start
+2023-11-24 14:25:22 log in: webadmin
+2023-11-24 14:25:57 log in: webadmin
+2023-11-24 14:26:31 log in: ordersadmin
+2023-11-24 14:26:51 log in: webadmin
+2023-11-24 14:27:16 log in: ordersadmin
+2023-11-25 09:27:28 Server start
+2023-11-25 09:33:21 log in: webadmin
+2023-11-25 09:33:26 2t6r8k : cart item operation
+2023-11-25 09:34:20 2t6r8k : checkout
+2023-11-25 09:37:18 2t6r8k : checkout
+2023-11-25 09:41:55 2tmq67 : Error: Expected ',' or ']' after array element in JSON at position 113Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"value":"eemenu1","id":"6561be076cedbb8919791757"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561c0a16cedbb8919791b30"},"_parent":null,"_children":[]}]},]
+    at http://localhost:6001/client/request.mjs:175:15
+    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
+    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
+    at async PagesContent.loadInitExtraContent (http://localhost:6001/client/pages/pages.mjs:13:28)
+    at async PagesContent.initData (http://localhost:6001/client/pages/pages.mjs:18:5)
+    at async initMenus (http://localhost:6001/client/context__main/pages/pages.mjs:46:3)
+    at async bodyView (http://localhost:6001/client/context__main/body.mjs:20:3)
+    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
+2023-11-25 09:44:45 Server start
+2023-11-25 09:44:49 2ts3kh : Error: Expected ',' or ']' after array element in JSON at position 113Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"value":"eemenu1","id":"6561be076cedbb8919791757"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561c0a16cedbb8919791b30"},"_parent":null,"_children":[]}]},]
+    at http://localhost:6001/client/request.mjs:175:15
+    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
+    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
+    at async PagesContent.loadInitExtraContent (http://localhost:6001/client/pages/pages.mjs:13:28)
+    at async PagesContent.initData (http://localhost:6001/client/pages/pages.mjs:18:5)
+    at async initMenus (http://localhost:6001/client/context__main/pages/pages.mjs:46:3)
+    at async bodyView (http://localhost:6001/client/context__main/body.mjs:20:3)
+    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
+2023-11-25 09:45:53 Server start
+2023-11-25 09:46:17 log in: webadmin
+2023-11-25 09:46:48 log in: webadmin
+2023-11-25 10:30:51 log in: webadmin
+2023-11-25 10:39:27 log in: webadmin
+2023-11-25 10:57:03 log in: webadmin
+2023-11-25 12:51:56 log in: webadmin
+2023-11-25 12:52:29 log in: webadmin
+2023-11-25 12:54:32 log in: webadmin
+2023-11-25 12:55:57 log in: webadmin
+2023-11-25 13:03:43 log in: webadmin
+2023-11-25 13:18:05 log in: pwdError
+2023-11-25 13:18:13 log in: productsadmin
+2023-11-25 13:20:11 user created
+2023-11-25 13:20:14 39836b : cart item operation
+2023-11-25 13:20:16 39836b : checkout
+2023-11-25 13:33:39 3av3ci : Error: Expected ',' or ']' after array element in JSON at position 111Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"name":"undies","id":"6561c2555e554636d45579b4"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561f4495e554636d4558663"},"_parent":null,"_children":[]}]},]
+    at http://localhost:6001/client/request.mjs:175:15
+    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
+    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
+    at async Categories.setExtraContent (http://localhost:6001/client/catalog/categories.mjs:18:26)
+    at async Categories.initData (http://localhost:6001/client/catalog/categories.mjs:11:5)
+    at async initCategories (http://localhost:6001/client/context__main/catalog/categories.mjs:61:3)
+    at async bodyView (http://localhost:6001/client/context__main/body.mjs:23:3)
+    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
+2023-11-25 13:34:03 3avrkd : Error: Expected ',' or ']' after array element in JSON at position 111Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"name":"undies","id":"6561c2555e554636d45579b4"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561f4495e554636d4558663"},"_parent":null,"_children":[]}]},]
+    at http://localhost:6001/client/request.mjs:175:15
+    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
+    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
+    at async Categories.setExtraContent (http://localhost:6001/client/catalog/categories.mjs:18:26)
+    at async Categories.initData (http://localhost:6001/client/catalog/categories.mjs:11:5)
+    at async initCategories (http://localhost:6001/client/context__main/catalog/categories.mjs:61:3)
+    at async bodyView (http://localhost:6001/client/context__main/body.mjs:23:3)
+    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
+2023-11-25 13:35:05 log in: webadmin
+2023-11-25 13:37:12 log in: webadmin
+2023-11-25 13:54:14 log in: webadmin
+2023-11-25 14:08:49 log in: webadmin
+2023-11-25 14:10:44 log in: webadmin
+2023-11-25 14:15:41 log in: webadmin
+2023-11-25 14:16:52 log in: webadmin
+2023-11-25 15:57:34 log in: webadmin
+2023-11-25 15:58:20 log in: webadmin
+2023-11-25 16:04:22 log in: webadmin
+2023-11-25 19:27:38 Server start
+2023-11-25 19:28:37 log in: webadmin
+2023-11-25 19:43:30 3v8g6r : cart item operation
+2023-11-25 19:43:32 3v8g6r : checkout
+2023-11-25 19:44:23 3v8g6r : cart item operation
+2023-11-25 19:44:26 3v8g6r : checkout
+2023-11-26 08:12:15 Server start
+2023-11-26 18:40:15 6et4uo : cart item operation
+2023-11-26 18:40:25 log in: ordersadmin
+2023-11-26 18:40:25 6et4uo : checkout
+2023-11-26 21:34:40 6oshog : cart item operation
+2023-11-26 21:34:50 log in: webadmin
+2023-11-26 21:34:50 6oshog : checkout
+2023-11-26 21:37:02 log in: webadmin
+2023-11-27 09:01:19 Server start
+2023-11-27 09:01:40 log in: webadmin
+2023-11-27 09:25:35 Server start
+2023-11-27 16:30:18 Server start
+2023-11-28 16:00:56 Server start
+2023-11-28 16:08:02 Server start
+2023-11-28 16:09:43 Server start
+2023-11-28 20:05:20 Server start
+2023-11-28 20:13:16 Server start
+2023-11-29 11:11:01 Server start
+2023-11-29 16:39:54 Server start
+2023-11-29 16:40:18 log in: productsadmin
+2023-11-30 11:28:45 Server start
+2023-11-30 15:41:34 log in: webadmin
+2023-11-30 15:51:33 Server start
+2023-12-01 14:28:03 Server start
+2023-12-01 14:30:39 Server start
+2023-12-01 14:30:55 Server start
+2023-12-01 17:38:07 Server start
+2023-12-01 17:43:33 Server start
+2023-12-01 17:44:08 Server start
+2023-12-01 18:11:01 Server start
+2023-12-01 18:11:55 Server start
+2023-12-02 12:03:35 Server start
+2023-12-02 12:55:21 Server start
+2023-12-02 12:56:11 Server start
+2023-12-02 12:57:27 Server start
+2023-12-02 12:58:08 Server start
+2023-12-02 12:59:52 Server start
+2023-12-02 13:16:37 Server start
+2023-12-02 16:49:47 Server start
+2023-12-03 18:29:24 Server start
+2023-12-03 18:29:50 log in: webadmin
+2023-12-05 11:07:26 Server start
+2023-12-05 11:07:47 log in: userError
+2023-12-05 11:08:18 log in: systemadmin
+2023-12-05 11:09:09 log in: systemadmin
+2023-12-05 11:09:59 error trying to access file: client/context__main/webuser/export.mjs
+2023-12-05 11:10:30 log in: systemadmin
+2023-12-05 11:11:20 log in: systemadmin
+2023-12-05 11:11:58 log in: systemadmin
+2023-12-05 11:13:09 log in: systemadmin
+2023-12-05 11:14:35 log in: systemadmin
+2023-12-05 11:18:58 log in: systemadmin

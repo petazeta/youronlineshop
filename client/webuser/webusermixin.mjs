@@ -1,9 +1,8 @@
-const webUserMixin=Sup => class extends Sup {
+export const webUserMixin = Sup => class extends Sup {
   async initUser(){
     // It loads the user type data for customer type
-    const typesMother=new this.constructor.linkerConstructor("TABLE_USERSTYPES")
-    const userType=(await typesMother.loadRequest('get all my children')).getChild({type: 'customer'})
-    await userType.loadRequest('get my relationships')
+    const userType = (await new this.constructor.linkerConstructor("TABLE_USERSTYPES").loadRequest('get all my children', {filterProps: {type: 'customer'}})).getChild()
+    await userType.loadRequest('get my relationships', {filterProps: {childTableName: 'TABLE_USERS'}})
     userType.getRelationship('users').addChild(this)
     return this
   }
@@ -17,5 +16,3 @@ const webUserMixin=Sup => class extends Sup {
     }
   }
 }
-
-export default webUserMixin

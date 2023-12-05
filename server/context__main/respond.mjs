@@ -57,7 +57,7 @@ export async function respond(request, response) {
     const results = []
     response.write("[")
     for (let i=0; i<data.action.length; i++) {
-      results.push(await responses.makeRequest(response, user, data.action[i], data.parameters && data.parameters[i]))
+      results.push(await responses.handleRequest(response, user, data.action[i], data.parameters && data.parameters[i]))
       if (i != 0)
         response.write(",")
     }
@@ -65,7 +65,7 @@ export async function respond(request, response) {
     resultData = results
   }
   else {
-    resultData = await responses.makeRequest(response, user, data.action, data.parameters)
+    resultData = await responses.handleRequest(response, user, data.action, data.parameters)
     response.end()
   }
   reporting(resultData, data.action, request.headers)

@@ -9,7 +9,7 @@ export class Responses{
 
     // this.responseAuth: get a request response.
 
-    this.responseAuth.set("populate database", async (response)=>{
+    this.responseAuth.set("populate database", async ()=>{
       const {total} = await Node.dbGateway.elementsFromTable({props: {childTableName: "TABLE_LANGUAGES"}})
       if (total > 0)
         throw new Error('The database is not empty')
@@ -81,7 +81,8 @@ export class Responses{
         throw new Error("Database safety")
       const reqNode = Node.clone(unpacking(parameters.nodeData))
       const result = await reqNode.dbGetMyTree(arrayUnpacking(parameters.extraParents), parameters.deepLevel, parameters.filterProps, parameters.limit, parameters.myself)
-      if (!result) return result
+      if (!result)
+        return result
       // careful the result list has still parentNode or partnerNode,
       if (Node.detectLinker(unpacking(parameters.nodeData))) {
         if (result.total==0) return {total: 0}
@@ -100,11 +101,10 @@ export class Responses{
         throw new Error("Database safety")
       const reqNode = Node.clone(unpacking(parameters.nodeData))
       const result = await reqNode.dbGetMyTreeUp(parameters.deepLevel)
-      if (!result) return result
       if (Array.isArray(result)) {
         return result.map(result=>packing(result))
       }
-      return packing(result)
+      return result && packing(result)
     })
 
     this.responseAuth.set("get my relationships", async (parameters)=>{
@@ -129,23 +129,17 @@ export class Responses{
       if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
       const req = Node.clone(unpacking(parameters.nodeData));
-      return req.dbInsertMyTree(parameters.deepLevel, arrayUnpacking(parameters.extraParents), parameters.myself, parameters.updateSiblingsOrder)
-      .then(result=>{
-        if (!result) return result;
-        return packing(result);
-      });
+      const result = await req.dbInsertMyTree(parameters.deepLevel, arrayUnpacking(parameters.extraParents), parameters.myself, parameters.updateSiblingsOrder)
+      return result && packing(result)
     });
 
     this.responseAuth.set("add my tree table content", async (parameters, user)=>{
       if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
       const req = Node.clone(unpacking(parameters.nodeData));
-      return req.dbInsertMyTreeTableContent(parameters.tableName, parameters.deepLevel, arrayUnpacking(parameters.extraParents))
-      .then(result=>{
-        if (!result) return result;
-        return packing(result);
-      });
-    });
+      const result = await req.dbInsertMyTreeTableContent(parameters.tableName, parameters.deepLevel, arrayUnpacking(parameters.extraParents))
+      return result && packing(result)
+    })
 
     this.responseAuth.set("add my link", async (parameters, user)=>{
       if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
@@ -164,28 +158,28 @@ export class Responses{
     this.responseAuth.set("delete my tree", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
-      const req = Node.clone(unpacking(parameters.nodeData));
-      const load = parameters.load===undefined ? true : parameters.load;
-      return req.dbDeleteMyTree(load);
+      const req = Node.clone(unpacking(parameters.nodeData))
+      const load = parameters.load===undefined ? true : parameters.load
+      return req.dbDeleteMyTree(load)
     });
 
     this.responseAuth.set("delete my tree table content", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
       const req = Node.clone(unpacking(parameters.nodeData));
-      return req.dbDeleteMyTreeTableContent(parameters.tableName);
+      return req.dbDeleteMyTreeTableContent(parameters.tableName)
     });
 
     this.responseAuth.set("delete my children", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
        throw new Error("Database safety")
-      return new Linker().load(unpacking(parameters.nodeData)).dbDeleteMyChildren();
+      return new Linker().load(unpacking(parameters.nodeData)).dbDeleteMyChildren()
     });
 
     this.responseAuth.set("delete my link", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
-      return new Node().load(unpacking(parameters.nodeData)).dbDeleteMyLink();
+      return new Node().load(unpacking(parameters.nodeData)).dbDeleteMyLink()
     });
 
     //<-- Update queries
@@ -200,30 +194,30 @@ export class Responses{
     this.responseAuth.set("edit my sort_order", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
-      return new Node().load(unpacking(parameters.nodeData)).dbUpdateMySortOrder(parameters.newSortOrder)
-      .then(afected=>{
-        if (afected==1) return parameters.newSortOrder;
-        else return false;
-      });
-    });
+      const afected = await new Node().load(unpacking(parameters.nodeData)).dbUpdateMySortOrder(parameters.newSortOrder)
+      if (afected==1)
+        return parameters.newSortOrder
+      else
+        return false
+    })
 
     this.responseAuth.set("upload image", async (parameters, user)=>{
       if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
-      return true;
-    });
+      return true
+    })
 
     // utils
     this.responseAuth.set("get time", async ()=>Date.now());
   }
   // ** Main Entrance ** it writes to client the request response and returns it
   // if request response comes from a read stream it also collects it for returning it
-  async makeRequest(response, user, action, parameters) {
+  async handleRequest(response, user, action, parameters) {
     if (!this.responseAuth.has(action)) {
       // mirar error response en errors.mjs
       const myError = new Error(`Error: action "${action}" not recognised`)
-      myError.name="400";
-      throw myError;
+      myError.name = "400"
+      throw myError
     }
     const result = await this.responseAuth.get(action)(parameters, user)
     if (result instanceof Readable) {
@@ -237,7 +231,7 @@ export class Responses{
     if (!this.responseContentType.has(action)) {
       return "application/json" // Default Value
     }
-    return this.responseContentType.get(action);
+    return this.responseContentType.get(action)
   }
 }
 

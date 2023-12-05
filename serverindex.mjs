@@ -5,7 +5,7 @@ import {join as pathJoin} from "path"
 let openBrowserinstances = false
 
 for (const [pathName, {ports}] of servers) {
-  let {app} = await import("./" + pathJoin("./server", pathName))
+  let {app} = await import("./" + pathJoin("./server", pathName, "main.mjs"))
   for (const port of ports) {
     let myServer = http.createServer(app)
     myServer.listen(port, ()=>{

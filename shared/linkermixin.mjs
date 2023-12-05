@@ -169,6 +169,14 @@ const linkerMixin=Sup => class extends Sup {
     return this.constructor.getChildKeys(this, type)
   }
 
+  static isYBranch(parent, db_collection) {
+    return parent.sysChildTableKeysInfo?.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName==db_collection) // some -db_collection- related branch
+  }
+
+  isYBranch(db_collection){
+    return this.constructor.isYBranch(this, db_collection)
+  }
+
   getChild(obj) {
     return super.getDescendent(obj)
   }

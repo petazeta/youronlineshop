@@ -21,8 +21,9 @@ export function startEdition(myNode, editElement, butsContainer, thisProperty, t
   }
   activeEdition(editElement, butsContainer)
   const setProp=()=>{
-    // src, href, value (general rule is getAttribute but sometimes it doesn't work)
-    const getElmValue = (myElement, thisAttribute) => myElement.hasAttribute(thisAttribute) ? myElement.getAttribute(thisAttribute) : myElement[thisAttribute]
+    // Emements attributes used can be: src, href, value, textContent, innerHTML.
+    // In case attribute is a custom attribute we need to use getAttribute, and it would be differences between property and attribute for href attribute
+    const getElmValue = (myElement, thisAttribute) => myElement[thisAttribute] === undefined ? myElement.getAttribute(thisAttribute) : myElement[thisAttribute]
     let myValue = getElmValue(editElement, thisAttribute)
     if (dataProcessor)
       myValue = dataProcessor(myValue)
@@ -32,10 +33,10 @@ export function startEdition(myNode, editElement, butsContainer, thisProperty, t
       changeProperty(myNode, thisProperty, myValue)
       .then(newValue=>{
         if (editElement.hasAttribute("data-has-target")) {
-          const dataIdTargetValue=editElement.getAttribute("data-target-id") || "value" // for recognizing the value element when is marked differently
-          const targetElm=containerValueElm.querySelector(`[data-${dataIdTargetValue}]`)
-          const targetAttr=editElement.getAttribute("data-target-attr") || "textContent"
-          targetElm[targetAttr]=editElement[thisAttribute]
+          const dataIdTargetValue = editElement.getAttribute("data-target-id") || "value" // for recognizing the value element when is marked differently
+          const targetElm = containerValueElm.querySelector(`[data-${dataIdTargetValue}]`) || containerValueElm.parentElement.querySelector(`[data-${dataIdTargetValue}]`) || document.querySelector(`[data-${dataIdTargetValue}]`)
+          const targetAttr = editElement.getAttribute("data-target-attr") || "textContent"
+          targetElm[targetAttr] = editElement[thisAttribute] // if it is a custom attribute it will not work like this
         }
       })
       .catch(myE=>{
@@ -60,7 +61,7 @@ export function startEdition(myNode, editElement, butsContainer, thisProperty, t
   }
   // Activating editElement finish edition procedure
   if (inlineEdition) {
-    // disable Intro keyCode for new Line and enable it for submith
+    // disable Intro keyCode for new Line and enable it for submit
     editElement.addEventListener('keydown', listenerIntroKey)
   }
   editElement.addEventListener("blur", listenerBlur)
@@ -95,7 +96,8 @@ function activeEdition(editElement, butsContainer){
     else editElement[thisAttribute] = shadowValue;
   }
   */
-  if (editElement.hasAttribute("data-toggle")) editElement.style.display="unset"
+  if (editElement.hasAttribute("data-toggle"))
+    editElement.style.display="unset"
 
   editElement.focus()
 }
@@ -105,7 +107,8 @@ function unActiveEdition(editElement, butsContainer) {
   if ((editElement.tagName=="INPUT" || editElement.tagName=="TEXTAREA") && editElement.disabled===false) {
     editElement.disabled = true
   }
-  if (editElement.hasAttribute("data-toggle")) editElement.style.display="none"
+  if (editElement.hasAttribute("data-toggle"))
+    editElement.style.display="none"
   //Set visible edit and admin buttons
   setButVisibility(butsContainer, "visible")
 }

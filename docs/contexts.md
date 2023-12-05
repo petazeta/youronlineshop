@@ -60,9 +60,9 @@ When we use several instances of the same class (for example the Node class) in 
 
 ## How we use contexts
 
-We are using contexts at server for launching several instances of the application and share modules between them. And we are developing the contexts in client to be able to execute plugins.
+We are using contexts at server for launching several instances of the application and share modules between them. And we are using contexts in client to be able to execute plugins.
 
-client/context__main/viewcomponent.mjs sets the templates scripts execution enviroment variable "thisAppFolder" by getting it from the current module address.
+At client/context__main/viewcomponent.mjs we are using some code to get the contexted folder name. It was used for seting templates scripts execution enviroment variable "thisAppFolder" but currently we are not using scripts in layouts.
 
 ## Propuesta
 

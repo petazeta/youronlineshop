@@ -1,0 +1,35 @@
+#dashmenu{
+	position: absolute;
+	top: 35px;
+	z-index: 15;
+	border: 1px solid grey;
+	border-radius: 3px;
+	transition: transform 400ms cubic-bezier(0.2, 0, 0.13, 1.5);
+	left: 120px;
+	visibility: hidden;
+	transform: translateY(-15px);
+}
+.dashbuttons {
+	align-items: center;
+	display: flex;
+	flex-flow: column;
+	gap: 1em;
+}
+#dashmenu .dashbuttons {
+	gap: 0;
+}
+#dashmenu .dashbuttons .btn-container{
+	width: 100%;
+}
+#dashmenu .dashbuttons .btn-container .btn{
+	width: 100%;
+	font-weight: normal;
+	border-radius: 0;
+	border: 0;
+	background-color: unset;
+	background-image: unset;
+	gap: 1em;
+}
+#dashmenu .dashbuttons .btn-container .btn:hover{
+	background-color: rgb(0 0 0 / 0.05);
+}

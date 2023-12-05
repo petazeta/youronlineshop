@@ -2,7 +2,7 @@
 thisNode textContent => "dashboard" - "showOrd"
 thisParams.filterorders: "archived" => status=1
 -->
-<table class="list" data-table>
+<table class="list" data-table data-container>
   <thead>
     <tr data-head>
       <th style="position:relative;" data-date>
@@ -15,13 +15,13 @@ thisParams.filterorders: "archived" => status=1
       </th>
       <th style="position:relative;" data-order>
         <div data-butedit class="bttopcenter"></div>
-        <div> data-value</div>
+        <div data-value></div>
       </th>
     </tr>
   </thead>
   <tbody data-body></tbody>
 </table>
-<template data-actions-head-tp>
+<template data-actions-th-tp>
   <th style="position:relative;" data-actions>
     <div data-butedit class="bttopcenter"></div>
     <div data-value></div>

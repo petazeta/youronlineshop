@@ -39,10 +39,6 @@ Cambiar un elemento de lugar puede ocasionar que ese elemento, si está en pági
 
 Para usar este servicio se ha de crear un elemento pagination a través de la función del módulo apropiada y después cargar la plantilla pagination a través del nodo que es el partner de los elementos a ser mostrados. Esto se realiza en la plantilla subcategory. En la misma plantilla para ajustar los elementos de edición se ha de crear un listener a los eventos delete, create and move.
 
-## Configuration
-
-There is a configuration option that is the page size. This parameter name is catPageSize for the items pagination. See [config](config.md).
-
 ## Procedure
 
 Para paginar los resultados de requiere un layout que cumpla las premisas de recibir como parámetros los índices de comienzo y final y como nodo principal el parent partner de los elementos a mostrar. Esta plantilla mostrará los elementos correspondientes a los índices. Para el ejemplo a la plantallia la llamaremos elementsView.

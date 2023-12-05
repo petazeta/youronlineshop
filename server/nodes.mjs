@@ -177,20 +177,20 @@ const linkerModelMixin=Sup => class extends Sup {
   }
   
   async dbLoadMyChildren(extraParents=null, filterProp={}, limit=[], count=false) {
-    const result = await this.dbGetMyChildren(extraParents, filterProp, limit, count);
-    const children=result.data;
+    const result = await this.dbGetMyChildren(extraParents, filterProp, limit, count)
+    const children = result.data
     for (const child of children) {
-      this.addChild(child);
+      this.addChild(child)
     }
-    this.props.total=result.total;
-    return children;
+    this.props.total = result.total
+    return children
   }
   static async dbGetAllChildren(data, filterProp={}, limit=[]) {
-    let result = await this.dbGateway.elementsFromTable(data, filterProp, limit);
-    let children = this.readQuery(result.data);
-    children = await this.removeSysProps(children, data);
-    result.data=children;
-    return result;
+    let result = await this.dbGateway.elementsFromTable(data, filterProp, limit)
+    let children = this.readQuery(result.data)
+    children = await this.removeSysProps(children, data)
+    result.data = children
+    return result
   }
   
   async dbLoadAllMyChildren( filterProp={}, limit=[]){
@@ -241,12 +241,15 @@ const linkerModelMixin=Sup => class extends Sup {
   }
   
   async dbLoadMyTreeUp(level=null) {
-    if (level===0) return true;
-    if (level) level--;
-    this.partner=null;
-    await this.dbLoadMyPartner(this.getChild().props.id);
-    if (this.partner) await this.partner.dbLoadMyTreeUp(level);
-    return this.partner;
+    if (level===0)
+      return true
+    if (level)
+      level--
+    this.partner = null
+    await this.dbLoadMyPartner(this.getChild().props.id)
+    if (this.partner)
+      await this.partner.dbLoadMyTreeUp(level)
+    return this.partner
   }
   
   async dbGetMyTreeUp(level=null) {

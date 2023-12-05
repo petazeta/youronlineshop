@@ -1,0 +1,66 @@
+<form data-container data-form>
+  <div id="logform">
+    <!--
+    <div class="msgbox" style="position:relative;">
+      <div data-butedit class="btmiddleright"></div>
+      <span data-value></span>
+    </div>
+    <script>
+      setNode(thisNode.getNextChild("lgintt"), thisElement)
+    </script>
+    -->
+    <div class="loginform">
+      <div class="form-group">
+        <div data-username-label>
+          <span style="position:relative;">
+            <div data-butedit class="btmiddleright"></div>
+            <label class="form-label" for="user_name" data-value></label>
+          </span>
+        </div>
+        <input class="form-control" name="user_name" data-username-input data-value>
+      </div>
+      <div class="form-group">
+        <div data-password-label>
+          <span style="position:relative;">
+            <div data-butedit class="btmiddleright"></div>
+            <label class="form-label" for="user_password" data-value></label>
+          </span>
+        </div>
+        <input type="password" class="form-control" name="user_password" data-value data-password-input>
+      </div>
+      <div class="rememberme" style="position:relative;" data-rememberme>
+        <input type="checkbox" id="rememberme" name="rememberme" data-checkbox>
+        <div data-butedit class="btmiddleright"></div>
+        <label for="rememberme" data-value></label>
+      </div>
+      <div style="position:relative;" data-login-button>
+        <div data-butedit class="btmiddleright"></div>
+        <button type="submit" class="btn" data-value></button>
+      </div>
+    </div>
+    <div style="position:relative;" data-usercharerror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="userCharError" disabled data-hidden data-value>
+    </div>
+    <div style="position:relative;" data-pwdcharerror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="pwdCharError" disabled data-hidden data-value>
+    </div>
+    <div style="position:relative;" data-loginok>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="loginOk" disabled data-hidden data-value>
+    </div>
+    <div style="position:relative;" data-usererror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="userError" disabled data-hidden data-value>
+    </div>
+    <div style="position:relative;"  data-pwderror>
+      <div data-butedit class="btmiddleright"></div>
+      <input type="hidden" name="pwdError" disabled data-hidden data-value>
+    </div>
+    <div class="new-account-button" style="position:relative;" data-newuser>
+      <div data-butedit class="btmiddleright"></div>
+      <button type="button" class="btn" data-value data-btn></button>
+    </div>
+  </div>
+</form>

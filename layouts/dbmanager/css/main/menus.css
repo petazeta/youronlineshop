@@ -1,0 +1,98 @@
+
+nav.menus .menuscontainer {
+  margin: 1em;
+  margin-top: 0.5em;
+}
+.nav-toggle {
+	visibility: hidden;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+@media screen and (min-width: 400px){
+	nav.menus {
+		transform: scale(1, 1);
+	}
+}
+@media screen and (max-width: 400px){
+	ul.menuscontainer {
+		border: 1px solid grey;
+		border-radius: 3px;
+	}
+	.menuscontainer a.menu {
+		font-size: 1.2em;
+		margin: 0.2em;
+	}
+	.nav-toggle {
+		visibility: visible;
+	}
+	nav.menus {
+		position: absolute;
+		z-index: 20;
+		transform: translateX(-120%);
+		transition: transform 400ms ease-in-out;
+	}
+	nav.menus ul.menuscontainer{
+		flex-direction: column;
+		gap: 0;
+		background-color: var(--mainbackground);
+		margin-left: 0;
+		margin-right: 0;
+		margin-top: -1em;
+	}
+	nav.menus ul.menuscontainer li{
+		margin-top: 0;
+		margin-bottom: 0;
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	nav.menus a.menu{
+		font-size: 1.3em;
+	}
+	nav.nav-open{
+		transform: translateX(0);
+	}
+}
+.menuscontainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 2.7em; /* Avoid menu high reduction whenever empty */
+	gap: 1.8em;
+}
+.menuscontainer li {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+.menuscontainer a.menu{
+  font-size: 1.5em;
+  color: hsl(0, 0%, 30%);
+}
+.menuscontainer a.menu:hover, .menuscontainer .selected a.menu{
+  color: hsl(0, 0%, 10%);
+}
+.nav-toggle {
+	position: relative;
+	height: 26px;
+	cursor: pointer;
+	align-items: center;
+}
+.nav-toggle span,
+.nav-toggle span:before,
+.nav-toggle span:after {
+	height: 2px;
+	width: 2em;
+	background: black;
+	position: relative;
+	border-radius: 2px;
+}
+.nav-toggle span:before,
+.nav-toggle span:after {
+	content: '';
+	position: absolute;
+}
+.nav-toggle span:before {
+	bottom: 7px;
+}
+.nav-toggle span:after {
+	top: 7px;
+}

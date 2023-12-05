@@ -60,7 +60,7 @@ reqLoaders.set("get my tree", (myNode, result, params)=>{
     myNode.addRelationship(new myNode.constructor.linkerConstructor().load(rel))
   }
 })
-reqReduc.set("get my ascendent", myNode=>packing(myNode.clone(1, 1, "id")))
+reqReduc.set("get my ascendent", myNode=>packing(myNode.clone(1, 1, "id"))) // *** que diferencia con my tree up?
 reqReduc.set("get my tree up", reqReduc.get("get my ascendent"))
 reqLoaders.set("get my tree up", (myNode, result)=>{
   if (!result) return result
@@ -84,7 +84,7 @@ reqLoaders.set("get my tree up", (myNode, result)=>{
   myNode.parent=new myNode.constructor.linkerConstructor().load(unpacking(result))
   myNode.parent.addChild(myNode)
 })
-reqLoaders.set("get themes tree", (myNode, result)=>myNode.load(unpacking(result)))
+reqLoaders.set("get themes tree", (myNode, result)=>myNode.load(unpacking(result))) // *** anticuado??
 
 reqReduc.set("add my link", [ myNode=>packing(myNode.clone(3, 0, null, 'id')), reduceExtraParents]) //we are keeping the props cause we need the sort_order positioning prop
 reqMethods.set("add my link", ()=>"put")

@@ -17,27 +17,33 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
   userInfoButton.addEventListener('click', async (ev)=>{
     ev.preventDefault()
     const {userInfoView} = await import("./userdata.mjs")
-    await userInfoView()
+    document.getElementById("centralcontent").innerHTML=""
+    document.getElementById("centralcontent").appendChild(await userInfoView())
+    setActiveInSite(webuser)
   })
+  menusContainer.appendChild(userInfoButton)
 
   const showordersButton = tpButton.cloneNode(true)
   dashPath.getNextChild("btShowOrd").setContentView(showordersButton)
-  // await getTemplate("showorders")
-  /*
-  showordersButton.addEventListener('click', , async (ev)=>{
+  showordersButton.addEventListener('click', async (ev)=>{
     ev.preventDefault()
-    const {showOrdersView} = await import("../shop/orders.mjs")
-    await showOrdersView()
+    const {ordersView} = await import("../shop/orders.mjs")
+    document.getElementById("centralcontent").innerHTML=""
+    document.getElementById("centralcontent").appendChild(await ordersView())
+    setActiveInSite(webuser)
   })
-  */
+  menusContainer.appendChild(showordersButton)
   
   const showaddressButton = tpButton.cloneNode(true)
   dashPath.getNextChild("btShowAdd").setContentView(showaddressButton)
   showaddressButton.addEventListener('click', async (ev)=>{
     ev.preventDefault()
     const {addressView} = await import("./userdata.mjs")
-    await addressView()
+    document.getElementById("centralcontent").innerHTML=""
+    document.getElementById("centralcontent").appendChild(await addressView())
+    setActiveInSite(webuser)
   })
+  menusContainer.appendChild(showaddressButton)
   
   const changepwdButton = tpButton.cloneNode(true)
   dashPath.getNextChild("btChangePwd").setContentView(changepwdButton)
@@ -49,6 +55,20 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
     await changePwdView()
   })
   */
+
+  if (webuser.isSystemAdmin()) {
+    const expButton = tpButton.cloneNode(true)
+    dashPath.getNextChild("expimp").getNextChild("butexp").setContentView(expButton)
+    expButton.addEventListener('click', async (ev)=>{
+      ev.preventDefault()
+      const {exportView} = await import("../export.mjs")
+      document.getElementById("centralcontent").innerHTML=""
+      document.getElementById("centralcontent").appendChild(await exportView())
+      setActiveInSite(webuser)
+    })
+    menusContainer.appendChild(expButton)
+  }
+
   const logOutButton = tpButton.cloneNode(true)
   dashPath.getNextChild("btLogOut").setContentView(logOutButton)
   logOutButton.addEventListener('click', async ()=>{

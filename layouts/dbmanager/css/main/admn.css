@@ -1,0 +1,163 @@
+/* admin buttons*/
+.admnbtsgrid {
+  z-index:1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.bttopcenter{
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%) translateY(-100%);
+}
+.bttopleft{
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: translateX(-100%) translateY(-100%);
+}
+.bttopleftinside{
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: translateY(-100%);
+}
+.bttopleftinsideafteredit{
+	position: absolute;
+	top: 0;
+	left: 40px;
+	transform: translateY(-100%);
+}
+.bttopinsideleftinside{
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.bttopinsiderightinside{
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.btmiddleleft{
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translateX(-100%) translateY(-50%);
+}
+.btmiddleright{
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translateX(100%) translateY(-50%);
+}
+.btmiddlecenter{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+.btbottomcenter{
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%) translateY(100%);
+}
+.btbottominsiderightinside{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+.btleftmiddle {
+	position: absolute;
+	top: 50%;
+	left: 0px;
+	transform: translateX(-100%) translateY(-50%);
+}
+.btrightadmn {
+	position: absolute;
+	top: calc(50% - 16px);
+	left: 40px;
+}
+.btleftedit {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: translateX(-50%) translateY(-50%);
+}
+.butedit, .butdel, .butadd, .butsucs, .butarrows, .butdots, .iconbuttons, .buteditcode, .buttons{
+  background-color: #eff3f6;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid rgba(27,31,35,0.2);
+  border-radius: 0.25em;
+  cursor: pointer;
+  justify-self: left;
+}
+.butarrows {
+	cursor: unset;
+  display:flex
+}
+.clearbutton{
+	background: none;
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+ .butdots{
+  padding: 5px 7px;
+ }
+.editimage {
+  background: url(images/pencil.svg) no-repeat;
+  background-size: contain;
+}
+.editcodeimage {
+  background: url(images/code.svg) no-repeat;
+  background-size: contain;
+}
+.delimage {
+  background: url(images/trash.svg) no-repeat;
+  background-size: contain;
+}
+.plusimage {
+  background: url(images/plus.svg) no-repeat;
+  background-size: contain;
+}
+.arrowleftimage {
+  background: url(images/arrowleft.svg) no-repeat;
+  background-size: contain;
+}
+.arrowrightimage {
+  background: url(images/arrowright.svg) no-repeat;
+  background-size: contain;
+}
+.arrowupimage {
+  background: url(images/arrowup.svg) no-repeat;
+  background-size: contain;
+}
+.arrowdownimage {
+  background: url(images/arrowdown.svg) no-repeat;
+  background-size: contain;
+}
+.zoomimage {
+  background: url(images/zoom.svg) no-repeat;
+  background-size: contain;
+}
+.checkimage {
+  background: url(images/check.svg) no-repeat;
+  background-size: contain;
+}
+.viewinimage {
+  background: url(images/viewin.svg) no-repeat;
+  background-size: contain;
+}
+.undoimage {
+  background: url(images/undo.svg) no-repeat;
+  background-size: contain;
+}
+.dotsimage {
+  background: url(images/dots.svg) no-repeat;
+  background-size: contain;
+}

@@ -32,3 +32,5 @@ You should search for these keywords in order to find critical elements
 - semicolon at the end of the line is not used in js
 
 - file names extension is .mjs this way can be used as modules for nodejs.
+
+- From abstraction to specific: A file or module functions will be distributed from top to bottom starting for more abstracted to more specific. That is, the ones at the top would have calls to the ones more at the bottom. This usually will produce in modules that the exported functions would be first. Generic purpose functions that can be used however would be at the bottom.

@@ -60,3 +60,5 @@ In case we would use multiprocess instead of multithreading we can still provide
 The system design could be having these shared services: layouts, client source files, product images, product uploadas and the database. Some of them could be upgraded by adding a cache system (Cache)[cache.md]. By default cache is enabled for the layouts service.
 
 Then we can launch as many shops as posible in one machine (forwarding their services to the shared ones as described before). The number of shops should be measured depending on shops traffic and computer power.
+
+He desarrollado en servidor un modulo denominado enviroments. Habría que hacer algo así como un multiplexador entre las posibles request desde diferentes hosts (nombres de dominio) a los servicios que estos comparten. Es decir el servicio context__main/respond.mjs estaría compartido por tales o cuales hosts. También por tanto habría que levantar estos servicios para poder usarlos. 

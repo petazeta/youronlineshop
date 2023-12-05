@@ -48,6 +48,8 @@ Methods of the content class would be used to request and load the content from 
 
 Class TextContent uses several times languages module facilities for getting information about site language and its nodes language branch.
 
+** we should explain about the data- attributes
+
 ### Languages
 
 get data branch

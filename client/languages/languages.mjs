@@ -47,13 +47,19 @@ export default class Languages{
       this.treeRoot.notifyObservers("language change", {lastLanguage: lastLanguage})
     }
   }
+  // It returns the node branch (relationship) that is connected with languages
   getLangBranch(myNode){
     return myNode.getYBranch(this.db_collection)
+  }
+  // It returns true when the branch is lang related
+  isLangBranch(myBranch) {
+    return myBranch.isYBranch(this.db_collection)
   }
   getLangParent(myNode){
     if (typeof myNode == "string") // it can be just the data collection name
       return this.currentLanguage.relationships.find(langRel=>langRel.props.childTableName==myNode)
-    // it calculates the collection name from the relationship
+    if (myNode.detectLinker())
+      return this.currentLanguage.relationships.find(langRel=>langRel.props.childTableName==myNode?.props.childTableName)
     return this.currentLanguage.relationships.find(langRel=>langRel.props.childTableName==this.getLangBranch(myNode)?.props.childTableName)
   }
   async createInstanceChildText(parentNode, position=1, everyLang=true){
