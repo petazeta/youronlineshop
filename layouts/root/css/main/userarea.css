@@ -1,0 +1,15 @@
+.dashboard {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+}
+
+/*Export import*/
+.export-import .exp-select td{
+	display: flex;
+	gap: 1em;
+	align-items: flex-start;
+}
+.langselectlist{
+    margin: 0.5em;
+}

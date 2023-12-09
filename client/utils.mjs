@@ -26,6 +26,10 @@ export async function impData(newLangs, langrelname, datatree, currentLangs, roo
   }
 }
 
+export function findLeafs(treeRoot) {
+  return walkTrhoug(treeRoot, undefined, undefined, undefined, nodeElement=>nodeElement._children.length == 0)
+}
+
 /*
 // recursively inspect the tree to replace lang data
 export function replaceData(origin, target, relName, relDataName) {

@@ -1,6 +1,5 @@
 import {unpacking, arrayUnpacking, packing} from "../shared/utils.mjs"
 import {Readable} from "stream"
-import {populateDb} from "./import.mjs"
 
 export class Responses{
   constructor(Node, Linker, User, isAllowedToRead, isAllowedToInsert, isAllowedToModify, makeReport, importPath){
@@ -13,6 +12,7 @@ export class Responses{
       const {total} = await Node.dbGateway.elementsFromTable({props: {childTableName: "TABLE_LANGUAGES"}})
       if (total > 0)
         throw new Error('The database is not empty')
+      const {populateDb} = await import( "./import.mjs")
       return await populateDb(Node, importPath)
     })
 

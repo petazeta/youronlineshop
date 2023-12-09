@@ -271,3 +271,69 @@ new file
 2023-12-05 11:13:09 log in: systemadmin
 2023-12-05 11:14:35 log in: systemadmin
 2023-12-05 11:18:58 log in: systemadmin
+2023-12-06 09:26:43 Server start
+2023-12-06 09:26:59 log in: systemadmin
+2023-12-06 09:28:21 log in: systemadmin
+2023-12-06 09:40:24 log in: systemadmin
+2023-12-06 11:59:10 log in: userError
+2023-12-06 11:59:20 log in: systemadmin
+2023-12-06 11:59:56 Server start
+2023-12-06 12:00:07 log in: systemadmin
+2023-12-06 12:02:46 log in: systemadmin
+2023-12-06 12:44:42 log in: systemadmin
+2023-12-06 12:45:21 log in: systemadmin
+2023-12-06 12:46:03 log in: systemadmin
+2023-12-06 12:46:55 log in: systemadmin
+2023-12-06 12:49:19 log in: systemadmin
+2023-12-06 12:52:05 log in: systemadmin
+2023-12-06 12:53:19 log in: systemadmin
+2023-12-06 12:58:01 log in: systemadmin
+2023-12-06 18:57:19 Server start
+2023-12-06 18:58:34 log in: systemadmin
+2023-12-06 19:00:29 log in: systemadmin
+2023-12-06 19:01:33 log in: systemadmin
+2023-12-06 22:38:11 Server start
+2023-12-06 22:38:41 log in: systemadmin
+2023-12-08 18:01:26 Server start
+2023-12-08 19:28:51 log in: systemadmin
+2023-12-08 19:34:17 log in: systemadmin
+2023-12-08 19:41:34 log in: systemadmin
+2023-12-08 19:47:49 log in: systemadmin
+2023-12-08 21:12:52 Server start
+2023-12-09 09:23:18 Server start
+2023-12-09 09:23:39 log in: systemadmin
+2023-12-09 09:54:19 Server start
+2023-12-09 10:07:18 Server start
+2023-12-09 11:09:13 Server start
+2023-12-09 11:23:37 Server start
+2023-12-09 11:34:33 Server start
+2023-12-09 11:36:25 Server start
+2023-12-09 11:36:59 Server start
+2023-12-09 11:37:46 Server start
+2023-12-09 11:43:37 Server start
+2023-12-09 11:44:32 Server start
+2023-12-09 11:45:35 Server start
+2023-12-09 11:54:50 Server start
+2023-12-09 11:55:11 Server start
+2023-12-09 11:56:34 Server start
+2023-12-09 11:59:13 Server start
+2023-12-09 12:02:21 Server start
+2023-12-09 12:04:31 Server start
+2023-12-09 12:07:51 Server start
+2023-12-09 12:08:28 Server start
+2023-12-09 12:15:40 Server start
+2023-12-09 12:16:16 Server start
+2023-12-09 12:32:21 Server start
+2023-12-09 12:37:58 Server start
+2023-12-09 12:38:35 Server start
+2023-12-09 12:38:57 Server start
+2023-12-09 12:39:21 Server start
+2023-12-09 12:51:31 Server start
+2023-12-09 12:51:39 log in: systemadmin
+2023-12-09 12:52:38 log in: systemadmin
+2023-12-09 12:53:40 Server start
+2023-12-09 12:53:52 log in: systemadmin
+2023-12-09 14:57:26 Server start
+2023-12-09 14:57:41 log in: systemadmin
+2023-12-09 15:00:00 log in: systemadmin
+2023-12-09 15:06:44 log in: systemadmin

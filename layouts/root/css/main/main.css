@@ -448,17 +448,6 @@ nav ul{
 	}
 }
 
-.dashboard {
-	display: flex;
-	flex-flow: column;
-	align-items: center;
-}
-
-/*Export import*/
-.export-import .exp-select td{
-	display: flex;
-	gap: 1em;
-}
 
 /* Unchecked zone */
 /* ------------------------ */

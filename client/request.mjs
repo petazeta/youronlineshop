@@ -1,5 +1,5 @@
 import {authorizationToken} from "./webuser/authorization.mjs";
-import {packing, unpacking} from '../shared/utils.mjs';
+import {packing, unpacking, walkThrough} from '../shared/utils.mjs';
 
 const reduceExtraParents = (params)=>{
   if (params.extraParents) {
@@ -88,12 +88,12 @@ reqLoaders.set("get themes tree", (myNode, result)=>myNode.load(unpacking(result
 
 reqReduc.set("add my link", [ myNode=>packing(myNode.clone(3, 0, null, 'id')), reduceExtraParents]) //we are keeping the props cause we need the sort_order positioning prop
 reqMethods.set("add my link", ()=>"put")
-reqReduc.set("add myself", [myNode=>packing(myNode.clone(3, 0, null, 'id')), reduceExtraParents])
+reqReduc.set("add myself", [myNode=>packing(myNode.clone(3, 0, {"id": false}, 'id')), reduceExtraParents])
 reqLoaders.set("add myself", (myNode, result)=>{
   myNode.props.id=result
 })
 reqMethods.set("add myself", ()=>"put")
-reqReduc.set("add my children", [myNode=>packing(myNode.clone(2, 1, 'id', 'id')), reduceExtraParents]) // we need the partner (and partner->parent for safety check)
+reqReduc.set("add my children", [myNode=>packing(myNode.clone(2, 1, {"id": false}, 'id', {"id": false})), reduceExtraParents]) // we need the partner (and partner->parent for safety check)
 reqLoaders.set("add my children", (myNode, result)=>{
   /*
   for (const i in result) {
@@ -104,15 +104,17 @@ reqLoaders.set("add my children", (myNode, result)=>{
 })
 reqMethods.set("add my children", ()=>"put")
 reqReduc.set("add my tree", [myNode=>{
-  if (myNode.constructor.nodeConstructor.detectLinker(myNode)) return packing(myNode.clone(2, null, null, 'id'))
-  else return packing(myNode.clone(3, null, null, 'id'))
-},  reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
+  if (myNode.constructor.nodeConstructor.detectLinker(myNode))
+    return packing(cutVoidRels(myNode.clone(2, null, {"id": false}, 'id', {"id": false})))
+  else
+    return packing(cutVoidRels(myNode.clone(3, null, {"id": false}, 'id', {"id": false})))
+}, reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
 reqMethods.set("add my tree", ()=>"put")
 reqLoaders.set("add my tree", (myNode, result)=>{
   if (!result) return
-  const resultNode=unpacking(result)
+  const resultNode = unpacking(result)
   if (!myNode.constructor.nodeConstructor.detectLinker(myNode)) {
-    myNode.props.id=resultNode.props.id
+    myNode.props.id = resultNode.props.id
   }
   myNode.loadDesc(resultNode)
 })
@@ -231,3 +233,21 @@ export function requestMulti(action, dataNodes, parameters, url) {
   }
   return makeRequest(action, myParams, url)
 }
+
+// when adding the tree, void rels are not necesary
+function cutVoidRels(treeRoot) {
+  Array.from(walkThrough(treeRoot,
+    myElm=>{
+      if (!myElm.constructor.nodeConstructor.detectLinker(myElm)) {
+        for (const myRel of myElm.relationships) {
+          if (myRel.children.length == 0)
+            myElm.removeRelationship(myRel)
+        }
+      }
+      return myElm._children
+    }
+  ))
+  return treeRoot
+}
+
+// *** should check if myNode.constructor.nodeConstructor.detectLinker is always equivalent to myNode.constructor.detectLinker

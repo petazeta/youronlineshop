@@ -12,6 +12,10 @@ export function setDbSchema(dbLink) {
   dbLink.model("UsersTypes",
     new Schema({
       type: String,
+      parentUsersTypes: {
+        type: SchemaTypes.ObjectId,
+        ref: "UsersTypes",
+      },
       positionUsersTypes: {
         type: Number,
         positionRef: "UsersTypes",

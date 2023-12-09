@@ -33,15 +33,24 @@ const basicMixin=Sup => class extends Sup {
 
 export default basicMixin;
 
+// thisKeys is props to copy: "id" o ["id", "name"], if it is in format {id: false} then exclude keys
 export function copyProps(target, source, thisKeys) {
   if (!source) return target;
   if (thisKeys) {
-    if (!Array.isArray(thisKeys)) thisKeys=[thisKeys]; // single type
-    thisKeys.filter(key=>Object.keys(source.props).includes(key)).forEach(key=>target.props[key] = source.props[key]);
+    let filterKeys = []
+    if (!Array.isArray(thisKeys)) {
+      if (typeof thisKeys=="string")
+        filterKeys = [thisKeys] // single type
+      else {
+        const noKeys = Object.keys(thisKeys).filter(key=>thisKeys[key]===false)
+        filterKeys = Object.keys(source.props).filter(key=>!noKeys.includes(key)) 
+      }
+    }
+    filterKeys.filter(key=>Object.keys(source.props).includes(key)).forEach(key=>target.props[key] = source.props[key])
     return target;
   }
-  Object.assign(target.props, source.props);
-  return target;
+  Object.assign(target.props, source.props)
+  return target
 }
 
 /*

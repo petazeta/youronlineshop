@@ -64,15 +64,8 @@
             </tr>
             <tr>
               <td style="position:relative;">
-                <input type="radio" value="lang" name="dataoption">
-                <script>
-                  thisElement.form.dataoption.forEach(radio=>{
-                    radio.addEventListener("change", (ev)=>{
-                      if (thisElement.checked) thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="block";
-                      else thisElement.parentElement.querySelector("[type=checkbox]").parentElement.parentElement.style.display="none";
-                    });
-                  });
-                </script>
+                <input type="radio" value="lang" name="dataoption" data-chklang-input>
+                <div>
                 <details>
                   <summary style="position:relative; display: inline-block;" data-chklang>
                     <div data-butedit class="btmiddleright"></div>
@@ -83,36 +76,13 @@
                     <span class="explanation" data-value></span>
                   </span>
                 </details>
-                <template>
+                <div class="langselectlist" style="display:none" data-languages-list>
                   <div style="margin:auto; text-align:left; margin-bottom:0.2em">
-                    <input type="checkbox" value="" name="">
-                    <script>
-                      thisNode.writeProp(thisElement, "id", "value");
-                      thisNode.writeProp(thisElement, "code", "name");
-                    </script>
-                    <span></span>
-                    <script>
-                      thisNode.writeProp(thisElement, "code");
-                    </script>
-                  </div>
-                </template>
-                <div class="msgbox" style="display:none" data-languages>
-                  <div style="margin:auto; text-align:left; margin-bottom:0.2em">
-                    <input type="checkbox" value="" name="" data-input>
-                    <script>
-                      thisNode.writeProp(thisElement, "id", "value");
-                      thisNode.writeProp(thisElement, "code", "name");
-                    </script>
-                    <span data-code></span>
-                    <script>
-                      thisNode.writeProp(thisElement, "code");
-                    </script>
+                    <input type="checkbox" value="" name="" data-lang-input>
+                    <span data-lang-code></span>
                   </div>
                 </div>
-                <script>
-                  const {languages}=await import('./' + CLIENT_MODULES_PATH + 'languages.mjs');
-                  languages.setChildrenView(thisElement, thisElement.previousElementSibling);
-                </script>
+              </div>
               </td>
             </tr>
             <tr>
@@ -135,13 +105,9 @@
                 <input type="radio" value="db" name="dataoption">
                 <details>
                   <summary style="position:relative; display: inline-block;">
-  <!--
-    *** falta pasar a bd
-  -->
+                    <!--*** falta pasar a bd -->
                     <span>Entire db</span>
-
                   </summary>
-
                 </details>
               </td>
             </tr>

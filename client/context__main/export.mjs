@@ -1,9 +1,11 @@
 import {getRoot as getSiteText} from "./sitecontent.mjs"
 import {Node, Linker} from './nodes.mjs'
 import {packing, unpacking} from '../../../shared/utils.mjs'
-import {getLanguages} from './languages/languages.mjs'
+import {getLanguages, getLanguagesRoot} from './languages/languages.mjs'
 import {getTemplate} from './layouts.mjs'
 import {selectorFromAttr} from "../frontutils.mjs"
+import {exportFormat} from "../../shared/utils.mjs"
+import {prepareRequest, prepareMultiRequest} from "../request.mjs";
 
 export async function exportView(){
   const expPath = getSiteText().getNextChild("dashboard").getNextChild("expimp")
@@ -22,50 +24,70 @@ export async function exportView(){
   expPath.getNextChild("chkusers").setContentView(selectorFromAttr(expContainer, "data-chkusers"))
   expPath.getNextChild("chkusers").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chkusers-details"))
   expPath.getNextChild("butexp").setContentView(selectorFromAttr(expContainer, "data-butexp"))
-  const langContainer = selectorFromAttr(expContainer, "data-languages")
+  const langContainer = selectorFromAttr(expContainer, "data-languages-list")
   const langSample = langContainer.firstElementChild.cloneNode(true)
   langContainer.removeChild(langContainer.firstElementChild)
   for (const lang of getLanguages()) {
     let langElm = langSample.cloneNode(true)
-    lang.writeProp(selectorFromAttr(langElm, "data-input"), "id", "value")
-    lang.writeProp(selectorFromAttr(langElm, "data-input"), "code", "name")
-    lang.writeProp(selectorFromAttr(langElm, "data-code"), "code")
+    lang.writeProp(selectorFromAttr(langElm, "data-lang-input"), "id", "value")
+    lang.writeProp(selectorFromAttr(langElm, "data-lang-input"), "code", "name")
+    lang.writeProp(selectorFromAttr(langElm, "data-lang-code"), "code")
     langContainer.appendChild(langElm)
   }
-
-
-  /*
-  webuser.writeProp(selectorFromAttr(showuserinfo, "data-username"))
-  selectorFromAttr(showuserinfo, "data-userinfo").appendChild(await userDataInfoView())
-  */
+  const langRadioInput = selectorFromAttr(expContainer, "data-chklang-input")
+  for (const radioInput of expContainer.getElementsByTagName("form")[0].dataoption) {
+    radioInput.addEventListener("change", ev=>{
+      if (langRadioInput.checked)
+        langContainer.style.display = "block"
+      else
+        langContainer.style.display = "none"
+    })
+  }
+  selectorFromAttr(expContainer, "data-butexp").addEventListener("click", async function(event){
+    event.preventDefault()
+    const expFunc = exportFunc.get(expContainer.getElementsByTagName("form")[0].dataoption.value)
+    if (!expFunc) {
+      document.createElement("alert-element").showMsg(expContainer.getElementsByTagName("form")[0].elements.noselection.value, 2000)
+      return
+    }
+    if (expContainer.getElementsByTagName("form")[0].dataoption.value == "lang") {
+      alert("no implem")
+      return
+    }
+    expContainer.getElementsByTagName("form")[0].result.value = exportFormat(JSON.stringify(await expFunc()))
+  })
   return expTp
 }
 
 
-const exportFunc = new Map();
+const exportFunc = new Map()
 
 // To export data with lang content we first export the lang tree for first 2 levels: root and its rels (languages key). Then the root element tree to be exported with all langs.
 
 exportFunc.set("menus", async ()=>{  
-  const {getPageText} = await import('./pagessever.mjs')
-  const pagesText=await getPageText();
-  const textClone=pagesText.clone(null, 0);
-  await textClone.loadRequest("get my tree");
-  return {"languages": await Node.requestMulti("add my tree", getLanguagesRoot().getRelationship().children, null, true), "tree": await textClone.getMainBranch().request("add my tree", null, true)};
-});
+  const {getRoot: getPagesContent} = await import('./pages/pages.mjs')
+  const textClone = await getPagesContent().clone(null, 0).loadRequest("get my tree")
+  const [langs] = await prepareMultiRequest("add my tree", getLanguages())
+  const [tree] = await prepareRequest(textClone, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
+  return {"languages": langs, "tree": tree}
+})
 
 exportFunc.set("catalog", async ()=>{
-  const {getCategoriesRoot} = await import('./categoriesserver.mjs');
-  const catRoot = await getCategoriesRoot().clone(null, 0).loadRequest("get my tree");
-  //data from the structure
-  return {"languages": await Node.requestMulti("add my tree", getLanguagesRoot().getRelationship().children, null, true), "tree": await catRoot.getMainBranch().request("add my tree", null, true)};
-});
+  const {getRoot: getCategoriesContent} = await import('./catalog/categories.mjs')
+  const textClone = await getCategoriesContent().clone(null, 0).loadRequest("get my tree")
+  const [langs] = await prepareMultiRequest("add my tree", getLanguages())
+  const [tree] = await prepareRequest(textClone, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
+  return {"languages": langs, "tree": tree}
+})
 
 exportFunc.set("checkout", async ()=>{
-  const shippingtypesmother=await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my tree");
-  const paymenttypesmother=await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my tree");
-  return {"languages": await Node.requestMulti("add my tree", getLanguagesRoot().getRelationship().children, null, true), "tree": [await shippingtypesmother.request("add my tree", null, true), await paymenttypesmother.request("add my tree", null, true)]};
-});
+  const shippingsRoot = (await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my tree")).getChild()
+  const paymentsRoot = (await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my tree")).getChild()
+  const [langs] = await prepareMultiRequest("add my tree", getLanguages())
+  const [shippingsTree] = await prepareRequest(shippingsRoot, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
+  const [paymentsTree] = await prepareRequest(paymentsRoot, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
+  return {"languages": langs, "tree": [shippingsTree, paymentsTree]}
+})
 
 exportFunc.set("lang", async (selectedLangs)=>{
   //data from the structure
@@ -95,20 +117,18 @@ exportFunc.set("users", async ()=>{
 });
 
 exportFunc.set("db", async ()=>{
-  const db=[];
-  db.push(await new Linker("TABLE_USERSTYPES").loadRequest("get my tree"));
-  const {getPageText} = await import('./pagescontent.mjs')
-  db.push(await getPageText().clone(null, 0).loadRequest("get my tree"));
-  const {getSiteText} = await import('./sitecontent.mjs')
-  db.push(await getSiteText().clone(null, 0).loadRequest("get my tree"));
-  const {getCategoriesRoot} = await import('./categories.mjs');
-  db.push(await getCategoriesRoot().clone(null, 0).loadRequest("get my tree"));
-  db.push(await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my tree"));
-  db.push(await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my tree"));
-  
-// El uso de request esta desfasado, actualmente no se utiliza request para devolver la version reducida del nodo
-// creo que se usa prepareRequest, prepareMultiRequest
-  return {"languages": await getLanguagesRoot().request("add my tree", null, true), "tree": await Node.requestMulti("add my tree", db, null, true)};
-});
+  const db = []
+  db.push((await new Linker("TABLE_USERSTYPES").loadRequest("get my tree")).getChild())
+  const {getRoot: getPagesContent} = await import('./pages/pages.mjs')
+  db.push(await getPagesContent().clone(null, 0).loadRequest("get my tree"))
+  const {getRoot: getSiteContent} = await import('./sitecontent.mjs')
+  db.push(await getSiteContent().clone(null, 0).loadRequest("get my tree"))
+  const {getRoot: getCategoriesContent} = await import('./catalog/categories.mjs')
+  db.push(await getCategoriesContent().clone(null, 0).loadRequest("get my tree"))
+  db.push((await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my tree")).getChild())
+  db.push((await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my tree")).getChild())
+  const [langs] = await prepareRequest(getLanguagesRoot(), "add my tree") // languages root and children
+  const [tree] = await prepareMultiRequest("add my tree", db)
 
-export {exportFunc};
+  return {"languages": langs, "tree": tree}
+})

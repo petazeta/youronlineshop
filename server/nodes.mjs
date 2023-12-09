@@ -229,6 +229,7 @@ const linkerModelMixin=Sup => class extends Sup {
   async dbGetMyPartner(childId) {
     const foreignKey = await this.getMySysKeyAsync();
     const result = await this.constructor.dbGateway.getPartner(foreignKey, this, childId);
+    if (!result) return
     const partner=new this.constructor.nodeConstructor(result);
     this.constructor.removeSysProps([partner], new this.constructor(this.props.parentTableName))
     return partner;

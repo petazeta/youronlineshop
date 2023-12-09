@@ -4,12 +4,14 @@ import {unpacking, arrayUnpacking, replaceLangData, splitLangTree} from '../shar
 
 export async function populateDb(Node, importPath) {
   const data = JSON.parse(fs.readFileSync(pathJoin(importPath, 'mongodb_dtbs.json'), 'utf8'))
-  const langsRoot = new Node().load(unpacking(data.languages));
+  const langsRoot = new Node().load(unpacking(data.languages))
   const langs = langsRoot.getRelationship()
   await langsRoot.dbInsertMyTree()
   const newLangs = langs.children
-  const usersMo = new Node.linkerConstructor().load(unpacking(data.tree.shift()))
-  await usersMo.dbInsertMyTree()
+  const usersRoot = new Node.linkerConstructor("TABLE_USERSTYPES").addChild(new Node({type: "root"}))
+  usersRoot.addRelationship(new Node.linkerConstructor().load(unpacking(data.tree.shift())))
+  usersRoot.getRelationship().props.parentTableName = "TABLE_USERSTYPES"
+  await usersRoot.dbInsertMyTree()
   while(data.tree.length) {
     await impData(newLangs, Node.clone(unpacking(data.tree.shift())))
   }
@@ -25,7 +27,6 @@ export async function impData(newLangs, datatree, currentLangs, rootelement) {
   if (rootelement)
     await rootelement.dbDeleteMyTree()
   const singleTrees = splitLangTree(datatree, newLangs.length)
-  debugger
   const newTree = singleTrees[0]
 
   const langrelname = newTree.getYBranch("TABLE_LANGUAGES").props.name

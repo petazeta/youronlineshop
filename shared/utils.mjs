@@ -153,13 +153,13 @@ export const arrayPacking=datas=>{
   return datas;
 };
 
-export const splitLinesFormat=jsonData=>{
-  return jsonData.replaceAll('],[', '],\n[');
-};
+export const splitLinesFormat = jsonData=>{
+  return jsonData.replaceAll('],[', '],\n[')
+}
 
-export const exportFormat=jsonData=>{
+export const exportFormat = jsonData=>{
   return splitLinesFormat(jsonData).replaceAll('[[[', '\n[[[').replaceAll(']]],', ']]],\n')
-};
+}
 // DEPRECATED -> replaceLangData
 export function replaceData(target, source, relName, relDataName) {
   // myElement => [sourceChildren, targetChildren]
