@@ -227,8 +227,8 @@ const linkerModelMixin=Sup => class extends Sup {
   }
 
   async dbGetMyPartner(childId) {
-    const foreignKey = await this.getMySysKeyAsync();
-    const result = await this.constructor.dbGateway.getPartner(foreignKey, this, childId);
+    const foreignKey = await this.getMySysKeyAsync() // At the model it can be multiple foreigns but at the parent there is only one
+    const result = await this.constructor.dbGateway.getPartner(foreignKey, this, childId)
     if (!result) return
     const partner=new this.constructor.nodeConstructor(result);
     this.constructor.removeSysProps([partner], new this.constructor(this.props.parentTableName))
@@ -254,7 +254,7 @@ const linkerModelMixin=Sup => class extends Sup {
   }
   
   async dbGetMyTreeUp(level=null) {
-    const myPartner=await this.dbLoadMyTreeUp(level);
+    const myPartner=await this.dbLoadMyTreeUp(level)
     if (myPartner) {
       myPartner.relationships=[];
     }
@@ -405,24 +405,23 @@ const dataModelMixin=Sup => class extends Sup {
   }
   
   //It requires parent.props.childTableName or relationships[0].props.parentTableName
-  /* ********** que ocurre con el propio parent, se toman los extra parents pero no el propio parent?????      */
   async dbLoadMyParent() {
-    let myTableName;
-    if (this.parent) {
-      myTableName=this.parent.props.childTableName;
-    }
-    else if (this.relationships.length > 0) myTableName=this.relationships[0].props.parentTableName;
-    else return false;
-    const result = await this.constructor.dbGateway.getExtraParentsFromTable(this.constructor.dbGateway.tableList.get(myTableName));
-    this.parent=result.length > 0 ? [] : null;
-    for (let i=0; i<result.length; i++) {
-      this.parent[i] = new this.constructor.linkerConstructor(this.constructor.dbGateway.tableRef.get(result[i].childTableName), this.constructor.dbGateway.tableRef.get(result[i].parentTableName), result[i].name);
-      await this.parent[i].dbLoadMyChildTableKeys();
-      this.parent[i].children[0]=this;
-    }
-    
-    if (Array.isArray(this.parent) && this.parent.length==1) this.parent=this.parent[0];
-    return this.parent;
+    let myTableName
+    if (this.parent)
+      myTableName = this.parent.props.childTableName
+    else if (this.relationships.length > 0)
+      myTableName = this.relationships[0].props.parentTableName
+    else return false
+    let resultParentsProps = await this.constructor.dbGateway.getExtraParentsFromTable(this.constructor.dbGateway.tableList.get(myTableName))
+    this.parent = resultParentsProps.map(parentProps=>{
+      const parent = new this.constructor.linkerConstructor(this.constructor.dbGateway.tableRef.get(parentProps.childTableName), this.constructor.dbGateway.tableRef.get(parentProps.parentTableName), parentProps.name)
+      parent.dbLoadMyChildTableKeys()
+      parent.children[0] = this
+      return parent
+    })
+    if (this.parent.length <= 1)
+      this.parent = this.parent[0]
+    return this.parent
   }
   
   async dbLoadMyTree(extraParents=null, level=null, filterProp={}, limit=[], myself=false) {
@@ -444,18 +443,20 @@ const dataModelMixin=Sup => class extends Sup {
   }
   
   async dbLoadMyTreeUp(level=null) {
-    if (level===0) return true;
-    if (level) level--;
-    await this.dbLoadMyParent();
-    if (!this.parent) return this.parent;
+    if (level===0)
+      return true
+    if (level)
+      level--
+    await this.dbLoadMyParent()
+    if (!this.parent) return
     if (Array.isArray(this.parent)) {
       for (const pNode of this.parent) {
-        await pNode.dbLoadMyTreeUp(level);
+        await pNode.dbLoadMyTreeUp(level)
       }
-      return this.parent;
+      return this.parent
     }
-    await this.parent.dbLoadMyTreeUp(level);
-    return this.parent;
+    await this.parent.dbLoadMyTreeUp(level)
+    return this.parent
   }
   
   async dbGetMyTreeUp(level=null) {

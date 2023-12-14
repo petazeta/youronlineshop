@@ -58,10 +58,11 @@ export class SiteDbGateway {
       return tot;
     }, []);
   }
-
+  // it gets collections related to tableName, returns an array
   getExtraParentsFromTable(tableName) {
-    return Object.entries(this.dbLink.model(tableName).schema.tree).filter(([key, value])=>value?.ref)
-    .map(([key, value])=>({childTableName: tableName, parentTableName: value.ref.toString(), name: tableName.toLowerCase()}));
+    return Object.entries(this.dbLink.model(tableName).schema.tree)
+    .filter(([key, value])=>value?.ref)
+    .map(([key, value])=>({childTableName: tableName, parentTableName: value.ref.toString(), name: tableName.toLowerCase()}))
   }
 
   getTableKeys(tableName) {

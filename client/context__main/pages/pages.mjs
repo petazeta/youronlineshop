@@ -212,7 +212,7 @@ async function setMenusCollectionEventsReactions(){
   if (hasWritePermission() && !getRoot()._collectionReactions) {
     const {onDelSelectedChild} = await import("../admin/deletion.mjs")
     const {onNewNodeMakeClick, onNoChildrenShowAdd} = await import("../admin/addition.mjs")
-    const {setAdditionButton} = await import("../admin/addition.mjs")
+    //const {setAdditionButton} = await import("../admin/addition.mjs")
     const {showFirstAdditionOnLog} = await import("../admin/addition.mjs")
     onNewNodeMakeClick(getRoot().getMainBranch(), displayParagraphs)
     /* old
@@ -379,7 +379,7 @@ async function setPrphsCollectionEventsReactions(menu){
   // this is kind of different reaction, it is not related to edition events but with loggin events
   if (menu._collectionReactions)
     return
-  const {setAdditionButton} = await import("../admin/addition.mjs")
+  const {setAdditionButton} = await import("../admin/addition.mjs") //*** no se usa
   const {showFirstAdditionOnLog} = await import("../admin/addition.mjs")
   /*
   const logChangeReaction=async ()=>{

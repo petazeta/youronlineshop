@@ -326,7 +326,7 @@ const nodeMixin=Sup => class extends Sup {
       if (!Array.isArray(this.parent)) this.parent=[this.parent]
       if (!this.parent.includes(obj)) this.parent.push(obj)
     }
-    if (!obj.relationships.includes(this)) obj.relationships.push(this)
+    if (!obj.children.includes(this)) obj.children.push(this)
   }
 
   setParent(obj) {

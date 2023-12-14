@@ -193,6 +193,7 @@ export function replaceLangData(target, source, langCollectionName) {
       }
     }
   }
+  // *** relName is not defined?
   // return [sourceChildren, targetChildren]
   const splitting=(myElement, resultElement)=>[ myElement[0].getRelationship(relName)?.children || [], myElement[1].getRelationship(relName)?.children || [] ]
 
@@ -200,7 +201,42 @@ export function replaceLangData(target, source, langCollectionName) {
   return target
 }
 
+export function getLangDataBranches(treeRoot, langCollectionName) {
+  const isDataBranch = branch=>branch.isYBranch(langCollectionName)
+  //const isDataBranch = branch=>true
+  const getBranches = myElm => myElm.children.reduce((total, child)=>[...total, ...child.relationships], [])
+  return Array.from(walkThrough(treeRoot.parent, getBranches, undefined, undefined, isDataBranch))//.reduce((total, rel)=> [...total, ...rel.children], [])
+}
+
+//let findChildBranch = (myNode, childCollName) => myNode.relationships.find(langRel=>langRel.props.childTableName==childCollName)
+/*
+async function setLangs(treeRoot) {
+  const {getLangDataBranches} = await import("./shared/utils.mjs")
+  const {getLanguagesRoot} = await import("./client/context__main/languages/languages.mjs")
+  for (const langDataBranch of getLangDataBranches(treeRoot, getLanguagesRoot().parent.props.childTableName)) {
+    for (const langData of langDataBranch.children) {
+      // clone langdata
+      let dataClon = langData.clone(null, 0)
+      // add new parent (langDataBranch.props.childTableName, getLanguagesRoot().parent.props.childTableName)
+      dataClon.parent = new langDataBranch.constructor.linkerConstructor(langDataBranch.props.childTableName, getLanguagesRoot().parent.props.childTableName)
+      dataClon.parent.addChild(dataClon)
+      // loadtreeup langData
+      await dataClon.parent.loadRequest("get my tree up") 
+      // add lang link
+      //dataClon.request("add my link")
+      console.log(dataClon)
+    }
+    //console.log(findChildBranch(lang, langBranchData.props.childTableName))
+  }
+}
+
+const {getRoot} = await import ("./client/context__main/sitecontent.mjs")
+
+await setLangs(getRoot())
+*/
+
 export async function reloadLangData(target, getDataBranch){ //ESTA MAL REVISAR
+  // Node no esta definido
   const subCatData=target.getMainBranch().children.reduce((acc, rootChild)=>[...acc, ...rootChild.getMainBranch().children.map(child=>getDataBranch(child))], []);
   const langParent=this.getCurrentLanguage().getRelationship({childTableName: getDataBranch(this.treeRoot).childTableName});
   const result = await Node.requestMulti("get my children", subCatData, {extraParents: langParent});
@@ -252,10 +288,10 @@ export function splitLangTree(origTree, totalLang){
 }
 
 export function getChildrenArray(myNode) {
-  // const relChildrenArray = (rel) => rel.children.reduce((childArray, child)=>childArray = [...childArray, child], []);
+  // const relChildrenArray = (rel) => rel.children.reduce((childArray, child)=>[...childArray, child], []);
   const relChildrenArray = (rel) => [...rel.children];
   if (BasicNode.detectLinker(myNode)) return relChildrenArray(myNode);
-  return myNode.relationships.reduce((totalArray, rel)=>totalArray = [...totalArray, ...relChildrenArray(rel)], []);
+  return myNode.relationships.reduce((totalArray, rel)=>[...totalArray, ...relChildrenArray(rel)], []);
 }
 
 export function arrayFromTree(thisNode){

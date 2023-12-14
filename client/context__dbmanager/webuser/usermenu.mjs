@@ -55,6 +55,20 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
     await changePwdView()
   })
   */
+
+  if (webuser.isSystemAdmin()) {
+    const expButton = tpButton.cloneNode(true)
+    dashPath.getNextChild("expimp").getNextChild("butexp").setContentView(expButton)
+    expButton.addEventListener('click', async (ev)=>{
+      ev.preventDefault()
+      const {exportView} = await import("../export.mjs")
+      document.getElementById("centralcontent").innerHTML=""
+      document.getElementById("centralcontent").appendChild(await exportView())
+      setActiveInSite(webuser)
+    })
+    menusContainer.appendChild(expButton)
+  }
+
   const logOutButton = tpButton.cloneNode(true)
   dashPath.getNextChild("btLogOut").setContentView(logOutButton)
   logOutButton.addEventListener('click', async ()=>{

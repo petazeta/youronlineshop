@@ -116,14 +116,12 @@ async function orderCartView(order) {
   const orderTp = await getTemplate("ordercart")
   const orderContainer = selectorFromAttr(orderTp, "data-container")
   const itemsTableTp = await getTemplate("ordertable")
-  const itemsTable = selectorFromAttr(itemsTableTp, "data-container")
+  const itemsTable = selectorFromAttr(itemsTableTp, "data-table").cloneNode()
   order.firstElement = itemsTable
-  const itemsTableRow = itemsTable.rows[0].cloneNode(true)
-  const itemsTableCell = itemsTableRow.cells[0].cloneNode(true)
-  itemsTableRow.deleteCell(0)
-  itemsTable.deleteRow(0)
+  const itemsTableRowSample = selectorFromAttr(itemsTableTp, "data-row")
+  const itemsTableCellSample = selectorFromAttr(itemsTableTp, "data-cell")
   for (const item of order.getRelationship("orderitems").children) {
-    itemsTable.appendChild(await itemCartView(item, itemsTableRow.cloneNode(true), itemsTableCell))
+    itemsTable.appendChild(await itemCartView(item, itemsTableRowSample.cloneNode(), itemsTableCellSample))
     item.addEventListener("changeProperty", function(propKey) {
       if (propKey=="quantity" || propKey=="price") {
         selectorFromAttr(orderContainer, "data-subtotal-value").textContent = subTotal(order)
@@ -159,9 +157,8 @@ async function displayShippings(myContainer){
   getSiteText().getNextChild("checkout").getNextChild("shippingTit").setContentView(selectorFromAttr(thisContainer, "data-tit"))
 
   const thisTableTp = await getTemplate("shippingstable")
-  const thisTable = selectorFromAttr(thisTableTp, "data-container")
-  const thisTableRow = thisTable.rows[0].cloneNode(true)
-  thisTable.deleteRow(0)
+  const thisTable = selectorFromAttr(thisTableTp, "data-table").cloneNode()
+  const thisTableRowSample = selectorFromAttr(thisTableTp, "data-row")
   const {Content} = await import("../../contentbase.mjs")
   const thisText = new Content("TABLE_SHIPPINGTYPES", -1, "TABLE_SHIPPINGTYPESDATA")
   await thisText.initData(Linker, getLangParent, webuser, getCurrentLanguage)
@@ -174,7 +171,7 @@ async function displayShippings(myContainer){
   thisTable.innerHTML = ""
   for (const myNode of thisText.treeRoot.getMainBranch().children) {
     // it is important to await View for the syncrhony of performance: the Tp to not be empty when append in DOM, dispatch displayChildren after append
-    thisTable.appendChild(await shippingView(myNode, thisTableRow))
+    thisTable.appendChild(await shippingView(myNode, thisTableRowSample))
     // selecting first one by default
     if (myNode == thisText.treeRoot.getMainBranch().getChild()) {
       const selectElement = selectorFromAttr(myNode.firstElement, "data-select")
@@ -263,9 +260,8 @@ async function displayPayments(myContainer){
   getSiteText().getNextChild("checkout").getNextChild("paymentTit").setContentView(selectorFromAttr(thisContainer, "data-tit"))
 
   const thisTableTp = await getTemplate("paymentstable")
-  const thisTable = selectorFromAttr(thisTableTp, "data-container")
-  const thisTableRow = thisTable.rows[0].cloneNode(true)
-  thisTable.deleteRow(0)
+  const thisTable = selectorFromAttr(thisTableTp, "data-table").cloneNode()
+  const thisTableRowSample = selectorFromAttr(thisTableTp, "data-row")
   const {Content} = await import("../../contentbase.mjs")
   const thisText = new Content("TABLE_PAYMENTTYPES", -1, "TABLE_PAYMENTTYPESDATA")
   await thisText.initData(Linker, getLangParent, webuser, getCurrentLanguage)
@@ -279,7 +275,7 @@ async function displayPayments(myContainer){
   await thisText.treeRoot.getMainBranch().loadRequest("get my tree")
   for (const myNode of thisText.treeRoot.getMainBranch().children) {
     // it is important to await View for the syncrhony of performance: the Tp to not be empty when append in DOM, dispatch displayChildren after append
-    thisTable.appendChild(await paymentView(myNode, thisTableRow))
+    thisTable.appendChild(await paymentView(myNode, thisTableRowSample))
     // selecting first one by default
     if (myNode == thisText.treeRoot.getMainBranch().getChild()) {
       const selectElement = selectorFromAttr(myNode.firstElement, "data-select")
@@ -349,14 +345,12 @@ async function orderView(order) {
   const orderTp = await getTemplate("order")
   const orderContainer = selectorFromAttr(orderTp, "data-container")
   const itemsTableTp = await getTemplate("ordertable")
-  const itemsTable = selectorFromAttr(itemsTableTp, "data-container")
+  const itemsTable = selectorFromAttr(itemsTableTp, "data-table").cloneNode()
   order.firstElement = itemsTable
-  const itemsTableRow = itemsTable.rows[0].cloneNode(true)
-  const itemsTableCell = itemsTableRow.cells[0].cloneNode(true)
-  itemsTableRow.deleteCell(0)
-  itemsTable.deleteRow(0)
+  const itemsTableRowSample = selectorFromAttr(itemsTableTp, "data-row")
+  const itemsTableCellSample = selectorFromAttr(itemsTableTp, "data-cell")
   for (const item of order.getRelationship("orderitems").children) {
-    itemsTable.appendChild(await itemView(item, itemsTableRow.cloneNode(true), itemsTableCell))
+    itemsTable.appendChild(await itemView(item, itemsTableRowSample.cloneNode(), itemsTableCellSample))
     // we still havent developed a way to change the order in this stage
   }
   selectorFromAttr(orderContainer, "data-items").appendChild(itemsTable)

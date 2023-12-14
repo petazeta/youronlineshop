@@ -5,7 +5,8 @@ import {getLanguages, getLanguagesRoot} from './languages/languages.mjs'
 import {getTemplate} from './layouts.mjs'
 import {selectorFromAttr} from "../frontutils.mjs"
 import {exportFormat} from "../../shared/utils.mjs"
-import {prepareRequest, prepareMultiRequest} from "../request.mjs";
+import {prepareRequest, prepareMultiRequest} from "../request.mjs"
+import {exportData} from "../export.mjs"
 
 export async function exportView(){
   const expPath = getSiteText().getNextChild("dashboard").getNextChild("expimp")
@@ -24,6 +25,8 @@ export async function exportView(){
   expPath.getNextChild("chkusers").setContentView(selectorFromAttr(expContainer, "data-chkusers"))
   expPath.getNextChild("chkusers").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chkusers-details"))
   expPath.getNextChild("butexp").setContentView(selectorFromAttr(expContainer, "data-butexp"))
+  expPath.getNextChild("chkentiredb").setContentView(selectorFromAttr(expContainer, "data-chk-entire-db"))
+  expPath.getNextChild("chkentiredb").getNextChild("details").setContentView(selectorFromAttr(expContainer, "data-chk-entire-db-details"))
   const langContainer = selectorFromAttr(expContainer, "data-languages-list")
   const langSample = langContainer.firstElementChild.cloneNode(true)
   langContainer.removeChild(langContainer.firstElementChild)
@@ -59,34 +62,25 @@ export async function exportView(){
   return expTp
 }
 
-
-const exportFunc = new Map()
+export const exportFunc = new Map()
 
 // To export data with lang content we first export the lang tree for first 2 levels: root and its rels (languages key). Then the root element tree to be exported with all langs.
 
 exportFunc.set("menus", async ()=>{  
-  const {getRoot: getPagesContent} = await import('./pages/pages.mjs')
-  const textClone = await getPagesContent().clone(null, 0).loadRequest("get my tree")
-  const [langs] = await prepareMultiRequest("add my tree", getLanguages())
-  const [tree] = await prepareRequest(textClone, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
-  return {"languages": langs, "tree": tree}
+  const {getRoot: getPagesContent} = await import('./catalog/categories.mjs')
+  return await exportData(getLanguages(), getPagesContent())
 })
 
 exportFunc.set("catalog", async ()=>{
   const {getRoot: getCategoriesContent} = await import('./catalog/categories.mjs')
-  const textClone = await getCategoriesContent().clone(null, 0).loadRequest("get my tree")
-  const [langs] = await prepareMultiRequest("add my tree", getLanguages())
-  const [tree] = await prepareRequest(textClone, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
-  return {"languages": langs, "tree": tree}
+  return await exportData(getLanguages(), getCategoriesContent())
 })
 
 exportFunc.set("checkout", async ()=>{
-  const shippingsRoot = (await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my tree")).getChild()
-  const paymentsRoot = (await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my tree")).getChild()
-  const [langs] = await prepareMultiRequest("add my tree", getLanguages())
-  const [shippingsTree] = await prepareRequest(shippingsRoot, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
-  const [paymentsTree] = await prepareRequest(paymentsRoot, "add my tree") // *** he cambiado tree, originalmente exportaba desde la relacion main branch ahora exporta partiendo de root
-  return {"languages": langs, "tree": [shippingsTree, paymentsTree]}
+  // *** por que no funciona get my children?? no seria mejor hacer que funcionara y eliminar la necesidad de get my root?
+  const shippingsRoot = (await new Linker("TABLE_SHIPPINGTYPES").loadRequest("get my root")).getChild()
+  const paymentsRoot = (await new Linker("TABLE_PAYMENTTYPES").loadRequest("get my root")).getChild()
+  return await exportData(getLanguages(), [shippingsRoot, paymentsRoot])
 })
 
 exportFunc.set("lang", async (selectedLangs)=>{
