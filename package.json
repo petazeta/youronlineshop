@@ -1,14 +1,15 @@
 {
   "name": "@petazeta/your-online-shop-server",
   "description": "server for your online shop",
-  "main": "serverindex.mjs",
+  "main": "server/serverindex.mjs",
   "scripts": {
-    "start": "node serverindex.mjs",
-    "test": "node --inspect serverindex.mjs"
+    "start": "node server/serverindex.mjs",
+    "test": "node --inspect server/serverindex.mjs"
   },
   "author": "alberto melchor herrera",
   "license": "ISC",
   "dependencies": {
+    "node-fetch": "*",
     "mongoose": "*",
     "nodemailer": "*"
   }

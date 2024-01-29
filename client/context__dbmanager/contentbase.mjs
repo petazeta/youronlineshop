@@ -12,7 +12,8 @@ export class BaseContent extends Content{
     }
     else {
       this.treeRoot = new Linker().addChild(new Linker.nodeConstructor())
-      this.treeRoot.addRelationship(await new Linker(this.db_collection).loadRequest("get all my children"))
+      this.treeRoot.addRelationship(await new Linker(this.db_collection).loadRequest("get my childtablekeys"))
+      await this.treeRoot.getRelationship().loadRequest("get all my children")
     }
     this.setReactions(webuser, getCurrentLanguage)
     return this.treeRoot

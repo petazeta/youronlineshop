@@ -50,20 +50,21 @@ export async function setDeletionButton(delNode, elmView, dataIdButsWrapper="adm
   })
 }
 // to set some procedures after deletion. I asummes "deleteChild" is dispatched
-export function onDelSelectedChild(nodeParent, clickOn){
+export function onDelSelectedChild(nodeParent, listenerCallback){
   // If node was selected then we select the previous one and expand it
   nodeParent.addEventListener("deleteChild", delNode => {
     const skey = nodeParent.getSysKey("sort_order")
-    if (!delNode.selected) return
-    if (nodeParent.children.length>0) {
-      let position=1
-      if (delNode.props[skey] > 1)
-        position=delNode.props[skey]-1
-      clickOn(nodeParent.children.find(child=>child.props[skey]==position))
+    if (!delNode.selected)
+      return
+    let nextSelected
+    if (nodeParent.children.length > 0) {
+      const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
+      nextSelected = nodeParent.children.find(child=>child.props[skey]==nextPosition) || nodeParent.getChild()
     }
     else if (delNode==getActiveInSite()){
       document.getElementById("centralcontent").innerHTML="" // Remove the container content when remove expander node
     }
+    listenerCallback(nextSelected)
   }, "unselectNode")
 }
 // to set some procedures after deletion. I asummes "deleteChild" is dispatched
@@ -86,4 +87,13 @@ export function onDelInPageChild(nodeParent, refreshView){
     // No change in indexes
     refreshView(nodeParent.partner, pagination.pageNum)
   }, "delinpage")
+}
+// If we are using onDelSelectedChild then this should be not necesary so a only child would be a selected one
+export function onDelOnlyChild(nodeParent, onDelAction){
+  // If node was selected then we select the previous one and expand it
+  nodeParent.addEventListener("deleteChild", delNode => {
+    if (nodeParent.children.length!=0)
+      return
+    onDelAction()
+  }, "onlyChild")
 }

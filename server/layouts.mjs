@@ -1,7 +1,7 @@
 import {BasicLinker, BasicNode} from '../shared/linker.mjs';
 import {walkThrough} from '../shared/utils.mjs';
 import {readTree} from './layoutfolderread.mjs';
-import {createReadStream, readFileSync, statSync, promises as fs} from 'fs';
+import {createReadStream, promises as fs} from 'fs';
 import * as path from 'path';
 import {compose, pipeline} from 'stream'
 import {streamErrorGuard} from "./errors.mjs"

@@ -27,9 +27,18 @@ export function setDbSchema(dbLink) {
     new Schema({
       username: String,
       pwd: String,
-      status: Number,
-      access: Date,
-      creationDate: Date,
+      status: {
+        type: Number,
+        default: 1,
+      },
+      access: {
+        type: Date,
+        default: Date.now,
+      },
+      creationDate: {
+        type: Date,
+        default: Date.now,
+      },
       parentUsersTypes: {
         type: SchemaTypes.ObjectId,
         ref: "UsersTypes",
@@ -174,6 +183,8 @@ export function setDbSchema(dbLink) {
     
   dbLink.model("Items",
     new Schema({
+      price: Number,
+      currencyCode: String,
       parentItemCategories: {
         type: SchemaTypes.ObjectId,
         ref: "ItemCategories",
@@ -194,7 +205,6 @@ export function setDbSchema(dbLink) {
       name: String,
       descriptionlarge: String,
       descriptionshort: String,
-      price: Number,
       parentItems: {
         type: SchemaTypes.ObjectId,
         ref: "Items",
@@ -223,8 +233,8 @@ export function setDbSchema(dbLink) {
   dbLink.model("PaymentTypes",
     new Schema({
       image: String,
-      vars: String,
       template: String,
+      vars: String, // public paymentAccount vars
       active: Number,
       parentPaymentTypes: {
         type: SchemaTypes.ObjectId,
@@ -235,7 +245,32 @@ export function setDbSchema(dbLink) {
         positionRef: "PaymentTypes",
       }
     })
-  );
+  )
+
+  dbLink.model("PaymentTypesAccount",
+    new Schema({
+      vars: String, // private paymentAccount vars
+      parentPaymentTypes: {
+        type: SchemaTypes.ObjectId,
+        ref: "PaymentTypes",
+      }
+    })
+  )
+    
+  dbLink.model("PaymentTypesData",
+    new Schema({
+      name: String,
+      description: String,
+      parentPaymentTypes: {
+        type: SchemaTypes.ObjectId,
+        ref: "PaymentTypes",
+      },
+      parentLanguages: {
+        type: SchemaTypes.ObjectId,
+        ref: "Languages",
+      }
+    })
+  )
 
   dbLink.model("ShippingTypes",
     new Schema({
@@ -251,23 +286,8 @@ export function setDbSchema(dbLink) {
         positionRef: "ShippingTypes",
       }
     })
-  );
-    
-  dbLink.model("PaymentTypesData",
-    new Schema({
-      name: String,
-      description: String,
-      parentPaymentTypes: {
-        type: SchemaTypes.ObjectId,
-        ref: "PaymentTypes",
-      },
-      parentLanguages: {
-        type: SchemaTypes.ObjectId,
-        ref: "Languages",
-      }
-    })
-  );
-    
+  )
+
   dbLink.model("ShippingTypesData",
     new Schema({
       name: String,
@@ -285,9 +305,18 @@ export function setDbSchema(dbLink) {
     
   dbLink.model("Orders",
     new Schema({
-      creationDate: Date,
-      modificationDate: Date,
-      status: Number,
+      creationDate: {
+        type: Date,
+        default: Date.now,
+      },
+      modificationDate: {
+        type: Date,
+        default: Date.now,
+      },
+      status: {
+        type: Number,
+        default: 1,
+      },
       parentUsers: {
         type: SchemaTypes.ObjectId,
         ref: "Users",
@@ -300,14 +329,19 @@ export function setDbSchema(dbLink) {
       quantity: Number,
       name: String,
       price: Number,
+      currencyCode: String,
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",
+      },
+      parentItems: {
+        type: SchemaTypes.ObjectId,
+        ref: "Items",
       }
     })
   );
     
-  dbLink.model("OrderPaymentTypes",
+  dbLink.model("OrderPayment",
     new Schema({
       name: String,
       details: String,
@@ -315,11 +349,15 @@ export function setDbSchema(dbLink) {
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",
+      },
+      parentPaymentTypes: {
+        type: SchemaTypes.ObjectId,
+        ref: "PaymentTypes",
       }
     })
   );
 
-  dbLink.model("OrderShippingTypes",
+  dbLink.model("OrderShipping",
     new Schema({
       name: String,
       delay_hours: Number,
@@ -327,6 +365,10 @@ export function setDbSchema(dbLink) {
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",
+      },
+      parentShippingTypes: {
+        type: SchemaTypes.ObjectId,
+        ref: "ShippingTypes",
       }
     })
   );

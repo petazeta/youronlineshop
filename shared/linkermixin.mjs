@@ -129,24 +129,42 @@ const linkerMixin=Sup => class extends Sup {
   // We need to set nodeConstructor at the concret linker class
 
   loadDesc(source, level, thisProps) {
-    if (!source?.children) return
-    if (level===0) return
-    if (level > 0) level--
-    this.children=[] // reset children
+    if (!source?.children)
+      return
+    if (level===0)
+      return
+    if (level > 0)
+      level--
+    this.children = [] // reset children
     source.children.forEach(sourceChild=>{
-      const targetChild=this.addChild(new this.constructor.nodeConstructor())
+      const targetChild = this.addChild(new this.constructor.nodeConstructor())
       this.constructor.copyProps(targetChild, sourceChild, thisProps) // loading just some props
+      // Check for multiple parents
+      if (Array.isArray(sourceChild.parent)) {
+        for (const sourceLinker of sourceChild.parent.slice(1)) {
+          let targetLinker = new this.constructor.linkerConstructor()
+          this.constructor.copyProps(targetLinker, sourceLinker)
+          targetLinker.loadChildTableKeys(sourceLinker)
+          targetChild.addParent(targetLinker)
+          targetLinker.loadAsc(sourceLinker)
+        }
+      }
       targetChild.loadDesc(sourceChild, level, thisProps)
     })
+    return this
   }
 
   loadAsc(source, level, thisProps) {
-    if (!source?.partner) return
-    if (level===0) return
-    if (level > 0) level--
+    if (!source?.partner)
+      return
+    if (level===0)
+      return
+    if (level > 0)
+      level--
     this.setPartner(new this.constructor.nodeConstructor())
     this.constructor.copyProps(this.partner, source.partner, thisProps)
     this.partner.loadAsc(source.partner, level, thisProps)
+    return this
   }
   
   // type: primary, foreignkey, positionkey. return unique value
@@ -251,24 +269,31 @@ const nodeMixin=Sup => class extends Sup {
   // We need to set linkerConstructor at the concret node class
 
   loadDesc(source, level, thisProps) {
-    if (!source?.relationships) return
-    if (level===0) return
-    if (level > 0) level--
-    this.relationships=[] // reset rels
+    if (!source?.relationships)
+      return
+    if (level===0)
+      return
+    if (level > 0)
+      level--
+    this.relationships = [] // reset rels
     source.relationships.forEach(sourceLinker=>{
       const targetLinker=this.addRelationship(new this.constructor.linkerConstructor())
       this.constructor.copyProps(targetLinker, sourceLinker, thisProps) // loading just props
       targetLinker.loadChildTableKeys(sourceLinker)
       targetLinker.loadDesc(sourceLinker, level, thisProps)
     })
+    return this
   }
 
   loadAsc(source, level, thisProps) {
-    if (!source?.parent) return
-    if (level===0) return
-    if (level > 0) level--
+    if (!source?.parent)
+      return
+    if (level===0)
+      return
+    if (level > 0)
+      level--
     if (Array.isArray(source.parent)) {
-      this.parent=[]
+      this.parent = []
       source.parent.forEach(sourceLinker=>{
         const targetLinker=new this.constructor.linkerConstructor()
         this.constructor.copyProps(targetLinker, sourceLinker)
@@ -278,10 +303,11 @@ const nodeMixin=Sup => class extends Sup {
       })
       return
     }
-    const targetLinker=this.setParent(new this.constructor.linkerConstructor())
+    const targetLinker = this.setParent(new this.constructor.linkerConstructor())
     this.constructor.copyProps(targetLinker, source.parent)
     targetLinker.loadChildTableKeys(source.parent)
     targetLinker.loadAsc(source.parent, level, thisProps)
+    return this
   }
 
   getRelationship(relname) {
@@ -317,16 +343,21 @@ const nodeMixin=Sup => class extends Sup {
     }
     return super.getAscendent(objSearch)
   }
-  // This is not clear, probably is erroneous, better use addChild in parent
-  // Multple parents is not well implemented, what about addChild? why addChild doesn't implement multple parents in child?
+  /* This implementation is for multiple parents. We could have multiple parents but not multiple partners
+     addChild doesn't implement multiple parents.
+  */
   addParent(obj) {
     if (!this.parent)
       this.parent = obj
     else {
-      if (!Array.isArray(this.parent)) this.parent=[this.parent]
-      if (!this.parent.includes(obj)) this.parent.push(obj)
+      if (!Array.isArray(this.parent))
+        this.parent = [this.parent] // always an array
+      if (!this.parent.includes(obj))
+        this.parent.push(obj)
     }
-    if (!obj.children.includes(this)) obj.children.push(this)
+    if (!obj.children.includes(this))
+      obj.children.push(this)
+    return obj
   }
 
   setParent(obj) {

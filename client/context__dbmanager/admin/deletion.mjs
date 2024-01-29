@@ -87,3 +87,12 @@ export function onDelInPageChild(nodeParent, refreshView){
     refreshView(nodeParent.partner, pagination.pageNum)
   }, "delinpage")
 }
+// If we are using onDelSelectedChild then this should be not necesary so a only child would be a selected one
+export function onDelOnlyChild(nodeParent, onDelAction){
+  // If node was selected then we select the previous one and expand it
+  nodeParent.addEventListener("deleteChild", delNode => {
+    if (nodeParent.children.length!=0)
+      return
+    onDelAction()
+  }, "onlyChild")
+}

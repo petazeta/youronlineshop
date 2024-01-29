@@ -15,73 +15,47 @@
 import {BasicNode} from './linker.mjs';
 
 // serializing the node data
-export function deconstruct(inputNode){
-  // It returns the node with the basic data. It clears the links to parent and children.
-  const clearNode = (myNode) => {
-    const serialCommon ={_parent: null, _children:[]},
-    serialLinker = {partner: null, children:[]},
-    serialNode = {parent: null, relationships:[]},
-    commonKeys = ['props'],
-    nodeKeys = [],
-    linkerKeys = ['childTableKeys', 'childTableKeysInfo', 'sysChildTableKeys', 'sysChildTableKeysInfo']
-
-    const isLinker = BasicNode.detectLinker(myNode)
-    const myKeys = isLinker ? [...commonKeys, ...linkerKeys] : [...commonKeys, ...nodeKeys];
-    const serialResult = isLinker ? {...serialCommon, ...serialLinker} : {...serialCommon, ...serialNode};
-    for (const key of myKeys) {
-      serialResult[key] = myNode[key]
-    }
-    return serialResult
-  }
-  /*
-  // We get to the root node and serialize from it, and for be able to get again to the present node we store it in an index field.
-  const indexNode = inputNode // set a pointer to the present node
+export function deconstruct(inputNode, cutVoidRels=false){
   let rootNode = BasicNode.getRoot(inputNode)
   if (!rootNode)
     rootNode = indexNode
 
-  const serials = new Map()
-  let indexKey // For storing the indexKey
-  // uses indexNode, indexKey and serials
-  const innerSerialize = (rootNode) => {
-    const myId = serials.size + 1 // this ensures unique ids
-    if (rootNode===indexNode)
-      indexKey = myId
-    const newOne = clearNode(rootNode)
-    newOne.props.__id = myId // We set the id into the properties
-
-    if (rootNode._parent?.props.__id) {
-      newOne._parent = rootNode._parent.props.__id // we assing the parent id to "_parent" property
+  const getTreeNodes = (thisNode) => walkThrough(
+    thisNode,
+    (elmSplit)=>{
+      // set extra Parents
+      if (isLinker(elmSplit))
+        return elmSplit.children
+      if (cutVoidRels)
+        return elmSplit.relationships.filter(rel=>rel.children.length)
+      return elmSplit.relationships
+    },
+    undefined,
+    (elmYield)=>{
+      if (isLinker(elmYield) && true) {
+        const extraParentNodes = []
+        for (const child of elmYield.children) {
+          if (Array.isArray(child.parent)) {
+            child.parent.slice(1).forEach(extraParent=>{
+              extraParentNodes.push(extraParent.partner, extraParent)
+            })
+          }
+        }
+        return [...extraParentNodes, elmYield]
+      }
+      return [elmYield]
     }
+  )
 
-    serials.set(myId, newOne)
-    for (const re of rootNode._children) {
-      innerSerialize(re)
-    }
-  }
+  const serialNodes = Array.from(getTreeNodes(rootNode)).reduce((acc,val)=>acc.concat(...val), []) // yields comes in arrays
 
-  innerSerialize(rootNode)
-  
-  serials.forEach((value)=>{
-    if (value?.props?.__id)
-      delete value.props.__id
-  })
-  if (!indexKey) {
-    throw new Error("incorrect deconstruct")
-  }
-  // ponemos un último valor en el map para establecer el valor inicial del bloque: index: id, 
-  serials.set('index', indexKey)
-*/
-  let rootNode = BasicNode.getRoot(inputNode)
-  if (!rootNode)
-    rootNode = indexNode
-  const serialNodes = arrayFromTree(rootNode)
   const serials = new Map(serialNodes.map((val, ind)=>{
     const newOne = clearNode(val)
-    if (val._parent) {
-      const parentInd = serialNodes.findIndex(parentVal=>parentVal == val._parent)
-      if (parentInd!=-1)
-        newOne._parent = parentInd + 1 // we assing the parent id to "_parent" property
+    if (!isLinker(val) && Array.isArray(val.parent)) {
+      newOne._parent = val.parent.map(parent=>serialNodes.findIndex(parentVal=>parentVal == parent) + 1)
+    }
+    else if (val._parent) {
+      newOne._parent = serialNodes.findIndex(parentVal=>parentVal == val._parent) + 1
     }
     return [ind + 1, newOne]
   }))
@@ -93,34 +67,48 @@ export function deconstruct(inputNode){
   serials.set('index', indexKey + 1)
 
   return serials
+
+  // helpers
+  // It returns the node with the basic data. It clears the links to parent and children.
+  function clearNode(myNode) {
+    const serialCommon ={_parent: null, _children:[]},
+    serialLinker = {partner: null, children:[]},
+    serialNode = {parent: null, relationships:[]},
+    commonKeys = ['props'],
+    nodeKeys = [],
+    linkerKeys = ['childTableKeys', 'childTableKeysInfo', 'sysChildTableKeys', 'sysChildTableKeysInfo']
+    const myKeys = isLinker(myNode) ? [...commonKeys, ...linkerKeys] : [...commonKeys, ...nodeKeys];
+    const serialResult = isLinker(myNode) ? {...serialCommon, ...serialLinker} : {...serialCommon, ...serialNode};
+    for (const key of myKeys) {
+      serialResult[key] = myNode[key]
+    }
+    return serialResult
+  }
+  function isLinker(myNode) {
+    return BasicNode.detectLinker(myNode)
+  }
 }
-
-/*
-Esta consulta devuelve los datos de la tabla siteelements ordenados en jerarquía lo que sería útil si quisiéramos convertir estos datos al tree sin usar recursión
-
-WITH RECURSIVE MyTree AS (
-    SELECT * FROM public.siteelements WHERE "_siteelements" IS NULL
-    UNION ALL
-    SELECT m.* FROM public.siteelements AS m JOIN MyTree AS t ON m._siteelements = t.id
-)
-SELECT * FROM MyTree;
-
-So tenemos este resultado de una tabla podemos utilizar los propios ids para que el mapa resultante de serialize tenga como claves los ids y de esta forma si queremos añadir al arbol elementos de otras tablas lo tendríamos más fácil:
-const myId = gender == "male" ? myNode.props.id : 'f' + (serials.size + 1);
-
-Quizá podría ponerse en cada nodo de la lista además de parent__id children[..._id] y así quizás se podría hacer de forma que no importara el orden
-*/
 
 export function construct(serials){
   const tree = new Map() // we return a copy not to modify the original
   serials.forEach((dataValue, id)=>{
     if (id=='index')
       return
-    let value = JSON.parse(JSON.stringify(dataValue)) // make a copy
+    const value = JSON.parse(JSON.stringify(dataValue)) // make a copy
     tree.set(id, value)
     // set the antecesor
-    const parent = value._parent && tree.get(value._parent)
-    if (parent) {
+    if (Array.isArray(value._parent)) {
+      value._parent = value._parent.map(parentId=>parentId && tree.get(parentId))
+      value.parent = value._parent
+      value.parent.forEach(parent=>parent.children.push(value))
+    }
+    else {
+      setLinks(value)
+    }
+    function setLinks(value) {
+      const parent = value._parent && tree.get(value._parent)
+      if (!parent)
+        return
       // add child to parent
       value._parent = parent
       if ("parent" in value)
@@ -143,9 +131,9 @@ export const arrayUnpacking=datas=>{
   if (typeof datas == 'object') return datas.map(data => unpacking(data));
   return datas;
 };
-export const packing = data=>{
+export const packing = (data, cutVoidRels=false)=>{
   if (typeof data == 'object')
-    return Array.from(deconstruct(data))
+    return Array.from(deconstruct(data, cutVoidRels))
   return data
 }
 export const arrayPacking=datas=>{
@@ -298,12 +286,18 @@ export function arrayFromTree(thisNode){
   return Array.from(walkThrough(thisNode))
 }
 
-export function* zip (...iterables){
-  let iterators = iterables.map(i => i[Symbol.iterator]() )
-  while (true) {
-    let results = iterators.map(iter => iter.next() )
-    if (results.some(res => res.done) ) return
-    else yield results.map(res => res.value )
+
+// equivalent to python zip. Asociates elements from a row to another row/rows
+export function zip(...args){
+  return Array.from(zip_iter(args))
+  
+  function* zip_iter (iterables){
+    let iterators = iterables.map(i => i[Symbol.iterator]() )
+    while (true) {
+      let results = iterators.map(iter => iter.next() )
+      if (results.some(res => res.done) ) return
+      else yield results.map(res => res.value )
+    }
   }
 }
 

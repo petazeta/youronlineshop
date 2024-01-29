@@ -1,0 +1,273 @@
+<div id="paypal-button-container" class="paypal-button-container"></div>
+<div id="card-form" class="card_container">
+  <div id="card-name-field-container"></div>
+  <div id="card-number-field-container"></div>
+  <div id="card-expiry-field-container"></div>
+  <div id="card-cvv-field-container"></div>
+  <button id="multi-card-field-button" type="button">Pay now with Card</button>
+</div>
+<p id="result-message"></p>
+<!--
+    <script src="https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=<%= clientId %>"></script>
+    <script src="checkout.js"></script>
+
+<div id="paypal-button-container"></div>
+<script>
+const {default: {currencyCode}}=await import('./' + CLIENT_CONFIG_PATH + 'main.mjs');
+const {sumTotal}=await import('./' + CLIENT_MODULES_PATH + 'cart.mjs');
+const {AlertMessage} = await import('./' + CLIENT_MODULES_PATH + 'alert.mjs');
+const {getSiteText}=await import('./' + CLIENT_MODULES_PATH + 'sitecontent.mjs');
+const orderPaymentType=thisNode;
+const order=orderPaymentType.parent.partner;
+const myVars=JSON.parse(orderPaymentType.props.details).vars;
+const myorderitems=order.getRelationship("orderitems");
+const myordership=order.getRelationship("ordershippingtypes");
+const mytotal=(sumTotal(myorderitems.children) + sumTotal(myordership.children)) / 100;
+const onApprove=(orderData)=>{
+  const transactionStatus = orderData.purchase_units[0]?.payments?.captures[0]?.status;
+  const transactionId = orderData.purchase_units[0]?.payments?.captures[0]?.id;
+  if (transactionStatus=='COMPLETED' || transactionStatus=='PROCESSED') {
+    orderPaymentType.props.succeed=1;
+    orderPaymentType.request("edit my props", {values: {succeed: 1, details: "Payment id:" + transactionId}})
+    .then(res=>{
+      const myNode=getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("paysucceed").getRelationship("siteelementsdata").getChild();
+      new AlertMessage(myNode.props.value, 3000).showAlert();
+      // we update the order view
+      order.setView(document.getElementById("centralcontent"), 'onsucceed');
+    });
+  }
+  else {
+    new AlertMessage("Order status: " + transactionStatus, 3000).showAlert();
+  }
+}
+  
+const onScriptLoaded=function(){
+  paypal.Buttons({
+      style: {
+          shape: 'rect',
+          color: 'gold',
+          layout: 'vertical',
+          label: 'paypal',
+      },
+      createOrder: function(data, actions) {
+          return actions.order.create({
+              purchase_units: [{
+                  amount: {
+                      value: mytotal,
+                      currency_code: currencyCode
+                  }
+              }]
+          });
+      },
+      onApprove: function(data, actions) {
+          return actions.order.capture()
+          .then(onApprove);
+      }
+  }).render('#paypal-button-container');
+}
+  /**
+ * Loads a JavaScript file and returns a Promise for when it is loaded
+ */
+const loadScript = src => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.onload = resolve
+    script.onerror = reject
+    script.src = src
+    document.head.append(script)
+  })
+}
+let paypalurl='https://www.paypal.com/sdk/js' + '?' + 'client-id=' + myVars.merchantId + '&' + 'currency=' +  currencyCode;
+loadScript(paypalurl)
+  .then(() => {
+    onScriptLoaded();
+  })
+  .catch(() => console.error('Something went wrong with paypal.'))
+</script>
+<span style="position:relative;">
+  <div data-id="butedit" class="btmiddleright"></div>
+  <input type="hidden" name="succeedNotice" disabled>
+  <script>
+    const {getSiteText}=await import('./' + CLIENT_MODULES_PATH + 'sitecontent.mjs');
+    const myNode=getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("paysucceed").getRelationship("siteelementsdata").getChild();
+    myNode.writeProp(thisElement);
+    //adding the edition pencil
+    if (webuser.isWebAdmin()) {
+      const {visibleOnMouseOver}= await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
+      visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
+      myNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
+      thisElement.type="text";
+    }
+  </script>
+</span>
+-->
+<style>
+.paybutton .paypal-button-container {
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    max-width: 760px;
+    /*width: 100%;*/
+    margin: 0 auto;
+}
+.paybutton .card_container {
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    max-width: 760px;
+    /*width: 100%;*/
+    margin: 0 auto;
+}
+.paybutton .card_field{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    height:40px;
+    background:white;
+    font-size:17px;
+    color:#3a3a3a;
+    font-family:helvetica, tahoma, calibri, sans-serif;
+}
+.paybutton .card_field_50{
+    width: 50%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    height:40px;
+    background:white;
+    font-size:17px;
+    color:#3a3a3a;
+    font-family:helvetica, tahoma, calibri, sans-serif;
+}
+.paybutton .card_field_75{
+    width: 75%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    height:40px;
+    background:white;
+    font-size:17px;
+    color:#3a3a3a;
+    font-family:helvetica, tahoma, calibri, sans-serif;
+}
+.paybutton .row {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+    margin: 0 -16px;
+}
+.paybutton .col-25 {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+}
+.paybutton .col-50 {
+    -ms-flex: 50%; /* IE10 */
+    flex: 50%;
+}
+.paybutton input[type=text], .paybutton select, .paybutton textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    height:40px;
+    background:white;
+    font-size:17px;
+    color:#3a3a3a;
+    font-family:helvetica, tahoma, calibri, sans-serif;
+}
+.paybutton input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.paybutton .message_container {
+    border-radius: 5px;
+    background:#FFFFFF;
+    font-size:13px;
+    font-family:monospace;
+    padding: 20px;
+}
+#loading {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    opacity: 0.7;
+    background-color: #fff;
+    z-index: 99;
+    text-align: center;
+}
+#loading-image {
+    position: absolute;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -150px;
+}
+.paybutton .spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px; /* half width of the spinner gif */
+    margin-top: -50px; /* half height of the spinner gif */
+    text-align:center;
+    z-index:1234;
+    overflow: auto;
+    width: 100px; /* width of the spinner gif */
+    height: 102px; /* height of the spinner gif +2px to fix IE8 issue */
+}
+.paybutton .button_container {
+    display: flex;
+    justify-content: center;
+}
+.paybutton button:hover {
+    background-color: powderblue;
+}
+.paybutton button {
+    width:229px;
+    height:49px;
+    background:lightblue;
+    border:1px dotted black;
+    font-size:17px;
+    color:#3a3a3a;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+.paybutton .btn_small{
+    width:130px;
+    height:39px;
+    background:lightblue;
+    border:1px dotted black;
+    font-size:14px;
+    color:#3a3a3a;
+}
+.paybutton .btn_small:hover {
+    background-color: powderblue;
+}
+</style>

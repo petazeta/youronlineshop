@@ -1,4 +1,4 @@
-import {unpacking, arrayUnpacking, packing} from "../shared/utils.mjs"
+import {unpacking, arrayUnpacking, packing, zip} from "../shared/utils.mjs"
 import {Readable} from "stream"
 
 export class Responses{
@@ -51,6 +51,42 @@ export class Responses{
       return await user.sendMail(parameters.to, parameters.subject, parameters.message, parameters.from)
     })
 
+    this.responseAuth.set("save order", async (parameters, user)=>{
+      const order = unpacking(parameters.nodeData)
+      if (! order.parent.props.childTableName == "TABLE_ORDERS" || !user.props.id) // if user id -> user logged in
+        throw new Error("Database safety")
+      const result = await order.dbInsertMyTree()
+      // Set relationships with real elements
+      const extraParents = arrayUnpacking(parameters.extraParents)
+      if (extraParents.find(parent=>parent.props.parentTableName=="TABLE_PAYMENTTYPES")) {
+        const myParent = Node.clone(extraParents.find(parent=>parent.props.parentTableName=="TABLE_PAYMENTTYPES"))
+        myParent.children = [] // just for safety
+        myParent.addChild(order.getRelationship("orderpayment").getChild().clone(0))
+        await myParent.getChild().dbInsertMyLink()
+      }
+      if (extraParents.find(parent=>parent.props.parentTableName=="TABLE_SHIPPINGTYPES")) {
+        const myParent = Node.clone(extraParents.find(parent=>parent.props.parentTableName=="TABLE_SHIPPINGTYPES"))
+        myParent.children = [] // just for safety
+        myParent.addChild(order.getRelationship("ordershipping").getChild().clone(0))
+        await myParent.getChild().dbInsertMyLink()
+      }
+      for (const [myParentObj, myChild] of zip(extraParents.filter(parent=>parent.props.parentTableName=="TABLE_ITEMS"), order.getRelationship("orderitems").children)) {
+        const myParent = Node.clone(myParentObj)
+        myParent.children = [] // just for safety
+        myParent.addChild(myChild.clone(0))
+        await myParent.getChild().dbInsertMyLink()
+      }
+      return result && packing(result)
+    })
+
+    this.responseAuth.set("payment", async (parameters, user)=>{
+      const order = new Node().load(unpacking(parameters.nodeData))
+      const payment = new Node().load(unpacking(parameters.payment))
+      const payments = await import(`./payments/${payment.props.template}.mjs`)
+      if (typeof payments[parameters.paymentAction]=="function")
+        return await payments[parameters.paymentAction](order, payment)
+    })
+
     //<-- Read this.responseAuth
 
     this.responseAuth.set("get my childtablekeys", async (parameters)=>{
@@ -64,7 +100,7 @@ export class Responses{
     })
 
     this.responseAuth.set("get all my children", async (parameters, user)=>{
-      if (! await isAllowedToRead(user,unpacking(parameters.nodeData)))
+      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
       return Linker.dbGetAllChildren(unpacking(parameters.nodeData), parameters.filterProps, parameters.limit)
     })
@@ -111,12 +147,24 @@ export class Responses{
       return await Node.dbGetRelationships(unpacking(parameters.nodeData))
     })
 
+    this.responseAuth.set("get my props", async (parameters, user)=>{
+      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
+        throw new Error("Database safety")
+      const reqNode = Node.clone(unpacking(parameters.nodeData))
+      const result = await reqNode.dbGetMyProps()
+      if (result && parameters.filterProps) {
+        return Object.fromEntries(Object.entries(result).filter(([key, value])=>parameters.filterProps.includes(key)))
+      }
+      return result
+    })
+
     //<-- Insert this.responseAuth
 
     this.responseAuth.set("add myself", async (parameters, user)=>{
       if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety");
-      return new Node().load(unpacking(parameters.nodeData)).dbInsertMySelf(arrayUnpacking(parameters.extraParents), parameters.updateSiblingsOrder);
+      const myExtraParents = Array.isArray(parameters.extraParents) ? arrayUnpacking(parameters.extraParents) : parameters.extraParents
+      return new Node().load(unpacking(parameters.nodeData)).dbInsertMySelf(myExtraParents, parameters.updateSiblingsOrder);
     });
 
     this.responseAuth.set("add my children", async (parameters, user)=>{
@@ -128,8 +176,9 @@ export class Responses{
     this.responseAuth.set("add my tree", async (parameters, user)=>{
       if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
+      const myExtraParents = Array.isArray(parameters.extraParents) ? arrayUnpacking(parameters.extraParents) : parameters.extraParents
       const req = Node.clone(unpacking(parameters.nodeData));
-      const result = await req.dbInsertMyTree(parameters.deepLevel, arrayUnpacking(parameters.extraParents), parameters.myself, parameters.updateSiblingsOrder)
+      const result = await req.dbInsertMyTree(parameters.deepLevel, myExtraParents, parameters.myself, parameters.updateSiblingsOrder)
       return result && packing(result)
     });
 
@@ -207,7 +256,7 @@ export class Responses{
       return true
     })
 
-    // utils
+    // utils *** deprecated
     this.responseAuth.set("get time", async ()=>Date.now());
   }
   // ** Main Entrance ** it writes to client the request response and returns it

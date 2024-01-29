@@ -1,23 +1,24 @@
-import {authorizationToken} from "./webuser/authorization.mjs";
-import {packing, unpacking, walkThrough} from '../shared/utils.mjs';
+import {authorizationToken} from "./webuser/authorization.mjs"
+import {packing, unpacking, walkThrough} from '../shared/utils.mjs'
 
 const reduceExtraParents = (params)=>{
-  if (params.extraParents) {
-    if (!Array.isArray(params.extraParents)) params.extraParents=[params.extraParents];
-    params.extraParents=params.extraParents.map(eParent=>{
+  if (params.extraParents && typeof params.extraParents == "object") {
+    if (!Array.isArray(params.extraParents))
+      params.extraParents = [params.extraParents]
+    params.extraParents = params.extraParents.map(eParent=>{
       if (eParent.clone) { // por que hace esta comprobación??
-        return packing(eParent.clone(1, 0, null, "id"));
+        return packing(eParent.clone(1, 0, null, "id"))
       }
-      return eParent;
-    });
+      return eParent
+    })
   }
-  return params;
-};
+  return params
+}
 
-export const reqReduc = new Map();
-export const reqLoaders = new Map();
-export const reqMethods = new Map(); // http request method
-export const reqContentType = new Map();
+export const reqReduc = new Map()
+export const reqLoaders = new Map()
+export const reqMethods = new Map() // http request method
+export const reqContentType = new Map()
 
 reqReduc.set("get my root", myNode=>packing(myNode.clone(0, 0)))
 reqLoaders.set("get my root", (myNode, result)=>{
@@ -60,6 +61,11 @@ reqLoaders.set("get my tree", (myNode, result, params)=>{
     myNode.addRelationship(new myNode.constructor.linkerConstructor().load(rel))
   }
 })
+reqReduc.set("get my props", myNode=>packing(myNode.clone(1, 0, "id")))
+reqLoaders.set("get my props", (myNode, result)=>{
+  Object.assign(myNode.props, result)
+})
+reqMethods.set("get my props", ()=>"put")
 reqReduc.set("get my ascendent", myNode=>packing(myNode.clone(1, 1, "id"))) // *** que diferencia con my tree up?
 reqReduc.set("get my tree up", reqReduc.get("get my ascendent"))
 reqLoaders.set("get my tree up", (myNode, result)=>{
@@ -118,6 +124,18 @@ reqLoaders.set("add my tree", (myNode, result)=>{
   }
   myNode.loadDesc(resultNode)
 })
+reqReduc.set("save order", [myNode=>{
+    return packing(cutVoidRels(myNode.clone(3, null, {"id": false}, 'id', {"id": false})))
+}, reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
+reqMethods.set("save order", ()=>"put")
+reqLoaders.set("save order", (myNode, result)=>{
+  if (!result) return
+  const resultNode = unpacking(result)
+  if (!myNode.constructor.nodeConstructor.detectLinker(myNode)) {
+    myNode.props.id = resultNode.props.id
+  }
+  myNode.loadDesc(resultNode)
+})
 reqReduc.set("add my tree table content", reqReduc.get("add my tree"))
 reqMethods.set("add my tree table content", ()=>"put")
 reqLoaders.set("add my tree table content", reqLoaders.get("add my tree"))
@@ -137,6 +155,16 @@ reqReduc.set("delete my tree table content", reqReduc.get("delete my tree"))
 reqMethods.set("delete my tree table content", ()=>"delete")
 reqReduc.set("delete myself", reqReduc.get("delete my tree"))
 reqMethods.set("delete myself", ()=>"delete")
+
+reqReduc.set("payment", [myNode=>packing(myNode.clone()), params=>{
+  if (params.payment)
+    params.payment = packing(params.payment.clone(1, 0, null, "id"))
+  return params
+}])
+reqLoaders.set("payment", (myNode, result)=>{
+  Object.assign(myNode.props, result)
+})
+reqMethods.set("payment", ()=>"put")
 
 // ***Por que no añadir una funcion default para parametros y asi seguir el mismo patron:
 // reqReduc.set("default", myNode=>packing(myNode.clone()), params=>params)

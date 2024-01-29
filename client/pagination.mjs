@@ -12,8 +12,8 @@ export class Pagination{
     this.loaded = false
     this.container
   }
-  async init() {
-    await this.getTotal(this.parent)
+  async init(params={}) {
+    await this.getTotal(this.parent, params)
     this.createIndexes()
     this.createItemsWindow()
   }
@@ -28,15 +28,14 @@ export class Pagination{
     if (pageNum)
       this.pageNum = pageNum
     this.createItemsWindow()
-    params.limit = [this.itemsWindow[0] - 1, this.itemsWindow[1]]
-    await this.parent.loadRequest(action, params) // loading data
+    await this.parent.loadRequest(action, { limit: [this.itemsWindow[0] - 1, this.itemsWindow[1]], ...params }) // loading data
   }
-  async getTotal(parent) {
+  async getTotal(parent, params={}) {
     this.totalParent = parent.clone()
     this.totalParent.pagination = this
     // In same cases we don't need to make the request because we know total value in advance. In that cases we set it before.
     if (this.totalParent.props.total === undefined) {
-      await this.totalParent.loadRequest("get my children", {count: true})
+      await this.totalParent.loadRequest("get my children", {count: true, ...params})
     }
   }
   createIndexes(){

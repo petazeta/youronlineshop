@@ -63,10 +63,7 @@ export const userModelMixin = Sup => class extends Sup {
     const user = new this()
     await user.setMyUserType(userType)
     user.props.username = username
-    let hash = await cryptPwd(pwd)
-    user.props.pwd = hash
-    user.props.creationDate = new Date().toISOString()
-    user.props.access = user.props.creationDate
+    user.props.pwd = await cryptPwd(pwd)
     await user.dbInsertMySelf()
     await user.dbLoadMyRelationships()
     const userdatarel = user.getRelationship("usersdata")
@@ -100,7 +97,7 @@ export const userModelMixin = Sup => class extends Sup {
     return false;
   }
   async dbUpdateAccess() {
-    await this.dbUpdateMyProps({access: (new Date()).toISOString()})
+    await this.dbUpdateMyProps({access: new Date().toISOString()})
   }
   // This is often used when the connection needs authentication
   static async login(uname, upwd){

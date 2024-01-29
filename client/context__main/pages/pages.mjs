@@ -410,9 +410,9 @@ async function setPrphsCollectionEventsReactions(menu){
 async function setPgphEdition(prNode, prContainer){
   if (hasWritePermission()) {
     const {setEdition} = await import("../admin/edition.mjs")
-    setEdition(getLangBranch(prNode).getChild(), prContainer, undefined, "innerHTML", undefined, undefined, undefined, false)
+    setEdition(getLangBranch(prNode).getChild(), prContainer, undefined, "innerHTML", false)
     visibleOnMouseOver(selectorFromAttr(prContainer, "data-butedit"), prContainer) // on mouse over edition button visibility
-    setEdition(getLangBranch(prNode).getChild(), prContainer, "buteditcode", "value", undefined, "edit-text", "buteditcode", false, null)
+    setEdition(getLangBranch(prNode).getChild(), prContainer, undefined, "value", false, "edit-text", "buteditcode", undefined, "buteditcode")
     visibleOnMouseOver(selectorFromAttr(prContainer, "data-buteditcode"), prContainer) // on mouse over edition button visibility
   }
 }

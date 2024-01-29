@@ -40,6 +40,10 @@ When selecting the shipping at shippint type, it is added to the webuser order. 
 
 Payment view is very similar to the shipping one. Layouts are: chktpayment, paymnentlist and paymenttype.
 
+El payment type tiene unos valores que son template y otro que es vars. El valor template tiene como propósito definir el nombre del modulo y del template correspondiente al tipo de pago, el cual se mostrará en la siguiente pantalla de checkout. En vars hay valores de configuración correspondientes a la cuenta asociada al pago codificados en formato json.
+
+Una vez seleccionado el pago estos datos son almacenados en el campo details de orderpaymenttype en formato json para ser recuperados en el siguiente paso de checkout.
+
 ### Continue with the order action
 
 When clicking the continue button at chktmain we are saving the user data and adding the order to the database. We set the order with status=0 so this is the status for orders still not processed. Then we are launching chktend template. We are also reseting the cart. The next step is proceed payment.

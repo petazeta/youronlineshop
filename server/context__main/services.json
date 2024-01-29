@@ -1,0 +1,11 @@
+[
+  [
+    ["status", "on"],
+    ["host-name", "localhost"],
+    ["port", 6002],
+    ["db-doc-name", "borrar1"],
+    ["loader-path", "./loader/main"],
+    ["images-path", "./catalog-images/main"],
+    ["db-import-path", "./server/utils"]
+  ]
+]

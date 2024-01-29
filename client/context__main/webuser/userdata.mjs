@@ -83,19 +83,19 @@ async function setUserData(myContainer, showAddress=false, fieldtype="input"){
   return myContainer
 }
 export async function saveUserData(myForm, showAddress=false){
-  const saveReturn = await innerSave(myForm)
+  const saveReturn = await innerSave()
   if (saveReturn instanceof Error) {
     const errorKey = JSON.parse(saveReturn.message).errorKey
     const errorField = errorKey == "emailaddress" ? "emailCharError" : "fieldCharError"
     document.createElement("alert-element").showMsg(myForm.elements[errorField].value, 5000)
     if (myForm.elements[errorKey])
       myForm.elements[errorKey].focus()
-    return
+    return saveReturn
   }
   document.createElement("alert-element").showMsg(getSiteText().getNextChild("not located").getNextChild("saved").getLangData(), 3000)
 
   // Helpers
-  async function innerSave(myForm) {
+  async function innerSave() {
     const userdata = formToData(webuser.getRelationship("usersdata").childTableKeys, myForm)
     if (checkValidData(userdata) instanceof Error) {
       return checkValidData(userdata)

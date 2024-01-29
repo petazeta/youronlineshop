@@ -63,10 +63,12 @@ export function switchVisibility_old(velement) { // use classList.toggle instead
 export function selectorFromAttr(elm, attName, attValue){
   if (attValue===undefined) {
     // nodeType==11 => template content, hasAttribute not applied
-    if (elm.nodeType!=11 && elm.hasAttribute(attName)) return elm
+    if (elm.nodeType!=11 && elm.hasAttribute(attName))
+      return elm
     return elm.querySelector(`[${attName}]`)
   }
-  if (elm.nodeType!=11 && elm.hasAttribute(attName) && elm.getAttribute(attName)===attValue) return elm
+  if (elm.nodeType!=11 && elm.hasAttribute(attName) && elm.getAttribute(attName)===attValue)
+    return elm
   return elm.querySelector(`[${attName}=${attValue}]`)
 }
 
@@ -116,4 +118,21 @@ export function onEventSetStatus(myElement, parentElement, myStatus='opacity=1:0
   myElement.addEventListener(eventOff, setOff)
   parentElement.addEventListener(eventOn, setOn)
   parentElement.addEventListener(eventOff, setOff)
+}
+
+export function fadeIn(elm){
+  elm.style.transition=`opacity 200ms`
+  elm.style.opacity = 1
+}
+export function fadeOut(elm){
+  elm.style.transition = `opacity 0ms`
+  elm.style.opacity = 0
+}
+export function fadeInTmOut(container) {
+  return new Promise((res,rej)=>{
+    setTimeout(()=>{
+      fadeIn(container)
+      res()
+    }, 50)
+  })
 }

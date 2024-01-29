@@ -4,13 +4,13 @@
     Quizas mejor importar al principio en lugar de dinamicamente ???
 */
 import {config} from "./cfg.mjs";
-import makeReport from "./reports.mjs";
+import {makeReport} from "./reports.mjs";
 import {initServer} from "./serverstart.mjs";
 import {join as pathJoin} from "path"
 
 await initServer()
 
-makeReport("Server start")
+makeReport("Server start") // make report should be called after initServer, for enviroments to be set
 
 const routerMap = new Set()
 

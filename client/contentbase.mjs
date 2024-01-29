@@ -11,17 +11,14 @@ export class Content{
     this.deepLevel = deepLevel // Initial load tree deep level
   }
   async initData(Linker, getLangParent, webuser, getCurrentLanguage){
-    if (!this.db_lang_collection) {
-      this.treeRoot = (await new Linker(this.db_collection).loadRequest("get my tree", {deepLevel: 2})).getChild() // level 2: needed for extraParent
-      //if no root means that table domelements doesn't exist or has no elements
-      if (!this.treeRoot)
-        throw new Error('Database Content Error'); // esto convendría explicarlo
+    this.treeRoot = (await new Linker(this.db_collection).loadRequest("get my tree", {deepLevel: 2})).getChild() // level 2: needed for extraParent
+    //if no root means that table domelements doesn't exist or has no elements
+    if (!this.treeRoot)
+      throw new Error('Database Content Error'); // esto convendría explicarlo
+    if (this.db_lang_collection)
+      await this.loadInitContent(this.treeRoot, getLangParent(this.db_lang_collection))
+    else
       await this.loadInitContent(this.treeRoot, getLangParent(this.treeRoot))
-    }
-    else {
-      const deepLevel = this.deepLevel > 0 ? this.deepLevel + 1 : this.deepLevel
-      this.treeRoot = (await new Linker(this.db_collection).loadRequest("get my tree", {extraParents:getLangParent(this.db_lang_collection), deepLevel: deepLevel})).getChild() // level 2: needed for extraParent
-    }
     this.setReactions(webuser, getCurrentLanguage)
     return this.treeRoot
   }

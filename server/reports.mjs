@@ -4,9 +4,7 @@ export class SiteReport {
   constructor(maxSize=50000){
     this.maxSize = maxSize
   }
-  makeReport(reportsFile, dataRow) {
-    if (!Array.isArray(dataRow))
-      dataRow = [dataRow]
+  makeReport(reportsFile, dataRow = []) {
     console.log("reporting", dataRow)
     const myDate = new Date()
     dataRow.unshift(myDate.toISOString().split('T')[0] + ' ' + myDate.toISOString().split('T')[1].slice(0, 8))

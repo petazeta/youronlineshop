@@ -2,14 +2,16 @@
 import {config} from './cfg.mjs'
 import {getCurrentLanguage} from './languages/languages.mjs'
 
-export function intToMoney(moneyValue) {
-  const locale = config.get("currency-code-locale") ? config.get("locale-Currency") : getCurrentLanguage()
+export function intToMoney(moneyValue, currencyCode) {
+  if (!currencyCode)
+    currencyCode = config.get("currency-code")
+  const locale = config.get("currency-locale") || getCurrentLanguage()
   moneyValue = moneyValue / 100
-  return new Intl.NumberFormat(locale, {style: 'currency', currency: config.get("currency-code")}).format(moneyValue)
+  return new Intl.NumberFormat(locale, {style: 'currency', currency: currencyCode}).format(moneyValue)
 }
 
 export function moneyToInt(stringNumber) {
-  const locale=config.get("currency-code-locale") ? config.get("locale-currency") : getCurrentLanguage()
+  const locale = config.get("currency-locale") || getCurrentLanguage()
   return Math.round(parseLocaleNumber(stringNumber, locale) * 100)
 }
 
@@ -22,4 +24,8 @@ function parseLocaleNumber(stringNumber='0', locale) {
     .replace(new RegExp('[^\\d' + '\\' + decimalSeparator + ']', 'g'), '')
     .replace(new RegExp('\\' + decimalSeparator), '.')
   );
+}
+
+export function getCurrencyCode(){
+  return config.get("currency-code")
 }

@@ -4,7 +4,7 @@ import {selectorFromAttr, visibleOnMouseOver} from '../frontutils.mjs'
 import {setEdition} from "./admin/edition.mjs"
 import {setAdditionButton, onNewNodeMakeClick} from "./admin/addition.mjs"
 import {setChangePosButton} from "./admin/changepos.mjs"
-import {setDeletionButton} from "./admin/deletion.mjs"
+import {setDeletionButton, onDelOnlyChild} from "./admin/deletion.mjs"
 import {getLangParent, isLangBranch, getLangBranch, getCurrentLanguage} from "./languages/languages.mjs"
 import {BaseContent} from "./contentbase.mjs"
 import {webuser} from './webuser/webuser.mjs'
@@ -58,6 +58,7 @@ async function displayChildren(container, parent){
       return await nodeView(newNode)
     })
   }
+  // we are not dipaching displayChildren, so there is no use for it
 }
 
 async function linkerView(myNode){
@@ -116,8 +117,9 @@ async function fieldsView(myNode) {
   for (const propKey of myNode.parent.childTableKeys) {
     let propCell = fieldsTableCell.cloneNode(true)
     myNode.writeProp(selectorFromAttr(propCell, "data-value"), propKey)
+    selectorFromAttr(propCell, "data-value").setAttribute("title", propKey) // It shows the label on hover
     visibleOnMouseOver(selectorFromAttr(propCell, "data-butedit"), propCell) // on mouse over edition button visibility
-    await setEdition(myNode, propCell, undefined, undefined, propKey)
+    await setEdition(myNode, propCell, propKey)
     fieldsTableRow.appendChild(propCell)
   }
   fieldsTableRow.appendChild(modTableCell)
@@ -131,6 +133,9 @@ async function setChildrenCollectionEventsReactions(viewContainer, myParent){
     setActive(newNode)
     await newNode.loadRequest("get my relationships")
     await displayRels(selectorFromAttr(newNode.firstElement, "data-children"), newNode)
+  })
+  onDelOnlyChild(myParent, async (delNode)=>{
+    setAdditionButton(myParent, null, 1, viewContainer, async (newNode)=>await nodeView(newNode))
   })
   myParent._collectionReactions = true
 }

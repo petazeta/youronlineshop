@@ -1,414 +1,405 @@
 new file
-2023-11-17 21:09:55 fhsh4t : checkout
-2023-11-17 21:16:29 Server start
-2023-11-17 21:24:09 fimpna : cart item operation
-2023-11-17 21:24:19 log in: ordersadmin
-2023-11-17 21:26:10 fiqgm8 : cart item operation
-2023-11-17 21:26:18 log in: ordersadmin
-2023-11-17 21:26:19 fiqgm8 : checkout
-2023-11-18 08:44:21 Server start
-2023-11-18 08:47:23 log in: ordersadmin
-2023-11-18 08:47:25 gppjp7 : cart item operation
-2023-11-18 08:47:26 gppjp7 : checkout
-2023-11-18 09:27:32 gs3bp9 : cart item operation
-2023-11-18 09:27:42 log in: ordersadmin
-2023-11-18 09:27:43 gs3bp9 : checkout
-2023-11-18 10:35:35 gvvv6e : cart item operation
-2023-11-18 10:35:51 log in: ordersadmin
-2023-11-18 10:37:12 h02utc : cart item operation
-2023-11-18 10:37:21 log in: ordersadmin
-2023-11-18 10:37:21 h02utc : checkout
-2023-11-19 10:08:50 Server start
-2023-11-19 10:09:05 jgs16o : cart item operation
-2023-11-19 10:09:16 log in: userError
-2023-11-19 10:09:27 log in: ordersadmin
-2023-11-19 10:09:27 jgs16o : checkout
-2023-11-19 10:11:25 jh0dqr : cart item operation
-2023-11-19 10:11:35 log in: ordersadmin
-2023-11-19 10:11:35 jh0dqr : checkout
-2023-11-19 10:18:52 log in: ordersadmin
-2023-11-19 10:18:59 jhdppg : cart item operation
-2023-11-19 10:19:00 jhdppg : checkout
-2023-11-19 10:21:47 jhjdsv : cart item operation
-2023-11-19 10:21:59 log in: ordersadmin
-2023-11-19 10:23:26 jhjdsv : checkout
-2023-11-19 10:26:19 log in: productsadmin
-2023-11-19 10:26:23 jhrfrq : cart item operation
-2023-11-19 10:26:32 jhrfrq : checkout
-2023-11-19 10:30:59 ji488h : cart item operation
-2023-11-19 10:31:15 log in: ordersadmin
-2023-11-19 10:31:15 ji488h : checkout
-2023-11-19 10:34:09 log in: ordersadmin
-2023-11-19 10:34:13 ji5e6f : cart item operation
-2023-11-19 10:34:18 ji5e6f : checkout
-2023-11-19 10:35:31 jiaibn : cart item operation
-2023-11-19 10:35:46 log in: ordersadmin
-2023-11-19 10:35:46 jiaibn : checkout
-2023-11-19 10:39:43 jik5bm : cart item operation
-2023-11-19 10:39:54 log in: ordersadmin
-2023-11-19 10:39:54 jik5bm : checkout
-2023-11-19 10:40:44 jim3v1 : cart item operation
-2023-11-19 10:40:53 log in: ordersadmin
-2023-11-19 10:40:53 jim3v1 : checkout
-2023-11-19 12:32:32 jimk2s : cart item operation
-2023-11-19 12:32:41 log in: ordersadmin
-2023-11-19 13:13:08 Server start
-2023-11-19 13:13:17 jrdc3l : cart item operation
-2023-11-19 13:13:25 log in: ordersadmin
-2023-11-20 10:28:59 Server start
-2023-11-20 10:29:32 log in: ordersadmin
-2023-11-20 10:29:35 m4dvuh : cart item operation
-2023-11-20 10:30:35 m4g376 : cart item operation
-2023-11-20 10:30:53 log in: ordersadmin
-2023-11-20 10:32:21 log in: ordersadmin
-2023-11-20 10:32:27 m4j5cd : cart item operation
-2023-11-20 10:32:28 m4j5cd : checkout
-2023-11-20 10:41:18 m53s1g : cart item operation
-2023-11-20 10:41:30 log in: ordersadmin
-2023-11-20 10:41:31 m53s1g : checkout
-2023-11-20 10:45:35 m5bmnm : cart item operation
-2023-11-20 10:45:44 log in: ordersadmin
-2023-11-20 10:45:45 m5bmnm : checkout
-2023-11-20 10:48:06 m5gajr : cart item operation
-2023-11-20 10:48:14 log in: ordersadmin
-2023-11-20 10:48:14 m5gajr : checkout
-2023-11-20 10:58:51 m63sqf : cart item operation
-2023-11-20 10:59:00 log in: ordersadmin
-2023-11-20 10:59:01 m63sqf : checkout
-2023-11-20 11:08:52 log in: ordersadmin
-2023-11-20 11:08:53 m63sqf : cart item operation
-2023-11-20 11:08:54 m63sqf : checkout
-2023-11-20 11:50:31 Server start
-2023-11-20 11:51:43 m92tev : cart item operation
-2023-11-20 11:51:46 m92tev : cart item operation
-2023-11-20 11:54:33 m9a0pv : cart item operation
-2023-11-20 11:55:12 m9b731 : cart item operation
-2023-11-20 11:56:25 m9cpqh : cart item operation
-2023-11-20 12:00:56 m9lmvs : cart item operation
-2023-11-20 12:03:25 m9q8lt : cart item operation
-2023-11-20 12:03:30 m9q8lt : cart item operation
-2023-11-20 12:03:31 m9q8lt : cart item operation
-2023-11-20 12:03:33 m9q8lt : cart item operation
-2023-11-20 12:09:09 ma4oc1 : cart item operation
-2023-11-20 12:09:13 ma4oc1 : cart item operation
-2023-11-20 12:09:20 ma4oc1 : cart item operation
-2023-11-20 12:09:21 ma4oc1 : cart item operation
-2023-11-20 12:09:21 ma4oc1 : cart item operation
-2023-11-20 12:09:24 ma4oc1 : cart item operation
-2023-11-20 12:09:24 ma4oc1 : cart item operation
-2023-11-20 12:09:24 ma4oc1 : cart item operation
-2023-11-20 12:17:34 ma4oc1 : cart item operation
-2023-11-20 12:17:35 ma4oc1 : cart item operation
-2023-11-20 12:17:51 log in: ordersadmin
-2023-11-20 12:17:51 ma4oc1 : checkout
-2023-11-23 10:27:45 Server start
-2023-11-23 10:28:07 log in: ordersadmin
-2023-11-23 10:28:10 trhfh7 : cart item operation
-2023-11-23 10:28:11 trhfh7 : checkout
-2023-11-23 10:30:47 trmpuc : cart item operation
-2023-11-23 10:30:56 log in: ordersadmin
-2023-11-23 10:30:56 trmpuc : checkout
-2023-11-23 10:52:21 tsu8qr : cart item operation
-2023-11-23 10:52:29 log in: ordersadmin
-2023-11-23 10:52:30 tsu8qr : checkout
-2023-11-23 10:53:05 tsvkc1 : cart item operation
-2023-11-23 10:53:13 log in: ordersadmin
-2023-11-23 10:53:13 tsvkc1 : checkout
-2023-11-23 10:55:40 tt4b8j : cart item operation
-2023-11-23 10:55:52 log in: productsadmin
-2023-11-23 10:56:07 tt56if : cart item operation
-2023-11-23 10:56:16 log in: productsadmin
-2023-11-23 10:56:17 tt56if : checkout
-2023-11-23 11:13:00 tu42oo : cart item operation
-2023-11-23 11:13:11 log in: productsadmin
-2023-11-23 11:13:11 tu42oo : checkout
-2023-11-23 12:44:39 log in: ordersadmin
-2023-11-24 10:46:43 Server start
-2023-11-24 10:47:01 log in: ordersadmin
-2023-11-24 10:49:10 log in: ordersadmin
-2023-11-24 10:49:38 log in: ordersadmin
-2023-11-24 10:50:19 log in: ordersadmin
-2023-11-24 11:14:02 Server start
-2023-11-24 11:14:15 log in: ordersadmin
-2023-11-24 11:14:57 log in: ordersadmin
-2023-11-24 11:15:26 log in: ordersadmin
-2023-11-24 11:17:02 log in: ordersadmin
-2023-11-24 11:17:33 log in: ordersadmin
-2023-11-24 12:06:38 Server start
-2023-11-24 12:08:34 log in: webadmin
-2023-11-24 12:23:30 0jm9fb : cart item operation
-2023-11-24 12:23:31 0jm9fb : checkout
-2023-11-24 12:26:15 log in: webadmin
-2023-11-24 14:24:23 Server start
-2023-11-24 14:25:22 log in: webadmin
-2023-11-24 14:25:57 log in: webadmin
-2023-11-24 14:26:31 log in: ordersadmin
-2023-11-24 14:26:51 log in: webadmin
-2023-11-24 14:27:16 log in: ordersadmin
-2023-11-25 09:27:28 Server start
-2023-11-25 09:33:21 log in: webadmin
-2023-11-25 09:33:26 2t6r8k : cart item operation
-2023-11-25 09:34:20 2t6r8k : checkout
-2023-11-25 09:37:18 2t6r8k : checkout
-2023-11-25 09:41:55 2tmq67 : Error: Expected ',' or ']' after array element in JSON at position 113Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"value":"eemenu1","id":"6561be076cedbb8919791757"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561c0a16cedbb8919791b30"},"_parent":null,"_children":[]}]},]
-    at http://localhost:6001/client/request.mjs:175:15
-    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
-    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
-    at async PagesContent.loadInitExtraContent (http://localhost:6001/client/pages/pages.mjs:13:28)
-    at async PagesContent.initData (http://localhost:6001/client/pages/pages.mjs:18:5)
-    at async initMenus (http://localhost:6001/client/context__main/pages/pages.mjs:46:3)
-    at async bodyView (http://localhost:6001/client/context__main/body.mjs:20:3)
-    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
-2023-11-25 09:44:45 Server start
-2023-11-25 09:44:49 2ts3kh : Error: Expected ',' or ']' after array element in JSON at position 113Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"value":"eemenu1","id":"6561be076cedbb8919791757"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561c0a16cedbb8919791b30"},"_parent":null,"_children":[]}]},]
-    at http://localhost:6001/client/request.mjs:175:15
-    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
-    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
-    at async PagesContent.loadInitExtraContent (http://localhost:6001/client/pages/pages.mjs:13:28)
-    at async PagesContent.initData (http://localhost:6001/client/pages/pages.mjs:18:5)
-    at async initMenus (http://localhost:6001/client/context__main/pages/pages.mjs:46:3)
-    at async bodyView (http://localhost:6001/client/context__main/body.mjs:20:3)
-    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
-2023-11-25 09:45:53 Server start
-2023-11-25 09:46:17 log in: webadmin
-2023-11-25 09:46:48 log in: webadmin
-2023-11-25 10:30:51 log in: webadmin
-2023-11-25 10:39:27 log in: webadmin
-2023-11-25 10:57:03 log in: webadmin
-2023-11-25 12:51:56 log in: webadmin
-2023-11-25 12:52:29 log in: webadmin
-2023-11-25 12:54:32 log in: webadmin
-2023-11-25 12:55:57 log in: webadmin
-2023-11-25 13:03:43 log in: webadmin
-2023-11-25 13:18:05 log in: pwdError
-2023-11-25 13:18:13 log in: productsadmin
-2023-11-25 13:20:11 user created
-2023-11-25 13:20:14 39836b : cart item operation
-2023-11-25 13:20:16 39836b : checkout
-2023-11-25 13:33:39 3av3ci : Error: Expected ',' or ']' after array element in JSON at position 111Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"name":"undies","id":"6561c2555e554636d45579b4"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561f4495e554636d4558663"},"_parent":null,"_children":[]}]},]
-    at http://localhost:6001/client/request.mjs:175:15
-    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
-    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
-    at async Categories.setExtraContent (http://localhost:6001/client/catalog/categories.mjs:18:26)
-    at async Categories.initData (http://localhost:6001/client/catalog/categories.mjs:11:5)
-    at async initCategories (http://localhost:6001/client/context__main/catalog/categories.mjs:61:3)
-    at async bodyView (http://localhost:6001/client/context__main/body.mjs:23:3)
-    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
-2023-11-25 13:34:03 3avrkd : Error: Expected ',' or ']' after array element in JSON at position 111Action: get my children,get my children. Error: Response error: [{"total":1,"data":[{"props":{"name":"undies","id":"6561c2555e554636d45579b4"},"_parent":null,"_children":[]}]}{"total":1,"data":[{"props":{"id":"6561f4495e554636d4558663"},"_parent":null,"_children":[]}]},]
-    at http://localhost:6001/client/request.mjs:175:15
-    at async requestMulti (http://localhost:6001/client/context__main/request.mjs:11:10)
-    at async Function.requestMulti (http://localhost:6001/client/context__main/nodes.mjs:34:12)
-    at async Categories.setExtraContent (http://localhost:6001/client/catalog/categories.mjs:18:26)
-    at async Categories.initData (http://localhost:6001/client/catalog/categories.mjs:11:5)
-    at async initCategories (http://localhost:6001/client/context__main/catalog/categories.mjs:61:3)
-    at async bodyView (http://localhost:6001/client/context__main/body.mjs:23:3)
-    at async main (http://localhost:6001/client/context__main/main.mjs:39:31)
-2023-11-25 13:35:05 log in: webadmin
-2023-11-25 13:37:12 log in: webadmin
-2023-11-25 13:54:14 log in: webadmin
-2023-11-25 14:08:49 log in: webadmin
-2023-11-25 14:10:44 log in: webadmin
-2023-11-25 14:15:41 log in: webadmin
-2023-11-25 14:16:52 log in: webadmin
-2023-11-25 15:57:34 log in: webadmin
-2023-11-25 15:58:20 log in: webadmin
-2023-11-25 16:04:22 log in: webadmin
-2023-11-25 19:27:38 Server start
-2023-11-25 19:28:37 log in: webadmin
-2023-11-25 19:43:30 3v8g6r : cart item operation
-2023-11-25 19:43:32 3v8g6r : checkout
-2023-11-25 19:44:23 3v8g6r : cart item operation
-2023-11-25 19:44:26 3v8g6r : checkout
-2023-11-26 08:12:15 Server start
-2023-11-26 18:40:15 6et4uo : cart item operation
-2023-11-26 18:40:25 log in: ordersadmin
-2023-11-26 18:40:25 6et4uo : checkout
-2023-11-26 21:34:40 6oshog : cart item operation
-2023-11-26 21:34:50 log in: webadmin
-2023-11-26 21:34:50 6oshog : checkout
-2023-11-26 21:37:02 log in: webadmin
-2023-11-27 09:01:19 Server start
-2023-11-27 09:01:40 log in: webadmin
-2023-11-27 09:25:35 Server start
-2023-11-27 16:30:18 Server start
-2023-11-28 16:00:56 Server start
-2023-11-28 16:08:02 Server start
-2023-11-28 16:09:43 Server start
-2023-11-28 20:05:20 Server start
-2023-11-28 20:13:16 Server start
-2023-11-29 11:11:01 Server start
-2023-11-29 16:39:54 Server start
-2023-11-29 16:40:18 log in: productsadmin
-2023-11-30 11:28:45 Server start
-2023-11-30 15:41:34 log in: webadmin
-2023-11-30 15:51:33 Server start
-2023-12-01 14:28:03 Server start
-2023-12-01 14:30:39 Server start
-2023-12-01 14:30:55 Server start
-2023-12-01 17:38:07 Server start
-2023-12-01 17:43:33 Server start
-2023-12-01 17:44:08 Server start
-2023-12-01 18:11:01 Server start
-2023-12-01 18:11:55 Server start
-2023-12-02 12:03:35 Server start
-2023-12-02 12:55:21 Server start
-2023-12-02 12:56:11 Server start
-2023-12-02 12:57:27 Server start
-2023-12-02 12:58:08 Server start
-2023-12-02 12:59:52 Server start
-2023-12-02 13:16:37 Server start
-2023-12-02 16:49:47 Server start
-2023-12-03 18:29:24 Server start
-2023-12-03 18:29:50 log in: webadmin
-2023-12-05 11:07:26 Server start
-2023-12-05 11:07:47 log in: userError
-2023-12-05 11:08:18 log in: systemadmin
-2023-12-05 11:09:09 log in: systemadmin
-2023-12-05 11:09:59 error trying to access file: client/context__main/webuser/export.mjs
-2023-12-05 11:10:30 log in: systemadmin
-2023-12-05 11:11:20 log in: systemadmin
-2023-12-05 11:11:58 log in: systemadmin
-2023-12-05 11:13:09 log in: systemadmin
-2023-12-05 11:14:35 log in: systemadmin
-2023-12-05 11:18:58 log in: systemadmin
-2023-12-06 09:26:43 Server start
-2023-12-06 09:26:59 log in: systemadmin
-2023-12-06 09:28:21 log in: systemadmin
-2023-12-06 09:40:24 log in: systemadmin
-2023-12-06 11:59:10 log in: userError
-2023-12-06 11:59:20 log in: systemadmin
-2023-12-06 11:59:56 Server start
-2023-12-06 12:00:07 log in: systemadmin
-2023-12-06 12:02:46 log in: systemadmin
-2023-12-06 12:44:42 log in: systemadmin
-2023-12-06 12:45:21 log in: systemadmin
-2023-12-06 12:46:03 log in: systemadmin
-2023-12-06 12:46:55 log in: systemadmin
-2023-12-06 12:49:19 log in: systemadmin
-2023-12-06 12:52:05 log in: systemadmin
-2023-12-06 12:53:19 log in: systemadmin
-2023-12-06 12:58:01 log in: systemadmin
-2023-12-06 18:57:19 Server start
-2023-12-06 18:58:34 log in: systemadmin
-2023-12-06 19:00:29 log in: systemadmin
-2023-12-06 19:01:33 log in: systemadmin
-2023-12-06 22:38:11 Server start
-2023-12-06 22:38:41 log in: systemadmin
-2023-12-08 18:01:26 Server start
-2023-12-08 19:28:51 log in: systemadmin
-2023-12-08 19:34:17 log in: systemadmin
-2023-12-08 19:41:34 log in: systemadmin
-2023-12-08 19:47:49 log in: systemadmin
-2023-12-08 21:12:52 Server start
-2023-12-09 09:23:18 Server start
-2023-12-09 09:23:39 log in: systemadmin
-2023-12-09 09:54:19 Server start
-2023-12-09 10:07:18 Server start
-2023-12-09 11:09:13 Server start
-2023-12-09 11:23:37 Server start
-2023-12-09 11:34:33 Server start
-2023-12-09 11:36:25 Server start
-2023-12-09 11:36:59 Server start
-2023-12-09 11:37:46 Server start
-2023-12-09 11:43:37 Server start
-2023-12-09 11:44:32 Server start
-2023-12-09 11:45:35 Server start
-2023-12-09 11:54:50 Server start
-2023-12-09 11:55:11 Server start
-2023-12-09 11:56:34 Server start
-2023-12-09 11:59:13 Server start
-2023-12-09 12:02:21 Server start
-2023-12-09 12:04:31 Server start
-2023-12-09 12:07:51 Server start
-2023-12-09 12:08:28 Server start
-2023-12-09 12:15:40 Server start
-2023-12-09 12:16:16 Server start
-2023-12-09 12:32:21 Server start
-2023-12-09 12:37:58 Server start
-2023-12-09 12:38:35 Server start
-2023-12-09 12:38:57 Server start
-2023-12-09 12:39:21 Server start
-2023-12-09 12:51:31 Server start
-2023-12-09 12:51:39 log in: systemadmin
-2023-12-09 12:52:38 log in: systemadmin
-2023-12-09 12:53:40 Server start
-2023-12-09 12:53:52 log in: systemadmin
-2023-12-09 14:57:26 Server start
-2023-12-09 14:57:41 log in: systemadmin
-2023-12-09 15:00:00 log in: systemadmin
-2023-12-09 15:06:44 log in: systemadmin
-2023-12-09 15:22:12 Server start
-2023-12-09 16:15:29 Server start
-2023-12-09 16:22:13 Server start
-2023-12-09 16:23:02 Server start
-2023-12-09 16:29:09 log in: systemadmin
-2023-12-09 16:33:09 Server start
-2023-12-09 16:38:55 Server start
-2023-12-09 16:39:29 log in: systemadmin
-2023-12-10 10:16:27 Server start
-2023-12-10 10:22:31 error trying to access file: client/context__main/sitetext.mjs
-2023-12-10 14:39:36 Server start
-2023-12-10 15:34:06 Server start
-2023-12-10 15:35:04 Server start
-2023-12-10 15:39:13 Server start
-2023-12-10 15:43:53 Server start
-2023-12-10 15:44:54 Server start
-2023-12-10 15:46:46 Server start
-2023-12-10 15:48:38 Server start
-2023-12-10 15:49:13 Server start
-2023-12-10 15:50:30 Server start
-2023-12-10 15:52:07 Server start
-2023-12-10 15:55:04 Server start
-2023-12-10 15:56:08 Server start
-2023-12-10 15:59:28 Server start
-2023-12-10 17:56:35 Server start
-2023-12-10 18:15:37 Server start
-2023-12-10 18:20:16 Server start
-2023-12-10 18:24:00 Server start
-2023-12-10 18:24:58 Server start
-2023-12-10 18:26:08 Server start
-2023-12-10 18:26:38 Server start
-2023-12-10 18:38:50 Server start
-2023-12-10 18:39:59 Server start
-2023-12-10 18:48:23 Server start
-2023-12-10 18:53:52 Server start
-2023-12-10 19:23:56 Server start
-2023-12-10 19:26:07 Server start
-2023-12-10 19:28:52 Server start
-2023-12-10 19:29:26 aj94qe : cart item operation
-2023-12-10 19:29:35 log in: systemadmin
-2023-12-11 05:06:06 Server start
-2023-12-11 05:06:26 log in: systemadmin
-2023-12-11 05:20:50 Server start
-2023-12-11 05:22:12 Server start
-2023-12-11 05:23:43 Server start
-2023-12-11 05:30:51 Server start
-2023-12-11 05:36:46 Server start
-2023-12-11 05:37:11 log in: systemadmin
-2023-12-12 10:41:13 Server start
-2023-12-12 10:48:53 log in: systemadmin
-2023-12-12 11:40:20 log in: systemadmin
-2023-12-12 11:42:22 log in: systemadmin
-2023-12-12 11:42:51 log in: systemadmin
-2023-12-12 11:43:00 log in: systemadmin
-2023-12-12 11:44:03 Server start
-2023-12-12 11:44:17 log in: systemadmin
-2023-12-12 12:14:24 Server start
-2023-12-12 18:17:01 Server start
-2023-12-12 18:19:58 Server start
-2023-12-12 18:21:58 Server start
-2023-12-12 19:45:20 Server start
-2023-12-13 22:00:54 Server start
-2023-12-14 10:25:33 Server start
-2023-12-14 11:07:33 Server start
-2023-12-14 15:10:20 Server start
-2023-12-14 15:12:17 Server start
-2023-12-14 15:13:15 Server start
-2023-12-14 15:54:12 Server start
-2023-12-14 16:11:29 Server start
-2023-12-14 16:32:35 Server start
-2023-12-14 16:43:46 Server start
-2023-12-14 16:45:55 log in: systemadmin
-2023-12-14 16:55:06 log in: systemadmin
-2023-12-14 16:58:27 kk1etc : cart item operation
-2023-12-14 16:58:29 kk1etc : checkout
+2024-01-15 11:26:25 log in: systemadmin
+2024-01-15 11:26:26 localhost:6002 6dujrm : cart item operation
+2024-01-15 11:26:27 localhost:6002 6dujrm : checkout
+2024-01-15 11:30:44 localhost:6002 6e6l9n : cart item operation
+2024-01-15 11:30:50 log in: systemadmin
+2024-01-15 11:30:51 localhost:6002 6e6l9n : checkout
+2024-01-15 11:36:00 log in: systemadmin
+2024-01-15 11:36:01 localhost:6002 6eg50r : cart item operation
+2024-01-15 11:36:02 localhost:6002 6eg50r : checkout
+2024-01-15 11:37:45 log in: systemadmin
+2024-01-15 11:37:45 localhost:6002 6ejami : cart item operation
+2024-01-15 11:37:47 localhost:6002 6ejami : checkout
+2024-01-15 11:44:24 log in: systemadmin
+2024-01-15 11:44:24 localhost:6002 6evhpl : cart item operation
+2024-01-15 11:44:26 localhost:6002 6evhpl : checkout
+2024-01-15 11:44:48 localhost:6002 6f0du3 : cart item operation
+2024-01-15 11:44:54 log in: systemadmin
+2024-01-15 11:44:55 localhost:6002 6f0du3 : checkout
+2024-01-15 13:11:21 Server start
+2024-01-15 13:13:01 Server start
+2024-01-15 13:13:15 log in: systemadmin
+2024-01-15 13:13:20 localhost:6002 6k267j : cart item operation
+2024-01-15 13:13:22 localhost:6002 6k267j : checkout
+2024-01-15 13:16:15 Server start
+2024-01-15 13:16:29 localhost:6002 6k267j : checkout
+2024-01-15 13:19:36 Server start
+2024-01-15 13:19:46 log in: systemadmin
+2024-01-15 13:19:47 localhost:6002 6ke4eg : cart item operation
+2024-01-15 13:19:48 localhost:6002 6ke4eg : checkout
+2024-01-15 14:58:04 Server start
+2024-01-15 14:58:08 localhost:6002 6ke4eg : checkout
+2024-01-15 14:58:57 Server start
+2024-01-15 14:59:00 localhost:6002 6ke4eg : checkout
+2024-01-15 14:59:44 Server start
+2024-01-15 15:00:51 Server start
+2024-01-15 15:01:05 localhost:6002 6ke4eg : checkout
+2024-01-15 15:01:37 Server start
+2024-01-15 15:01:41 localhost:6002 6ke4eg : checkout
+2024-01-15 15:06:50 Server start
+2024-01-15 15:06:53 localhost:6002 6ke4eg : checkout
+2024-01-15 15:07:31 Server start
+2024-01-15 15:07:33 localhost:6002 6ke4eg : checkout
+2024-01-15 15:08:46 Server start
+2024-01-15 15:08:50 localhost:6002 6ke4eg : checkout
+2024-01-15 15:09:18 Server start
+2024-01-15 15:17:45 Server start
+2024-01-15 15:18:06 Server start
+2024-01-15 15:18:10 localhost:6002 6ke4eg : checkout
+2024-01-15 15:19:52 Server start
+2024-01-15 15:26:38 Server start
+2024-01-15 15:28:26 Server start
+2024-01-15 15:44:40 Server start
+2024-01-15 15:44:46 localhost:6002 6snp6d : cart item operation
+2024-01-15 15:44:54 log in: systemadmin
+2024-01-15 15:44:55 localhost:6002 6snp6d : checkout
+2024-01-15 15:46:48 localhost:6002 6srf6d : cart item operation
+2024-01-15 15:46:54 log in: systemadmin
+2024-01-15 15:46:55 localhost:6002 6srf6d : checkout
+2024-01-15 15:48:43 log in: systemadmin
+2024-01-15 15:48:44 localhost:6002 6supql : cart item operation
+2024-01-15 15:48:45 localhost:6002 6supql : checkout
+2024-01-15 15:51:40 Server start
+2024-01-15 15:52:48 Server start
+2024-01-16 08:25:36 Server start
+2024-01-16 08:25:54 log in: systemadmin
+2024-01-16 08:25:57 localhost:6002 8m0o8p : cart item operation
+2024-01-16 08:26:00 localhost:6002 8m0o8p : checkout
+2024-01-16 08:27:09 Server start
+2024-01-16 10:57:20 localhost:6002 8um7j7 : cart item operation
+2024-01-16 10:57:29 log in: systemadmin
+2024-01-16 10:58:21 log in: systemadmin
+2024-01-16 10:58:22 localhost:6002 8unue9 : cart item operation
+2024-01-16 10:59:29 localhost:6002 8uq5bt : cart item operation
+2024-01-16 10:59:36 log in: systemadmin
+2024-01-16 16:54:27 Server start
+2024-01-16 16:56:07 Server start
+2024-01-16 16:57:29 Server start
+2024-01-16 16:57:58 Server start
+2024-01-16 16:58:00 localhost:6002 9jam69 : TypeError: Cannot read properties of undefined (reading 'loadRequest')
+    at Object.initUser (http://localhost:6002/client/webuser/webusermixin.mjs:5:20)
+    at async init (http://localhost:6002/client/context__main/webuser/webuser.mjs:12:3)
+    at async http://localhost:6002/client/context__main/main.mjs:25:3
+2024-01-16 16:58:28 localhost:6002 9jbgl5 : TypeError: Cannot read properties of undefined (reading 'loadRequest')
+    at Object.initUser (http://localhost:6002/client/webuser/webusermixin.mjs:5:20)
+    at async init (http://localhost:6002/client/context__main/webuser/webuser.mjs:12:3)
+    at async http://localhost:6002/client/context__main/main.mjs:25:3
+2024-01-16 17:01:12 Server start
+2024-01-16 17:23:06 Server start
+2024-01-16 17:26:48 Server start
+2024-01-16 17:27:28 Server start
+2024-01-16 17:29:30 Server start
+2024-01-16 17:30:21 Server start
+2024-01-16 17:45:34 Server start
+2024-01-16 19:06:11 Server start
+2024-01-16 19:10:00 Server start
+2024-01-16 19:30:21 Server start
+2024-01-16 19:41:54 Server start
+2024-01-16 19:42:12 localhost:6002 9sn7at : cart item operation
+2024-01-16 19:42:19 log in: systemadmin
+2024-01-16 19:42:20 localhost:6002 9sn7at : checkout
+2024-01-17 09:52:21 Server start
+2024-01-17 10:00:44 Server start
+2024-01-17 10:42:29 Server start
+2024-01-17 10:43:11 localhost:6002 bg834u : cart item operation
+2024-01-17 10:43:35 log in: systemadmin
+2024-01-17 10:43:36 localhost:6002 bg834u : checkout
+2024-01-17 10:49:32 log in: systemadmin
+2024-01-17 10:49:34 localhost:6002 bgk6is : cart item operation
+2024-01-17 10:49:36 localhost:6002 bgk6is : checkout
+2024-01-17 10:56:50 localhost:6002 bh1vmc : cart item operation
+2024-01-17 10:57:00 log in: systemadmin
+2024-01-17 10:57:01 localhost:6002 bh1vmc : checkout
+2024-01-17 11:05:35 localhost:6002 bhi1cr : cart item operation
+2024-01-17 11:05:46 log in: systemadmin
+2024-01-17 11:05:47 localhost:6002 bhi1cr : checkout
+2024-01-17 11:13:46 Server start
+2024-01-17 11:14:00 localhost:6002 bi1d7m : cart item operation
+2024-01-17 11:14:10 log in: systemadmin
+2024-01-17 11:14:11 localhost:6002 bi1d7m : checkout
+2024-01-17 11:17:48 localhost:6002 bi8c5t : cart item operation
+2024-01-17 11:17:56 log in: systemadmin
+2024-01-17 11:17:57 localhost:6002 bi8c5t : checkout
+2024-01-17 11:19:54 localhost:6002 bic85m : cart item operation
+2024-01-17 11:20:05 log in: systemadmin
+2024-01-17 11:20:06 localhost:6002 bic85m : checkout
+2024-01-17 11:23:20 localhost:6002 biigsd : cart item operation
+2024-01-17 11:23:31 log in: systemadmin
+2024-01-17 11:23:31 localhost:6002 biigsd : checkout
+2024-01-17 11:23:35 localhost:6002 error trying to access file: client/shop/payments/undefined.mjs
+2024-01-17 11:24:20 localhost:6002 bikbns : cart item operation
+2024-01-17 11:24:28 log in: systemadmin
+2024-01-17 11:24:29 localhost:6002 bikbns : checkout
+2024-01-17 11:28:41 localhost:6002 bisah7 : cart item operation
+2024-01-17 11:28:51 log in: systemadmin
+2024-01-17 11:30:31 localhost:6002 bisah7 : checkout
+2024-01-17 11:32:08 localhost:6002 bj2jnv : cart item operation
+2024-01-17 11:32:19 log in: systemadmin
+2024-01-17 11:32:19 localhost:6002 bj2jnv : checkout
+2024-01-17 11:34:17 localhost:6002 bj6j60 : cart item operation
+2024-01-17 11:34:27 log in: systemadmin
+2024-01-17 11:34:28 localhost:6002 bj6j60 : checkout
+2024-01-17 11:44:14 Server start
+2024-01-17 11:44:20 localhost:6002 bjov8m : cart item operation
+2024-01-17 11:44:30 log in: systemadmin
+2024-01-17 11:44:31 localhost:6002 bjov8m : checkout
+2024-01-17 11:45:18 Server start
+2024-01-17 11:47:29 Server start
+2024-01-17 11:47:35 localhost:6002 bjuu88 : cart item operation
+2024-01-17 11:47:44 log in: systemadmin
+2024-01-17 11:47:45 localhost:6002 bjuu88 : checkout
+2024-01-17 11:57:49 Server start
+2024-01-17 11:58:06 localhost:6002 bkhpgv : cart item operation
+2024-01-17 11:58:15 log in: systemadmin
+2024-01-17 11:58:16 localhost:6002 bkhpgv : checkout
+2024-01-17 15:40:36 Server start
+2024-01-17 15:41:14 log in: systemadmin
+2024-01-17 15:41:20 localhost:6002 c1achp : cart item operation
+2024-01-17 15:41:21 localhost:6002 c1achp : checkout
+2024-01-17 15:52:17 Server start
+2024-01-17 15:52:22 localhost:6002 c1v573 : cart item operation
+2024-01-17 15:52:33 log in: systemadmin
+2024-01-17 15:52:34 localhost:6002 c1v573 : checkout
+2024-01-17 15:55:35 Server start
+2024-01-17 15:55:53 Server start
+2024-01-17 15:58:10 Server start
+2024-01-17 15:59:45 Server start
+2024-01-17 16:01:55 Server start
+2024-01-17 18:26:36 localhost:6002 c1v573 : checkout
+2024-01-17 18:27:12 Server start
+2024-01-17 18:27:24 log in: systemadmin
+2024-01-17 18:27:25 localhost:6002 caqq18 : cart item operation
+2024-01-17 18:27:27 localhost:6002 caqq18 : checkout
+2024-01-17 18:29:50 localhost:6002 cavg3n : cart item operation
+2024-01-17 18:29:57 log in: systemadmin
+2024-01-17 18:29:57 localhost:6002 cavg3n : checkout
+2024-01-17 18:40:25 localhost:6002 cbio5b : cart item operation
+2024-01-17 18:40:37 log in: systemadmin
+2024-01-17 18:40:38 localhost:6002 cbio5b : checkout
+2024-01-17 18:43:11 log in: systemadmin
+2024-01-17 18:43:12 localhost:6002 cbnlbk : cart item operation
+2024-01-17 18:43:13 localhost:6002 cbnlbk : checkout
+2024-01-17 18:45:59 localhost:6002 cbt23e : cart item operation
+2024-01-17 18:46:05 log in: systemadmin
+2024-01-17 18:46:06 localhost:6002 cbt23e : checkout
+2024-01-17 18:47:33 localhost:6002 cbvub2 : cart item operation
+2024-01-17 18:47:39 log in: systemadmin
+2024-01-17 18:47:40 localhost:6002 cbvub2 : checkout
+2024-01-17 18:50:47 localhost:6002 cc5rhs : cart item operation
+2024-01-17 18:50:56 log in: systemadmin
+2024-01-17 18:50:57 localhost:6002 cc5rhs : checkout
+2024-01-17 19:02:19 localhost:6002 ccr1fq : Error: incorrect deconstruct
+    at deconstruct (http://localhost:6002/shared/utils.mjs:64:11)
+    at packing (http://localhost:6002/shared/utils.mjs:136:23)
+    at http://localhost:6002/client/request.mjs:23:37
+    at prepareRequest (http://localhost:6002/client/request.mjs:222:11)
+    at request (http://localhost:6002/client/request.mjs:225:37)
+    at loadRequest (http://localhost:6002/client/request.mjs:235:24)
+    at loadRequest (http://localhost:6002/client/context__main/request.mjs:14:16)
+    at Object.loadRequest (http://localhost:6002/client/context__main/nodes.mjs:31:18)
+    at Object.initUser (http://localhost:6002/client/webuser/webusermixin.mjs:4:88)
+    at init (http://localhost:6002/client/context__main/webuser/webuser.mjs:12:17)
+2024-01-17 19:04:33 localhost:6002 ccv4lt : Error: incorrect deconstruct
+    at deconstruct (http://localhost:6002/shared/utils.mjs:65:11)
+    at packing (http://localhost:6002/shared/utils.mjs:137:23)
+    at http://localhost:6002/client/request.mjs:23:37
+    at prepareRequest (http://localhost:6002/client/request.mjs:222:11)
+    at request (http://localhost:6002/client/request.mjs:225:37)
+    at loadRequest (http://localhost:6002/client/request.mjs:235:24)
+    at loadRequest (http://localhost:6002/client/context__main/request.mjs:14:16)
+    at Object.loadRequest (http://localhost:6002/client/context__main/nodes.mjs:31:18)
+    at Object.initUser (http://localhost:6002/client/webuser/webusermixin.mjs:4:88)
+    at init (http://localhost:6002/client/context__main/webuser/webuser.mjs:12:17)
+2024-01-17 19:20:15 Server start
+2024-01-17 19:20:27 localhost:6002 cdruat : cart item operation
+2024-01-17 19:20:34 log in: systemadmin
+2024-01-17 19:20:35 localhost:6002 cdruat : checkout
+2024-01-17 19:22:50 Server start
+2024-01-17 19:25:17 Server start
+2024-01-17 19:25:27 log in: systemadmin
+2024-01-17 19:25:28 localhost:6002 ce558g : cart item operation
+2024-01-17 19:25:29 localhost:6002 ce558g : checkout
+2024-01-17 19:27:57 Server start
+2024-01-17 19:28:01 localhost:6002 cea1cj : cart item operation
+2024-01-17 19:28:07 log in: systemadmin
+2024-01-17 19:28:08 localhost:6002 cea1cj : checkout
+2024-01-17 19:32:11 Server start
+2024-01-17 19:33:56 Server start
+2024-01-17 19:34:16 Server start
+2024-01-17 19:34:21 localhost:6002 celk5i : cart item operation
+2024-01-17 19:34:28 log in: systemadmin
+2024-01-17 19:34:28 localhost:6002 celk5i : checkout
+2024-01-17 19:36:46 Server start
+2024-01-17 19:36:51 localhost:6002 ceq62i : cart item operation
+2024-01-17 19:36:59 log in: systemadmin
+2024-01-17 19:36:59 localhost:6002 ceq62i : checkout
+2024-01-17 19:41:38 localhost:6002 cf2vk6 : cart item operation
+2024-01-17 19:41:48 log in: systemadmin
+2024-01-17 19:41:49 localhost:6002 cf2vk6 : checkout
+2024-01-17 19:48:31 localhost:6002 cffida : cart item operation
+2024-01-17 19:48:38 log in: systemadmin
+2024-01-17 19:48:38 localhost:6002 cffida : checkout
+2024-01-17 19:52:34 Server start
+2024-01-17 19:52:39 localhost:6002 cfn48s : cart item operation
+2024-01-17 19:52:48 log in: systemadmin
+2024-01-17 19:52:48 localhost:6002 cfn48s : checkout
+2024-01-17 19:54:45 Server start
+2024-01-17 19:54:49 localhost:6002 cfr3pv : cart item operation
+2024-01-17 19:54:57 log in: systemadmin
+2024-01-17 19:54:57 localhost:6002 cfr3pv : checkout
+2024-01-17 19:58:12 Server start
+2024-01-17 19:58:34 localhost:6002 cfr3pv : checkout
+2024-01-17 20:03:00 localhost:6002 cga3ml : cart item operation
+2024-01-17 20:03:10 log in: systemadmin
+2024-01-17 20:03:10 localhost:6002 cga3ml : checkout
+2024-01-17 20:06:35 localhost:6002 cggl64 : cart item operation
+2024-01-17 20:06:44 log in: systemadmin
+2024-01-17 20:06:44 localhost:6002 cggl64 : checkout
+2024-01-18 16:10:37 Server start
+2024-01-18 16:10:55 localhost:6002 eldpii : cart item operation
+2024-01-18 16:11:02 log in: systemadmin
+2024-01-18 16:11:02 localhost:6002 eldpii : checkout
+2024-01-18 16:14:14 Server start
+2024-01-18 16:47:52 Server start
+2024-01-18 16:57:29 Server start
+2024-01-18 16:58:03 log in: systemadmin
+2024-01-18 16:58:05 localhost:6002 eo3s83 : cart item operation
+2024-01-18 16:58:06 localhost:6002 eo3s83 : checkout
+2024-01-18 17:02:45 Server start
+2024-01-18 17:02:54 localhost:6002 eo3s83 : cart item operation
+2024-01-18 17:02:55 localhost:6002 eo3s83 : checkout
+2024-01-18 17:10:24 Server start
+2024-01-18 17:11:18 Server start
+2024-01-18 17:55:46 localhost:6002 eqps8o : cart item operation
+2024-01-18 17:55:52 log in: systemadmin
+2024-01-18 17:55:53 localhost:6002 eqps8o : checkout
+2024-01-18 19:56:40 Server start
+2024-01-18 19:57:03 log in: productsadmin
+2024-01-18 19:57:46 log in: systemadmin
+2024-01-18 19:57:47 localhost:6002 f2caqo : cart item operation
+2024-01-18 19:57:48 localhost:6002 f2caqo : checkout
+2024-01-18 20:16:14 Server start
+2024-01-18 20:20:20 log in: systemadmin
+2024-01-18 20:20:23 localhost:6002 f3mc7s : cart item operation
+2024-01-18 20:20:24 localhost:6002 f3mc7s : checkout
+2024-01-18 20:22:52 localhost:6002 f3r61p : cart item operation
+2024-01-18 20:22:59 log in: systemadmin
+2024-01-18 20:22:59 localhost:6002 f3r61p : checkout
+2024-01-18 20:24:42 localhost:6002 f3ug9d : cart item operation
+2024-01-18 20:24:49 log in: systemadmin
+2024-01-18 20:24:49 localhost:6002 f3ug9d : checkout
+2024-01-18 20:26:10 Server start
+2024-01-18 20:26:45 Server start
+2024-01-18 20:27:01 localhost:6002 f3ug9d : checkout
+2024-01-18 20:28:14 Server start
+2024-01-18 20:28:58 localhost:6002 f46b84 : cart item operation
+2024-01-18 20:29:08 log in: systemadmin
+2024-01-18 20:29:09 localhost:6002 f46b84 : checkout
+2024-01-18 20:32:46 Server start
+2024-01-18 20:32:51 localhost:6002 f4degc : cart item operation
+2024-01-18 20:32:59 log in: systemadmin
+2024-01-18 20:33:00 localhost:6002 f4degc : checkout
+2024-01-18 20:36:35 Server start
+2024-01-18 20:36:36 localhost:6002 f4k6mp : cart item operation
+2024-01-18 20:36:43 log in: systemadmin
+2024-01-18 20:36:43 localhost:6002 f4k6mp : checkout
+2024-01-18 20:37:25 Server start
+2024-01-18 20:41:27 Server start
+2024-01-18 20:45:13 Server start
+2024-01-18 20:45:19 localhost:6002 f548ph : cart item operation
+2024-01-18 20:45:25 log in: systemadmin
+2024-01-18 20:45:26 localhost:6002 f548ph : checkout
+2024-01-18 20:48:26 Server start
+2024-01-18 23:21:09 Server start
+2024-01-18 23:21:37 localhost:6002 fe2cvu : cart item operation
+2024-01-18 23:21:49 localhost:6002 log in: userError
+2024-01-18 23:22:06 log in: systemadmin
+2024-01-18 23:22:07 localhost:6002 fe2cvu : checkout
+2024-01-18 23:23:44 localhost:6002 fe6akp : cart item operation
+2024-01-18 23:23:57 log in: systemadmin
+2024-01-18 23:23:58 localhost:6002 fe6akp : checkout
+2024-01-18 23:28:45 log in: systemadmin
+2024-01-18 23:29:03 log in: productsadmin
+2024-01-18 23:29:11 localhost:6002 fef5ri : cart item operation
+2024-01-18 23:29:17 localhost:6002 fef5ri : checkout
+2024-01-18 23:30:28 Server start
+2024-01-18 23:35:39 Server start
+2024-01-19 14:26:09 Server start
+2024-01-19 14:26:47 log in: systemadmin
+2024-01-19 14:26:50 localhost:6002 h1rduu : cart item operation
+2024-01-19 14:26:52 localhost:6002 h1rduu : checkout
+2024-01-19 14:27:52 localhost:6002 h1rduu : checkout
+2024-01-19 14:29:40 Server start
+2024-01-19 14:29:45 localhost:6002 h1rduu : checkout
+2024-01-19 14:29:57 localhost:6002 h1rduu : checkout
+2024-01-19 14:31:44 Server start
+2024-01-19 14:31:48 localhost:6002 h1rduu : checkout
+2024-01-19 14:33:01 Server start
+2024-01-19 14:33:04 localhost:6002 h1rduu : checkout
+2024-01-19 14:33:10 localhost:6002 h1rduu : checkout
+2024-01-19 14:45:05 Server start
+2024-01-19 14:45:15 localhost:6002 h1rduu : checkout
+2024-01-19 14:45:24 localhost:6002 h1rduu : checkout
+2024-01-19 14:49:34 Server start
+2024-01-19 14:49:38 localhost:6002 h1rduu : checkout
+2024-01-19 14:55:20 Server start
+2024-01-19 14:55:26 localhost:6002 h3gb8i : cart item operation
+2024-01-19 14:55:34 log in: systemadmin
+2024-01-19 14:55:35 localhost:6002 h3gb8i : checkout
+2024-01-19 14:55:45 localhost:6002 h3gb8i : checkout
+2024-01-19 17:30:15 Server start
+2024-01-19 17:30:45 log in: ordersadmin
+2024-01-19 17:30:58 localhost:6002 hccffa : cart item operation
+2024-01-19 17:31:00 localhost:6002 hccffa : checkout
+2024-01-19 18:12:20 Server start
+2024-01-19 18:12:42 log in: systemadmin
+2024-01-19 18:12:51 localhost:6002 hep2pl : cart item operation
+2024-01-19 18:12:54 localhost:6002 hep2pl : checkout
+2024-01-19 18:13:14 localhost:6002 heqgtl : cart item operation
+2024-01-19 18:13:25 log in: systemadmin
+2024-01-19 18:13:25 localhost:6002 heqgtl : checkout
+2024-01-19 18:14:57 localhost:6002 hetldi : cart item operation
+2024-01-19 18:15:10 log in: systemadmin
+2024-01-19 18:15:11 localhost:6002 hetldi : checkout
+2024-01-19 18:15:56 localhost:6002 heveeh : cart item operation
+2024-01-19 18:16:06 log in: systemadmin
+2024-01-19 18:16:06 localhost:6002 heveeh : checkout
+2024-01-19 18:16:27 localhost:6002 hf0d3e : cart item operation
+2024-01-19 18:16:38 log in: systemadmin
+2024-01-19 18:16:38 localhost:6002 hf0d3e : checkout
+2024-01-19 18:19:11 localhost:6002 hf5deq : cart item operation
+2024-01-19 18:19:22 log in: systemadmin
+2024-01-19 18:19:23 localhost:6002 hf5deq : checkout
+2024-01-19 18:19:42 localhost:6002 hf6bea : cart item operation
+2024-01-19 18:19:52 log in: systemadmin
+2024-01-19 18:19:53 localhost:6002 hf6bea : checkout
+2024-01-19 18:20:49 localhost:6002 hf8d9r : cart item operation
+2024-01-19 18:20:59 log in: systemadmin
+2024-01-19 18:21:00 localhost:6002 hf8d9r : checkout
+2024-01-19 18:23:04 localhost:6002 hf8d9r : checkout
+2024-01-19 20:28:41 Server start
+2024-01-19 20:28:51 localhost:6002 hmio8h : cart item operation
+2024-01-19 20:29:03 log in: systemadmin
+2024-01-19 20:29:03 localhost:6002 hmio8h : checkout
+2024-01-19 20:34:52 localhost:6002 hmtp1v : cart item operation
+2024-01-19 20:35:03 log in: systemadmin
+2024-01-19 20:35:04 localhost:6002 hmtp1v : checkout
+2024-01-19 20:37:35 localhost:6002 hn2pda : cart item operation
+2024-01-19 20:37:49 log in: systemadmin
+2024-01-19 20:37:50 localhost:6002 hn2pda : checkout
+2024-01-29 13:10:20 Server start
+2024-01-29 13:12:53 log in: ordersadmin
+2024-01-29 13:14:53 log in: ordersadmin
+2024-01-29 13:15:00 localhost:6002 error trying to access file: client/context__main/pagination.mjs
+2024-01-29 13:15:29 log in: ordersadmin
+2024-01-29 13:17:59 log in: ordersadmin
+2024-01-29 14:50:53 Server start
+2024-01-29 14:51:22 log in: ordersadmin
+2024-01-29 15:00:04 Server start
+2024-01-29 15:07:13 log in: ordersadmin
+2024-01-29 15:12:36 Server start
+2024-01-29 15:12:53 log in: ordersadmin
+2024-01-29 15:26:43 localhost:6002 asf428 : cart item operation
+2024-01-29 15:26:45 localhost:6002 asf428 : checkout
+2024-01-29 15:28:50 log in: ordersadmin

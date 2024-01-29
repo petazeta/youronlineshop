@@ -1,7 +1,7 @@
 // Hay que ampliar esta clase, introducir lo de navhistory y opción pagination
 import {addItem} from '../shop/cart.mjs'
 import {Categories} from '../../catalog/categories.mjs'
-import {selectorFromAttr, visibleOnMouseOver, removeVisibleOnMouseOver} from '../../frontutils.mjs'
+import {selectorFromAttr, visibleOnMouseOver, removeVisibleOnMouseOver, fadeIn, fadeOut, fadeInTmOut} from '../../frontutils.mjs'
 import {pathJoin} from '../../urlutils.mjs'
 import {Node, Linker} from '../nodes.mjs'
 import {webuser} from '../webuser/webuser.mjs'
@@ -36,7 +36,7 @@ async function setPropEdition(myNode, myContainer, propKey){
   if (!hasWritePermission()) return
   const {setEdition} = await import('../admin/edition.mjs')
   visibleOnMouseOver(selectorFromAttr(myContainer, "data-butedit"), myContainer) // on mouse over edition button visibility
-  await setEdition(getLangBranch(myNode).getChild(), myContainer, undefined, propKey)
+  await setEdition(getLangBranch(myNode).getChild(), myContainer, propKey)
 }
 // write + setEdition
 async function setPropView(myNode, myContainer, propKey){
@@ -159,7 +159,7 @@ async function subCatView(subCat){
 }
 
 // -- Items
-async function displayItems(subCat, pageNum /*default: current pagination.pageNum*/) {
+async function displayItems(subCat, pageNum) { // default pageNum: current pagination.pageNum
   setActiveInSite(subCat)
   if (!subCat.getRelationship("items").pagination) {
     subCat.getRelationship("items")
@@ -186,7 +186,12 @@ async function displayItems(subCat, pageNum /*default: current pagination.pageNu
     })
     subCat._logCollectionReaction = true
   }
-  const catalogTp = await itemsPageView(subCat)
+  const catalogTp = await getTemplate("catalog")
+  const itemsContainer = selectorFromAttr(catalogTp, "data-container")
+  subCat.getRelationship("items").childContainer = itemsContainer
+  for (const item of subCat.getRelationship("items").children) {
+    itemsContainer.appendChild(await itemView(item))
+  }
   const pageView = await pagination.pageView(getTemplate)
   selectorFromAttr(pageView, "data-content").appendChild(catalogTp)
   // There is a jump in the content layout view. We need this transition effect
@@ -210,15 +215,6 @@ async function displayItems(subCat, pageNum /*default: current pagination.pageNu
     })
   }
   subCat.getRelationship("items").dispatchEvent("displayChildren")
-}
-async function itemsPageView(subCat){
-  const catalogTp = await getTemplate("catalog")
-  const itemsContainer = selectorFromAttr(catalogTp, "data-container")
-  subCat.getRelationship("items").childContainer = itemsContainer
-  for (const item of subCat.getRelationship("items").children) {
-    itemsContainer.appendChild(await itemView(item))
-  }
-  return catalogTp
 }
 async function itemView(myItem){
   const itemTp = await getTemplate("item")
@@ -392,8 +388,17 @@ async function setCatsCollectionEventsReactions(){
     return
   const {onDelSelectedChild} = await import("../admin/deletion.mjs")
   const {onNewNodeMakeClick} = await import("../admin/addition.mjs")
-  onNewNodeMakeClick(getRoot().getMainBranch(), displaySubCategories /* on cat click reaction */)
-  onDelSelectedChild(getRoot().getMainBranch(), displaySubCategories /* on cat click reaction */)
+  onNewNodeMakeClick(getRoot().getMainBranch(), displaySubCategories)
+  onDelSelectedChild(getRoot().getMainBranch(), async (categ)=>{
+    if (!categ) {
+      const {setAdditionButton} = await import("../admin/addition.mjs")
+      setAdditionButton(getRoot().getMainBranch(), null, 1 /* position */, null, async (newNode)=>{
+        return await catView(newNode)
+      })
+    }
+    else
+      displaySubCategories(categ)
+  })
   getRoot()._collectionReactions = true
 }
 
@@ -502,9 +507,19 @@ async function setSubCatsCollectionEventsReactions(categ){
     displayItems(subCat)
     pushNavHisSubCat(subCat)
   } /* on subcat click reaction */)
-  onDelSelectedChild(categ.getMainBranch(), (subCat)=>{
-    displayItems(subCat)
-    pushNavHisSubCat(subCat)
+  onDelSelectedChild(categ.getMainBranch(), async (subCat)=>{
+    if (!subCat) { // no more subCats
+      const {setAdditionButton} = await import("../admin/addition.mjs")
+      setAdditionButton(categ.getMainBranch(), null, 1 /* position */, null, async (newNode)=>{
+        await setNavStateSubCat(newNode)
+        return await subCatView(newNode)
+      })
+    }
+    else {
+      displayItems(subCat)
+      pushNavHisSubCat(subCat)
+    }
+
   } /* on subcat click reaction */)
   categ._collectionReactions = true
 }
@@ -550,12 +565,12 @@ async function setItemCollectionEdition(myNode, myContainer){
   await setDeletionButton(myNode, myContainer)
 }
 function writePrice(myNode, viewContainer){
-  selectorFromAttr(viewContainer, "data-value").textContent=intToMoney(getLangBranch(myNode).getChild().props.price)
+  selectorFromAttr(viewContainer, "data-value").textContent = intToMoney(myNode.props.price)
 }
 async function setPriceEdition(myNode, viewContainer){
   if (!hasWritePermission()) return
   const {setEdition} = await import('../admin/edition.mjs')
-  await setEdition(getLangBranch(myNode).getChild(), viewContainer, undefined, "price", undefined, undefined, undefined, moneyToInt)
+  await setEdition(myNode, viewContainer, "price", undefined, undefined, undefined, undefined, moneyToInt)
   visibleOnMouseOver(selectorFromAttr(viewContainer, "data-butedit"), viewContainer) // on mouse over edition button visibility
   if (selectorFromAttr(viewContainer, "data-value")._intoMoneyReaction)
     return
@@ -678,22 +693,6 @@ export function setThumbnail(imageNode){
     imageNode.parent.partner.largeImageView.src=thumbnailImage.src.replace("small", "big")
   })
 }
-
-function fadeIn(elm){
-  elm.style.transition=`opacity 200ms`
-  elm.style.opacity = 1
-}
-function fadeOut(elm){
-  elm.style.transition = `opacity 0ms`
-  elm.style.opacity = 0
-}
-const fadeInTmOut = (container)=>
-new Promise((res,rej)=>{
-  setTimeout(()=>{
-    fadeIn(container)
-    res()
-  }, 50)
-})
 
 /*
 export async function reloadInitLangData() {

@@ -24,7 +24,7 @@ import {getTemplate} from '../layouts.mjs'
     if (!checkAdmin() && false) return
     const editTpName = image=="code" ? "buteditcode" : "butedit"
 */
-export async function setEdition(langDataNode, elmView, editButtonTpName="butedit", editAttribute="textContent", editProp, dataIdValue="value", dataIdButContainer="butedit", inlineEdition=true, dataProcessor){
+export async function setEdition(langDataNode, elmView, editProp, editAttribute="textContent", inlineEdition=true, dataIdValue="value", dataIdButContainer="butedit", dataProcessor, editButtonTpName="butedit"){
   const editElement = selectorFromAttr(elmView, "data-" + dataIdValue)
   // Making editAttribute default value as "value" for input elements
   if (editElement.tagName=="INPUT" && editAttribute=="textContent")

@@ -1,13 +1,14 @@
 import {getRoot as getSiteText} from "../sitecontent.mjs"
-import {selectorFromAttr, visibleOnMouseOver} from "../../frontutils.mjs" // (elm, attName, attValue)
+import {selectorFromAttr, visibleOnMouseOver, fadeIn, fadeOut, fadeInTmOut} from "../../frontutils.mjs" // (elm, attName, attValue)
 import {webuser} from '../webuser/webuser.mjs'
 import {Node} from '../nodes.mjs'
-import makeReport from '../reports.mjs'
+import {makeReport} from '../reports.mjs'
 import {setActiveInSite} from '../activeingroup.mjs'
 import {getTemplate} from '../layouts.mjs'
 import {intToMoney} from '../money.mjs'
 import {myCart, hideCartBox, sumTotal} from "./cart.mjs"
 import {getLangBranch} from '../languages/languages.mjs'
+import {Pagination} from "../../pagination.mjs"
 //import {userView} from "../webuser/userdata.mjs"
 
 async function orderView(order){
@@ -27,13 +28,13 @@ async function orderView(order){
     }, "reCaluculate")
   })
   selectorFromAttr(orderTp, "data-items").appendChild(itemsTable)
-  selectorFromAttr(orderTp, "data-shipping").appendChild(await shippingView(order.getRelationship("ordershippingtypes")))
+  selectorFromAttr(orderTp, "data-shipping").appendChild(await shippingView(order.getRelationship("ordershipping")))
   setTotal(order, selectorFromAttr(orderTp, "data-total"))
   // Show Order payment button.
   // This is valid for chktend and userordersline
-  const myorderpay=order.getRelationship("orderpaymenttypes").getChild()
+  const myorderpay = order.getRelationship("orderpayment").getChild()
   if (myorderpay && !myorderpay.props.succeed && myorderpay.props.details) {
-    const template=JSON.parse(myorderpay.props.details).template
+    const template = JSON.parse(myorderpay.props.details).template
     // aqui lo mejor quizas sería que tuviera ademas de template el nombre del script, y de ese script se importe una funcion: payemtView
     if (template) {
       //myorderpay.setView(thisElement, template)
@@ -60,11 +61,10 @@ async function itemView(orderItem, fieldsContainer, fieldElementSample) {
     if (webuser.isOrdersAdmin()) {
       const {setEdition} = await import('../admin/edition.mjs')
       if (propKey == "price") {
-        // ** no va bien, fijarse en setPriceEdition de categories.mjs
-        await setEdition(orderItem, myField, undefined, propKey, undefined, undefined, undefined, intToMoney)
+        await setEdition(orderItem, myField, propKey, undefined, undefined, undefined, undefined, intToMoney)
       }
       else {
-        await setEdition(orderItem, myField, undefined, propKey)
+        await setEdition(orderItem, myField, propKey)
       }
       visibleOnMouseOver(selectorFromAttr(myField, "data-butedit"), myField) // on mouse over edition button visibility
     }
@@ -87,9 +87,11 @@ export async function ordersView(){
   const statusSelect = selectorFromAttr(ordersview, "data-status")
   statusSelect.onchange = async function(){
     selectorFromAttr(ordersview, "data-orders").innerHTML = ""
-    selectorFromAttr(ordersview, "data-orders").appendChild(await ordersListView(this.options[this.selectedIndex].value))
+    const status = statusSelect.options[statusSelect.selectedIndex].value == "new"? 1 : 2
+    await displayOrders(selectorFromAttr(ordersview, "data-orders"), webuser.getRelationship("orders"), status)
   }
-  selectorFromAttr(ordersview, "data-orders").appendChild(await ordersListView(statusSelect.options[statusSelect.selectedIndex].value))
+  const status = statusSelect.options[statusSelect.selectedIndex].value == "new"? 1 : 2
+  await displayOrders(selectorFromAttr(ordersview, "data-orders"), webuser.getRelationship("orders"), status)
 /*
   selectorFromAttr(ordersviewTp, "data-status").onchange=function(){
     // "userorders.html" {filterorders: thisElement.options[thisElement.selectedIndex].value});
@@ -111,25 +113,51 @@ export async function ordersView(){
   return ordersviewTp
 }
 
-// fildterOrders: "archived"
-async function ordersListView(filterorders){
-  const ordersviewTp = await getTemplate("userorders")
-  const ordersview = selectorFromAttr(ordersviewTp, "data-container")
+async function displayOrders(containerView, ordersParent, status, pageNum){
+  const tableTp = await getTemplate("userorderstable")
+  const headFieldsContainer = selectorFromAttr(tableTp, "data-head").cloneNode()
+  const headField = selectorFromAttr(selectorFromAttr(tableTp, "data-head"), "data-cell")
+  const thisTable = selectorFromAttr(tableTp, "data-table").cloneNode()
+  ordersParent.firstElement = thisTable
   const ordersTxt = getSiteText().getNextChild("dashboard").getNextChild("showOrd")
-  ordersTxt.getNextChild("date").setContentView(selectorFromAttr(ordersview, "data-date"))
-  ordersTxt.getNextChild("name").setContentView(selectorFromAttr(ordersview, "data-name"))
-  ordersTxt.getNextChild("order").setContentView(selectorFromAttr(ordersview, "data-order"))
+  headFieldsContainer.appendChild(await ordersTxt.getNextChild("date").setContentView(headField.cloneNode(true)))
+  headFieldsContainer.appendChild(await ordersTxt.getNextChild("name").setContentView(headField.cloneNode(true)))
+  headFieldsContainer.appendChild(await ordersTxt.getNextChild("order").setContentView(headField.cloneNode(true)))
   if (webuser.isOrdersAdmin() || webuser.isWebAdmin()) {
-    const actionsTh = selectorFromAttr(selectorFromAttr(ordersviewTp, "data-actions-th-tp").content, "data-actions")
-    ordersTxt.getNextChild("actions").setContentView(actionsTh)
-    selectorFromAttr(ordersview, "data-head").appendChild(actionsTh)
+    headFieldsContainer.appendChild(await ordersTxt.getNextChild("actions").setContentView(headField.cloneNode(true)))
   }
-  const statusValue = filterorders == "archived"? 1 : 0
-  await webuser.getRelationship("orders").loadRequest("get my children", {filterProps: {status: statusValue}})
-  // *** here we would have a problem if the orders list is too long, we should make a pagination from results
-  for (const order of webuser.getRelationship("orders").children) {
-    selectorFromAttr(ordersview, "data-body").appendChild(await orderLineView(order))
+  thisTable.appendChild(headFieldsContainer)
+  if (!ordersParent.pagination) {
+    ordersParent.pagination = {}
   }
+  if (!ordersParent.pagination[status]) {
+    ordersParent
+    .pagination[status] = new Pagination(ordersParent, async (index)=>{
+      await displayOrders(containerView, ordersParent, status, index)
+    })
+    await ordersParent.pagination[status].init({filterProps: {status: status}})
+  }
+  const pagination = ordersParent.pagination[status]
+  if (pagination.totalParent.props.total>0 && !pagination.loaded || (pageNum !== undefined && pagination.pageNum!=pageNum)) {
+    await pagination.loadPageItems("get my children", {filterProps: {status: status}}, pageNum)
+    pagination.loaded = true
+  }
+  for (const order of ordersParent.children) {
+    thisTable.appendChild(await orderListView(order, selectorFromAttr(tableTp, "data-row")))
+  }
+  const pageView = await pagination.pageView(getTemplate)
+  selectorFromAttr(pageView, "data-content").appendChild(thisTable)
+  // There is a jump in the content layout view. We need this transition effect
+  fadeOut(containerView)
+  containerView.innerHTML = ""
+  // give time the fade out to happend
+  containerView.appendChild(pageView)
+  fadeInTmOut(containerView)
+  //ordersParent.dispatchEvent("displayChildren")
+}
+
+
+  //-----
   /*
 
   const listBody= selectorFromAttr(ordersviewTp, "data-body")
@@ -162,12 +190,23 @@ async function ordersListView(filterorders){
 
   //------
   */
-  return ordersview
-  
+
+
+async function orderListView(order, rowSample) {
+  const thisContainer = rowSample.cloneNode()
+  thisContainer.appendChild(selectorFromAttr(rowSample, "data-cell").cloneNode(true))
+    .textContent = new Date(order.props.creationDate)
+  const userName = selectorFromAttr(thisContainer.appendChild(selectorFromAttr(rowSample, "data-username").cloneNode(true)), "data-value")
+  userName.textContent = webuser.getRelationship("usersdata").getChild().props.fullname
+  // falta action
+  const showOrder = selectorFromAttr(thisContainer.appendChild(selectorFromAttr(rowSample, "data-showorder").cloneNode(true)), "data-button")
+  // falta action
+  // falta linea de edicion
+  return thisContainer
 }
 
 // we need ordersList for administration purposes
-async function orderLineView(order){
+async function orderLineViewOld(order){
   const lineTp = await getTemplate("userordersline")
   const line = selectorFromAttr(lineTp, "data-container")
   // *** here we are not taking in account the local date format
@@ -223,9 +262,9 @@ async function orderLineView(order){
 
 
 function setTotal(order, totView){
-  const myorderpay = order.getRelationship("orderpaymenttypes").getChild()
+  const myorderpay = order.getRelationship("orderpayment").getChild()
   if (myorderpay)
     selectorFromAttr(totView, "data-pyment-type").textContent = `(${myorderpay.props.name})`
   getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("total").setContentView(selectorFromAttr(totView, "data-total-label"))
-  selectorFromAttr(totView, "data-total-value").textContent = intToMoney(sumTotal(order.getRelationship("orderitems").children) + sumTotal(order.getRelationship("ordershippingtypes").children))
+  selectorFromAttr(totView, "data-total-value").textContent = intToMoney(sumTotal(order.getRelationship("orderitems").children) + sumTotal(order.getRelationship("ordershipping").children))
 }

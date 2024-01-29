@@ -196,9 +196,12 @@ export const dataViewMixin=Sup => class extends Sup {
   // It inserts the property value in the container. Container can contain the property name to be filled.
   // If no value, it inserts a default value: 0 for integers and onEmptyValueText for texts
   writeProp(container, propName, attribute, onEmptyValueText) {
+    const parent = Array.isArray(this.parent)? this.parent[0] : this.parent
     if (!propName) { //we must guess the propName value if it is not settled
-      if (this.parent?.childTableKeys.length) propName = this.parent.childTableKeys.filter(key=>!this.parent.sysChildTableKeys.includes(key))[0];
-      else propName = Object.keys(this.props).find(key => key!="id"); //Order minds!!
+      if (parent?.childTableKeys.length)
+        propName = parent.childTableKeys.filter(key=>!parent.sysChildTableKeys.includes(key))[0]
+      else
+        propName = Object.keys(this.props).find(key => key!="id"); //Order minds!!
     }
     let value=this.props[propName];
     if (!value && value!==0) value=''; //Parse undefined
@@ -214,7 +217,7 @@ export const dataViewMixin=Sup => class extends Sup {
     //We set a default value
     if (attribute || container.tagName=="INPUT") return;
     //If field type is int => value=0, other case value=onEmptyValueText when innerHTML
-    if (this.parent && this.constructor.isNumberField(this.parent, propName)) {
+    if (parent && this.constructor.isNumberField(parent, propName)) {
       container.setAttribute("data-placeholder", "0");
     }
     else {

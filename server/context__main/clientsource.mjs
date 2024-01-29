@@ -6,22 +6,24 @@
   - ./client/ ./shared/ <==> client and shared path
 */
 import {join as pathJoin} from "path"
-import makeReport from "./reports.mjs"
+import {makeReport} from "./reports.mjs"
 import {config} from "./cfg.mjs"
 import {streamFile, writeFile} from "../streamfile.mjs"
+import {enviroments} from "./serverstart.mjs"
 
 export async function fileServer(request, response) {
+  const enviroment = enviroments.get(request.headers.host)
   let filePathName = new URL(request.url, "http://localhost").pathname
   if (filePathName == "/")
     filePathName = "/index.html"
   try {
     if (filePathName.match(/^\/index\.html/)) {
-      filePathName = pathJoin(config.get("loader-path"),  filePathName)
+      filePathName = pathJoin(enviroment.get("loader-path"),  filePathName)
       await streamFile(filePathName, response)
       return
     }
     if (filePathName.match(/^\/images\//)) {
-      filePathName = pathJoin(config.get("loader-path"),  filePathName)
+      filePathName = pathJoin(enviroment.get("loader-path"),  filePathName)
       await streamFile(filePathName, response)
       return
     }
@@ -38,7 +40,7 @@ export async function fileServer(request, response) {
   }
   catch(err) {
     response.writeHead(404)
-    makeReport("error trying to access file: " + filePathName)
+    makeReport("error trying to access file: " + filePathName, request)
     response.end()
   }
 }

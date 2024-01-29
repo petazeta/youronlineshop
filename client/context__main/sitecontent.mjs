@@ -39,12 +39,6 @@ function write(myNode, viewContainer, propKey, dataId="value", attrKey, volatile
     myNode._langReaction = true
   }
 }
-// writting plus setting edition button
-async function setNodeView(myNode, viewContainer, volatile, editable=true){
-  write(myNode, viewContainer, undefined, undefined, undefined, volatile)
-  if (editable)
-    await setElmEdition(myNode, viewContainer, volatile)
-}
 // setting the edition button
 async function setElmEdition(myNode, viewContainer, volatile){
   const {setEdition} = await import("./admin/edition.mjs")
@@ -135,8 +129,12 @@ const siteContentMixin=Sup => class extends Sup {
 }
 // Attaching handy functions directly to nodes in site content tree
 const SiteContentDataNodeMixin = Sup => class extends Sup {
-  async setContentView(viewContainer, volatile=true, editable=true){
-    await setNodeView(this, viewContainer, volatile, editable)
+  async setContentView(viewContainer, volatile=true, editable=true) {
+    // writting plus setting edition button
+    write(this, viewContainer, undefined, undefined, undefined, volatile)
+    if (editable)
+      await setElmEdition(this, viewContainer, volatile)
+    return viewContainer // so if viewContainer is created on the fly we can catch it
   }
   write(viewContainer, propKey, dataId, attrKey, volatile=true) {
     write(this, viewContainer, propKey, dataId, attrKey, volatile)

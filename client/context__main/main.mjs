@@ -10,7 +10,7 @@ try {
   customElements.define("alert-element", Alert)
 
   // Layouts init
-  await getTemplates() // Load the templates from server
+  await getTemplates() // Load the templates from server. COMMENTING THIS LINE COULD BE USEFUL IN DEVELOPMENT MODE
   await getStyles() // Load the css from server
   try {
     await initLanguages() // Load languages for server
@@ -47,7 +47,7 @@ catch(myError) {
     errorAlert.textContent = myError
     document.body.appendChild(errorAlert)
     errorAlert.showModal()
-    const makeReport = await import("./reports.mjs")
+    const {makeReport} = await import("./reports.mjs")
     makeReport(myError)
   }
 }

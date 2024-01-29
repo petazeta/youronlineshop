@@ -1,6 +1,8 @@
 // It sets user permissions to access database
-// At this implementation any admin user has permission for almost any database operation
+// Admin user has permission for almost any database operation
 // For no admin users the permsion depends on if user owns data
+// ADVISE!! The safety checking level is shalow (It doesn't double check database for data correctness), it trust the data sent, so it is up to the module consumer to check that the data (myNode and user) is actually correct
+
 import {Node as ProtoNode, Linker as ProtoLinker} from './nodes.mjs';
 import {TABLES} from './admintableslist.mjs'
 import {ADMINUSERS} from './adminusertypes.mjs'
@@ -23,7 +25,7 @@ function getTableName(myNode){
     return myNode
   if (Node.detectLinker(myNode))
     return myNode.props.childTableName
-  return myNode.parent.props.childTableName
+  return Array.isArray(myNode.parent)? myNode.parent[0].props.childTableName : myNode.parent.props.childTableName
 }
 function getUserType(user){
   if (user.parent && user.parent.partner)
@@ -43,6 +45,10 @@ function isCatalogTable(tableName){
 }
 function isItemTable(tableName){
   if (TABLES.itemTables.includes(tableName))
+    return true
+}
+function isOrderTable(tableName){
+  if (TABLES.orderTables.includes(tableName))
     return true
 }
 function isAdmin(user){
@@ -78,8 +84,8 @@ export async function isAllowedToRead(user, myNode){
 export async function isAllowedToInsert(user, myNode){
   if (isAdmin(user))
     return true
-  if (!isConfidentialTable(getTableName(myNode)) && getUserType(user)=="prodcut seller" && isItemTable(getTableName(myNode)) && await isOwner(myNode, user.props.id))
-    return true
+  if (isOrderTable(getTableName(myNode))) // orders can not being created by direct insert for no users
+    return false
   if (isConfidentialTable(getTableName(myNode)) && user.props.id)
     return true
 }
@@ -90,8 +96,6 @@ export async function isAllowedToModify(user, myNode){
   if (!myNode)
     return false
   if (isAdmin(user))
-    return true
-  if (!isConfidentialTable(getTableName(myNode)) && getUserType(user)=="prodcut seller" && isItemTable(getTableName(myNode)) && await isOwner(myNode, user.props.id))
     return true
   if (isConfidentialTable(getTableName(myNode)) && (await isOwner(myNode, user.props.id)))
     return true

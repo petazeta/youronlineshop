@@ -5,7 +5,7 @@ import {getRoot as getSiteText} from "../sitecontent.mjs"
 import {selectorFromAttr} from "../../frontutils.mjs" // (elm, attName, attValue)
 import {getLangBranch} from '../languages/languages.mjs'
 import {getTemplate} from '../layouts.mjs'
-import makeReport from '../reports.mjs'
+import {makeReport} from '../reports.mjs'
 
 export {sumTotal}
 const Cart = cartMixin(Node)
