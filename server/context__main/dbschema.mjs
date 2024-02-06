@@ -233,7 +233,7 @@ export function setDbSchema(dbLink) {
   dbLink.model("PaymentTypes",
     new Schema({
       image: String,
-      template: String,
+      moduleName: String,
       vars: String, // public paymentAccount vars
       active: Number,
       parentPaymentTypes: {
@@ -247,7 +247,7 @@ export function setDbSchema(dbLink) {
     })
   )
 
-  dbLink.model("PaymentTypesAccount",
+  dbLink.model("PaymentTypesPrivate",
     new Schema({
       vars: String, // private paymentAccount vars
       parentPaymentTypes: {
@@ -362,6 +362,7 @@ export function setDbSchema(dbLink) {
       name: String,
       delay_hours: Number,
       price: Number,
+      currencyCode: String,
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",

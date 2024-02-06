@@ -2,7 +2,7 @@
 // payment is not full implemented, it should be checked, success payment not implemented yet 
 
 import {getRoot as getSiteText} from "../sitecontent.mjs"
-import {selectorFromAttr, visibleOnMouseOver} from "../../frontutils.mjs" // (elm, attName, attValue)
+import {selectorFromAttr, visibleOnMouseOver, setQttySelect} from "../../frontutils.mjs" // (elm, attName, attValue)
 import {config} from "../cfg.mjs"
 import {webuser} from '../webuser/webuser.mjs'
 import {Node, Linker} from '../nodes.mjs'
@@ -15,15 +15,7 @@ import {userDataView, saveUserData} from "../webuser/userdata.mjs"
 import {setActive} from "../../activelauncher.mjs"
 import {intToMoney, moneyToInt, getCurrencyCode} from '../money.mjs'
 
-export async function cartToOrder(myCart){
-  webuser.getRelationship("orders").children = []
-  webuser.getRelationship("orders").addChild(new Node())
-  await webuser.getRelationship("orders").getChild().loadRequest("get my relationships")
-  for (const cartItem of myCart.getRelationship().children) {
-    const orderItem = webuser.getRelationship("orders").getChild().getRelationship("orderitems").addChild(new Node({quantity: cartItem.props.quantity, name: getLangBranch(cartItem.item).getChild().props.name, price: cartItem.item.props.price}))
-    orderItem.addParent(cartItem.item.getRelationship("orderitems")) // extraParent
-  }
-}
+// <---- Cart Order Check out Start
 
 export async function toCheckOut(cartBoxContainer = document.getElementById("cartbox")){
   hideCartBox(cartBoxContainer)
@@ -66,58 +58,44 @@ async function cktView(){
   }
   const confirmBut = selectorFromAttr(cktContainer, "data-confirm") 
   getSiteText().getNextChild("checkout").getNextChild("confirmButLabel").setContentView(confirmBut)
-  confirmBut.addEventListener("click", async ev=>{
+  selectorFromAttr(confirmBut, "data-btn").addEventListener("click", async ev=>{
     ev.preventDefault()
+    const myOrder = webuser.getRelationship("orders").getChild()
+    // prevent submit empty order
+    if (myOrder.getRelationship("orderitems").children.lenth==0) {
+      // *** maybe here the same as discard button
+    }
     if (config.get("cktuserdata-on")) {
       if (await saveUserData(selectorFromAttr(selectorFromAttr(cktContainer, "data-user-data-container"), "data-form"), true) instanceof Error)
         return
     }
     // Create order
-    const myOrder = webuser.getRelationship("orders").getChild()
+    
     const myPayment = myOrder.getRelationship("orderpayment").getChild().parent[1].partner
     await myOrder.loadRequest("add my tree", { extraParents: true }) // To insert extra-parents link when there are multiple parents
     // after loading data, it has now ids but it has lost the extra parents
     document.getElementById("centralcontent").innerHTML = ""
     document.getElementById("centralcontent").appendChild(await cktEndView(myOrder))
-    // esto se implementa aqui porque paypal script tiene que estar en el documento
+    // Render payment comes after the view is appended because pay provider script uses elements from the DOM
     // *** aqui falta ponerle edicion
     const myorderpay = myOrder.getRelationship("orderpayment").getChild()
     if (myorderpay && !myorderpay.props.succeed) {
-      const {renderPayment} = await import(`../../shop/payments/${myPayment.props.template}.mjs`)
+      const {renderPayment} = await import(`../../shop/payments/${myPayment.props.moduleName}.mjs`)
       await renderPayment(getTemplate, selectorFromAttr(selectorFromAttr(document.getElementById("centralcontent"), "data-order"), "data-payment"), myOrder, myPayment)
-      // *** falta payment button mirar template
-      // actuar con myorderpay.props.template 
-      // el tema ahora cambia porque habra un modulo y un template, hay que implementar el modulo y ponerlo en un campo en los datos del payment client/shop/payments/paypal.mjs
     }
-    //myCart.resetCartBox()
-    //document.getElementById("cartbox").style.visibility="hidden"
-    //resetCartBox()
+    // ** error : myCart.resetCartBox()
+    hideCartBox(document.getElementById("cartbox"))
   })
   getSiteText().getNextChild("checkout").getNextChild("discardButLabel").setContentView(selectorFromAttr(cktContainer, "data-discard"))
+  selectorFromAttr(selectorFromAttr(cktContainer, "data-discard"), "data-btn").addEventListener("click", ()=>{
+    myCart.resetCartBox()
+    hideCartBox(document.getElementById("cartbox"))
+    // falta *** go back last history state, antes se mostraba el dashboard inicio
+  })
 
   makeReport("checkout")
-  /*
-
-	// setting discard button
-	
-	const discardBut=selectorFromAttr(selectorFromAttr(viewContainer, "data-but-discard-container"), "data-id", "value")
-  discardBut.onclick=function(){
-    //myCart.resetCartBox();
-    //document.getElementById("cartbox").style.visibility="hidden"
-    resetCartBox()
-    new Node().setView(document.getElementById("centralcontent"), "showuserinfo")
-  }
-  */
 
   return cktTp
-}
-
-async function cktEndView(order) {
-  const myTp = await getTemplate("chktend")
-  const myContainer = selectorFromAttr(myTp, "data-container")
-  getSiteText().getNextChild("checkout").getNextChild("successTit").setContentView(selectorFromAttr(myContainer, "data-tit"))
-  selectorFromAttr(myContainer, "data-order").appendChild(await orderView(order))
-  return myTp
 }
 
 async function orderCartView(order) {
@@ -135,10 +113,8 @@ async function displayOrderCartItems(order, orderContainer){
   const tableTp = await getTemplate("ordertable")
   const thisTable = selectorFromAttr(tableTp, "data-table").cloneNode()
   order.firstElement = thisTable
-  const rowSample = selectorFromAttr(tableTp, "data-row")
-  const cellSample = selectorFromAttr(tableTp, "data-cell")
   for (const item of order.getRelationship("orderitems").children) {
-    thisTable.appendChild(await itemCartView(item, rowSample, cellSample))
+    thisTable.appendChild(await itemCartView(item, selectorFromAttr(tableTp, "data-row")))
     item.addEventListener("changeProperty", function(propKey) {
       if (propKey=="quantity" || propKey=="price") {
         selectorFromAttr(orderContainer, "data-subtotal-value").textContent = subTotal(order)
@@ -148,20 +124,63 @@ async function displayOrderCartItems(order, orderContainer){
   selectorFromAttr(orderContainer, "data-items").appendChild(thisTable)
 }
 
-async function itemCartView(orderItem, rowSample, fieldElementSample) {
+async function itemCartView(orderItem, rowSample) {
+  const cellSample = selectorFromAttr(rowSample, "data-cell")
+  const cellQttySample = selectorFromAttr(rowSample, "data-qtty")
   const fieldsContainer = rowSample.cloneNode()
   orderItem.firstElement = fieldsContainer
   for (const propKey of orderItem.parent[0].childTableKeys) {
     if (propKey == "currencyCode") continue
-    let myField = fieldElementSample.cloneNode(true)
-    if (propKey != "price")
-      orderItem.writeProp(selectorFromAttr(myField, "data-value"), propKey)
-    else if (propKey == "price")
+    let myField = cellSample.cloneNode(true)
+    if (propKey == "price")
       selectorFromAttr(myField, "data-value").textContent = intToMoney(orderItem.props["price"]) // *** faltaria implementar diferentes monedas para cada producto
+    else if (propKey == "quantity") {
+      myField = cellQttySample.cloneNode(true)
+      const myInput = myField.querySelector('input')
+      myInput.addEventListener("focusout", ()=>{
+        orderItem.props.quantity = myInput.value
+        orderItem.dispatchEvent("changeProperty", "quantity")
+      })
+      const qttyRangeWindowLength = 25
+      if (orderItem.props["quantity"] > qttyRangeWindowLength) {
+        const replaceSelect = setQttySelect(myField, -1) // It returns a function
+        replaceSelect()
+      }
+      else {
+        setQttySelect(myField, qttyRangeWindowLength, true)
+        const mySelect = myField.querySelector('select')
+        for (const myOption of mySelect){
+          if (myOption.value == orderItem.props["quantity"])
+            myOption.selected = true
+        }
+        mySelect.addEventListener("change", ()=>{
+          const selectedValue = mySelect.options[mySelect.selectedIndex].value
+          if (isNaN(selectedValue)) {
+            if (selectedValue == "-") {
+              orderItem.props.quantity = 0
+              orderItem.dispatchEvent("changeProperty", "quantity")
+              orderItem.parent[0].removeChild(orderItem)
+              if (orderItem.parent[0].children==0) {
+                // *** make discard action
+                return
+              }
+              const rowElement = myField.parentElement
+              rowElement.parentElement.removeChild(rowElement)
+            }
+            return
+          }
+          orderItem.props.quantity = selectedValue
+          orderItem.dispatchEvent("changeProperty", "quantity")
+        })
+      }
+    }
+    else
+      orderItem.writeProp(selectorFromAttr(myField, "data-value"), propKey)
     // *** iria bien poner la cantidad con un dropdown y hacer que se pueda cambiar
     fieldsContainer.appendChild(myField)
   }
   return fieldsContainer
+
 }
 
 async function displayShippings(myContainer){
@@ -281,7 +300,7 @@ async function shippingView(myNode, rowElementSample) {
 function setOrderShipping(myShipping) {
   const shippingTypesRel = webuser.getRelationship("orders").getChild().getRelationship("ordershipping")
   shippingTypesRel.children = []
-  shippingTypesRel.addChild(new Node({name: getLangBranch(myShipping).getChild().props.name, ...myShipping.props}))
+  shippingTypesRel.addChild(new Node({name: getLangBranch(myShipping).getChild().props.name, ...myShipping.props, currencyCode: getCurrencyCode()}))
   // experimental ***
   shippingTypesRel.getChild().addParent(myShipping.getRelationship("ordershipping"))
 }
@@ -363,12 +382,12 @@ async function paymentView(myNode, rowElementSample) {
 
   if (hasNodeWritePermission()) {
     const {setEdition} = await import("../admin/edition.mjs")
-    const templateDataCell = extraCell.cloneNode(true)
-    myNode.writeProp(selectorFromAttr(templateDataCell, "data-value"), "template")
-    selectorFromAttr(templateDataCell, "data-value").setAttribute("title", "template name")
-    await setEdition(myNode, templateDataCell, "template")
-    visibleOnMouseOver(selectorFromAttr(templateDataCell, "data-butedit"), templateDataCell) // on mouse over edition button visibility
-    myContainer.insertBefore(templateDataCell, myContainer.cells[myContainer.cells.length-1])
+    const moduleNameDataCell = extraCell.cloneNode(true)
+    myNode.writeProp(selectorFromAttr(moduleNameDataCell, "data-value"), "moduleName")
+    selectorFromAttr(moduleNameDataCell, "data-value").setAttribute("title", "moduleName")
+    await setEdition(myNode, moduleNameDataCell, "moduleName")
+    visibleOnMouseOver(selectorFromAttr(moduleNameDataCell, "data-butedit"), moduleNameDataCell) // on mouse over edition button visibility
+    myContainer.insertBefore(moduleNameDataCell, myContainer.cells[myContainer.cells.length-1])
     const varsDataCell = extraCell.cloneNode(true)
     myNode.writeProp(selectorFromAttr(varsDataCell, "data-value"), "vars")
     selectorFromAttr(varsDataCell, "data-value").setAttribute("title", "vars {}")
@@ -377,16 +396,16 @@ async function paymentView(myNode, rowElementSample) {
     myContainer.insertBefore(varsDataCell, myContainer.cells[myContainer.cells.length-1])
 
     // we load payment account data as well
-    await myNode.getRelationship("paymenttypesaccount").loadRequest("get my children")
+    await myNode.getRelationship("paymenttypesprivate").loadRequest("get my children")
     // if there is no child we should insert it
-    if (myNode.getRelationship("paymenttypesaccount").children.length==0) {
-      myNode.getRelationship("paymenttypesaccount").addChild(new Node())
-      myNode.getRelationship("paymenttypesaccount").getChild().loadRequest("add myself")
+    if (myNode.getRelationship("paymenttypesprivate").children.length==0) {
+      myNode.getRelationship("paymenttypesprivate").addChild(new Node())
+      myNode.getRelationship("paymenttypesprivate").getChild().loadRequest("add myself")
     }
-    const accountNode = myNode.getRelationship("paymenttypesaccount").getChild()
+    const accountNode = myNode.getRelationship("paymenttypesprivate").getChild()
     const privateVarsDataCell = extraCell.cloneNode(true)
     accountNode.writeProp(selectorFromAttr(privateVarsDataCell, "data-value"), "vars")
-    selectorFromAttr(privateVarsDataCell, "data-value").setAttribute("title", "vars: {}")
+    selectorFromAttr(privateVarsDataCell, "data-value").setAttribute("title", "private vars: {}")
     await setEdition(accountNode, privateVarsDataCell, "vars")
     visibleOnMouseOver(selectorFromAttr(privateVarsDataCell, "data-butedit"), privateVarsDataCell) // on mouse over edition button visibility
     myContainer.insertBefore(privateVarsDataCell, myContainer.cells[myContainer.cells.length-1])
@@ -411,112 +430,15 @@ function setOrderPayment(myPayment) {
   thisRel.getChild().addParent(myPayment.getRelationship("orderpayment"))
 }
 
-async function orderView(order) {
-  const orderTp = await getTemplate("order")
-  const orderContainer = selectorFromAttr(orderTp, "data-container")
-  await displayOrderItems(order, orderContainer)
-  getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("total").setContentView(selectorFromAttr(orderContainer, "data-total-label"))
-  selectorFromAttr(orderContainer, "data-total-value").textContent = total(order)
-  // falta shipping y payment
-
-  return orderTp
+async function cartToOrder(myCart){
+  webuser.getRelationship("orders").children = []
+  webuser.getRelationship("orders").addChild(new Node())
+  await webuser.getRelationship("orders").getChild().loadRequest("get my relationships")
+  for (const cartItem of myCart.getRelationship().children) {
+    const orderItem = webuser.getRelationship("orders").getChild().getRelationship("orderitems").addChild(new Node({quantity: cartItem.props.quantity, name: getLangBranch(cartItem.item).getChild().props.name, price: cartItem.item.props.price, currencyCode: getCurrencyCode()}))
+    orderItem.addParent(cartItem.item.getRelationship("orderitems")) // extraParent
+  }
 }
-
-async function displayOrderItems(order, orderContainer){
-  const tableTp = await getTemplate("ordertable")
-  const thisTable = selectorFromAttr(tableTp, "data-table").cloneNode()
-  order.firstElement = thisTable
-  const rowSample = selectorFromAttr(tableTp, "data-row")
-  const cellSample = selectorFromAttr(tableTp, "data-cell")
-  const thisTableAdmnCellSample = selectorFromAttr(tableTp, "data-admn")
-  order.getRelationship("orderitems").childContainer = thisTable
-  for (const item of order.getRelationship("orderitems").children) {
-    thisTable.appendChild(await itemView(item, rowSample, cellSample, thisTableAdmnCellSample))
-    // we still havent developed a way to change the order in this stage
-    item.addEventListener("changeProperty", function(propKey) {
-      if (propKey=="quantity" || propKey=="price") {
-        selectorFromAttr(orderContainer, "data-total-value").textContent = total(order)
-      }
-    }, "reCaluculate")
-  }
-  if (order.getRelationship("orderitems").children.length == 0  && hasNodeWritePermission()) {
-    const {setAdditionButton} = await import("../admin/addition.mjs")
-    setAdditionButton(order.getRelationship("orderitems"), null, 1 , null, async (newNode)=>{
-      return await itemView(newNode, rowSample, cellSample, thisTableAdmnCellSample)
-    })
-  }
-  if (hasNodeWritePermission()) {
-    const {onDelOnlyChild} = await import("../admin/deletion.mjs")
-    onDelOnlyChild(order.getRelationship("orderitems"), async (delNode)=>{
-      const {setAdditionButton} = await import("../admin/addition.mjs")
-      setAdditionButton(order.getRelationship("orderitems"), null, 1 , null, async (newNode)=>{
-        return await itemView(newNode, rowSample, cellSample, thisTableAdmnCellSample)
-      })
-    })
-  }
-  selectorFromAttr(orderContainer, "data-items").appendChild(thisTable)
-}
-
-async function itemView(orderItem, containerSample, fieldElementSample, fieldAdmnElementSample) {
-  console.log("orderitem", orderItem)
-  const fieldsContainer = containerSample.cloneNode()
-  orderItem.firstElement = fieldsContainer
-  const orderItemParent = Array.isArray(orderItem)? orderItem.parent[0] : orderItem.parent // *** parece que a veces no es multiparent??
-  for (const propKey of orderItemParent.childTableKeys) {
-    let myField = fieldElementSample.cloneNode(true)
-    myField.setAttribute(`data-${propKey}`, "")
-    if (propKey != "price" && propKey != "currencyCode") {
-      orderItem.writeProp(selectorFromAttr(myField, "data-value"), propKey)
-      if (hasNodeWritePermission()) {
-        const {setEdition} = await import("../admin/edition.mjs")
-        await setEdition(orderItem, myField, propKey)
-        visibleOnMouseOver(selectorFromAttr(myField, "data-butedit"), myField) // on mouse over edition button visibility
-      }
-    }
-    else if (propKey == "price") {
-      selectorFromAttr(myField, "data-value").textContent = intToMoney(orderItem.props["price"])
-      if (hasNodeWritePermission()) {
-        const {setEdition} = await import("../admin/edition.mjs")
-        await setEdition(orderItem, myField, "price", undefined, undefined, undefined, undefined, moneyToInt)
-        visibleOnMouseOver(selectorFromAttr(myField, "data-butedit"), myField) // on mouse over edition button visibility
-        if (!selectorFromAttr(myField, "data-value")._intoMoneyReaction) {
-          selectorFromAttr(myField, "data-value").addEventListener("blur"
-            , function (ev) {
-            this.textContent = intToMoney(moneyToInt(this.textContent), orderItem["currencyCode"])
-            this._intoMoneyReaction = true
-          })
-        }
-      }
-    }
-    else if (propKey == "currencyCode" && hasNodeWritePermission()) { // currencyCode
-      selectorFromAttr(myField, "data-value").setAttribute("title", "Currency Code")
-      orderItem.writeProp(selectorFromAttr(myField, "data-value"), propKey)
-      const {setEdition} = await import("../admin/edition.mjs")
-      await setEdition(orderItem, myField, propKey)
-      visibleOnMouseOver(selectorFromAttr(myField, "data-butedit"), myField) // on mouse over edition button visibility
-
-    }
-    // *** iria bien poner la cantidad con un dropdown y hacer que se pueda cambiar
-    fieldsContainer.appendChild(myField) // last element is reserved for the collection edition
-  }
-  if (hasNodeWritePermission()) {
-    const admnElm = fieldsContainer.appendChild(fieldAdmnElementSample.cloneNode(true))
-    visibleOnMouseOver(selectorFromAttr(fieldsContainer, "data-admnbuts"), fieldsContainer)
-    const {setAdditionButton} = await import("../admin/addition.mjs")
-    const {setDeletionButton} = await import("../admin/deletion.mjs")
-    await setAdditionButton(orderItem.parent[0], orderItem, 1, admnElm, async (newNode)=>{
-      return await itemView(newNode, containerSample, fieldElementSample, fieldAdmnElementSample)
-    })
-    await setDeletionButton(orderItem, admnElm)
-  }
-  return fieldsContainer
-}
-
-function total(order){
-  return intToMoney(sumTotal(order.getRelationship("orderitems").children) + + sumTotal(order.getRelationship("ordershipping").children))
-}
-
-// Helpers
 
 async function setShippingsCollectionReactions(myNode, rowSample) {
   const {onDelSelectedChild} = await import("../admin/deletion.mjs")
@@ -567,6 +489,132 @@ async function setPaymentsCollectionReactions(myNode, rowSample) {
       selectorFromAttr(myNode.getMainBranch().getChild().firstElement, "data-select").checked = true
   })
 }
+
+
+// <--- Cart Order check out End --
+
+// <--- Checkout out end (Payment process) Start --
+// The payment button rendering is implemented at the order cart submit function
+
+async function cktEndView(order) {
+  const myTp = await getTemplate("chktend")
+  const myContainer = selectorFromAttr(myTp, "data-container")
+  getSiteText().getNextChild("checkout").getNextChild("successTit").setContentView(selectorFromAttr(myContainer, "data-tit"))
+  selectorFromAttr(myContainer, "data-order").appendChild(await orderView(order))
+  return myTp
+}
+
+async function orderView(order) {
+  const orderTp = await getTemplate("order")
+  const orderContainer = selectorFromAttr(orderTp, "data-container")
+  await displayOrderItems(order, orderContainer)
+  await displayOrderShipping(order, orderContainer)
+  getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("total").setContentView(selectorFromAttr(orderContainer, "data-total-label"))
+  selectorFromAttr(orderContainer, "data-total-value").textContent = total(order)
+  // falta shipping y payment
+
+  return orderTp
+}
+
+async function displayOrderItems(order, orderContainer){
+  const tableTp = await getTemplate("ordertable")
+  const thisTable = selectorFromAttr(tableTp, "data-table").cloneNode()
+  order.firstElement = thisTable
+  const rowSample = selectorFromAttr(tableTp, "data-row")
+  const cellSample = selectorFromAttr(tableTp, "data-cell")
+  const thisTableAdmnCellSample = selectorFromAttr(tableTp, "data-admn")
+  order.getRelationship("orderitems").childContainer = thisTable
+  for (const item of order.getRelationship("orderitems").children) {
+    thisTable.appendChild(await itemView(item, rowSample, cellSample, thisTableAdmnCellSample))
+    // we still havent developed a way to change the order in this stage
+    item.addEventListener("changeProperty", function(propKey) {
+      // currency code 
+      if (propKey=="quantity" || propKey=="price" || propKey=="currencyCode") {
+        selectorFromAttr(orderContainer, "data-total-value").textContent = total(order)
+        if (propKey=="currencyCode")
+          selectorFromAttr(orderContainer, "data-price").textContent = intToMoney(item.props["price"], item.props["currencyCode"])
+      }
+    }, "reCaluculate")
+
+  }
+  if (order.getRelationship("orderitems").children.length == 0  && hasNodeWritePermission()) {
+    const {setAdditionButton} = await import("../admin/addition.mjs")
+    setAdditionButton(order.getRelationship("orderitems"), null, 1 , null, async (newNode)=>{
+      return await itemView(newNode, rowSample, cellSample, thisTableAdmnCellSample)
+    })
+  }
+  if (hasNodeWritePermission()) {
+    const {onDelOnlyChild} = await import("../admin/deletion.mjs")
+    onDelOnlyChild(order.getRelationship("orderitems"), async (delNode)=>{
+      const {setAdditionButton} = await import("../admin/addition.mjs")
+      setAdditionButton(order.getRelationship("orderitems"), null, 1 , null, async (newNode)=>{
+        return await itemView(newNode, rowSample, cellSample, thisTableAdmnCellSample)
+      })
+    })
+  }
+  selectorFromAttr(orderContainer, "data-items").appendChild(thisTable)
+}
+
+async function displayOrderShipping(orderShipping, orderContainer){
+  const shippingContainer = selectorFromAttr(orderContainer, "data-shipping")
+  orderShipping.writeProp(selectorFromAttr(shippingContainer, "data-name"), "name")
+  // *** In case items currencyCode is different to general currencyCode the total amount would be wrong
+  selectorFromAttr(myField, "data-value").textContent = intToMoney(ordershipping.props["price"], ordershipping.props["currencyCode"])
+}
+
+async function itemView(orderItem, containerSample, fieldElementSample, fieldAdmnElementSample) {
+  console.log("orderitem", orderItem)
+  const fieldsContainer = containerSample.cloneNode()
+  orderItem.firstElement = fieldsContainer
+  const orderItemParent = Array.isArray(orderItem)? orderItem.parent[0] : orderItem.parent // *** parece que a veces no es multiparent??
+  for (const propKey of orderItemParent.childTableKeys) {
+    // currency code field serves as a register for the currency code related with the price amount. This way we can follow any currency code change.
+    // but this field is not useful for the selling process 
+    if (propKey == "currencyCode")
+      continue
+    let myField = fieldElementSample.cloneNode(true)
+    myField.setAttribute(`data-${propKey}`, "")
+    if (propKey != "price") {
+      orderItem.writeProp(selectorFromAttr(myField, "data-value"), propKey)
+      if (hasNodeWritePermission()) {
+        const {setEdition} = await import("../admin/edition.mjs")
+        await setEdition(orderItem, myField, propKey)
+        visibleOnMouseOver(selectorFromAttr(myField, "data-butedit"), myField) // on mouse over edition button visibility
+      }
+    }
+    else if (propKey == "price") {
+      selectorFromAttr(myField, "data-value").textContent = intToMoney(orderItem.props["price"], orderItem["currencyCode"])
+      if (hasNodeWritePermission()) {
+        const {setEdition} = await import("../admin/edition.mjs")
+        await setEdition(orderItem, myField, "price", undefined, undefined, undefined, undefined, moneyToInt)
+        visibleOnMouseOver(selectorFromAttr(myField, "data-butedit"), myField) // on mouse over edition button visibility
+        selectorFromAttr(myField, "data-value").addEventListener("blur", function (ev) {
+          this.textContent = intToMoney(moneyToInt(this.textContent), orderItem["currencyCode"])
+        })
+      }
+    }
+    fieldsContainer.appendChild(myField) // last element is reserved for the collection edition
+  }
+  if (hasNodeWritePermission()) {
+    const admnElm = fieldsContainer.appendChild(fieldAdmnElementSample.cloneNode(true))
+    visibleOnMouseOver(selectorFromAttr(fieldsContainer, "data-admnbuts"), fieldsContainer)
+    const {setAdditionButton} = await import("../admin/addition.mjs")
+    const {setDeletionButton} = await import("../admin/deletion.mjs")
+    await setAdditionButton(orderItem.parent[0], orderItem, 1, admnElm, async (newNode)=>{
+      return await itemView(newNode, containerSample, fieldElementSample, fieldAdmnElementSample)
+    })
+    await setDeletionButton(orderItem, admnElm)
+  }
+  return fieldsContainer
+}
+
+function total(order){
+  // *** At the current implementation first item currency code is sample of order currencyCode
+  const currencyCode = order.getRelationship("orderitems").getChild()?.props.currencyCode
+  return intToMoney(sumTotal(order.getRelationship("orderitems").children) + sumTotal(order.getRelationship("ordershipping").children), currencyCode)
+}
+
+// Helpers
 
 function hasNodeWritePermission() {
   return webuser.isSystemAdmin() || webuser.isOrdersAdmin()

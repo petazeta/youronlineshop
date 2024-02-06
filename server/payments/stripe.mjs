@@ -94,7 +94,7 @@ const generateAccessToken = async (CLIENT_ID, CLIENT_SECRET) => {
 
 async function getCredentials(payment){
   await payment.dbLoadMyTree()
-  const vars = JSON.parse(payment.getRelationship("paymenttypesaccount").getChild()?.props.vars || "{}")
+  const vars = JSON.parse(payment.getRelationship("paymenttypesprivate").getChild()?.props.vars || "{}")
   return [vars.clientId, vars.secret]
 }
 

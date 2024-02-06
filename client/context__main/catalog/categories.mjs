@@ -1,7 +1,7 @@
 // Hay que ampliar esta clase, introducir lo de navhistory y opción pagination
 import {addItem} from '../shop/cart.mjs'
 import {Categories} from '../../catalog/categories.mjs'
-import {selectorFromAttr, visibleOnMouseOver, removeVisibleOnMouseOver, fadeIn, fadeOut, fadeInTmOut} from '../../frontutils.mjs'
+import {selectorFromAttr, visibleOnMouseOver, removeVisibleOnMouseOver, fadeIn, fadeOut, fadeInTmOut, setQttySelect} from '../../frontutils.mjs'
 import {pathJoin} from '../../urlutils.mjs'
 import {Node, Linker} from '../nodes.mjs'
 import {webuser} from '../webuser/webuser.mjs'
@@ -209,7 +209,7 @@ async function displayItems(subCat, pageNum) { // default pageNum: current pagin
   }
   if (subCat.getRelationship("items").children.length == 0  && hasWritePermission()) {
     const {setAdditionButton} = await import("../admin/addition.mjs")
-    setAdditionButton(subCat.getRelationship("items"), null, 1 /* position */, null, async (newNode)=>{
+    setAdditionButton(subCat.getRelationship("items"), null, 1, null, async (newNode)=>{
       await setNavStateItem(newNode)
       return await itemView(newNode)
     })
@@ -594,7 +594,7 @@ async function setShortImageView(myItem, viewContainer){
     displayItemLarge(myItem.parent.pagination.totalParent.children.find(item=>item.props.id==myItem.props.id))
   })
 }
-function setQttySelect(viewContainer){
+function setQttySelect_old(viewContainer){
   const mySelect=viewContainer.querySelector('select')
   const firstOption=mySelect.options[0]
   for (let i=1; i<25; i++){
@@ -608,8 +608,10 @@ async function setCartBut(myItem, viewContainer){
   const cartButton = selectorFromAttr(viewContainer, "data-button")
   cartButton.addEventListener("click", ev=>{
     ev.preventDefault()
-    const quantity = cartButton.form.elements["pquantity"].value || 1
-    addItem(myItem, quantity)
+    if (isNaN(cartButton.form.elements["pquantity"].value))
+      return
+    const quantity = Number.parseInt(cartButton.form.elements["pquantity"].value)
+    if (quantity) addItem(myItem, quantity)
   })
   const cartButtonLabel = getSiteText().getNextChild("addcarttt")
   await cartButtonLabel.setContentView(viewContainer)

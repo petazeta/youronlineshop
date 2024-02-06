@@ -72,6 +72,18 @@ async function itemView(orderItem, fieldsContainer, fieldElementSample) {
     fieldsContainer.appendChild(myField)
   }
   return fieldsContainer
+
+  // helper
+  function setQttySelect(viewContainer){
+    const mySelect=viewContainer.querySelector('select')
+    const firstOption=mySelect.options[0]
+    for (let i=1; i<25; i++){
+      let myOption = firstOption.cloneNode()
+      myOption.textContent=i+1
+      myOption.value=i+1
+      mySelect.add(myOption)
+    }
+  }
 }
 
 // starting element

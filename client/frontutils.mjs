@@ -136,3 +136,46 @@ export function fadeInTmOut(container) {
     }, 50)
   })
 }
+export function setQttySelect(viewContainer, rangeWindowLength = 25, showRemoveOption){
+  const mySelect = viewContainer.querySelector('select')
+  if (rangeWindowLength == -1)
+    return replaceSelect
+  const sampleOption = mySelect.options[0]
+  mySelect.remove(0)
+  if (showRemoveOption) {
+    const removeOption = sampleOption.cloneNode()
+    removeOption.textContent = " 0"
+    removeOption.value = "-"
+    mySelect.add(removeOption)
+  }
+  for (let qtty=1; qtty<=rangeWindowLength; qtty++){
+    let myOption = sampleOption.cloneNode()
+    myOption.textContent = qtty
+    myOption.value = qtty
+    mySelect.add(myOption)
+  }
+  const plusOption = sampleOption.cloneNode()
+  plusOption.textContent = " + "
+  plusOption.value = "+"
+  mySelect.add(plusOption)
+  mySelect.addEventListener("change", ()=>{
+    if (mySelect.options[mySelect.selectedIndex].value=="+") {
+      replaceSelect()
+    }
+  })
+  function replaceSelect(){
+    const myField = viewContainer.querySelector('input')
+    const parentElement = mySelect.parentElement
+    parentElement.removeChild(mySelect)
+    myField.style.visibility = "visible"
+    myField.name = mySelect.name
+  }
+  const myField = viewContainer.querySelector('input')
+  myField.addEventListener("focusout", ()=>{
+    if (isNaN(myField.value)) {
+      myField.value = 0
+      myField.focus()
+    }
+    myField.value = Number.parseInt(myField.value)
+  })
+}

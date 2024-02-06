@@ -226,6 +226,7 @@ td,th{padding:0;vertical-align:top;} /* Padding 0 because this tables are used a
   border: 1px solid #AAA;
   border-radius: 3px;
   padding: 0.5em;
+  display: inline-block;
 }
 .flexbox{
   display: flex;
