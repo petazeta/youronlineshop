@@ -37,6 +37,7 @@ export async function setAdditionButton(newNodeParent, ownerNode, step=1, elmVie
   const butsWrapper = elmView && selectorFromAttr(elmView, "data-" + dataIdButsWrapper) || newNodeParent.childContainer
   butsWrapper.appendChild(addTp)
 }
+// *** this could be not needed, so we can do it inside setAdditionButton makeview function
 export function onNewNodeMakeClick(nodeParent, clickOn){
   //when a new subnode is created we select it
   nodeParent.addEventListener("addNewNode", (newNode)=>{

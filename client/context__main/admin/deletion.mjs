@@ -17,7 +17,7 @@ It gets deletion button layout (template) name and some parent of the destinatio
   Note for upper methods:
     if (!checkAdmin() && false) return
 */
-export async function setDeletionButton(delNode, elmView, dataIdButsWrapper="admnbuts", delTpName="butdelete"){
+export async function setDeletionButton(delNode, elmView, callBack, dataIdButsWrapper="admnbuts", delTpName="butdelete"){
   const butsWrapper=selectorFromAttr(elmView, "data-" + dataIdButsWrapper)
 
   const delTp=await getTemplate(delTpName)
@@ -46,10 +46,13 @@ export async function setDeletionButton(delNode, elmView, dataIdButsWrapper="adm
   // setting confirm deletion
   selectorFromAttr(selectorFromAttr(delAlertTp, "data-confirm"), "data-button").addEventListener("click", async ()=>{
     await performDeletion(delNode)
+    if (callBack)
+      await callBack(delNode)
     myAlert.hideAlert()
   })
 }
 // to set some procedures after deletion. I asummes "deleteChild" is dispatched
+// we can avoid using it by a callback in setdeletionbutton
 export function onDelSelectedChild(nodeParent, listenerCallback){
   // If node was selected then we select the previous one and expand it
   nodeParent.addEventListener("deleteChild", delNode => {

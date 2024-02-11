@@ -368,6 +368,9 @@ header .toolbar a.toolbaricon{
   text-align: center;
   font-size: 14px;
 }
+.toolbaricon .icon-caption {
+  min-width: 4em;
+}
 @media screen and (max-width: 400px){
 	.pgsubtitle{
 		display: none;

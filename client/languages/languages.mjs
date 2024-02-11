@@ -65,6 +65,7 @@ export default class Languages{
   async createInstanceChildText(parentNode, position=1, everyLang=true){
     const newNode=parentNode.createInstanceChild(position)
     await newNode.loadRequest("get my relationships")
+    console.log("createInstanceChild", newNode.relationships, newNode)
     if (!this.getLangBranch(newNode)) return newNode
     // We get the relationship about language to add a data language node child
     let langs=1

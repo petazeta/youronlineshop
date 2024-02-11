@@ -508,7 +508,7 @@ const dataModelMixin=Sup => class extends Sup {
       level--
     if (myself!==false) {
       // removing not related extraParents (dbInsertMyTree get generic extraParents argument)
-      const myExtraParents = Array.isArray(extraParents) ? extraParents.filter(extraParent=>extraParent.props.childTableName==this.parent.props.childTableName) : extraParents
+      const myExtraParents = Array.isArray(extraParents) ? extraParents.filter(extraParent=>extraParent.props.childTableName==this.parent.props?.childTableName || Array.isArray(this.parent) && this.parent[0].props.childTableName) : extraParents
       this.props.id = await this.dbInsertMySelf(myExtraParents, updateSiblingsOrder)
     }
     for (const rel of this.relationships) {

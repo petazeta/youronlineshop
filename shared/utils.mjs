@@ -114,6 +114,7 @@ export function construct(serials){
       if ("parent" in value)
         value.parent = parent
       else value.partner = parent
+      parent._children.push(value)
       if ("children" in parent)
         parent.children.push(value)
       else parent.relationships.push(value)
@@ -194,6 +195,52 @@ export function getLangDataBranches(treeRoot, langCollectionName) {
   //const isDataBranch = branch=>true
   const getBranches = myElm => myElm.children.reduce((total, child)=>[...total, ...child.relationships], [])
   return Array.from(walkThrough(treeRoot.parent, getBranches, undefined, undefined, isDataBranch))//.reduce((total, rel)=> [...total, ...rel.children], [])
+}
+
+// It loads source into target. It doesn't remove original content but fills it.
+// It doesn't go up the tree
+export async function crawler(target, source) {
+  if (target.constructor.detectLinker(source) != target.constructor.detectLinker(target))
+    throw new Error("target and source are linker versus node")
+  if (!target.constructor.detectLinker(source))
+    target.constructor.copyProps(target, source)
+  else
+    target.loadChildTableKeys(source)
+  source._children.forEach(res=>innerCrawler(target, res))
+  function innerCrawler(targetParent, source) {
+    for (const _iteration of walkThrough([targetParent, source], splitting)) continue
+    function splitting([elmTargetParent, elmSource]) {
+      if (targetParent.constructor.detectLinker(elmSource)) {
+        let targetLinker
+        const linkerMatch = elmTargetParent.relationships.find(targetLinker=>targetLinker.props.name==elmSource.props.name)
+        if (linkerMatch) {
+          targetLinker = linkerMatch
+          targetParent.constructor.copyProps(targetLinker, elmSource)
+          targetLinker.loadChildTableKeys(elmSource)
+        }
+        else {
+          targetLinker = elmTargetParent.addRelationship(new targetParent.constructor.linkerConstructor(elmSource.props))
+          targetLinker.loadChildTableKeys(elmSource)
+        }
+        return elmSource.children.map(child=>[targetLinker, child])
+      }
+      else {
+        let targetNode, nodeMatch
+        if (elmTargetParent.children.length > 0) {
+          nodeMatch = elmTargetParent.children.find((targetNode, pos)=>pos===elmSource.parent.children.indexOf(elmSource))
+        }
+        if (nodeMatch) {
+          targetNode = nodeMatch
+          targetParent.constructor.copyProps(targetNode, elmSource)
+        }
+        else {
+          targetNode = elmTargetParent.addChild(new targetParent.constructor.nodeConstructor(elmSource.props))
+        }
+        return elmSource.relationships.map(rel=>[targetNode, rel])
+      }
+    }
+    return targetParent
+  }
 }
 
 //let findChildBranch = (myNode, childCollName) => myNode.relationships.find(langRel=>langRel.props.childTableName==childCollName)

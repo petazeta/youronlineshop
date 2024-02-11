@@ -194,10 +194,6 @@ async function displayShippings(myContainer){
   const {Content} = await import("../../contentbase.mjs")
   const thisText = new Content("TABLE_SHIPPINGTYPES")
   await thisText.initData(Linker, getLangParent, webuser, getCurrentLanguage)
-  if (hasNodeWritePermission() && !thisText.treeRoot._collectionReactions) {
-    await setShippingsCollectionReactions(thisText.treeRoot, rowSample)
-    thisText.treeRoot._collectionReactions = true
-  }
   thisText.treeRoot.getMainBranch().childContainer = thisTable
   thisTable.innerHTML = ""
   for (const myNode of thisText.treeRoot.getMainBranch().children) {
@@ -221,7 +217,7 @@ async function displayShippings(myContainer){
       const selectElement = selectorFromAttr(newView, "data-select")
       selectElement.checked = true
       setOrderShipping(newNode)
-      setActive(newNode)
+      setActive(newNode) // this can be just if we want to use a highlight element
       return newView
     })
   }
@@ -231,8 +227,8 @@ function subTotal(order){
   return intToMoney(sumTotal(order.getRelationship("orderitems").children))
 }
 
-async function shippingView(myNode, rowElementSample) {
-  const myContainer = rowElementSample.cloneNode(true)
+async function shippingView(myNode, rowSample) {
+  const myContainer = rowSample.cloneNode(true)
   myNode.firstElement = myContainer // it is used by setActive
   const selectElm = selectorFromAttr(myContainer, "data-select")
   myContainer.addEventListener("click", function(ev) {
@@ -290,9 +286,39 @@ async function shippingView(myNode, rowElementSample) {
     const {setDeletionButton} = await import("../admin/deletion.mjs")
     await setChangePosButton(myNode, myContainer, "butchposvert")
     await setAdditionButton(myNode.parent, myNode, 1, myContainer, async (newNode)=>{
-      return await shippingView(newNode, rowElementSample)
+      //return await shippingView(newNode, rowSample) // old, we add and make click at the same time
+      const newView = await shippingView(newNode, rowSample)
+      const selectElement = selectorFromAttr(newView, "data-select")
+      selectElement.checked = true
+      setOrderShipping(newNode)
+      setActive(newNode)
+      return newView
     })
-    await setDeletionButton(myNode, myContainer)
+    await setDeletionButton(myNode, myContainer, async (delNode)=>{
+      const parentNode = Array.isArray(myNode.parent)? myNode.parent[0] : myNode.parent
+      if (parentNode.children.length==0) {
+        const {setAdditionButton} = await import("../admin/addition.mjs")
+        setAdditionButton(parentNode, null, 1 , null, async (newNode)=>{ // 1 : position
+          const newView = await shippingView(newNode, rowSample)
+          const selectElement = selectorFromAttr(newView, "data-select")
+          selectElement.checked = true
+          setOrderShipping(newNode)
+          setActive(newNode)
+          return newView
+        })
+      }
+      else {
+        if (!delNode.selected)
+          return
+        const skey = parentNode.getSysKey("sort_order")
+        let nextSelected
+        if (parentNode.children.length > 0) {
+          const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
+          nextSelected = parentNode.children.find(child=>child.props[skey]==nextPosition) || parentNode.getChild()
+        }
+        selectorFromAttr(nextSelected.firstElement, "data-select").checked = true
+      }
+    })
   }
   return myContainer
 }
@@ -316,10 +342,6 @@ async function displayPayments(myContainer){
   const {Content} = await import("../../contentbase.mjs")
   const thisText = new Content("TABLE_PAYMENTTYPES")
   await thisText.initData(Linker, getLangParent, webuser, getCurrentLanguage)
-  if (hasNodeWritePermission() && !thisText.treeRoot._collectionReactions) {
-    await setPaymentsCollectionReactions(thisText.treeRoot, rowSample)
-    thisText.treeRoot._collectionReactions = true
-  }
   thisText.treeRoot.getMainBranch().childContainer = thisTable
   thisTable.innerHTML = ""
   await thisText.treeRoot.getMainBranch().loadRequest("get my tree")
@@ -349,8 +371,8 @@ async function displayPayments(myContainer){
   }
 }
 
-async function paymentView(myNode, rowElementSample) {
-  const myContainer = rowElementSample.cloneNode(true)
+async function paymentView(myNode, rowSample) {
+  const myContainer = rowSample.cloneNode(true)
   const extraCell = selectorFromAttr(myContainer, "data-extra") // extra cell for hidden data edition
   myContainer.removeChild(extraCell)
   myNode.firstElement = myContainer // it is used by setActive
@@ -416,9 +438,39 @@ async function paymentView(myNode, rowElementSample) {
     const {setDeletionButton} = await import("../admin/deletion.mjs")
     await setChangePosButton(myNode, myContainer, "butchposvert")
     await setAdditionButton(myNode.parent, myNode, 1, myContainer, async (newNode)=>{
-      return await paymentView(newNode, rowElementSample)
+      //return await paymentView(newNode, rowSample) // old, we add and make click at the same time
+      const newView = await paymentView(newNode, rowSample)
+      const selectElement = selectorFromAttr(newView, "data-select")
+      selectElement.checked = true
+      setOrderPayment(newNode)
+      setActive(newNode)
+      return newView
     })
-    await setDeletionButton(myNode, myContainer)
+    await setDeletionButton(myNode, myContainer, async (delNode)=>{
+      const parentNode = Array.isArray(myNode.parent)? myNode.parent[0] : myNode.parent
+      if (parentNode.children.length==0) {
+        const {setAdditionButton} = await import("../admin/addition.mjs")
+        setAdditionButton(parentNode, null, 1 , null, async (newNode)=>{ // 1 : position
+          const newView = await paymentView(newNode, rowSample)
+          const selectElement = selectorFromAttr(newView, "data-select")
+          selectElement.checked = true
+          setOrderPayment(newNode)
+          setActive(newNode)
+          return newView
+        })
+      }
+      else {
+        if (!delNode.selected)
+          return
+        const skey = parentNode.getSysKey("sort_order")
+        let nextSelected
+        if (parentNode.children.length > 0) {
+          const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
+          nextSelected = parentNode.children.find(child=>child.props[skey]==nextPosition) || parentNode.getChild()
+        }
+        selectorFromAttr(nextSelected.firstElement, "data-select").checked = true
+      }
+    })
   }
   return myContainer
 }
@@ -427,6 +479,7 @@ function setOrderPayment(myPayment) {
   const thisRel = webuser.getRelationship("orders").getChild().getRelationship("orderpayment")
   thisRel.children = []
   thisRel.addChild(new Node({name: getLangBranch(myPayment).getChild().props.name, details: new URLSearchParams({currencyCode: getCurrencyCode()}).toString()}))
+  // *** por alguna razon solo tiene cargadas dos de las relaciones que deberia cuando se pulsa añadir payment
   thisRel.getChild().addParent(myPayment.getRelationship("orderpayment"))
 }
 
@@ -439,57 +492,6 @@ async function cartToOrder(myCart){
     orderItem.addParent(cartItem.item.getRelationship("orderitems")) // extraParent
   }
 }
-
-async function setShippingsCollectionReactions(myNode, rowSample) {
-  const {onDelSelectedChild} = await import("../admin/deletion.mjs")
-  const {onNewNodeMakeClick} = await import("../admin/addition.mjs")
-  onNewNodeMakeClick(myNode.getMainBranch(), (newNode)=>{
-    selectorFromAttr(newNode.firstElement, "data-select").checked = true
-    setOrderShipping(newNode)
-    setActive(newNode)
-  })
-  onDelSelectedChild(myNode.getMainBranch(), async (nextNode)=>{
-    if (!myNode.getMainBranch().getChild()) {
-      const {setAdditionButton} = await import("../admin/addition.mjs")
-      setAdditionButton(myNode.getMainBranch(), null, 1 , null, async (newNode)=>{ // 1 : position
-        const newView = await shippingView(newNode, rowSample)
-        const selectElement = selectorFromAttr(newView, "data-select")
-        selectElement.checked = true
-        setOrderShipping(newNode)
-        setActive(newNode)
-        return newView
-      })
-    }
-    else
-      selectorFromAttr(myNode.getMainBranch().getChild().firstElement, "data-select").checked = true
-  })
-}
-
-async function setPaymentsCollectionReactions(myNode, rowSample) {
-  const {onDelSelectedChild} = await import("../admin/deletion.mjs")
-  const {onNewNodeMakeClick} = await import("../admin/addition.mjs")
-  onNewNodeMakeClick(myNode.getMainBranch(), (newNode)=>{
-    selectorFromAttr(newNode.firstElement, "data-select").checked = true
-    setOrderPayment(newNode)
-    setActive(newNode)
-  })
-  onDelSelectedChild(myNode.getMainBranch(), async (nextNode)=>{
-    if (!myNode.getMainBranch().getChild()) {
-      const {setAdditionButton} = await import("../admin/addition.mjs")
-      setAdditionButton(myNode.getMainBranch(), null, 1 , null, async (newNode)=>{ // 1 : position
-        const newView = await paymentView(newNode, rowSample)
-        const selectElement = selectorFromAttr(newView, "data-select")
-        selectElement.checked = true
-        setOrderPayment(newNode)
-        setActive(newNode)
-        return newView
-      })
-    }
-    else
-      selectorFromAttr(myNode.getMainBranch().getChild().firstElement, "data-select").checked = true
-  })
-}
-
 
 // <--- Cart Order check out End --
 
@@ -559,7 +561,7 @@ async function displayOrderShipping(orderShipping, orderContainer){
   const shippingContainer = selectorFromAttr(orderContainer, "data-shipping")
   orderShipping.writeProp(selectorFromAttr(shippingContainer, "data-name"), "name")
   // *** In case items currencyCode is different to general currencyCode the total amount would be wrong
-  selectorFromAttr(myField, "data-value").textContent = intToMoney(ordershipping.props["price"], ordershipping.props["currencyCode"])
+  selectorFromAttr(shippingContainer, "data-value").textContent = intToMoney(ordershipping.props["price"], ordershipping.props["currencyCode"])
 }
 
 async function itemView(orderItem, containerSample, fieldElementSample, fieldAdmnElementSample) {

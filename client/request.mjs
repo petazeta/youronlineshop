@@ -1,5 +1,5 @@
 import {authorizationToken} from "./webuser/authorization.mjs"
-import {packing, unpacking, walkThrough} from '../shared/utils.mjs'
+import {packing, unpacking, crawler} from '../shared/utils.mjs'
 
 const reduceExtraParents = (params)=>{
   if (params.extraParents && typeof params.extraParents == "object") {
@@ -111,27 +111,23 @@ reqLoaders.set("add my children", (myNode, result)=>{
 reqMethods.set("add my children", ()=>"put")
 reqReduc.set("add my tree", [myNode=>{
   if (myNode.constructor.nodeConstructor.detectLinker(myNode))
-    return packing(cutVoidRels(myNode.clone(2, null, {"id": false}, 'id', {"id": false})))
+    return packing(myNode.clone(2, null, {"id": false}, 'id', {"id": false}), true)
   else
-    return packing(cutVoidRels(myNode.clone(3, null, {"id": false}, 'id', {"id": false})))
+    return packing(myNode.clone(3, null, {"id": false}, 'id', {"id": false}), true)
 }, reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
 reqMethods.set("add my tree", ()=>"put")
 reqLoaders.set("add my tree", (myNode, result)=>{
   if (!result) return
-  const resultNode = unpacking(result)
-  if (!myNode.constructor.nodeConstructor.detectLinker(myNode)) {
-    myNode.props.id = resultNode.props.id
-  }
-  myNode.loadDesc(resultNode)
+  crawler(myNode, unpacking(result))
 })
 reqReduc.set("save order", [myNode=>{
-    return packing(cutVoidRels(myNode.clone(3, null, {"id": false}, 'id', {"id": false})))
+    return packing(myNode.clone(3, null, {"id": false}, 'id', {"id": false}), true)
 }, reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
 reqMethods.set("save order", ()=>"put")
 reqLoaders.set("save order", (myNode, result)=>{
   if (!result) return
   const resultNode = unpacking(result)
-  if (!myNode.constructor.nodeConstructor.detectLinker(myNode)) {
+  if (!myNode.constructor.detectLinker(myNode)) {
     myNode.props.id = resultNode.props.id
   }
   myNode.loadDesc(resultNode)
@@ -261,21 +257,3 @@ export function requestMulti(action, dataNodes, parameters, url) {
   }
   return makeRequest(action, myParams, url)
 }
-
-// when adding the tree, void rels are not necesary
-function cutVoidRels(treeRoot) {
-  Array.from(walkThrough(treeRoot,
-    myElm=>{
-      if (!myElm.constructor.nodeConstructor.detectLinker(myElm)) {
-        for (const myRel of myElm.relationships) {
-          if (myRel.children.length == 0)
-            myElm.removeRelationship(myRel)
-        }
-      }
-      return myElm._children
-    }
-  ))
-  return treeRoot
-}
-
-// *** should check if myNode.constructor.nodeConstructor.detectLinker is always equivalent to myNode.constructor.detectLinker

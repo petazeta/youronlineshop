@@ -57,8 +57,7 @@
 	align-items: flex-start;
 }
 #cartbox .boxtitle{
-  margin-left: 0.2em;
-  margin-top: 1px;
+  margin: 1px auto 0px auto;
 }
 #cartbox .boxbody {
     padding: 0;

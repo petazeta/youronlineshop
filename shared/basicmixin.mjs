@@ -52,7 +52,3 @@ export function copyProps(target, source, thisKeys) {
   Object.assign(target.props, source.props)
   return target
 }
-
-/*
-cambios con respecto al código antiguo:
-*/
