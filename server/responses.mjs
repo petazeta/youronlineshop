@@ -177,7 +177,7 @@ export class Responses{
       if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
         throw new Error("Database safety")
       const myExtraParents = Array.isArray(parameters.extraParents) ? arrayUnpacking(parameters.extraParents) : parameters.extraParents
-      const req = Node.clone(unpacking(parameters.nodeData));
+      const req = Node.clone(unpacking(parameters.nodeData))
       const result = await req.dbInsertMyTree(parameters.deepLevel, myExtraParents, parameters.myself, parameters.updateSiblingsOrder)
       return result && packing(result)
     });

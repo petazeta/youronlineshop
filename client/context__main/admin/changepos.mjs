@@ -17,18 +17,26 @@ It gets edition button layout (template) name and some parent of the destination
     const chTpName = position == "vertical" ? "butchposver" : "butchposhor"
 */
 
-export async function setChangePosButton(chNode, elmView, chTpName="butchposver", dataIdButsWrapper="admnbuts"){
+export async function setChangePosButton(chNode, elmView, chTpName="butchposvert", callBack, dataIdButsWrapper="admnbuts"){
   const butsWrapper = selectorFromAttr(elmView, "data-" + dataIdButsWrapper)
   
   const chPosTp = await getTemplate(chTpName)
 
-  const chPosButtons=selectorFromAttr(chPosTp, "data-chpos-container") // data-minus data-plus
+  const chPosButtons = selectorFromAttr(chPosTp, "data-chpos-container") // data-minus data-plus
   butsWrapper.appendChild(chPosTp)
   // setting behaviour
-  selectorFromAttr(chPosButtons, "data-minus").addEventListener('click', (event) => performChangePos(chNode, -1))
-  selectorFromAttr(chPosButtons, "data-plus").addEventListener('click', (event) => performChangePos(chNode, +1))
+  selectorFromAttr(chPosButtons, "data-minus").addEventListener('click', async (event) => {
+    await performChangePos(chNode, -1)
+    if (callBack)
+      await callBack(-1)
+  })
+  selectorFromAttr(chPosButtons, "data-plus").addEventListener('click', async (event) => {
+    await performChangePos(chNode, +1)
+    if (callBack)
+      await callBack(+1)
+})
 }
-// to set some procedures
+// to set some procedures, this can be replaced by callBack
 export function onChangePosInPageChild(nodeParent, refreshView){
   nodeParent.addEventListener("moveNode", (increment, currentNode, nextSortOrder) => {
     const pagination = nodeParent.pagination

@@ -21,7 +21,7 @@ It gets adition button layout (template) name and some parent of the destination
   - and parent has instance variable childContainer -> elements container
 -->
 */
-export async function setAdditionButton(newNodeParent, ownerNode, step=1, elmView, makeView, dataIdButsWrapper="admnbuts", addTpName="butaddnewnode"){
+export async function setAdditionButton(newNodeParent, ownerNode, step=1, elmView, makeView, callBack, dataIdButsWrapper="admnbuts", addTpName="butaddnewnode"){
   const addTp = await getTemplate(addTpName)
   const addButton=addTp.querySelector("[data-add-button]")
   addButton.addEventListener("click", async (ev)=>{
@@ -31,8 +31,9 @@ export async function setAdditionButton(newNodeParent, ownerNode, step=1, elmVie
     const hasLangContent = getLangParent(newNodeParent.partner) ? true : false
     const newNode = hasLangContent ? await createInstanceChildText(newNodeParent, sortOrder) : newNodeParent.createInstanceChild(sortOrder)
     const extraParent = hasLangContent && getLangParent(newNode)
-    const newView = await makeView(newNode)
-    await performAddition(newNode, extraParent, newView)
+    await performAddition(newNode, extraParent, makeView)
+    if (callBack)
+      await callBack(newNode)
   })
   const butsWrapper = elmView && selectorFromAttr(elmView, "data-" + dataIdButsWrapper) || newNodeParent.childContainer
   butsWrapper.appendChild(addTp)
@@ -69,6 +70,7 @@ export function showFirstAdditionOnLog(newNodeParent, rootNode, hasWritePermissi
     logChangeReaction()
   })
 }
+// we can also avoid using this, just using the script at the post addition callback
 export function onAddInPageChild(nodeParent, refreshView){
   // adjust the page view after adding an element to fit the pagination
   nodeParent.addEventListener("addNewNode", (newNode)=>{

@@ -232,13 +232,13 @@ export class SiteDbGateway {
   }
 
   async setSiblingsOrderOnInsert(tableName, positioncolumnname, actualPosition, thisId, foreigncolumnname, foreignId) {
-    let findQuery= this.dbLink.model(tableName).find({ [positioncolumnname]: { $gte: actualPosition} , _id: {$ne: thisId} });
-    if (foreigncolumnname) findQuery=findQuery.find({ [foreigncolumnname]: foreignId });
-    const result =await findQuery.exec();
+    let findQuery= this.dbLink.model(tableName).find({ [positioncolumnname]: { $gte: actualPosition} , _id: {$ne: thisId} })
+    if (foreigncolumnname) findQuery = findQuery.find({ [foreigncolumnname]: foreignId })
+    const result = await findQuery.exec()
     for (const elm of result) {
-      elm[positioncolumnname]++;
-      await elm.save();
+      elm[positioncolumnname]++
+      await elm.save()
     }
-    return result.length;
+    return result.length
   }
 }

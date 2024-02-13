@@ -1,9 +1,10 @@
 import {getDomElementFromChild, swapElement} from '../frontutils.mjs'
 // it assumes node instance var firstElement is settled as the view node element
 export async function performChangePos(currentNode, increment) {
-  const skey=currentNode.parent.getSysKey('sort_order')
-  if (!skey) return
-  const currentSortOrder=currentNode.props[skey]
+  const skey = currentNode.parent.getSysKey('sort_order')
+  if (!skey)
+    return
+  const currentSortOrder = currentNode.props[skey]
   const nextSortOrder=currentSortOrder + increment
   let total = currentNode.parent.props.total
   if (currentNode.parent.pagination)
@@ -23,4 +24,5 @@ export async function performChangePos(currentNode, increment) {
   nextNode.props[skey] = currentSortOrder
   swapElement(currentNode.firstElement, nextNode.firstElement)
   currentNode.parent.dispatchEvent("moveNode", increment, currentNode, nextSortOrder)
+  return [increment, currentNode, nextSortOrder]
 }

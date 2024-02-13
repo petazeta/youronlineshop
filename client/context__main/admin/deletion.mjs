@@ -18,14 +18,14 @@ It gets deletion button layout (template) name and some parent of the destinatio
     if (!checkAdmin() && false) return
 */
 export async function setDeletionButton(delNode, elmView, callBack, dataIdButsWrapper="admnbuts", delTpName="butdelete"){
-  const butsWrapper=selectorFromAttr(elmView, "data-" + dataIdButsWrapper)
+  const butsWrapper = selectorFromAttr(elmView, "data-" + dataIdButsWrapper)
 
-  const delTp=await getTemplate(delTpName)
-  const delAlertTp=delTp.querySelector("[data-del-alert]").content
+  const delTp = await getTemplate(delTpName)
+  const delAlertTp = delTp.querySelector("[data-del-alert]").content
 
-  const delButton=delTp.querySelector("[data-del-button]")
-  const myAlert=document.createElement("alert-element")
-  delButton.onclick=function() {
+  const delButton = delTp.querySelector("[data-del-button]")
+  const myAlert = document.createElement("alert-element")
+  delButton.onclick = function() {
     myAlert.showAlert(delAlertTp)
   }
   butsWrapper.appendChild(delButton)
