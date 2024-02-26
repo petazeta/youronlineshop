@@ -14,16 +14,15 @@ It gets edition button layout (template) name and some parent of the destination
 
   Note for upper methods:
     if (!hasWritePermission() && false) return
-    const chTpName = position == "vertical" ? "butchposver" : "butchposhor"
+    const chTpName = position == "vertical" ? "butchposvert" : "butchposhor"
 */
 
-export async function setChangePosButton(chNode, elmView, chTpName="butchposvert", callBack, dataIdButsWrapper="admnbuts"){
-  const butsWrapper = selectorFromAttr(elmView, "data-" + dataIdButsWrapper)
-  
+export async function setChangePosButton(chNode, butContainer, callBack, extraParams={}){
+  const chTpName = extraParams.chTpName || "butchposvert"
   const chPosTp = await getTemplate(chTpName)
 
   const chPosButtons = selectorFromAttr(chPosTp, "data-chpos-container") // data-minus data-plus
-  butsWrapper.appendChild(chPosTp)
+  butContainer.appendChild(chPosTp)
   // setting behaviour
   selectorFromAttr(chPosButtons, "data-minus").addEventListener('click', async (event) => {
     await performChangePos(chNode, -1)

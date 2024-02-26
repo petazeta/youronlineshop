@@ -637,3 +637,58 @@ new file
 2024-02-13 10:50:06 log in: productsadmin
 2024-02-13 10:50:59 log in: productsadmin
 2024-02-13 11:34:54 log in: productsadmin
+2024-02-13 18:19:50 Server start
+2024-02-13 18:20:15 log in: productsadmin
+2024-02-13 18:21:11 log in: productsadmin
+2024-02-13 18:23:14 log in: productsadmin
+2024-02-13 18:24:08 log in: productsadmin
+2024-02-13 18:30:10 log in: productsadmin
+2024-02-13 18:36:24 log in: productsadmin
+2024-02-13 18:58:21 log in: productsadmin
+2024-02-13 18:59:18 log in: productsadmin
+2024-02-13 19:29:56 log in: productsadmin
+2024-02-13 19:35:38 log in: productsadmin
+2024-02-13 19:55:04 log in: productsadmin
+2024-02-13 20:06:43 localhost:6002 log in: pwdError
+2024-02-13 20:06:51 log in: productsadmin
+2024-02-13 20:12:08 log in: productsadmin
+2024-02-13 21:28:39 Server start
+2024-02-13 21:29:30 log in: productsadmin
+2024-02-13 21:30:57 Server start
+2024-02-13 21:31:11 log in: productsadmin
+2024-02-13 21:31:42 log in: productsadmin
+2024-02-14 08:27:51 Server start
+2024-02-14 08:29:11 log in: productsadmin
+2024-02-14 08:29:39 log in: productsadmin
+2024-02-22 10:36:45 Server start
+2024-02-22 10:37:11 log in: productsadmin
+2024-02-22 10:47:34 log in: productsadmin
+2024-02-22 10:48:34 log in: productsadmin
+2024-02-22 10:52:09 log in: productsadmin
+2024-02-22 10:58:21 log in: productsadmin
+2024-02-22 11:00:34 log in: productsadmin
+2024-02-24 09:40:46 Server start
+2024-02-24 19:51:59 Server start
+2024-02-24 19:58:11 log in: productsadmin
+2024-02-24 20:00:14 log in: productsadmin
+2024-02-24 20:02:31 log in: webadmin
+2024-02-24 20:09:49 log in: webadmin
+2024-02-24 20:30:02 log in: webadmin
+2024-02-24 20:35:46 log in: webadmin
+2024-02-24 20:39:34 log in: webadmin
+2024-02-24 20:40:00 localhost:6002 error trying to access file: /favicon.ico
+2024-02-24 20:41:06 log in: webadmin
+2024-02-24 20:49:56 log in: webadmin
+2024-02-24 20:55:26 log in: webadmin
+2024-02-24 21:05:23 log in: webadmin
+2024-02-24 21:09:17 log in: webadmin
+2024-02-24 21:11:45 log in: webadmin
+2024-02-26 10:15:11 Server start
+2024-02-26 10:16:04 log in: productsadmin
+2024-02-26 10:17:07 Server start
+2024-02-26 10:18:22 log in: webadmin
+2024-02-26 10:41:27 log in: webadmin
+2024-02-26 10:51:41 log in: webadmin
+2024-02-26 10:58:25 log in: webadmin
+2024-02-26 11:52:54 log in: webadmin
+2024-02-26 11:55:01 log in: webadmin

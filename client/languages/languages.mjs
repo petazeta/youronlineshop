@@ -63,13 +63,13 @@ export default class Languages{
     return this.currentLanguage.relationships.find(langRel=>langRel.props.childTableName==this.getLangBranch(myNode)?.props.childTableName)
   }
   async createInstanceChildText(parentNode, position=1, everyLang=true){
-    const newNode=parentNode.createInstanceChild(position)
+    const newNode = parentNode.createInstanceChild(position)
     await newNode.loadRequest("get my relationships")
-    console.log("createInstanceChild", newNode.relationships, newNode)
     if (!this.getLangBranch(newNode)) return newNode
     // We get the relationship about language to add a data language node child
-    let langs=1
-    if (everyLang) langs = this.treeRoot.getMainBranch().children.length
+    let langs = 1
+    if (everyLang)
+      langs = this.treeRoot.getMainBranch().children.length
     for (let i=0; i<langs; i++) this.getLangBranch(newNode).addChild(new newNode.constructor)
     return newNode
   }

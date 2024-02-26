@@ -212,7 +212,7 @@ async function loggedIn(afterLogin){
       for (const menu of getRoot().getMainBranch().children) {
         blink((menu.firstElement))
       }
-      blink(selectorFromAttr(window.document, "data-site-title"))
+      blink(selectorFromAttr(window.document.firstElementChild, "data-site-title"))
     }
   }
   if (afterLogin == "checkout") {

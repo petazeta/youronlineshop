@@ -4,7 +4,7 @@ import {selectorFromAttr} from '../frontutils.mjs'
 
 export class Categories extends Content{
   constructor(){ // reduced args=> super.deepLevel: 5, super.db_collection: 'TABLE_ITEMCATEGORIES'
-    super('TABLE_ITEMCATEGORIES', 5, 'TABLE_ITEMCATEGORIESDATA')
+    super('TABLE_ITEMCATEGORIES', 5)
   }
   async initData(Linker, getLangParent, getLangBranch, webuser, getCurrentLanguage){
     await super.initData(Linker, getLangParent, webuser, getCurrentLanguage)
@@ -14,7 +14,6 @@ export class Categories extends Content{
     // Categories load has a specific load to avoid loading the categories items at init:
     // It loads untill the subcategory node relationships depth. And then for each lang related relationship it makes a load
     const subCatLangRels=getMainBranchDataNodes(this.treeRoot, 2).map(child=>getLangBranch(child))
-    //old: const subCatLangRels=this.treeRoot.getBranch('main').children.reduce((acc, rootChild)=>[...acc, ...rootChild.getBranch('main').children.map(child=>child.getBranch("TABLE_LANGUAGES"))], []);
     const langDataResult=await Node.requestMulti("get my children", subCatLangRels, {extraParents: getLangParent(this.treeRoot)})
     langDataResult.forEach((value, key)=>subCatLangRels[key].addChild(new Node().load(value.data[0])))
   }

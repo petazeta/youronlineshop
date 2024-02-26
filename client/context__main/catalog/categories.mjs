@@ -1,5 +1,3 @@
-// Hay que ampliar esta clase, introducir lo de navhistory y opción pagination
-// *** error, no desaparece el boton addition unico (no children) al hacer logout ni lo pone al login
 import {addItem} from '../shop/cart.mjs'
 import {Categories} from '../../catalog/categories.mjs'
 import {selectorFromAttr, visibleOnMouseOver, removeVisibleOnMouseOver, fadeIn, fadeOut, fadeInTmOut, setQttySelect} from '../../frontutils.mjs'
@@ -20,43 +18,8 @@ import {observerMixin} from '../../observermixin.mjs'
 
 const mySiteCategories = new Categories()
 const searchParamsKeys = ["category", "subcategory", "item"]
-
-// -- helpers
-
-function hasWritePermission(){
-  //return true // hack
-  return webuser.isProductAdmin()
-}
-export function getRoot() {
-  return mySiteCategories.treeRoot
-}
-function write(myNode, viewContainer, propKey, dataId="value", attrKey) {
-  getLangBranch(myNode).getChild().writeProp(selectorFromAttr(viewContainer, "data-" + dataId), propKey, attrKey)
-}
-async function setPropEdition(myNode, myContainer, propKey){
-  if (!hasWritePermission()) return
-  const {setEdition} = await import('../admin/edition.mjs')
-  visibleOnMouseOver(selectorFromAttr(myContainer, "data-butedit"), myContainer) // on mouse over edition button visibility
-  await setEdition(getLangBranch(myNode).getChild(), myContainer, propKey)
-}
-// write + setEdition
-async function setPropView(myNode, myContainer, propKey){
-  write(myNode, myContainer, propKey)
-  await setPropEdition(myNode, myContainer, propKey)
-}
-function remvEdition(myContainer){
-  selectorFromAttr(myContainer, "data-butedit").innerHTML = ""
-  removeVisibleOnMouseOver(selectorFromAttr(myContainer, "data-butedit"), myContainer)
-}
-function remvModification(myContainer){
-  selectorFromAttr(myContainer, "data-admnbuts").innerHTML = ""
-  removeVisibleOnMouseOver(selectorFromAttr(myContainer, "data-admnbuts"), myContainer)
-}
-function remvAddition(myContainer){
-  const but = selectorFromAttr(myContainer, "data-add-button")
-  but.parentElement.removeChild(but)
-}
 let centralContentContainer
+
 // --- General elements end ---
 
 // -- categories
@@ -75,11 +38,7 @@ export async function displayCategories(viewContainer){
     if (getRoot().getMainBranch().children.length == 0) {
       if (hasWritePermission()) {
         const {setAdditionButton} = await import("../admin/addition.mjs")
-        setAdditionButton(getRoot().getMainBranch(), null, 1, null, async (newNode)=>{
-          const myView = await catView(newNode)
-          await displaySubCategories(newNode)
-          return myView
-        })
+        await setAdditionButton(getRoot().getMainBranch(), 1, getRoot().getMainBranch().childContainer, catView, displaySubCategories)
       }
       else {
         const additionButton = selectorFromAttr(viewContainer, "data-add-button")
@@ -87,152 +46,125 @@ export async function displayCategories(viewContainer){
           additionButton.parentElement.removeChild(additionButton)
       }
     }
+    // refresh central content view (remove addButton)
+    if (getActiveInSite()?.parent?.props.childTableName==getRoot().parent.props.childTableName)
+        displayItems(getActiveInSite()) // refresh view
   })
 
   const catsContainer = selectorFromAttr(viewContainer, "data-cats-container")
   getRoot().getMainBranch().childContainer = catsContainer
   for (const categ of getRoot().getMainBranch().children) {
-    // await setCatUserEventsReactions(categ)
     catsContainer.appendChild(await catView(categ))
+    await displaySubCategories(categ) // subcategories are displayed at the same time
     for (const subCat of categ.getMainBranch().children) {
-      await initialNavSearchSubCat(subCat) // nav search procedure in subcat.
+      await initialNavSearchSubCat(subCat) // nav search procedure in subcat
     }
   }
+  // this is not clear that is used but it could be in case the user ins logged in automatically when stay logged is settled
   if (getRoot().getMainBranch().children.length == 0  && hasWritePermission()) {
     const {setAdditionButton} = await import("../admin/addition.mjs")
-    setAdditionButton(getRoot().getMainBranch(), null, 1 , null, async (newNode)=>{
-      const myView = await catView(newNode)
-      await displaySubCategories(newNode)
-      return myView
-    })
+    await setAdditionButton(getRoot().getMainBranch(), 1, getRoot().getMainBranch().childContainer, catView, displaySubCategories)
   }
-  getRoot().getMainBranch().dispatchEvent("displayChildren") // event for addition and no children
+  getRoot().getMainBranch().dispatchEvent("displayChildren") // dispatch event in case needed
 }
 
-async function catView(categ){
+async function catView(myNode){
   const catTp = await getTemplate("category")
   const catContainer = selectorFromAttr(catTp, "data-container")
-  categ.firstElement = catContainer
-  writeCatNode(categ, catContainer)
-  await setCatNodeEdition(categ, catContainer)
-  await setCatCollectionEdition(categ, catContainer)
-  // no se si hace falta la siguiente linea porque en teoria no hay refreshing aqui
-  //if (categ.selected) clickCategory(categ) // Selection can be happened before: refreshing
-
-  // showing subcategories
-  const subCatsContainer = selectorFromAttr(catContainer, "data-subcat-container")
-  await displaySubCategories(categ)
+  myNode.firstElement = catContainer
+  writeCatNode(myNode, catContainer)
+  await setCatNodeEdition(myNode, catContainer)
+  await setCatCollectionEdition(myNode, catContainer)
   return catTp
 }
 
-async function displaySubCategories(categ){
-  if (!categ._logCollectionReaction) {
-    if (!categ.setReaction) {
-      Object.setPrototypeOf(categ, observerMixin(categ.constructor).prototype) // adding methods 
-      observerMixin(Object).prototype.initObserver.call(categ) // adding properties : calling constructor
+async function displaySubCategories(myNode){  // myNode = category
+  if (!myNode._logCollectionReaction) {
+    if (!myNode.setReaction) {
+      Object.setPrototypeOf(myNode, observerMixin(myNode.constructor).prototype) // adding methods 
+      observerMixin(Object).prototype.initObserver.call(myNode) // adding properties : calling constructor
     }
-    getRoot().attachObserver("usertype change", categ)
-    getRoot().setReaction("usertype change", async ()=>{
-      console.log(`node id=${getRoot().props.id} said "webuser log change" `)
-      if (categ.getMainBranch().children.length == 0) {
+    getRoot().attachObserver("usertype change", myNode)
+    myNode.setReaction("usertype change", async ()=>{
+      console.log(`node id=${myNode.props.id} said "webuser log change" `)
+      if (myNode.getMainBranch().children.length == 0) {
         if (hasWritePermission()) {
           const {setAdditionButton} = await import("../admin/addition.mjs")
-          setAdditionButton(categ.getMainBranch(), null, 1 , null, async (newNode)=>{
+          await setAdditionButton(myNode.getMainBranch(), 1, myNode.getMainBranch().childContainer, subCatView, async (newNode)=>{
             await setNavStateSubCat(newNode)
-            const myView = await subCatView(newNode)
             newNode.getRelationship("items").props.total = 0 // to not have to load total
-            displayItems(newNode)
+            await displayItems(newNode)
             pushNavHisSubCat(newNode)
-            return myView
           })
         }
         else {
-          const additionButton = selectorFromAttr(categ.getMainBranch().childContainer, "data-add-button")
+          const additionButton = selectorFromAttr(myNode.getMainBranch().childContainer, "data-add-button")
           if (additionButton)
             additionButton.parentElement.removeChild(additionButton)
         }
       }
     })
-    categ._logCollectionReaction = true
+    myNode._logCollectionReaction = true
   }
-  const subCatsContainer = selectorFromAttr(categ.firstElement, "data-subcat-container")
-  categ.getMainBranch().childContainer = subCatsContainer
+  const subCatsContainer = selectorFromAttr(myNode.firstElement, "data-subcat-container")
+  myNode.getMainBranch().childContainer = subCatsContainer
   subCatsContainer.innerHTML = ""
-  for (const subCat of categ.getMainBranch().children) {
-    // await setSubCatUserEventsReactions(subCat)
+  for (const child of myNode.getMainBranch().children) {
     // it is important to await View for the syncrhony of performance: the Tp to not be empty when append in DOM, dispatch displayChildren after append
-    subCatsContainer.appendChild(await subCatView(subCat))
-    await setNavStateSubCat(subCat) // should be at the end because subCat.firstElement is referenced
+    subCatsContainer.appendChild(await subCatView(child))
+    await setNavStateSubCat(child) // should be at the end because child.firstElement is referenced
   }
-  if (categ.getMainBranch().children.length == 0 && hasWritePermission()) {
+  if (myNode.getMainBranch().children.length == 0 && hasWritePermission()) {
     const {setAdditionButton} = await import("../admin/addition.mjs")
-    setAdditionButton(categ.getMainBranch(), null, 1 , null, async (newNode)=>{
+    await setAdditionButton(myNode.getMainBranch(), 1, myNode.getMainBranch().childContainer, subCatView, async (newNode)=>{
       await setNavStateSubCat(newNode)
-      const myView = await subCatView(newNode)
       newNode.getRelationship("items").props.total = 0 // to not have to load total
-      displayItems(newNode)
+      await displayItems(newNode)
       pushNavHisSubCat(newNode)
-      return myView
     })
   }
-  categ.getMainBranch().dispatchEvent("displayChildren") // event for addition and no children
+  myNode.getMainBranch().dispatchEvent("displayChildren") // event for addition and no children
 }
 
-// aqui si que hay que añadir los listeners para change log and change lang
-async function subCatView(subCat){
-  const subCatTp = await getTemplate("subcategory") // everytime a new tp is created
-  const subCatContainer = selectorFromAttr(subCatTp, "data-container")
-  subCat.firstElement = subCatContainer
-  writeSubCatNode(subCat, subCatContainer)
-  await setSubCatNodeEdition(subCat, subCatContainer)
-  await setSubCatCollectionEdition(subCat, subCatContainer)
-  // no se si hace falta la siguiente linea porque en teoria no hay refreshing aqui
-  //if (subCat.selected) click(subCat) // Selection can be happened before: refreshing
-  selectorFromAttr(subCatContainer, "data-value")
+// aqui si que hay que añadir los listeners para change lang
+async function subCatView(myNode){
+  const myTp = await getTemplate("subcategory") // everytime a new tp is created
+  const myContainer = selectorFromAttr(myTp, "data-container")
+  myNode.firstElement = myContainer
+  writeSubCatNode(myNode, myContainer)
+  await setSubCatNodeEdition(myNode, myContainer)
+  await setSubCatCollectionEdition(myNode, myContainer)
+  selectorFromAttr(myContainer, "data-value")
   .addEventListener('click', async function(event){
     event.preventDefault()
     if (this.isContentEditable == true)
       return // The event should not be executed at contenteditable state
-    await displayItems(subCat)
-    pushNavHisSubCat(subCat)
+    await displayItems(myNode)
+    pushNavHisSubCat(myNode)
   })
-  return subCatTp
+  return myTp
 }
 
 // -- Items
-async function displayItems(subCat, pageNum) { // default pageNum: current pagination.pageNum
-  console.log("displayItems", subCat)
-  setActiveInSite(subCat)
-  if (!subCat.getRelationship("items").pagination) {
-    subCat.getRelationship("items")
-    .pagination = new Pagination(subCat.getRelationship("items"), async (index)=>{
-      await displayItems(subCat, index)
+async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNum: current pagination.pageNum
+  console.log("displayItems", myNode)
+  setActiveInSite(myNode)
+  if (!myNode.getRelationship("items").pagination) {
+    myNode.getRelationship("items")
+    .pagination = new Pagination(myNode.getRelationship("items"), async (index)=>{
+      await displayItems(myNode, index)
     })
-    await subCat.getRelationship("items").pagination.init()
+    await myNode.getRelationship("items").pagination.init()
   }
-  const pagination = subCat.getRelationship("items").pagination
+  const pagination = myNode.getRelationship("items").pagination
   if (pagination.totalParent.props.total>0 && !pagination.loaded || (pageNum !== undefined && pagination.pageNum!=pageNum)) {
-    await pagination.loadPageItems("get my tree", {extraParents: getLangParent(subCat)}, pageNum)
+    await pagination.loadPageItems("get my tree", {extraParents: getLangParent(myNode)}, pageNum)
     pagination.loaded = true
   }
-  /*
-  if (!subCat._logCollectionReaction) {
-    if (!subCat.setReaction) {
-      Object.setPrototypeOf(subCat, observerMixin(subCat.constructor).prototype) // adding methods 
-      observerMixin(Object).prototype.initObserver.call(subCat) // adding properties : calling constructor
-    }
-    getRoot().attachObserver("usertype change", subCat)
-    getRoot().setReaction("usertype change", async ()=>{
-      console.log(`node id=${getRoot().props.id} said "webuser log change" `)
-      await setItemsCollectionEventsReactions(subCat)
-    })
-    subCat._logCollectionReaction = true
-  }
-  */
   const catalogTp = await getTemplate("catalog")
   const itemsContainer = selectorFromAttr(catalogTp, "data-container")
-  subCat.getRelationship("items").childContainer = itemsContainer
-  for (const item of subCat.getRelationship("items").children) {
+  myNode.getRelationship("items").childContainer = itemsContainer
+  for (const item of myNode.getRelationship("items").children) {
     itemsContainer.appendChild(await itemView(item))
   }
   const pageView = await pagination.pageView(getTemplate)
@@ -250,43 +182,11 @@ async function displayItems(subCat, pageNum) { // default pageNum: current pagin
     await setNavStateItem(item)
     //await initialNavSearchItem(item)
   }
-  if (subCat.getRelationship("items").children.length == 0  && hasWritePermission()) {
+  if (myNode.getRelationship("items").children.length == 0  && hasWritePermission()) {
     const {setAdditionButton} = await import("../admin/addition.mjs")
-    setAdditionButton(subCat.getRelationship("items"), null, 1, null, async (newNode)=>{
-      await setNavStateItem(newNode)
-      const myView = await itemView(newNode)
-      const nodeParent = subCat.getRelationship("items")
-      const pagination = nodeParent.pagination
-      const total = ++pagination.totalParent.props.total // perform addition adds one to normal parent total but not to pagination.totalParent
-      // is it change in indexes number because of the addition?
-      if (total > 1 && total % pagination.pageSize == 1) {
-        pagination.createIndexes() // refresh indexes to include the new one
-        pagination.createItemsWindow()
-        pagination.displayButtons(getTemplate)
-      }
-      // is it page overflow?
-      if (nodeParent.children.length > pagination.pageSize) {
-        // we have to options: newNode is in the current page or it is in the next page
-        const skey = newNode.parent.getSysKey('sort_order')
-        if (newNode.props[skey] == nodeParent.children.reduce((cc, sibling)=>sibling.props[skey] > cc? sibling.props[skey] : cc, 0)) {
-        //if (nodeParent.children[nodeParent.children.length - 1] == newNode) {
-          // next page situtation
-          //for (let i = 0; i<pagination.pageSize; i++)
-            //nodeParent.removeChild(nodeParent.firstElementChild)
-          //while (nodeParent.firstElementChild)
-            //nodeParent.removeChild(nodeParent.firstElementChild)
-          await displayItems(nodeParent.partner, pagination.pageNum + 1)
-        }
-        // Is it not last page?
-        else {
-          nodeParent.childContainer.removeChild(nodeParent.childContainer.lastElementChild)
-          nodeParent.removeChild(nodeParent.children[nodeParent.children.length-1])
-        }
-      }
-      return myView
-    })
+    await setAdditionButton(myNode.getRelationship("items"), 1, myNode.getRelationship("items").childContainer, null, async (newNode) => await onPageAddition(myNode.getRelationship("items"), newNode))
   }
-  subCat.getRelationship("items").dispatchEvent("displayChildren")
+  myNode.getRelationship("items").dispatchEvent("displayChildren")
 }
 async function itemView(myItem){
   const itemTp = await getTemplate("item")
@@ -380,18 +280,15 @@ async function setCatNodeEdition(myNode, myContainer, propKey){
       Object.setPrototypeOf(myNode, observerMixin(myNode.constructor).prototype) // adding methods 
       observerMixin(Object).prototype.initObserver.call(myNode) // adding properties : calling constructor
     }
-    const logChangeReaction = async ()=>{
+    getRoot().attachObserver("usertype change", myNode)
+    myNode.setReaction("usertype change", async ()=>{
+      console.log(`node id=${myNode.props.id} said "webuser log change" `)
       if (hasWritePermission()) {
         await setCatNodeEdition(myNode, myContainer, propKey)
       }
       else {
         remvEdition(myContainer)
       }
-    }
-    getRoot().attachObserver("usertype change", myNode)
-    myNode.setReaction("usertype change", ()=>{
-      console.log(`node id=${myNode.props.id} said "webuser log change" `)
-      logChangeReaction()
     })
     myNode._logEditReaction = true
   }
@@ -403,53 +300,15 @@ async function setSubCatNodeEdition(myNode, myContainer, propKey){
       Object.setPrototypeOf(myNode, observerMixin(myNode.constructor).prototype) // adding methods 
       observerMixin(Object).prototype.initObserver.call(myNode) // adding properties : calling constructor
     }
-    const logChangeReaction = async ()=>{
+    getRoot().attachObserver("usertype change", myNode)
+    myNode.setReaction("usertype change", async ()=>{
+      console.log(`node id=${myNode.props.id} said "webuser log change" `)
       if (hasWritePermission()) {
         await setSubCatNodeEdition(myNode, myContainer, propKey)
       }
       else {
         remvEdition(myContainer)
       }
-      // item group view
-      if (myNode.selected) {
-        for (const item of myNode.getRelationship("items").children){
-          if (hasWritePermission()) {
-            await setPropEdition(item, selectorFromAttr(item.firstElement, "data-name"), "name")
-            await setPropEdition(item, selectorFromAttr(item.firstElement, "data-description"), "descriptionshort")
-            await setPriceEdition(item, selectorFromAttr(item.firstElement, "data-price"))
-          }
-          else {
-            remvEdition(selectorFromAttr(item.firstElement, "data-name"))
-            remvEdition(selectorFromAttr(item.firstElement, "data-description"))
-            remvEdition(selectorFromAttr(item.firstElement, "data-price"))
-          }
-        }
-      }
-      // single item view
-      else {
-        const activeNode = getActiveInSite()
-        if (activeNode?.parent && myNode.getRelationship("items")?.pagination
-          && activeNode.parent == myNode.getRelationship("items").pagination.totalParent) {
-          const item = myNode.getRelationship("items").pagination.totalParent.children.find(item=>item.props.id==activeNode.props.id)
-          if (item) {
-            if (hasWritePermission()) {
-              await setPropEdition(item, selectorFromAttr(item.firstElement, "data-name"), "name")
-              await setPropEdition(item, selectorFromAttr(item.firstElement, "data-description"), "descriptionshort")
-              await setPriceEdition(item, selectorFromAttr(item.firstElement, "data-price"))
-            }
-            else {
-              remvEdition(selectorFromAttr(item.firstElement, "data-name"))
-              remvEdition(selectorFromAttr(item.firstElement, "data-description"))
-              remvEdition(selectorFromAttr(item.firstElement, "data-price"))
-            }
-          }
-        }
-      }
-    }
-    getRoot().attachObserver("usertype change", myNode)
-    myNode.setReaction("usertype change", ()=>{
-      console.log(`node id=${myNode.props.id} said "webuser log change" `)
-      logChangeReaction()
     })
     myNode._logEditReaction = true
   }
@@ -461,26 +320,16 @@ async function setCatCollectionEdition(myNode, myContainer){
     const {setAdditionButton} = await import("../admin/addition.mjs")
     const {setChangePosButton} = await import("../admin/changepos.mjs")
     const {setDeletionButton} = await import("../admin/deletion.mjs")
-    await setChangePosButton(myNode, myContainer)
-    await setAdditionButton(myNode.parent, myNode, 1, myContainer, async (newNode)=>{
-      // no need to set nav history for partial url in new cat
-      // await setCatUserEventsReactions(newNode)
-      const myView = await catView(newNode)
-      displaySubCategories(newNode)
-      return myView
-    })
+    await setChangePosButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"))
+    const position = myNode.props[myNode.parent.getSysKey('sort_order')] + 1
+    // getRoot().getMainBranch() == myNode.parent
+    await setAdditionButton(myNode.parent, position, selectorFromAttr(myContainer, "data-admnbuts"), catView, displaySubCategories)
     //**** cuando se borra una subcategoria se borran tambien los items, por tanto hay que poner la pagina pricipal en blanco cuando
     // coincide que está activa la vista de los items
-    await setDeletionButton(myNode, myContainer, async (delNode)=>{
-      console.log("after setting deletion: ", myNode)
-      if (getRoot().getMainBranch().children.length==0) {
+    await setDeletionButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), async (delNode)=>{
+      if (myNode.parent.children.length==0) {
         const {setAdditionButton} = await import("../admin/addition.mjs")
-        setAdditionButton(getRoot().getMainBranch(), null, 1 , null, async (newNode)=>{
-          const myView = await catView(newNode)
-          await displaySubCategories(newNode)
-          return myView
-        })
-        return
+        await setAdditionButton(myNode.parent, 1, myNode.parent.childContainer, catView, displaySubCategories)
       }
       if (!delNode.selected)
         return
@@ -490,7 +339,13 @@ async function setCatCollectionEdition(myNode, myContainer){
         const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
         nextSelected = getRoot().getMainBranch().children.find(child=>child.props[skey]==nextPosition) || getRoot().getMainBranch().getChild()
       }
-      displaySubCategories(nextSelected)
+      if (nextSelected && nextSelected.getMainBranch().children.length > 0) {
+        await displayItems(nextSelected.getMainBranch().getChild())
+      }
+      else {
+        fadeOut(centralContentContainer)
+        centralContentContainer.innerHTML = ""
+      }
     })
   }
   if (!myNode._logModReaction) {
@@ -498,18 +353,15 @@ async function setCatCollectionEdition(myNode, myContainer){
       Object.setPrototypeOf(myNode, observerMixin(myNode.constructor).prototype) // adding methods 
       observerMixin(Object).prototype.initObserver.call(myNode) // adding properties : calling constructor
     }
-    const logChangeReaction=async ()=>{
+    getRoot().attachObserver("usertype change", myNode)
+    myNode.setReaction("usertype change", async()=>{
+      console.log(`node id=${myNode.props.id} said "webuser log change" `)
       if (hasWritePermission()) {
         await setCatCollectionEdition(myNode, myContainer)
       }
       else {
         remvModification(myContainer)
       }
-    }
-    getRoot().attachObserver("usertype change", myNode)
-    myNode.setReaction("usertype change", ()=>{
-      console.log(`node id=${myNode.props.id} said "webuser log change" `)
-      logChangeReaction()
     })
     myNode._logModReaction = true
   }
@@ -522,28 +374,24 @@ async function setSubCatCollectionEdition(myNode, myContainer){
     const {setAdditionButton} = await import("../admin/addition.mjs")
     const {setChangePosButton} = await import("../admin/changepos.mjs")
     const {setDeletionButton} = await import("../admin/deletion.mjs")
-    await setChangePosButton(myNode, myContainer)
-    await setAdditionButton(myNode.parent, myNode, 1, myContainer, async (newNode)=>{
+    await setChangePosButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"))
+    const position = myNode.props[myNode.parent.getSysKey('sort_order')] + 1
+    // getRoot().getMainBranch() == myNode.parent
+    await setAdditionButton(myNode.parent, position, selectorFromAttr(myContainer, "data-admnbuts"), subCatView, async (newNode)=>{
       await setNavStateSubCat(newNode) // declaring navigation url
-      // await setSubCatUserEventsReactions(newNode)
-      const myView = await subCatView(newNode)
       newNode.getRelationship("items").props.total = 0 // to not have to load total
       displayItems(newNode)
       pushNavHisSubCat(newNode)
-      return myView
     })
-    await setDeletionButton(myNode, myContainer, async (delNode)=>{
+    await setDeletionButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), async (delNode)=>{
       if (myNode.parent.children.length==0) {
         const {setAdditionButton} = await import("../admin/addition.mjs")
-        setAdditionButton(myNode.parent, null, 1 , null, async (newNode)=>{
+        await setAdditionButton(myNode.parent, 1, myNode.parent.childContainer, subCatView, async (newNode)=>{
           await setNavStateSubCat(newNode)
-          const myView = await subCatView(newNode)
           newNode.getRelationship("items").props.total = 0 // to not have to load total
           await displayItems(newNode)
           pushNavHisSubCat(newNode)
-          return myView
         })
-        return
       }
       if (!delNode.selected)
         return
@@ -553,8 +401,14 @@ async function setSubCatCollectionEdition(myNode, myContainer){
         const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
         nextSelected = myNode.parent.children.find(child=>child.props[skey]==nextPosition) || myNode.parent.getChild()
       }
-      displayItems(nextSelected)
-      pushNavHisSubCat(nextSelected)
+      if (nextSelected) {
+        displayItems(nextSelected)
+        pushNavHisSubCat(nextSelected)
+      }
+      else {
+        fadeOut(centralContentContainer)
+        centralContentContainer.innerHTML = ""
+      }
     })
   }
   if (!myNode._logModReaction) {
@@ -571,57 +425,30 @@ async function setSubCatCollectionEdition(myNode, myContainer){
       else {
         remvModification(myContainer)
       }
-      // item group view
-      if (myNode.selected) {
-        for (const item of myNode.getRelationship("items").children){
-          if (hasWritePermission()) {
-            await setItemCollectionEdition(item, item.firstElement)
-          }
-          else {
-            remvModification(item.firstElement)
-          }
-        }
-      }
     })
     myNode._logModReaction = true
   }
 }
-
-
-async function setNavStateSubCat(subCat){
+async function setNavStateSubCat(myNode){
   // despite click subcat would set the same nav state again, nav state system prevent double setting the same state
-  await setNav(subCat, "subcategory", searchParamsKeys, displayItems)
+  await setNav(myNode, "subcategory", searchParamsKeys, displayItems)
 }
-function pushNavHisSubCat(subCat){
-  pushNav(subCat, "subcategory", searchParamsKeys)
+function pushNavHisSubCat(myNode){
+  pushNav(myNode, "subcategory", searchParamsKeys)
 }
-function initialNavSearchSubCat(subCat){
-  initialNavSearch(subCat, "subcategory", searchParamsKeys, displayItems)
+function initialNavSearchSubCat(myNode){
+  initialNavSearch(myNode, "subcategory", searchParamsKeys, displayItems)
 }
 
 // -- Items
 
-function pushNavHisItem(item){
-  pushNav(item, "item", searchParamsKeys)
-}
-function initialNavSearchItem(item){
-  initialNavSearch(item, "item", searchParamsKeys, displayItemLarge)
-}
-async function setNavStateItem(myNode){
-  await setNav(myNode, "item", searchParamsKeys, displayItemLarge)
-}
-async function remvItemEdition(subCatContainer){
-  selectorFromAttr(subCatContainer, "data-butedit").innerHTML=""
-  selectorFromAttr(subCatContainer, "data-buteditcode").innerHTML=""
-  removeVisibleOnMouseOver(selectorFromAttr(subCatContainer, "data-butedit"), subCatContainer)
-}
 async function setItemCollectionEdition(myNode, myContainer){
   if (!hasWritePermission()) return
   visibleOnMouseOver(selectorFromAttr(myContainer, "data-admnbuts"), myContainer) // on mouse over edition button visibility
   const {setAdditionButton} = await import("../admin/addition.mjs")
   const {setChangePosButton} = await import("../admin/changepos.mjs")
   const {setDeletionButton} = await import("../admin/deletion.mjs")
-  await setChangePosButton(myNode, myContainer, "butchposhor", async (increment)=>{
+  await setChangePosButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), async (increment)=>{
     const nodeParent = myNode.parent
     const skey = myNode.parent.getSysKey('sort_order') 
     const nextSortOrder = myNode.props[skey] + increment
@@ -632,51 +459,25 @@ async function setItemCollectionEdition(myNode, myContainer){
     if (nextSortOrder < pagination.itemsWindow[0]) {
       await displayItems(nodeParent.partner, pagination.pageNum - 1)
     }
-  })
-  await setAdditionButton(myNode.parent, myNode, 1, myContainer, undefined, async (newNode)=>{
-    await setNavStateItem(newNode) // declaring navigation url
-    const nodeParent = myNode.parent
-    const pagination = nodeParent.pagination
-    const total = ++pagination.totalParent.props.total // perform addition adds one to normal parent total but not to pagination.totalParent
-    // is it change in indexes number because of the addition?
-    if (total > 1 && total % pagination.pageSize == 1) {
-      pagination.createIndexes() // refresh indexes to include the new one
-      pagination.createItemsWindow()
-      pagination.displayButtons(getTemplate)
-    }
-    // is it page overflow?
-    if (nodeParent.children.length >= pagination.pageSize) {
-      // we have to options: newNode is in the current page or it is in the next page
-      const skey = newNode.parent.getSysKey('sort_order')
-      if (newNode.props[skey] == nodeParent.children.reduce((cc, sibling)=>sibling.props[skey] > cc? sibling.props[skey] : cc, 0)) {
-      //if (nodeParent.children[nodeParent.children.length - 1] == newNode) {
-        // next page situtation
-        //for (let i = 0; i<pagination.pageSize; i++)
-          //nodeParent.removeChild(nodeParent.firstElementChild)
-        while (nodeParent.firstElementChild)
-          nodeParent.removeChild(nodeParent.firstElementChild)
-        await displayItems(nodeParent.partner, pagination.pageNum + 1)
-      }
-      // Is it not last page?
-      else {
-        nodeParent.childContainer.removeChild(nodeParent.childContainer.lastElementChild)
-        nodeParent.removeChild(nodeParent.children[nodeParent.children.length-1])
-        const container = nodeParent.childContainer
-        // to be inserted just before the next sibling
-        const nextSibling = skey? nodeParent.children.find(child=>child.props[skey]==newNode.props[skey]+1)?.firstElement : undefined
-        const newView = await itemView(newNode)
-        nextSibling ? container.insertBefore(newView, nextSibling) : container.appendChild(newView)
-      }
-    }
-  })
-  await setDeletionButton(myNode, myContainer, async (delNode)=>{
+  }, {chTpName: "butchposhor"})
+  const position = myNode.props[myNode.parent.getSysKey('sort_order')] + 1
+  await setAdditionButton(myNode.parent, position, selectorFromAttr(myContainer, "data-admnbuts"), null, async (newNode)=>await onPageAddition(myNode.parent, newNode))
+  await setDeletionButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), async (delNode)=>{
     const nodeParent = myNode.parent
     const pagination = nodeParent.pagination
     const total = --pagination.totalParent.props.total // standard deletion substract from parent, not from totalParent
+    if (nodeParent.children.length==0) {
+      const {setAdditionButton} = await import("../admin/addition.mjs")
+      await setAdditionButton(nodeParent, 1, nodeParent.childContainer, null, async (newNode) => await onPageAddition(myNode.getRelationship("items"), newNode))
+    }
+
     // Is it not last page?
     if (pagination.pageNum < pagination.indexes.length)  // Hay paginas posteriores
       pagination.loaded = false // reload items in window
+    else
+      return // we could let the default behaveour to work
     // Is there a change in indexes because of the substraction?
+    // We have two options 
     if (total > 0 && total % pagination.pageSize == 0) {
       pagination.createIndexes()
       pagination.createItemsWindow()
@@ -687,6 +488,20 @@ async function setItemCollectionEdition(myNode, myContainer){
     // No change in indexes
     await displayItems(nodeParent.partner, pagination.pageNum)
   })
+}
+function pushNavHisItem(item){
+  pushNav(item, "item", searchParamsKeys)
+}
+function initialNavSearchItem(item){
+  initialNavSearch(item, "item", searchParamsKeys, displayItemLarge)
+}
+async function setNavStateItem(myNode){
+  await setNav(myNode, "item", searchParamsKeys, displayItemLarge)
+}
+async function remvItemEdition(myContainer){
+  selectorFromAttr(myContainer, "data-butedit").innerHTML=""
+  selectorFromAttr(myContainer, "data-buteditcode").innerHTML=""
+  removeVisibleOnMouseOver(selectorFromAttr(myContainer, "data-butedit"), myContainer)
 }
 function writePrice(myNode, viewContainer){
   selectorFromAttr(viewContainer, "data-value").textContent = intToMoney(myNode.props.price)
@@ -717,16 +532,6 @@ async function setShortImageView(myItem, viewContainer){
     // we search the item in the total parent
     displayItemLarge(myItem.parent.pagination.totalParent.children.find(item=>item.props.id==myItem.props.id))
   })
-}
-function setQttySelect_old(viewContainer){
-  const mySelect=viewContainer.querySelector('select')
-  const firstOption=mySelect.options[0]
-  for (let i=1; i<25; i++){
-    let myOption = firstOption.cloneNode()
-    myOption.textContent=i+1
-    myOption.value=i+1
-    mySelect.add(myOption)
-  }
 }
 async function setCartBut(myItem, viewContainer){
   const cartButton = selectorFromAttr(viewContainer, "data-button")
@@ -825,3 +630,73 @@ export async function reloadInitLangData() {
   return await mySiteCategories.reloadInitLangData(getCurrentLanguage, getLangParent, getLangBranch, Linker.getNodeConstructor())
 }
 */
+async function onPageAddition(nodeParent, newNode) {
+  console.log("onPageAddition")
+  await setNavStateItem(newNode) // declaring navigation url
+  const pagination = nodeParent.pagination
+  const total = ++pagination.totalParent.props.total // perform addition adds one to normal parent total but not to pagination.totalParent
+  // is it change in indexes number because of the addition?
+  if (total > 1 && total % pagination.pageSize == 1) {
+    pagination.createIndexes() // refresh indexes to include the new one
+    pagination.createItemsWindow()
+    pagination.displayButtons(getTemplate)
+  }
+  const skey = newNode.parent.getSysKey('sort_order')
+  // is it page overflow?
+  if (nodeParent.children.length > pagination.pageSize) {
+    // we have to options: newNode is in the current page or it is in the next page:
+    
+    // next page situtation
+    if (newNode.props[skey] == nodeParent.children.reduce((cc, sibling)=>sibling.props[skey] > cc? sibling.props[skey] : cc, 0)) {
+      while (nodeParent.firstElementChild) // also we could use the loop limit pagination.pageSize
+        nodeParent.removeChild(nodeParent.firstElementChild)
+      await displayItems(nodeParent.partner, pagination.pageNum + 1)
+      return
+    }
+    // current page
+    else {
+      nodeParent.childContainer.removeChild(nodeParent.childContainer.lastElementChild)
+      nodeParent.removeChild(nodeParent.children[nodeParent.children.length-1])
+    }
+  }
+  const container = nodeParent.childContainer
+  // to be inserted just before the next sibling
+  const nextSibling = skey? nodeParent.children.find(child=>child.props[skey]==newNode.props[skey]+1)?.firstElement : undefined
+  const newView = await itemView(newNode)
+  nextSibling ? container.insertBefore(newView, nextSibling) : container.appendChild(newView)
+}
+
+// -- helpers
+
+function hasWritePermission(){
+  return webuser.isProductAdmin()
+}
+export function getRoot() {
+  return mySiteCategories.treeRoot
+}
+function write(myNode, viewContainer, propKey, dataId="value", attrKey) {
+  getLangBranch(myNode).getChild().writeProp(selectorFromAttr(viewContainer, "data-" + dataId), propKey, attrKey)
+}
+async function setPropEdition(myNode, myContainer, propKey){
+  if (!hasWritePermission()) return
+  const {setEdition} = await import('../admin/edition.mjs')
+  visibleOnMouseOver(selectorFromAttr(myContainer, "data-butedit"), myContainer) // on mouse over edition button visibility
+  await setEdition(getLangBranch(myNode).getChild(), myContainer, propKey)
+}
+// write + setEdition
+async function setPropView(myNode, myContainer, propKey){
+  write(myNode, myContainer, propKey)
+  await setPropEdition(myNode, myContainer, propKey)
+}
+function remvEdition(myContainer){
+  selectorFromAttr(myContainer, "data-butedit").innerHTML = ""
+  removeVisibleOnMouseOver(selectorFromAttr(myContainer, "data-butedit"), myContainer)
+}
+function remvModification(myContainer){
+  selectorFromAttr(myContainer, "data-admnbuts").innerHTML = ""
+  removeVisibleOnMouseOver(selectorFromAttr(myContainer, "data-admnbuts"), myContainer)
+}
+function remvAddition(myContainer){
+  const but = selectorFromAttr(myContainer, "data-add-button")
+  but.parentElement.removeChild(but)
+}
