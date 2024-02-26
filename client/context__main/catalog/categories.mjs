@@ -341,6 +341,7 @@ async function setCatCollectionEdition(myNode, myContainer){
       }
       if (nextSelected && nextSelected.getMainBranch().children.length > 0) {
         await displayItems(nextSelected.getMainBranch().getChild())
+        pushNavHisSubCat(nextSelected.getMainBranch().getChild())
       }
       else {
         fadeOut(centralContentContainer)

@@ -94,7 +94,7 @@ async function menuView(menu){
   menu.firstElement = menuContainer // firstElement is used for other modules
   writeMenu(menu, menuContainer)
   await setMenuEdition(menu, menuContainer)
-  await setMenuModification(menu, menuContainer)
+  await setMenuEditCollection(menu, menuContainer)
   // no se si hace falta la siguiente linea porque en teoria no hay refreshing aqui
   //if (menu.selected) clickMenu(menu) // Selection can be happened before: refreshing
   // ** doc entrance method **
@@ -141,7 +141,7 @@ async function pgphView(prgph){
   write(prgph, prContainer)
   write(prgph, prContainer, undefined, "edit-text") // for html code edition
   await setPgphEdition(prgph, prContainer)
-  await setPgphModification(prgph, prContainer)
+  await setPgphEditCollection(prgph, prContainer)
   return pgphTp
 }
 
@@ -216,13 +216,13 @@ async function remvMenuEdition(menuContainer){
   removeVisibleOnMouseOver(selectorFromAttr(menuContainer, "data-butedit"), menuContainer)
 }
 // sets menu modification buttons
-async function setMenuModification(myNode, myContainer){
+async function setMenuEditCollection(myNode, myContainer){
   if (hasWritePermission()) {
     visibleOnMouseOver(selectorFromAttr(myContainer, "data-admnbuts"), myContainer) // on mouse over edition button visibility
     const {setAdditionButton} = await import("../admin/addition.mjs")
     const {setChangePosButton} = await import("../admin/changepos.mjs")
     const {setDeletionButton} = await import("../admin/deletion.mjs")
-    await setChangePosButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), null, {chTpName: "butchposhor"})
+    await setChangePosButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), null, {chTpName: "butch"})
     const position = myNode.props[myNode.parent.getSysKey('sort_order')] + 1
     await setAdditionButton(myNode.parent, position, selectorFromAttr(myContainer, "data-admnbuts"), menuView, async (newNode)=>{
       setNavStateMenu(newNode) // declaring navigation url
@@ -245,9 +245,10 @@ async function setMenuModification(myNode, myContainer){
         const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
         nextSelected = getRoot().getMainBranch().children.find(child=>child.props[skey]==nextPosition) || getRoot().getMainBranch().getChild()
       }
-      if (nextSelected && nextSelected.getMainBranch().children.length > 0) {
-        await displayParagraphs(nextSelected.getMainBranch().getChild())
+      if (nextSelected) {
+        await displayParagraphs(nextSelected)
       }
+      // Not any menu left
       else {
         fadeOut(centralContentContainer)
         centralContentContainer.innerHTML = ""
@@ -263,7 +264,7 @@ async function setMenuModification(myNode, myContainer){
     myNode.setReaction("usertype change", async ()=>{
       console.log(`node id=${myNode.props.id} said "webuser log change" `)
       if (hasWritePermission()) {
-        await setMenuModification(myNode, myContainer)
+        await setMenuEditCollection(myNode, myContainer)
       }
       else {
         remvModification(myContainer)
@@ -276,27 +277,28 @@ async function setMenuModification(myNode, myContainer){
 // -- Pages (paragraphs)
 
 // for setting the edition button
-async function setPgphEdition(prNode, prContainer){
+async function setPgphEdition(myNode, prContainer){
   if (hasWritePermission()) {
     const {setEdition} = await import("../admin/edition.mjs")
-    setEdition(getLangBranch(prNode).getChild(), prContainer, undefined, "innerHTML", false)
+    setEdition(getLangBranch(myNode).getChild(), prContainer, undefined, "innerHTML", false)
     visibleOnMouseOver(selectorFromAttr(prContainer, "data-butedit"), prContainer) // on mouse over edition button visibility
-    setEdition(getLangBranch(prNode).getChild(), prContainer, undefined, "value", false, "edit-text", "buteditcode", undefined, "buteditcode")
+    setEdition(getLangBranch(myNode).getChild(), prContainer, undefined, "value", false, "edit-text", "buteditcode", undefined, "buteditcode")
     visibleOnMouseOver(selectorFromAttr(prContainer, "data-buteditcode"), prContainer) // on mouse over edition button visibility
   }
 }
-async function setPgphModification(prNode, prContainer){
+async function setPgphEditCollection(myNode, prContainer){
   if (hasWritePermission()) {
     visibleOnMouseOver(selectorFromAttr(prContainer, "data-admnbuts"), prContainer) // on mouse over edition button visibility
     const {setAdditionButton} = await import("../admin/addition.mjs")
     const {setChangePosButton} = await import("../admin/changepos.mjs")
     const {setDeletionButton} = await import("../admin/deletion.mjs")
-    await setChangePosButton(prNode, selectorFromAttr(prContainer, "data-admnbuts"))
-    await setAdditionButton(prNode.parent, 1, selectorFromAttr(prContainer, "data-admnbuts"), pgphView)
-    await setDeletionButton(prNode, selectorFromAttr(prContainer, "data-admnbuts"), async(delNode)=>{
-      if (prNode.parent.children.length==0) {
+    const position = myNode.props[myNode.parent.getSysKey('sort_order')] + 1
+    await setChangePosButton(myNode, selectorFromAttr(prContainer, "data-admnbuts"))
+    await setAdditionButton(myNode.parent, position, selectorFromAttr(prContainer, "data-admnbuts"), pgphView)
+    await setDeletionButton(myNode, selectorFromAttr(prContainer, "data-admnbuts"), async(delNode)=>{
+      if (myNode.parent.children.length==0) {
         const {setAdditionButton} = await import("../admin/addition.mjs")
-        await setAdditionButton(prNode.parent, 1, prNode.parent.childContainer, pgphView)
+        await setAdditionButton(myNode.parent, 1, myNode.parent.childContainer, pgphView)
       }
     })
   }
