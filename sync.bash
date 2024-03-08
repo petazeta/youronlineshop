@@ -31,3 +31,5 @@ fi
 sudo rsync -avu --exclude 'node_modules/*' --exclude '*.bash' --delete "${orig}" "${target}"
 
 echo "sync: $orig -> $target"
+# he visto en un curso que en el if el parentesis es doble [[]]
+

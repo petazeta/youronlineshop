@@ -1,88 +1,62 @@
 import {getRoot as getSiteText} from "../sitecontent.mjs"
-import {webuser} from "../webuser/webuser.mjs"
 import {selectorFromAttr} from "../../frontutils.mjs"
 import {checkValidData, validateEmail, checkDataChange} from "../../../shared/datainput.mjs"
 import {getTemplate} from '../layouts.mjs'
 
-export async function userInfoView(){
+export async function userInfoView(myUser){
   const dashPath = getSiteText().getNextChild("dashboard")
-  const showuserinfoTp = await getTemplate("showuserinfo")
-  const showuserinfo = selectorFromAttr(showuserinfoTp, "data-container")
-  dashPath.getNextChild("dashboardtit").setContentView(selectorFromAttr(showuserinfo, "data-dash-tit"))
-  webuser.writeProp(selectorFromAttr(showuserinfo, "data-username"))
-  selectorFromAttr(showuserinfo, "data-userinfo").appendChild(await userDataInfoView())
-  return showuserinfoTp
+  const container = selectorFromAttr(await getTemplate("showuserinfo"), "data-container")
+  dashPath.getNextChild("dashboardtit").setContentView(selectorFromAttr(container, "data-dash-tit"))
+  myUser.writeProp(selectorFromAttr(container, "data-username"))
+  const myData = [myUser.getRelationship("usersdata").getChild()]
+  selectorFromAttr(container, "data-userinfo").appendChild(await userDataInfoView(myData))
+  return container
 }
-export async function addressView(){
+export async function userAddressView(myUser){
   const dashPath = getSiteText().getNextChild("dashboard")
-  const showaddressTp = await getTemplate("showaddress")
-  const showaddress = selectorFromAttr(showaddressTp, "data-container")
-  dashPath.getNextChild("addresstt").setContentView(selectorFromAttr(showaddress, "data-addresstt"))
-  selectorFromAttr(showaddress, "data-userinfo").appendChild(await userDataInfoView(true))
-  return showaddressTp
+  const container = selectorFromAttr(await getTemplate("showaddress"), "data-container")
+  dashPath.getNextChild("addresstt").setContentView(selectorFromAttr(container, "data-addresstt"))
+  const myData = [myUser.getRelationship("usersdata").getChild(), myUser.getRelationship("addresses").getChild()]
+  selectorFromAttr(container, "data-userinfo").appendChild(await userDataInfoView(myData))
+  return container
 }
 
-async function userDataInfoView(showAddress=false, fieldtype="input"){
-  const userInfoTp = await getTemplate("userinfo")
-  const userInfo = selectorFromAttr(userInfoTp, "data-container")
-  selectorFromAttr(userInfo, "data-userdata").appendChild(await userDataView(showAddress, fieldtype))
-  getSiteText().getNextChild("not located").getNextChild("save").setContentView(selectorFromAttr(userInfo, "data-saver"))
-  selectorFromAttr(userInfo, "data-saver").addEventListener("click", async ev=>{
-    ev.preventDefault()
-    await saveUserData(selectorFromAttr(userInfo, "data-form"))
-  })
-  return userInfoTp
-}
-
-export async function userDataView(showAddress=false, fieldtype="input"){
-  const userdataviewTp = await getTemplate("userdata")
-  const myForm =  selectorFromAttr(userdataviewTp, "data-form")
+export async function userDataView(myNodes, fieldtype="input"){ // myNodes: nodes with user data
+  const container = selectorFromAttr(await getTemplate("userdata"), "data-container")
+  const myForm =  selectorFromAttr(container, "data-form")
   //Cancelation of submit is important because there could be enter keyboard pressing in fields
   myForm.addEventListener("submit", (event)=>{
     event.preventDefault()
   })
-  await setUserData(selectorFromAttr(myForm, "data-userdata"), showAddress, fieldtype)
-  
-  getSiteText().getNextChild("userdataform").getNextChild("fieldCharError").setContentView(selectorFromAttr(myForm, "data-fieldcharerror"))
-  getSiteText().getNextChild("userdataform").getNextChild("emailCharError").setContentView(selectorFromAttr(myForm, "data-fieldemailerror"))
-/*
-// *** esto iria en la version para el dashboard: template userdataview.html
-  getSiteText().getNextChild("not located").getNextChild("save").setContentView(selectorFromAttr(myForm, "data-saver"))
-  selectorFromAttr(myForm, "data-saver").addEventListener("click", async ev=>{
-    ev.preventDefault()
-    await saveUserData(myForm, showAddress)
-  })
-*/
-  return userdataviewTp
-}
-
-
-// It adds the fields for a user data container
-async function setUserData(myContainer, showAddress=false, fieldtype="input"){
-  async function setField(myNode, fieldTpName, labelsRoot, fieldsContainer){
-    for (const propKey of myNode.parent.childTableKeys) {
+  // It adds the fields for a user data container
+  if (!Array.isArray(myNodes))
+    myNodes = [myNodes]
+  const fieldTpName = fieldtype=="textnode" ? "singlefield" : "singleinput"
+  for (const myNode of myNodes) {
+    let labelsRoot = getSiteText().getNextChild(myNode.getParent().props.childTableName)
+    for (const propKey of myNode.getParent().childTableKeys) {
       let inputTp = await getTemplate(fieldTpName)
       let inputLabelElm = selectorFromAttr(inputTp, "data-label")
-      labelsRoot.getNextChild(propKey).setContentView(inputLabelElm)
+      if (labelsRoot)
+        labelsRoot.getNextChild(propKey).setContentView(inputLabelElm)
       selectorFromAttr(inputLabelElm, "data-value").attributes.for.value = propKey
       let inputElm = selectorFromAttr(inputTp, "data-input")
       if (myNode.props[propKey]!==undefined)
         inputElm.value = myNode.props[propKey]
       inputElm.attributes.name.value = propKey
       inputElm.attributes.placeholder.value = propKey
-      fieldsContainer.appendChild(inputTp)
+      selectorFromAttr(myForm, "data-userdata").appendChild(inputTp)
     }
   }
-  const fieldTpName = fieldtype=="textnode" ? "singlefield" : "singleinput"
-  const userDataLabels = getSiteText().getNextChild(webuser.getRelationship("usersdata").props.childTableName)
-  await setField(webuser.getRelationship("usersdata").getChild(), fieldTpName, userDataLabels, myContainer)
-  if (showAddress) {
-    const addressLabels = getSiteText().getNextChild(webuser.getRelationship("addresses").props.childTableName)
-    await setField(webuser.getRelationship("addresses").getChild(), fieldTpName, addressLabels, myContainer)
-  }
-  return myContainer
+  getSiteText().getNextChild("userdataform").getNextChild("fieldCharError").setContentView(selectorFromAttr(myForm, "data-fieldcharerror"))
+  getSiteText().getNextChild("userdataform").getNextChild("emailCharError").setContentView(selectorFromAttr(myForm, "data-fieldemailerror"))
+
+  return container
 }
-export async function saveUserData(myForm, showAddress=false){
+
+export async function saveUserData(myNodes, myForm){
+  if (!Array.isArray(myNodes))
+    myNodes = [myNodes]
   const saveReturn = await innerSave()
   if (saveReturn instanceof Error) {
     const errorKey = JSON.parse(saveReturn.message).errorKey
@@ -95,22 +69,17 @@ export async function saveUserData(myForm, showAddress=false){
   document.createElement("alert-element").showMsg(getSiteText().getNextChild("not located").getNextChild("saved").getLangData(), 3000)
 
   // Helpers
+  // ****  quiza sería mejor hacer catch error y olvidarse de este lio de errores, entonces habria que cambiar tambien checkValidData
   async function innerSave() {
-    const userdata = formToData(webuser.getRelationship("usersdata").childTableKeys, myForm)
-    if (checkValidData(userdata) instanceof Error) {
-      return checkValidData(userdata)
-    }
-    if (!validateEmail(userdata.emailaddress)) {
-      return new Error(`{"errorKey" : "emailaddress"}`)
-    }
-    if (showAddress) {
-      const addressdata = formToData(webuser.getRelationship("addresses").childTableKeys, myForm)
-      if (checkValidData(addressdata) instanceof Error) {
-        return checkValidData(addressdata)
+    for (const myNode of myNodes) {
+      const myData = formToData(myNode.getParent().childTableKeys, myForm)
+      if (checkValidData(myData) instanceof Error)
+        return checkValidData(myData)
+      if (myData.emailaddress && !validateEmail(myData.emailaddress)) {
+        return new Error(`{"errorKey" : "emailaddress"}`)
       }
-      await updateProps(webuser.getRelationship("addresses").getChild(), addressdata)
+      await updateProps(myNode, myData)
     }
-    await updateProps(webuser.getRelationship("usersdata").getChild(), userdata)
 
     // Helpers
     //Turn input values to element props
@@ -132,4 +101,16 @@ export async function saveUserData(myForm, showAddress=false){
       .forEach(propName=>myNode.props[propName] = mydata[propName])
     }
   }
+}
+
+// Helpers
+async function userDataInfoView(myData, fieldtype="input"){ // fieldtype: textnode
+  const container = selectorFromAttr(await getTemplate("userinfo"), "data-container")
+  selectorFromAttr(container, "data-userdata").appendChild(await userDataView(myData, fieldtype))
+  getSiteText().getNextChild("not located").getNextChild("save").setContentView(selectorFromAttr(container, "data-saver"))
+  selectorFromAttr(container, "data-saver").addEventListener("click", async ev=>{
+    ev.preventDefault()
+    await saveUserData(myData, selectorFromAttr(container, "data-form"))
+  })
+  return container
 }

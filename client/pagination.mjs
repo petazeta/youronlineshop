@@ -35,7 +35,8 @@ export class Pagination{
     this.totalParent.pagination = this
     // In same cases we don't need to make the request because we know total value in advance. In that cases we set it before.
     if (this.totalParent.props.total === undefined) {
-      await this.totalParent.loadRequest("get my children", {count: true, ...params})
+      const requestAction = this.totalParent.partner? "get my children" : "get all my children"
+      await this.totalParent.loadRequest(requestAction, {count: true, ...params})
     }
   }
   createIndexes(){

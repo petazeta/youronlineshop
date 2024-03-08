@@ -108,7 +108,7 @@ function refreshCartBox(cartBoxContainer){
   displayItemList(cartBoxContainer)
   showCartBox(cartBoxContainer)
 }
-function resetCartBox(cartBoxContainer){
+export function resetCartBox(cartBoxContainer){
   myCart.getRelationship().children = []
   displayItemList(cartBoxContainer)
 }

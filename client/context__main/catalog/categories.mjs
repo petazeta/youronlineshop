@@ -147,11 +147,9 @@ async function subCatView(myNode){
 
 // -- Items
 async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNum: current pagination.pageNum
-  console.log("displayItems", myNode)
   setActiveInSite(myNode)
   if (!myNode.getRelationship("items").pagination) {
-    myNode.getRelationship("items")
-    .pagination = new Pagination(myNode.getRelationship("items"), async (index)=>{
+    myNode.getRelationship("items").pagination = new Pagination(myNode.getRelationship("items"), async (index)=>{
       await displayItems(myNode, index)
     })
     await myNode.getRelationship("items").pagination.init()

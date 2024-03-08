@@ -19,7 +19,36 @@ const nodesConstructorsMixin = Sup => class extends Sup {
 const Node = nodesConstructorsMixin(ProtoNode)
 const Linker = nodesConstructorsMixin(ProtoLinker)
 
-//Safety check functions
+export async function isAllowedToRead(user, myNode){
+  if (!isConfidentialTable(getTableName(myNode)))
+    return true
+  if (isAdmin(user))
+    return true
+  if (await isOwner(myNode, user.props.id))
+    return true
+}
+export async function isAllowedToInsert(user, myNode){
+  if (isAdmin(user))
+    return true
+  // *** this should be checked to ensure user id correspond to some user
+  if (isConfidentialTable(getTableName(myNode)) && user.props.id) // orders can be created by direct insert for users
+    return true
+}
+export async function isAllowedToModify(user, myNode){
+  if (getUserType(user)=='system administrator')
+    return true // For changing users password
+  if (!myNode)
+    return false
+  if (isAdmin(user))
+    return true
+  if (isConfidentialTable(getTableName(myNode)) && (await isOwner(myNode, user.props.id)))
+    return true
+}
+export function isAllowedToUpdateCatalogImage(user){
+  if (isAdmin(user))
+    return true
+}
+// -- helpers --
 function getTableName(myNode){
   if (typeof myNode=="string")
     return myNode
@@ -56,7 +85,12 @@ function isAdmin(user){
     return true
 }
 async function isOwner(myNode, userId) {
-  if (myNode.props.id==userId && myNode.parent.childTableName=="TABLE_USERS")
+  if (Node.detectLinker(myNode)) {
+    if (myNode.props.parentTableName=="TABLE_USERS" && myNode.partner.props.id==userId)
+      return true
+    myNode = myNode.partner
+  }
+  if (myNode.props.id==userId && myNode.parent?.childTableName=="TABLE_USERS")
     return true
   if (isOwnerCore(myNode))
     return true
@@ -66,42 +100,12 @@ async function isOwner(myNode, userId) {
     return true
   function isOwnerCore(pointer) {
     while (pointer) {
-      if (pointer.props.parentTableName=="TABLE_USERS" && pointer.partner?.props.id==userId)
+      if (pointer.parent?.props.parentTableName=="TABLE_USERS" && pointer.parent?.partner?.props.id==userId)
         return true
-      pointer = pointer.getAscendent()
+      if (Array.isArray(pointer.parent))
+        pointer = pointer.parent[0]?.partner
+      else
+        pointer = pointer.parent?.partner
     }
   }
-}
-
-export async function isAllowedToRead(user, myNode){
-  if (!isConfidentialTable(getTableName(myNode)))
-    return true
-  if (isAdmin(user))
-    return true
-  if (await isOwner(myNode, user.props.id))
-    return true
-}
-export async function isAllowedToInsert(user, myNode){
-  if (isAdmin(user))
-    return true
-  if (isOrderTable(getTableName(myNode))) // orders can not being created by direct insert for no users
-    return false
-  if (isConfidentialTable(getTableName(myNode)) && user.props.id)
-    return true
-}
-
-export async function isAllowedToModify(user, myNode){
-  if (getUserType(user)=='system administrator')
-    return true // For changing users password
-  if (!myNode)
-    return false
-  if (isAdmin(user))
-    return true
-  if (isConfidentialTable(getTableName(myNode)) && (await isOwner(myNode, user.props.id)))
-    return true
-}
-
-export function isAllowedToUpdateCatalogImage(user){
-  if (isAdmin(user))
-    return true
 }

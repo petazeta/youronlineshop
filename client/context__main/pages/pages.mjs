@@ -229,7 +229,6 @@ async function setMenuEditCollection(myNode, myContainer){
       await displayParagraphs(newNode)
     })
     await setDeletionButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), async (delNode)=>{
-      console.log("after setting deletion: ", myNode)
       if (getRoot().getMainBranch().children.length==0) {
         const {setAdditionButton} = await import("../admin/addition.mjs")
         setAdditionButton(getRoot().getMainBranch(), 1, getRoot().getMainBranch().childContainer, menuView, async (newNode)=>{
@@ -240,7 +239,7 @@ async function setMenuEditCollection(myNode, myContainer){
       if (!delNode.selected)
         return
       const skey = getRoot().getMainBranch().getSysKey("sort_order")
-      let nextSelected = getRoot().getMainBranch().getChild()
+      let nextSelected
       if (getRoot().getMainBranch().children.length > 1) {
         const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
         nextSelected = getRoot().getMainBranch().children.find(child=>child.props[skey]==nextPosition) || getRoot().getMainBranch().getChild()

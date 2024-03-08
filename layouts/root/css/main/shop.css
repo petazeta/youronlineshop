@@ -157,6 +157,8 @@ div.quantityselect {
 /* <-- old end */
 .orderitemscontainer{
   padding: 0.5em;
+  display: flex;
+  justify-content: flex-end;
 }
 .ordercarttotals, .ordertotals {
   border-top:1px solid #666;
@@ -164,10 +166,15 @@ div.quantityselect {
     text-align: right;
     padding-right: 2.2em;
 }
-.shippingitem{
+.shippingitem, .paymentitem{
+  display: flex;
+  justify-content: flex-end;
+  gap: 2.2em;
   padding: 0.5em;
-  text-align:right;
   padding-right:2.2em
+}
+.paymentitem {
+  margin-top: 1em;
 }
 .paybutton {
   align-self: center;

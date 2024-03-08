@@ -24,6 +24,7 @@ const userMixin=Sup => class extends Sup {
   async login(name, password, user=null){
     // const histUrl=window.history.state && window.history.state.url;
     // if (histUrl?.includes('category') || histUrl.includes('menu')) webuser.perviousLoginHistorySate=window.history.state;
+    // *** should we reset user data??
     const lastUserType = this.getUserType() // save last user state to detect change
     if (!user) {
       const result = await this.constructor.makeRequest("login", {"user_name": name, "user_password": password})

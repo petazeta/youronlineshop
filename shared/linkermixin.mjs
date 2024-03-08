@@ -14,8 +14,16 @@
 
 //import {copyProps} from './basicmixin.mjs';
 
-export function detectLinker(myNode){
-  return 'partner' in myNode;
+function detectLinker(myNode){
+  return 'partner' in myNode
+}
+function getRoot(myNode){
+  const parent = myNode._parent
+  if (!parent)
+    return myNode
+  if (Array.isArray(parent))
+    return getRoot(parent[0])
+  return getRoot(parent)
 }
 
 export function isNumberField(parent, prop) {
@@ -62,6 +70,12 @@ const commonMixin=Sup => class extends Sup {
   static clone(dataSource, levelUp, levelDown, thisProps, thisPropsUp, thisPropsDown){
     const myClon = detectLinker(dataSource) ? new this.linkerConstructor() : new this.nodeConstructor();
     return myClon.load(dataSource, levelUp, levelDown, thisProps, thisPropsUp, thisPropsDown);
+  }
+  static getRoot(myNode){
+    return getRoot(myNode)
+  }
+  getRoot(){
+    return getRoot(this)
   }
 }
 
@@ -336,7 +350,8 @@ const nodeMixin=Sup => class extends Sup {
 
   getParent(objSearch) {
     if (Array.isArray(this.parent)) {
-      if (!objSearch) return this.parent[0]
+      if (!objSearch)
+        return this.parent[0]
       return this.parent.find(parent=>
         Object.entries(objSearch).every(([objKey, objValue])=>
           Object.entries(parent.props).find(([parentKey, parentValue])=>objKey==parentKey && objValue==parentValue)))

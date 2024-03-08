@@ -2,8 +2,9 @@
 // Basic Node mixin for parent - children relationships (links)
 // It contains some facilities related to parent children link elements: load, clone, addChild, etc...
 
-export function getRoot(element) {
-  if (!element._parent) return element
+function getRoot(element) {
+  if (!element._parent)
+    return element
   return getRoot(element._parent)
 }
 
@@ -57,11 +58,11 @@ const linksMixin=Sup => class extends Sup {
   }
   
   static getRoot(element){
-    return getRoot(element);
+    return getRoot(element)
   }
 
   getRoot(){
-    return getRoot(this);
+    return getRoot(this)
   }
 
   // Finds the child which value is as in obj key value pair. If no argument it returs first child
@@ -114,12 +115,4 @@ const linksMixin=Sup => class extends Sup {
   }
 }
 
-export default linksMixin;
-/*
-cambios con respecto al código antiguo: loadasc => loadAsc, loaddesc => loadDesc, getrootnode getRoot, levelup => levelUp, leveldown => levelDown, cloneNode => clone
-childtablekeys - childTableKeys
-childtablekeysinfo - childTableKeysInfo
-syschildtablekeys - sysChildTableKeys
-syschildtablekeysinfo - sysChildTableKeysInfo
-getMyRoot getRoot
-*/
+export default linksMixin

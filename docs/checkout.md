@@ -3,13 +3,13 @@ Making orders
 
 ## Introduction
 
-Ordering process starts when user adds a product to the [cart](cart.md). When cart is not empty we can click the checkout button. If the user is not logged in it will show the login layout and after the login the checkout process will continue.
+Ordering process starts when user adds a product to the [cart](cart.md). When cart is not empty we can click the checkout button. If the user is not logged in it will show the login layout and, after the login, the checkout process will continue.
 
-It is showing the order and requesting user to introduce some data like the address and to select th shipping type and payment type. Then it will show the order and a button for the payment process that is external.
+Checkout process is then showing the order and requesting user to introduce its address and to select the shipping type and payment type. Then it will show the order and a button for the payment process (that button comes from an external script).
 
 ## Implementation
 
-Checkout process is some of the largest facilities. The templates that take part on it are: chktmain, ordercart, orderitem, chktuserdata, useraddressview, userdata, singleinput, chktshipping, shippinglist, shippingtype, chktpayment, paymnentlist, paymenttype, chktend, order, ordershipping and the template for the payment: paypal.
+Checkout process is some of the largest facilities. Some templates that takes part on it are: chktmain, ordercart, orderitem, chktuserdata, useraddressview, userdata, singleinput, chktshipping, shippinglist, shippingtype, chktpayment, paymnentlist, paymenttype, chktend, order, ordershipping and the template for the payment: paypalm stripe.
 
 It starts when launching template chktmain. It shows the order but first it creates the order node inside webuser node. The following code is for creating the order node and populating it with the cart elements.
 ```
@@ -76,3 +76,16 @@ And the other configuration is related to the payment type and it is setled at i
 vars: {merchantId: 'test', template: 'paypal'}
 ```
 The merchantId value is an identifier for the merchant that the payment provider supplies. To set this value you should log-in with systemadmin user and get to this page so the element will be editable.
+
+
+## Checkout active in site, navigation state and entrance link
+
+We should set as active in site when there is the checkout content because it has some user information and when user logs out or logs in, that information should be removed. So we need to set the state for state the situation and be able to check whaterver a checkout is happening if users decides to log out.
+
+Give a navigation state to checkout can be useful for:
+- Checkout first step could be recovered if user wants to got back to it. That could happend when user check some other content and want to go back. It is not very important so user can get to checkout anytime by clicking "checkout" at the cart element, but why not allow the option for the back - forward button?. 
+- The same for Checkout second step.
+
+However after checkout second process has been reached the cart is empty so going back to the previous step would not produce any useful result. So we are just stablishing a single state for the checkout. Depending if user has or not a order attached then we will show first or second step.
+
+Entrance link for checkout has no much sense if user is not logged in, and that is a requirement for checkout. I dont know if with the option of "remember me" it could have sense to implement it.

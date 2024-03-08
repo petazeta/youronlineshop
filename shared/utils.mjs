@@ -18,8 +18,7 @@ import {BasicNode} from './linker.mjs';
 export function deconstruct(inputNode, cutVoidRels=false){
   let rootNode = BasicNode.getRoot(inputNode)
   if (!rootNode)
-    rootNode = indexNode
-
+    rootNode = inputNode
   const getTreeNodes = (thisNode) => walkThrough(
     thisNode,
     (elmSplit)=>{
@@ -32,7 +31,7 @@ export function deconstruct(inputNode, cutVoidRels=false){
     },
     undefined,
     (elmYield)=>{
-      if (isLinker(elmYield) && true) {
+      if (isLinker(elmYield)) {
         const extraParentNodes = []
         for (const child of elmYield.children) {
           if (Array.isArray(child.parent)) {

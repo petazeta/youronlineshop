@@ -9,6 +9,7 @@ import {userMenuView} from "./usermenu.mjs"
 import {rmBoxView} from "../../rmbox.mjs"
 import {Node} from '../nodes.mjs'
 import {myCart} from "../shop/cart.mjs"
+import {setActiveInSite, getActiveInSite} from '../activeingroup.mjs'
 
 const searchParamsKeys = ["login"]
 
@@ -221,7 +222,18 @@ async function loggedIn(afterLogin){
   }
   else if (afterLogin == "dashboard")
     await loginDashboard()
-  // *** Tenemos la situación de que después del login la pantalla en la vista principal queda igual. Pero un login debería alterar la vista principal (admn buts), por lo que sería interesante introducir una forma de refrescar la pantalla principal despues del login, quizas a través del modulo activeinsite
+  // *** Tenemos la situación de que después del login la pantalla en la vista principal queda igual.
+  //Pero un login debería alterar la vista principal (admn buts), por lo que sería interesante introducir una forma de refrescar la pantalla principal despues del login, quizas a través del modulo activeinsite
+  else {
+    // Check for private information at central content
+    // *** we should transfer this to the check out, so it should happended at check out better
+    if (getActiveInSite()==webuser)
+      loginDashboard()
+  }
+}
+//*** por hacer
+async function loggedOut(afterLogin){
+
 }
 
 async function loginDashboard(){

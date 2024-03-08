@@ -120,9 +120,8 @@ reqLoaders.set("add my tree", (myNode, result)=>{
   if (!result) return
   crawler(myNode, unpacking(result))
 })
-reqReduc.set("save order", [myNode=>{
-    return packing(myNode.clone(3, null, {"id": false}, 'id', {"id": false}), true)
-}, reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
+// *** save order deprecated
+reqReduc.set("save order", [myNode=>packing(myNode.clone(3, null, {"id": false}, 'id', {"id": false}), true), reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
 reqMethods.set("save order", ()=>"put")
 reqLoaders.set("save order", (myNode, result)=>{
   if (!result) return
@@ -137,7 +136,7 @@ reqMethods.set("add my tree table content", ()=>"put")
 reqLoaders.set("add my tree table content", reqLoaders.get("add my tree"))
 reqReduc.set("edit my sort_order", myNode=>packing(myNode.clone(3, 0, "id", "id"))) // we need the parent->partner (and parent->partner->parent for safety check)
 reqMethods.set("edit my sort_order", ()=>"put")
-reqReduc.set("edit my props", myNode=>packing(myNode.clone(2, 0, null, "id")))
+reqReduc.set("edit my props", myNode=>packing(myNode.clone(2, 0, null, "id")), true)
 reqMethods.set("edit my props", ()=>"put")
 
 reqReduc.set("delete my link", reqReduc.get("edit my sort_order"))

@@ -278,17 +278,18 @@ table.list {
   margin:auto;
   border: 1px #666 solid;
 }
-table.list > tbody > tr > td {
+/* **** esto podria dar problemas si hay thead , tbody */
+table.list > tr > td {
   border: 1px #666 solid;
   padding:0.5em;
   vertical-align: middle;
 }
-table.list > thead > tr > th {
+table.list > tr > th {
   background-color: #F0F0F0;
   padding:5px;
   vertical-align: middle;
 }
-table.list > tbody > tr > td.containerbuttons{
+table.list > tr > td.containerbuttons{
   text-align: center;
 }
 details {

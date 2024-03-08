@@ -6,6 +6,7 @@ import {setLangSelectionElm} from "./languages/langsview.mjs"
 import {setLogIcon} from "./webuser/login.mjs"
 import {setCartIcon, cartBoxView} from "./shop/cart.mjs"
 import {initCategories, displayCategories} from "./catalog/categories.mjs"
+import {setNavCkt} from "./shop/ckt.mjs"
 
 export async function bodyView(){
   const bodyTp = await getTemplate("body")
@@ -16,6 +17,7 @@ export async function bodyView(){
   setLogIcon(selectorFromAttr(body, "data-log-icon-button"))
   setCartIcon(selectorFromAttr(body, "data-cart-icon-button"), selectorFromAttr(body, "data-cartbox"))
   selectorFromAttr(body, "data-cartbox").appendChild(await cartBoxView(selectorFromAttr(body, "data-cartbox")))
+  setNavCkt()  // Navigation status for checkout
   getSiteContent().getNextChild("page_head_subtitle").setContentView(selectorFromAttr(body, "data-site-subtitle"), false)
   await initMenus(selectorFromAttr(body, "data-centralcontent"))
   await displayMenus(selectorFromAttr(body, "data-menus"))

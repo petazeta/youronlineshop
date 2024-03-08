@@ -345,7 +345,7 @@ export function setDbSchema(dbLink) {
     new Schema({
       name: String,
       details: String,
-      succed: Number,
+      succeed: Number,
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",
@@ -370,6 +370,22 @@ export function setDbSchema(dbLink) {
       parentShippingTypes: {
         type: SchemaTypes.ObjectId,
         ref: "ShippingTypes",
+      }
+    })
+  );
+
+  dbLink.model("OrderAddress",
+    new Schema({
+      fullname: String,
+      streetaddress: String,
+      city: String,
+      state: String,
+      zipcode: String,
+      country: String,
+      comments: String,
+      parentOrders: {
+        type: SchemaTypes.ObjectId,
+        ref: "Orders",
       }
     })
   );

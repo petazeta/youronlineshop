@@ -11,8 +11,7 @@ export async function rmBoxView(getTemplate, bodyTp, removeContainer) {
     else {
       boxContainer.parentElement.removeChild(boxContainer)
     }
-    //siteContentNode.dispatchEvent("closewindow")
   })
   selectorFromAttr(boxContainer, "data-rm-body").appendChild(bodyTp)
-  return rmBoxTp
+  return boxContainer
 }
