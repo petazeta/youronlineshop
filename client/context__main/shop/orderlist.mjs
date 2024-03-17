@@ -16,7 +16,7 @@ import {userDataView} from "../webuser/userdata.mjs"
 // starting element
 export async function ordersView(){
   const myTp = await getTemplate("showorders")
-  const myContainer = selectorFromAttr(myTp, "data-container")
+  const myContainer = myTp.querySelector("[data-container]")
   const ordersSelectTxt = getSiteText().getNextChild("dashboard").getNextChild("showOrd")
   ordersSelectTxt.getNextChild("new").writeProp(selectorFromAttr(myContainer, "data-new-status"))
   ordersSelectTxt.getNextChild("archived").writeProp(selectorFromAttr(myContainer, "data-archived-status"))
@@ -36,15 +36,6 @@ export async function ordersView(){
   const status = statusSelect.options[statusSelect.selectedIndex].value == "new"? 1 : 2
   await displayOrders(selectorFromAttr(myContainer, "data-orders"), ordersParent, status)
 /*
-  selectorFromAttr(myTp, "data-status").onchange=function(){
-    // "userorders.html" {filterorders: thisElement.options[thisElement.selectedIndex].value});
-  }
-
-        const textContent=thisNode;
-        thisElement.onchange=function(){
-          textContent.setView(document.getElementById("ordersContainer"), "userorders", {filterorders: thisElement.options[thisElement.selectedIndex].value});
-        }
-        thisElement.form.elements.ordersStatus[1].innerHTML=thisElement.value;
 
   //.getNextChild("btShowOrd")
   await setUserData(selectorFromAttr(userviewTp, "data-user-data"))
@@ -57,11 +48,13 @@ export async function ordersView(){
 }
 
 async function displayOrders(containerView, ordersParent, status, pageNum){
+  if (!containerView)
+    containerView = ordersParent.childContainer
   const tableTp = await getTemplate("userorderstable")
   const headFieldsContainer = selectorFromAttr(tableTp, "data-head").cloneNode()
   const headField = selectorFromAttr(selectorFromAttr(tableTp, "data-head"), "data-cell")
   const thisTable = selectorFromAttr(tableTp, "data-table").cloneNode()
-  ordersParent.firstElement = thisTable
+  ordersParent.childContainer = thisTable
   const ordersTxt = getSiteText().getNextChild("dashboard").getNextChild("showOrd")
   headFieldsContainer.appendChild(await ordersTxt.getNextChild("date").setContentView(headField.cloneNode(true)))
   headFieldsContainer.appendChild(await ordersTxt.getNextChild("name").setContentView(headField.cloneNode(true)))
@@ -137,6 +130,7 @@ async function displayOrders(containerView, ordersParent, status, pageNum){
 
 async function rowOrderView(order, rowSample) {
   const thisContainer = rowSample.cloneNode()
+  order.firstElement = thisContainer
   thisContainer.appendChild(selectorFromAttr(rowSample, "data-cell").cloneNode(true)).textContent = new Date(order.props.creationDate).toLocaleString()
   const userNameBut = selectorFromAttr(thisContainer.appendChild(selectorFromAttr(rowSample, "data-username").cloneNode(true)), "data-value")
   webuser.getRelationship("usersdata").getChild().writeProp(userNameBut, "fullname")
@@ -151,7 +145,9 @@ async function rowOrderView(order, rowSample) {
     newRow._addressRow = true
     const newCell = newRow.insertCell(0)
     newCell.colSpan = userNameBut.closest("TABLE").rows[0].cells.length
-    newCell.appendChild(await rmBoxView(getTemplate, await userDataView(order.getRelationship("orderaddress").getChild()), newRow))
+    const container = selectorFromAttr(await getTemplate("userinfo"), "data-container")
+    selectorFromAttr(container, "data-userdata").appendChild(await userDataView(order.getRelationship("orderaddress").getChild(), "textnode"))
+    newCell.appendChild(await rmBoxView(getTemplate, container, newRow))
   })
   const showOrderBut = selectorFromAttr(thisContainer.appendChild(selectorFromAttr(rowSample, "data-showorder").cloneNode(true)), "data-button")
   showOrderBut.addEventListener('click', async function(event){
@@ -167,9 +163,57 @@ async function rowOrderView(order, rowSample) {
     newCell.colSpan = userNameBut.closest("TABLE").rows[0].cells.length
     newCell.appendChild(await rmBoxView(getTemplate, await orderView(order), newRow))
   })
+  if (hasNodeWritePermission()) {
+    const adminRow = thisContainer.appendChild(selectorFromAttr(rowSample, "data-admin").cloneNode(true))
+    await setSuccessButton(selectorFromAttr(adminRow, "data-success"))
+    const {setDeletionButton} = await import("../admin/deletion.mjs")
+    await setDeletionButton(order, selectorFromAttr(adminRow, "data-remove"), async (delNode)=>{
+      const nodeParent = order.getParent()
+      const pagination = nodeParent.pagination[order.props.status]
+      const total = --pagination.totalParent.props.total // standard deletion substract from parent, not from totalParent
+
+      // Is it not last page?
+      if (pagination.pageNum < pagination.indexes.length)  // Hay paginas posteriores
+        pagination.loaded = false // reload items in window
+      else
+        return // we could let the default behaveour to work
+      // Is there a change in indexes because of the substraction?
+      // We have two options 
+      if (total > 0 && total % pagination.pageSize == 0) {
+        pagination.createIndexes()
+        pagination.createItemsWindow()
+        pagination.displayButtons(getTemplate)
+        await displayOrders(userNameBut.closest("TABLE"), nodeParent, order.props.status, pagination.pageNum - 1)
+        return
+      }
+      // No change in indexes
+      await displayOrders(userNameBut.closest("TABLE"), nodeParent, order.props.status, pagination.pageNum)
+    })
+  }
   // falta action
   // falta linea de edicion
   return thisContainer
+  // Helps
+  async function setSuccessButton(butContainer){
+    const successStatus = 1, notSuccessStatus = 0
+    const mySuccessTp = await getTemplate("butsuccessorder")
+    const myUndoSuccessTp = await getTemplate("butundosuccessorder")
+    const myButton = mySuccessTp.querySelector("[data-button]")
+    const myUndoButton = myUndoSuccessTp.querySelector("[data-button]")
+    myButton.addEventListener("click", async (ev)=>{
+      ev.preventDefault()
+      await order.loadRequest("edit my props", {values:{status: successStatus}})
+      butContainer.removeChild(myButton)
+      butContainer.appendChild(myUndoButton)
+    })
+    myUndoButton.addEventListener("click", async (ev)=>{
+      ev.preventDefault()
+      await order.loadRequest("edit my props", {values:{status: notSuccessStatus}})
+      butContainer.removeChild(myUndoButton)
+      butContainer.appendChild(myButton)
+    })
+    butContainer.appendChild(myButton)
+  }
 }
 
 
@@ -180,6 +224,7 @@ function setTotal(order, totView){
   getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("total").setContentView(selectorFromAttr(totView, "data-total-label"))
   selectorFromAttr(totView, "data-total-value").textContent = intToMoney(sumTotal(order.getRelationship("orderitems").children) + sumTotal(order.getRelationship("ordershipping").children))
 }
+
 
 function hasNodeWritePermission() {
   return webuser.isSystemAdmin() || webuser.isOrdersAdmin()

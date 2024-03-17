@@ -1,6 +1,6 @@
 import {performAddition} from '../../admin/addition.mjs'
 import {getLangParent, createInstanceChildText} from '../languages/languages.mjs'
-import {selectorFromAttr} from '../../frontutils.mjs'
+//import {selectorFromAttr} from '../../frontutils.mjs'
 import {getTemplate} from '../layouts.mjs'
 import {observerMixin} from '../../observermixin.mjs'
 

@@ -1,93 +1,12 @@
 <!--
   It displays the props of a node (a single property)
-  It receives:
-   editPropName
-   (optional) labelNode, noEditLabel
-   editableFunc -> function to determine if editable
-   typeInput; default false
-   codeEdition
-   valueProcessor -> function to format the value, receives propertyname and value
-   
-   ******** ver si se puede quitar en code el data-id=butedit y dejarlo como buteditcode y quitar data-sub
-   butcode debería estar escondido también por defecto: display: none
 --> 
-<div class="singlefield">
+<div style="padding-right:2.2em;" data-container>
   <div class="form-group">
-    <div style="display:table"></div>
-    <script>
-      if (thisParams.labelNode) {
-        thisParams.labelNode.setView(thisElement, "singlelabel", {editPropName: thisParams.editPropName, noEditLabel: thisParams.noEditLabel});
-      }
-      else if (thisParams.labelName) {
-        new thisNode.constructor().setView(thisElement, "singlelabel", {labelName: thisParams.labelName, editPropName: thisParams.editPropName});
-      }
-    </script>
-    <div style="display:table; position: relative;">
-      <div class="btmiddleright">
-        <div class="admnbtsgrid">
-          <div data-id="butedit"></div>
-          <div data-id="butedit" data-sub="code"></div>
-        </div>
-      </div>
-      
-      <span data-id="maintext" style="display: none"></span>
-      <script>
-        if (!thisParams.typeInput) {
-          thisElement.style.display="unset";
-          if (!thisParams.valueProcessor) thisNode.writeProp(thisElement, thisParams.editPropName);
-          else thisElement.textContent=thisParams.valueProcessor(thisParams.editPropName, thisNode.props[thisParams.editPropName]);
-          //adding the edition pencil
-          if (typeof thisParams.editableFunc=="function" && thisParams.editableFunc()) {
-            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
-            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
-            thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement, thisProperty : thisParams.editPropName});
-            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit][data-sub=code]'), thisElement.parentElement);
-            thisElement.onblur=function(){
-              thisElement.parentElement.querySelector('textarea').value=thisElement.innerHTML;
-            }
-          }
-        }
-      </script>
-      <input type="hidden">
-      <script>
-        if (thisParams.typeInput) {
-          thisElement.type="text";
-          thisNode.writeProp(thisElement, thisParams.editPropName);
-          //adding the edition pencil
-          if (typeof thisParams.editableFunc=="function" && thisParams.editableFunc()) {
-            thisElement.disabled=true;
-            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
-            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
-            thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-          }
-        }
-      </script>
-      <textarea style="display:none; width:100%" rows="6" disabled></textarea>
-      <script>
-        if (thisParams.codeEdition) {
-          thisNode.writeProp(thisElement, thisParams.editPropName);
-          thisElement.onblur=function(){
-            thisElement.parentElement.querySelector('[data-id=maintext]').innerHTML=thisElement.value;
-            thisElement.style.display="none";
-          }
-          //adding the edition pencil
-           if (typeof thisParams.editableFunc=="function" && thisParams.editableFunc()) {
-            thisNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit][data-sub=code]'), "butedit", {editElement: thisElement, thisProperty : thisParams.editPropName, image: 'code', inlineEdition: false})
-            .then(()=>{
-              thisElement.parentElement.querySelector('[data-id=butedit][data-sub=code]').querySelector('button[data-id=codebut]').addEventListener('click', ()=>{
-                thisElement.style.display="unset";
-                thisElement.focus();
-              });
-            });
-          }
-        }
-      </script>
+    <div style="display:table; position: relative;" data-label>
+      <div class="btmiddleright" data-butedit></div>
+      <label for="" class="form-label" data-value></label>
     </div>
+    <div class="form-field" data-text></div>
   </div>
 </div>
-<script>
-  if (thisParams.codeEdition) {
-    thisElement.style.paddingRight="4.4em";
-    //********* mejor class += code
-  }
-</script>

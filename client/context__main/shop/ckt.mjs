@@ -46,7 +46,7 @@ export async function toCheckOut(cartBoxContainer = document.getElementById("car
 
 async function cktView(cartBoxContainer = document.getElementById("cartbox")){
   const cktTp = await getTemplate("chktmain")
-  const cktContainer = selectorFromAttr(cktTp, "data-container")
+  const cktContainer = cktTp.querySelector("[data-container]")
   getSiteText().getNextChild("checkout").getNextChild("checkoutTit").setContentView(selectorFromAttr(cktContainer, "data-ckt-tit"))
   getSiteText().getNextChild("checkout").getNextChild("orderTit").setContentView(selectorFromAttr(cktContainer, "data-order-tit"))
 
@@ -60,8 +60,8 @@ async function cktView(cartBoxContainer = document.getElementById("cartbox")){
   chktOrderContainer.appendChild(await orderCartView(webuser.getRelationship("orders").getChild()))
   
   if (config.get("cktuserdata-on")) {
-    const userDataTp = await getTemplate("chktuserdata")
-    const userDataContainer = selectorFromAttr(userDataTp, "data-container")
+    const myTp = await getTemplate("chktuserdata")
+    const userDataContainer = myTp.querySelector("[data-container]")
     getSiteText().getNextChild("checkout").getNextChild("addressTit").setContentView(selectorFromAttr(userDataContainer, "data-address-tit"))
     selectorFromAttr(userDataContainer, "data-useraddress").appendChild(await userDataView([webuser.getRelationship("usersdata").getChild(), webuser.getRelationship("addresses").getChild()]))
     selectorFromAttr(cktContainer, "data-user-data-container").appendChild(userDataContainer)
@@ -128,8 +128,8 @@ async function checkoutEnd(myOrder){
 }
 
 async function orderCartView(order) {
-  const orderTp = await getTemplate("ordercart")
-  const orderContainer = selectorFromAttr(orderTp, "data-container")
+  const myTp = await getTemplate("ordercart")
+  const orderContainer = myTp.querySelector("[data-container]")
   displayOrderCartItems(order, orderContainer)
   
   getSiteText().getNextChild("checkout").getNextChild("order").getNextChild("subtotal").setContentView(selectorFromAttr(orderContainer, "data-subtotal-label"))
@@ -352,7 +352,7 @@ function setOrderShipping(myShipping) {
 
 async function displayPayments(myContainer){
   const thisTp = await getTemplate("chktpayment")
-  const thisContainer = selectorFromAttr(thisTp, "data-container")
+  const thisContainer = thisTp.querySelector("[data-container]")
   getSiteText().getNextChild("checkout").getNextChild("paymentTit").setContentView(selectorFromAttr(thisContainer, "data-tit"))
 
   const tableTp = await getTemplate("paymentstable")

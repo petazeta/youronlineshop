@@ -120,17 +120,6 @@ reqLoaders.set("add my tree", (myNode, result)=>{
   if (!result) return
   crawler(myNode, unpacking(result))
 })
-// *** save order deprecated
-reqReduc.set("save order", [myNode=>packing(myNode.clone(3, null, {"id": false}, 'id', {"id": false}), true), reduceExtraParents]) // we need the parent->partner (and parent->partner->parent for safety check)
-reqMethods.set("save order", ()=>"put")
-reqLoaders.set("save order", (myNode, result)=>{
-  if (!result) return
-  const resultNode = unpacking(result)
-  if (!myNode.constructor.detectLinker(myNode)) {
-    myNode.props.id = resultNode.props.id
-  }
-  myNode.loadDesc(resultNode)
-})
 reqReduc.set("add my tree table content", reqReduc.get("add my tree"))
 reqMethods.set("add my tree table content", ()=>"put")
 reqLoaders.set("add my tree table content", reqLoaders.get("add my tree"))

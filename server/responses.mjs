@@ -51,36 +51,8 @@ export class Responses{
       return await user.sendMail(parameters.to, parameters.subject, parameters.message, parameters.from)
     })
 
-    this.responseAuth.set("save order", async (parameters, user)=>{
-      const order = unpacking(parameters.nodeData)
-      if (! order.parent.props.childTableName == "TABLE_ORDERS" || !user.props.id) // if user id -> user logged in
-        throw new Error("Database safety")
-      const result = await order.dbInsertMyTree()
-      // Set relationships with real elements
-      const extraParents = arrayUnpacking(parameters.extraParents)
-      if (extraParents.find(parent=>parent.props.parentTableName=="TABLE_PAYMENTTYPES")) {
-        const myParent = Node.clone(extraParents.find(parent=>parent.props.parentTableName=="TABLE_PAYMENTTYPES"))
-        myParent.children = [] // just for safety
-        myParent.addChild(order.getRelationship("orderpayment").getChild().clone(0))
-        await myParent.getChild().dbInsertMyLink()
-      }
-      if (extraParents.find(parent=>parent.props.parentTableName=="TABLE_SHIPPINGTYPES")) {
-        const myParent = Node.clone(extraParents.find(parent=>parent.props.parentTableName=="TABLE_SHIPPINGTYPES"))
-        myParent.children = [] // just for safety
-        myParent.addChild(order.getRelationship("ordershipping").getChild().clone(0))
-        await myParent.getChild().dbInsertMyLink()
-      }
-      for (const [myParentObj, myChild] of zip(extraParents.filter(parent=>parent.props.parentTableName=="TABLE_ITEMS"), order.getRelationship("orderitems").children)) {
-        const myParent = Node.clone(myParentObj)
-        myParent.children = [] // just for safety
-        myParent.addChild(myChild.clone(0))
-        await myParent.getChild().dbInsertMyLink()
-      }
-      return result && packing(result)
-    })
-
     this.responseAuth.set("payment", async (parameters, user)=>{
-      const order = new Node().load(unpacking(parameters.nodeData))
+      const order = new Node().load(unpacking(parameters.nodeData)) //new Node().load == Node.clone
       const payment = new Node().load(unpacking(parameters.payment))
       const payments = await import(`./payments/${payment.props.template}.mjs`)
       if (typeof payments[parameters.paymentAction]=="function")
@@ -94,33 +66,37 @@ export class Responses{
     })
 
     this.responseAuth.set("get my root",  async (parameters, user)=>{
-      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToRead(user, myNode))
         throw new Error("Database safety")
-      return Linker.dbGetRoot(unpacking(parameters.nodeData).props.childTableName)
+      return Linker.dbGetRoot(myNode.props.childTableName)
     })
 
     this.responseAuth.set("get all my children", async (parameters, user)=>{
-      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToRead(user, myNode))
         throw new Error("Database safety")
-      return Linker.dbGetAllChildren(unpacking(parameters.nodeData), parameters.filterProps, parameters.limit)
+      return Linker.dbGetAllChildren(myNode, parameters.filterProps, parameters.limit)
     })
       
     this.responseAuth.set("get my children", async (parameters, user)=>{
-      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToRead(user, myNode))
         throw new Error("Database safety")
-      return Linker.dbGetChildren(unpacking(parameters.nodeData), arrayUnpacking(parameters.extraParents), parameters.filterProps, parameters.limit, parameters.count)
+      return Linker.dbGetChildren(myNode, arrayUnpacking(parameters.extraParents), parameters.filterProps, parameters.limit, parameters.count)
     })
 
     // get descendents: equivalent to get my tree down
     this.responseAuth.set("get my tree", async (parameters, user)=>{
-      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToRead(user, myNode))
         throw new Error("Database safety")
-      const reqNode = Node.clone(unpacking(parameters.nodeData))
+      const reqNode = Node.clone(myNode)
       const result = await reqNode.dbGetMyTree(arrayUnpacking(parameters.extraParents), parameters.deepLevel, parameters.filterProps, parameters.limit, parameters.myself)
       if (!result)
         return result
       // careful the result list has still parentNode or partnerNode,
-      if (Node.detectLinker(unpacking(parameters.nodeData))) {
+      if (Node.detectLinker(myNode)) {
         if (result.total==0) return {total: 0}
         const myResult = new Linker()
         result.data.forEach(child=>myResult.addChild(child))
@@ -133,9 +109,10 @@ export class Responses{
     })
 
     this.responseAuth.set("get my tree up", async (parameters, user)=>{
-      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToRead(user, myNode))
         throw new Error("Database safety")
-      const reqNode = Node.clone(unpacking(parameters.nodeData))
+      const reqNode = Node.clone(myNode)
       const result = await reqNode.dbGetMyTreeUp(parameters.deepLevel)
       if (Array.isArray(result)) {
         return result.map(result=>packing(result))
@@ -148,9 +125,10 @@ export class Responses{
     })
 
     this.responseAuth.set("get my props", async (parameters, user)=>{
-      if (! await isAllowedToRead(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToRead(user, myNode))
         throw new Error("Database safety")
-      const reqNode = Node.clone(unpacking(parameters.nodeData))
+      const reqNode = Node.clone(myNode)
       const result = await reqNode.dbGetMyProps()
       if (result && parameters.filterProps) {
         return Object.fromEntries(Object.entries(result).filter(([key, value])=>parameters.filterProps.includes(key)))
@@ -161,89 +139,101 @@ export class Responses{
     //<-- Insert this.responseAuth
 
     this.responseAuth.set("add myself", async (parameters, user)=>{
-      if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety");
       const myExtraParents = Array.isArray(parameters.extraParents) ? arrayUnpacking(parameters.extraParents) : parameters.extraParents
-      return new Node().load(unpacking(parameters.nodeData)).dbInsertMySelf(myExtraParents, parameters.updateSiblingsOrder);
+      return new Node().load(myNode).dbInsertMySelf(myExtraParents, parameters.updateSiblingsOrder);
     });
 
     this.responseAuth.set("add my children", async (parameters, user)=>{
-      if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      return new Linker().load(unpacking(parameters.nodeData)).dbInsertMyChildren(arrayUnpacking(parameters.extraParents));
+      return new Linker().load(myNode).dbInsertMyChildren(arrayUnpacking(parameters.extraParents));
     });
       
     this.responseAuth.set("add my tree", async (parameters, user)=>{
-      if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
       const myExtraParents = Array.isArray(parameters.extraParents) ? arrayUnpacking(parameters.extraParents) : parameters.extraParents
-      const req = Node.clone(unpacking(parameters.nodeData))
+      const req = Node.clone(myNode)
       const result = await req.dbInsertMyTree(parameters.deepLevel, myExtraParents, parameters.myself, parameters.updateSiblingsOrder)
       return result && packing(result)
     });
 
     this.responseAuth.set("add my tree table content", async (parameters, user)=>{
-      if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      const req = Node.clone(unpacking(parameters.nodeData));
+      const req = Node.clone(myNode);
       const result = await req.dbInsertMyTreeTableContent(parameters.tableName, parameters.deepLevel, arrayUnpacking(parameters.extraParents))
       return result && packing(result)
     })
 
     this.responseAuth.set("add my link", async (parameters, user)=>{
-      if (! await isAllowedToInsert(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      return new Node().load(unpacking(parameters.nodeData)).dbInsertMyLink(arrayUnpacking(parameters.extraParents));
+      return new Node().load(myNode).dbInsertMyLink(arrayUnpacking(parameters.extraParents));
     });
 
     //<-- Delete queries
 
     this.responseAuth.set("delete myself", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      return new Node().load(unpacking(parameters.nodeData)).dbDeleteMySelf();
+      return new Node().load(myNode).dbDeleteMySelf();
     });
 
     this.responseAuth.set("delete my tree", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      const req = Node.clone(unpacking(parameters.nodeData))
+      const req = Node.clone(myNode)
       const load = parameters.load===undefined ? true : parameters.load
       return req.dbDeleteMyTree(load)
     });
 
     this.responseAuth.set("delete my tree table content", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      const req = Node.clone(unpacking(parameters.nodeData));
+      const req = Node.clone(myNode);
       return req.dbDeleteMyTreeTableContent(parameters.tableName)
     });
 
     this.responseAuth.set("delete my children", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
        throw new Error("Database safety")
-      return new Linker().load(unpacking(parameters.nodeData)).dbDeleteMyChildren()
+      return new Linker().load(myNode).dbDeleteMyChildren()
     });
 
     this.responseAuth.set("delete my link", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      return new Node().load(unpacking(parameters.nodeData)).dbDeleteMyLink()
+      return new Node().load(myNode).dbDeleteMyLink()
     });
 
     //<-- Update queries
 
     this.responseAuth.set("edit my props", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
       //await siteContentCacheReset(parameters) *** parece que no se ha implementado ningún sistema par resetear cache para estos casos
-      return new Node().load(unpacking(parameters.nodeData)).dbUpdateMyProps(parameters.values)
+      return new Node().load(myNode).dbUpdateMyProps(parameters.values)
     })
       
     this.responseAuth.set("edit my sort_order", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
-      const afected = await new Node().load(unpacking(parameters.nodeData)).dbUpdateMySortOrder(parameters.newSortOrder)
+      const afected = await new Node().load(myNode).dbUpdateMySortOrder(parameters.newSortOrder)
       if (afected==1)
         return parameters.newSortOrder
       else
@@ -251,7 +241,8 @@ export class Responses{
     })
 
     this.responseAuth.set("upload image", async (parameters, user)=>{
-      if (! await isAllowedToModify(user, unpacking(parameters.nodeData)))
+      const myNode = unpacking(parameters.nodeData)
+      if (! await isAllowedToInsert(user, myNode))
         throw new Error("Database safety")
       return true
     })

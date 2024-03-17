@@ -31,21 +31,28 @@ export async function userDataView(myNodes, fieldtype="input"){ // myNodes: node
   // It adds the fields for a user data container
   if (!Array.isArray(myNodes))
     myNodes = [myNodes]
-  const fieldTpName = fieldtype=="textnode" ? "singlefield" : "singleinput"
   for (const myNode of myNodes) {
     let labelsRoot = getSiteText().getNextChild(myNode.getParent().props.childTableName)
     for (const propKey of myNode.getParent().childTableKeys) {
-      let inputTp = await getTemplate(fieldTpName)
-      let inputLabelElm = selectorFromAttr(inputTp, "data-label")
+      let fieldTpName = fieldtype=="textnode" ? "singlefield" : "singleinput"
+      let myContainer = (await getTemplate(fieldTpName)).querySelector("[data-container]")
+      let myLabelElm = selectorFromAttr(myContainer, "data-label")
       if (labelsRoot)
-        labelsRoot.getNextChild(propKey).setContentView(inputLabelElm)
-      selectorFromAttr(inputLabelElm, "data-value").attributes.for.value = propKey
-      let inputElm = selectorFromAttr(inputTp, "data-input")
-      if (myNode.props[propKey]!==undefined)
-        inputElm.value = myNode.props[propKey]
-      inputElm.attributes.name.value = propKey
-      inputElm.attributes.placeholder.value = propKey
-      selectorFromAttr(myForm, "data-userdata").appendChild(inputTp)
+        labelsRoot.getNextChild(propKey).setContentView(myLabelElm)
+      selectorFromAttr(myLabelElm, "data-value").attributes.for.value = propKey
+      let selector = fieldtype=="textnode" ? "data-text" : "data-input"
+      let myElm = selectorFromAttr(myContainer, selector)
+      if (myNode.props[propKey]!==undefined) {
+        if (fieldtype=="textnode")
+          myElm.textContent = myNode.props[propKey]
+        else
+          myElm.value = myNode.props[propKey]
+      }
+      if (fieldtype=="input") {
+        myElm.attributes.name.value = propKey
+        myElm.attributes.placeholder.value = propKey
+      }
+      selectorFromAttr(myForm, "data-userdata").appendChild(myContainer)
     }
   }
   getSiteText().getNextChild("userdataform").getNextChild("fieldCharError").setContentView(selectorFromAttr(myForm, "data-fieldcharerror"))
