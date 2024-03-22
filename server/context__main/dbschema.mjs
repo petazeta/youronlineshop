@@ -52,11 +52,13 @@ export function setDbSchema(dbLink) {
     
   dbLink.model("Addresses",
     new Schema({
+      fullname: String,
       streetaddress: String,
       city: String,
       state: String,
       zipcode: String,
       country: String,
+      comments: String,
       parentUsers: {
         type: SchemaTypes.ObjectId,
         ref: "Users",

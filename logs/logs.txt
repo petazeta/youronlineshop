@@ -104,3 +104,95 @@ new file
 2024-03-17 18:03:20 Server start
 2024-03-17 18:14:53 Server start
 2024-03-17 18:16:14 Server start
+2024-03-19 09:10:06 Server start
+2024-03-19 16:33:25 Server start
+2024-03-19 16:43:28 Server start
+2024-03-19 16:58:26 Server start
+2024-03-19 16:58:43 log in: pepe
+2024-03-19 17:00:00 log in: pepe
+2024-03-19 17:06:38 log in: pepe
+2024-03-19 18:59:44 Server start
+2024-03-20 12:13:46 Server start
+2024-03-20 12:21:36 log in: pepe
+2024-03-20 12:22:37 log in: pepe
+2024-03-20 12:23:40 log in: pepe
+2024-03-20 12:24:38 log in: pepe
+2024-03-20 12:31:08 log in: pepe
+2024-03-20 12:31:50 log in: pepe
+2024-03-20 12:34:41 log in: pepe
+2024-03-20 12:37:48 log in: pepe
+2024-03-20 12:40:13 log in: pepe
+2024-03-20 15:34:50 log in: pepe
+2024-03-20 15:35:27 Server start
+2024-03-20 15:35:47 log in: pepe
+2024-03-20 15:36:31 log in: pepe
+2024-03-20 15:38:38 localhost:6002 e83610 : cart item operation
+2024-03-20 15:38:41 localhost:6002 e83610 : checkout
+2024-03-20 15:39:35 log in: pepe
+2024-03-20 15:45:17 log in: pepe
+2024-03-20 17:39:48 Server start
+2024-03-20 17:49:11 log in: pepe
+2024-03-20 17:54:02 log in: pepe
+2024-03-20 17:56:52 log in: pepe
+2024-03-20 18:00:43 log in: pepe
+2024-03-21 15:56:58 Server start
+2024-03-21 15:57:25 log in: pepe
+2024-03-21 16:00:43 log in: pepe
+2024-03-21 16:03:41 localhost:6002 grrrnd : cart item operation
+2024-03-21 16:03:44 localhost:6002 grrrnd : checkout
+2024-03-21 18:47:14 Server start
+2024-03-21 19:31:06 log in: pepe
+2024-03-21 19:32:13 localhost:6002 h7tcd7 : cart item operation
+2024-03-21 19:32:15 localhost:6002 h7tcd7 : checkout
+2024-03-21 19:32:31 Server start
+2024-03-21 19:32:43 localhost:6002 h80ddm : cart item operation
+2024-03-21 19:32:51 log in: pepe
+2024-03-21 19:32:52 localhost:6002 h80ddm : checkout
+2024-03-22 10:53:51 Server start
+2024-03-22 10:54:04 localhost:6002 isnh7c : cart item operation
+2024-03-22 10:54:21 log in: pepe
+2024-03-22 10:54:21 localhost:6002 isnh7c : checkout
+2024-03-22 10:55:30 localhost:6002 isnh7c : cart item operation
+2024-03-22 10:55:31 localhost:6002 isnh7c : checkout
+2024-03-22 10:57:46 Server start
+2024-03-22 10:57:55 log in: pepe
+2024-03-22 10:58:05 localhost:6002 istmgh : cart item operation
+2024-03-22 10:58:07 localhost:6002 istmgh : checkout
+2024-03-22 11:05:47 Server start
+2024-03-22 11:06:01 localhost:6002 istmgh : cart item operation
+2024-03-22 11:06:03 localhost:6002 istmgh : checkout
+2024-03-22 11:08:51 Server start
+2024-03-22 11:09:16 localhost:6002 istmgh : cart item operation
+2024-03-22 11:09:18 localhost:6002 istmgh : checkout
+2024-03-22 11:11:10 Server start
+2024-03-22 11:11:19 localhost:6002 istmgh : cart item operation
+2024-03-22 11:11:22 localhost:6002 istmgh : checkout
+2024-03-22 11:18:20 Server start
+2024-03-22 11:18:26 localhost:6002 istmgh : cart item operation
+2024-03-22 11:18:29 localhost:6002 istmgh : checkout
+2024-03-22 11:19:53 Server start
+2024-03-22 11:20:01 localhost:6002 istmgh : cart item operation
+2024-03-22 11:20:04 localhost:6002 istmgh : checkout
+2024-03-22 11:30:46 Server start
+2024-03-22 11:30:54 localhost:6002 istmgh : cart item operation
+2024-03-22 11:30:56 localhost:6002 istmgh : checkout
+2024-03-22 11:31:21 Server start
+2024-03-22 11:31:30 localhost:6002 istmgh : cart item operation
+2024-03-22 11:31:33 localhost:6002 istmgh : checkout
+2024-03-22 11:38:59 Server start
+2024-03-22 11:39:02 Server start
+2024-03-22 11:47:28 Server start
+2024-03-22 11:48:32 localhost:6002 istmgh : cart item operation
+2024-03-22 11:48:38 localhost:6002 istmgh : checkout
+2024-03-22 11:49:11 localhost:6002 istmgh : cart item operation
+2024-03-22 11:49:14 localhost:6002 istmgh : checkout
+2024-03-22 11:50:15 localhost:6002 istmgh : cart item operation
+2024-03-22 11:50:18 localhost:6002 istmgh : checkout
+2024-03-22 12:05:44 localhost:6002 istmgh : cart item operation
+2024-03-22 12:05:46 localhost:6002 istmgh : checkout
+2024-03-22 12:32:11 log in: pepe
+2024-03-22 14:19:10 Server start
+2024-03-22 14:19:25 log in: pepe
+2024-03-22 14:19:56 log in: pepe
+2024-03-22 14:30:10 log in: pepe
+2024-03-22 14:51:01 log in: pepe

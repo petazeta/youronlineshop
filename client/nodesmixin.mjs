@@ -190,38 +190,48 @@ export const dataViewMixin=Sup => class extends Sup {
 
   //It doesn't replace, it adds the content
   async appendPropsView(container, tp, params) {
-    return this.setPropsView(container, tp, params, true);
+    return this.setPropsView(container, tp, params, true)
   }
   
   // It inserts the property value in the container. Container can contain the property name to be filled.
   // If no value, it inserts a default value: 0 for integers and onEmptyValueText for texts
+  // **** ver que pasa con valor "undefined", se imprime???
   writeProp(container, propName, attribute, onEmptyValueText) {
     const parent = Array.isArray(this.parent)? this.parent[0] : this.parent
     if (!propName) { //we must guess the propName value if it is not settled
       if (parent?.childTableKeys.length)
         propName = parent.childTableKeys.filter(key=>!parent.sysChildTableKeys.includes(key))[0]
       else
-        propName = Object.keys(this.props).find(key => key!="id"); //Order minds!!
+        propName = Object.keys(this.props).find(key => key!="id") //Order minds!!
     }
-    let value=this.props[propName];
-    if (!value && value!==0) value=''; //Parse undefined
+    let value=this.props[propName]
+    if (!value && value!==0)
+      value='' //Parse undefined
 
     //Write the new value
     if (!attribute) {
-      if (container.tagName=="INPUT")
+      if (container.tagName=="INPUT") {
         container.value = value
-      else container.innerHTML = value
+        if (!container.getAttribute("name"))
+          container.setAttribute("name", propName)
+        if (!container.getAttribute("placeholder"))
+          container.setAttribute("placeholder", propName)
+      }
+      else
+        container.innerHTML = value
     }
-    else container.hasAttribute(attribute) ? container.setAttribute(attribute, value) : container[attribute]=value;
+    else
+      container.hasAttribute(attribute) ? container.setAttribute(attribute, value) : container[attribute] = value
 
     //We set a default value
-    if (attribute || container.tagName=="INPUT") return;
+    if (attribute || container.tagName=="INPUT")
+      return
     //If field type is int => value=0, other case value=onEmptyValueText when innerHTML
     if (parent && this.constructor.isNumberField(parent, propName)) {
-      container.setAttribute("data-placeholder", "0");
+      container.setAttribute("data-placeholder", "0")
     }
     else {
-      container.setAttribute("data-placeholder", onEmptyValueText);
+      container.setAttribute("data-placeholder", onEmptyValueText)
     }
   }
   // observer and event interface

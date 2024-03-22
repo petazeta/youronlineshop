@@ -333,7 +333,7 @@ export function arrayFromTree(thisNode){
 }
 
 
-// equivalent to python zip. Asociates elements from a row to another row/rows
+// equivalent to python zip. Asociates elements from a row to another row/rows. [[a, b], [a, b], ...]
 export function zip(...args){
   return Array.from(zip_iter(args))
   

@@ -11,7 +11,7 @@ Las ventajas fundamentales son su rapidez y su tamaño comparado con otros siste
 
 ## 3 ¿Qué diferencias tiene con respecto de otras opciones más utilizadas?
 
-La ventaja principal es su sencillez. Aprender a desarrollar en esta plataforma no es un proceso tan árduo como en otras. Una vez se comprende lo fundamental el proceso creativo es altamente satisfactorio. Además para crear nuevos diseños no es necesario tocar el código sólo crear plantillas en HTML y modificar el css.
+La ventaja principal es su sencillez. Aprender a desarrollar en esta plataforma no es un proceso tan árduo como en otras. Una vez se comprende lo fundamental, el proceso creativo es altamente satisfactorio. Además para crear nuevos diseños no es necesario tocar el código sólo crear plantillas en HTML y hojas css.
 
 ## 4 ¿Cómo puedo beneficiarme de Your online shop?
 
@@ -21,7 +21,7 @@ Y por último puedes formar parte del proyecto para así contribuir a su crecimi
 
 ## 5 ¿Qué ventajas tiene participar del proyecto?
 
-Cuando hablamos del proyecto nos referimos al código original de la aplicación y a posibles extensiones y "apariencias" que se puedan incorparar. Estas extensiones y apariencias pueden ofrecerse como servicio o como producto en la plataforma que se creará con este fin.
+Cuando hablamos del proyecto nos referimos al código original de la aplicación y a posibles extensiones y "apariencias" que se puedan incorparar. Estas extensiones y apariencias pueden ofrecerse como servicio o como producto en la plataforma que se creará con ese fin.
 
 ## 6 ¿En que consiste la creación de extensiones y "apariencias"?
 
@@ -39,7 +39,7 @@ Para la comunicación entre los desarrolladores se pueden usar los servicios de 
 
 (Your online shop)[https://github.com/petazeta/youronlineshop] is a source code of a software for building an e-commerce which can be modified from the browser to become a custom e-commerce or online store.
 
-## 2 Which are the adventages for developers?
+## 2 Which adventages have for developers?
 
 Main adventages are small source code weight, high speed compared to other solutions and also its simplicity for users.
 
@@ -55,7 +55,7 @@ Furthermore you can become a project member and make it growing as well as parti
 
 ## 5 What are the benefits of becoming a project member?
 
-What we call project is the source code and the might extensions and skins that can be added. These extensions and skins can be offered as a service or product on the platform that we will build for that purpose.
+What we call project is the source code and the might extensions and skins that could be added. These extensions and skins could be offered as a service or product on the platform that we will build for that purpose.
 
 ## 6 What does it mean to build extensions and skins?
 
@@ -65,7 +65,7 @@ Therefore we can decide in the application which extensions and which skins are 
 
 ## 7 Communication channel
 
-Developers can communicate throgh github services, the (Discord channel)[https://discord.gg/k4pxeMCa] or email melchorherrera@gmail.com
+Developers can communicate through github services, through the (Discord channel)[https://discord.gg/k4pxeMCa] or by email melchorherrera@gmail.com
 
 
 # Landing Page

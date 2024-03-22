@@ -110,9 +110,11 @@ async function newFormView(afterLogin) {
 
 async function loginFormSubm(formElement, afterLogin) {
   const logFormTxt = getSiteText().getNextChild("logform")
-  const checkData = checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
-  if (checkData instanceof Error) {
-    dataError(checkData, formElement)
+  try {
+    checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
+  }
+  catch(err){
+    dataError(err, formElement)
     return
   }
   const storeChecked = formElement.elements.rememberme.checked
@@ -143,9 +145,11 @@ async function loginFormSubm(formElement, afterLogin) {
 }
 async function signUpFormSubm(formElement, afterLogin) {
   const logFormTxt = getSiteText().getNextChild("logform")
-  const checkData = checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
-  if (checkData instanceof Error) {
-    dataError(checkData, formElement)
+  try {
+    checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
+  }
+  catch(err){
+    dataError(err, formElement)
     return
   }
   // pwd and repaet pwd
@@ -245,8 +249,8 @@ async function loginDashboard(){
   document.getElementById("centralcontent").appendChild(await userInfoView())
 }
 
-function dataError(checkData, formElement) {
-  const errorKey = JSON.parse(checkData.message).errorKey
+function dataError(err, formElement) {
+  const errorKey = JSON.parse(err.message).errorKey
   if (errorKey=="user_name")
     document.createElement("alert-element").showMsg(getSiteText().getNextChild("logform").getNextChild("userCharError").getLangData(), 3000).showAlert()
   else if (errorKey=="user_password")

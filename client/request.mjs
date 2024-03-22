@@ -127,6 +127,7 @@ reqReduc.set("edit my sort_order", myNode=>packing(myNode.clone(3, 0, "id", "id"
 reqMethods.set("edit my sort_order", ()=>"put")
 reqReduc.set("edit my props", myNode=>packing(myNode.clone(2, 0, null, "id")), true)
 reqMethods.set("edit my props", ()=>"put")
+reqLoaders.set("edit my props", reqLoaders.get("get my props"))
 
 reqReduc.set("delete my link", reqReduc.get("edit my sort_order"))
 reqMethods.set("delete my link", ()=>"put")

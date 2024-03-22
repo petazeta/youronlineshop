@@ -209,8 +209,9 @@ export class SiteDbGateway {
     return await this.dbLink.model(tableName).findByIdAndDelete(thisId);
   }
   // it doesnt take in account if the update is about the position for updating siblings. That is managed by by Node object.
-  async updateMe(tableName, thisId,  proparray) { // ***why is call proparray?? better just props
-    return await this.dbLink.model(tableName).findByIdAndUpdate(thisId, proparray)
+  async updateMe(tableName, thisId,  props) {
+    await this.dbLink.model(tableName).findByIdAndUpdate(thisId, props)
+    return props
   }
 
   async setSiblingsOrderOnUpdate(tableName, positioncolumnname, thisId, newOrder, oldOrder, foreigncolumnname, foreignId) {

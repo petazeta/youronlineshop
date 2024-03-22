@@ -11,7 +11,7 @@ import {getLangBranch} from '../languages/languages.mjs'
 import {Pagination} from "../../pagination.mjs"
 import {orderView} from "./orders.mjs"
 import {rmBoxView} from "../../rmbox.mjs"
-import {userDataView} from "../webuser/userdata.mjs"
+import {dataView} from "../../displaydata.mjs"
 
 // starting element
 export async function ordersView(){
@@ -24,17 +24,16 @@ export async function ordersView(){
   ordersSelectTxt.getNextChild("new").setContentView(selectorFromAttr(myContainer, "data-new"))
   ordersSelectTxt.getNextChild("archived").setContentView(selectorFromAttr(myContainer, "data-archived"))
   const statusSelect = selectorFromAttr(myContainer, "data-status")
-  let ordersParent = webuser.getRelationship("orders")
-  if (webuser.isOrdersAdmin()) {
-    ordersParent = new ordersParent.constructor.linkerConstructor("TABLE_ORDERS")
-  }
+  let ordersParents = webuser.isOrdersAdmin()?
+    [new webuser.constructor.linkerConstructor("TABLE_ORDERS"), new webuser.constructor.linkerConstructor("TABLE_ORDERS")]
+    : [webuser.getRelationship("orders").clone(), webuser.getRelationship("orders").clone()]
   statusSelect.onchange = async function(){
     selectorFromAttr(myContainer, "data-orders").innerHTML = ""
     const status = statusSelect.options[statusSelect.selectedIndex].value == "new"? 1 : 2
-    await displayOrders(selectorFromAttr(myContainer, "data-orders"), ordersParent, status)
+    await displayOrders(selectorFromAttr(myContainer, "data-orders"), ordersParents, status)
   }
   const status = statusSelect.options[statusSelect.selectedIndex].value == "new"? 1 : 2
-  await displayOrders(selectorFromAttr(myContainer, "data-orders"), ordersParent, status)
+  await displayOrders(selectorFromAttr(myContainer, "data-orders"), ordersParents, status)
 /*
 
   //.getNextChild("btShowOrd")
@@ -47,7 +46,8 @@ export async function ordersView(){
   return myContainer
 }
 
-async function displayOrders(containerView, ordersParent, status, pageNum){
+async function displayOrders(containerView, ordersParents, status, pageNum){
+  const ordersParent = status == 1? ordersParents[0] : ordersParents[1]
   if (!containerView)
     containerView = ordersParent.childContainer
   const tableTp = await getTemplate("userorderstable")
@@ -63,17 +63,15 @@ async function displayOrders(containerView, ordersParent, status, pageNum){
     headFieldsContainer.appendChild(await ordersTxt.getNextChild("actions").setContentView(headField.cloneNode(true)))
   }
   thisTable.appendChild(headFieldsContainer)
-  if (!ordersParent.pagination) {
-    ordersParent.pagination = {}
-  }
   const pageSize = 20
-  if (!ordersParent.pagination[status]) {
-    ordersParent.pagination[status] = new Pagination(ordersParent, async (index)=>{
+  if (!ordersParent.pagination) {
+    ordersParent.pagination = new Pagination(ordersParent, async (index)=>{
       await displayOrders(containerView, ordersParent, status, index)
     }, pageSize)
-    await ordersParent.pagination[status].init({filterProps: {status: status}})
+    // **** parece que hay un error aqui, quizas si se crea un pagination con el mismo ordersParent, na va bien??
+    await ordersParent.pagination.init({filterProps: {status: status}})
   }
-  const pagination = ordersParent.pagination[status]
+  const pagination = ordersParent.pagination
   if (pagination.totalParent.props.total>0 && !pagination.loaded || (pageNum !== undefined && pagination.pageNum!=pageNum)) {
     const loadAction = ordersParent.props.parentTableName == "TABLE_USERS" ? "get my children" : "get all my children"
     await pagination.loadPageItems(loadAction, {filterProps: {status: status}}, pageNum)
@@ -145,8 +143,13 @@ async function rowOrderView(order, rowSample) {
     newRow._addressRow = true
     const newCell = newRow.insertCell(0)
     newCell.colSpan = userNameBut.closest("TABLE").rows[0].cells.length
-    const container = selectorFromAttr(await getTemplate("userinfo"), "data-container")
-    selectorFromAttr(container, "data-userdata").appendChild(await userDataView(order.getRelationship("orderaddress").getChild(), "textnode"))
+    const container = selectorFromAttr(await getTemplate("orderaddress"), "data-container")
+
+    // **** order.getParent().partner == null => is orders admin => we can edit
+    //selectorFromAttr(container, "data-addressdata").appendChild(await userDataView(order.getRelationship("orderaddress").getChild(), "textnode"))
+    
+    await dataView(await getTemplate("singlefield"), order.getRelationship("orderaddress").getChild(), selectorFromAttr(container, "data-addressdata"))
+
     newCell.appendChild(await rmBoxView(getTemplate, container, newRow))
   })
   const showOrderBut = selectorFromAttr(thisContainer.appendChild(selectorFromAttr(rowSample, "data-showorder").cloneNode(true)), "data-button")
