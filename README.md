@@ -68,7 +68,7 @@ Some other configuration can be done by editing some files at cfg folders.
 
 ## Skins
 
-Y.O.S. system have layouts files that can be modified. You can find thise files at layouts folder.
+Y.O.S. system have layouts files that can be modified. You can find these files at layouts folder.
 
 
 ## Extensions
