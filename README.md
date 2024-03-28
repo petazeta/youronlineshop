@@ -13,7 +13,7 @@
   </tr>
 </table>
 
-## About
+## :cactus: About
 
 This is a SPA (Single Page Application) for e-commerce. It is built in javascript with Node.js and Mongodb, and it has no dependencies.
 
@@ -31,7 +31,7 @@ https://youronlineshop.net
 - :sparkles: Easy skins edition
 - :fire: [Multi shop](docs/multishopguide.md)
 
-## Installation
+## :zap: Installation
 
 1. Get the source files.
 2. Install node and mongodb when necesary.
@@ -43,14 +43,14 @@ npm start
 ```
 5. The server is running now. Continue in browser as prompt tells.
 
-## Support
+## :ghost: Support
 
 It works at Node v.16 and mongodb v.4. We can no guarantee it would work on a different version.
 
 For any issues please write to: melchorherrera@gmail.com. We will gladly appreciate any bug report.
 
 
-## Getting started
+## :rocket: Getting started
 
 Once Your Online Shop is installed you can open your browser at the correspondent url address. Lets log-in with some of the admin users to make changes: user webadmin for web content and productsadmin for catalog content. Other operations can be done by user systemadmin, and to check customer orders log-in with ordersadmin.
 
@@ -61,22 +61,22 @@ To edit some features from the checkout process you should log in with systemadm
 Some other configuration can be done by editing some files at cfg folders.
 
 
-## Documentation
+## :green_book: Documentation
 
 [Check Documentation](docs/overview.md)
 
 
-## Skins
+## :art: Skins
 
 Y.O.S. system have layouts files that can be modified. You can find these files at layouts folder.
 
 
-## Extensions
+## :bulb: Extensions
 
 There is a preinstalled extension to manage the database records, check prompt messages.
 
 
-## More
+## :family: More
 
 [More info](docs/marketing.md)
 
