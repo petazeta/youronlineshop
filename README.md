@@ -1,4 +1,10 @@
 ![Your Online Shop](readme_images/logotype.png "Your Online Shop")
+
+=> [Demo Shop](https://youronlineshop.net/sample/)
+
+Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
+
+=> [Video Demo](https://youtu.be/PD_olszbGWA)
 <table>
   <tr>
     <td>
@@ -7,12 +13,6 @@
   </tr>
 </table>
 
-=> [Demo Shop](https://youronlineshop.net/sample/)
-
-Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
-
-=> [Video Demo](https://youtu.be/PD_olszbGWA)
-
 ## About
 
 This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb and it has no dependencies.
@@ -20,6 +20,7 @@ This is a SPA (Single Page Application) for e-commerce. It is build in Node.js a
 https://youronlineshop.net
 
 Awards:
+
 <img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="100"/>
 
 ## Main features:
