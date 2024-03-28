@@ -1,12 +1,6 @@
 ![Your Online Shop](readme_images/logotype.png "Your Online Shop")
 
 # Your Online Shop
-
-## Demo
-
-[Demo Shop](https://youronlineshop.net/sample/) Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
-
-[Video Demo](https://youtu.be/PD_olszbGWA)
 <table>
   <tr>
     <td>
@@ -14,6 +8,12 @@
     </td>
   </tr>
 </table>
+
+=> [Demo Shop](https://youronlineshop.net/sample/)
+
+Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
+
+=> [Video Demo](https://youtu.be/PD_olszbGWA)
 
 ## About
 
