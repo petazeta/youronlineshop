@@ -28,8 +28,8 @@ https://youronlineshop.net
 - :thumbsup: Easy shop edition
 - :runner: Quick purchase process
 - :heart: Website pages (About, Contact, ect...)
-- :sparkles: Easy skins edition
-- :fire: [Multi shop](docs/multishopguide.md)
+- :art: Easy skins edition
+- :sparkles: [Multi shop](docs/multishopguide.md)
 
 ## :zap: Installation
 
