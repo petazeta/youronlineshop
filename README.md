@@ -1,6 +1,4 @@
 ![Your Online Shop](readme_images/logotype.png "Your Online Shop")
-
-# Your Online Shop
 <table>
   <tr>
     <td>
@@ -21,6 +19,7 @@ This is a SPA (Single Page Application) for e-commerce. It is build in Node.js a
 
 https://youronlineshop.net
 
+Awards:
 <img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="100"/>
 
 ## Main features:
