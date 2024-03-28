@@ -1,43 +1,9 @@
 Your Online Shop
 ----------------
 
-## 1 ¿Qué es Your Online Shop?
-
-(Your online shop)[https://github.com/petazeta/youronlineshop] es un código fuente para crear una tienda online la cual puede ser editada desde el navegador para así adaptarla a diferentes negocios o sistemas de venta.
-
-## 2 ¿Qué ventajas ofrece para los desarrolladores?
-
-Las ventajas fundamentales son su rapidez y su tamaño comparado con otros sistemas que realizan la misma función, además de su simplicidad de uso.
-
-## 3 ¿Qué diferencias tiene con respecto de otras opciones más utilizadas?
-
-La ventaja principal es su sencillez. Aprender a desarrollar en esta plataforma no es un proceso tan árduo como en otras. Una vez se comprende lo fundamental, el proceso creativo es altamente satisfactorio. Además para crear nuevos diseños no es necesario tocar el código sólo crear plantillas en HTML y hojas css.
-
-## 4 ¿Cómo puedo beneficiarme de Your online shop?
-
-Como desarrollador puedes descargarte el codigo de la tienda y hacer uso de éste para la función que quieras, para tu propio uso o para el uso de terceros. También puedes modificar el código y crear extensiones o apariencias diferentes.
-
-Y por último puedes formar parte del proyecto para así contribuir a su crecimiento y tener una participación en él.
-
-## 5 ¿Qué ventajas tiene participar del proyecto?
-
-Cuando hablamos del proyecto nos referimos al código original de la aplicación y a posibles extensiones y "apariencias" que se puedan incorparar. Estas extensiones y apariencias pueden ofrecerse como servicio o como producto en la plataforma que se creará con ese fin.
-
-## 6 ¿En que consiste la creación de extensiones y "apariencias"?
-
-El código de la aplicación tiene una capa superior la cual engloba las inferiores y es en esta capa en la que se puede contribuir fundamentalmente. Al modificar esta capa la aplicación puede tener funcionalidades diferentes a la original pero además estas modificaciones o extensiones pueden funcionar simultaneamente pudiendose aplicar a distintas webs al mismo tiempo.
-
-Esto significa que en la aplicación se puede decidir qué apariencia o qué funcionalidades se desean para cada web que está sirve. Estas extensiones y apariencias pueden ser ofrecidas como producto o como servicio en la plataforma que se creará para tal fin.
-
-## 7 Canal de comunicación
-
-Para la comunicación entre los desarrolladores se pueden usar los servicios de comunicación de github, el canal de (Discord)[https://discord.gg/k4pxeMCa] o el email melchorherrera@gmail.com 
-
-# English
-
 ## 1 Your Online Shop ¿What is it?
 
-(Your online shop)[https://github.com/petazeta/youronlineshop] is a source code of a software for building an e-commerce which can be modified from the browser to become a custom e-commerce or online store.
+[Your online shop](https://github.com/petazeta/youronlineshop) is a source code of a software for building an e-commerce which can be modified from the browser to become a custom e-commerce or online store.
 
 ## 2 Which adventages have for developers?
 
@@ -65,7 +31,41 @@ Therefore we can decide in the application which extensions and which skins are 
 
 ## 7 Communication channel
 
-Developers can communicate through github services, through the (Discord channel)[https://discord.gg/k4pxeMCa] or by email melchorherrera@gmail.com
+Developers can communicate through github services, through the [Discord channel](https://discord.gg/k4pxeMCa) or by email melchorherrera@gmail.com
+
+# Spanish
+
+## 1 ¿Qué es Your Online Shop?
+
+[Your online shop](https://github.com/petazeta/youronlineshop) es un código fuente para crear una tienda online la cual puede ser editada desde el navegador para así adaptarla a diferentes negocios o sistemas de venta.
+
+## 2 ¿Qué ventajas ofrece para los desarrolladores?
+
+Las ventajas fundamentales son su rapidez y su tamaño comparado con otros sistemas que realizan la misma función, además de su simplicidad de uso.
+
+## 3 ¿Qué diferencias tiene con respecto de otras opciones más utilizadas?
+
+La ventaja principal es su sencillez. Aprender a desarrollar en esta plataforma no es un proceso tan árduo como en otras. Una vez se comprende lo fundamental, el proceso creativo es altamente satisfactorio. Además para crear nuevos diseños no es necesario tocar el código sólo crear plantillas en HTML y hojas css.
+
+## 4 ¿Cómo puedo beneficiarme de Your online shop?
+
+Como desarrollador puedes descargarte el codigo de la tienda y hacer uso de éste para la función que quieras, para tu propio uso o para el uso de terceros. También puedes modificar el código y crear extensiones o apariencias diferentes.
+
+Y por último puedes formar parte del proyecto para así contribuir a su crecimiento y tener una participación en él.
+
+## 5 ¿Qué ventajas tiene participar del proyecto?
+
+Cuando hablamos del proyecto nos referimos al código original de la aplicación y a posibles extensiones y "apariencias" que se puedan incorparar. Estas extensiones y apariencias pueden ofrecerse como servicio o como producto en la plataforma que se creará con ese fin.
+
+## 6 ¿En que consiste la creación de extensiones y "apariencias"?
+
+El código de la aplicación tiene una capa superior la cual engloba las inferiores y es en esta capa en la que se puede contribuir fundamentalmente. Al modificar esta capa la aplicación puede tener funcionalidades diferentes a la original pero además estas modificaciones o extensiones pueden funcionar simultaneamente pudiendose aplicar a distintas webs al mismo tiempo.
+
+Esto significa que en la aplicación se puede decidir qué apariencia o qué funcionalidades se desean para cada web que está sirve. Estas extensiones y apariencias pueden ser ofrecidas como producto o como servicio en la plataforma que se creará para tal fin.
+
+## 7 Canal de comunicación
+
+Para la comunicación entre los desarrolladores se pueden usar los servicios de comunicación de github, el canal de [Discord](https://discord.gg/k4pxeMCa) o el email melchorherrera@gmail.com 
 
 
 # Landing Page
