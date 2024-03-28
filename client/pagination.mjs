@@ -9,7 +9,6 @@ export class Pagination{
     this.totalParent
     this.itemsWindow = [] // [first element position, last element position]. It starts by 1.
     this.pageNum = pageNum
-    this.loaded = false
     this.container
   }
   async init(params={}) {
@@ -33,11 +32,9 @@ export class Pagination{
   async getTotal(parent, params={}) {
     this.totalParent = parent.clone()
     this.totalParent.pagination = this
-    // In same cases we don't need to make the request because we know total value in advance. In that cases we set it before.
-    if (this.totalParent.props.total === undefined) {
-      const requestAction = this.totalParent.partner? "get my children" : "get all my children"
-      await this.totalParent.loadRequest(requestAction, {count: true, ...params})
-    }
+    // In same cases we don't need to make the request because we know total value in advance. In that cases we set it before ???
+    const requestAction = this.totalParent.partner?.props.id? "get my children" : "get all my children"
+    await this.totalParent.loadRequest(requestAction, {count: true, ...params})
   }
   createIndexes(){
     const pagesNum = Math.ceil(this.totalParent.props.total / this.pageSize) || 1

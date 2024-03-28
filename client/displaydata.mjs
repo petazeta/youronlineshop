@@ -1,10 +1,10 @@
-import {selectorFromAttr} from "./frontutils.mjs"
+import {visibleOnMouseOver, selectorFromAttr} from "./frontutils.mjs"
 import {zip} from "../shared/utils.mjs"
 
 // It prints the node data using the given template
 // Args -> myNodes: node with user data, fieldTemplate (it comes usually from "singlefield" or "singleinput"), myLabels: labelNode, "propName", null
 // myNodes, myLabels could be an array. If so its elements should be correlated
-export async function dataView(fieldTemplate, myNodes, myContainer, myLabels, excludePropsArray){
+export async function dataView(fieldTemplate, myNodes, myContainer, myLabels, excludePropsArray, setEdition){
   // It adds the fields for a user data container
   if (!Array.isArray(myNodes))
     myNodes = [myNodes]
@@ -20,7 +20,7 @@ export async function dataView(fieldTemplate, myNodes, myContainer, myLabels, ex
         if (excludeProps.includes(propKey))
           continue
       }
-      let myFieldContainer = fieldTemplate.cloneNode(true).querySelector("[data-container]")
+      let myFieldContainer = selectorFromAttr(fieldTemplate.cloneNode(true), "data-container")
       let myLabelElm = selectorFromAttr(myFieldContainer, "data-label")
       if (myLabel && typeof myLabel == "object")
         await myLabel.getNextChild(propKey)?.setContentView(myLabelElm)
@@ -28,7 +28,14 @@ export async function dataView(fieldTemplate, myNodes, myContainer, myLabels, ex
         selectorFromAttr(myLabelElm, "data-value").textContent = propKey
       if (myLabel)
         selectorFromAttr(myLabelElm, "data-value").attributes.for.value = propKey
-      myNode.writeProp(selectorFromAttr(myFieldContainer, "data-text"), propKey)
+      const textField = selectorFromAttr(myFieldContainer, "data-text")
+      const textContainer = selectorFromAttr(textField, "data-value") || textField
+      myNode.writeProp(textContainer, propKey)
+      textContainer.setAttribute("title", propKey) // It shows the label on hover
+      if (setEdition) {
+        visibleOnMouseOver(selectorFromAttr(textField, "data-butedit"), textField) // on mouse over edition button visibility
+        await setEdition(myNode, textField, propKey)
+      }
       myContainer.appendChild(myFieldContainer)
     }
   }

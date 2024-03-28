@@ -8,7 +8,7 @@ import {getTemplate} from "../layouts.mjs"
 import {userMenuView} from "./usermenu.mjs"
 import {rmBoxView} from "../../rmbox.mjs"
 import {Node} from '../nodes.mjs'
-import {myCart} from "../shop/cart.mjs"
+import {setActiveInSite, getActiveInSite} from '../activeingroup.mjs'
 
 const searchParamsKeys = ["login"]
 
@@ -109,9 +109,11 @@ async function newFormView(afterLogin) {
 
 async function loginFormSubm(formElement, afterLogin) {
   const logFormTxt = getSiteText().getNextChild("logform")
-  const checkData = checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
-  if (checkData instanceof Error) {
-    dataError(checkData, formElement)
+  try {
+    checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
+  }
+  catch(err){
+    dataError(err, formElement)
     return
   }
   const storeChecked = formElement.elements.rememberme.checked
@@ -142,9 +144,11 @@ async function loginFormSubm(formElement, afterLogin) {
 }
 async function signUpFormSubm(formElement, afterLogin) {
   const logFormTxt = getSiteText().getNextChild("logform")
-  const checkData = checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
-  if (checkData instanceof Error) {
-    dataError(checkData, formElement)
+  try {
+    checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
+  }
+  catch(err){
+    dataError(err, formElement)
     return
   }
   // pwd and repaet pwd
@@ -212,7 +216,7 @@ async function loggedIn(afterLogin){
       for (const menu of getRoot().getMainBranch().children) {
         blink((menu.firstElement))
       }
-      blink(selectorFromAttr(window.document, "data-site-title"))
+      blink(selectorFromAttr(window.document.firstElementChild, "data-site-title"))
     }
   }
   if (afterLogin == "checkout") {
@@ -221,7 +225,18 @@ async function loggedIn(afterLogin){
   }
   else if (afterLogin == "dashboard")
     await loginDashboard()
-  // *** Tenemos la situación de que después del login la pantalla en la vista principal queda igual. Pero un login debería alterar la vista principal (admn buts), por lo que sería interesante introducir una forma de refrescar la pantalla principal despues del login, quizas a través del modulo activeinsite
+  // *** Tenemos la situación de que después del login la pantalla en la vista principal queda igual.
+  //Pero un login debería alterar la vista principal (admn buts), por lo que sería interesante introducir una forma de refrescar la pantalla principal despues del login, quizas a través del modulo activeinsite
+  else {
+    // Check for private information at central content
+    // *** we should transfer this to the check out, so it should happended at check out better
+    if (getActiveInSite()==webuser)
+      loginDashboard()
+  }
+}
+//*** por hacer
+async function loggedOut(afterLogin){
+
 }
 
 async function loginDashboard(){
@@ -233,8 +248,8 @@ async function loginDashboard(){
   document.getElementById("centralcontent").appendChild(await userInfoView())
 }
 
-function dataError(checkData, formElement) {
-  const errorKey = JSON.parse(checkData.message).errorKey
+function dataError(err, formElement) {
+  const errorKey = JSON.parse(err.message).errorKey
   if (errorKey=="user_name")
     document.createElement("alert-element").showMsg(getSiteText().getNextChild("logform").getNextChild("userCharError").getLangData(), 3000).showAlert()
   else if (errorKey=="user_password")

@@ -1,6 +1,6 @@
 import {performAddition} from '../../admin/addition.mjs'
 import {getLangParent, createInstanceChildText} from '../languages/languages.mjs'
-import {selectorFromAttr} from '../../frontutils.mjs'
+//import {selectorFromAttr} from '../../frontutils.mjs'
 import {getTemplate} from '../layouts.mjs'
 import {observerMixin} from '../../observermixin.mjs'
 
@@ -21,22 +21,22 @@ It gets adition button layout (template) name and some parent of the destination
   - and parent has instance variable childContainer -> elements container
 -->
 */
-export async function setAdditionButton(newNodeParent, ownerNode, step=1, elmView, makeView, dataIdButsWrapper="admnbuts", addTpName="butaddnewnode"){
+export async function setAdditionButton(nodeParent, position, butContainer, makeView, callBack, extraParams={}){
+  const addTpName = extraParams.addTpName || "butaddnewnode"
   const addTp = await getTemplate(addTpName)
-  const addButton=addTp.querySelector("[data-add-button]")
+  const addButton = addTp.querySelector("[data-add-button]")
   addButton.addEventListener("click", async (ev)=>{
     ev.preventDefault()
-    const skey = ownerNode?.parent.getSysKey('sort_order')
-    const sortOrder = skey ? ownerNode.props[skey] + step : step
-    const hasLangContent = getLangParent(newNodeParent.partner) ? true : false
-    const newNode = hasLangContent ? await createInstanceChildText(newNodeParent, sortOrder) : newNodeParent.createInstanceChild(sortOrder)
+    const hasLangContent = getLangParent(nodeParent.partner) ? true : false
+    const newNode = hasLangContent ? await createInstanceChildText(nodeParent, position) : nodeParent.createInstanceChild(position)
     const extraParent = hasLangContent && getLangParent(newNode)
-    const newView = await makeView(newNode)
-    await performAddition(newNode, extraParent, newView)
+    await performAddition(newNode, extraParent, makeView)
+    if (callBack)
+      await callBack(newNode)
   })
-  const butsWrapper = elmView && selectorFromAttr(elmView, "data-" + dataIdButsWrapper) || newNodeParent.childContainer
-  butsWrapper.appendChild(addTp)
+  butContainer.appendChild(addTp)
 }
+// *** this could be not needed, so we can do it inside setAdditionButton makeview function
 export function onNewNodeMakeClick(nodeParent, clickOn){
   //when a new subnode is created we select it
   nodeParent.addEventListener("addNewNode", (newNode)=>{
@@ -44,30 +44,32 @@ export function onNewNodeMakeClick(nodeParent, clickOn){
     clickOn(newNode)
   }, "expandANodeOnaddANewNode")
 }
-export function showFirstAdditionOnLog(newNodeParent, rootNode, hasWritePermission, makeView, elmContainer, addTpName="butaddnewnode"){
+// *** This is deprecated
+export function showFirstAdditionOnLog_old(nodeParent, rootNode, hasWritePermission, makeView, elmContainer, addTpName="butaddnewnode"){
   if (!elmContainer)
-    elmContainer = newNodeParent.childContainer
+    elmContainer = nodeParent.childContainer
   const logChangeReaction=async ()=>{
-    if (newNodeParent.children.length == 0) {
+    if (nodeParent.children.length == 0) {
       if (hasWritePermission()) {
         // hay que calcular step que es en realidad pos
-        setAdditionButton(newNodeParent, null, 1 /* position */, elmContainer, makeView, undefined, addTpName)
+        setAdditionButton(nodeParent, 1, selectorFromAttr(elmContainer, "data-admnbuts"), makeView, undefined)
       }
       else if (selectorFromAttr(elmContainer, "data-add-button")){
         elmContainer.removeChild(selectorFromAttr(elmContainer, "data-add-button"))
       }
     }
   }
-  if (!newNodeParent.setReaction) {
-    Object.setPrototypeOf(newNodeParent, observerMixin(newNodeParent.constructor).prototype) // adding methods 
-    observerMixin(Object).prototype.initObserver.call(newNodeParent) // adding properties : calling constructor
+  if (!nodeParent.setReaction) {
+    Object.setPrototypeOf(nodeParent, observerMixin(nodeParent.constructor).prototype) // adding methods 
+    observerMixin(Object).prototype.initObserver.call(nodeParent) // adding properties : calling constructor
   }
-  rootNode.attachObserver("usertype change", newNodeParent)
-  newNodeParent.setReaction("usertype change", ()=>{
-    console.log(`node =${newNodeParent.props} said "webuser log change" `)
+  rootNode.attachObserver("usertype change", nodeParent)
+  nodeParent.setReaction("usertype change", ()=>{
+    console.log(`node =${nodeParent.props} said "webuser log change" `)
     logChangeReaction()
   })
 }
+// we can also avoid using this, just using the script at the post addition callback
 export function onAddInPageChild(nodeParent, refreshView){
   // adjust the page view after adding an element to fit the pagination
   nodeParent.addEventListener("addNewNode", (newNode)=>{

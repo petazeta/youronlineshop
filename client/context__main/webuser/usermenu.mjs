@@ -27,9 +27,9 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
   dashPath.getNextChild("btShowOrd").setContentView(showordersButton)
   showordersButton.addEventListener('click', async (ev)=>{
     ev.preventDefault()
-    const {ordersView} = await import("../shop/orderlist.mjs")
+    const {orderListView} = await import("../shop/orderlist.mjs")
     document.getElementById("centralcontent").innerHTML=""
-    document.getElementById("centralcontent").appendChild(await ordersView())
+    document.getElementById("centralcontent").appendChild(await orderListView())
     setActiveInSite(webuser)
   })
   menusContainer.appendChild(showordersButton)
@@ -45,16 +45,16 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
   })
   menusContainer.appendChild(showaddressButton)
   
-  const changepwdButton = tpButton.cloneNode(true)
-  dashPath.getNextChild("btChangePwd").setContentView(changepwdButton)
-  // await getTemplate("changepwd")
-  /*
-  changepwdButton.addEventListener('click', async (ev)=>{
+  const changePwdButton = tpButton.cloneNode(true)
+  dashPath.getNextChild("btChangePwd").setContentView(changePwdButton)
+  changePwdButton.addEventListener('click', async (ev)=>{
     ev.preventDefault()
     const {changePwdView} = await import("./userdata.mjs")
-    await changePwdView()
+    document.getElementById("centralcontent").innerHTML=""
+    document.getElementById("centralcontent").appendChild(await changePwdView(webuser))
+    setActiveInSite(webuser)
   })
-  */
+  menusContainer.appendChild(changePwdButton)
 
   if (webuser.isSystemAdmin()) {
     const expButton = tpButton.cloneNode(true)

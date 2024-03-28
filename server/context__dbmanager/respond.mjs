@@ -55,6 +55,7 @@ export async function respond(request, response) {
     return Node.dbGateway.getTables().map(tableName=>"TABLE_" + tableName.toUpperCase(),)
   })
   // --- dbmanager custom end
+  
   const user = await authenticate(User, request.headers)
   const data = await collectRequest(request, config.get("request-max-size"))
   response.setHeader('Content-Type', responses.getResponseContentType(data.action))
@@ -63,9 +64,9 @@ export async function respond(request, response) {
     const results = []
     response.write("[")
     for (let i=0; i<data.action.length; i++) {
-      results.push(await responses.handleRequest(response, user, data.action[i], data.parameters && data.parameters[i]))
       if (i != 0)
         response.write(",")
+      results.push(await responses.handleRequest(response, user, data.action[i], data.parameters && data.parameters[i]))
     }
     response.end("]")     
     resultData = results

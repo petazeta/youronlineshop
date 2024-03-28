@@ -90,8 +90,7 @@ async function displayOrderShipping(myNode, orderContainer){
 }
 
 async function orderPaymentView(myNode){
-  const myTp = await getTemplate("orderpayment")
-  const myContainer = selectorFromAttr(myTp, "data-container")
+  const myContainer = selectorFromAttr(await getTemplate("orderpayment"), "data-container")
   const parentNode = Array.isArray(myNode.parent)? myNode.parent[0] : myNode.parent
   myNode.firstElement = myContainer
   for (const propKey of parentNode.childTableKeys) {

@@ -9,8 +9,8 @@ import {initCategories, displayCategories} from "./catalog/categories.mjs"
 import {setNavCkt} from "./shop/ckt.mjs"
 
 export async function bodyView(){
-  const bodyTp = await getTemplate("body")
-  const body = selectorFromAttr(bodyTp, "data-body-container")
+  const container = selectorFromAttr(await getTemplate("body"), "data-container")
+  const body = selectorFromAttr(container, "data-body-container")
   setPageTitle(getSiteContent().getNextChild("page_head_title"), selectorFromAttr(body, "data-site-title")) // Set the head title field and the browser page title
   setOnClickNavToggle(selectorFromAttr(body, "data-navtoggle")) // showing up the page menus on mobile screens
   setLangSelectionElm(selectorFromAttr(body, "data-lang-select-container"))
@@ -25,5 +25,5 @@ export async function bodyView(){
   await initCategories(selectorFromAttr(body, "data-centralcontent"))
   await displayCategories(selectorFromAttr(body, "data-cats-container"))
   getSiteContent().getNextChild("bottom").getNextChild("designed").write(selectorFromAttr(body, "data-designed"))
-  return bodyTp
+  return container
 }

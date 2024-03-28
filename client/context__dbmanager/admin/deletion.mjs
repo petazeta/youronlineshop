@@ -17,18 +17,17 @@ It gets deletion button layout (template) name and some parent of the destinatio
   Note for upper methods:
     if (!checkAdmin() && false) return
 */
-export async function setDeletionButton(delNode, elmView, dataIdButsWrapper="admnbuts", delTpName="butdelete"){
-  const butsWrapper=selectorFromAttr(elmView, "data-" + dataIdButsWrapper)
+export async function setDeletionButton(delNode, butContainer, callBack, extraParams={}){
+  const delTpName = extraParams.delTpName || "butdelete"
+  const delTp = await getTemplate(delTpName)
+  const delAlertTp = delTp.querySelector("[data-del-alert]").content
 
-  const delTp=await getTemplate(delTpName)
-  const delAlertTp=delTp.querySelector("[data-del-alert]").content
-
-  const delButton=delTp.querySelector("[data-del-button]")
-  const myAlert=document.createElement("alert-element")
-  delButton.onclick=function() {
+  const delButton = delTp.querySelector("[data-del-button]")
+  const myAlert = document.createElement("alert-element")
+  delButton.onclick = function() {
     myAlert.showAlert(delAlertTp)
   }
-  butsWrapper.appendChild(delButton)
+  butContainer.appendChild(delButton)
   // stablishing alert text content
   if (getSiteText) { // for not to have to change this code in a no siteText app
     const titAlert=getSiteText().getNextChild("deletealert").getNextChild("titalert")
@@ -46,24 +45,28 @@ export async function setDeletionButton(delNode, elmView, dataIdButsWrapper="adm
   // setting confirm deletion
   selectorFromAttr(selectorFromAttr(delAlertTp, "data-confirm"), "data-button").addEventListener("click", async ()=>{
     await performDeletion(delNode)
+    if (callBack)
+      await callBack(delNode)
     myAlert.hideAlert()
   })
 }
 // to set some procedures after deletion. I asummes "deleteChild" is dispatched
-export function onDelSelectedChild(nodeParent, clickOn){
+// we can avoid using it by a callback in setdeletionbutton
+export function onDelSelectedChild(nodeParent, listenerCallback){
   // If node was selected then we select the previous one and expand it
   nodeParent.addEventListener("deleteChild", delNode => {
     const skey = nodeParent.getSysKey("sort_order")
-    if (!delNode.selected) return
-    if (nodeParent.children.length>0) {
-      let position=1
-      if (delNode.props[skey] > 1)
-        position=delNode.props[skey]-1
-      clickOn(nodeParent.children.find(child=>child.props[skey]==position))
+    if (!delNode.selected)
+      return
+    let nextSelected
+    if (nodeParent.children.length > 0) {
+      const nextPosition = delNode.props[skey] > 1 ? delNode.props[skey] - 1 : 1
+      nextSelected = nodeParent.children.find(child=>child.props[skey]==nextPosition) || nodeParent.getChild()
     }
     else if (delNode==getActiveInSite()){
       document.getElementById("centralcontent").innerHTML="" // Remove the container content when remove expander node
     }
+    listenerCallback(nextSelected)
   }, "unselectNode")
 }
 // to set some procedures after deletion. I asummes "deleteChild" is dispatched
@@ -88,7 +91,7 @@ export function onDelInPageChild(nodeParent, refreshView){
   }, "delinpage")
 }
 // If we are using onDelSelectedChild then this should be not necesary so a only child would be a selected one
-export function onDelOnlyChild(nodeParent, onDelAction){
+export function onDelOnlyChild_old(nodeParent, onDelAction){
   // If node was selected then we select the previous one and expand it
   nodeParent.addEventListener("deleteChild", delNode => {
     if (nodeParent.children.length!=0)

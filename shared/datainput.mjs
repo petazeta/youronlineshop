@@ -15,7 +15,7 @@ export function checkValidData(data) {
     if (key=="id")
       continue
     if (!checkLength(value, minchar, maxchar)) {
-      throw new Error(`{"errorKey": "${key}", "minchar": ${minchar}, "maxchar": ${maxchar}}`)
+      throw new Error(`{"errorKey": "${key}", "minchar": ${minchar}, "maxchar": ${maxchar}}`, {cause: "human"})
     }
   }
 }

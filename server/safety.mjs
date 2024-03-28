@@ -46,6 +46,7 @@ function getTableName(myNode){
   return Array.isArray(myNode.parent)? myNode.parent[0].props.childTableName : myNode.parent.props.childTableName
 }
 function getUserType(user){
+  // I think users can not have multiple parents *** check it
   if (user.parent && user.parent.partner)
     return user.parent.partner.props.type
 }
@@ -90,12 +91,10 @@ async function isOwner(myNode, userId) {
     return true
   function isOwnerCore(pointer) {
     while (pointer) {
-      if (pointer.parent?.props.parentTableName=="TABLE_USERS" && pointer.parent?.partner?.props.id==userId)
+      const pointerParent = Array.isArray(pointer.parent)? pointer.parent[0] : pointer.parent
+      if (pointerParent?.props.parentTableName=="TABLE_USERS" && pointerParent?.partner?.props.id==userId)
         return true
-      if (Array.isArray(pointer.parent))
-        pointer = pointer.parent[0]?.partner
-      else
-        pointer = pointer.parent?.partner
+      pointer = pointerParent?.partner
     }
   }
 }

@@ -1,14 +1,24 @@
-<div class="alert dialogbox" data-container>
-  <div>
-    <h1 style="font-size:1.5em" style="display:block;">
-      <p>No Database Tables!</p>
-    </h1>
-  </div>
-  <div style="padding:1em;">
-    <div style="padding:1em;">
+import {selectorFromAttr} from "../../frontutils.mjs"
+import {getTemplate} from "../layouts.mjs"
+import {Node} from '../nodes.mjs'
+import {startView} from '../start.mjs'
+import {chagePwdsView} from "./changepwds.mjs"
 
-      <button class="btn" type="button" style="padding:1em;" data-button>Populate Database with Initial data</button>
-      <script>
+export async function dbPopView() {
+  const mainTp = await getTemplate("dbpop")
+  const container = selectorFromAttr(mainTp, "data-container")
+  selectorFromAttr(container, "data-button").addEventListener("click", async()=>{
+    document.createElement("alert-element").showAlert(selectorFromAttr(mainTp, "data-alert"))
+    if (!await Node.makeRequest("populate database"))
+      return document.createElement("alert-element").showMsg("Error populating database")
+    await startView(chagePwdsView)
+    document.createElement("alert-element").showAlert(selectorFromAttr(mainTp, "data-success-msg"))
+  })
+  return container
+}
+
+  /*
+
         thisElement.addEventListener("click", async ()=>{
           const {AlertMessage}=await import('./' + CLIENT_MODULES_PATH + 'alert.mjs');
           thisNode.setView(document.body, thisElement.previousElementSibling);
@@ -30,22 +40,4 @@
           // Este texto mejor que lo tome de la base de datos
           new AlertMessage("<BR/>Database Populated saccesfully.<BR/><BR/><B>Please Change Administration Passwords.</B><BR/><BR/>", 6000).showAlert();
         });
-      </script>
-    </div>
-  </div>
-</div>
-<template data-alert>
-  <div class="alert warningmsg">
-    <p><b>Populating database ... It could take some time, please be patient.</b></p>
-    <div style="text-align:center">
-      <div class="circleloader"></div>
-    </div>
-  </div>
-</template>
-<template data-success-msg>
-  <BR/>
-  Database Populated saccesfully.
-  <BR/><BR/>
-  <B>Please Change Administration Passwords.</B>
-  <BR/><BR/>
-</template>
+        */

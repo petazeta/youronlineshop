@@ -1,14 +1,12 @@
 ![Your Online Shop](readme_images/logotype.png "Your Online Shop")
 
-# Your Online Shop System
+# Your Online Shop
 
-## Live Demo
+## Demo
 
-Shop sample => [Your Online Shop Demo Shop](https://youronlineshop.net/sample/)
+[Demo Shop](https://youronlineshop.net/sample/) Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
 
-Admin => (usr/password) webadmin/webadmin, productsadmin/productsadmin
-
-Video Demo => https://youtu.be/PD_olszbGWA
+[Video Demo](https://youtu.be/PD_olszbGWA)
 <table>
   <tr>
     <td>
@@ -23,26 +21,21 @@ This is a SPA (Single Page Application) for e-commerce. It is build in Node.js a
 
 https://youronlineshop.net
 
-Awards:
-
-<img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="200"/>
+<img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="100"/>
 
 ## Main features:
 
-- Easy edition
+- Easy shop edition
 - Quick purchase process
 - Website pages (About, Contact, ect...)
-- Multilingual
-- Blazingly fast
-- Themes (Templates and css)
-- Export / Import
+- Easy skins edition
 - [Multi shop](docs/multishopguide.md)
 
 ## Installation
 
 1. Get the source files.
 2. Install node and mongodb when necesary.
-3. Edit the mongodb settings at: server/contexts/main/cfg/dbcustom.mjs.
+3. Edit the mongodb url when cecesary at: server/context__main/cfg.mjs.
 4. Open your terminal at the source top folder and type:
 ```
 npm install 
@@ -52,9 +45,9 @@ npm start
 
 ## Support
 
-I'd like to receive a lot of comments and suggestions.
+It works at Node v.16 and mongodb v.4. We can no garantee it would work in different version.
 
-For any issues please write to: melchorherrera@gmail.com
+For any issues please write to: melchorherrera@gmail.com. We will gladly appreciate any bug report.
 
 
 ## Getting started
@@ -73,14 +66,14 @@ Some other configuration can be done by editing some files at cfg folders.
 [Check Documentation](docs/overview.md)
 
 
-## Themes
+## Skins
 
-Y.O.S. system has a themes feature. You can find theme files at layouts folder.
+Y.O.S. system have layouts files that can be modified. You can find thise files at layouts folder.
 
 
 ## Extensions
 
-There is a extensions folder which could include some extensions. Follow the extension readme file instructions for executing it.
+There is a preinstalled extension to manage the database records, check prompt messages.
 
 
 ## More

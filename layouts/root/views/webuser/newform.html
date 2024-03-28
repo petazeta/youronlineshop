@@ -1,48 +1,35 @@
+<!--
+-->
 <form  data-container data-form>
   <div id="logform">
   <!--
+    There was a title for it, we suppress it. Db: signuptt
     <div class="msgbox" style="position:relative;">
       <div data-id="butedit" class="btmiddleright"></div>
       <span></span>
-      <script>
-        const title=thisNode.getNextChild("signuptt").getRelationship("siteelementsdata").getChild();
-        title.writeProp(thisElement);
-        //adding the edition pencil
-        if (webuser.isWebAdmin()) {
-          const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
-          visibleOnMouseOver( thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
-          title.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-        }
-      </script>
     </div>
     -->
     <div class="loginform">
-      <div class="form-group">
-        <div data-username-label>
-          <span style="position:relative;">
-            <div data-butedit class="btmiddleright"></div>
-            <label class="form-label" for="user_name" data-value></label>
-          </span>
+      <div class="form-group" data-username>
+        <div data-label style="position:relative;">
+          <div data-butedit class="btmiddleright"></div>
+          <label class="form-label" for="user_name" data-value></label>
         </div>
-        <input class="form-control" name="user_name" data-username-input data-value>
+        <input class="form-control" name="user_name" data-text>
       </div>
-      <div class="form-group">
-        <div data-password-label>
-          <span style="position:relative;">
-            <div data-butedit class="btmiddleright"></div>
-            <label class="form-label" for="user_password" data-value></label>
-          </span>
+      <div class="form-group" data-password>
+        <div data-label style="position:relative;">
+          <div data-butedit class="btmiddleright"></div>
+          <label class="form-label" for="user_password" data-value></label>
         </div>
-        <input type="password" class="form-control" placeholder="" name="user_password" data-value data-password-input>
+        <input type="password" class="form-control" placeholder="" name="user_password" data-text>
       </div>
-      <div class="form-group">
-        <div data-repeat-password-label>
-          <span style="position:relative;">
-            <div data-butedit class="btmiddleright"></div>
-            <label class="form-label" for="repeat_password" data-value></label>
-          </span>
+      <div class="form-group" data-repeat-password>
+        <div data-label style="position:relative;">
+          <div data-butedit class="btmiddleright"></div>
+          <label class="form-label" for="repeat_password" data-value></label>
         </div>
-        <input type="password" class="form-control" name="repeat_password" data-value data-repeat-password-input>
+        <input type="password" class="form-control" name="repeat_password" data-text>
       </div>
       <div class="sign-up-button" style="position:relative;" data-sign-up-button>
         <div data-butedit class="btmiddleright"></div>
@@ -70,23 +57,11 @@
       <input type="hidden" name="pwdDoubleError" disabled data-hidden data-value>
     </div>
     <!--
+      We suppress a going back button. Bd: loginBack
     <div class="dashbuttons">
       <div style="position:relative;">
         <div data-id="butedit" class="btmiddleright"></div>
         <button type="button" class="btn" data-id="but"></button>
-        <script>
-          const myTextNode=thisNode.getNextChild("loginBack").getRelationship("siteelementsdata").getChild();
-          myTextNode.writeProp(thisElement);
-          thisElement.onclick=function(){
-            thisNode.setView(document.getElementById("centralcontent"), "loginform");
-          }
-          //adding the edition pencil
-          if (webuser.isWebAdmin()) {
-            const {visibleOnMouseOver}=await import('./' + CLIENT_MODULES_PATH + 'frontutils.mjs');
-            visibleOnMouseOver(thisElement.parentElement.querySelector('[data-id=butedit]'), thisElement.parentElement);
-            myTextNode.appendView(thisElement.parentElement.querySelector('[data-id=butedit]'), "butedit", {editElement: thisElement});
-          }
-        </script>
       </div>
     </div>
     -->

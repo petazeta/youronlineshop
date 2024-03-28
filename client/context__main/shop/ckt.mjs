@@ -60,11 +60,19 @@ async function cktView(cartBoxContainer = document.getElementById("cartbox")){
   chktOrderContainer.innerHTML = ""
   chktOrderContainer.appendChild(await orderCartView(webuser.getRelationship("orders").getChild()))
   
+  // setting data to be exposed
+  const addressData = [webuser.getRelationship("addresses").getChild()]
+  const userData = webuser.getRelationship("usersdata").getChild()
+  if (userData.getParent().childTableKeys.some(key=>!userData.props[key]))
+    addressData.unshift(userData)
+  else if (!addressData[0].props.fullname)
+    addressData[0].props.fullname = userData.props.fullname // copy full name from user data
+
   if (config.get("cktuserdata-on")) {
     const myTp = await getTemplate("chktuserdata")
     const userDataContainer = myTp.querySelector("[data-container]")
     getSiteText().getNextChild("checkout").getNextChild("addressTit").setContentView(selectorFromAttr(userDataContainer, "data-address-tit"))
-    selectorFromAttr(userDataContainer, "data-useraddress").appendChild(await userDataView())
+    selectorFromAttr(userDataContainer, "data-useraddress").appendChild(await userDataView(addressData))
     selectorFromAttr(cktContainer, "data-user-data-container").appendChild(userDataContainer)
   }
   
@@ -87,8 +95,11 @@ async function cktView(cartBoxContainer = document.getElementById("cartbox")){
     }
     if (config.get("cktuserdata-on")) {
       // *** aqui se actualiza el email, esto luego hay que revisar cuando la cuenta se valide por email
-      if (await saveUserData([webuser.getRelationship("usersdata").getChild(), webuser.getRelationship("addresses").getChild()], selectorFromAttr(selectorFromAttr(cktContainer, "data-user-data-container"), "data-form"), ["comments"]) instanceof Error)
+      if (!await saveUserData(addressData, selectorFromAttr(selectorFromAttr(cktContainer, "data-user-data-container"), "data-form"), "comments"))
         return
+      // user data fullname is not displayed so it is not saved by saveUserData, we do it manually
+      if (addressData.length==2)
+        await addressData[0].loadRequest("edit my props", {values: {fullname: addressData[0].props.fullname}})
       // Copying address *** falta poner el comments de la dirección
       const myOrderAddress = myOrder.getRelationship("orderaddress").addChild(new Node())
       for (const key of webuser.getRelationship("addresses").childTableKeys) {
@@ -510,8 +521,7 @@ async function cartToOrder(myCart){
 // The payment button rendering is implemented at the order cart submit function
 
 async function cktEndView(order) {
-  const myTp = await getTemplate("chktend")
-  const myContainer = selectorFromAttr(myTp, "data-container")
+  const myContainer = selectorFromAttr(await getTemplate("chktend"), "data-container")
   getSiteText().getNextChild("checkout").getNextChild("successTit").setContentView(selectorFromAttr(myContainer, "data-tit"))
   selectorFromAttr(myContainer, "data-order").appendChild(await orderView(order))
   return myContainer
@@ -523,19 +533,20 @@ function hasNodeWritePermission() {
 function hasTextWritePermission() {
   return webuser.isWebAdmin() || webuser.isSystemAdmin() || webuser.isOrdersAdmin()
 }
-async function userDataView(){
+async function userDataView(dataNodes){
   const container = selectorFromAttr(await getTemplate("userdata"), "data-container")
   const myForm =  selectorFromAttr(container, "data-form")
   //Cancelation of submit is important because there could be enter keyboard pressing in fields
   myForm.addEventListener("submit", (event)=>{
     event.preventDefault()
   })
-  const dataNodes = [webuser.getRelationship("usersdata").getChild(), webuser.getRelationship("addresses").getChild()]
   const labelNodes = []
   for (const dataNode of dataNodes) {
     labelNodes.push(getSiteText().getNextChild(dataNode.getParent().props.childTableName))
   }
-  await dataView(await getTemplate("singleinput"), dataNodes, selectorFromAttr(myForm, "data-userdata"), labelNodes, [["fullname"],[]])
+  // if incluing user data, then userdata fullname is not displayed, just address fullname
+  const exclude = dataNodes.length == 2 ? [["fullname"],[]] : undefined
+  await dataView(await getTemplate("singleinput"), dataNodes, selectorFromAttr(myForm, "data-userdata"), labelNodes, exclude)
 
   getSiteText().getNextChild("userdataform").getNextChild("fieldCharError").setContentView(selectorFromAttr(myForm, "data-fieldcharerror"))
   getSiteText().getNextChild("userdataform").getNextChild("emailCharError").setContentView(selectorFromAttr(myForm, "data-fieldemailerror"))

@@ -23,6 +23,7 @@ export class Responses{
     // -- User this.responseAuth
 
     this.responseAuth.set("login", async (parameters)=> {
+      // *** quiza mejor no enviar el password directamente sino que codificarlo antes
       const result = await User.login(parameters.user_name, parameters.user_password)
       if (result instanceof Error)
         return {logError: true, code: result.message}
@@ -32,15 +33,16 @@ export class Responses{
     })
 
     this.responseAuth.set("update user pwd", async (parameters, user)=>{
-      if (! await isAllowedToModify(user)) throw new Error("Database safety")
-        return await User.dbUpdatePwd(parameters.user_name, parameters.user_password)
-    });
-
-    this.responseAuth.set("update my user pwd", async (parameters, user)=>{
-      return await user.dbUpdateMyPwd(parameters.user_password)
+      // *** quiza mejor no enviar el password directamente sino que codificarlo antes
+      if (user.props.username==parameters.user_name)
+        return await user.dbUpdateMyPwd(parameters.user_password)
+      if (! await isAllowedToModify(user))
+        throw new Error("Database safety")
+      return await User.dbUpdatePwd(parameters.user_name, parameters.user_password)
     })
 
     this.responseAuth.set("create user", async (parameters)=>{
+      // *** quiza mejor no enviar el password directamente sino que codificarlo antes
       const result = await User.create(parameters.user_name, parameters.user_password)
       if (result instanceof Error)
         return {logError: true, code: result.message}
@@ -54,7 +56,7 @@ export class Responses{
     this.responseAuth.set("payment", async (parameters, user)=>{
       const order = new Node().load(unpacking(parameters.nodeData)) //new Node().load == Node.clone
       const payment = new Node().load(unpacking(parameters.payment))
-      const payments = await import(`./payments/${payment.props.template}.mjs`)
+      const payments = await import(`./payments/${payment.props.moduleName}.mjs`)
       if (typeof payments[parameters.paymentAction]=="function")
         return await payments[parameters.paymentAction](order, payment)
     })

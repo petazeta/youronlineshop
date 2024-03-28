@@ -15,8 +15,6 @@ requestsRep.set('login', (result, request)=>{
 
 requestsRep.set('update user pwd', (result)=>console.log(result))
 
-requestsRep.set('update my user pwd', (result)=>console.log(result))
-
 requestsRep.set('create user', (result, request)=>makeReport("user created", request))
 
 requestsRep.set('send mail', (result)=>console.log(result))

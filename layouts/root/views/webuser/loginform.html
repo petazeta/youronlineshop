@@ -1,32 +1,26 @@
 <form data-container data-form>
   <div id="logform">
     <!--
+      There was a title for it, we suppress it. Db: lgintt
     <div class="msgbox" style="position:relative;">
       <div data-butedit class="btmiddleright"></div>
       <span data-value></span>
     </div>
-    <script>
-      setNode(thisNode.getNextChild("lgintt"), thisElement)
-    </script>
     -->
     <div class="loginform">
-      <div class="form-group">
-        <div data-username-label>
-          <span style="position:relative;">
-            <div data-butedit class="btmiddleright"></div>
-            <label class="form-label" for="user_name" data-value></label>
-          </span>
+      <div class="form-group" data-username>
+        <div data-label style="position:relative;">
+          <div data-butedit class="btmiddleright"></div>
+          <label class="form-label" for="user_name" data-value></label>
         </div>
-        <input class="form-control" name="user_name" data-username-input data-value>
+        <input class="form-control" name="user_name" data-text>
       </div>
-      <div class="form-group">
-        <div data-password-label>
-          <span style="position:relative;">
-            <div data-butedit class="btmiddleright"></div>
-            <label class="form-label" for="user_password" data-value></label>
-          </span>
+      <div class="form-group" data-password>
+        <div data-label style="position:relative;">
+          <div data-butedit class="btmiddleright"></div>
+          <label class="form-label" for="user_password" data-value></label>
         </div>
-        <input type="password" class="form-control" name="user_password" data-value data-password-input>
+        <input type="password" class="form-control" name="user_password" data-text>
       </div>
       <div class="rememberme" style="position:relative;" data-rememberme>
         <input type="checkbox" id="rememberme" name="rememberme" data-checkbox>

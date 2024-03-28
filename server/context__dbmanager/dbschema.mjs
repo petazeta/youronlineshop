@@ -27,7 +27,10 @@ export function setDbSchema(dbLink) {
     new Schema({
       username: String,
       pwd: String,
-      status: Number,
+      status: {
+        type: Number,
+        default: 1,
+      },
       access: {
         type: Date,
         default: Date.now,
@@ -49,11 +52,13 @@ export function setDbSchema(dbLink) {
     
   dbLink.model("Addresses",
     new Schema({
+      fullname: String,
       streetaddress: String,
       city: String,
       state: String,
       zipcode: String,
       country: String,
+      comments: String,
       parentUsers: {
         type: SchemaTypes.ObjectId,
         ref: "Users",
@@ -180,6 +185,8 @@ export function setDbSchema(dbLink) {
     
   dbLink.model("Items",
     new Schema({
+      price: Number,
+      currencyCode: String,
       parentItemCategories: {
         type: SchemaTypes.ObjectId,
         ref: "ItemCategories",
@@ -200,7 +207,6 @@ export function setDbSchema(dbLink) {
       name: String,
       descriptionlarge: String,
       descriptionshort: String,
-      price: Number,
       parentItems: {
         type: SchemaTypes.ObjectId,
         ref: "Items",
@@ -229,7 +235,7 @@ export function setDbSchema(dbLink) {
   dbLink.model("PaymentTypes",
     new Schema({
       image: String,
-      template: String,
+      moduleName: String,
       vars: String, // public paymentAccount vars
       active: Number,
       parentPaymentTypes: {
@@ -243,7 +249,7 @@ export function setDbSchema(dbLink) {
     })
   )
 
-  dbLink.model("PaymentTypesAccount",
+  dbLink.model("PaymentTypesPrivate",
     new Schema({
       vars: String, // private paymentAccount vars
       parentPaymentTypes: {
@@ -309,7 +315,10 @@ export function setDbSchema(dbLink) {
         type: Date,
         default: Date.now,
       },
-      status: Number,
+      status: {
+        type: Number,
+        default: 1,
+      },
       parentUsers: {
         type: SchemaTypes.ObjectId,
         ref: "Users",
@@ -322,6 +331,7 @@ export function setDbSchema(dbLink) {
       quantity: Number,
       name: String,
       price: Number,
+      currencyCode: String,
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",
@@ -337,7 +347,7 @@ export function setDbSchema(dbLink) {
     new Schema({
       name: String,
       details: String,
-      succed: Number,
+      succeed: Number,
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",
@@ -354,6 +364,7 @@ export function setDbSchema(dbLink) {
       name: String,
       delay_hours: Number,
       price: Number,
+      currencyCode: String,
       parentOrders: {
         type: SchemaTypes.ObjectId,
         ref: "Orders",
@@ -361,6 +372,22 @@ export function setDbSchema(dbLink) {
       parentShippingTypes: {
         type: SchemaTypes.ObjectId,
         ref: "ShippingTypes",
+      }
+    })
+  );
+
+  dbLink.model("OrderAddress",
+    new Schema({
+      fullname: String,
+      streetaddress: String,
+      city: String,
+      state: String,
+      zipcode: String,
+      country: String,
+      comments: String,
+      parentOrders: {
+        type: SchemaTypes.ObjectId,
+        ref: "Orders",
       }
     })
   );

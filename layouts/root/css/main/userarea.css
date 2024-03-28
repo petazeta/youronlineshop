@@ -13,3 +13,10 @@
 .langselectlist{
     margin: 0.5em;
 }
+.field-grid{
+	display:flex;
+	flex-flow:column;
+	align-items:center;
+	padding: .5em 1.5em;
+	gap: .8em;
+}

@@ -129,6 +129,9 @@ a.selected[data-placeholder]:empty::before{color:hsl(0, 0%, 10%)}
 [contenteditable=true]:focus{outline: 2px dashed lightgrey;}
 table{border-collapse:collapse;} /* It is needed for the table border to be 0 width */
 td,th{padding:0;vertical-align:top;} /* Padding 0 because this tables are used as boxes to locate the content. vertical-align:top because the content in the table should be as appear in the dom that is positioning from top to down */
+.edit-wrapper {
+  position: relative;
+}
 .space {
 	width: 100%;
   height: 2em;

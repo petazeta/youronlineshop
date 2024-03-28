@@ -3,6 +3,7 @@ import {selectorFromAttr} from "../../frontutils.mjs"
 import {checkValidData, validateEmail, checkDataChange} from "../../../shared/datainput.mjs"
 import {getTemplate} from '../layouts.mjs'
 import {dataView} from "../../displaydata.mjs"
+import {zip} from "../../../shared/utils.mjs"
 
 export async function userInfoView(myUser){
   const container = selectorFromAttr(await getTemplate("showuserinfo"), "data-container")
@@ -52,44 +53,56 @@ export async function userAddressView(myUser){
   getSiteText().getNextChild("not located").getNextChild("save").setContentView(selectorFromAttr(container, "data-saver"))
   selectorFromAttr(container, "data-saver").addEventListener("click", async ev=>{
     ev.preventDefault()
-    await saveUserData(myData, myForm, ["comments"])
+    await saveUserData(myData, myForm, "comments")
   })
   return container
 }
 
-export async function saveUserData(myNodes, myForm, excludeCheck=[], excludeSave=[]){
+// returns true if successful
+export async function saveUserData(myNodes, myForm, checkExcludeds, saveExcludeds){
   if (!Array.isArray(myNodes))
     myNodes = [myNodes]
+  if (!Array.isArray(checkExcludeds))
+    checkExcludeds = new Array(myNodes.length).fill(checkExcludeds)
+  if (!Array.isArray(saveExcludeds))
+    saveExcludeds = new Array(myNodes.length).fill(saveExcludeds)
   try {
     await innerSave()
   }
   catch(err){
+    if (err.cause != "human")
+      throw err
     const errorKey = JSON.parse(err.message).errorKey
     const errorField = errorKey == "emailaddress" ? "emailCharError" : "fieldCharError"
     document.createElement("alert-element").showMsg(myForm.elements[errorField].value, 5000)
     if (myForm.elements[errorKey])
       myForm.elements[errorKey].focus()
-    return err
+    return false
   }
   document.createElement("alert-element").showMsg(getSiteText().getNextChild("not located").getNextChild("saved").getLangData(), 3000)
+  return true
 
   // Helpers
   async function innerSave() {
-    for (const myNode of myNodes) {
+    for (let [myNode, checkExcluded, saveExcluded] of zip(myNodes, checkExcludeds, saveExcludeds)) {
+      if (!Array.isArray(checkExcluded))
+        checkExcluded = [checkExcluded]
+      if (!Array.isArray(saveExcluded))
+        saveExcluded = [saveExcluded]
       const myData = formToData(myNode.getParent().childTableKeys, myForm)
       const saveData = Object.entries(myData).reduce((acc, [key, val])=>{
-        if (!excludeSave.includes(key))
+        if (!saveExcluded.includes(key))
           acc[key] = val
         return acc
       }, {})
       const checkData = Object.entries(myData).reduce((acc, [key, val])=>{
-        if (!excludeCheck.includes(key))
+        if (!checkExcluded.includes(key))
           acc[key] = val
         return acc
       }, {})
       checkValidData(checkData)
       if (checkData.emailaddress && !validateEmail(checkData.emailaddress)) {
-        throw new Error(`{"errorKey" : "emailaddress"}`)
+        throw new Error(`{"errorKey" : "emailaddress"}`, {cause: "human"})
       }
       await updateProps(myNode, saveData)
     }
@@ -109,58 +122,64 @@ export async function saveUserData(myNodes, myForm, excludeCheck=[], excludeSave
       if (!checkDataChange(myNode, mydata))
         return
       await myNode.loadRequest("edit my props", {values: mydata})
-      /*
-      myNode.parent.childTableKeys
-      //.filter(propName=>propName!="id")
-      .forEach(propName=>myNode.props[propName] = mydata[propName])
-      */
     }
   }
 }
 
-// Helpers
-async function userDataInfoView_old(myData, fieldtype="input"){ // fieldtype: textnode
-  const container = selectorFromAttr(await getTemplate("userinfo"), "data-container")
-  selectorFromAttr(container, "data-userdata").appendChild(await userDataView(myData, fieldtype))
-  getSiteText().getNextChild("not located").getNextChild("save").setContentView(selectorFromAttr(container, "data-saver"))
-  selectorFromAttr(container, "data-saver").addEventListener("click", async ev=>{
+export async function changePwdView(myUser){
+  const container = selectorFromAttr(await getTemplate("changepwd"), "data-container")
+  const textBase = getSiteText().getNextChild("dashboard").getNextChild("changepwd")
+  textBase.getNextChild("titmsg").setContentView(selectorFromAttr(container, "data-titmsg"))
+
+  textBase.getNextChild("newpwd").setContentView(selectorFromAttr(selectorFromAttr(container, "data-password"), "data-label"))
+  textBase.getNextChild("newpwd").write(selectorFromAttr(container, "data-password"), undefined, "text", "placeholder")
+  textBase.getNextChild("repeatpwd").setContentView(selectorFromAttr(selectorFromAttr(container, "data-repeat-password"), "data-label"))
+  textBase.getNextChild("repeatpwd").write(selectorFromAttr(container, "data-repeat-password"), undefined, "text", "placeholder")
+  textBase.getNextChild("btsmt").setContentView(selectorFromAttr(container, "data-save"))
+
+  const logformTxt = getSiteText().getNextChild("logform")
+  logformTxt.getNextChild("pwdCharError").setContentView(selectorFromAttr(container, "data-pwdcharerror"))
+  textBase.getNextChild("pwdChangeOk").setContentView(selectorFromAttr(container, "data-pwdok"))
+  textBase.getNextChild("pwdChangeError").setContentView(selectorFromAttr(container, "data-pwd-error"))
+  textBase.getNextChild("pwdDoubleError").setContentView(selectorFromAttr(container, "data-pwd-double-error"))
+
+  selectorFromAttr(container, "data-form").addEventListener("submit", async function(ev){
     ev.preventDefault()
-    await saveUserData(myData, selectorFromAttr(container, "data-form"))
+    try {
+      checkValidData({new_password: this.elements.new_password.value})
+    }
+    catch(err){
+      if (err.cause!="human")
+        throw err
+      dataError(err, this)
+      return
+    }
+    // pwd and repaet pwd
+    if (this.elements.new_password.value!=this.elements.repeat_password.value) {
+      document.createElement("alert-element").showMsg(textBase.getNextChild("pwdDoubleError").getLangData(), 3000)
+      this.elements.new_password.focus()
+      return
+    }
+    myUser.updateMyPwd(this.elements.new_password.value)
+    .then( async ()=>{
+      document.createElement("alert-element").showMsg(textBase.getNextChild("pwdChangeOk").getLangData(), 3000)
+    })
+    .catch(error=>{
+      document.createElement("alert-element").showMsg(textBase.getNextChild("pwdChangeError").getLangData(), 3000)
+      throw error
+    })
   })
+
   return container
+
+  function dataError(err, formElement) {
+    const errorKey = JSON.parse(err.message).errorKey
+    if (errorKey=="new_password")
+      document.createElement("alert-element").showMsg(logformTxt.getNextChild("pwdCharError").getLangData(), 3000)
+    else if (errorKey=="repeat_password")
+      document.createElement("alert-element").showMsg(textBase.getNextChild("pwdDoubleCharError").getLangData(), 3000)
+    if (formElement.elements[errorKey])
+      formElement.elements[errorKey].focus()
+  }
 }
 
-
-/*
-  // It adds the fields for a user data container
-  if (!Array.isArray(myNodes))
-    myNodes = [myNodes]
-  if (!Array.isArray(myLabels))
-    myLabels = [myLables]
-  for (const [myNode, myLabel] of zip(myNodes, myLabels)) {
-    let labelsRoot = getSiteText().getNextChild(myNode.getParent().props.childTableName)
-    for (const propKey of myNode.getParent().childTableKeys) {
-      let fieldTpName = fieldtype=="textnode" ? "singlefield" : "singleinput"
-      let myContainer = (await getTemplate(fieldTpName)).querySelector("[data-container]")
-      let myLabelElm = selectorFromAttr(myContainer, "data-label")
-      if (labelsRoot)
-        labelsRoot.getNextChild(propKey).setContentView(myLabelElm)
-      else
-        selectorFromAttr(myLabelElm, "data-value").textContent = propKey
-      selectorFromAttr(myLabelElm, "data-value").attributes.for.value = propKey
-      let selector = fieldtype=="textnode" ? "data-text" : "data-input"
-      let myElm = selectorFromAttr(myContainer, selector)
-      if (myNode.props[propKey]!==undefined) {
-        if (fieldtype=="textnode")
-          myElm.textContent = myNode.props[propKey]
-        else
-          myElm.value = myNode.props[propKey]
-      }
-      if (fieldtype=="input") {
-        myElm.attributes.name.value = propKey
-        myElm.attributes.placeholder.value = propKey
-      }
-      selectorFromAttr(myForm, "data-userdata").appendChild(myContainer)
-    }
-  }
-*/

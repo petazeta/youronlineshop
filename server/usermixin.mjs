@@ -79,18 +79,18 @@ export const userModelMixin = Sup => class extends Sup {
     if (!checkLength(pwd, 4, 20)) {
       return new Error("pwdCharError")
     }
-    await this.dbUpdateMyProps({pwd: await crypt(pwd)})
+    await this.dbUpdateMyProps({pwd: await cryptPwd(pwd)})
     return true
   }
   static async dbUpdatePwd(username, pwd) {
     if (!checkLength(username, 4, 20)) {
       return new Error("userCharError");
     }
-    const myuser=new this();
-    const result=await this.linkerConstructor.dbGetAllChildren(myuser.parent, {username: username});
-    if (result.total!==1) return false;
-    myuser.props.id=result.data[0].props.id;
-    return await myuser.dbUpdateMyPwd(pwd);
+    const result = await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("TABLE_USERS"), {username: username})
+    if (result.total!==1)
+      return false
+    const myuser = new this({id: result.data[0].props.id})
+    return await myuser.dbUpdateMyPwd(pwd)
   }
   static checkLength(value, min, max){
     if (value.length >= min && value.length <= max) return true;

@@ -23,7 +23,8 @@ export function getRoot() {
 }
 // writing the text content at the correspondent view container
 function write(myNode, viewContainer, propKey, dataId="value", attrKey, volatile) {
-  getLangBranch(myNode).getChild().writeProp(selectorFromAttr(viewContainer, "data-" + dataId), propKey, attrKey) // selectorFromAttr allows viewContainer element to be in the attribute search while querySelector not
+  const myElm = selectorFromAttr(viewContainer, "data-" + dataId) || viewContainer
+  getLangBranch(myNode).getChild().writeProp(myElm, propKey, attrKey) // selectorFromAttr allows viewContainer element to be in the attribute search while querySelector not
   if (!volatile && !myNode._langReaction) {
     if (!myNode.setReaction) {
       Object.setPrototypeOf(myNode, observerMixin(myNode.constructor).prototype) // adding methods 

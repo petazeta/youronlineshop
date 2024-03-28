@@ -5,24 +5,17 @@
   <div style="display:table; margin: 1em auto;">
     <form>
       <select name="ordersStatus" class="" data-status>
-        <option value="new" data-new-status></option>
+        <option value="pending" data-pending-status></option>
         <option value="archived" data-archived-status></option>
       </select>
-      <div style="position:relative;" data-new>
+      <div style="position:relative;" data-pending>
         <div data-butedit class="btmiddleright"></div>
-        <input type="hidden" name="new" disabled data-has-target data-target-id="new-status" data-hidden data-value>
+        <input type="hidden" name="pending" disabled data-has-target data-target-id="pending-status" data-hidden data-value>
       </div>
       <div style="position:relative;" data-archived>
         <div data-butedit class="btmiddleright"></div>
         <input type="hidden" name="archived" disabled data-has-target data-target-id="archived-status" data-hidden data-value>
       </div>
-
-      <script>
-        const textContent=thisNode;
-        thisElement.onchange=function(){
-          textContent.setView(document.getElementById("ordersContainer"), "userorders", {filterorders: thisElement.options[thisElement.selectedIndex].value});
-        }
-      </script>
     </form>
   </div>
   <div style="margin-bottom:1em" data-orders></div>

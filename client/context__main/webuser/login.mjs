@@ -8,7 +8,6 @@ import {getTemplate} from "../layouts.mjs"
 import {userMenuView} from "./usermenu.mjs"
 import {rmBoxView} from "../../rmbox.mjs"
 import {Node} from '../nodes.mjs'
-import {myCart} from "../shop/cart.mjs"
 import {setActiveInSite, getActiveInSite} from '../activeingroup.mjs'
 
 const searchParamsKeys = ["login"]
@@ -55,13 +54,12 @@ function hideUserMenu(){
   document.getElementById("dashmenu").style.visibility = "hidden"
 }
 export async function loginFormView(afterLogin) {
-  const logTp = await getTemplate("loginform")
-  const logContainer = selectorFromAttr(logTp, "data-container")
+  const logContainer = selectorFromAttr(await getTemplate("loginform"), "data-container")
   const logformTxt = getSiteText().getNextChild("logform")
-  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(logContainer, "data-username-label"))
-  logformTxt.getNextChild("userName").write(selectorFromAttr(logContainer, "data-username-input"), undefined, undefined, "placeholder")
-  logformTxt.getNextChild("password").setContentView(selectorFromAttr(logContainer, "data-password-label"))
-  logformTxt.getNextChild("password").write(selectorFromAttr(logContainer, "data-password-input"), undefined, undefined, "placeholder")
+  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-username"), "data-label"))
+  logformTxt.getNextChild("userName").write(selectorFromAttr(logContainer, "data-username"), undefined, "text", "placeholder")
+  logformTxt.getNextChild("password").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-password"), "data-label"))
+  logformTxt.getNextChild("password").write(selectorFromAttr(logContainer, "data-password"), undefined, "text", "placeholder")
   logformTxt.getNextChild("rememberme").setContentView(selectorFromAttr(logContainer, "data-rememberme"))
   if (localStorage.getItem("user_name"))
     selectorFromAttr(selectorFromAttr(logContainer, "data-rememberme"), "data-checkbox").checked = true
@@ -82,19 +80,18 @@ export async function loginFormView(afterLogin) {
     event.preventDefault()
     await loginFormSubm(this, afterLogin)
   })
-  return logTp
+  return logContainer
 }
 
 async function newFormView(afterLogin) {
-  const logTp = await getTemplate("newform")
-  const logContainer = selectorFromAttr(logTp, "data-container")
+  const logContainer = selectorFromAttr(await getTemplate("newform"), "data-container")
   const logformTxt = getSiteText().getNextChild("logform")
-  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(logContainer, "data-username-label"))
-  logformTxt.getNextChild("userName").write(selectorFromAttr(logContainer, "data-username-input"), undefined, undefined, "placeholder")
-  logformTxt.getNextChild("password").setContentView(selectorFromAttr(logContainer, "data-password-label"))
-  logformTxt.getNextChild("password").write(selectorFromAttr(logContainer, "data-password-input"), undefined, undefined, "placeholder")
-  getSiteText().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").setContentView(selectorFromAttr(logContainer, "data-repeat-password-label"))
-  getSiteText().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").write(selectorFromAttr(logContainer, "data-repeat-password-input"), undefined, undefined, "placeholder")
+  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-username"), "data-label"))
+  logformTxt.getNextChild("userName").write(selectorFromAttr(logContainer, "data-username"), undefined, "text", "placeholder")
+  logformTxt.getNextChild("password").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-password"), "data-label"))
+  logformTxt.getNextChild("password").write(selectorFromAttr(logContainer, "data-password"), undefined, "text", "placeholder")
+  getSiteText().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-repeat-password"), "data-label"))
+  getSiteText().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").write(selectorFromAttr(logContainer, "data-repeat-password"), undefined, "text", "placeholder")
   logformTxt.getNextChild("signUp").setContentView(selectorFromAttr(logContainer, "data-sign-up-button"))
   logformTxt.getNextChild("userCharError").setContentView(selectorFromAttr(logContainer, "data-usercharerror"))
   logformTxt.getNextChild("pwdCharError").setContentView(selectorFromAttr(logContainer, "data-pwdcharerror"))
@@ -105,15 +102,16 @@ async function newFormView(afterLogin) {
     event.preventDefault()
     await signUpFormSubm(this, afterLogin)
   })
-  return logTp
+  return logContainer
 }
 
 async function loginFormSubm(formElement, afterLogin) {
-  const logFormTxt = getSiteText().getNextChild("logform")
   try {
     checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
   }
   catch(err){
+    if (err.cause!="human")
+      throw err
     dataError(err, formElement)
     return
   }
@@ -122,6 +120,7 @@ async function loginFormSubm(formElement, afterLogin) {
   const upass = formElement.elements.user_password.value
   webuser.login(uname, upass)
   .then(async ()=> {
+    const logFormTxt = getSiteText().getNextChild("logform")
     document.createElement("alert-element").showMsg(logFormTxt.getNextChild("loginOk").getLangData().replace("${user_name}", uname), 3000)
     if (storeChecked) {
       localStorage.setItem("user_name", uname)
@@ -144,14 +143,16 @@ async function loginFormSubm(formElement, afterLogin) {
   })
 }
 async function signUpFormSubm(formElement, afterLogin) {
-  const logFormTxt = getSiteText().getNextChild("logform")
   try {
     checkValidData({user_name: formElement.elements.user_name.value, user_password: formElement.elements.user_password.value})
   }
   catch(err){
+    if (err.cause!="human")
+      throw err
     dataError(err, formElement)
     return
   }
+  const logFormTxt = getSiteText().getNextChild("logform")
   // pwd and repaet pwd
   if (formElement.elements.user_password.value!=formElement.elements.repeat_password.value) {
     document.createElement("alert-element").showMsg(logFormTxt.getNextChild("pwdDoubleError").getLangData(), 3000)
@@ -252,9 +253,9 @@ async function loginDashboard(){
 function dataError(err, formElement) {
   const errorKey = JSON.parse(err.message).errorKey
   if (errorKey=="user_name")
-    document.createElement("alert-element").showMsg(getSiteText().getNextChild("logform").getNextChild("userCharError").getLangData(), 3000).showAlert()
+    document.createElement("alert-element").showMsg(getSiteText().getNextChild("logform").getNextChild("userCharError").getLangData(), 3000)
   else if (errorKey=="user_password")
-    document.createElement("alert-element").showMsg(getSiteText().getNextChild("logform").getNextChild("pwdCharError").getLangData(), 3000).showAlert()
+    document.createElement("alert-element").showMsg(getSiteText().getNextChild("logform").getNextChild("pwdCharError").getLangData(), 3000)
   if (formElement.elements[errorKey])
     formElement.elements[errorKey].focus()
 }

@@ -27,8 +27,8 @@
 	display:flex;
 	flex-flow:column;
 	align-items:center;
-	  padding-left: 1.5rem;
-	  padding-right: 1.5rem; 
+	padding-left: 1.5rem;
+	padding-right: 1.5rem; 
 }
 .new-account-button, .loginform div.sign-up-button{
 	margin-top: 1rem;
@@ -48,7 +48,8 @@
 	display: flex;
 	flex-flow: column;
 	align-items: center;
-	  margin-bottom: 0.5rem;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
 }
 .rememberme{
 	padding-right: 0.2em;

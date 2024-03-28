@@ -12,7 +12,9 @@ export const config = new Map([
   ["default-img", "noimg.png"], // "noimg.png"
   ["item-imgs-max", 3], // Num maxim the images per item
   ["request-url-path", "request.cmd"], // url paths should have ".cmd" extension" to make it apart from client source files requests
+  // --- dbmanager custom start
   ["layouts-url-path", "layouts.cmd?skin=dbmanager"], // layouts.cmd?skin=skinId&subskin=subskinId&style=styleId
+  // --- dbmanager custom end
   ["upload_imgs-url-path", "upload.cmd"],
   ["catalog-imgs-url-path", "catalogimages.cmd"],
   ["reports-url-path", "reports.cmd"],

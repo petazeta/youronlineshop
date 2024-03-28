@@ -10,7 +10,6 @@ import prepareTpScripts from './viewcomponent.mjs'
 import {selectorFromAttr} from '../frontutils.mjs'
 
 class Alert extends ProtoAlert {
-
   async showMsg(msg, timeout=2000, closeOnClick=true, tp="alertmsg" /* string or DOM */) {
     tp = await getTp(tp)
     const valueElement = selectorFromAttr(tp, "data-value")

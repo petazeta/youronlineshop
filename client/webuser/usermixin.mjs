@@ -1,4 +1,3 @@
-import sharedUserMixin from '../../shared/usermixin.mjs'
 import {authorizationToken, setAuthorization} from './authorization.mjs'
 import {unpacking} from '../../shared/utils.mjs';
 
@@ -47,14 +46,16 @@ const userMixin=Sup => class extends Sup {
     return unpacking(result)
   }
   static async updatePwd(username, password){
-    const result = await this.makeRequest("update user pwd", {"user_name": username, "user_password": password});
-    if (result!==true) throw new Error(result); //not successful
-    return result;
+    const result = await this.makeRequest("update user pwd", {"user_name": username, "user_password": password})
+    if (result!==true)
+      throw new Error(result) //not successful
+    return result
   }
   async updateMyPwd(password){
-    const result = await this.constructor.makeRequest("update my user pwd", {"user_password": password});
-    if (result!==true) throw new Error(result); //not successful
-    return result;
+    const result = await this.constructor.makeRequest("update user pwd", {"user_name": this.props.username, "user_password": password})
+    if (result!==true)
+      throw new Error(result) //not successful
+    return result
   }
   sendmail(to, subject, message, from){
     return this.constructor.makeRequest("send mail", {to: to, subject: subject, message: message, from: from});

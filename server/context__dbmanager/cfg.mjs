@@ -12,7 +12,7 @@ export const config = new Map([
   ["catalog-images-url-path", "catalogimages.cmd"],
   ["reports-url-path", "reports.cmd"],
   ["reports-file-maxsize", 50000],
-  ["reports-file-path", "./logs/dbmglogs.txt"],
+  ["reports-file-path", "./logs/logs.txt"],
   ["db-url", "mongodb://localhost/"],
   ["request-max-size", 1e6],
   ["timeZone", "Europe/Madrid"],

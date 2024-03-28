@@ -18,7 +18,7 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
     ev.preventDefault()
     const {userInfoView} = await import("./userdata.mjs")
     document.getElementById("centralcontent").innerHTML=""
-    document.getElementById("centralcontent").appendChild(await userInfoView())
+    document.getElementById("centralcontent").appendChild(await userInfoView(webuser))
     setActiveInSite(webuser)
   })
   menusContainer.appendChild(userInfoButton)
@@ -27,7 +27,7 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
   dashPath.getNextChild("btShowOrd").setContentView(showordersButton)
   showordersButton.addEventListener('click', async (ev)=>{
     ev.preventDefault()
-    const {ordersView} = await import("../shop/orders.mjs")
+    const {ordersView} = await import("../shop/orderlist.mjs")
     document.getElementById("centralcontent").innerHTML=""
     document.getElementById("centralcontent").appendChild(await ordersView())
     setActiveInSite(webuser)
@@ -38,9 +38,9 @@ export async function userMenuView(hideUserMenu) { // mejor userMenuView
   dashPath.getNextChild("btShowAdd").setContentView(showaddressButton)
   showaddressButton.addEventListener('click', async (ev)=>{
     ev.preventDefault()
-    const {addressView} = await import("./userdata.mjs")
+    const {userAddressView} = await import("./userdata.mjs")
     document.getElementById("centralcontent").innerHTML=""
-    document.getElementById("centralcontent").appendChild(await addressView())
+    document.getElementById("centralcontent").appendChild(await userAddressView(webuser))
     setActiveInSite(webuser)
   })
   menusContainer.appendChild(showaddressButton)

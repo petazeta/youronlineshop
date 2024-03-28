@@ -155,9 +155,9 @@ async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNu
     await myNode.getRelationship("items").pagination.init()
   }
   const pagination = myNode.getRelationship("items").pagination
-  if (pagination.totalParent.props.total>0 && !pagination.loaded || (pageNum !== undefined && pagination.pageNum!=pageNum)) {
+  if (pagination.totalParent.props.total>0 && !pagination._loaded || (pageNum !== undefined && pagination.pageNum!=pageNum)) {
     await pagination.loadPageItems("get my tree", {extraParents: getLangParent(myNode)}, pageNum)
-    pagination.loaded = true
+    pagination._loaded = true
   }
   const catalogTp = await getTemplate("catalog")
   const itemsContainer = selectorFromAttr(catalogTp, "data-container")
@@ -472,7 +472,7 @@ async function setItemCollectionEdition(myNode, myContainer){
 
     // Is it not last page?
     if (pagination.pageNum < pagination.indexes.length)  // Hay paginas posteriores
-      pagination.loaded = false // reload items in window
+      pagination._loaded = false // reload items in window
     else
       return // we could let the default behaveour to work
     // Is there a change in indexes because of the substraction?

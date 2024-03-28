@@ -69,8 +69,7 @@ export function startEdition(myNode, editElement, butsContainer, thisProperty, t
 
 async function changeProperty(myNode, thisProperty, myValue){
   console.log("change in content", myNode.props[thisProperty], myValue)
-  await myNode.request("edit my props", {values:{[thisProperty]: myValue}})
-  myNode.props[thisProperty] = myValue
+  await myNode.loadRequest("edit my props", {values:{[thisProperty]: myValue}})
   myNode.dispatchEvent("changeProperty", thisProperty)
   return myValue
 }
