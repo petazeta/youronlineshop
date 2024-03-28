@@ -1,10 +1,10 @@
 ![Your Online Shop](readme_images/logotype.png "Your Online Shop")
 
-=> [Demo Shop](https://youronlineshop.net/sample/)
+=> :boom: [Demo Shop](https://youronlineshop.net/sample/)
 
-Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
+:wrench: Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
 
-=> [Video Demo](https://youtu.be/PD_olszbGWA)
+=> :information_desk_person: [Video Demo](https://youtu.be/PD_olszbGWA)
 <table>
   <tr>
     <td>
@@ -15,21 +15,21 @@ Admins (usr/password) => webadmin/webadmin, productsadmin/productsadmin
 
 ## About
 
-This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb and it has no dependencies.
+This is a SPA (Single Page Application) for e-commerce. It is built in javascript with Node.js and Mongodb, and it has no dependencies.
 
 https://youronlineshop.net
 
-Awards:
+:trophy: Awards:
 
-<img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="120"/>
+<img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="130"/>
 
-## Main features:
+## :ok_hand: Main features:
 
-- Easy shop edition
-- Quick purchase process
-- Website pages (About, Contact, ect...)
-- Easy skins edition
-- [Multi shop](docs/multishopguide.md)
+- :thumbsup: Easy shop edition
+- :runner: Quick purchase process
+- :heart: Website pages (About, Contact, ect...)
+- :sparkles: Easy skins edition
+- :fire: [Multi shop](docs/multishopguide.md)
 
 ## Installation
 
@@ -78,4 +78,6 @@ There is a preinstalled extension to manage the database records, check prompt m
 
 ## More
 
-Consider giving us a star.
+[More info](docs/marketing.md)
+
+Please consider giving us a star :star:!!!
