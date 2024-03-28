@@ -21,7 +21,7 @@ https://youronlineshop.net
 
 Awards:
 
-<img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="100"/>
+<img src="readme_images/oss-community-choice-white.svg" alt="Community choice" width="120"/>
 
 ## Main features:
 
@@ -45,7 +45,7 @@ npm start
 
 ## Support
 
-It works at Node v.16 and mongodb v.4. We can no garantee it would work in different version.
+It works at Node v.16 and mongodb v.4. We can no guarantee it would work on a different version.
 
 For any issues please write to: melchorherrera@gmail.com. We will gladly appreciate any bug report.
 
