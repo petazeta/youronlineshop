@@ -56,13 +56,13 @@ function hideUserMenu(){
 export async function loginFormView(afterLogin) {
   const logContainer = selectorFromAttr(await getTemplate("loginform"), "data-container")
   const logformTxt = getSiteText().getNextChild("logform")
-  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-username"), "data-label"))
+  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(logContainer, "data-username data-label"))
   logformTxt.getNextChild("userName").write(selectorFromAttr(logContainer, "data-username"), undefined, "text", "placeholder")
-  logformTxt.getNextChild("password").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-password"), "data-label"))
+  logformTxt.getNextChild("password").setContentView(selectorFromAttr(logContainer, "data-password data-label"))
   logformTxt.getNextChild("password").write(selectorFromAttr(logContainer, "data-password"), undefined, "text", "placeholder")
   logformTxt.getNextChild("rememberme").setContentView(selectorFromAttr(logContainer, "data-rememberme"))
   if (localStorage.getItem("user_name"))
-    selectorFromAttr(selectorFromAttr(logContainer, "data-rememberme"), "data-checkbox").checked = true
+    selectorFromAttr(logContainer, "data-rememberme data-checkbox").checked = true
   logformTxt.getNextChild("login").setContentView(selectorFromAttr(logContainer, "data-login-button"))
   logformTxt.getNextChild("userCharError").setContentView(selectorFromAttr(logContainer, "data-usercharerror"))
   logformTxt.getNextChild("pwdCharError").setContentView(selectorFromAttr(logContainer, "data-pwdcharerror"))
@@ -70,7 +70,7 @@ export async function loginFormView(afterLogin) {
   logformTxt.getNextChild("userError").setContentView(selectorFromAttr(logContainer, "data-usererror"))
   logformTxt.getNextChild("pwdError").setContentView(selectorFromAttr(logContainer, "data-pwderror"))
   logformTxt.getNextChild("newuserbt").setContentView(selectorFromAttr(logContainer, "data-newuser"))
-  selectorFromAttr(selectorFromAttr(logContainer, "data-newuser"), "data-btn").addEventListener("click", async (ev)=>{
+  selectorFromAttr(logContainer, "data-newuser data-btn").addEventListener("click", async (ev)=>{
     ev.preventDefault()
     const loginFrame = document.getElementById("login-card")
     selectorFromAttr(loginFrame, "data-card-body").innerHTML = ""
@@ -86,11 +86,11 @@ export async function loginFormView(afterLogin) {
 async function newFormView(afterLogin) {
   const logContainer = selectorFromAttr(await getTemplate("newform"), "data-container")
   const logformTxt = getSiteText().getNextChild("logform")
-  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-username"), "data-label"))
+  logformTxt.getNextChild("userName").setContentView(selectorFromAttr(logContainer, "data-username data-label"))
   logformTxt.getNextChild("userName").write(selectorFromAttr(logContainer, "data-username"), undefined, "text", "placeholder")
-  logformTxt.getNextChild("password").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-password"), "data-label"))
+  logformTxt.getNextChild("password").setContentView(selectorFromAttr(logContainer, "data-password data-label"))
   logformTxt.getNextChild("password").write(selectorFromAttr(logContainer, "data-password"), undefined, "text", "placeholder")
-  getSiteText().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").setContentView(selectorFromAttr(selectorFromAttr(logContainer, "data-repeat-password"), "data-label"))
+  getSiteText().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").setContentView(selectorFromAttr(logContainer, "data-repeat-password data-label"))
   getSiteText().getNextChild("dashboard").getNextChild("changepwd").getNextChild("repeatpwd").write(selectorFromAttr(logContainer, "data-repeat-password"), undefined, "text", "placeholder")
   logformTxt.getNextChild("signUp").setContentView(selectorFromAttr(logContainer, "data-sign-up-button"))
   logformTxt.getNextChild("userCharError").setContentView(selectorFromAttr(logContainer, "data-usercharerror"))

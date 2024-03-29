@@ -58,26 +58,26 @@ async function displayOrderItems(order, orderContainer){
 async function displayOrderShipping(myNode, orderContainer){
   const myContainer = selectorFromAttr(orderContainer, "data-shipping")
   myNode.firstElement = myContainer
-  myNode.writeProp(selectorFromAttr(selectorFromAttr(myContainer, "data-name"), "data-value"), "name")
+  myNode.writeProp(selectorFromAttr(myContainer, "data-name data-value"), "name")
   if (hasNodeWritePermission()) {
     const {setEdition} = await import("../admin/edition.mjs")
     await setEdition(myNode, selectorFromAttr(myContainer, "data-name"), "name")
-    visibleOnMouseOver(selectorFromAttr(selectorFromAttr(myContainer, "data-name"), "data-butedit"), selectorFromAttr(myContainer, "data-name")) // on mouse over edition button visibility
+    visibleOnMouseOver(selectorFromAttr(myContainer, "data-name data-butedit"), selectorFromAttr(myContainer, "data-name")) // on mouse over edition button visibility
   }
-  myNode.writeProp(selectorFromAttr(selectorFromAttr(myContainer, "data-delay"), "data-value"), "delay_hours")
+  myNode.writeProp(selectorFromAttr(myContainer, "data-delay data-value"), "delay_hours")
   if (hasNodeWritePermission()) {
     const {setEdition} = await import("../admin/edition.mjs")
     await setEdition(myNode, selectorFromAttr(myContainer, "data-delay"), "delay_hours")
-    visibleOnMouseOver(selectorFromAttr(selectorFromAttr(myContainer, "data-delay"), "data-butedit"), selectorFromAttr(myContainer, "data-delay")) // on mouse over edition button visibility
+    visibleOnMouseOver(selectorFromAttr(myContainer, "data-delay data-butedit"), selectorFromAttr(myContainer, "data-delay")) // on mouse over edition button visibility
   }
-  selectorFromAttr(selectorFromAttr(myContainer, "data-delay"), "data-hours").textContent = getSiteText().getNextChild("hours").getLangData()
+  selectorFromAttr(myContainer, "data-delay data-hours").textContent = getSiteText().getNextChild("hours").getLangData()
   // *** In case items currencyCode is different to general currencyCode the total amount would be wrong
-  selectorFromAttr(selectorFromAttr(myContainer, "data-price"), "data-value").textContent = intToMoney(myNode.props["price"], myNode.props["currencyCode"])
+  selectorFromAttr(myContainer, "data-price data-value").textContent = intToMoney(myNode.props["price"], myNode.props["currencyCode"])
   if (hasNodeWritePermission()) {
     const {setEdition} = await import("../admin/edition.mjs")
     await setEdition(myNode, selectorFromAttr(myContainer, "data-price"), "price", undefined, undefined, undefined, undefined, moneyToInt)
-    visibleOnMouseOver(selectorFromAttr(selectorFromAttr(myContainer, "data-price"), "data-butedit"), selectorFromAttr(myContainer, "data-price")) // on mouse over edition button visibility
-    selectorFromAttr(selectorFromAttr(myContainer, "data-price"), "data-value").addEventListener("blur", function (ev) {
+    visibleOnMouseOver(selectorFromAttr(myContainer, "data-price data-butedit"), selectorFromAttr(myContainer, "data-price")) // on mouse over edition button visibility
+    selectorFromAttr(myContainer, "data-price data-value").addEventListener("blur", function (ev) {
       this.textContent = intToMoney(moneyToInt(this.textContent), myNode["currencyCode"])
     })
   }
@@ -96,13 +96,13 @@ async function orderPaymentView(myNode){
   for (const propKey of parentNode.childTableKeys) {
     if (!selectorFromAttr(myContainer, "data-" + propKey))
       continue
-    myNode.writeProp(selectorFromAttr(selectorFromAttr(myContainer, "data-" + propKey), "data-value"), propKey)
+    myNode.writeProp(selectorFromAttr(myContainer, `data-${propKey} data-value`), propKey)
     if (hasNodeWritePermission()) {
       const {setEdition} = await import("../admin/edition.mjs")
       await setEdition(myNode, selectorFromAttr(myContainer, "data-" + propKey), propKey)
-      visibleOnMouseOver(selectorFromAttr(selectorFromAttr(myContainer, "data-" + propKey), "data-butedit"), selectorFromAttr(myContainer, "data-" + propKey)) // on mouse over edition button visibility
+      visibleOnMouseOver(selectorFromAttr(myContainer, `data-${propKey} data-butedit`), selectorFromAttr(myContainer, "data-" + propKey)) // on mouse over edition button visibility
     }
-    selectorFromAttr(selectorFromAttr(myContainer, "data-" + propKey), "data-value").setAttribute("title", propKey)
+    selectorFromAttr(myContainer, `data-${propKey} data-value`).setAttribute("title", propKey)
   }
   return myContainer
 }

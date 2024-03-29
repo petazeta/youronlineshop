@@ -1,24 +1,26 @@
 // Introduces the context value uploadImagesUrlPath
-import loadImgBase from '../../../catalog/admin/loadimg.mjs'
+import {loadImg} from '../../../catalog/admin/loadimg.mjs'
 import {resizeImage} from '../../../catalog/admin/resizeimage.mjs'
-import addition from '../../admin/addition.mjs'
+import {performAddition} from '../../../admin/addition.mjs'
 import {config} from '../../cfg.mjs'
 import {getRoot as getSiteText} from '../../sitecontent.mjs'
 import {selectorFromAttr} from '../../../frontutils.mjs'
+import {getTemplate} from '../../layouts.mjs'
 
-function loadImg(imageName, newImageSmall, newImageBig){
-  loadImgBase(config.get("upload-imgs-url-path"), imageName, newImageSmall, newImageBig)
-}
-
-export function setButEditImgView(myItem, viewElement){
-  const myButton=selectorFromAttr(viewElement, "data-button")
-  myButton.addEventListener('click', async event => {
+export async function setImgEdition(myItem, viewContainer){
+  const editBut = selectorFromAttr(await getTemplate("buteditimage"), "data-but")
+  const butEditContainer = selectorFromAttr(viewContainer, "data-butedit")
+  butEditContainer.appendChild(editBut)
+  //new this.constructor.nodeConstructor().appendView(butEditView, "buteditimage", {setView: viewElement=>setImageEditButton(this, viewElement)})
+  // falta lo de actualizar cuando termine la edicion ????
+  editBut.addEventListener('click', async event => {
     event.preventDefault()
-    document.body.appedChild(await loadImgView())
+    document.body.appedChild(await loadImgView(myItem))
   })
 }
 
 export async function loadImgView(myItem){
+  // esto se sigue haciendo asi? fijarse en delete
   const loadImgView = await document.createElement("alert-element").showAlert("loadimg")
   const containerView = selectorFromAttr(loadImgView, "data-container")
   selectorFromAttr(containerView, "data-close").addEventListener("click", (ev)=>{
@@ -38,54 +40,62 @@ export async function loadImgView(myItem){
     });
     */
   })
-  const loadImageText=getSiteText().getNextChild("loadImg")
+  const loadImageText = getSiteText().getNextChild("loadImg")
   loadImageText.getNextChild("headNote").setContentView(selectorFromAttr(containerView, "data-head-note"))
-  loadImageText.getNextChild("file").setContentView(selectorFromAttr(viewElement, "data-file"))
+  loadImageText.getNextChild("file").setContentView(selectorFromAttr(containerView, "data-file"))
 
-  const imagesContainer=selectorFromAttr(viewElement, "data-items-images")
-  const parentNode=myItem.getRelationship("itemsimages")
-  
-  parentNode.setChildrenView(imagesContainer, "loadimglisting") // ojo! aqui estamos reemplazando .ChildTp de la antigua "itemthumbnail" con la nueva plantilla loadimglist
-  const myForm=selectorFromAttr(viewElement, "data-id", "load-img-form")
-  const fileData=myForm.elements.fileData
+  const imagesContainer = selectorFromAttr(containerView, "data-items-images")
+  const parentNode = myItem.getRelationship("itemsimages")
+  // setChildrenView parece anticuado
+  parentNode.setChildrenView(imagesContainer, "loadimglistimg") // ojo! aqui estamos reemplazando .ChildTp de la antigua "itemthumbnail" con la nueva plantilla loadimglist
+  const myForm = selectorFromAttr(containerView, "data-form")
+  const fileData = myForm.elements.fileData
   fileData.addEventListener("change", async ()=>{
-    if (parentNode.children.length>=config.get("item-imgs-max") {
-      new AlertMessage("Please DELETE an image first").showAlert() // *** Atención, este mensaje debería tomarse de la base de datos
+    if (parentNode.children.length>=config.get("item-imgs-max")) {
+      // *** anticuado
+      document.createElement("alert-element").showMsg("Please DELETE an image first") // *** Atención, este mensaje debería tomarse de la base de datos
       return
     }
-    fileData.disabled=true //Waiting
-    fileData.previousElementSibling.style.visibility="visible"
-    const newImageSmall=await resizeImage(fileData.files[0], 200)
-    const newImageBig=await resizeImage(fileData.files[0], 520)
+    fileData.disabled = true //Waiting
+    fileData.previousElementSibling.style.visibility = "visible"
+    const newImageSmall = await resizeImage(fileData.files[0], 200)
+    const newImageBig = await resizeImage(fileData.files[0], 520)
     // const childNode = parentNode.children.length ? parentNode.children[parentNode.children.length-1] : parentNode.createInstanceChild();
     // antes pasabamos {imgBlob: newImageSmall} a addition para que lo pasara a loadimglistimg
     // de esta forma no lo teniamos que actualizar, pero ahora seria mejor actualizarlo
-    const newNode=await addition(undefined, undefined, parentNode) // falta lo de sort_order ??
-    newNode.props.imagename=`${newNode.props.id}.png` // anular esto
+    const newNode = parentNode.createInstanceChild()
+    await performAddition(newNode)
+    //const newNode = await addition(undefined, undefined, parentNode) // falta lo de sort_order ??
+    newNode.props.imagename = `${newNode.props.id}.png` // anular esto
     await newNode.request("edit my props", {values:{imagename: newNode.props.imagename}})
-    const loadResult = await loadImg(newNode.props.imagename, newImageSmall, newImageBig)
+    const loadResult = await myLoadImg(newNode.props.imagename, newImageSmall, newImageBig)
     newNode.dispatchEvent("loadImage")
-    fileData.disabled=false //Waiting
-    fileData.previousElementSibling.style.visibility="hidden"
+    fileData.disabled = false //Waiting
+    fileData.previousElementSibling.style.visibility = "hidden"
     myForm.reset()
     // Aqui faltaría actualizar la vista de la imagen en el item.html o itemlarge.html
   })
+  return loadImgView
 }
 
 // it is used by loadimglistimg.html
 // At loadimglistimg.html imgBlog has value when it is loaded from a brand new loaded image
 export async function setLoadImgListImgView(itemImage, viewElement, imgBlob){
   // imgBlob sera antes, ahora ya no recibe esto, hay que revisarlo para que lo pueda actualizar correctamente
-  const myImageView=selectorFromAttr(viewElement, "data-id", "value")
+  const myImageView = selectorFromAttr(viewElement, "data-value")
   if (imgBlob) {
     const objectURL = URL.createObjectURL(imgBlob)
     myImageView.src = objectURL
   }
   else {
-    const myImageName=itemImage.props.imagename || config.get("default-img")
-    myImageView.src=pathJoin(config.get("catalog-imgs-url-path"), 'small', myImageName)
+    const myImageName = itemImage.props.imagename || config.get("default-img")
+    myImageView.src = pathJoin(config.get("catalog-imgs-url-path"), 'small', myImageName)
   }
-  const butsWrapper=selectorFromAttr(viewElement, "data-id", "admnbuts")
-  new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butdelete", {delNode: itemImage})
-  new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butchpos", {chNode: itemImage, position: "vertical"})
+  const butsWrapper = selectorFromAttr(viewElement, "data-id", "admnbuts")
+  // new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butdelete", {delNode: itemImage})
+  // new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butchpos", {chNode: itemImage, position: "vertical"})
+}
+
+function myLoadImg(imageName, newImageSmall, newImageBig){
+  loadImg(config.get("upload-imgs-url-path"), imageName, newImageSmall, newImageBig)
 }

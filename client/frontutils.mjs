@@ -1,5 +1,5 @@
 
-export function getDomElementFromChild(myNode, virtualParent) { // deprecated
+export function getDomElementFromChild_old(myNode, virtualParent) { // deprecated
   const myParent = virtualParent || myNode.parent
   if (!myParent || !myParent.childContainer) return false;
   // This method only works well in wrapped templates
@@ -59,17 +59,27 @@ export function switchVisibility_old(velement) { // use classList.toggle instead
   velement.style.visibility=="hidden" ? velement.style.visibility="visible" : velement.style.visibility="hidden";
 }
 
-// it includes elm and its children nodes in the query
+// it includes elm and its children nodes in the query. attValue is optional
 export function selectorFromAttr(elm, attName, attValue){
-  if (attValue===undefined) {
-    // nodeType==11 => template content, hasAttribute not applied
-    if (elm.nodeType!=11 && elm.hasAttribute(attName))
-      return elm
-    return elm.querySelector(`[${attName}]`)
-  }
-  if (elm.nodeType!=11 && elm.hasAttribute(attName) && elm.getAttribute(attName)===attValue)
+  const separator = " " // accepting multi queries like "data-admin data-value"
+  if (attName.includes(separator)) {
+    for (const myAttName of attName.split(" ")) {
+      elm = innerSelect(elm, myAttName)
+    }
     return elm
-  return elm.querySelector(`[${attName}=${attValue}]`)
+  }
+  return  innerSelect(elm, attName, attValue)
+  function innerSelect(elm, attName, attValue) {
+    if (attValue===undefined) {
+      // nodeType==11 => template content, hasAttribute not applied
+      if (elm.nodeType!=11 && elm.hasAttribute(attName))
+        return elm
+      return elm.querySelector(`[${attName}]`)
+    }
+    if (elm.nodeType!=11 && elm.hasAttribute(attName) && elm.getAttribute(attName)===attValue)
+      return elm
+    return elm.querySelector(`[${attName}=${attValue}]`)
+  }
 }
 
 // Deprecated. Can be used to set the size of an element based in the backround svg image. But we dont need it anymore, style width is setled at server css service.

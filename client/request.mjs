@@ -181,13 +181,13 @@ export function makeRequest(action, params, url) {
   })
   .then(resultTxt => {
     // This is allowing a null result, it doesnt throw errur if resultTxt==null
-    let result=null
+    let result = null
     if (resultTxt) {
       try {
-        result=JSON.parse(resultTxt)
+        result = JSON.parse(resultTxt)
       }
       catch(e){//To send errors from server in case the error catching methods at backend fail
-        throw new Error(e.message + "Action: " + action + ". Error: Response error: "+ resultTxt)
+        throw new Error(`${e.message}. Action: ${action}. Error: Response error: ${resultTxt}`)
       }
     }
     return result
@@ -201,9 +201,11 @@ export function makeRequest(action, params, url) {
 }
 export function prepareRequest(myNode, action, parameters) {
   let reducFuncs = reqReduc.get(action) || reqReduc.get("default")
-  if (!Array.isArray(reducFuncs)) reducFuncs = [reducFuncs] // we can get nodeRedFunc alone or [nodeRedFunc, paramRedFunc], we set it to an array anyway
+  if (!Array.isArray(reducFuncs))
+    reducFuncs = [reducFuncs] // we can get nodeRedFunc alone or [nodeRedFunc, paramRedFunc], we set it to an array anyway
   const [nodeRedFunc, paramRedFunc] = reducFuncs
-  if (parameters && paramRedFunc) paramRedFunc(parameters) // no need to re-asign because we act to the object properties
+  if (parameters && paramRedFunc)
+    paramRedFunc(parameters) // no need to re-asign because we act to the object properties
   return [nodeRedFunc(myNode), parameters]
 }
 export function request(myNode, action, params, url) {

@@ -131,9 +131,9 @@ export async function changePwdView(myUser){
   const textBase = getSiteText().getNextChild("dashboard").getNextChild("changepwd")
   textBase.getNextChild("titmsg").setContentView(selectorFromAttr(container, "data-titmsg"))
 
-  textBase.getNextChild("newpwd").setContentView(selectorFromAttr(selectorFromAttr(container, "data-password"), "data-label"))
+  textBase.getNextChild("newpwd").setContentView(selectorFromAttr(container, "data-password data-label"))
   textBase.getNextChild("newpwd").write(selectorFromAttr(container, "data-password"), undefined, "text", "placeholder")
-  textBase.getNextChild("repeatpwd").setContentView(selectorFromAttr(selectorFromAttr(container, "data-repeat-password"), "data-label"))
+  textBase.getNextChild("repeatpwd").setContentView(selectorFromAttr(container, "data-repeat-password data-label"))
   textBase.getNextChild("repeatpwd").write(selectorFromAttr(container, "data-repeat-password"), undefined, "text", "placeholder")
   textBase.getNextChild("btsmt").setContentView(selectorFromAttr(container, "data-save"))
 

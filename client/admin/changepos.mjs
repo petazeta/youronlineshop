@@ -1,4 +1,4 @@
-import {getDomElementFromChild, swapElement} from '../frontutils.mjs'
+import {swapElement} from '../frontutils.mjs'
 // it assumes node instance var firstElement is settled as the view node element
 export async function performChangePos(currentNode, increment) {
   const skey = currentNode.parent.getSysKey('sort_order')

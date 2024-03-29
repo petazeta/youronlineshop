@@ -35,11 +35,11 @@ async function singlePwdView(myUser, container){
   const textBase = getSiteText().getNextChild("dashboard").getNextChild("changepwd")
   const logformTxt = getSiteText().getNextChild("logform")
   textBase.getNextChild("titmsg").setContentView(selectorFromAttr(container, "data-titmsg"))
-  myUser.writeProp(selectorFromAttr(selectorFromAttr(container, "data-titmsg"), "data-username"), "username")
+  myUser.writeProp(selectorFromAttr(container, "data-titmsg data-username"), "username")
 
-  textBase.getNextChild("newpwd").setContentView(selectorFromAttr(selectorFromAttr(container, "data-password"), "data-label"))
+  textBase.getNextChild("newpwd").setContentView(selectorFromAttr(container, "data-password data-label"))
   textBase.getNextChild("newpwd").write(selectorFromAttr(container, "data-password"), undefined, "text", "placeholder")
-  textBase.getNextChild("repeatpwd").setContentView(selectorFromAttr(selectorFromAttr(container, "data-repeat-password"), "data-label"))
+  textBase.getNextChild("repeatpwd").setContentView(selectorFromAttr(container, "data-repeat-password data-label"))
   textBase.getNextChild("repeatpwd").write(selectorFromAttr(container, "data-repeat-password"), undefined, "text", "placeholder")
   textBase.getNextChild("btsmt").setContentView(selectorFromAttr(container, "data-save"))
 

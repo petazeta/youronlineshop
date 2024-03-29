@@ -34,9 +34,9 @@ https://youronlineshop.net
 ## :zap: Installation
 
 1. Get the source files.
-2. Install node and mongodb when necesary.
-3. Edit the mongodb url when cecesary at: server/context__main/cfg.mjs.
-4. Open your terminal at the source top folder and type:
+2. Install node and mongodb when needed.
+3. Edit mongodb url when needed (server/context__main/cfg.mjs).
+4. Open your terminal at source top folder and type:
 ```
 npm install 
 npm start
@@ -45,7 +45,7 @@ npm start
 
 ## :ghost: Support
 
-It works at Node v.16 and mongodb v.4. We can no guarantee it would work on a different version.
+It works on Node v.16 and mongodb v.4. We can no guarantee it would work on a different version.
 
 For any issues please write to: melchorherrera@gmail.com. We will gladly appreciate any bug report.
 
@@ -58,26 +58,28 @@ After editing some content press Intro or click outside of the editable area to 
 
 To edit some features from the checkout process you should log in with systemadmin user and make an order as if you were a customer. Once you get to the checkout step you should be able to edit checkout options.
 
-Some other configuration can be done by editing some files at cfg folders.
+Some other configuration can be done by editing some cfg files.
 
 
 ## :green_book: Documentation
 
-[Check Documentation](docs/overview.md)
+=> [Check Documentation](docs/overview.md)
 
 
 ## :art: Skins
 
-Y.O.S. system have layouts files that can be modified. You can find these files at layouts folder.
+Y.O.S. system have layouts files that can be modified (HTML and CSS). You can find these files at layouts folder.
 
 
 ## :bulb: Extensions
 
-There is a preinstalled extension to manage the database records, check prompt messages.
+There is a preinstalled extension to manage database content directly, check prompt messages.
 
 
 ## :family: More
 
-[Y.O.S. Main adventages](docs/marketing.md)
+=> [Y.O.S. main adventages and more](docs/marketing.md)
 
-Please consider giving us a star :star:!!!
+<code style="color : gold">
+  Please consider giving us a star :star: !!!
+</code>

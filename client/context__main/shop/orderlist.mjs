@@ -49,7 +49,7 @@ async function displayOrders(ordersParent, containerView, pageNum){
     ordersParent.pageContainer = containerView
   const tableTp = await getTemplate("userorderstable")
   const headFieldsContainer = selectorFromAttr(tableTp, "data-head").cloneNode()
-  const headField = selectorFromAttr(selectorFromAttr(tableTp, "data-head"), "data-cell")
+  const headField = selectorFromAttr(tableTp, "data-head data-cell")
   const thisTable = selectorFromAttr(tableTp, "data-table").cloneNode()
   ordersParent.childContainer = thisTable
   const ordersTxt = getSiteText().getNextChild("dashboard").getNextChild("showOrd")

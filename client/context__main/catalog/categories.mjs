@@ -552,7 +552,7 @@ async function setImageView(myNode, viewContainer, size){
   const imageView = selectorFromAttr(viewContainer, "data-value")
   const imageName = imageNode?.props.imagename || config.get("default-img")
   imageView.src = config.get("catalog-imgs-url-path") + `?size=${size}&image=${imageName}`
-  await setImageEdition(myNode, viewContainer)
+  await setImgEditBut(myNode, viewContainer)
 }
 function setCloseBtn(btn, item){
   btn.addEventListener("click", async (ev)=>{
@@ -562,11 +562,13 @@ function setCloseBtn(btn, item){
   })
 }
 // *** falta
-async function setImageEdition(myItem, viewContainer){
+async function setImgEditBut(myItem, viewContainer){
   if (!hasWritePermission())
     return
+  const {setImgEdition} = await import("./admin/loadimg.mjs")
   const butEditView = selectorFromAttr(viewContainer, "data-butedit")
   visibleOnMouseOver(butEditView, viewContainer)
+  setImgEdition(myItem, viewContainer)
   //new this.constructor.nodeConstructor().appendView(butEditView, "buteditimage", {setView: viewElement=>setImageEditButton(this, viewElement)})
   // falta lo de actualizar cuando termine la edicion ????
 }

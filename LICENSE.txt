@@ -1,6 +1,6 @@
 License for Your Online Shop
 
-Copyright 2015-2021 by Alberto Melchor <melchorherrera@gmail.com>
+Copyright 2015-2024 by Alberto Melchor <melchorherrera@gmail.com>
 
 All Rights Reserved
 
@@ -10,9 +10,9 @@ provided that the above copyright notice appear in all copies and that
 both that copyright notice and this permission notice appear in
 supporting documentation.
 
-NEIL HODGSON DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+ALBERTO MELCHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
 SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS, IN NO EVENT SHALL NEIL HODGSON BE LIABLE FOR ANY
+AND FITNESS, IN NO EVENT SHALL ALBERTO MELCHOR BE LIABLE FOR ANY
 SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
 WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
