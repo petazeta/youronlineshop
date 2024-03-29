@@ -80,6 +80,4 @@ There is a preinstalled extension to manage database content directly, check pro
 
 => [Y.O.S. main adventages and more](docs/marketing.md)
 
-<code style="color : gold">
   Please consider giving us a star :star: !!!
-</code>
