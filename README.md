@@ -36,7 +36,7 @@ https://youronlineshop.net
 1. Get the source files.
 2. Install node and mongodb when needed.
 3. Edit mongodb url when needed (server/context__main/cfg.mjs).
-4. Open your terminal at source top folder and type:
+4. Open your terminal at the source top folder and type:
 ```
 npm install 
 npm start
@@ -80,4 +80,4 @@ There is a preinstalled extension to manage database content directly, check pro
 
 => [Y.O.S. main adventages and more](docs/marketing.md)
 
-  Please consider giving us a star :star: !!!
+Please consider giving us a star :star: !!!

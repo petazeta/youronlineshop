@@ -3,7 +3,7 @@
   "description": "server for your online shop",
   "main": "server/serverindex.mjs",
   "scripts": {
-    "start": "node server/serverindex.mjs",
+    "start": "node --no-warnings server/serverindex.mjs",
     "test": "node --inspect server/serverindex.mjs"
   },
   "author": "alberto melchor herrera",
