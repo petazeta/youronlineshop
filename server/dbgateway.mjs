@@ -141,7 +141,7 @@ export class SiteDbGateway {
       if (offset) query=query.skip(offset);
     }
     if (count) {
-      const result = await query.count().exec(); // count(true) => with limit
+      const result = await query.countDocuments().exec() // count(true) => with limit
       return {total: result, data: null};
     }
     const result = (await query.exec()).map(mo=>mo.toJSON());
