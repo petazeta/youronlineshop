@@ -1,11 +1,13 @@
 // Introduces the context value uploadImagesUrlPath
-import {loadImg} from '../../../catalog/admin/loadimg.mjs'
+import {loadImg as loadImgBase} from '../../../catalog/admin/loadimg.mjs'
 import {resizeImage} from '../../../catalog/admin/resizeimage.mjs'
 import {performAddition} from '../../../admin/addition.mjs'
 import {config} from '../../cfg.mjs'
 import {getRoot as getSiteText} from '../../sitecontent.mjs'
 import {selectorFromAttr} from '../../../frontutils.mjs'
 import {getTemplate} from '../../layouts.mjs'
+import {rmBoxView} from "../../../rmbox.mjs"
+import {pathJoin} from '../../../urlutils.mjs'
 
 export async function setImgEdition(myItem, viewContainer){
   const editBut = selectorFromAttr(await getTemplate("buteditimage"), "data-but")
@@ -15,17 +17,22 @@ export async function setImgEdition(myItem, viewContainer){
   // falta lo de actualizar cuando termine la edicion ????
   editBut.addEventListener('click', async event => {
     event.preventDefault()
-    document.body.appedChild(await loadImgView(myItem))
+    const myFrame = selectorFromAttr(await getTemplate("loadimg"), "data-card")
+    selectorFromAttr(myFrame, "data-card-body").appendChild(await loadImgView(myItem))
+    document.body.appendChild(myFrame)
   })
 }
 
 export async function loadImgView(myItem){
   // esto se sigue haciendo asi? fijarse en delete
-  const loadImgView = await document.createElement("alert-element").showAlert("loadimg")
-  const containerView = selectorFromAttr(loadImgView, "data-container")
+  //const loadImgView = await document.createElement("alert-element").showAlert("loadimg")
+  //const loadImgView = await rmBoxView(getTemplate, "loadimg")
+  const containerView = selectorFromAttr(await getTemplate("loadimg"), "data-container")
+
   selectorFromAttr(containerView, "data-close").addEventListener("click", (ev)=>{
     ev.preventDefault()
-    loadImgView.hideAlert()
+    document.getElementById("loadimg-card").parentElement.removeChild(document.getElementById("loadimg-card"))
+
     /*
     // Esto era para actualizar la imagen, hacerlo ahora de otra mandera
 
@@ -47,7 +54,14 @@ export async function loadImgView(myItem){
   const imagesContainer = selectorFromAttr(containerView, "data-items-images")
   const parentNode = myItem.getRelationship("itemsimages")
   // setChildrenView parece anticuado
-  parentNode.setChildrenView(imagesContainer, "loadimglistimg") // ojo! aqui estamos reemplazando .ChildTp de la antigua "itemthumbnail" con la nueva plantilla loadimglist
+  //parentNode.setChildrenView(imagesContainer, "loadimglistimg") // ojo! aqui estamos reemplazando .ChildTp de la antigua "itemthumbnail" con la nueva plantilla loadimglist
+  
+  const table = selectorFromAttr(await getTemplate("imgloadlist"), "data-container")
+  parentNode.childContainer = table
+  const sampleRow = selectorFromAttr(table, "data-row")
+  for (const myImage of parentNode.children) {
+    imagesContainer.appendChild(await listView(myImage, sampleRow))
+  }
   const myForm = selectorFromAttr(containerView, "data-form")
   const fileData = myForm.elements.fileData
   fileData.addEventListener("change", async ()=>{
@@ -64,38 +78,46 @@ export async function loadImgView(myItem){
     // antes pasabamos {imgBlob: newImageSmall} a addition para que lo pasara a loadimglistimg
     // de esta forma no lo teniamos que actualizar, pero ahora seria mejor actualizarlo
     const newNode = parentNode.createInstanceChild()
-    await performAddition(newNode)
+    
     //const newNode = await addition(undefined, undefined, parentNode) // falta lo de sort_order ??
-    newNode.props.imagename = `${newNode.props.id}.png` // anular esto
+    await performAddition(newNode)
+    newNode.props.imagename = `${newNode.props.id}.png` // anular esto ??
     await newNode.request("edit my props", {values:{imagename: newNode.props.imagename}})
-    const loadResult = await myLoadImg(newNode.props.imagename, newImageSmall, newImageBig)
+    const loadResult = await loadImg(newNode.props.imagename, newImageSmall, newImageBig)
     newNode.dispatchEvent("loadImage")
     fileData.disabled = false //Waiting
     fileData.previousElementSibling.style.visibility = "hidden"
     myForm.reset()
     // Aqui faltaría actualizar la vista de la imagen en el item.html o itemlarge.html
   })
-  return loadImgView
+  return containerView
 }
 
 // it is used by loadimglistimg.html
 // At loadimglistimg.html imgBlog has value when it is loaded from a brand new loaded image
-export async function setLoadImgListImgView(itemImage, viewElement, imgBlob){
+export async function listView(itemImage, rowSample){
+  const container = rowSample.cloneNode(true)
+  itemImage.firstElement = container
   // imgBlob sera antes, ahora ya no recibe esto, hay que revisarlo para que lo pueda actualizar correctamente
-  const myImageView = selectorFromAttr(viewElement, "data-value")
+  const myImageView = selectorFromAttr(container, "data-value")
+  /*
   if (imgBlob) {
     const objectURL = URL.createObjectURL(imgBlob)
     myImageView.src = objectURL
   }
-  else {
-    const myImageName = itemImage.props.imagename || config.get("default-img")
-    myImageView.src = pathJoin(config.get("catalog-imgs-url-path"), 'small', myImageName)
-  }
-  const butsWrapper = selectorFromAttr(viewElement, "data-id", "admnbuts")
+  */
+  const myImageName = itemImage.props.imagename || config.get("default-img")
+  myImageView.src = pathJoin(config.get("catalog-imgs-url-path"), 'small', myImageName)
+  const butsWrapper = selectorFromAttr(container, "data-admnbuts")
   // new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butdelete", {delNode: itemImage})
   // new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butchpos", {chNode: itemImage, position: "vertical"})
+  const {setDeletionButton} = await import("../../admin/deletion.mjs")
+  await setDeletionButton(itemImage, butsWrapper)
+  const {setChangePosButton} = await import("../../admin/changepos.mjs")
+  await setChangePosButton(itemImage, butsWrapper)
+  return container
 }
 
-function myLoadImg(imageName, newImageSmall, newImageBig){
-  loadImg(config.get("upload-imgs-url-path"), imageName, newImageSmall, newImageBig)
+function loadImg(imageName, newImageSmall, newImageBig){
+  loadImgBase(config.get("upload-imgs-url-path"), imageName, newImageSmall, newImageBig)
 }

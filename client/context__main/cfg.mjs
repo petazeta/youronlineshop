@@ -13,7 +13,7 @@ export const config = new Map([
   ["item-imgs-max", 3], // Num maxim the images per item
   ["request-url-path", "request.cmd"], // url paths should have ".cmd" extension" to make it apart from client source files requests
   ["layouts-url-path", "layouts.cmd"], // layouts.cmd?skin=skinId&subskin=subskinId&style=styleId
-  ["upload_imgs-url-path", "upload.cmd"],
+  ["upload-imgs-url-path", "upload.cmd"],
   ["catalog-imgs-url-path", "catalogimages.cmd"],
   ["reports-url-path", "reports.cmd"],
 ])

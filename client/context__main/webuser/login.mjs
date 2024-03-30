@@ -40,8 +40,8 @@ export async function setLogIcon(logContainer) {
       showUserMenu()
       return
     }
-    const loginFrame = await getTemplate("loginframe")
-    selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView(), selectorFromAttr(loginFrame, "data-container")))
+    const loginFrame = selectorFromAttr(await getTemplate("loginframe"), "data-container")
+    selectorFromAttr(loginFrame, "data-card-body").appendChild(await rmBoxView(getTemplate, await loginFormView(), loginFrame))
     document.body.appendChild(loginFrame)
   }
 }

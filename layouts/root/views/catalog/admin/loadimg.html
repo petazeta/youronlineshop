@@ -11,14 +11,19 @@ myNode => itemNode
 Aparecen la lista y debaj el boton de selecionar archivo.
 Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se supera el limite de imágenes.
 
+
+
 -->
-<div class="alert dialogbox" data-container>
-  <div class="bttopinsiderightinside">
-    <button type="button" class="closeimage minibtn transp" style="margin-right:10px; margin-top: 6px;" data-close>
+<div class="login-frame" id="loadimg-card" data-card>
+  <div data-card-body></div>
+</div>
+<div class="alert dialogbox rmbox" data-container>
+  <div class="bt-wrapper">
+    <button type="button" class="closeimage minibtn transp" data-close>
       <div class="closeimage"></div>
     </button>
   </div>
-  <form enctype="multipart/form-data" id="loadimg" data-form>
+  <form enctype="multipart/form-data" id="loadimg" data-form >
     <div style="display:flex; flex-flow: column; gap: 1em;">
       <div data-head-note>
         <span style="position:relative;">
@@ -26,7 +31,7 @@ Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se super
           <h3 style="margin: 0.2em" data-value></h3>
         </span>
       </div>
-      <table style="align-self: center;" data-items-images></table>
+      <div style="align-self: center;" data-items-images></div>
       <div style="margin-bottom: 0.2em">
         <div class="form-group">
           <div style="position:relative;" data-file>

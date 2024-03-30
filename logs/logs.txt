@@ -485,3 +485,62 @@ new file
 2024-03-29 13:23:10 Server start
 2024-03-29 13:26:01 Server start
 2024-03-29 13:26:01 Server start
+2024-03-29 13:36:34 log in: productsadmin
+2024-03-29 13:37:15 Server start
+2024-03-29 13:37:15 Server start
+2024-03-29 13:37:38 Server start
+2024-03-29 13:37:38 Server start
+2024-03-29 15:01:31 Server start
+2024-03-29 15:01:31 Server start
+2024-03-29 15:14:03 localhost:6002 5ccfbd : cart item operation
+2024-03-29 15:14:06 localhost:6002 5ccfbd : cart item operation
+2024-03-29 15:15:26 localhost:6002 5cf20s : cart item operation
+2024-03-29 15:15:31 localhost:6002 5cf20s : cart item operation
+2024-03-29 15:31:26 log in: productsadmin
+2024-03-29 15:32:09 log in: productsadmin
+2024-03-29 15:35:34 Server start
+2024-03-29 15:35:35 Server start
+2024-03-29 15:35:52 log in: productsadmin
+2024-03-29 15:37:39 localhost:6002 5dns91 : cart item operation
+2024-03-29 15:37:49 log in: productsadmin
+2024-03-29 15:40:09 log in: productsadmin
+2024-03-30 09:55:02 Server start
+2024-03-30 09:55:02 Server start
+2024-03-30 09:55:49 log in: productsadmin
+2024-03-30 10:07:49 log in: productsadmin
+2024-03-30 10:08:40 log in: productsadmin
+2024-03-30 11:11:36 log in: productsadmin
+2024-03-30 11:30:07 Server start
+2024-03-30 11:31:36 log in: ordersadmin
+2024-03-30 11:31:48 log in: productsadmin
+2024-03-30 11:40:04 Server start
+2024-03-30 11:44:38 log in: productsadmin
+2024-03-30 12:16:55 localhost:6002 7kl17f : cart item operation
+2024-03-30 12:17:09 log in: productsadmin
+2024-03-30 12:17:46 log in: productsadmin
+2024-03-30 15:20:23 Server start
+2024-03-30 15:20:35 log in: productsadmin
+2024-03-30 15:26:12 log in: productsadmin
+2024-03-30 15:28:49 log in: productsadmin
+2024-03-30 15:28:55 localhost:6002 error trying to access file: /undefined
+2024-03-30 15:30:49 log in: productsadmin
+2024-03-30 15:30:56 localhost:6002 error trying to access file: /undefined
+2024-03-30 15:31:02 localhost:6002 error trying to access file: client/context__main/catalog/admin/changepos.mjs
+2024-03-30 15:32:02 log in: productsadmin
+2024-03-30 15:32:12 localhost:6002 error trying to access file: /undefined
+2024-03-30 15:32:49 log in: productsadmin
+2024-03-30 15:32:57 localhost:6002 error trying to access file: /undefined
+2024-03-30 15:37:53 log in: productsadmin
+2024-03-30 15:38:02 localhost:6002 error trying to access file: /undefined
+2024-03-30 15:38:17 Server start
+2024-03-30 15:38:24 localhost:6002 error trying to access file: /undefined
+2024-03-30 15:39:36 log in: productsadmin
+2024-03-30 19:24:55 Server start
+2024-03-30 19:26:24 Server start
+2024-03-30 19:33:55 log in: productsadmin
+2024-03-30 19:34:41 Server start
+2024-03-30 19:35:27 Server start
+2024-03-30 19:35:42 log in: productsadmin
+2024-03-30 19:46:36 Server start
+2024-03-30 19:49:08 Server start
+2024-03-30 19:50:58 log in: productsadmin

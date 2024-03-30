@@ -19,21 +19,21 @@ export function setCartIcon(iconContainer,  cartBoxContainer) {
   })
 }
 export async function cartBoxView(cartBoxContainer) {
-  const cbTp = await getTemplate("cartbox")
-  selectorFromAttr(cbTp, "data-close").addEventListener("click",  (ev)=>{
+  const myContainer = selectorFromAttr(await getTemplate("cartbox"), "data-container")
+  selectorFromAttr(myContainer, "data-close").addEventListener("click",  (ev)=>{
     ev.preventDefault()
     hideCartBox(cartBoxContainer)
   })
-  const cartTitView = selectorFromAttr(cbTp, "data-tit")
+  const cartTitView = selectorFromAttr(myContainer, "data-tit")
   getSiteText().getNextChild("cartbox").getNextChild("crtbxtt").setContentView(cartTitView)
   selectorFromAttr(cartTitView, "data-value").addEventListener("click",  (event)=>{
     event.preventDefault()
     hideCartBox(cartBoxContainer)
   })
-  await displayItemList(cbTp)
-  setCkOutBtn(selectorFromAttr(cbTp, "data-checkoutcontainer"), cartBoxContainer)
-  setCkOutDiscardBtn(selectorFromAttr(cbTp, "data-discardcontainer"), cartBoxContainer)
-  return cbTp
+  await displayItemList(myContainer)
+  setCkOutBtn(selectorFromAttr(myContainer, "data-checkoutcontainer"), cartBoxContainer)
+  setCkOutDiscardBtn(selectorFromAttr(myContainer, "data-discardcontainer"), cartBoxContainer)
+  return myContainer
 }
 export function addItem(item, quantity) {
   myCart.addItem(item, quantity)

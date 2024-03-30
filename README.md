@@ -15,9 +15,9 @@
 
 ## :cactus: About
 
-This is a SPA (Single Page Application) for e-commerce. It is built in javascript with Node.js and Mongodb, and it has no dependencies.
+This is the source code of an application for building an e-commerce which can be modified from the browser to become a custom e-commerce or online store. It is built in javascript with Node.js and Mongodb, and it has no dependencies.
 
-https://youronlineshop.net
+=> :globe_with_meridians: https://youronlineshop.net
 
 :trophy: Awards:
 
@@ -73,7 +73,7 @@ Y.O.S. system have layouts files that can be modified (HTML and CSS). You can fi
 
 ## :bulb: Extensions
 
-There is a preinstalled extension to manage database content directly, check prompt messages.
+There is already one extension you can use. It is for managing database directly. For installing it follow the instructions at: "server/_context_dbmanager/README.txt".
 
 
 ## :family: More

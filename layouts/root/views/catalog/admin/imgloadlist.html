@@ -1,0 +1,43 @@
+<!--
+  thisParams.imgBlob
+
+  antes se usaba imgBlob porque lo recibía al hacer el cambio y no se actualizaba desde el servidor si no
+  directamente del cliente cuando se añadía este nodo, pero es mejor que ahora se actualice directamente del servidor
+  sin hacer este apaño
+  ---
+
+  ;
+-->
+<table data-container>
+  <tr data-row>
+    <td style="padding: 0.4em;">
+      <img style="padding-right: 1em;" data-value>
+      <script>
+        /*
+        if (thisParams.imgBlob) {
+          const objectURL = URL.createObjectURL(thisParams.imgBlob);
+          thisElement.src = objectURL;
+        }
+        else {
+          const {default: config} = await import(pathJoin('./', CLIENT_CONFIG_PATH, 'main.mjs'));
+          const myImage=thisNode.props.imagename || config.defaultImg;
+          thisElement.src=pathJoin(config.catalogImagesUrlPath, 'small', myImage);
+        }
+        */
+      </script>
+    </td>
+    <td class="containerbuttons" style="position:relative; vertical-align: middle;">
+      <div class="admnbtsgrid" data-admnbuts></div>
+      <script>
+        /*
+        new thisNode.constructor.nodeConstructor().appendView(thisElement, "butdelete", {delNode: thisNode});
+        new thisNode.constructor.nodeConstructor().appendView(thisElement, "butchpos", {chNode: thisNode, position: "vertical"});
+        */
+      </script>
+    </td>
+  </tr>
+</table>
+<script>
+  //const {setLoadImgListImgView} = await import(pathJoin("./client", thisAppFolder, "catalog/admin/loadimg.mjs")
+  //setLoadImgListImgView(thisNode, thisElement, thisParams.imgBlob) // imgBlob deprecated
+</script>

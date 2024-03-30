@@ -43,7 +43,7 @@ export function parseContent(request, nameToPath) {
   }
 
     // Iterative function. It uses entriesBoundary, contents, nameToPath
-  parseContentCore(entriesBoundary, contents, nameToPath) {
+  function parseContentCore(entriesBoundary, contents, nameToPath) {
     return async function * parseContentCoreIter(source) {
       let currentElement;
       for await (const chunk of source) {
@@ -138,7 +138,7 @@ export function parseContent(request, nameToPath) {
     }
   }
   // It uses entriesBoundary
-  fixBoundaryInBetween(entriesBoundary) {
+  function fixBoundaryInBetween(entriesBoundary) {
     return async function * fixBoundaryInBetweenIter(source) {
       let lastChunk
       for await (const chunk of source) {

@@ -26,26 +26,7 @@ import {isAllowedToRead, isAllowedToInsert, isAllowedToModify} from "../safety.m
 export async function respond(request, response) {
   //const [hostname, port] = request.headers.host.split(":")
   const enviroment = enviroments.get(request.headers.host)
-
-  const nodesConstructorsMixin = Sup => class extends Sup {
-    static get nodeConstructor(){
-      return Node
-    }
-    static get linkerConstructor(){
-      return Linker
-    }
-    static get userConstructor(){
-      return User // never needed at the moment
-    }
-  }
-  const nodeSettingsMixin=Sup => class extends Sup {
-    static get dbGateway(){
-      return enviroment.get("db-gateway")
-    }
-  }
-  const Node = nodeSettingsMixin(nodesConstructorsMixin(ProtoNode))
-  const Linker = nodeSettingsMixin(nodesConstructorsMixin(ProtoLinker))
-  const User = userModelMixin(userMixin(Node))
+  const [Node, Linker, User] = setConstructors(enviroment.get("db-gateway"))
 
   const responses = new Responses(Node, Linker, User, isAllowedToRead, isAllowedToInsert, isAllowedToModify, (data)=>makeReport(data, request), enviroment.get("db-import-path"))
   
@@ -75,4 +56,28 @@ export async function respond(request, response) {
 
 function toJSON(myObj){
   return (myObj && JSON.stringify(myObj)) || ""
+}
+
+export function setConstructors(dbGateway) {
+  const nodesConstructorsMixin = Sup => class extends Sup {
+    static get nodeConstructor(){
+      return Node
+    }
+    static get linkerConstructor(){
+      return Linker
+    }
+    static get userConstructor(){
+      return User // never needed at the moment
+    }
+  }
+  const nodeSettingsMixin=Sup => class extends Sup {
+    static get dbGateway(){
+      return dbGateway
+    }
+  }
+  const Node = nodeSettingsMixin(nodesConstructorsMixin(ProtoNode))
+  const Linker = nodeSettingsMixin(nodesConstructorsMixin(ProtoLinker))
+  const User = userModelMixin(userMixin(Node))
+
+  return [Node, Linker, User]
 }

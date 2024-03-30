@@ -1,14 +1,16 @@
-import authentication from "./authentication.mjs"
+import {authenticate} from "./authentication.mjs"
 import {basename as pathBaseName, join as pathJoin} from "path"
 import {parseContent} from "../multipartreceiver.mjs"
-import {isAllowedToUpdateCatalogImage} from "./safety.mjs"
-import {errorResponse} from "../errors.mjs"
+import {isAllowedToUpdateCatalogImage} from "../safety.mjs"
+import {errorResponse} from "../errors.mjs" // ??? why it is not wided use
 import {enviroments} from "./serverstart.mjs"
+import {setConstructors} from "./respond.mjs"
 
 export async function uploadImages(request, response){
   try {
     const enviroment = enviroments.get(request.headers.host)
-    const user = await authentication(request.headers)
+    const [Node, Linker, User] = setConstructors(enviroment.get("db-gateway"))
+    const user = await authenticate(User, request.headers)
     if (!isAllowedToUpdateCatalogImage(user))
       throw new Error("user not allowed to upload image");
     const elements = await parseContent(request, nameToPath);
@@ -16,7 +18,7 @@ export async function uploadImages(request, response){
     function nameToPath(name, fileName) {
       const imageName = pathBaseName(fileName)
       const imageSizeFolderName = name.includes("big") ? "big" : "small"
-      const imagePath = pathJoin(enviroment.get("imges-path"), imageSizeFolderName, imageName)
+      const imagePath = pathJoin(enviroment.get("images-path"), imageSizeFolderName, imageName)
       return imagePath
     }
     response.write("true")
