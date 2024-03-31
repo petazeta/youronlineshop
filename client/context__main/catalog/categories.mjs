@@ -157,6 +157,12 @@ async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNu
   const pagination = myNode.getRelationship("items").pagination
   if (pagination.totalParent.props.total>0 && !pagination._loaded || (pageNum !== undefined && pagination.pageNum!=pageNum)) {
     await pagination.loadPageItems("get my tree", {extraParents: getLangParent(myNode)}, pageNum)
+    // *** there is a problem with extra parents, it doesn't load if no extra parent for not related tables
+    // that is way we make this here, however we should also check not to maybe go for "get my tree cause" it can get
+    // item->itemorders children, what is a waste, so maybe go for get my children
+    for (const item of myNode.getRelationship("items").children) {
+      await item.getRelationship("itemsimages").loadRequest("get my children")
+    }
     pagination._loaded = true
   }
   const catalogTp = await getTemplate("catalog")
@@ -550,8 +556,10 @@ async function setLargeImageView(myItem, viewContainer){
 async function setImageView(myNode, viewContainer, size){
   const imageNode = myNode.getRelationship("itemsimages").getChild()
   const imageView = selectorFromAttr(viewContainer, "data-value")
-  const imageName = imageNode?.props.imagename || config.get("default-img")
-  imageView.src = config.get("catalog-imgs-url-path") + `?size=${size}&image=${imageName}`
+  if (!imageNode?.props.imagename)
+    imageView.src = config.get("catalog-imgs-url-path") + `?size=${size}&image=${config.get("default-img")}&source=sample`
+  else 
+    imageView.src = config.get("catalog-imgs-url-path") + `?size=${size}&image=${imageNode.props.imagename}`
   await setImgEditBut(myNode, viewContainer)
 }
 function setCloseBtn(btn, item){
@@ -614,15 +622,17 @@ export function setThumbnail(imageNode){
   const myButtonContainer=selectorFromAttr(viewElement, "data-id", "thumbnail-container")
   const thumbnailImage=selectorFromAttr(viewElement, "data-id", "value")
 
-  const myImageName = imageNode.props.imagename || config.get("default-img")
-  thumbnailImage.src = pathJoin(config.get("catalog-imgs-url-path"), 'small', myImageName)
+  if (!imageNode?.props.imagename)
+    thumbnailImage.src = config.get("catalog-imgs-url-path") + `?size=small&image=${config.get("default-img")}&source=sample`
+  else 
+    thumbnailImage.src = config.get("catalog-imgs-url-path") + `?size=small&image=${imageNode.props.imagename}`
 
   visibleOnMouseOver(myButton, myButtonContainer)
 
   myButton.addEventListener("click", event => {
     event.preventDefault()
     // we have saved in the item a reference to the DOM large image when setLargeImageView method was called
-    imageNode.parent.partner.largeImageView.src=thumbnailImage.src.replace("small", "big")
+    imageNode.parent.partner.largeImageView.src = thumbnailImage.src.replace("small", "big")
   })
 }
 

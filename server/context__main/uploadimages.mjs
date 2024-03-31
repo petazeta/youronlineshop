@@ -1,3 +1,5 @@
+// *** sería ideal que se crearan las carpetas de las imagenes si no existen, de esta manera se evita tener esta estructura en el codigo fuente
+
 import {authenticate} from "./authentication.mjs"
 import {basename as pathBaseName, join as pathJoin} from "path"
 import {parseContent} from "../multipartreceiver.mjs"

@@ -9,6 +9,9 @@ export const config = new Map([
   ["newordermailcustomer-on", false], // mail to customer
   ["currency-code", "USD"], // 'USD', 'EUR' ...
   ["currency-locale", null], // 'en-IN', 'en-US'  null => let for browser config
+  // Esto de default-img en cliente es tonteria, mejor enviar un código al servidor que pueda reconocer y pasar esta configuracion de la imagen al servidor
+  // ademas no guardar esta imagen con el resto si no aparte, parece que la mejor opcion es en loader/images
+  // mejor que esto sea un codigo que el servidor reconozca
   ["default-img", "noimg.png"], // "noimg.png"
   ["item-imgs-max", 3], // Num maxim the images per item
   ["request-url-path", "request.cmd"], // url paths should have ".cmd" extension" to make it apart from client source files requests

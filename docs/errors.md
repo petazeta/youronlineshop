@@ -15,3 +15,5 @@ There is an error protocol understood for client for when an error is sent from 
     if (err instanceof SyntaxError || err instanceof ReferenceError || err instanceof TypeError) throw err;
   });
 */
+
+Ahora se esta haciendo esto con la propiedad error.cause, cuando el error se genera por cuestiones propias del programa lo ponemos en valor "human", asi se distingue de errores de programación.

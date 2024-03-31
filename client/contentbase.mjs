@@ -14,7 +14,7 @@ export class Content{
     //if no root means that table domelements doesn't exist or has no elements
     if (!this.treeRoot)
       throw new Error('Database Content Error'); // esto convendría explicarlo
-    await this.loadInitContent(this.treeRoot, getLangParent(this.treeRoot))
+    await this.loadInitContent(this.treeRoot, getLangParent(this.treeRoot)) // *** getLangParent doesent work
     this.setReactions(webuser, getCurrentLanguage, getLangParent)
     return this.treeRoot
   }

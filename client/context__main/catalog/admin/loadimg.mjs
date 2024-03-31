@@ -7,7 +7,7 @@ import {getRoot as getSiteText} from '../../sitecontent.mjs'
 import {selectorFromAttr} from '../../../frontutils.mjs'
 import {getTemplate} from '../../layouts.mjs'
 import {rmBoxView} from "../../../rmbox.mjs"
-import {pathJoin} from '../../../urlutils.mjs'
+//import {pathJoin} from '../../../urlutils.mjs'
 
 export async function setImgEdition(myItem, viewContainer){
   const editBut = selectorFromAttr(await getTemplate("buteditimage"), "data-but")
@@ -59,6 +59,7 @@ export async function loadImgView(myItem){
   const table = selectorFromAttr(await getTemplate("imgloadlist"), "data-container")
   parentNode.childContainer = table
   const sampleRow = selectorFromAttr(table, "data-row")
+  console.log("IMAGES", parentNode)
   for (const myImage of parentNode.children) {
     imagesContainer.appendChild(await listView(myImage, sampleRow))
   }
@@ -95,26 +96,28 @@ export async function loadImgView(myItem){
 
 // it is used by loadimglistimg.html
 // At loadimglistimg.html imgBlog has value when it is loaded from a brand new loaded image
-export async function listView(itemImage, rowSample){
+export async function listView(myNode, rowSample){ // myNode. imageNode
   const container = rowSample.cloneNode(true)
-  itemImage.firstElement = container
+  myNode.firstElement = container
   // imgBlob sera antes, ahora ya no recibe esto, hay que revisarlo para que lo pueda actualizar correctamente
-  const myImageView = selectorFromAttr(container, "data-value")
+  const imageView = selectorFromAttr(container, "data-value")
   /*
   if (imgBlob) {
     const objectURL = URL.createObjectURL(imgBlob)
-    myImageView.src = objectURL
+    imageView.src = objectURL
   }
   */
-  const myImageName = itemImage.props.imagename || config.get("default-img")
-  myImageView.src = pathJoin(config.get("catalog-imgs-url-path"), 'small', myImageName)
+  if (!myNode?.props.imagename)
+    imageView.src = config.get("catalog-imgs-url-path") + `?size=small&image=${config.get("default-img")}&source=sample`
+  else 
+    imageView.src = config.get("catalog-imgs-url-path") + `?size=small&image=${myNode.props.imagename}`
   const butsWrapper = selectorFromAttr(container, "data-admnbuts")
-  // new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butdelete", {delNode: itemImage})
-  // new itemImage.constructor.nodeConstructor().appendView(butsWrapper, "butchpos", {chNode: itemImage, position: "vertical"})
+  // new myNode.constructor.nodeConstructor().appendView(butsWrapper, "butdelete", {delNode: myNode})
+  // new myNode.constructor.nodeConstructor().appendView(butsWrapper, "butchpos", {chNode: myNode, position: "vertical"})
   const {setDeletionButton} = await import("../../admin/deletion.mjs")
-  await setDeletionButton(itemImage, butsWrapper)
+  await setDeletionButton(myNode, butsWrapper)
   const {setChangePosButton} = await import("../../admin/changepos.mjs")
-  await setChangePosButton(itemImage, butsWrapper)
+  await setChangePosButton(myNode, butsWrapper)
   return container
 }
 

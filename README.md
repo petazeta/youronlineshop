@@ -17,7 +17,7 @@
 
 This is the source code of an application for building an e-commerce which can be modified from the browser to become a custom e-commerce or online store. It is built in javascript with Node.js and Mongodb, and it has no dependencies.
 
-=> :globe_with_meridians: https://youronlineshop.net
+:globe_with_meridians: https://youronlineshop.net
 
 :trophy: Awards:
 
@@ -34,8 +34,8 @@ This is the source code of an application for building an e-commerce which can b
 ## :zap: Installation
 
 1. Get the source files.
-2. Install node and mongodb when needed.
-3. Edit mongodb url when needed (server/context__main/cfg.mjs).
+2. Install Node and Mongodb when needed.
+3. Edit Mongodb url when needed (server/context__main/cfg.mjs).
 4. Open your terminal at the source top folder and type:
 ```
 npm install 
@@ -43,9 +43,11 @@ npm start
 ```
 5. The server is running now. Continue in browser as prompt tells.
 
+Note: [Master](https://github.com/petazeta/youronlineshop/tree/master) branch contains the latest implementation, [development](https://github.com/petazeta/youronlineshop/tree/development) branch contains last changes, and [Last stable release](https://github.com/petazeta/youronlineshop/releases/tag/v5.0) is the most suitable for using in production.
+
 ## :ghost: Support
 
-It works on Node v.16 and mongodb v.4. We can no guarantee it would work on a different version.
+It works on Node v.16 and Mongodb v.4. We can no guarantee it would work on a different version.
 
 For any issues please write to: melchorherrera@gmail.com. We will gladly appreciate any bug report.
 
@@ -73,7 +75,7 @@ Y.O.S. system have layouts files that can be modified (HTML and CSS). You can fi
 
 ## :bulb: Extensions
 
-There is already one extension you can use. It is for managing database directly. For installing it follow the instructions at: "server/_context_dbmanager/README.txt".
+There is already one extension you can use. It is for directly managing database. For executing it follow the instructions at: "server/_context__dbmanager/README.txt".
 
 
 ## :family: More
