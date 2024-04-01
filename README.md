@@ -43,7 +43,7 @@ npm start
 ```
 5. The server is running now. Continue in browser as prompt tells.
 
-Note: [Master](https://github.com/petazeta/youronlineshop/tree/master) branch contains the latest implementation, [development](https://github.com/petazeta/youronlineshop/tree/development) branch contains last changes, and [Last stable release](https://github.com/petazeta/youronlineshop/releases/tag/v5.0) is the most suitable for using in production.
+**Note:** [Master branch](https://github.com/petazeta/youronlineshop/tree/master) contains the latest implementation, [development branch](https://github.com/petazeta/youronlineshop/tree/development) contains last changes, and [Last stable release](https://github.com/petazeta/youronlineshop/releases/tag/v5.0) is the most suitable for using in production.
 
 ## :ghost: Support
 

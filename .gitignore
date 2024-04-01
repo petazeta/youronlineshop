@@ -1,4 +1,6 @@
-logs
-catalog-images
-node_modules
-backup
+#logs
+#catalog-images
+#node_modules
+#backup
+#context__*
+#!context__main

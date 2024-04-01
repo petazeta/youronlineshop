@@ -59,7 +59,6 @@ export async function loadImgView(myItem){
   const table = selectorFromAttr(await getTemplate("imgloadlist"), "data-container")
   parentNode.childContainer = table
   const sampleRow = selectorFromAttr(table, "data-row")
-  console.log("IMAGES", parentNode)
   for (const myImage of parentNode.children) {
     imagesContainer.appendChild(await listView(myImage, sampleRow))
   }

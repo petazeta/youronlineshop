@@ -157,9 +157,8 @@ async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNu
   const pagination = myNode.getRelationship("items").pagination
   if (pagination.totalParent.props.total>0 && !pagination._loaded || (pageNum !== undefined && pagination.pageNum!=pageNum)) {
     await pagination.loadPageItems("get my tree", {extraParents: getLangParent(myNode)}, pageNum)
-    // *** there is a problem with extra parents, it doesn't load if no extra parent for not related tables
-    // that is way we make this here, however we should also check not to maybe go for "get my tree cause" it can get
-    // item->itemorders children, what is a waste, so maybe go for get my children
+    // *** no comprendo totalmente las consecuecias del parametro extraParents, parece que toma los nodos del raiz que son autorelated y los que son del lenguage
+    // pero no los otros de otras tablas
     for (const item of myNode.getRelationship("items").children) {
       await item.getRelationship("itemsimages").loadRequest("get my children")
     }
