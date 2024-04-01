@@ -75,7 +75,7 @@ Y.O.S. system has layouts files that can be modified (HTML and CSS) to change th
 
 ## :bulb: Extensions
 
-There is already one extension available in the source: dbmanager. You can use it to manage database content directly. Run it by following the instructions at: "server/_context__dbmanager/README.txt".
+There is already one extension included with in the source: dbmanager. You can use it to manage database content directly. Run it by following the instructions at: "utils/dbmanager/README.txt".
 
 
 ## :family: More
