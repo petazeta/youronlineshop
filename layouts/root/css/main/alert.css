@@ -7,7 +7,6 @@
   max-width: 90%;
   z-index:100;
   max-height: 70%;
-  overflow-y: scroll;
 }
 .alertmsg, .dialogbox, .warningmsg {
 	border: 1px solid;
