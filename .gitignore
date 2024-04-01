@@ -1,6 +1,8 @@
-#logs
-#catalog-images
-#node_modules
-#backup
-#context__*
-#!context__main
+logs
+catalog-images
+node_modules
+backup
+context__*
+!context__main
+layouts/*
+!layouts/root
