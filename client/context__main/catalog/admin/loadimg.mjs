@@ -56,12 +56,14 @@ export async function loadImgView(myItem){
   // setChildrenView parece anticuado
   //parentNode.setChildrenView(imagesContainer, "loadimglistimg") // ojo! aqui estamos reemplazando .ChildTp de la antigua "itemthumbnail" con la nueva plantilla loadimglist
   
-  const table = selectorFromAttr(await getTemplate("imgloadlist"), "data-container")
+  const tableContainer = selectorFromAttr(await getTemplate("imgloadlist"), "data-container")
+  const sampleRow = selectorFromAttr(tableContainer, "data-row")
+  const table = tableContainer.cloneNode()
   parentNode.childContainer = table
-  const sampleRow = selectorFromAttr(table, "data-row")
   for (const myImage of parentNode.children) {
-    imagesContainer.appendChild(await listView(myImage, sampleRow))
+    table.appendChild(await listView(myImage, sampleRow))
   }
+  imagesContainer.appendChild(table)
   const myForm = selectorFromAttr(containerView, "data-form")
   const fileData = myForm.elements.fileData
   fileData.addEventListener("change", async ()=>{
@@ -80,11 +82,19 @@ export async function loadImgView(myItem){
     const newNode = parentNode.createInstanceChild()
     
     //const newNode = await addition(undefined, undefined, parentNode) // falta lo de sort_order ??
-    await performAddition(newNode)
-    newNode.props.imagename = `${newNode.props.id}.png` // anular esto ??
-    await newNode.request("edit my props", {values:{imagename: newNode.props.imagename}})
-    const loadResult = await loadImg(newNode.props.imagename, newImageSmall, newImageBig)
-    newNode.dispatchEvent("loadImage")
+    await performAddition(newNode, undefined, async newNode => {
+      await loadImg(`${newNode.props.id}.png`, newImageSmall, newImageBig)
+      await newNode.loadRequest("edit my props", {values:{imagename: `${newNode.props.id}.png`}})
+      updateItemImage(myItem)
+      return await listView(newNode, sampleRow)
+    })
+    
+    
+
+
+
+    // newNode.dispatchEvent("loadImage")
+
     fileData.disabled = false //Waiting
     fileData.previousElementSibling.style.visibility = "hidden"
     myForm.reset()
@@ -113,13 +123,24 @@ export async function listView(myNode, rowSample){ // myNode. imageNode
   const butsWrapper = selectorFromAttr(container, "data-admnbuts")
   // new myNode.constructor.nodeConstructor().appendView(butsWrapper, "butdelete", {delNode: myNode})
   // new myNode.constructor.nodeConstructor().appendView(butsWrapper, "butchpos", {chNode: myNode, position: "vertical"})
+  const myItem = myNode.getParent().getPartner()
   const {setDeletionButton} = await import("../../admin/deletion.mjs")
-  await setDeletionButton(myNode, butsWrapper)
+  await setDeletionButton(myNode, butsWrapper, ()=>updateItemImage(myItem))
   const {setChangePosButton} = await import("../../admin/changepos.mjs")
-  await setChangePosButton(myNode, butsWrapper)
+  await setChangePosButton(myNode, butsWrapper, ()=>updateItemImage(myItem))
   return container
 }
 
-function loadImg(imageName, newImageSmall, newImageBig){
-  loadImgBase(config.get("upload-imgs-url-path"), imageName, newImageSmall, newImageBig)
+async function loadImg(imageName, newImageSmall, newImageBig){
+  return await loadImgBase(config.get("upload-imgs-url-path"), imageName, newImageSmall, newImageBig)
+}
+
+function updateItemImage(myNode){
+  const container = myNode.firstElement
+  const myImage = myNode.getRelationship("itemsimages").getChild()
+  const imageView = selectorFromAttr(container, "data-image-container data-value"), size = "small"
+  if (!myImage?.props.imagename)
+    imageView.src = config.get("catalog-imgs-url-path") + `?size=${size}&image=${config.get("default-img")}&source=sample`
+  else 
+    imageView.src = config.get("catalog-imgs-url-path") + `?size=${size}&image=${myImage.props.imagename}`
 }

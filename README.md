@@ -63,14 +63,14 @@ To edit some features from the checkout process, you should log in with the syst
 Some other configuration can be done by editing some cfg files.
 
 
-## :green_book: Documentation
+## :mortar_board: Documentation
 
-=> [Check Documentation](docs/overview.md)
+=> :green_book: [Check Documentation](docs/overview.md)
 
 
 ## :art: Skins
 
-Y.O.S. system has layouts files that can be modified (HTML and CSS) to change the appearance. You can find these files in the layouts' folder.
+Y.O.S. system has layouts files that can be modified (HTML and CSS) to change its appearance. You can find these files in the layouts' folder.
 
 
 ## :bulb: Extensions
@@ -78,8 +78,8 @@ Y.O.S. system has layouts files that can be modified (HTML and CSS) to change th
 There is already one extension included with in the source: dbmanager. You can use it to manage database content directly. Run it by following the instructions at: "utils/dbmanager/README.txt".
 
 
-## :family: More
+## :eight_spoked_asterisk: More
 
-=> [Y.O.S. main advantages and more](docs/marketing.md)
+=> :family: [Y.O.S. main advantages and more](docs/marketing.md)
 
 Please consider giving us a star :star: !!!

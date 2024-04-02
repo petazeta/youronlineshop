@@ -180,7 +180,7 @@ export function makeRequest(action, params, url) {
     return res.text()
   })
   .then(resultTxt => {
-    // This is allowing a null result, it doesnt throw errur if resultTxt==null
+    // This is allowing a null result, it doesnt throw error if !resultTxt
     let result = null
     if (resultTxt) {
       try {
