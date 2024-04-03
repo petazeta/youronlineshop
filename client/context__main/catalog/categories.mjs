@@ -56,6 +56,8 @@ export async function displayCategories(viewContainer){
   for (const categ of getRoot().getMainBranch().children) {
     catsContainer.appendChild(await catView(categ))
     await displaySubCategories(categ) // subcategories are displayed at the same time
+    // We proceed here in displayCategories and not in displaySubCategories because this is the page entrance point rather than displaySubCategories
+    // that can be called once page is olready working
     for (const subCat of categ.getMainBranch().children) {
       await initialNavSearchSubCat(subCat) // nav search procedure in subcat
     }
@@ -168,6 +170,7 @@ async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNu
   const itemsContainer = selectorFromAttr(catalogTp, "data-container")
   myNode.getRelationship("items").childContainer = itemsContainer
   for (const item of myNode.getRelationship("items").children) {
+    //await setNavStateItem(item)
     itemsContainer.appendChild(await itemView(item))
   }
   const pageView = await pagination.pageView(getTemplate)
@@ -179,12 +182,14 @@ async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNu
   centralContentContainer.appendChild(pageView)
   fadeInTmOut(centralContentContainer)
   
-  for (const item of pagination.totalParent.children) {
+  //for (const item of pagination.totalParent.children) {
+  for (const item of myNode.getRelationship("items").children) { // *** esto habria que hacerlo con todos??
     // navigation state needs to be stablished for every item (not just the ones in page) for an item entrance search
     // initial nav procedure due url search is performed as well
     await setNavStateItem(item)
-    //await initialNavSearchItem(item)
+    await initialNavSearchItem(item) // esto quizas no va bien hacerlo dentro de displayItems porque esta funcion puede ser quizas llamada fuera del flujo normal de inicio, para que hacer navsearch en otros casos??
   }
+
   if (myNode.getRelationship("items").children.length == 0  && hasWritePermission()) {
     const {setAdditionButton} = await import("../admin/addition.mjs")
     await setAdditionButton(myNode.getRelationship("items"), 1, myNode.getRelationship("items").childContainer, null, async (newNode) => await onPageAddition(myNode.getRelationship("items"), newNode))
@@ -205,28 +210,28 @@ async function itemView(myItem){
   return itemTp
 }
 async function displayItemLarge(item /* totalParent child*/) {
+  console.log("displayItemLarge")
   setActiveInSite(item)
   pushNavHisItem(item)
-  await item.loadRequest("get my tree")
-  const pageView = await itemLargeView(item)
+  // await item.loadRequest("get my tree") // item could come from url input
   fadeOut(centralContentContainer)
   centralContentContainer.innerHTML = ""
   // give time the fade out to happend
-  centralContentContainer.appendChild(pageView)
+  centralContentContainer.appendChild(await itemLargeView(item))
   fadeInTmOut(centralContentContainer)
 }
-async function itemLargeView(myItem /* totalParent child*/){
-  const itemTp = await getTemplate("itemlarge")
-  const itemContainer = selectorFromAttr(itemTp, "data-container")
-  myItem.firstElement = itemContainer
-  setCloseBtn(selectorFromAttr(itemContainer, "data-close-btn"), myItem)
-  await setImageView(myItem, selectorFromAttr(itemContainer, "data-image-container"), "big")
-  await setPropView(myItem, selectorFromAttr(itemContainer, "data-name"), "name")
-  await setPropView(myItem, selectorFromAttr(itemContainer, "data-description"), "descriptionshort")
-  setPriceView(myItem, selectorFromAttr(itemContainer, "data-price"))
-  setQttySelect(selectorFromAttr(itemContainer, "data-qtty"))
-  await setCartBut(myItem, selectorFromAttr(itemContainer, "data-add-cart"))
-  return itemTp
+async function itemLargeView(myNode /* totalParent child*/){
+  const container = selectorFromAttr(await getTemplate("itemlarge"), "data-container")
+  myNode.firstElement = container
+  setCloseBtn(selectorFromAttr(container, "data-close-btn"), myNode)
+  await setImageView(myNode, selectorFromAttr(container, "data-image-container"), "big")
+  await setPropView(myNode, selectorFromAttr(container, "data-name"), "name")
+  await setPropView(myNode, selectorFromAttr(container, "data-description"), "descriptionshort")
+  await setPropView(myNode, selectorFromAttr(container, "data-description-large"), "descriptionlarge")
+  setPriceView(myNode, selectorFromAttr(container, "data-price"))
+  setQttySelect(selectorFromAttr(container, "data-qtty"))
+  await setCartBut(myNode, selectorFromAttr(container, "data-add-cart"))
+  return container
 }
 
 // --- helpers ---
@@ -441,6 +446,7 @@ function pushNavHisSubCat(myNode){
   pushNav(myNode, "subcategory", searchParamsKeys)
 }
 function initialNavSearchSubCat(myNode){
+  // *** we should check here if there is search in item, and in this case then search for item and show the item, skeeping displayItems
   initialNavSearch(myNode, "subcategory", searchParamsKeys, displayItems)
 }
 
@@ -497,6 +503,7 @@ function pushNavHisItem(item){
   pushNav(item, "item", searchParamsKeys)
 }
 function initialNavSearchItem(item){
+  // aqui habria que mirar el caso en el que el item buscado no estuviera entre los de la paginación
   initialNavSearch(item, "item", searchParamsKeys, displayItemLarge)
 }
 async function setNavStateItem(myNode){
@@ -531,10 +538,11 @@ async function setShortImageView(myItem, viewContainer){
   setImageView(myItem, viewContainer, "small")
   const enlargeButton = selectorFromAttr(viewContainer, "data-enlarge-item-button")
   visibleOnMouseOver(enlargeButton, viewContainer)
-  enlargeButton.addEventListener("click",(event)=> {
+  enlargeButton.addEventListener("click",async (event)=> {
     event.preventDefault()
-    // we search the item in the total parent
-    displayItemLarge(myItem.parent.pagination.totalParent.children.find(item=>item.props.id==myItem.props.id))
+    // we search the item in the total parent because the query could come directly from an url input
+    // await displayItemLarge(myItem.parent.pagination.totalParent.children.find(item=>item.props.id==myItem.props.id))
+    await displayItemLarge(myItem)
   })
 }
 async function setCartBut(myItem, viewContainer){
@@ -547,6 +555,7 @@ async function setCartBut(myItem, viewContainer){
     if (quantity) addItem(myItem, quantity)
   })
   const cartButtonLabel = getSiteText().getNextChild("addcarttt")
+  // *** revisar, creo que ahora para editar el title se puede hacer de otra manera
   await cartButtonLabel.setContentView(viewContainer)
 }
 async function setLargeImageView(myItem, viewContainer){

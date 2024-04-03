@@ -1,11 +1,11 @@
 <div class="productlargecontainer rmbox" style="color:rgb(40,40,40);" data-container>
-  <div class="bttopinsiderightinside">
+  <div class="bt-wrapper">
     <button type="button" data-close-btn class="closeimage minibtn transp">
       <div class="closeimage"></div>
     </button>
   </div>
   <div class="productgrid">
-    <div class="productimg" data-image-container style="position:relative;">
+    <div class="productimg" data-image-container style="position:relative;" data-size="big">
       <div data-butedit class="btmiddlecenter"  style="z-index:1"></div>
       <img class="productimg" data-value>
       <script>
@@ -54,13 +54,15 @@
                 </span>
               </div>
               <div class="quantityselect" data-qtty>
-                <select name="pquantity" style="color: #666"><option value="1">1</option></select>
+                <select name="pquantity" style="color: #666"><option></option></select>
+                <input style="visibility: hidden;" size="5">
               </div>
               <div style="position:relative;"  data-add-cart>
                 <button type="button" class="btn" data-button>
                   <div class="cartplusimage"></div>
                 </button>
-                <div data-id="butedit" class="btmiddleright"></div>
+                <!-- revisar -->
+                <div data-butedit class="btmiddleright"></div>
                 <input style="display:none" disabled data-value data-has-target data-target-attr="title" data-toggle>
               </div>
             </div>
@@ -69,7 +71,8 @@
       </div>
     </div>
   </div>
-  <div class="thumbnails" data-id="thumbnails-container" style="display:flex; gap: 0.6em; margin-left: 0.5em; margin-bottom: 0.5em;"></div>
+  <!-- revisar -->
+  <div class="thumbnails" data-thumbnails-container style="display:flex; gap: 0.6em; margin-left: 0.5em; margin-bottom: 0.5em;"></div>
   <script>
     thisParams.item.setThumbnails(thisElement)
     /*
@@ -77,12 +80,12 @@
     else thisNode.getRelationship("itemsimages").setChildrenView(thisElement, "itemthumbnails");
     */
   </script>
-  <div style="display: inline-block; position:relative; z-index:6;">
-    <div class="btmiddleright" style="display:flex;" data-id="edit-buts">
-      <div data-id="butedit"></div>
-      <div data-id="buteditcode"></div>
+  <div style="display: inline-block; position:relative; z-index:6;"data-description-large>
+    <div class="btmiddleright" style="display:flex;" data-edit-buts>
+      <div data-butedit></div>
+      <div data-buteditcode></div>
     </div>
-    <div data-id='value' style="padding-top: 1em" class="descriptionlarge"></div>
+    <div data-value style="padding-top: 1em" class="descriptionlarge"></div>
     <script>
       /*
       thisNode.getRelationship("itemsdata").getChild().writeProp(thisElement, "descriptionlarge");

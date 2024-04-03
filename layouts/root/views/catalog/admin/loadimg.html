@@ -1,22 +1,8 @@
-<!--
-
-thisParams.setView
----
-
-thisParams ==> No vale :-> myNode, labelNode, fileName 
-----
-
-myNode => itemNode
-
-Aparecen la lista y debaj el boton de selecionar archivo.
-Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se supera el limite de imágenes.
-
-
-
--->
+<!-- First there is the frame to cover the page behind the popup -->
 <div class="login-frame" id="loadimg-card" data-card>
   <div data-card-body></div>
 </div>
+<!-- List of uploaded images and its edition. -->
 <div class="alert dialogbox rmbox" data-container style="overflow-y: scroll;">
   <div class="bt-wrapper">
     <button type="button" class="closeimage minibtn transp" data-close>
@@ -38,9 +24,6 @@ Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se super
             <div data-butedit class="btmiddleright"></div>
             <label for="fileData" style="align-self: left;" data-value></label>
           </div>
-          <script>
-            // este div no tiene style=inline
-          </script>
           <div>
             <div class="circleloader minicircleloader" style="visibility: hidden;"></div>
             <input name="fileData" type="file">
@@ -50,7 +33,3 @@ Una vez cargado una nueva imagen, el boton seleccionar se resetea si no se super
     </div>
   </form>
 </div>
-<script>
-  //const {setLoadImgForm} = await import(pathJoin("./client", thisAppFolder, "catalog/admin/loadimg.mjs"))
-  //setLoadImgForm(thisParams.item, thisElement)
-</script>
