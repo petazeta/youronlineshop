@@ -125,6 +125,7 @@
   background: url(images/plus.svg) no-repeat;
   background-size: contain;
 }
+/* --> deprecated*/
 .arrowleftimage {
   background: url(images/arrowleft.svg) no-repeat;
   background-size: contain;
@@ -138,6 +139,23 @@
   background-size: contain;
 }
 .arrowdownimage {
+  background: url(images/arrowdown.svg) no-repeat;
+  background-size: contain;
+}
+/* <-- deprecated */
+.arrowhor .arrowminusimage {
+  background: url(images/arrowleft.svg) no-repeat;
+  background-size: contain;
+}
+.arrowhor .arrowplusimage {
+  background: url(images/arrowright.svg) no-repeat;
+  background-size: contain;
+}
+.arrowvert .arrowminusimage {
+  background: url(images/arrowup.svg) no-repeat;
+  background-size: contain;
+}
+.arrowvert .arrowplusimage {
   background: url(images/arrowdown.svg) no-repeat;
   background-size: contain;
 }

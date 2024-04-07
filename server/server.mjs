@@ -3,7 +3,8 @@ import {join as pathJoin} from "path"
 import {statSync, promises as fs} from "fs"
 import {Services} from "./services.mjs"
 
-// [ ["main", {folderName: "context__main", services: [...]}], ["dbmanager", {...}], ]
+// [ ["main", {folderName: "context__main", services: {serviceList: [...]}} ], ["dbmanager", {...}], ]
+// serviceList: [{_server: httpServer, status: "on"}, {...}](Map)
 export async function loadContexts(contextName, folderPath="./server"){
   const contexts = new Map(
     (await fs.readdir(folderPath))

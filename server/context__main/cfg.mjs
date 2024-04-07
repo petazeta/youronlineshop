@@ -1,7 +1,7 @@
 export const config = new Map([
   ["layouts-url-path", "layouts.cmd"],  // Defaults: skin => "root", style => "main". You can configure other defaults => layouts.cmd?skin=my_default_skin&style=my_default_style
   ["layouts-folder-path", "./layouts"],
-  ["cache", "none"], // mem | none. Default mem
+  ["cache", "none"], // mem | none. Default: mem
   ["loader-path", "./loader/main"], // deprecated
   ["client-path", "./client"],
   ["shared-path", "./shared"], // shared and client should have a common parent folder

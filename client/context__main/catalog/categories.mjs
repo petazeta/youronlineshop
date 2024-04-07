@@ -192,7 +192,7 @@ async function displayItems(myNode, pageNum) { // myNode: subCat, default pageNu
 
   if (myNode.getRelationship("items").children.length == 0  && hasWritePermission()) {
     const {setAdditionButton} = await import("../admin/addition.mjs")
-    await setAdditionButton(myNode.getRelationship("items"), 1, myNode.getRelationship("items").childContainer, null, async (newNode) => await onPageAddition(myNode.getRelationship("items"), newNode))
+    await setAdditionButton(myNode.getRelationship("items"), 1, myNode.getRelationship("items").childContainer, null, onPageAddition)
   }
   myNode.getRelationship("items").dispatchEvent("displayChildren")
 }
@@ -471,14 +471,15 @@ async function setItemCollectionEdition(myNode, myContainer){
     }
   }, {chTpName: "butchposhor"})
   const position = myNode.props[myNode.parent.getSysKey('sort_order')] + 1
-  await setAdditionButton(myNode.parent, position, selectorFromAttr(myContainer, "data-admnbuts"), null, async (newNode)=>await onPageAddition(myNode.parent, newNode))
+  await setAdditionButton(myNode.parent, position, selectorFromAttr(myContainer, "data-admnbuts"), null, onPageAddition)
+  /*
   await setDeletionButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), async (delNode)=>{
     const nodeParent = myNode.parent
     const pagination = nodeParent.pagination
     const total = --pagination.totalParent.props.total // standard deletion substract from parent, not from totalParent
     if (nodeParent.children.length==0) {
       const {setAdditionButton} = await import("../admin/addition.mjs")
-      await setAdditionButton(nodeParent, 1, nodeParent.childContainer, null, async (newNode) => await onPageAddition(myNode.getRelationship("items"), newNode))
+      await setAdditionButton(nodeParent, 1, nodeParent.childContainer, null, onPageAddition)
     }
 
     // Is it not last page?
@@ -497,6 +498,32 @@ async function setItemCollectionEdition(myNode, myContainer){
     }
     // No change in indexes
     await displayItems(nodeParent.partner, pagination.pageNum)
+  })
+  */
+  await setDeletionButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), async (delNode)=>{
+    const nodeParent = myNode.parent
+    const pagination = nodeParent.pagination
+    const total = --pagination.totalParent.props.total // standard deletion substract from parent, not from totalParent
+    if (total>0 && total % pagination.pageSize == 0) { // change in indexes
+      pagination.createIndexes()
+      pagination.createItemsWindow()
+      pagination.displayButtons(getTemplate)
+    }
+    if (nodeParent.children.length==0) {
+      if (total == 0) {
+        const {setAdditionButton} = await import("../admin/addition.mjs")
+        await setAdditionButton(nodeParent, 1, nodeParent.childContainer, null, onPageAddition)
+        return
+      }
+      // ultima pagina eliminado unico elemento, pasamos a la pagina anterior
+      await displayItems(nodeParent.partner, pagination.pageNum - 1)
+      return
+    }
+    // Is it not last page or it is but because we just decrease the indexes
+    if (pagination.pageNum < pagination.indexes.length || (pagination.pageNum == pagination.indexes.length && total % pagination.pageSize == 0)) {
+      pagination._loaded = false // reload items in window
+      await displayItems(nodeParent.partner, pagination.pageNum)
+    }
   })
 }
 function pushNavHisItem(item){
@@ -649,8 +676,8 @@ export async function reloadInitLangData() {
   return await mySiteCategories.reloadInitLangData(getCurrentLanguage, getLangParent, getLangBranch, Linker.getNodeConstructor())
 }
 */
-async function onPageAddition(nodeParent, newNode) {
-  console.log("onPageAddition")
+async function onPageAddition(newNode) {
+  const nodeParent = newNode.parent
   await setNavStateItem(newNode) // declaring navigation url
   const pagination = nodeParent.pagination
   const total = ++pagination.totalParent.props.total // perform addition adds one to normal parent total but not to pagination.totalParent
@@ -660,7 +687,7 @@ async function onPageAddition(nodeParent, newNode) {
     pagination.createItemsWindow()
     pagination.displayButtons(getTemplate)
   }
-  const skey = newNode.parent.getSysKey('sort_order')
+  const skey = nodeParent.getSysKey('sort_order')
   // is it page overflow?
   if (nodeParent.children.length > pagination.pageSize) {
     // we have to options: newNode is in the current page or it is in the next page:

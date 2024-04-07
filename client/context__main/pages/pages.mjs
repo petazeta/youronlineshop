@@ -222,6 +222,7 @@ async function setMenuEditCollection(myNode, myContainer){
     const {setAdditionButton} = await import("../admin/addition.mjs")
     const {setChangePosButton} = await import("../admin/changepos.mjs")
     const {setDeletionButton} = await import("../admin/deletion.mjs")
+    // we are using a differnet template because in mobile screen we must change from horizontal to vertical arrows
     await setChangePosButton(myNode, selectorFromAttr(myContainer, "data-admnbuts"), null, {chTpName: "butch"})
     const position = myNode.props[myNode.parent.getSysKey('sort_order')] + 1
     await setAdditionButton(myNode.parent, position, selectorFromAttr(myContainer, "data-admnbuts"), menuView, async (newNode)=>{

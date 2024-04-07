@@ -1,5 +1,4 @@
 .alert {
-  display: table; /*????????????*/
   position: fixed !important;
   top: 20%;
   left: 50%;
@@ -7,6 +6,7 @@
   min-width: 16em;
   max-width: 90%;
   z-index:100;
+  max-height: 70%;
 }
 .alertmsg, .dialogbox, .warningmsg {
 	border: 1px solid;
@@ -26,12 +26,12 @@ button.closeimage:hover{
   border-radius: 50%;
 }
 button.closeimage{
+  position: absolute;
   padding: 5px;
   margin: 3px;
 }
 .rmbox {
   position:relative;
-  display: table;
   margin: auto;
 }
 .rmbox .bt-wrapper{
