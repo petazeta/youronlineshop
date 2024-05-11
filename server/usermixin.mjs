@@ -1,18 +1,21 @@
 //
 import {pbkdf2, randomBytes} from "crypto"
-import {checkLength, validateEmail} from "../shared/datainput.mjs";
+import {checkLength, validateEmail} from "../shared/datainput.mjs"
+
+const maxUserChars = 100
+const minUserChars = 4
 
 export const userModelMixin = Sup => class extends Sup {
   constructor(...args) {
     super(...args)
-    const userParent = new this.constructor.linkerConstructor("TABLE_USERS", "TABLE_USERSTYPES")
+    const userParent = new this.constructor.linkerConstructor("Users", "UsersTypes")
     userParent.dbLoadMyChildTableKeys() // sync (no need to use db connection for table keys)
     userParent.addChild(this)
     return this
   }
   static async setUserType(myUser, userType){
     //First we get the usertype (parent)
-    const usertypeMother = new this.linkerConstructor("TABLE_USERSTYPES")
+    const usertypeMother = new this.linkerConstructor("UsersTypes")
     await usertypeMother.dbLoadAllMyChildren({type: userType})
     const userTypeNode = usertypeMother.getChild()
     if (userTypeNode) {
@@ -27,7 +30,7 @@ export const userModelMixin = Sup => class extends Sup {
   }
   // If pwd===null, it checks just username and return username and password
   static async userCheck(username, pwd="") {
-    const result = await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("TABLE_USERS"), {username: username})
+    const result = await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("Users"), {username: username})
     const candidates = result.data
     if (result.total == 0) { //candidates=0
       return new Error("userError")
@@ -48,10 +51,10 @@ export const userModelMixin = Sup => class extends Sup {
   }
   // the email field is not implemented in client, we keep it for some other implementations
   static async create(username, pwd, email, userType="customer") {
-    if (!checkLength(username, 4, 20)) {
+    if (!checkLength(username, minUserChars, maxUserChars)) {
       return new Error("userCharError")
     }
-    if (!checkLength(pwd, 4, 20)) {
+    if (!checkLength(pwd, minUserChars, maxUserChars)) {
       return new Error("pwdCharError")
     }
     if (email && !validateEmail(email)) {
@@ -76,17 +79,17 @@ export const userModelMixin = Sup => class extends Sup {
     return user
   }
   async dbUpdateMyPwd(pwd) {
-    if (!checkLength(pwd, 4, 20)) {
+    if (!checkLength(pwd, minUserChars, maxUserChars)) {
       return new Error("pwdCharError")
     }
     await this.dbUpdateMyProps({pwd: await cryptPwd(pwd)})
     return true
   }
   static async dbUpdatePwd(username, pwd) {
-    if (!checkLength(username, 4, 20)) {
+    if (!checkLength(username, minUserChars, maxUserChars)) {
       return new Error("userCharError");
     }
-    const result = await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("TABLE_USERS"), {username: username})
+    const result = await this.linkerConstructor.dbGetAllChildren(new this.linkerConstructor("Users"), {username: username})
     if (result.total!==1)
       return false
     const myuser = new this({id: result.data[0].props.id})
@@ -136,7 +139,7 @@ export const userModelMixin = Sup => class extends Sup {
       if ("USER_ORDERSADMIN"==recipient) {
         userType="orders administrator";
       }
-      const parent=new this.linkerConstructor("TABLE_USERSTYPES");
+      const parent=new this.linkerConstructor("UsersTypes");
       const result=await this.linkerConstructor.dbGetAllChildren(parent, {type: userType});
       if (result.total > 0) {
         parent.addChild(result.data[0]);
@@ -149,7 +152,7 @@ export const userModelMixin = Sup => class extends Sup {
     else {
       const result=await this.linkerConstructor.dbGetAllChildren(this.parent, {username: recipient});
       if (result.total > 0) {
-        const parent=new this.linkerConstructor("TABLE_USERS");
+        const parent=new this.linkerConstructor("Users");
         myUser=new this();
         parent.addChild(myUser);
         myUser.props.id=result.data[0].props.id;

@@ -27,7 +27,8 @@ export class Content{
     Object.setPrototypeOf(this.treeRoot, observerMixin(observableMixin(this.treeRoot.constructor)).prototype) // adding methods
     observerMixin(Object).prototype.initObserver.call(this.treeRoot)
     observableMixin(Object).prototype.initObservable.call(this.treeRoot)
-    this.setLangChangeReaction(getCurrentLanguage, getLangParent)
+    if (getCurrentLanguage)
+      this.setLangChangeReaction(getCurrentLanguage, getLangParent)
     this.setLogReaction(webuser)
   }
   setLangChangeReaction(getCurrentLanguage, getLangParent){

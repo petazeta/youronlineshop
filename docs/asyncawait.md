@@ -66,3 +66,9 @@ let upperFunc = ()=>{
 }
 
 we can not make a map, foreEach, etc... function with await [1,2].map(async ()=>2) // [Promise, Promise]
+
+## Que pasa si se realiza una cadena de promesas?
+
+Si en un bloque .then() hay mas promesas o asincronicidades se ha de poner un await dentro del bloque "then" para que se realice la espera de todas en cadena y se resuelva.
+
+let result = await asyncfunc().then(async ()=> await otherAsyncfunc())

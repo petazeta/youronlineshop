@@ -30,8 +30,8 @@ importFunc.set("catalog", (data)=>{
 });
 
 importFunc.set("checkout", async (data)=>{
-  return impData(arrayUnpacking(data.languages), "shippingtypesdata", new Linker().load(unpacking(data.tree[0])), languages.children, new Linker("TABLE_SHIPPINGTYPES"))
-  .then(()=>impData(arrayUnpacking(data.languages), "paymenttypesdata", new Linker().load(unpacking(data.tree[1])), languages.children, new Linker("TABLE_PAYMENTTYPES")))
+  return impData(arrayUnpacking(data.languages), "shippingtypesdata", new Linker().load(unpacking(data.tree[0])), languages.children, new Linker("ShippingTypes"))
+  .then(()=>impData(arrayUnpacking(data.languages), "paymenttypesdata", new Linker().load(unpacking(data.tree[1])), languages.children, new Linker("PaymentTypes")))
   .catch((err)=>new AlertMessage(err).showAlert());
 });
 
@@ -88,7 +88,7 @@ importFunc.set("lang", async (importedDataTrees, importedDataLangs)=>{
 
 importFunc.set("users", async (data)=>{
   //First we add the remove tree request
-  const usertypemother=await new Linker("TABLE_USERSTYPES").loadRequest("get all my children", {filterProps: {type: "customer"}});
+  const usertypemother=await new Linker("UsersTypes").loadRequest("get all my children", {filterProps: {type: "customer"}});
   // quiza seria interesante una acción delete all my children y así no tener que borrar el pripio tipo customer.
   await usertypemother.getChild().request("delete myself"); //deleting the root will delete every children
   await usertypemother.getChild().loadRequest("add myself");
@@ -108,7 +108,7 @@ importFunc.set("db", async (data)=>{
   newLangs.forEach(newLang=>languages.addChild(newLang));
   await languages.request("add my tree");
   await loadLanguages();
-  const usersTypes =  await new Linker("TABLE_USERSTYPES").loadRequest("get all my children");
+  const usersTypes =  await new Linker("UsersTypes").loadRequest("get all my children");
   const newUsers=new Linker().load(unpacking(data.tree.shift()));
   // we can not remove the current user without eliminate the auth (login) and then produce safety error
   if (webuser?.isSystemAdmin()) {
@@ -120,8 +120,8 @@ importFunc.set("db", async (data)=>{
   await impData(newLangs, "pageelementsdata",  dataToNode(unpacking(data.tree.shift())), languages.children, pageText);
   await impData(newLangs, "siteelementsdata",  dataToNode(unpacking(data.tree.shift())), languages.children, getSiteText());
   await impData(newLangs, "itemcategoriesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, getCategoriesRoot());
-  await impData(newLangs, "shippingtypesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, new Linker("TABLE_SHIPPINGTYPES"));
-  await impData(newLangs, "paymenttypesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, new Linker("TABLE_PAYMENTTYPES"));
+  await impData(newLangs, "shippingtypesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, new Linker("ShippingTypes"));
+  await impData(newLangs, "paymenttypesdata",  dataToNode(unpacking(data.tree.shift())), languages.children, new Linker("PaymentTypes"));
 
   // En lugar de utilizar newLangs para impData, sería mejor utilizar quizás ya los languages ya insertados: loadLanguages() => languages ?
 });

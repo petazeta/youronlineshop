@@ -5,7 +5,7 @@
 
   It could be also used in no sql solution or to fastern the sql by quering all elements at once
   
-  En lugar de poner un id numérico, sería mejor que el id (en adelante hash) fuera tipo (table_name:id): TABLE_ITEMCATEGORIES:5. Y para las female quizá: (partner_id:childTableName;parentTableName)
+  En lugar de poner un id numérico, sería mejor que el id (en adelante hash) fuera tipo (table_name:id): ItemCategories:5. Y para las female quizá: (partner_id:childTableName;parentTableName)
   de esta forma sería más significativo. La función que sacaría el hash a partir del nodo se llama función de hash.
   
   Quizás sería más legible el resultado de packing si utilizaramos un objecto en lugar de un array, mediante Object.fromEntries(mapelement), en lugar de Array.from(mapElement), la operación inversa sería Object.entries(objelement);
@@ -289,7 +289,7 @@ export function replaceLangData(targetTree, sourceTree){
   const sourceArray=sourceTree.arrayFromTree();
   targetTree.arrayFromTree().forEach((targetTree, i)=>{
     if (BasicNode.detectLinker(targetTree)) {
-      const isLangContent = targetTree.sysChildTableKeysInfo?.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
+      const isLangContent = targetTree.sysChildTableKeysInfo?.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="Languages");
       //Swap the other langs content
       if (isLangContent) targetTree.children[0].props=sourceArray[i].children[0].props;
     }
@@ -312,7 +312,7 @@ export function splitLangTree(origTree, totalLang){
     const langSerial = arrayFromTree(singleTree)
     origSerial.forEach((orig, i)=>{
       if (BasicNode.detectLinker(orig)) {
-        const isLangContent = orig.sysChildTableKeysInfo && orig.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="TABLE_LANGUAGES");
+        const isLangContent = orig.sysChildTableKeysInfo && orig.sysChildTableKeysInfo.some(syskey=>syskey.type=='foreignkey' && syskey.parentTableName=="Languages");
         //The children are the lang conent
         if (isLangContent) langSerial[i].children=[orig.children[lang_i]];
       }

@@ -1,3 +1,4 @@
+// Este archivo es muy especifico para yos, mirar de ponerlo en yos y hacer otro general
 const userMixin = Sup => class extends Sup {
   isUserType(uType){
     return this.getUserType()==uType;

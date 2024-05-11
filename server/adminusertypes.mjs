@@ -1,1 +1,0 @@
-export const ADMINUSERS = ["web administrator", "orders administrator", "system administrator", "product administrator"]

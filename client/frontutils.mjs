@@ -1,15 +1,3 @@
-
-export function getDomElementFromChild_old(myNode, virtualParent) { // deprecated
-  const myParent = virtualParent || myNode.parent
-  if (!myParent || !myParent.childContainer) return false;
-  // This method only works well in wrapped templates
-  // We have a child and the container is at the parent.
-  const skey=myParent.getSysKey('sort_order');
-  // if no skey order it will not change
-  const children=myParent.children.sort((a,b)=>a.props[skey]-b.props[skey]);
-  return Array.from(myParent.childContainer.children).filter((child)=>!['SCRIPT', 'TEMPLATE'].includes(child.tagName))[children.indexOf(myNode)];
-}
-
 export function getChildViewElmts(myNode) {
   const myParent = myNode.parent
   if (!myParent || !myParent.childContainer) return false

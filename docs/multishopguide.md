@@ -3,6 +3,21 @@ How to Build a multi shop server
 
 ## Introduction
 
+You can set up several shops being launched at once with in the same application instance.
+
+## Steps
+
+Add new records to context__yos/services.json. Records should have the following fields:
+
+- images-path: ./catalog-images/<some-name>
+- db-url: filedb://localhost/<some-name>
+- status : on
+- hostname : for reverse proxy use
+
+
+
+------ old
+
 We can achieve a multi shop server by starting serveral YOS instances running at different http ports. You can achieve this goal by running the instances through processes directly in the operative system or with in a container using an application like Docker. But you can also do it within the YOS application itself, which would consume less resources.
 
 For making the derivations from the suitable host urls to their correspondent shop instance ports you can use a reverse proxy program like Nginx or just write the forwarding in Nodejs.

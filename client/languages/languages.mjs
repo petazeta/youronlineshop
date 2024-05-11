@@ -4,7 +4,7 @@ export default class Languages{
   constructor(){
     this.currentLanguage
     this.treeRoot
-    this.db_collection = 'TABLE_LANGUAGES'
+    this.db_collection = 'Languages'
   }
 
   async init(Linker){

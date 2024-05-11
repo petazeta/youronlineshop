@@ -1,26 +1,36 @@
 import {BasicLinker, BasicNode} from '../shared/linker.mjs';
-import {walkThrough} from '../shared/utils.mjs';
-import {readTree} from './layoutfolderread.mjs';
+import {walkThrough, walkThroughAsync} from '../shared/utils.mjs';
 import {createReadStream, promises as fs} from 'fs';
 import * as path from 'path';
-import {compose, pipeline} from 'stream'
+import {pipeline} from 'stream'
 import {streamErrorGuard} from "./errors.mjs"
 
 // This class serves as a container for the layout tree
 // The layout tree contains the child skin node and grandchild subskin nodes
 
-export class Skin {
+// **** no tiene sentido crear una clase skin que puede mutar a otra skin, mejor revisar esto
+// crear un objeto superior para esto cargar la skin segun la skin id
+
+export class SkinsTree {
   constructor(layoutsPath){
     this.treeRoot = new BasicNode({path: layoutsPath})
     this.treeRoot.addRelationship(new BasicLinker())
     this.treeRoot.getRelationship().props.name='descendents'
+  }
+  // create
+  async createTree(){
+    for (const skinId of (await fs.readdir(this.treeRoot.props.path)))
+      await this.createTreeFromSkin(skinId)
+  }
+  async createTreeFromSkin(skinId){
+    this.treeRoot.getRelationship().addChild(await readTree(path.join(this.treeRoot.props.path, skinId)))
   }
   // This method can be called at the beginning to load the tree based in the skinId
   async getSkin(skinId) {
     if (!findSkinNode(skinId, this.treeRoot, 1))
       // read and load tree elements when not present
       console.log("Retrieving skin: " + skinId)
-      this.treeRoot.getRelationship().addChild(await readTree(path.join(this.treeRoot.props.path, skinId)))
+      await this.createTreeFromSkin(skinId)
     return findSkinNode(skinId, this.treeRoot, 1)
   }
   // return a string containing the templates of the skin: <template id='x'>...</template><template id='y'>...</template> [...]
@@ -201,6 +211,76 @@ function fixBoundaryInBetween(regExp) {
     }
     if (lastChunk) yield lastChunk // return the last pieze
   }
+}
+
+// --- layout folder read, *** revisar integrarlo con el codigo de arriba, se ha movido desde un modulo
+// *** se podria hacer mediante memdbgateway, estudiarlo
+
+async function readTree(layoutFolderPath) {
+  async function layoutChildren(parentLayout) {
+    if ( !(await fs.stat(parentLayout.props.path))?.isDirectory() || !(await fs.readdir(parentLayout.props.path)).includes(childrenFolderName) )
+      return []
+    const childrenPath = path.join(parentLayout.props.path, childrenFolderName)
+    if ( !(await fs.stat(childrenPath))?.isDirectory() )
+      return []
+    return await Promise.all((
+      await fs.readdir(childrenPath))
+        .map( async sublayoutFolder =>
+          parentLayout.getRelationship('descendents')
+            .addChild(await createLayout(path.join(childrenPath, sublayoutFolder)))
+      ) )
+  }
+  const rootLayout = await createLayout(path.join(layoutFolderPath))
+  for await (const _layout of walkThroughAsync(rootLayout, layoutChildren)) continue
+  return rootLayout
+}
+
+const nodesConstructorsMixin=Sup => class extends Sup {
+  static get nodeConstructor(){
+    return Node
+  }
+  static get linkerConstructor(){
+    return Linker
+  }
+}
+const Node = nodesConstructorsMixin(BasicNode)
+const Linker = nodesConstructorsMixin(BasicLinker)
+
+// Crea un listado de todos los archivos del directorio (incluyendo los subdirectorios de forma recursiva)
+async function createListDirectory(folderPath, excludeDirs=[]){
+  if (!Array.isArray(excludeDirs)) excludeDirs=[excludeDirs]
+  const folderContentList = async (dirPath) => (await fs.stat(dirPath))?.isDirectory() && !(excludeDirs.includes(path.basename(dirPath))) ? ( await fs.readdir(dirPath)).map(file=>path.join(dirPath, file)) : [];
+  const dirList = []
+  for await (const dirPath of walkThroughAsync(folderPath, folderContentList, undefined, undefined, async pathName => ! (await fs.stat(pathName))?.isDirectory())) {
+    dirList.push(dirPath)
+  }
+  return dirList
+}
+// con esta base se puede hacer el nivel superior que podría crear todo el arbol, basándose unicamente en la carpeta children para la recursión
+// It creates 
+const childrenFolderName = "children";
+async function createLayout(layoutFolderPath) {
+  const viewsFolderName = "views";
+  const stylesFolderName = "css";
+
+  async function createBranch(parentElement, folderPath, excludeDirs=[]) {
+    (await createListDirectory(folderPath, excludeDirs))
+      .forEach( childPath => parentElement.addChild(new Node({path: childPath})))
+  }
+  const layout = new Node({path: layoutFolderPath})
+  const viewsBranch=new Linker();
+  viewsBranch.props.name='views'
+  await createBranch(viewsBranch, path.join(layoutFolderPath, viewsFolderName))
+  layout.addRelationship(viewsBranch)
+  const stylesBranch=new Linker();
+  stylesBranch.props.name='styles'
+  await createBranch(stylesBranch, path.join(layoutFolderPath, stylesFolderName))
+  layout.addRelationship(stylesBranch)
+  const childrenBranch=new Linker();
+  childrenBranch.props.name='descendents'
+  layout.addRelationship(childrenBranch)
+
+  return layout
 }
 
 //header('Access-Control-Allow-Origin: *'); //To allow use of external

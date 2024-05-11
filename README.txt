@@ -16,7 +16,7 @@ For any issues please write to: melchorherrera@gmail.com
 * About *
 *********
 
-This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and Mongodb and it has no dependencies.
+This is a SPA (Single Page Application) for e-commerce. It is build in Node.js and it has no dependencies.
 
 https://youronlineshop.net
 
@@ -41,10 +41,7 @@ Awards: Community Choice award by SourceForge
 * Installation *
 ****************
 
-1. Get the source files.
-2. Install node and mongodb when necesary.
-3. Edit the mongodb settings at: server/contexts/main/cfg/dbcustom.mjs.
-4. Open your terminal at the source top folder and type:
+4. Open your terminal at the source files top folder and type:
 npm install 
 npm start
 5. The server is running now. Continue in browser as prompt tells.
@@ -87,4 +84,4 @@ Y.O.S. system has a themes feature. You can find theme files at layouts folder.
 * Extensions *
 **************
 
-There is a extensions folder which could include some extensions. Follow the extension readme file instructions for executing it.
+Coming soon.

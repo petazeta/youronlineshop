@@ -1,6 +1,6 @@
 // It asumes that parent node children, that is, newNode sibling nodes has the instance variable firstElement that is the view node element
 export async function performAddition(newNode, extraParent, makeView) {
-  // *** why updateSiblingsOrder is not true by default in server??
+  // We set updateSiblingsOrder as true. By default is false because many addition doesn't needed as the imoprt procedure
   await newNode.loadRequest("add my tree", {extraParents: extraParent, updateSiblingsOrder: true})
   const skey = newNode.parent.getSysKey('sort_order')
   // update siblings sort_order when inserted in between

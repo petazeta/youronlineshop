@@ -28,7 +28,7 @@ const userMixin=Sup => class extends Sup {
     if (!user) {
       const result = await this.constructor.makeRequest("login", {"user_name": name, "user_password": password})
       if (typeof result=="object" && result.logError)
-        throw new Error(result.code) //not successful login message
+        throw new Error(result.code, {cause: "api error response"}) //not successful login message
       this.load(unpacking(result))
     }
     else{
@@ -42,7 +42,7 @@ const userMixin=Sup => class extends Sup {
   static async create(name, password, email){
     const result = await this.makeRequest("create user", {"user_name": name, "user_password": password, "user_email": email})
     if (typeof result=="object" && result.logError)
-      throw new Error(result.code) //not successful create message
+      throw new Error(result.code, {cause: "api error response"}) //not successful create message
     return unpacking(result)
   }
   static async updatePwd(username, password){

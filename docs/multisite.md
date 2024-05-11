@@ -3,6 +3,10 @@ Multi site
 
 # Introduction
 
+To create serveral severs runing in different ports each one with own settings like database and skin we can just edit file services.json for adding new records. We can aswell assing a port automatically if we don't set this property for the record.
+
+-- Old --
+
 Update:
 
 Se ha creado una forma de encapsular las instancias, y esto es más fácil ahora mediante esta forma. Para que la base de datos funcione para cada instancia las conexiones con la base de datos se hacen ahora mediante crateConnection en lugar de mediante connect.

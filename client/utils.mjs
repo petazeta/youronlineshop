@@ -20,7 +20,7 @@ export async function impData(newLangs, langrelname, datatree, currentLangs, roo
     const requestParams=[];
     for (let i=1; i<newLangs.length; i++) {
       requestData.push(replaceLangData(newTree, singleTrees[i]).clone());
-      requestParams.push({extraParents: currentLangs[i].getRelationship(langrelname), tableName: "TABLE_LANGUAGES"});
+      requestParams.push({extraParents: currentLangs[i].getRelationship(langrelname), tableName: "Languages"});
     }
     return await Node.requestMulti("add my tree table content", requestData, requestParams);
   }

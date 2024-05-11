@@ -1,0 +1,11 @@
+[
+  [
+    ["status","on"],
+    ["host-name","borrar1.localhost"],
+    ["port",null],
+    ["db-url","filedb://localhost/borrar1"],
+    ["images-path","./catalog-images/borrar1"],
+    ["id","662aa8dfcb6574ffb3dfca0a"],
+    ["positionContexts",1]
+  ]
+]

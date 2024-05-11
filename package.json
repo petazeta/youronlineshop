@@ -1,16 +1,17 @@
 {
   "name": "@petazeta/your-online-shop-server",
   "description": "server for your online shop",
-  "main": "server/serverindex.mjs",
+  "main": "server/server.mjs",
   "scripts": {
-    "start": "node --no-warnings server/serverindex.mjs",
-    "test": "node --inspect server/serverindex.mjs"
+    "start": "node --no-warnings server/server.mjs",
+    "test": "node --inspect server/server.mjs",
+    "search": "./bash/search.bash",
+    "sync": "./bash/sync.bash"
   },
   "author": "alberto melchor herrera",
   "license": "ISC",
   "dependencies": {
     "node-fetch": "*",
-    "mongoose": "*",
     "nodemailer": "*"
   }
 }

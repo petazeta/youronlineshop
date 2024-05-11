@@ -83,7 +83,7 @@ responseAuth.set('get my tree', async (parameters, user)=>{
 // siteContent cache retrieve driver: exec getResult when no cache
 async function siteContentCacheGuard(parameters, getResult) {
   const reqNode = Node.clone(unpacking(parameters.nodeData))
-  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "TABLE_SITEELEMENTS") {
+  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "SiteElements") {
     const extraParents = arrayUnpacking(parameters.extraParents)
     const myLangId = extraParents && extraParents[0]?.partner && extraParents[0].partner.props.id
     const cacheParams = {site_lang_id: myLangId, site_id: reqNode.props.id}
@@ -104,7 +104,7 @@ async function siteContentCacheGuard(parameters, getResult) {
 // menus content cache retrieve driver: exec getResult when no cache
 async function menusContentCacheGuard(parameters, getResult) {
   const reqNode = Node.clone(unpacking(parameters.nodeData))
-  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "TABLE_PAGEELEMENTS") {
+  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "PageElements") {
     const extraParents = arrayUnpacking(parameters.extraParents)
     const myLangId = extraParents && extraParents[0]?.partner && extraParents[0].partner.props.id
     const cacheParams = {menus_lang_id: myLangId, menus_id: reqNode.props.id}
@@ -125,7 +125,7 @@ async function menusContentCacheGuard(parameters, getResult) {
 // page content cache retrieve driver: exec getResult when no cache
 async function pageContentCacheGuard(parameters, getResult) {
   const reqNode = Node.clone(unpacking(parameters.nodeData))
-  if (config.cache != "none" && reqNode.props.childTableName == "TABLE_PAGEELEMENTS" && reqNode.partner?.props.id) {
+  if (config.cache != "none" && reqNode.props.childTableName == "PageElements" && reqNode.partner?.props.id) {
     const extraParents = arrayUnpacking(parameters.extraParents)
     const myLangId = extraParents && extraParents[0]?.partner && extraParents[0].partner.props.id
     const cacheParams = {page_lang_id: myLangId, page_id: reqNode.partner?.props.id}
@@ -146,7 +146,7 @@ async function pageContentCacheGuard(parameters, getResult) {
 // cats content cache retrieve driver: exec getResult when no cache
 async function catsContentCacheGuard(parameters, getResult) {
   const reqNode = Node.clone(unpacking(parameters.nodeData))
-  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "TABLE_ITEMCATEGORIES") {
+  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "ItemCategories") {
     const extraParents = arrayUnpacking(parameters.extraParents)
     const myLangId = extraParents && extraParents[0]?.partner && extraParents[0].partner.props.id
     const cacheParams = {cats_lang_id: myLangId, cats_id: reqNode.props.id}
@@ -167,7 +167,7 @@ async function catsContentCacheGuard(parameters, getResult) {
 // lang list content cache retrieve driver: exec getResult when no cache
 async function langsCacheGuard(parameters, getResult) {
   const reqNode = Node.clone(unpacking(parameters.nodeData))
-  if (config.cache != "none" && reqNode.props.childTableName == "TABLE_LANGUAGES") {
+  if (config.cache != "none" && reqNode.props.childTableName == "Languages") {
     const cacheStream = await cacheReadStream("langs")
     if (cacheStream === false) {
       // actualizando cache
@@ -185,7 +185,7 @@ async function langsCacheGuard(parameters, getResult) {
 // siteContent remove cache driver
 async function siteContentCacheReset(parameters) {
   const reqNode = Node.clone(unpacking(parameters.nodeData))
-  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "TABLE_SITEELEMENTS") {
+  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "SiteElements") {
     const extraParents = arrayUnpacking(parameters.extraParents)
     const myLangId = extraParents && extraParents[0]?.partner && extraParents[0].partner.props.id
     const cacheParams = {site_lang_id: myLangId}
@@ -197,7 +197,7 @@ async function siteContentCacheReset(parameters) {
 // pageContent remove cache driver
 async function menusContentCacheReset(parameters) {
   const reqNode = Node.clone(unpacking(parameters.nodeData))
-  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "TABLE_PAGEELEMENTS") {
+  if (config.cache != "none" && reqNode?.parent && reqNode.parent.props.childTableName == "PageElements") {
     const extraParents = arrayUnpacking(parameters.extraParents)
     const myLangId = extraParents && extraParents[0]?.partner && extraParents[0].partner.props.id
     const cacheParams = {page_lang_id: myLangId}

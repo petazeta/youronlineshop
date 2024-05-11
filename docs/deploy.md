@@ -1,3 +1,11 @@
+Correr un servidor mongodb y otro con la app node ambos en la misma network
+
+El url de mongodb sera: mongodb://nombre_mongodb_container/ 
+
+
+
+OLD
+
 # Servidor de tiendas
 
 Se construye la imagen de yos
@@ -425,3 +433,9 @@ sudo docker-compose up -d mongo-express
 # Administración del sistema
 
 He instalado firewalld, se puede parar con systemctl stop firewalld y se puede quitar del boot con sudo systemctl unable firewalld. Este firewall funciona con las reglas de docker. Si se instala un firewall hay que reiniciar el sistema para que docker haga las operaciones pertinentes en las reglas del firewall.
+
+He instalado iftop e iftraf-ng para visibilizar el trafico porque habia trafico inusual. Luego he habilitado el firewall en digitalocean para evitar problemas. Este firewall adminte solo http y https. Pero el mail usa otros puertos, entonces he habilitado todas las conexiones tcp para smtp-relay.sendinblue.com y la especifica de smtp.
+En el trafico inusual se apreciaba lo siguiente:
+134.209.228.174:16162 => 120.220.84.13:53001 358Mb   358Mb   236Mb
+134.209.228.174:16162 => 111.38.53.159:53001 627Mb   623Mb   327Mb
+Mucho trafico a traves de puertos que no no uso.

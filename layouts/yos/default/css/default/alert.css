@@ -1,0 +1,49 @@
+.alert {
+  position: fixed !important;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 16em;
+  max-width: 90%;
+  z-index:100;
+  max-height: 70%;
+}
+.alertmsg, .dialogbox, .warningmsg {
+	border: 1px solid;
+	padding: 0.5rem;
+	text-align: center;
+	border-radius: 3px;
+}
+div.closeimage {
+  background: url(images/closeicon.svg) no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  width: 1em;
+  height: 1em;
+}
+button.closeimage:hover{
+  background-color: rgb(0 0 0 / 10%);
+  border-radius: 50%;
+}
+button.closeimage{
+  position: absolute; /* For positioning at the same hight that other elements */
+  padding: 5px;
+  margin: 3px;
+}
+.rmbox {
+  position:relative;
+  margin: auto;
+}
+.rmbox .bt-wrapper{
+  display: flex;
+  justify-content: flex-end;
+}
+
+dialog {
+  /*transition: opacity 0.5s;*/
+}
+dialog[open] {
+  /*opacity: 1;*/
+}
+dialog::backdrop {
+}

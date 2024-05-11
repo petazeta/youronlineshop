@@ -127,7 +127,7 @@ function formatOrder(order){
 }
 
 /* checking integrity of order
-let orderItemParent = new orderItem.constructor.linkerConstructor("TABLE_ITEMS", "TABLE_ORDERITEMS")
+let orderItemParent = new orderItem.constructor.linkerConstructor("Items", "OrderItems")
 orderItemParent.addChild(orderItem.clone(0))
 await orderItemParent.dbLoadMyTreeUp()
 let item = orderItemParent.

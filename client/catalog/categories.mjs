@@ -3,8 +3,8 @@ import {getMainBranchDataNodes} from '../../shared/utils.mjs'
 import {selectorFromAttr} from '../frontutils.mjs'
 
 export class Categories extends Content{
-  constructor(){ // reduced args=> super.deepLevel: 5, super.db_collection: 'TABLE_ITEMCATEGORIES'
-    super('TABLE_ITEMCATEGORIES', 5)
+  constructor(){ // reduced args=> super.deepLevel: 5, super.db_collection: 'ItemCategories'
+    super('ItemCategories', 5)
   }
   async initData(Linker, getLangParent, getLangBranch, webuser, getCurrentLanguage){
     await super.initData(Linker, getLangParent, webuser, getCurrentLanguage)

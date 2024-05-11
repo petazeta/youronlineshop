@@ -3,9 +3,11 @@ export function checkDataChange(myNode, data) {
 }
 
 export function checkLength(value, min, max){
-  if (typeof value=="number") value=value.toString();
-  if (typeof value == "string" && value.length >= min && value.length <= max) return true;
-  return false;
+  if (typeof value=="number")
+    value = value.toString()
+  if (typeof value == "string" && value.length >= min && value.length <= max)
+    return true
+  return false
 };
 
 export function checkValidData(data) {

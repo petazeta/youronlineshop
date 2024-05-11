@@ -1,38 +1,36 @@
-import http from "http"
 import {join as pathJoin} from "path"
-import {statSync, promises as fs} from "fs"
-import {Services} from "./services.mjs"
+import {setConstructors, importSchema} from "./dbutils.mjs"
+import {proxyServer} from './proxyserver.mjs' // --- production mode
 
-// [ ["main", {folderName: "context__main", services: {serviceList: [...]}} ], ["dbmanager", {...}], ]
-// serviceList: [{_server: httpServer, status: "on"}, {...}](Map)
-export async function loadContexts(contextName, folderPath="./server"){
-  const contexts = new Map(
-    (await fs.readdir(folderPath))
-    .filter(entity=>statSync(pathJoin(folderPath, entity)).isDirectory())
-    .filter(dirname=>contextName ? dirname == "context__" + contextName : dirname.search(/^context__/)===0)
-    .map(contextFolderName=>[contextFolderName.slice("context__".length), {folderName: contextFolderName, services: []}])
-  )
-  // Adding ports and service
-  for (const [contextName, contextValues] of contexts) {
-    contexts.get(contextName).services = new Services(contextValues.folderName)
-    contexts.get(contextName).services.loadServices()
-  }
-  return contexts
+export const contexts = await loadContexts()
+await startContextsServices(contexts)
+
+// --- production mode start
+
+const proxyServerPort = '8001'
+
+proxyServer(contexts, proxyServerPort)
+
+// --- production mode end
+
+async function loadContexts(){
+  const dbUrl = "servicedb://localhost/borrar1"
+  const dbMode = Object.fromEntries([["cache", ["Contexts","Services"]]])
+  const rootPath = "./data/services"
+  const schemaPath = pathJoin("./data/services", "schema.json")
+  const dbType = new URL(dbUrl, "http://localhost").protocol.split(":")[0]
+  const {DbGateway} = await import("./" + dbType + "gateway.mjs")
+  const dbGateway = new DbGateway(rootPath)
+  await dbGateway.init(dbUrl, await importSchema(schemaPath), dbMode)
+  const [_, Linker] = setConstructors(dbGateway)
+  const contextsRoot = await new Linker("Contexts").dbLoadMyRoot()
+  await contextsRoot.dbLoadMyTree()
+  return contextsRoot
 }
-
-export async function runServers(thisContexts){
-  for (const [contextName, {folderName, services}] of thisContexts) {
-    let {app} = await import("./" + pathJoin(folderName, "main.mjs"))
-    for (const myService of services.serviceList) {
-      if (myService.get("status")=="on")
-        myService.set("_server", runServer(app, myService.get("port"), ()=>console.log("\n\x1b[35m%s\x1b[0m", `\n💻 Running server ${contextName} on port ${myService.get("port")}`)))
-    }
+async function startContextsServices(contextRoot){
+  contextRoot.props.portCount = 4000
+  for (const context of contextRoot.getRelationship("contexts").children) {
+    let {startServices} = await import("./" + pathJoin(context.props.folderName, "serverstart.mjs"))
+    await startServices(context)
   }
-  return thisContexts
-}
-
-function runServer(app, port, callback){
-  const myServer = http.createServer(app)
-  myServer.listen(port, callback)
-  return myServer
 }

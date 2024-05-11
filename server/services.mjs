@@ -1,40 +1,87 @@
-import {createRequire} from "module"
+import {contexts} from "./server.mjs"
 import {join as pathJoin} from "path"
-import {promises as fs} from "fs"
+import {runService} from "./serverutils.mjs"
 
-export class Services{
-  constructor(contextFolderName){
-    this.contextFolderName = contextFolderName
-    this.serviceList
-    this.rootPath = "./server"
-    this.notDataKeys = ["positionContexts", "parentContexts"]
+export async function createContextService(contextName, serviceName, extraProps=[]){
+  const myDomain = "localhost"
+  // Check if serviceName is taken
+  const myContext = contexts.getRelationship("contexts").getChild({name: contextName})
+  const {data} = await myContext.getRelationship("services").dbGetMyChildren(undefined, {"host-name": serviceName + "." + myDomain})
+  if (data.length) {
+    throw new Error("service name is taken", {cause: "service api error response"})
   }
-  loadServices(){
-    const require = createRequire(import.meta.url)
-    this.serviceList = require("./" + pathJoin(this.contextFolderName, "services.json")).map(hostService=>new Map(hostService))
+  const serviceSettings = [
+    ["host-name",serviceName + "." + myDomain],
+    ["positionContexts", myContext.getRelationship("services").children.length + 1]
+  ]
+  serviceSettings.push(...extraProps)
+  const myService = myContext.getRelationship("services").addChild(new myContext.constructor.nodeConstructor(Object.fromEntries(serviceSettings)))
+  myService.props = await myService.dbInsertMySelf()
+  return myService.props.id
+}
+export async function startContextService(myNode){
+  const myService = getContextService({id: myNode.parent.partner.props.id}, myNode.props.id)
+  if (!myService)
+    throw new Error("No service")
+  return await startService(myService)
+}
+
+async function startContextService_old(contextName, serviceId){
+  // we have to load the service to the context tree if it is not loaded yet
+  const myService = getContextService({name: contextName}, serviceId)
+  if (!myService) {
+    throw new Error("No service")
   }
-  async insertService(serviceObj){
-    this.serviceList.splice(serviceObj.positionContexts - 1, 0, new Map(Object.entries(serviceObj).filter(([key, value])=>!this.notDataKeys.includes(key))))
-    //await this.saveServices()
+  return await startService(myService)
+}
+
+async function startService(myService){
+  const myContext = myService.parent.partner
+  if (!myService._enviroment) {
+    const {setService} = await import("./" + pathJoin(myContext.props.folderName, "serverstart.mjs"))
+    await setService(myService)
+    // **** aqui actualiza la cache de la bd a los valores que pone en myservice ??? por que??
   }
-  async removeService(position){
-    this.serviceList.splice(position-1, 1)
-    //await this.saveServices()
-  }
-  async updateService(serviceObj){
-    const position = serviceObj["positionContexts"]
-    for (const key of Object.keys(serviceObj)) {
-      if (this.notDataKeys.includes(key))
-        continue
-      this.serviceList[position - 1].set(key, serviveObj[key])
-    }
-    //await this.saveServices()
-  }
-  async saveServices(){
-    //const savingData
-    console.log("./" + pathJoin(this.rootPath, this.contextFolderName, "service2.json"))
-    // Avoiding to insert any prop name that start with "_" which is reserver to not fields data
-    await fs.writeFile("./" + pathJoin(this.rootPath, this.contextFolderName, "service2.json"), JSON.stringify(this.serviceList.map(service=>Object.fromEntries(Array.from(service).filter(([key, value])=>key.search(/^_/)!==0))), null, 2))
-    
-  }
+  const {listener} = await import("./" + pathJoin(myContext.props.folderName, "main.mjs"))
+  await runService(myService, listener)
+  return true
+}
+// match ==> {id: value}
+export function getContextService(match, serviceId){
+  const myContext = contexts.getRelationship("contexts").getChild(match)
+  return myContext.getRelationship("services").children.find(child=>child.props.id==serviceId)
+}
+
+//
+
+export async function stopContextService(myNode){
+  const myService = getContextService({id: myNode.parent.partner.props.id}, myNode.props.id)
+  if (!myService)
+    throw new Error("No service")
+  await stopService(myService)
+}
+
+export async function stopContextService_old(contextName, serviceId){
+  const myService = getContextService({name: contextName}, serviceId)
+  if (!myService)
+    throw new Error("No service")
+  await stopService(myService)
+}
+
+async function stopService(myService){
+  myService._server.close() // free port
+  if (myService.props.status == "on")
+    await myService.dbUpdateMyProps({status: "off"})
+  // the service is still in context but status is off
+  return true
+}
+
+// *** prueba
+export function getContexts(){
+  return contexts.clone(1, 3)
+}
+export function getContextServices(contextName){
+  // we have to load the service to the context tree if it is not loaded yet
+  const myContext = contexts.getRelationship("contexts").getChild({name: contextName})
+  return myContext?.getRelationship("services")
 }
