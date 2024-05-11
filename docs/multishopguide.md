@@ -9,8 +9,8 @@ You can set up several shops being launched at once with in the same application
 
 Add new records to context__yos/services.json. Records should have the following fields:
 
-- images-path: ./catalog-images/<some-name>
-- db-url: filedb://localhost/<some-name>
+- images-path: ./catalog-images/some-name
+- db-url: filedb://localhost/some-name
 - status : on
 - hostname : for reverse proxy use
 
