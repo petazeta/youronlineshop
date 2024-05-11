@@ -1,0 +1,335 @@
+{
+  "UsersTypes": {
+    "type": "${String}",
+    "parentUsersTypes": {
+      "type": "${String}",
+      "ref": "UsersTypes"
+    },
+    "positionUsersTypes": {
+      "type": "${Number}",
+      "positionRef": "UsersTypes"
+    },
+    "id": "${String}"
+  },
+  "Users": {
+    "username": "${String}",
+    "pwd": "${String}",
+    "status": {
+      "type": "${Number}",
+      "default": 1
+    },
+    "access": {
+      "type": "${Date}",
+      "default": "Data.now"
+    },
+    "creationDate": {
+      "type": "${Date}",
+      "default": "${Date.now}"
+    },
+    "parentUsersTypes": {
+      "type": "${String}",
+      "ref": "UsersTypes"
+    },
+    "positionUsersTypes": {
+      "type": "${Number}",
+      "positionRef": "UsersTypes"
+    },
+    "id": "${String}"
+  },
+  "Addresses": {
+    "fullname": "${String}",
+    "streetaddress": "${String}",
+    "city": "${String}",
+    "state": "${String}",
+    "zipcode": "${String}",
+    "country": "${String}",
+    "comments": "${String}",
+    "parentUsers": {
+      "type": "${String}",
+      "ref": "Users"
+    },
+    "id": "${String}"
+  },
+  "UsersData": {
+    "fullname": "${String}",
+    "emailaddress": "${String}",
+    "phonenumber": "${String}",
+    "parentUsers": {
+      "type": "${String}",
+      "ref": "Users"
+    },
+    "id": "${String}"
+  },
+  "Languages": {
+    "code": "${String}",
+    "parentLanguages": {
+      "type": "${String}",
+      "ref": "Languages"
+    },
+    "positionLanguages": {
+      "type": "${Number}",
+      "positionRef": "Languages"
+    },
+    "id": "${String}"
+  },
+  "SiteElements": {
+    "name": "${String}",
+    "parentSiteElements": {
+      "type": "${String}",
+      "ref": "SiteElements"
+    },
+    "positionSiteElements": {
+      "type": "${Number}",
+      "positionRef": "SiteElements"
+    },
+    "id": "${String}"
+  },
+  "SiteElementsData": {
+    "value": "${String}",
+    "parentSiteElements": {
+      "type": "${String}",
+      "ref": "SiteElements"
+    },
+    "parentLanguages": {
+      "type": "${String}",
+      "ref": "Languages"
+    },
+    "id": "${String}"
+  },
+  "PageElements": {
+    "name": "${String}",
+    "parentPageElements": {
+      "type": "${String}",
+      "ref": "PageElements"
+    },
+    "positionPageElements": {
+      "type": "${Number}",
+      "positionRef": "PageElements"
+    },
+    "id": "${String}"
+  },
+  "PageElementsData": {
+    "value": "${String}",
+    "parentPageElements": {
+      "type": "${String}",
+      "ref": "PageElements"
+    },
+    "parentLanguages": {
+      "type": "${String}",
+      "ref": "Languages"
+    },
+    "id": "${String}"
+  },
+  "ItemCategories": {
+    "parentItemCategories": {
+      "type": "${String}",
+      "ref": "ItemCategories"
+    },
+    "positionItemCategories": {
+      "type": "${Number}",
+      "positionRef": "ItemCategories"
+    },
+    "id": "${String}"
+  },
+  "ItemCategoriesData": {
+    "name": "${String}",
+    "parentItemCategories": {
+      "type": "${String}",
+      "ref": "ItemCategories"
+    },
+    "parentLanguages": {
+      "type": "${String}",
+      "ref": "Languages"
+    },
+    "id": "${String}"
+  },
+  "Items": {
+    "price": "${Number}",
+    "currencyCode": "${String}",
+    "parentItemCategories": {
+      "type": "${String}",
+      "ref": "ItemCategories"
+    },
+    "positionItemCategories": {
+      "type": "${Number}",
+      "positionRef": "ItemCategories"
+    },
+    "parentUsers": {
+      "type": "${String}",
+      "ref": "Users"
+    },
+    "id": "${String}"
+  },
+  "ItemsData": {
+    "name": "${String}",
+    "descriptionlarge": "${String}",
+    "descriptionshort": "${String}",
+    "parentItems": {
+      "type": "${String}",
+      "ref": "Items"
+    },
+    "parentLanguages": {
+      "type": "${String}",
+      "ref": "Languages"
+    },
+    "id": "${String}"
+  },
+  "ItemsImages": {
+    "imagename": "${String}",
+    "parentItems": {
+      "type": "${String}",
+      "ref": "Items"
+    },
+    "positionItems": {
+      "type": "${Number}",
+      "positionRef": "Items"
+    },
+    "id": "${String}"
+  },
+  "PaymentTypes": {
+    "image": "${String}",
+    "moduleName": "${String}",
+    "vars": "${String}",
+    "active": "${Number}",
+    "parentPaymentTypes": {
+      "type": "${String}",
+      "ref": "PaymentTypes"
+    },
+    "positionPaymentTypes": {
+      "type": "${Number}",
+      "positionRef": "PaymentTypes"
+    },
+    "id": "${String}"
+  },
+  "PaymentTypesPrivate": {
+    "vars": "${String}",
+    "parentPaymentTypes": {
+      "type": "${String}",
+      "ref": "PaymentTypes"
+    },
+    "id": "${String}"
+  },
+  "PaymentTypesData": {
+    "name": "${String}",
+    "description": "${String}",
+    "parentPaymentTypes": {
+      "type": "${String}",
+      "ref": "PaymentTypes"
+    },
+    "parentLanguages": {
+      "type": "${String}",
+      "ref": "Languages"
+    },
+    "id": "${String}"
+  },
+  "ShippingTypes": {
+    "image": "${String}",
+    "delay_hours": "${Number}",
+    "price": "${Number}",
+    "parentShippingTypes": {
+      "type": "${String}",
+      "ref": "ShippingTypes"
+    },
+    "positionShippingTypes": {
+      "type": "${Number}",
+      "positionRef": "ShippingTypes"
+    },
+    "id": "${String}"
+  },
+  "ShippingTypesData": {
+    "name": "${String}",
+    "description": "${String}",
+    "parentShippingTypes": {
+      "type": "${String}",
+      "ref": "ShippingTypes"
+    },
+    "parentLanguages": {
+      "type": "${String}",
+      "ref": "Languages"
+    },
+    "id": "${String}"
+  },
+  "Orders": {
+    "creationDate": {
+      "type": "${Date}",
+      "default": "${Date.now}"
+    },
+    "modificationDate": {
+      "type": "${Date}",
+      "default": "${Date.now}"
+    },
+    "status": {
+      "type": "${Number}",
+      "default": 1
+    },
+    "parentUsers": {
+      "type": "${String}",
+      "ref": "Users"
+    },
+    "id": "${String}"
+  },
+  "OrderItems": {
+    "quantity": "${Number}",
+    "name": "${String}",
+    "price": "${Number}",
+    "currencyCode": "${String}",
+    "parentOrders": {
+      "type": "${String}",
+      "ref": "Orders"
+    },
+    "parentItems": {
+      "type": "${String}",
+      "ref": "Items"
+    },
+    "id": "${String}"
+  },
+  "OrderPayment": {
+    "name": "${String}",
+    "details": "${String}",
+    "succeed": "${Number}",
+    "parentOrders": {
+      "type": "${String}",
+      "ref": "Orders"
+    },
+    "parentPaymentTypes": {
+      "type": "${String}",
+      "ref": "PaymentTypes"
+    },
+    "id": "${String}"
+  },
+  "OrderShipping": {
+    "name": "${String}",
+    "delay_hours": "${Number}",
+    "price": "${Number}",
+    "currencyCode": "${String}",
+    "parentOrders": {
+      "type": "${String}",
+      "ref": "Orders"
+    },
+    "parentShippingTypes": {
+      "type": "${String}",
+      "ref": "ShippingTypes"
+    },
+    "id": "${String}"
+  },
+  "OrderAddress": {
+    "fullname": "${String}",
+    "streetaddress": "${String}",
+    "city": "${String}",
+    "state": "${String}",
+    "zipcode": "${String}",
+    "country": "${String}",
+    "comments": "${String}",
+    "parentOrders": {
+      "type": "${String}",
+      "ref": "Orders"
+    },
+    "id": "${String}"
+  },
+  "Cache": {
+    "key": "${String}",
+    "value": "${String}",
+    "isJSON": "${Boolean}",
+    "id": "${String}"
+  }
+}

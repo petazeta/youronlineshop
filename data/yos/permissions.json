@@ -1,0 +1,21 @@
+[
+  ["users_collections", 
+    [
+      ["users", "Users"], ["userstypes", "UsersTypes"]
+    ]
+  ],
+  ["users_types",
+    [
+      ["admins", ["web administrator", "orders administrator", "system administrator", "product administrator"]]
+    ]
+  ],
+  ["collections_types",
+    [
+      ["privateTables", ["Users", "UsersData", "Addresses", "Orders", "OrderItems", "OrderShipping", "OrderPayment", "PaymentTypesACCOUT"]],
+      ["catalogTables", ["Items", "ItemsData", "ItemCategories", "ItemCategoriesData"]],
+      ["itemTables", ["Items", "ItemsData"]],
+      ["orderTables", ["Orders", "OrderItems", "OrderShipping", "OrderPayment"]],
+      ["forbidenTables", []]
+    ]
+  ]
+]

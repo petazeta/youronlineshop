@@ -1,0 +1,18 @@
+[
+  ["users_collections", 
+    [
+      ["users", "Users"], ["userstypes", "UsersTypes"]
+    ]
+  ],
+  ["users_types",
+    [
+      ["admins", ["system administrator"]]
+    ]
+  ],
+  ["collections_types",
+    [
+      ["privateTables", ["Users"]],
+      ["forbidenTables", []]
+    ]
+  ]
+]

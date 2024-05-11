@@ -1,0 +1,59 @@
+{
+  "UsersTypes": {
+    "type": "${String}",
+    "parentUsersTypes": {
+      "type": "${String}",
+      "ref": "UsersTypes"
+    },
+    "positionUsersTypes": {
+      "type": "${Number}",
+      "positionRef": "UsersTypes"
+    },
+    "id": "${String}"
+  },
+  "Users": {
+    "username": "${String}",
+    "pwd": "${String}",
+    "parentUsersTypes": {
+      "type": "${String}",
+      "ref": "UsersTypes"
+    },
+    "positionUsersTypes": {
+      "type": "${Number}",
+      "positionRef": "UsersTypes"
+    },
+    "id": "${String}"
+  },
+  "Contexts": {
+    "id" : "${String}",
+    "name": "${String}",
+    "folderName": "${String}",
+    "parentContexts": {
+      "type": "${String}",
+      "ref": "Contexts"
+    },
+    "positionContexts": {
+      "type": "${Number}",
+      "positionRef": "Contexts"
+    }
+  },
+  "Services": {
+    "id" : "${String}",
+    "status": {
+      "type": "${String}",
+      "default": "off"
+    },
+    "host-name": "${String}",
+    "port": "${Number}",
+    "db-url": "${String}",
+    "loader-path": "${String}",
+    "parentContexts": {
+      "type": "${String}",
+      "ref": "Contexts"
+    },
+    "positionContexts": {
+      "type": "${Number}",
+      "positionRef": "Contexts"
+    }
+  }
+}
