@@ -3,9 +3,7 @@
 import {authenticate} from "./authentication.mjs"
 import {basename as pathBaseName, join as pathJoin, sep as pathSep} from "path"
 import {parseContent} from "../multipartreceiver.mjs"
-import {isAllowedToUpdateCatalogImage} from "../safety.mjs"
 import {errorResponse} from "../errors.mjs" // ??? why it is not wided use
-import {enviroments} from "./serverstart.mjs"
 import {setConstructors} from "../dbutils.mjs"
 import {existsSync, mkdirSync} from "fs"
 
@@ -13,7 +11,7 @@ export async function uploadImages(request, response, enviroment){
   try {
     const [Node, Linker, User] = setConstructors(enviroment.get("db-gateway"))
     const user = await authenticate(User, request.headers)
-    if (!isAllowedToUpdateCatalogImage(user))
+    if (!Node.isAllowedToUpdateCatalogImage(user))
       throw new Error("user not allowed to upload image")
     createImageFolders(enviroment)
     const elements = await parseContent(request, nameToPath)
