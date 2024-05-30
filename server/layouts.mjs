@@ -61,7 +61,7 @@ export class SkinsTree {
     if (subSkinId)
       activeSkin = findSkinNode(subSkinId, activeSkin)
     const cssFileList = (await this.getCssFileList(skinId, subSkinId))
-        .filter(cssFilePath=>path.relative(this.treeRoot.props.path, cssFilePath).split("/")[2] == styleId)
+        .filter(cssFilePath=>path.relative(this.treeRoot.props.path, cssFilePath).split(path.sep)[2] == styleId)
     response.write("<style>\n")
     for (const tpFilePath of cssFileList.filter(cssFilePath=>path.basename(cssFilePath).split('.')[1] == 'css')) {
       const readStream = getCssStream(cssFileList, tpFilePath)
