@@ -7,9 +7,9 @@ await startContextsServices(contexts)
 
 // --- production mode start
 
-const proxyServerPort = '8001'
+// const proxyServerPort = '8001'
 
-proxyServer(contexts, proxyServerPort)
+// proxyServer(contexts, proxyServerPort)
 
 // --- production mode end
 

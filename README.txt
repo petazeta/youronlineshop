@@ -41,10 +41,10 @@ Awards: Community Choice award by SourceForge
 * Installation *
 ****************
 
-4. Open your terminal at the source files top folder and type:
-npm install 
-npm start
-5. The server is running now. Continue in browser as prompt tells.
+Open your terminal in the source files top folder and type:
+  npm install 
+  npm start
+The server is running now. Continue in browser as prompt tells.
 
 ***********
 * Support *

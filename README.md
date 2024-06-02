@@ -33,12 +33,12 @@ This is the source code of an application for building an e-commerce which can b
 
 ## :zap: Installation
 
-Open your terminal at the source files top folder and type:
+Open your terminal in the source files top folder and type:
 ```
 npm install 
 npm start
 ```
-5. The server is running now. Continue in browser as prompt tells.
+The server is running now. Continue in browser as prompt tells.
 
 **Note:** [Master branch](https://github.com/petazeta/youronlineshop/tree/master) contains the latest implementation, [Development branch](https://github.com/petazeta/youronlineshop/tree/development) contains the last changes, and [The last stable release](https://github.com/petazeta/youronlineshop/releases/tag/v5.0) is the most suitable for use in production.
 

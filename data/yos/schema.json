@@ -20,7 +20,7 @@
     },
     "access": {
       "type": "${Date}",
-      "default": "Data.now"
+      "default": "${Date.now}"
     },
     "creationDate": {
       "type": "${Date}",

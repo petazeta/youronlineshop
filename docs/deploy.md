@@ -439,3 +439,7 @@ En el trafico inusual se apreciaba lo siguiente:
 134.209.228.174:16162 => 120.220.84.13:53001 358Mb   358Mb   236Mb
 134.209.228.174:16162 => 111.38.53.159:53001 627Mb   623Mb   327Mb
 Mucho trafico a traves de puertos que no no uso.
+
+En el firewall de digital ocean he habilitado el trafico para las ips:
+172.65.32.248 smtp-relay.sendinblue.com
+La configuracion del firewall debe incluir http, https, dns tcp
