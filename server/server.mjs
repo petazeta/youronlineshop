@@ -4,15 +4,15 @@ import {proxyServer} from './proxyserver.mjs' // --- production mode
 
 export const contexts = await loadContexts()
 await startContextsServices(contexts)
-
+/*
 // --- production mode start
 
-// const proxyServerPort = '8001'
+const proxyServerPort = '8001'
 
-// proxyServer(contexts, proxyServerPort)
+proxyServer(contexts, proxyServerPort)
 
 // --- production mode end
-
+*/
 async function loadContexts(){
   const dbUrl = "servicedb://localhost/borrar1"
   const dbMode = Object.fromEntries([["cache", ["Contexts","Services"]]])

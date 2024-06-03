@@ -2,8 +2,8 @@ import http from 'http';
 
 export class Proxy {
   constructor(port, hostname) {
-    this.info = {port: port, hostname: hostname};
-    this.options;
+    this.info = {port: port, hostname: hostname}
+    this.options
   }
   pipe(request, response) {
     this.options = {
@@ -17,10 +17,10 @@ export class Proxy {
       response.writeHead(proxyResponse.statusCode, proxyResponse.headers)
       proxyResponse.pipe(response, {
         end: true
-      });
-    });
+      })
+    })
     request.pipe(proxyRequest, {
       end: true
-    });
+    })
   }
 }

@@ -4,7 +4,8 @@ export function makeRequest(prepareRequest, reqMethods, reqContentType, action, 
   const parameters = prepareRequest(action, params)
   const reqMethodFunc = reqMethods.get(action) || reqMethods.get("default")
   const method = reqMethodFunc(params)
-  const contentType = reqContentType.get(action) || reqContentType.get("default")
+  const contentTypeFunc = reqContentType.get(action) || reqContentType.get("default")
+  const contentType = contentTypeFunc(params)
   const body = {action: action, parameters: parameters}
   return doRequest(method, contentType, body, url)
 }
